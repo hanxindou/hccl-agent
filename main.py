@@ -90,6 +90,14 @@ def main():
     )
 
     print()
+
+    print("LLM Reasoning")
+
+    print(
+        output.get("reasoning")
+    )
+
+    print()
     print("Simulation Result")
 
     print(

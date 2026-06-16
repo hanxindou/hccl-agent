@@ -888,6 +888,119 @@ Recommendation:
 
 测试结果：95 Python + 15 C = 110 测试全部通过。
 
+
+## 2026-06-14（第十批）：DeepSeek Reasoning Layer — LLM 推理能力接入
+
+### 目标
+
+让 Agent 首次具备真实大模型推理能力。DeepSeek 作为增强层分析候选算法，但**不替代**现有规则系统。
+
+```
+Agent
+  │
+  ├── AlgorithmSkill  (规则选择 → candidates)
+  ├── ReasoningSkill  (DeepSeek 分析 → recommendation + reasoning)
+  └── OptimizationSkill (Simulator 排名 → best_algorithm)
+```
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `agent/llm_client.py` | DeepSeek OpenAI-compatible API 客户端。仅依赖 `urllib`（标准库），零第三方依赖。`ask(prompt)` → `str` |
+| `agent/reasoning_skill.py` | 封装 LLMClient，构造算法分析 Prompt，解析回复中的 Recommendation / Reasoning |
+| `tests/test_llm_client.py` | 7 个测试：成功/空Key/空choices/HTTP错误/URL错误/system prompt/env fallback |
+| `tests/test_reasoning_skill.py` | 6 个测试：解析推荐/参数传递/空响应/自由格式/客户端异常 |
+| `docs/deepseek_setup.md` | DeepSeek API Key 配置指南 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/hccl_agent.py` | 3 处：import ReasoningSkill → `__init__` 创建实例 → `run()` 中 try/except 调用 → `output["reasoning"]` |
+
+### 类图
+
+```
+LLMClient                          ReasoningSkill
+├── ask(prompt, system_prompt)     ├── analyze(nodes, msg_size,
+│   → str                          │           topology, candidates)
+│                                  │   → {"recommendation": "...",
+└── uses urllib.request            │       "reasoning": "..."}
+    + DEEPSEEK_API_KEY env var     │
+                                   └── uses LLMClient
+                                       + structured prompt template
+```
+
+### 调用链路
+
+```
+HCCLAgent.run()
+  │
+  ├── candidate_algorithms = AlgorithmSkill.choose_algorithms(...)
+  │
+  ├── try:
+  │     reasoning_result = ReasoningSkill.analyze(
+  │         nodes, message_size, topology, candidate_algorithms
+  │     )
+  │   except:  # API key unset or network down
+  │     reasoning_result = None    ← graceful degradation
+  │
+  ├── best_algorithm, ... = OptimizationSkill.optimize(...)
+  │
+  └── output["reasoning"] = reasoning_result
+```
+
+### Prompt 设计
+
+```
+System: You are an expert in distributed collective-communication
+        algorithms for Ascend NPU clusters.
+
+User:   Analyse the following HCCL communication scenario...
+        Nodes: {nodes}
+        Message Size: {message_size} MB
+        Topology: {topology}
+        Candidate algorithms:
+        - Ring AllReduce
+        - Butterfly
+        - Mesh
+        Please recommend the best algorithm and explain why.
+
+Model:  Recommendation: Ring AllReduce
+        Reasoning: Ring provides balanced bandwidth and latency...
+```
+
+### 环境变量配置
+
+```bash
+export DEEPSEEK_API_KEY=sk-your-key-here
+```
+
+未设置时 Agent 静默跳过 LLM 推理，规则系统照常工作。
+
+### 测试结果
+
+```
+test_llm_client:       7 tests PASS (mock)
+test_reasoning_skill:  6 tests PASS (mock)
+Existing tests:       95 tests PASS (unchanged)
+Total:               108 Python + 15 C = 123 tests PASS
+```
+
+### 示例输入输出
+
+```python
+>>> agent = HCCLAgent()
+>>> out = agent.run(nodes=8, message_size=128, primitive="AllReduce")
+>>> print(out["reasoning"])
+{
+    "recommendation": "Ring AllReduce",
+    "reasoning": "Ring provides the best balance of bandwidth and latency..."
+}
+# None if DEEPSEEK_API_KEY not set.
+```
+
 ### 当前项目阶段评估
 
 | 层次 | 状态 |
@@ -914,6 +1027,106 @@ Recommendation:
 | Butterfly / Mesh / NHR / Fat-Tree | ⬜ 未实现 |
 | 真实 CANN / HCOMM 对接 | ⬜ 待 SDK |
 | LLM Agent 代码生成 | ⬜ 待后续 |
+
+
+
+## 2026-06-14（第十一批）：Performance Model Refactor — 标准化评分与竞争模型
+
+### 修改原因
+
+旧模型 `score = bandwidth * 0.7 - latency * 0.3` 存在三个严重缺陷：
+1. latency(ms) 与 bandwidth(GB/s) 单位不同，score 无固定范围
+2. 所有算法带宽完全相同，无法区分
+3. Mesh 因 O(1) 步数永远获胜，不符合真实场景
+
+### PerformanceModel 新设计
+
+标准化 0~100 评分体系：
+
+```
+bandwidth_score = min(bandwidth_gb_s / theoretical_max * 100, 100)
+latency_score   = max(0, 100 - latency_ms * 1000)
+final_score     = bandwidth_score * 0.4 + latency_score * 0.6
+```
+
+- 带宽以链路理论上限为满分基准
+- 延迟每 0.001ms 扣 1 分（penalty=1000），0.1ms 以上归零
+- 延迟权重 0.6 > 带宽权重 0.4，优先奖励低延迟
+
+### Algorithm Efficiency 模型
+
+不同算法对链路带宽的利用效率不同：
+
+| 算法 | Efficiency | 原因 |
+|------|-----------|------|
+| NHR | 0.92 | 非均匀环优化 |
+| Ring AllReduce | 0.90 | 流水线环，带宽利用率高 |
+| Fat-Tree | 0.88 | 层级开销 |
+| Mesh | 0.88 | 高并发但 O(N²) 链路使用 |
+| Butterfly | 0.85 | 递归加倍，对带宽要求低 |
+| PairWise | 0.82 | 逐对交换，效率最低 |
+
+带宽计算：
+```
+effective_bw = link_bw * algo_efficiency * primitive_factor * bw_contention
+```
+
+### Contention Model
+
+**延迟竞争（算法感知）**：
+- Mesh: `latency *= 1 + nodes * 0.15`（N-1 并发发送导致 NIC 队列深度）
+- Fat-Tree: `latency *= 1 + nodes * 0.04`（仅跨机架层有竞争）
+- Ring / Butterfly / NHR: 无竞争（串行化通信）
+
+**带宽竞争（Mesh 专有）**：
+- Mesh: `bw /= 1 + (nodes-1) * 0.12`（每个链路被 N-1 个对等方共享）
+- Fat-Tree: `bw /= 1 + (nodes-1) * 0.04`（仅跨机架层）
+- Ring / Butterfly / NHR: 无竞争
+
+**Mesh 有效步数**：
+- `steps = 1 + nodes * 0.15`（1 个逻辑轮次 + 队列深度开销）
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `skills/performance_model.py` | 重写评分公式：0-100 范围，双维度标准化 |
+| `simulator/simulator.py` | 新增 ALGORITHM_EFFICIENCY / BW_CONTENTION_COEFF / MESH_EFFECTIVE_STEPS_COEFF；带宽和延迟竞争模型；默认 link_lat 从 2000us 改为 2us（HCCS） |
+| `tests/test_performance_model.py` | **新文件**。8 测试：范围检查、满分/零分/带宽差异/延迟差异/边界条件 |
+| `tests/test_simulator_model.py` | **新文件**。10 测试：0-100 范围、Ring vs Mesh、Mesh 带宽崩溃、扩展退化、效率差异、Fat Tree 竞争 |
+
+### 测试结果
+
+```
+test_performance_model:  8 tests PASS
+test_simulator_model:   10 tests PASS
+Existing tests:        106 tests PASS (unchanged)
+Total:                 124 Python + 15 C = 139 tests PASS
+```
+
+### 典型输出对比
+
+| 场景 | 旧 score | 新 score | 说明 |
+|------|---------|---------|------|
+| Ring 4 nodes Full Mesh | ~8.75 | 88.80 | 标准化范围 |
+| Mesh 4 nodes Full Mesh | ~8.75 | 82.81 | Ring 效率更高 |
+| Mesh 32 nodes Full Mesh | ~8.75 | 27.09 | 带宽崩溃 |
+| Ring 32 nodes Full Mesh | ~8.75 | 36.00 | 延迟退化但带宽稳定 |
+
+### 当前项目阶段评估
+
+| 层次 | 状态 |
+|------|------|
+| C 通信基础设施 | ✅ |
+| C Ring AllReduce (CPU) | ✅ |
+| Python ↔ C Bridge | ✅ |
+| Plugin 能力发现 | ✅ |
+| Agent 执行 Ring AllReduce | ✅ |
+| Agent 自动评价与报告 | ✅ |
+| DeepSeek LLM 推理 | ✅ |
+| **标准化性能评分体系** | **✅ 本轮完成** |
+| Butterfly / Mesh / NHR / Fat-Tree | ⬜ 未实现 |
+| 真实 CANN / HCOMM 对接 | ⬜ 待 SDK |
 
 ## 2026-06-14（第三批）：C/C++ 骨架 + TopologyGraph + PromptEngine + 集成测试
 

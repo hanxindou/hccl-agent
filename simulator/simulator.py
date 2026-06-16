@@ -1,6 +1,27 @@
-from skills.performance_model import (
-    PerformanceModel
-)
+from skills.performance_model import PerformanceModel
+
+
+# Algorithm bandwidth efficiency relative to raw link capacity.
+ALGORITHM_EFFICIENCY = {
+    "Ring AllReduce": 0.90,
+    "Butterfly":      0.85,
+    "Mesh":           0.88,
+    "NHR":            0.92,
+    "Fat-Tree":       0.88,
+    "PairWise":       0.82,
+}
+
+# Mesh on Full Mesh: N-1 simultaneous sends per node → real wall-clock
+# grows faster than a single link-hop.  Model as effective steps.
+MESH_EFFECTIVE_STEPS_COEFF = 0.15   # added to step count per node
+
+# Bandwidth contention for algorithms that share links concurrently.
+# Ring / Butterfly / NHR serialise traffic → no contention.
+# Mesh → all N-1 peers share each link → bandwidth drops.
+BW_CONTENTION_COEFF = {
+    "Mesh":     0.12,   # each link shared by N-1 peers
+    "Fat-Tree": 0.04,   # hierarchical — only intra-rack is full mesh
+}
 
 
 class Simulator:
@@ -18,115 +39,85 @@ class Simulator:
         bandwidth_gbps=None,
         latency_ms=None,
     ):
-        """Estimate latency, bandwidth, and score for a candidate algorithm.
+        import math
 
-        Parameters
-        ----------
-        algorithm : str
-            Algorithm name (Ring AllReduce, Butterfly, Mesh, etc.).
-        topology : str
-            Cluster topology (Full Mesh, Ring, Fat Tree, etc.).
-        nodes : int
-            Number of NPU devices.
-        message_size_mb : float
-            Message size in MB.
-        primitive : str
-            Collective primitive: AllReduce, AllGather, or ReduceScatter.
-        bandwidth_gbps : float or None
-            Per-link bandwidth in Gbps from cluster config.
-        latency_ms : float or None
-            Per-link base latency in ms from cluster config.
+        link_bw_gbps = (bandwidth_gbps
+                        if bandwidth_gbps is not None
+                        else 100.0)
+        link_lat_us = ((latency_ms * 1000.0)
+                       if latency_ms is not None
+                       else 2.0)
 
-        Returns
-        -------
-        dict with keys: latency (ms), bandwidth (GB/s), score.
-        """
+        algo_eff = ALGORITHM_EFFICIENCY.get(algorithm, 0.85)
 
-        # Use config values when provided, otherwise fall back to defaults.
-        link_bw_gbps = bandwidth_gbps if bandwidth_gbps is not None else 100.0
-        link_lat_us = (
-            latency_ms * 1000.0 if latency_ms is not None else 2000.0
-        )  # us
-
-        # Convert message size to bytes for model calculations.
-        message_bytes = message_size_mb * 1024.0 * 1024.0
-
-        # ---- algorithm-specific step count ----
+        # ---- step count ----
         if algorithm == "Ring AllReduce":
-            # 2*(N-1) steps, each sending M/N bytes.
             steps = 2 * (nodes - 1)
-            data_per_step = message_bytes / nodes
         elif algorithm == "Butterfly":
-            # log2(N) steps for recursive doubling.
-            import math
             steps = int(math.ceil(math.log2(max(nodes, 1))))
-            data_per_step = message_bytes
         elif algorithm == "PairWise":
-            # N-1 steps, each sends full message to one partner.
             steps = nodes - 1
-            data_per_step = message_bytes
         elif algorithm == "NHR":
-            # Non-uniform ring — roughly 2*(N-1) with varying chunk sizes.
             steps = 2 * (nodes - 1)
-            data_per_step = message_bytes / nodes
         elif algorithm == "Mesh":
-            # Full pairwise exchange in O(1) concurrent steps.
-            steps = 1
-            data_per_step = message_bytes
+            # 1 logical round, but wall-clock grows with N due to queue depth.
+            steps = 1 + nodes * MESH_EFFECTIVE_STEPS_COEFF
         elif algorithm == "Fat-Tree":
-            # log_k(N) up + log_k(N) down.
-            import math
             steps = int(2 * math.ceil(math.log2(max(nodes, 1))))
-            data_per_step = message_bytes
         else:
-            # Generic fallback.
             steps = nodes
-            data_per_step = message_bytes
 
-        # ---- topology factor ----
+        # ---- latency (ms) ----
+        # Topology factor.
         if topology == "Full Mesh":
-            link_factor = 1.0
+            topo_lat_factor = 1.0
         elif topology == "Ring":
-            link_factor = 1.0
+            topo_lat_factor = 1.0
         elif topology == "Fat Tree":
-            # Multi-level switches add overhead.
-            link_factor = 1.15
+            topo_lat_factor = 1.15
         else:
-            link_factor = 1.2
+            topo_lat_factor = 1.2
 
-        # ---- primitive overhead ----
-        if primitive == "AllReduce":
-            primitive_factor = 1.0
-        elif primitive == "AllGather":
-            # AllGather sends (N-1)/N of total data without reduction.
-            primitive_factor = 0.9
+        # Algorithm-specific latency contention.
+        # Mesh: N-1 simultaneous sends per node cause NIC queue depth.
+        algo_lat_contention = 1.0
+        if algorithm == "Mesh":
+            algo_lat_contention = 1.0 + nodes * 0.15
+        elif algorithm == "Fat-Tree":
+            algo_lat_contention = 1.0 + nodes * 0.04
+
+        # Primitive factor.
+        if primitive == "AllGather":
+            prim_factor = 0.9
         elif primitive == "ReduceScatter":
-            # ReduceScatter sends (N-1)/N data chunks.
-            primitive_factor = 0.95
+            prim_factor = 0.95
         else:
-            primitive_factor = 1.0
+            prim_factor = 1.0
 
-        # ---- latency calculation (ms) ----
-        # Total latency = steps * per-link-latency * link_factor * primitive_factor
-        latency_us = (
-            steps * link_lat_us * link_factor * primitive_factor
+        latency_us = (steps * link_lat_us * topo_lat_factor
+                      * prim_factor * algo_lat_contention)
+        latency_ms_result = latency_us / 1000.0
+
+        # ---- bandwidth (GB/s) ----
+        bw_contention = 1.0
+        bw_coeff = BW_CONTENTION_COEFF.get(algorithm, 0.0)
+        if bw_coeff > 0:
+            bw_contention = 1.0 / (1.0 + (nodes - 1) * bw_coeff)
+
+        effective_bw_gbps = (link_bw_gbps * algo_eff
+                             * prim_factor * bw_contention)
+        bandwidth_gb_s = effective_bw_gbps / 8.0
+
+        # ---- score (0–100) ----
+        theoretical_max_gb_s = link_bw_gbps / 8.0
+        score = self.model.calculate_score(
+            latency_ms_result,
+            bandwidth_gb_s,
+            theoretical_max_bandwidth_gb_s=theoretical_max_gb_s,
         )
-        latency_ms = latency_us / 1000.0
-
-        # ---- bandwidth calculation (GB/s) ----
-        # Effective bandwidth = link_bw * link_factor adjusted by algorithm
-        # efficiency and primitive overhead.
-        base_bandwidth_gbps = link_bw_gbps * link_factor
-        effective_bandwidth_gbps = (
-            base_bandwidth_gbps * primitive_factor
-        )
-        bandwidth_gb_s = effective_bandwidth_gbps / 8.0  # Gbps -> GB/s
-
-        # ---- score ----
-        score = self.model.calculate_score(latency_ms, bandwidth_gb_s)
 
         return {
-            "latency": round(latency_ms, 4),
+            "latency": round(latency_ms_result, 4),
             "bandwidth": round(bandwidth_gb_s, 2),
             "score": score,
         }

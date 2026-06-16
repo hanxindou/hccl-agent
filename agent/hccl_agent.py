@@ -11,6 +11,7 @@ from agent.plugin_manager import PluginManager
 from agent.execution_skill import ExecutionSkill
 from agent.evaluation_skill import EvaluationSkill
 from agent.report_generator import ReportGenerator
+from agent.reasoning_skill import ReasoningSkill
 
 
 class HCCLAgent:
@@ -34,6 +35,7 @@ class HCCLAgent:
         self.execution_skill = ExecutionSkill()
         self.evaluation_skill = EvaluationSkill()
         self.report_generator = ReportGenerator()
+        self.reasoning_skill = ReasoningSkill()
 
     def run(
         self,
@@ -69,6 +71,23 @@ class HCCLAgent:
                 primitive=primitive,
             )
         )
+
+        # ---- LLM reasoning (best-effort, degrades gracefully) ----
+        reasoning_result = None
+        try:
+            reasoning_result = self.reasoning_skill.analyze(
+                nodes,
+                message_size,
+                topology,
+                candidate_algorithms,
+            )
+        except Exception as e:
+            # API key not set or network unavailable — Agent still
+            # functions with the rule-based path alone.
+            print(
+                "[Reasoning Error]",
+                e
+            )
 
         # ---- optimisation / ranking ----
         best_algorithm, best_result, ranking = (
@@ -137,6 +156,7 @@ class HCCLAgent:
             "strategy": strategy,
             "prompt_filled": filled_prompt[:200] + "..."
             if len(filled_prompt) > 200 else filled_prompt,
+            "reasoning": reasoning_result,
         }
 
         # Persist this run for reproducible experiment tracking.
