@@ -1267,6 +1267,61 @@ Fat-Tree  ⬜ → not_implemented
 
 
 
+## 2026-06-14（第十五批）：Fat-Tree AllReduce CPU 实现 — 树形聚合
+
+### Fat-Tree 原理 — 三阶段树形聚合
+
+```
+16 ranks, group_size=4:
+
+Phase 1 — Leaf:        Phase 2 — Core:       Phase 3 — Broadcast:
+G0:[0,1,2,3]→L0=10    L0+L1+L2+L3           L0→G0, L1→G1,
+G1:[4,5,6,7]→L1=26    = 136 (global sum)    L2→G2, L3→G3
+G2:[8,9,10,11]→L2=42                         → all 16 ranks = 136
+G3:[12,13,14,15]→L3=58
+```
+
+CPU 模拟：组内求和 → 组间求和 → 广播。FT_GROUP_SIZE=4。
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `hcccl/src/hccl_algorithms.c` | 替换 `fattree_allreduce()` 桩 |
+| `hcccl/tests/test_fattree.c` | **新文件**。7 测试 |
+| `hcccl/CMakeLists.txt` | 新增 `test_fattree` |
+| `plugin/execution_engine.py` | ctypes 绑定 + `_execute_fattree()` |
+| `simulator/simulator.py` | Fat-Tree 效率 0.88→0.95 |
+| `tests/test_execution_engine.py` | +2 Fat-Tree 测试 |
+| `tests/test_execution_skill.py` | +1 Fat-Tree 测试 |
+| `tests/test_execution_report_flow.py` | +1 Fat-Tree 测试 |
+
+### 测试结果
+
+```
+C:  41/41  (9+6+6+7+6+7)
+Python: 137/137
+Total:  178 PASS
+```
+
+### Agent 执行链路 — 全部 5 个算法可执行
+
+```
+Ring      ✅   Butterfly ✅   NHR  ✅   Mesh ✅   Fat-Tree ✅
+```
+
+### 当前项目阶段评估
+
+| 层次 | 状态 |
+|------|------|
+| C 基础设施 | ✅ |
+| **可执行算法** | **✅ 5/5 全部完成** |
+| Python ↔ C Bridge | ✅ |
+| Agent 评价/报告/推理 | ✅ |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
+
 ## 2026-06-14（第十四批）：Mesh AllReduce CPU 实现 — 全互联归约
 
 ### Mesh 原理

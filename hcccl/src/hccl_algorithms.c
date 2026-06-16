@@ -517,21 +517,64 @@ hcclResult_t fattree_allreduce(
     hcclComm_t      comm
 )
 {
-    /*
-     * ALGORITHM (two-level hierarchical):
-     *   Level 1 — Intra-rack (Full Mesh via HCCS):
-     *     Each rack of 8 NPUs does a Mesh AllReduce independently.
-     *   Level 2 — Inter-rack (Ring via RoCE):
-     *     Rack representatives exchange reduced results via a ring.
-     *
-     *   BEST FOR: multi-server clusters (64-1024 NPUs).
-     */
-    (void)send_buf;
-    (void)recv_buf;
-    (void)count;
-    (void)data_type;
-    (void)op;
-    (void)comm;
-    fprintf(stderr, "[STUB] fattree_allreduce — not implemented.\n");
-    return HCCL_ERR_NOT_SUPPORTED;
+    if (send_buf == NULL || recv_buf == NULL || comm == NULL)
+        return HCCL_ERR_INVALID_ARG;
+    if (data_type != HCCL_FP32)   return HCCL_ERR_NOT_SUPPORTED;
+    if (op != HCCL_SUM)           return HCCL_ERR_NOT_SUPPORTED;
+    if (count == 0)               return HCCL_ERR_INVALID_ARG;
+
+    {
+        hcclCommInternal* ctx = (hcclCommInternal*) comm;
+        int32_t N = ctx->num_devices;
+        int32_t rank = ctx->current_rank;
+
+        const float* input = (const float*) send_buf;
+        ctx->rank_values[rank] = input[0];
+
+        if (count != 1) return HCCL_ERR_NOT_SUPPORTED;
+        if (N > 64)     return HCCL_ERR_INTERNAL;
+
+        /*
+         * Fat-Tree AllReduce — 3 phases.
+         *
+         * Phase 1 — Leaf Aggregation:
+         *   Ranks partitioned into groups of FT_GROUP_SIZE.
+         *   Each group sums its members' values onto its leader.
+         *
+         * Phase 2 — Core Aggregation:
+         *   Group leaders sum their partial sums → global_sum.
+         *
+         * Phase 3 — Broadcast:
+         *   Leaders propagate global_sum back to group members.
+         */
+
+#define FT_GROUP_SIZE  4
+
+        int32_t num_groups = (N + FT_GROUP_SIZE - 1) / FT_GROUP_SIZE;
+
+        /* ---- phase 1: leaf aggregation ---- */
+        float leader_sum[16];
+        for (int32_t g = 0; g < num_groups; g++) {
+            leader_sum[g] = 0.0f;
+            int32_t start = g * FT_GROUP_SIZE;
+            int32_t end   = (start + FT_GROUP_SIZE < N)
+                            ? start + FT_GROUP_SIZE : N;
+            for (int32_t r = start; r < end; r++)
+                leader_sum[g] += ctx->rank_values[r];
+        }
+
+        /* ---- phase 2: core aggregation ---- */
+        float global_sum = 0.0f;
+        for (int32_t g = 0; g < num_groups; g++)
+            global_sum += leader_sum[g];
+
+        /* ---- phase 3: broadcast ---- */
+        for (int32_t i = 0; i < N; i++)
+            ctx->rank_results[i] = global_sum;
+        *(float*) recv_buf = global_sum;
+
+        return HCCL_SUCCESS;
+#undef FT_GROUP_SIZE
+    }
 }
+

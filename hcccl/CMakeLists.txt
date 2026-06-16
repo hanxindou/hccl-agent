@@ -74,6 +74,14 @@ target_include_directories(test_mesh
 
 target_link_libraries(test_mesh PRIVATE hccl_plugin)
 
+add_executable(test_fattree tests/test_fattree.c)
+
+target_include_directories(test_fattree
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(test_fattree PRIVATE hccl_plugin)
+
 # ---- Install rules ------------------------------------------------------
 
 install(TARGETS hccl_plugin

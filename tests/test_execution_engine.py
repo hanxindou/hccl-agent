@@ -90,9 +90,16 @@ class TestExecutionEngine(unittest.TestCase):
         self.assertEqual(result["status"], "success")
         self.assertEqual(result["result"], [36.0] * 8)
 
-    def test_fat_tree_not_implemented(self):
-        result = self.engine.execute_algorithm("Fat-Tree", [1.0, 2.0])
-        self.assertEqual(result["status"], "not_implemented")
+    def test_fat_tree_4_ranks(self):
+        result = self.engine.execute_algorithm("Fat-Tree", [1.0, 2.0, 3.0, 4.0])
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], [10.0, 10.0, 10.0, 10.0])
+
+    def test_fat_tree_16_ranks(self):
+        data = [float(i) for i in range(1, 17)]
+        result = self.engine.execute_algorithm("Fat-Tree", data)
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], [136.0] * 16)
 
     # ---- unknown algorithm ----
 

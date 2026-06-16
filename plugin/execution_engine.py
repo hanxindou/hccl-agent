@@ -35,7 +35,7 @@ _ALGO_TABLE = {
     "PairWise":       "pairwise",
 }
 
-_IMPLEMENTED = {"ring", "butterfly", "nhr", "mesh"}
+_IMPLEMENTED = {"ring", "butterfly", "nhr", "mesh", "fattree"}
 
 
 class ExecutionEngine:
@@ -126,6 +126,17 @@ class ExecutionEngine:
         ]
         lib.mesh_allreduce.restype = ctypes.c_int
 
+        # -- fattree_allreduce --
+        lib.fattree_allreduce.argtypes = [
+            ctypes.POINTER(ctypes.c_float),
+            ctypes.POINTER(ctypes.c_float),
+            ctypes.c_size_t,
+            ctypes.c_int,
+            ctypes.c_int,
+            ctypes.c_void_p,
+        ]
+        lib.fattree_allreduce.restype = ctypes.c_int
+
         self._lib = lib
 
     # ------------------------------------------------------------------
@@ -176,6 +187,8 @@ class ExecutionEngine:
             return self._execute_nhr(input_data)
         elif algo_key == "mesh":
             return self._execute_mesh(input_data)
+        elif algo_key == "fattree":
+            return self._execute_fattree(input_data)
 
         return {
             "algorithm": algorithm_name,
@@ -364,6 +377,41 @@ class ExecutionEngine:
             lib.hcclCommDestroy(comm)
 
         return {"algorithm": "Mesh", "status": "success", "result": results}
+
+    # ------------------------------------------------------------------
+    # Fat-Tree execution
+    # ------------------------------------------------------------------
+
+    def _execute_fattree(self, input_data):
+        self.load_library()
+        lib = self._lib
+        N = len(input_data)
+
+        comm = ctypes.c_void_p()
+        device_ids = (ctypes.c_int32 * N)(*range(N))
+        rc = lib.hcclCommInit(ctypes.byref(comm), N, device_ids)
+        if rc != HCCL_SUCCESS:
+            return {"algorithm": "Fat-Tree", "status": "comm_init_failed", "result": None}
+
+        try:
+            send = ctypes.c_float()
+            recv = ctypes.c_float()
+            for rank in range(N):
+                lib.hcclSetRank(comm, rank)
+                send.value = input_data[rank]
+                lib.fattree_allreduce(ctypes.byref(send), ctypes.byref(recv),
+                                      1, HCCL_FP32, HCCL_SUM, comm)
+            results = []
+            for rank in range(N):
+                lib.hcclSetRank(comm, rank)
+                send.value = input_data[rank]
+                lib.fattree_allreduce(ctypes.byref(send), ctypes.byref(recv),
+                                      1, HCCL_FP32, HCCL_SUM, comm)
+                results.append(round(recv.value, 6))
+        finally:
+            lib.hcclCommDestroy(comm)
+
+        return {"algorithm": "Fat-Tree", "status": "success", "result": results}
 
     # ------------------------------------------------------------------
     # Internal

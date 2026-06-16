@@ -67,9 +67,16 @@ class TestExecutionReportFlow(unittest.TestCase):
         self.assertEqual(result["execution"]["status"], "success")
         self.assertEqual(result["execution"]["result"], [10.0] * 4)
 
+    def test_full_flow_fattree_success(self):
+        result = self.agent.generate_execution_report(
+            algorithm="Fat-Tree", input_data=[1.0, 2.0, 3.0, 4.0],
+        )
+        self.assertEqual(result["execution"]["status"], "success")
+        self.assertEqual(result["execution"]["result"], [10.0] * 4)
+
     def test_full_flow_not_implemented(self):
         result = self.agent.generate_execution_report(
-            algorithm="Fat-Tree",
+            algorithm="PairWise",
             input_data=[1.0, 2.0],
         )
         self.assertEqual(result["execution"]["status"], "not_implemented")
