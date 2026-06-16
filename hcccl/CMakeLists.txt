@@ -58,6 +58,22 @@ target_include_directories(test_butterfly
 
 target_link_libraries(test_butterfly PRIVATE hccl_plugin)
 
+add_executable(test_nhr tests/test_nhr.c)
+
+target_include_directories(test_nhr
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(test_nhr PRIVATE hccl_plugin)
+
+add_executable(test_mesh tests/test_mesh.c)
+
+target_include_directories(test_mesh
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(test_mesh PRIVATE hccl_plugin)
+
 # ---- Install rules ------------------------------------------------------
 
 install(TARGETS hccl_plugin

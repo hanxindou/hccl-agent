@@ -1196,6 +1196,129 @@ Total:   148 tests PASS
 | Mesh / NHR / Fat-Tree | ⬜ 未实现 |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+
+
+## 2026-06-14（第十三批）：NHR AllReduce CPU 实现 — Hierarchical Ring
+
+### NHR 原理 — 三阶段层级环
+
+```
+16 ranks 示例 (group_size=4):
+
+Phase 1 — Group Local Reduce:
+  Group0: [0,1,2,3] → leader 0 持有组内和
+  Group1: [4,5,6,7] → leader 4 持有组内和
+  Group2: [8,9,10,11] → leader 8 持有组内和
+  Group3: [12,13,14,15] → leader 12 持有组内和
+
+Phase 2 — Leader Ring Reduce:
+  leader 0 → 4 → 8 → 12 → 0  (环)
+  → 所有 leader 持有全局和
+
+Phase 3 — Group Broadcast:
+  每个 leader 将全局和广播给组内成员
+  → 所有 16 个 rank 获得相同结果
+```
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `hcccl/src/hccl_algorithms.c` | 替换 `nhr_allreduce()` 桩：三阶段层级环实现（NHR_GROUP_SIZE=4） |
+| `hcccl/tests/test_nhr.c` | **新文件**。7 测试：4/8/16 rank + NULL/FP16/PROD |
+| `hcccl/CMakeLists.txt` | 新增 `test_nhr` 目标 |
+| `plugin/execution_engine.py` | ctypes 绑定 + `_execute_nhr()` + `_IMPLEMENTED` 增加 nhr |
+| `simulator/simulator.py` | NHR 效率系数 0.92→0.93 |
+| `tests/test_execution_engine.py` | +3 NHR 测试，移除旧 not_implemented |
+| `tests/test_execution_skill.py` | +1 NHR 成功测试 |
+| `tests/test_execution_report_flow.py` | +1 NHR 端到端测试 |
+
+### 测试结果
+
+```
+C:  topology 9 + ring 6 + butterfly 6 + nhr 7 = 28 PASS
+Python: 131 PASS (+4 new NHR tests)
+Total:  159 PASS
+```
+
+### Agent 执行链路
+
+```
+Ring      ✅ → ring_allreduce()
+Butterfly ✅ → butterfly_allreduce()
+NHR       ✅ → nhr_allreduce()     ← NEW
+Mesh      ⬜ → not_implemented
+Fat-Tree  ⬜ → not_implemented
+```
+
+### 当前项目阶段评估
+
+| 层次 | 状态 |
+|------|------|
+| C 通信基础设施 | ✅ |
+| **C 可执行算法: Ring / Butterfly / NHR** | **✅ 3/5 完成** |
+| Python ↔ C Bridge | ✅ |
+| Plugin 执行 | ✅ (3 algorithms) |
+| Agent 自动评价与报告 | ✅ |
+| DeepSeek LLM 推理 | ✅ |
+| 标准化 0–100 评分 | ✅ |
+| Mesh / Fat-Tree | ⬜ 未实现 |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
+
+## 2026-06-14（第十四批）：Mesh AllReduce CPU 实现 — 全互联归约
+
+### Mesh 原理
+
+Full Mesh 拓扑中所有节点直接互联。AllReduce 只需一步：
+1. 收集所有 rank 的输入 → 计算全局和
+2. 将全局和写入所有 rank → 完成
+
+CPU 模拟实现：
+```
+global_sum = Σ rank_values[0..N-1]
+rank_results[i] = global_sum  (for all i)
+```
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `hcccl/src/hccl_algorithms.c` | 替换 `mesh_allreduce()` 桩 |
+| `hcccl/tests/test_mesh.c` | **新文件**。6 测试 |
+| `hcccl/CMakeLists.txt` | 新增 `test_mesh` |
+| `plugin/execution_engine.py` | ctypes 绑定 + `_execute_mesh()` + mesh 加入 `_IMPLEMENTED` |
+| `tests/test_execution_engine.py` | +2 Mesh 测试，移除 not_implemented |
+| `tests/test_execution_skill.py` | +1 Mesh 测试 |
+| `tests/test_execution_report_flow.py` | +1 Mesh 端到端 |
+
+### 测试结果
+
+```
+C:  topology 9 + ring 6 + butterfly 6 + nhr 7 + mesh 6 = 34 PASS
+Python: 134 PASS
+Total:  168 PASS
+```
+
+### Agent 执行链路
+
+```
+Ring      ✅   Butterfly ✅   NHR  ✅   Mesh ✅
+Fat-Tree  ⬜
+```
+
+### 当前项目阶段评估
+
+| 层次 | 状态 |
+|------|------|
+| C 基础设施 | ✅ |
+| **可执行算法** | **✅ 4/5 (Ring + Butterfly + NHR + Mesh)** |
+| Python ↔ C Bridge | ✅ |
+| Agent 评价/报告/推理 | ✅ |
+| Fat-Tree | ⬜ |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
 ## 2026-06-14（第三批）：C/C++ 骨架 + TopologyGraph + PromptEngine + 集成测试
 
 新增文件：

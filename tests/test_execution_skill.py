@@ -28,8 +28,18 @@ class TestExecutionSkill(unittest.TestCase):
             [10.0, 10.0, 10.0, 10.0],
         )
 
+    def test_execute_nhr_success(self):
+        result = self.skill.execute("NHR", [1.0, 2.0, 3.0, 4.0])
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], [10.0, 10.0, 10.0, 10.0])
+
+    def test_execute_mesh_success(self):
+        result = self.skill.execute("Mesh", [1.0, 2.0, 3.0, 4.0])
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], [10.0, 10.0, 10.0, 10.0])
+
     def test_execute_not_implemented(self):
-        result = self.skill.execute("Mesh", [1.0, 2.0])
+        result = self.skill.execute("Fat-Tree", [1.0, 2.0])
         self.assertEqual(result["status"], "not_implemented")
 
     def test_execute_butterfly_success(self):

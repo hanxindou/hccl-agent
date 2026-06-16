@@ -58,15 +58,37 @@ class TestExecutionEngine(unittest.TestCase):
         self.assertEqual(result["status"], "success")
         self.assertEqual(result["result"], [36.0] * 8)
 
+    # ---- NHR AllReduce ----
+
+    def test_nhr_4_ranks(self):
+        result = self.engine.execute_algorithm("NHR", [1.0, 2.0, 3.0, 4.0])
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], [10.0, 10.0, 10.0, 10.0])
+
+    def test_nhr_8_ranks(self):
+        data = [float(i) for i in range(1, 9)]
+        result = self.engine.execute_algorithm("NHR", data)
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], [36.0] * 8)
+
+    def test_nhr_16_ranks(self):
+        data = [float(i) for i in range(1, 17)]
+        result = self.engine.execute_algorithm("NHR", data)
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], [136.0] * 16)
+
     # ---- unimplemented algorithms ----
 
-    def test_mesh_not_implemented(self):
-        result = self.engine.execute_algorithm("Mesh", [1.0, 2.0])
-        self.assertEqual(result["status"], "not_implemented")
+    def test_mesh_4_ranks(self):
+        result = self.engine.execute_algorithm("Mesh", [1.0, 2.0, 3.0, 4.0])
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], [10.0, 10.0, 10.0, 10.0])
 
-    def test_nhr_not_implemented(self):
-        result = self.engine.execute_algorithm("NHR", [1.0, 2.0])
-        self.assertEqual(result["status"], "not_implemented")
+    def test_mesh_8_ranks(self):
+        data = [float(i) for i in range(1, 9)]
+        result = self.engine.execute_algorithm("Mesh", data)
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], [36.0] * 8)
 
     def test_fat_tree_not_implemented(self):
         result = self.engine.execute_algorithm("Fat-Tree", [1.0, 2.0])

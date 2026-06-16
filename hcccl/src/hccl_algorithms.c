@@ -308,14 +308,39 @@ hcclResult_t mesh_allreduce(
      *   BEST FOR: single-server 8-NPU with Full Mesh HCCS.
      *   TRADE-OFF: O(N^2) concurrent sends — link contention above ~8.
      */
-    (void)send_buf;
-    (void)recv_buf;
-    (void)count;
-    (void)data_type;
-    (void)op;
-    (void)comm;
-    fprintf(stderr, "[STUB] mesh_allreduce — not implemented.\n");
-    return HCCL_ERR_NOT_SUPPORTED;
+    if (send_buf == NULL || recv_buf == NULL || comm == NULL)
+        return HCCL_ERR_INVALID_ARG;
+    if (data_type != HCCL_FP32)   return HCCL_ERR_NOT_SUPPORTED;
+    if (op != HCCL_SUM)           return HCCL_ERR_NOT_SUPPORTED;
+    if (count == 0)               return HCCL_ERR_INVALID_ARG;
+
+    {
+        hcclCommInternal* ctx = (hcclCommInternal*) comm;
+        int32_t N = ctx->num_devices;
+        int32_t rank = ctx->current_rank;
+
+        const float* input = (const float*) send_buf;
+        ctx->rank_values[rank] = input[0];
+
+        if (count != 1) return HCCL_ERR_NOT_SUPPORTED;
+        if (N > 64)     return HCCL_ERR_INTERNAL;
+
+        /*
+         * Mesh AllReduce — O(1) rounds on a fully-connected topology.
+         *
+         * Every rank sees every other rank's value directly.
+         * CPU simulation: sum all stored values, broadcast to all.
+         */
+        float global_sum = 0.0f;
+        for (int32_t i = 0; i < N; i++)
+            global_sum += ctx->rank_values[i];
+
+        for (int32_t i = 0; i < N; i++)
+            ctx->rank_results[i] = global_sum;
+
+        *(float*) recv_buf = global_sum;
+        return HCCL_SUCCESS;
+    }
 }
 
 hcclResult_t mesh_reducescatter(
@@ -369,14 +394,114 @@ hcclResult_t nhr_allreduce(
      *
      *   BEST FOR: heterogeneous clusters (910A2 + 910A3 mixed).
      */
-    (void)send_buf;
-    (void)recv_buf;
-    (void)count;
-    (void)data_type;
-    (void)op;
-    (void)comm;
-    fprintf(stderr, "[STUB] nhr_allreduce — not implemented.\n");
-    return HCCL_ERR_NOT_SUPPORTED;
+    /* ---- arg validation ---- */
+    if (send_buf == NULL || recv_buf == NULL || comm == NULL)
+        return HCCL_ERR_INVALID_ARG;
+    if (data_type != HCCL_FP32)   return HCCL_ERR_NOT_SUPPORTED;
+    if (op != HCCL_SUM)           return HCCL_ERR_NOT_SUPPORTED;
+    if (count == 0)               return HCCL_ERR_INVALID_ARG;
+
+    {
+        hcclCommInternal* ctx = (hcclCommInternal*) comm;
+        int32_t N = ctx->num_devices;
+        int32_t rank = ctx->current_rank;
+
+        const float* input = (const float*) send_buf;
+        ctx->rank_values[rank] = input[0];
+
+        if (count != 1) return HCCL_ERR_NOT_SUPPORTED;
+        if (N > 64)     return HCCL_ERR_INTERNAL;
+
+    /*
+     * NHR — Hierarchical Ring  (3 phases).
+     *
+     * Phase 1 — Group Local Reduce:
+     *   Ranks are partitioned into groups of NHR_GROUP_SIZE.
+     *   Within each group, a ring reduce accumulates the group sum
+     *   onto the group leader (first rank in the group).
+     *
+     * Phase 2 — Leader Ring Reduce:
+     *   Group leaders form a ring and reduce their partial sums
+     *   to obtain the global sum.
+     *
+     * Phase 3 — Group Broadcast:
+     *   Each leader broadcasts the global sum to its group members.
+     */
+
+#define NHR_GROUP_SIZE  4
+
+        int32_t num_groups = (N + NHR_GROUP_SIZE - 1) / NHR_GROUP_SIZE;
+
+        /* ---- phase 1: group-local ring reduce ---- */
+        float group_sum[16];  /* per-group accumulated sum  */
+        for (int32_t g = 0; g < num_groups; g++)
+            group_sum[g] = 0.0f;
+
+        for (int32_t g = 0; g < num_groups; g++) {
+            int32_t start = g * NHR_GROUP_SIZE;
+            int32_t end   = (start + NHR_GROUP_SIZE < N)
+                            ? start + NHR_GROUP_SIZE : N;
+            int32_t gsize = end - start;
+            if (gsize <= 0) continue;
+
+            /* ring reduce within the group → accumulated on each member */
+            float accum[4];
+            for (int32_t j = 0; j < gsize; j++) {
+                int32_t rid = start + j;
+                accum[j] = ctx->rank_values[rid];
+            }
+
+            float forward[4];
+            for (int32_t j = 0; j < gsize; j++)
+                forward[j] = accum[j];
+
+            for (int32_t step = 0; step < gsize - 1; step++) {
+                float received[4];
+                for (int32_t j = 0; j < gsize; j++) {
+                    int32_t src = (j - 1 + gsize) % gsize;
+                    received[j] = forward[src];
+                }
+                for (int32_t j = 0; j < gsize; j++) {
+                    forward[j] = received[j];
+                    accum[j]  += received[j];
+                }
+            }
+
+            /* After gsize-1 steps every member has the group sum. */
+            group_sum[g] = accum[0];  /* leader == first member */
+        }
+
+        /* ---- phase 2: leader ring reduce ---- */
+        float leader_accum[16];
+        float leader_fwd[16];
+        for (int32_t g = 0; g < num_groups; g++) {
+            leader_accum[g] = group_sum[g];
+            leader_fwd[g]   = group_sum[g];
+        }
+
+        for (int32_t step = 0; step < num_groups - 1; step++) {
+            float received[16];
+            for (int32_t g = 0; g < num_groups; g++) {
+                int32_t src = (g - 1 + num_groups) % num_groups;
+                received[g] = leader_fwd[src];
+            }
+            for (int32_t g = 0; g < num_groups; g++) {
+                leader_fwd[g]  = received[g];
+                leader_accum[g] += received[g];
+            }
+        }
+        /* After num_groups-1 steps every leader has the global sum. */
+        float global_sum = leader_accum[0];
+
+        /* ---- phase 3: broadcast global sum to all members ---- */
+        for (int32_t i = 0; i < N; i++) {
+            ctx->rank_results[i] = global_sum;
+        }
+        *(float*) recv_buf = global_sum;
+
+        return HCCL_SUCCESS;
+#undef NHR_GROUP_SIZE
+    }
 }
 
 /* ================================================================== */

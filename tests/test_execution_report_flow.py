@@ -52,9 +52,24 @@ class TestExecutionReportFlow(unittest.TestCase):
         self.assertIn("evaluation", result)
         self.assertIn("report", result)
 
+    def test_full_flow_nhr_success(self):
+        result = self.agent.generate_execution_report(
+            algorithm="NHR", input_data=[1.0, 2.0, 3.0, 4.0],
+        )
+        self.assertEqual(result["execution"]["status"], "success")
+        self.assertEqual(result["execution"]["result"], [10.0] * 4)
+        self.assertIn("report", result)
+
+    def test_full_flow_mesh_success(self):
+        result = self.agent.generate_execution_report(
+            algorithm="Mesh", input_data=[1.0, 2.0, 3.0, 4.0],
+        )
+        self.assertEqual(result["execution"]["status"], "success")
+        self.assertEqual(result["execution"]["result"], [10.0] * 4)
+
     def test_full_flow_not_implemented(self):
         result = self.agent.generate_execution_report(
-            algorithm="Mesh",
+            algorithm="Fat-Tree",
             input_data=[1.0, 2.0],
         )
         self.assertEqual(result["execution"]["status"], "not_implemented")

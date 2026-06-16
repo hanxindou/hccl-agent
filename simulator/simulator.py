@@ -6,7 +6,7 @@ ALGORITHM_EFFICIENCY = {
     "Ring AllReduce": 0.90,
     "Butterfly":      0.85,
     "Mesh":           0.88,
-    "NHR":            0.92,
+    "NHR":            0.93,
     "Fat-Tree":       0.88,
     "PairWise":       0.82,
 }
