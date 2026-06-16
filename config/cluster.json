@@ -1,0 +1,60 @@
+{
+    "cluster_name": "Ascend-Test-Cluster",
+    "nodes": 8,
+    "topology": "Full Mesh",
+    "device_type": "Ascend910A",
+    "memory_gb": 64,
+
+    "links": [
+        {
+            "type": "HCCS",
+            "description": "Intra-server NPU-to-NPU high-speed interconnect",
+            "bandwidth_gbps": 100,
+            "latency_ms": 0.002,
+            "ber": 1e-12,
+            "duplex": "full"
+        },
+        {
+            "type": "RoCE",
+            "description": "RDMA over Converged Ethernet for cross-server communication",
+            "bandwidth_gbps": 100,
+            "latency_ms": 0.005,
+            "ber": 1e-10,
+            "duplex": "full"
+        },
+        {
+            "type": "PCIe",
+            "description": "PCIe host-to-device interconnect",
+            "bandwidth_gbps": 32,
+            "latency_ms": 0.010,
+            "ber": 1e-9,
+            "duplex": "full"
+        }
+    ],
+
+    "numa": {
+        "nodes_per_socket": 4,
+        "sockets": 2,
+        "description": "2-socket NUMA topology, 4 NPUs per socket"
+    },
+
+    "hbm": {
+        "capacity_gb": 64,
+        "bandwidth_gbps": 1200,
+        "description": "HBM2e per NPU"
+    },
+
+    "ub": {
+        "capacity_kb": 192,
+        "description": "Unified Buffer (on-chip scratchpad) per NPU core"
+    },
+
+    "available_algorithms": [
+        "Ring AllReduce",
+        "Butterfly",
+        "PairWise",
+        "NHR",
+        "Mesh",
+        "Fat-Tree"
+    ]
+}

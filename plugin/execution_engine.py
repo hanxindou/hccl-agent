@@ -1,0 +1,214 @@
+"""Execution Engine — run HCCL algorithms via ctypes.
+
+Loads libhccl_plugin.so and calls the C implementation of ring_allreduce
+on real (CPU-simulated) data.  This is the first link that closes the
+loop from Agent decision to actual computation.
+
+Usage::
+
+    engine = ExecutionEngine()
+    result = engine.execute_algorithm("Ring AllReduce", [1.0, 2.0, 3.0, 4.0])
+    # → {"algorithm": "Ring AllReduce", "status": "success",
+    #    "result": [10.0, 10.0, 10.0, 10.0]}
+"""
+
+import ctypes
+import os
+
+# ---- C enum constants (must match hccl_comm.h) ----
+
+HCCL_SUCCESS = 0
+HCCL_ERR_INVALID_ARG   = -1
+HCCL_ERR_NOT_SUPPORTED = -6
+
+HCCL_FP32 = 0
+HCCL_SUM  = 0
+
+# ---- Algorithm name mapping (Agent display name → internal key) ----
+
+_ALGO_TABLE = {
+    "Ring AllReduce": "ring",
+    "Butterfly":      "butterfly",
+    "Mesh":           "mesh",
+    "NHR":            "nhr",
+    "Fat-Tree":       "fattree",
+    "PairWise":       "pairwise",
+}
+
+_IMPLEMENTED = {"ring"}  # only Ring AllReduce is implemented so far
+
+
+class ExecutionEngine:
+    """Execute a named HCCL algorithm on the given input data."""
+
+    def __init__(self, lib_path=None):
+        if lib_path is None:
+            lib_path = self._find_library()
+
+        if not os.path.exists(lib_path):
+            raise FileNotFoundError(
+                f"HCCL plugin library not found: {lib_path}"
+            )
+
+        self.lib_path = lib_path
+        self._lib = None
+
+    # ------------------------------------------------------------------
+    # Library loading & ctypes bindings
+    # ------------------------------------------------------------------
+
+    def load_library(self):
+        if self._lib is not None:
+            return
+
+        lib = ctypes.CDLL(self.lib_path)
+
+        # -- hcclCommInit --
+        lib.hcclCommInit.argtypes = [
+            ctypes.POINTER(ctypes.c_void_p),   # hcclComm_t*  (out)
+            ctypes.c_int32,                    # num_devices
+            ctypes.POINTER(ctypes.c_int32),    # device_ids*
+        ]
+        lib.hcclCommInit.restype = ctypes.c_int
+
+        # -- hcclCommDestroy --
+        lib.hcclCommDestroy.argtypes = [ctypes.c_void_p]
+        lib.hcclCommDestroy.restype = ctypes.c_int
+
+        # -- hcclSetRank --
+        lib.hcclSetRank.argtypes = [
+            ctypes.c_void_p,   # hcclComm_t
+            ctypes.c_int32,    # rank
+        ]
+        lib.hcclSetRank.restype = ctypes.c_int
+
+        # -- ring_allreduce --
+        lib.ring_allreduce.argtypes = [
+            ctypes.POINTER(ctypes.c_float),   # send_buf
+            ctypes.POINTER(ctypes.c_float),   # recv_buf
+            ctypes.c_size_t,                  # count
+            ctypes.c_int,                     # data_type
+            ctypes.c_int,                     # op
+            ctypes.c_void_p,                  # comm
+        ]
+        lib.ring_allreduce.restype = ctypes.c_int
+
+        self._lib = lib
+
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
+
+    def execute_algorithm(self, algorithm_name, input_data):
+        """Run *algorithm_name* on *input_data*.
+
+        Parameters
+        ----------
+        algorithm_name : str
+            Agent display name, e.g. "Ring AllReduce".
+        input_data : list[float]
+            One float per rank, e.g. [1.0, 2.0, 3.0, 4.0].
+
+        Returns
+        -------
+        dict with keys "algorithm", "status", "result".
+        """
+        algo_key = _ALGO_TABLE.get(algorithm_name)
+        if algo_key is None:
+            return {
+                "algorithm": algorithm_name,
+                "status": "unknown_algorithm",
+                "result": None,
+            }
+
+        if algo_key not in _IMPLEMENTED:
+            return {
+                "algorithm": algorithm_name,
+                "status": "not_implemented",
+                "result": None,
+            }
+
+        if not input_data:
+            return {
+                "algorithm": algorithm_name,
+                "status": "invalid_input",
+                "result": None,
+            }
+
+        return self._execute_ring_allreduce(input_data)
+
+    # ------------------------------------------------------------------
+    # Ring AllReduce execution
+    # ------------------------------------------------------------------
+
+    def _execute_ring_allreduce(self, input_data):
+        """Run Ring AllReduce(SUM) on *input_data*.
+
+        Two-pass pattern (matching test_ring.c):
+          Pass 1 — submit each rank's value
+          Pass 2 — retrieve per-rank results
+        """
+        self.load_library()
+        lib = self._lib
+        N = len(input_data)
+
+        # -- create communicator --
+        comm = ctypes.c_void_p()
+        device_ids = (ctypes.c_int32 * N)(*range(N))
+        rc = lib.hcclCommInit(
+            ctypes.byref(comm), N, device_ids
+        )
+        if rc != HCCL_SUCCESS:
+            return {
+                "algorithm": "Ring AllReduce",
+                "status": "comm_init_failed",
+                "result": None,
+            }
+
+        try:
+            send = ctypes.c_float()
+            recv = ctypes.c_float()
+
+            # Pass 1 — submit all values.
+            for rank in range(N):
+                lib.hcclSetRank(comm, rank)
+                send.value = input_data[rank]
+                lib.ring_allreduce(
+                    ctypes.byref(send), ctypes.byref(recv),
+                    1, HCCL_FP32, HCCL_SUM, comm,
+                )
+
+            # Pass 2 — retrieve all results.
+            results = []
+            for rank in range(N):
+                lib.hcclSetRank(comm, rank)
+                send.value = input_data[rank]
+                lib.ring_allreduce(
+                    ctypes.byref(send), ctypes.byref(recv),
+                    1, HCCL_FP32, HCCL_SUM, comm,
+                )
+                results.append(round(recv.value, 6))
+
+        finally:
+            lib.hcclCommDestroy(comm)
+
+        return {
+            "algorithm": "Ring AllReduce",
+            "status": "success",
+            "result": results,
+        }
+
+    # ------------------------------------------------------------------
+    # Internal
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _find_library():
+        candidate = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "..",
+            "hcccl",
+            "build",
+            "libhccl_plugin.so",
+        )
+        return os.path.normpath(candidate)

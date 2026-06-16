@@ -1,0 +1,943 @@
+# 项目概述
+
+当前项目是一个面向 HCCL 通信优化赛题的 Agent 工程。它用 Agent + Skills + Simulator 的方式，根据节点数、消息大小、集群配置和性能模型，选择候选通信算法、模拟性能得分、输出通信策略，并记录可复现的实验日志。
+
+项目已从早期 Python 原型逐步扩展：新增了 C/C++ HCCL 插件骨架（接口声明真实，实现为桩）、拓扑图模型（加权有向图 + 路径计算）、故障注入模拟器、AgentPromptEngine、结构化日志与性能报告生成器。
+
+# 项目整体架构
+
+当前架构由 8 类模块组成：
+
+1. **入口层**：main.py，CLI 参数解析 + 交互式输入。
+2. **Agent 编排层**：agent/hccl_agent.py，串联配置加载 → 拓扑推断 → 拓扑图构建 → 算法选择 → 模拟评估 → 策略生成 → Prompt 记录 → 日志持久化。
+3. **Skills 层**：skills/ 下 7 个模块，覆盖算法选择、拓扑推断、拓扑图建模、配置加载与校验、优化排序、性能评分、策略生成。
+4. **模拟器层**：simulator/ 下 simulator.py（性能模拟）和 fault_injector.py（故障注入）。
+5. **配置层**：config/cluster.json 存储 HCCS/RoCE/PCIe 链路参数、NUMA、HBM、UB 等昇腾关键参数。
+6. **Prompt 层**：prompts/algorithm_prompt.txt（5 类 Prompt 模板），agent/prompt_engine.py（模板填充与调用日志）。
+7. **C/C++ 插件骨架**：hcccl/ 目录，包含接口声明（真实 HCOMM API）、算法桩、CMakeLists.txt。
+8. **工具与日志**：scripts/generate_report.py（性能报告生成），scripts/integration_test.sh（集成测试），logs/ 目录（实验日志 + Prompt 调用记录）。
+
+逻辑调用关系：
+
+```text
+main.py
+  -> HCCLAgent.run(nodes, message_size, primitive)
+      -> ConfigSkill.load_cluster_info()
+      -> TopologySkill.analyze(nodes) -> topology string
+      -> _build_topology_graph(nodes, topology, cluster_info) -> TopologyGraph
+      -> AlgorithmSkill.choose_algorithms(nodes, message_size, primitive)
+      -> OptimizationSkill.optimize(simulator, cluster_info, candidates, ...)
+          -> Simulator.evaluate(algorithm, topology, nodes, message_size,
+                                primitive, bandwidth_gbps, latency_ms)
+              -> PerformanceModel.calculate_score(latency, bandwidth)
+      -> StrategySkill.generate(best_algorithm, nodes, primitive)
+      -> AgentPromptEngine.build_algorithm_selection_prompt(params)
+      -> ExperimentLogger.log_run(output)
+      -> return output
+```
+
+# 项目执行流程
+
+1. 用户运行 `main.py --nodes 8 --message-size 128 --primitive AllReduce`（或交互式输入）。
+2. HCCLAgent 加载 `config/cluster.json`，校验并提取链路参数。
+3. TopologySkill 根据节点数推断拓扑类型（Full Mesh / Ring / Fat Tree）。
+4. HCCLAgent 构建 TopologyGraph（加权有向图），将图摘要写入输出。
+5. AlgorithmSkill 根据消息大小五级粒度、节点数、原语类型选择候选算法。
+6. OptimizationSkill 遍历候选算法，调用 Simulator 评估每个算法。
+7. Simulator 使用 config 中的 bandwidth_gbps 和 latency_ms，结合算法步数模型、拓扑因子、原语因子计算 latency/bandwidth/score。
+8. OptimizationSkill 选出 best_algorithm 并生成 ranking。
+9. StrategySkill 根据 best_algorithm、nodes、primitive 生成通信步骤文本（区分 AllReduce 两阶段环、AllGather 单阶段、ReduceScatter 分片）。
+10. AgentPromptEngine 填充算法选择 Prompt 模板，记录到 `logs/prompt_calls.jsonl`。
+11. ExperimentLogger 记录完整运行到 `logs/runs.jsonl`，更新 `logs/summary.json`。
+12. main.py 打印全部输出字段。
+
+# 项目目录说明
+
+```text
+.
+├── .gitignore
+├── README.MD
+├── main.py
+├── agent/
+│   ├── hccl_agent.py               # Agent 编排核心
+│   ├── experiment_logger.py        # 结构化实验日志
+│   └── prompt_engine.py            # Prompt 模板填充与日志
+├── skills/
+│   ├── algorithm_skill.py          # 算法选择（5级消息粒度 + primitive感知）
+│   ├── config_skill.py             # 配置加载、校验、链路查询
+│   ├── optimization_skill.py       # 候选算法评估与排名
+│   ├── performance_model.py        # 综合评分模型
+│   ├── strategy_skill.py           # 通信策略生成（primitive感知）
+│   ├── topology_graph.py           # 加权图模型（路径计算）
+│   └── topology_skill.py           # 拓扑类型推断
+├── simulator/
+│   ├── simulator.py                # 通信性能模拟器
+│   └── fault_injector.py           # 故障注入与可靠性统计
+├── hcccl/                          # C/C++ HCCL 插件骨架
+│   ├── CMakeLists.txt
+│   ├── README.md
+│   ├── include/
+│   │   ├── hccl_comm.h             # HCCL 接口声明（真实 HCOMM API）
+│   │   └── hccl_algorithms.h       # 算法入口声明
+│   ├── src/
+│   │   ├── hccl_comm.c             # 通信器桩实现
+│   │   └── hccl_algorithms.c       # 算法桩实现
+│   └── tests/                      # 预留 C 测试目录
+├── scripts/
+│   ├── generate_report.py          # Markdown 性能报告生成
+│   └── integration_test.sh         # 集成测试脚本
+├── config/
+│   └── cluster.json                # 扩展集群配置（HCCS/RoCE/PCIe等）
+├── prompts/
+│   └── algorithm_prompt.txt        # 5类Prompt模板
+├── tests/
+│   └── test_agent.py               # 47个单元测试
+├── docs/
+│   ├── project_documentation.md    # 本文件
+│   ├── gap_analysis.md
+│   ├── competition_analysis.md
+│   ├── agent_capabilities.md       # Agent 能力清单
+│   ├── simulator_guide.md          # 模拟器说明文档
+│   └── 赛题.docx
+└── logs/
+    ├── runs.jsonl                  # 实验运行日志
+    ├── summary.json                # 聚合统计
+    ├── prompt_calls.jsonl          # Prompt 调用记录
+    └── performance_report.md       # 性能报告
+```
+
+# 文件说明概要
+
+（各文件详细说明见最初版本的项目文档，以下仅列出本次迭代变更）
+
+## 新增文件（第二批 + 第三批）
+
+- **`.gitignore`**：排除 `__pycache__/`、`logs/`、`*.pyc`、构建产物、IDE 配置。
+- **`agent/experiment_logger.py`**：每次 Agent 运行追加 JSON-lines 记录，自动更新聚合统计。
+- **`agent/prompt_engine.py`**：加载 Prompt 模板，填充 `{placeholders}`，记录到 `logs/prompt_calls.jsonl`。
+- **`skills/topology_graph.py`**：加权有向图模型，支持 Full Mesh / Ring / Fat-Tree 构建，Dijkstra 最短延迟路径、最大瓶颈带宽路径、故障链路避让。
+- **`simulator/fault_injector.py`**：4 种故障注入（link_down / timeout / corruption / congestion），基于 BER 的传输模拟，可靠性报告（重传率 ≤ 0.1% 目标）。
+- **`scripts/generate_report.py`**：从 `logs/runs.jsonl` 生成 Markdown 性能报告（算法对比、原语分析、拓扑分布、消息大小分析）。
+- **`scripts/integration_test.sh`**：11 个场景批量运行，自动校验输出结构完整性。
+- **`hcccl/` 目录**：C/C++ HCCL 插件骨架（6 个文件），接口声明基于真实 HCOMM API，实现为桩。
+- **`docs/agent_capabilities.md`**：赛题正式 Agent 能力清单（6 大类 12 个模块）。
+- **`docs/simulator_guide.md`**：模拟器配置说明、性能模型公式、验证流程。
+
+## 修改文件（三批迭代汇总）
+
+- **`agent/hccl_agent.py`**：集成 TopologyGraph 构建、AgentPromptEngine 调用、primitive 全链路传递、拓扑图摘要输出。
+- **`skills/algorithm_skill.py`**：五级消息粒度（≤64KB → ≥1GB），nodes 参与判断，primitive 影响候选（AllGather 增加 Butterfly，ReduceScatter 增加 Ring）。
+- **`skills/config_skill.py`**：基于模块路径的绝对路径解析、必需字段校验、默认值填充、`get_link_by_type()` 链路查询、bandwidth_gbps/latency_ms 自动提取。
+- **`skills/optimization_skill.py`**：primitive 参数透传，从 cluster_info 提取 bandwidth_gbps/latency_ms 传入 Simulator。
+- **`skills/strategy_skill.py`**：Butterfly 动态 bit-flip 配对（非硬编码），primitive 感知（AllReduce 两阶段环 / AllGather 单阶段 / ReduceScatter 分片），Mesh 策略生成。
+- **`simulator/simulator.py`**：使用 config 带宽/延迟参数，primitive 感知因子，6 种算法独立模型（含新增 PairWise/NHR/Fat-Tree），拓扑因子调整。
+- **`config/cluster.json`**：新增 `links[]`（HCCS/RoCE/PCIe + BER）、`numa`、`hbm`、`ub` 字段，算法列表扩展。
+- **`tests/test_agent.py`**：从 3 个扩展到 47 个测试，覆盖 7 个测试类。
+- **`prompts/algorithm_prompt.txt`**：5 类 Prompt 模板（算法选择/代码生成/测试生成/性能分析/可靠性机制）。
+- **`README.MD`**：完整项目介绍、架构图、快速开始、开发路线。
+
+# 参数说明
+
+## nodes
+含义：节点或卡数量。
+当前用途：AlgorithmSkill、Simulator、StrategySkill、TopologySkill、TopologyGraph 均使用。
+风险：与 config/cluster.json 中 nodes 字段无一致性校验（runtime_cluster_info 覆盖）。
+
+## message_size
+含义：消息大小，main.py 单位为 MB，支持浮点数（如 0.03 = 30KB）。
+当前用途：AlgorithmSkill 五级粒度判断，Simulator 计算 latency/bandwidth。
+风险：赛题要求覆盖 <=64KB 和 >=1GB，当前已支持。
+
+## primitive
+含义：集合通信原语。
+当前取值：AllReduce、AllGather、ReduceScatter。
+当前用途：全链路透传 —— AlgorithmSkill 候选调整、Simulator 原语因子、StrategySkill 阶段描述、AgentPromptEngine 模板填充、输出和日志记录。
+
+## topology
+含义：集群拓扑，TopologySkill 推断 + TopologyGraph 建模。
+当前用途：Simulator 拓扑因子、StrategySkill 策略选择、Agent 输出。
+
+## algorithm
+含义：通信算法名称，当前 6 种：Ring AllReduce、Butterfly、PairWise、NHR、Mesh、Fat-Tree。
+
+# 当前已实现功能（汇总三批迭代）
+
+1. 静态集群配置加载、校验与链路参数查询（HCCS/RoCE/PCIe + BER/NUMA/HBM/UB）。
+2. 五级消息粒度算法选择（≤64KB / ≤1MB / ≤512MB / ≤1GB / >1GB），nodes 和 primitive 参与判断。
+3. 三种集合通信原语全链路支持（AllReduce / AllGather / ReduceScatter）。
+4. 拓扑推断（Full Mesh / Ring / Fat Tree） + 拓扑图建模（加权有向图，Dijkstra 路径计算）。
+5. 6 种算法性能模拟（使用 config 带宽/延迟，primitive 感知，拓扑因子）。
+6. Butterfly 动态配对（bit-flip），primitive 感知的通信策略生成。
+7. 故障注入模拟（4 种故障类型，BER 传输模拟，可靠性报告）。
+8. 结构化实验日志（JSON-lines + summary），Prompt 调用记录。
+9. Markdown 性能报告自动生成。
+10. CLI 非交互式运行入口，集成测试脚本（11 场景）。
+11. 47 个单元测试（7 个测试类）。
+12. C/C++ HCCL 插件骨架（接口声明真实，实现为桩，需 CANN SDK 编译）。
+13. Agent 能力清单文档 + 模拟器说明文档。
+14. README + Prompt 初版。
+
+# 后续开发计划
+
+## P0（部分完成）
+
+- [x] C/C++ 插件 CPU 模拟编译 — 通信基础设施可在普通 Linux 上编译和测试，零 CANN 依赖
+- [ ] 获取 CANN 8.0 SDK，在实机上编译并替换为 HCOMM 驱动调用
+- [ ] 实现至少一种原语的真实通信逻辑（如 Ring AllReduce）
+
+## P1
+
+- [ ] 对接 HCOMM 真实拓扑探测
+- [ ] 将 PrompEngine 接入 LLM API，实现真正的 Agent 代码生成
+- [ ] 实机性能校准
+
+# 本次迭代记录
+
+## 2026-06-14（第四批）：CPU 模拟通信基础设施 — hcclCommInit / hcclCommDestroy / hcclGetTopology
+
+修改文件：
+1. `hcccl/src/hccl_comm.c`：实现三个通信基础设施函数（不再返回 NOT_SUPPORTED）
+2. `hcccl/CMakeLists.txt`：移除 CANN SDK 依赖，新增 `test_topology` 可执行文件目标
+
+新增文件：
+1. `hcccl/tests/test_topology.c`：9 个测试用例，验证 communicator 生命周期和 Full Mesh 拓扑生成
+
+新增内部结构体：
+1. `hcclCommInternal`（定义在 .c 文件中，不暴露）：
+   - `num_devices`（int32_t）：通信器内的设备/卡数量
+   - `device_ids`（int32_t*）：设备 ID 数组，长度等于 num_devices
+   - 作用：hcclCommInit 分配并填充该结构体，通过 `void*`（hcclComm_t）返回给调用者；
+     hcclCommDestroy 释放它；hcclGetTopology 读取 num_devices 生成正确规模的模拟拓扑
+
+新增 / 修改函数实现：
+1. **hcclCommInit(comm, num_devices, device_ids)**：
+   - 参数校验（NULL 指针、num_devices≤0 → HCCL_ERR_INVALID_ARG）
+   - malloc hcclCommInternal + malloc device_ids 数组
+   - memcpy device_ids，*comm = ctx
+   - 返回 HCCL_SUCCESS
+   - 不依赖任何 CANN/HCOMM API，纯 CPU 内存分配
+
+2. **hcclCommDestroy(comm)**：
+   - NULL 检查 → HCCL_ERR_INVALID_ARG
+   - free(ctx->device_ids)，free(ctx)
+   - 返回 HCCL_SUCCESS
+
+3. **hcclGetTopology(comm, topo)**：
+   - 参数校验
+   - 生成模拟 Full Mesh：N 设备 → N*(N-1) 条有向链路（无自环）
+   - 每条链路：link_type="HCCS"，bandwidth_gbps=100，latency_us=1，ber=1e-12，healthy=1
+   - 分配 hcclTopology_t + hcclLinkInfo_t 数组
+   - 返回 HCCL_SUCCESS
+
+编译命令：
+```bash
+cd hcccl && mkdir -p build && cd build
+cmake ..
+make
+# 产物：libhccl_plugin.so（共享库）+ test_topology（测试可执行文件）
+```
+
+运行测试命令：
+```bash
+cd hcccl/build
+./test_topology
+# 预期输出：9 run, 9 passed, 0 failed
+```
+
+验证无 CANN 依赖：
+```bash
+ldd hcccl/build/libhccl_plugin.so
+# 输出应仅含 linux-vdso、libc、ld-linux，无任何 Ascend/CANN 库
+```
+
+测试结果：9/9 C 测试通过，libhccl_plugin.so 仅依赖 libc。
+
+
+## 2026-06-14（第五批）：Ring AllReduce CPU 模拟版
+
+### 目标
+
+在 CPU 模拟框架上实现 Ring AllReduce 算法，验证 ReduceScatter + AllGather 两阶段环形通信逻辑，不依赖 Ascend SDK / CANN / MPI / 线程。
+
+### Ring AllReduce 原理
+
+Ring AllReduce 将 N 个 rank 排列成单向环，在 2×(N−1) 步内完成全局归约：
+
+**Phase 1 — Reduce (N-1 步):**
+每个 rank 维护两个 buffer：
+-  — 累加器，最终收敛到全局和
+-  — 传递给下一个 rank 的值
+
+每步：rank i 将 forward[i] 发送给 (i+1)%N，从 (i-1+N)%N 接收值存入 forward[i] 并累加到 partial[i]。关键性质：每个原始值在环上恰好传播一圈后回到原点，不会重复累加。
+
+**Phase 2 — AllGather (N-1 步):**
+将 Phase 1 结束后的 partial 复制到 forward 作为起点，再执行 N-1 步循环（只替换不累加），确保所有 rank 得到一致结果。
+
+### 为什么采用 CPU 模拟实现
+
+- 赛题要求 Agent 完成算法设计，CPU 模拟是验证算法逻辑正确性的最快路径
+- 无需昇腾硬件或 CANN SDK，可在任何 Linux 机器上编译运行
+- 算法逻辑（环形数据流、双 buffer 设计）与真实 HCCL 实现一致，仅数据搬运方式不同
+
+### 当前限制
+
+- 仅支持  数据类型，其他返回 
+- 仅支持  ReduceOp，其他返回 
+- 仅支持 count == 1（每个 rank 一个 float），多元素返回 
+- 最多支持 64 个 rank（栈上 buffer 限制）
+- 不涉及真实网络传输、RDMA、流水线等
+
+### 新增文件
+
+1.  — 6 个测试用例：
+   - 4 rank [1,2,3,4] → 期望 10
+   - 8 rank [1..8] → 期望 36
+   - 非法数据类型 → 
+   - 非法 ReduceOp → 
+   - NULL send_buf / recv_buf → 
+
+### 修改文件
+
+1.  — 新增  声明（CPU simulation helper 区域）
+2.  — 扩展 （+current_rank / rank_values / rank_results / calls_received），更新 （+calloc 模拟 buffer）和 （+释放），实现 
+3.  — 替换  桩为 CPU 实现（参数校验 → 存储输入 → 两阶段环形模拟 → 返回结果），其他算法保持桩不变
+4.  — 新增  目标
+
+### 编译命令
+
+```bash
+cd hcccl && mkdir -p build && cd build
+cmake .. && make
+# 产物：libhccl_plugin.so + test_topology + test_ring
+```
+
+### 运行测试命令
+
+```bash
+cd hcccl/build
+./test_topology   # 通信基础设施测试（9 项）
+./test_ring       # Ring AllReduce 测试（6 项）
+```
+
+### 预期输出结果
+
+```
+./test_ring
+ 4 ranks [1,2,3,4] → all get 10                     PASS
+ 8 ranks [1..8] → all get 36                        PASS
+ FP16 data type → HCCL_ERR_NOT_SUPPORTED            PASS
+ PROD ReduceOp → HCCL_ERR_NOT_SUPPORTED             PASS
+ NULL send_buf → HCCL_ERR_INVALID_ARG               PASS
+ NULL recv_buf → HCCL_ERR_INVALID_ARG               PASS
+ Results: 6 run, 6 passed, 0 failed
+```
+
+测试结果：15/15 C 测试通过（9 topology + 6 ring），libhccl_plugin.so 仅依赖 libc。
+
+
+## 2026-06-14（第六批）：Plugin Bridge — Python ↔ libhccl_plugin.so 闭环
+
+### 设计目标
+
+建立 Python Agent 与 C 动态库之间的第一条真实调用链路：
+
+```
+Agent (Python)
+    │
+    ▼
+Plugin Bridge (ctypes)
+    │
+    ▼
+libhccl_plugin.so (C)
+    │
+    ▼
+hcclPluginGetVersion() / hcclPluginGetAlgorithms()
+```
+
+通过 ctypes 加载已编译的 `.so` 文件，调用其中已有的插件发现函数，使 Python 层可以读取 C 层的版本号和算法能力列表。
+
+### ctypes 工作原理
+
+`ctypes` 是 Python 标准库模块，用于加载 C 动态库并调用其中的函数，无需编写 C 扩展或使用 Cython。
+
+关键步骤：
+1. `ctypes.CDLL(path)` 加载 `.so` 文件，返回库对象
+2. 为每个 C 函数设置 `argtypes`（参数类型列表）和 `restype`（返回类型）
+3. `c_char_p` 类型自动将 C 的 `const char*` 转换为 Python `bytes`，再 `.decode("utf-8")` 得到 `str`
+
+示例：
+```python
+lib = ctypes.CDLL("libhccl_plugin.so")
+lib.hcclPluginGetVersion.argtypes = []
+lib.hcclPluginGetVersion.restype = ctypes.c_char_p
+version = lib.hcclPluginGetVersion().decode("utf-8")
+# → "0.1.0-prototype"
+```
+
+### 新增文件
+
+1. **`plugin/hccl_bridge.py`** — `HCCLBridge` 类：
+   - `load_library()` — idempotent 加载，设置 argtypes/restype
+   - `get_version()` → str — 调用 `hcclPluginGetVersion()`
+   - `get_algorithms()` → str — 调用 `hcclPluginGetAlgorithms()`
+   - `_find_library()` — 自动定位 `hcccl/build/libhccl_plugin.so`
+   - 文件不存在时抛出 `FileNotFoundError` 并附带编译指引
+
+2. **`agent/plugin_capability.py`** — 轻量辅助模块：
+   - `parse_algorithm_list(raw)` — 将 "RingAllReduce,Butterfly,..." 拆分为 Python list
+   - `map_algorithm_name(name)` — 将紧凑名（"RingAllReduce"）映射为可读名（"Ring AllReduce"）
+
+3. **`tests/test_plugin_bridge.py`** — 10 个测试用例：
+   - 库加载成功 / 文件不存在抛出异常
+   - 版本号非空 / 类型正确
+   - 算法列表包含 RingAllReduce / 非空
+   - 算法字符串解析 / 空字符串处理
+   - 算法名称映射 / 未知名称透传
+   - 打印能力清单（人工检查）
+
+### 编译步骤
+
+```bash
+# 1. 编译 C 动态库（如果尚未编译）
+cd hcccl && mkdir -p build && cd build
+cmake .. && make
+# 产物：libhccl_plugin.so
+
+# 2. 无需额外步骤 — Python 端通过 ctypes 直接加载
+```
+
+### 测试步骤
+
+```bash
+# C 测试（确保动态库正常）
+cd hcccl/build
+./test_topology
+./test_ring
+
+# Python 桥接测试
+cd ../..
+python3 -m unittest tests.test_plugin_bridge -v
+```
+
+### 测试预期结果
+
+```
+$ python3 -m unittest tests.test_plugin_bridge -v
+test_get_algorithms_contains_ring ... ok
+test_get_algorithms_non_empty ...... ok
+test_get_version_non_empty ......... ok
+test_get_version_returns_str ....... ok
+test_load_library_succeeds ......... ok
+test_map_algorithm_name ............ ok
+test_missing_library_raises ........ ok
+test_parse_algorithm_list .......... ok
+test_parse_empty_string ............ ok
+test_print_capabilities ............ ok
+
+Plugin Version:
+  0.1.0-prototype
+
+Algorithms (raw):
+  RingAllReduce,Butterfly,Mesh,NHR,FatTree
+
+Algorithms (parsed):
+  - Ring AllReduce
+  - Butterfly
+  - Mesh
+  - NHR
+  - Fat-Tree
+
+Ran 10 tests in 0.001s
+OK
+```
+
+### 当前项目架构图
+
+```
+┌─────────────────────────────────────────────────┐
+│  main.py  (CLI: --nodes --message-size ...)      │
+└──────────────────┬──────────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────────┐
+│  agent/hccl_agent.py  (Orchestration)            │
+│    ├─ ConfigSkill      ├─ OptimizationSkill      │
+│    ├─ TopologySkill    ├─ StrategySkill          │
+│    ├─ AlgorithmSkill   ├─ ExperimentLogger       │
+│    └─ TopologyGraph    └─ AgentPromptEngine      │
+└──────────────────┬──────────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────────┐
+│  plugin/hccl_bridge.py  (ctypes bridge)          │
+│    ├─ get_version()                              │
+│    └─ get_algorithms()                           │
+└──────────────────┬──────────────────────────────┘
+                   │  ctypes.CDLL
+┌──────────────────▼──────────────────────────────┐
+│  hcccl/build/libhccl_plugin.so  (C shared lib)   │
+│    ├─ hcclPluginGetVersion()                     │
+│    ├─ hcclPluginGetAlgorithms()                  │
+│    ├─ hcclCommInit / hcclCommDestroy             │
+│    ├─ hcclGetTopology / hcclSetRank              │
+│    └─ ring_allreduce  (CPU-simulated)            │
+└─────────────────────────────────────────────────┘
+```
+
+测试结果：57 Python + 15 C = 72 测试全部通过。
+
+
+## 2026-06-14（第七批）：Agent ↔ Plugin 集成 — 能力发现
+
+### 目标
+
+让 Agent 首次真正使用 Plugin，形成完整的能力发现闭环：
+
+```
+Agent
+  │
+  ▼
+PluginManager
+  │
+  ▼
+HCCLBridge (ctypes)
+  │
+  ▼
+libhccl_plugin.so
+  │
+  ▼
+hcclPluginGetVersion() / hcclPluginGetAlgorithms()
+```
+
+### PluginManager 设计
+
+`agent/plugin_manager.py` — `PluginManager` 类：
+
+- 持有 `HCCLBridge` 实例
+- `discover()` 方法组合 bridge + capability 解析，返回结构化 dict：
+  ```python
+  {
+      "version": "0.1.0-prototype",
+      "algorithms": ["Ring AllReduce", "Butterfly", "Mesh", "NHR", "Fat-Tree"],
+      "raw_algorithms": "RingAllReduce,Butterfly,Mesh,NHR,FatTree",
+      "library_path": "/.../libhccl_plugin.so",
+  }
+  ```
+
+### Agent 与 Plugin 交互流程
+
+1. `HCCLAgent.__init__()` → 创建 `PluginManager` 实例
+2. `HCCLAgent.run()` → 调用 `plugin_manager.discover()` 获取插件能力
+3. 结果写入 `output["plugin"]`，与 Simulator 结果并列输出
+4. 不破坏现有逻辑：Simulator、StrategySkill、Logger 等全部保持不变
+
+### 修改文件
+
+1. **`agent/plugin_manager.py`** — 新文件。`PluginManager` 类封装 bridge + 解析
+2. **`agent/hccl_agent.py`** — 3 处最小改动：
+   - 新增 `from agent.plugin_manager import PluginManager`
+   - `__init__` 中新增 `self.plugin_manager = PluginManager()`
+   - `run()` 中新增 `plugin_info = self.plugin_manager.discover()` 并写入 `output["plugin"]`
+3. **`tests/test_plugin_manager.py`** — 新文件。8 个测试用例
+
+### 测试命令
+
+```bash
+python3 -m unittest tests/test_plugin_manager -v
+```
+
+### 测试结果
+
+```
+$ python3 -m unittest tests.test_plugin_manager -v
+test_discover_algorithms_non_empty ... ok
+test_discover_contains_ring_allreduce ... ok
+test_discover_library_path ........... ok
+test_discover_raw_algorithms ......... ok
+test_discover_returns_dict ........... ok
+test_discover_version_non_empty ...... ok
+test_manager_initializes ............. ok
+test_print_capability_report ......... ok
+
+Plugin Version:
+  0.1.0-prototype
+
+Supported Algorithms:
+  - Ring AllReduce
+  - Butterfly
+  - Mesh
+  - NHR
+  - Fat-Tree
+
+Ran 8 tests in 0.001s
+OK
+```
+
+### 当前架构图
+
+```
+┌─────────────────────────────────────────────────┐
+│  main.py  (CLI: --nodes --message-size ...)      │
+└──────────────────┬──────────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────────┐
+│  agent/hccl_agent.py  (Orchestration)            │
+│    ├─ ConfigSkill       ├─ OptimizationSkill     │
+│    ├─ TopologySkill     ├─ StrategySkill         │
+│    ├─ AlgorithmSkill    ├─ ExperimentLogger      │
+│    ├─ TopologyGraph     ├─ AgentPromptEngine     │
+│    └─ PluginManager ───────────────────┐         │
+└────────────────────────────────────────┼─────────┘
+                                         │
+┌────────────────────────────────────────▼─────────┐
+│  agent/plugin_manager.py  (Capability discovery)  │
+│    ├─ HCCLBridge.load_library()                  │
+│    └─ plugin_capability.parse / map              │
+└────────────────────┬─────────────────────────────┘
+                     │
+┌────────────────────▼─────────────────────────────┐
+│  plugin/hccl_bridge.py  (ctypes wrapper)          │
+│    ├─ get_version()     → const char*             │
+│    └─ get_algorithms()  → const char*             │
+└────────────────────┬─────────────────────────────┘
+                     │  ctypes.CDLL
+┌────────────────────▼─────────────────────────────┐
+│  hcccl/build/libhccl_plugin.so  (C shared lib)    │
+│    ├─ hcclPluginGetVersion()                     │
+│    ├─ hcclPluginGetAlgorithms()                  │
+│    ├─ hcclCommInit / hcclCommDestroy             │
+│    ├─ hcclGetTopology / hcclSetRank              │
+│    └─ ring_allreduce  (CPU-simulated)            │
+└──────────────────────────────────────────────────┘
+```
+
+测试结果：65 Python + 15 C = 80 测试全部通过。
+
+
+## 2026-06-14（第八批）：Agent Execution Framework — 首次真正执行 Ring AllReduce
+
+### 目标
+
+让 Agent 第一次真正执行插件中的算法，形成从决策到计算的完整闭环：
+
+```
+Agent
+  │
+  ├── PluginManager  (能力发现)
+  ├── AlgorithmSkill (算法选择)
+  │
+  └── ExecutionSkill ──→ ExecutionEngine ──→ PluginBridge
+                                                 │
+                                          libhccl_plugin.so
+                                                 │
+                                          ring_allreduce()
+                                                 │
+                                          [10, 10, 10, 10]
+```
+
+### Execution Engine 设计
+
+`plugin/execution_engine.py` — `ExecutionEngine` 类：
+
+- 通过 ctypes 加载 `libhccl_plugin.so`，绑定 4 个 C 函数：
+  - `hcclCommInit` — 创建 communicator
+  - `hcclCommDestroy` — 销毁 communicator
+  - `hcclSetRank` — 设置当前 rank
+  - `ring_allreduce` — 执行 Ring AllReduce
+- `execute_algorithm(name, data)` 方法：
+  - 将 Agent 算法名映射到内部 key
+  - 仅 `ring` 已实现；Butterfly/Mesh/NHR/Fat-Tree 返回 `not_implemented`
+  - 未知算法返回 `unknown_algorithm`
+  - 空输入返回 `invalid_input`
+- Ring AllReduce 执行流程（两阶段）：
+  1. 创建 N-rank communicator
+  2. Pass 1：逐个 rank 调用 `ring_allreduce` 提交输入值
+  3. Pass 2：逐个 rank 调用 `ring_allreduce` 获取归约结果
+  4. 销毁 communicator，返回结果列表
+
+### Agent 执行流程
+
+1. `HCCLAgent.__init__()` → 创建 `ExecutionSkill` 实例
+2. `HCCLAgent.run_execution_demo(algorithm, input_data)` → 调用 `execution_skill.execute()`
+3. 与 `run()` 完全独立，不破坏现有 Simulator 逻辑
+
+### 新增文件
+
+1. **`plugin/execution_engine.py`** — `ExecutionEngine`：ctypes 绑定 + 两阶段执行
+2. **`agent/execution_skill.py`** — `ExecutionSkill`：Agent 侧薄封装
+3. **`tests/test_execution_engine.py`** — 8 个测试用例：
+   - 4 rank [1,2,3,4] → [10,10,10,10]
+   - 8 rank [1..8] → [36]*8
+   - Butterfly/Mesh/NHR/Fat-Tree → not_implemented
+   - unknown algorithm → unknown_algorithm
+   - empty input → invalid_input
+4. **`tests/test_execution_skill.py`** — 5 个测试用例
+
+### 修改文件
+
+1. **`agent/hccl_agent.py`** — 3 处最小改动：
+   - import ExecutionSkill
+   - `__init__` 中创建 `self.execution_skill`
+   - 新增 `run_execution_demo()` 方法（与 `run()` 独立）
+
+### 测试命令
+
+```bash
+python3 -m unittest tests/test_execution_engine -v
+python3 -m unittest tests/test_execution_skill -v
+```
+
+### 测试结果
+
+```
+test_ring_allreduce_4_ranks ..... ok
+test_ring_allreduce_8_ranks ..... ok
+test_butterfly_not_implemented .. ok
+test_mesh_not_implemented ....... ok
+test_nhr_not_implemented ........ ok
+test_fat_tree_not_implemented ... ok
+test_unknown_algorithm .......... ok
+test_empty_input ................ ok
+Ran 8 tests ... OK
+
+test_execute_ring_allreduce_success ... ok
+test_execute_not_implemented .......... ok
+test_execute_unknown_algorithm ........ ok
+test_execute_preserves_algorithm_name . ok
+test_execute_empty_input .............. ok
+Ran 5 tests ... OK
+```
+
+### 当前项目架构图
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  main.py  (CLI: --nodes --message-size ...)              │
+└────────────────────────┬────────────────────────────────┘
+                         │
+┌────────────────────────▼────────────────────────────────┐
+│  agent/hccl_agent.py  (Orchestration)                    │
+│    ├─ ConfigSkill         ├─ OptimizationSkill           │
+│    ├─ TopologySkill       ├─ StrategySkill               │
+│    ├─ AlgorithmSkill      ├─ ExperimentLogger            │
+│    ├─ TopologyGraph       ├─ AgentPromptEngine           │
+│    ├─ PluginManager       └─ ExecutionSkill ───────┐     │
+│    └─ run_execution_demo()                         │     │
+└────────────────────────────────────────────────────┼─────┘
+                                                     │
+┌────────────────────────────────────────────────────▼─────┐
+│  agent/execution_skill.py                                │
+│    └─ ExecutionSkill.execute(algorithm, data)            │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+┌────────────────────────▼─────────────────────────────────┐
+│  plugin/execution_engine.py                              │
+│    ├─ ctypes bindings:                                   │
+│    │    hcclCommInit / hcclCommDestroy                   │
+│    │    hcclSetRank / ring_allreduce                     │
+│    └─ execute_algorithm(name, data)                      │
+└────────────────────────┬─────────────────────────────────┘
+                         │
+┌────────────────────────▼─────────────────────────────────┐
+│  plugin/hccl_bridge.py  (plugin discovery)               │
+└────────────────────────┬─────────────────────────────────┘
+                         │  ctypes.CDLL
+┌────────────────────────▼─────────────────────────────────┐
+│  hcccl/build/libhccl_plugin.so  (C shared library)        │
+│    ├─ hcclPluginGetVersion / hcclPluginGetAlgorithms     │
+│    ├─ hcclCommInit / hcclCommDestroy / hcclSetRank       │
+│    ├─ hcclGetTopology / hcclFreeTopology                 │
+│    └─ ring_allreduce  ← 首次真正执行 ✓                   │
+└──────────────────────────────────────────────────────────┘
+```
+
+测试结果：78 Python + 15 C = 93 测试全部通过。
+
+
+## 2026-06-14（第九批）：Self Evaluation Framework — 自动评价与报告生成
+
+### 目标
+
+让 Agent 在执行算法后自动评价性能并生成可读报告，形成完整闭环：
+
+```
+Agent
+  │
+  ├── ExecutionSkill  → 执行算法
+  ├── EvaluationSkill → 评价性能
+  └── ReportGenerator → 生成报告
+```
+
+### EvaluationSkill 设计
+
+`agent/evaluation_skill.py` — `EvaluationSkill` 类：
+
+基于 score 的四级评分制：
+
+| score 范围 | Grade | Recommendation |
+|-----------|-------|----------------|
+| >= 70 | EXCELLENT | Current algorithm performs very well. |
+| 50 – 70 | GOOD | Keep current algorithm. |
+| 30 – 50 | FAIR | Consider trying another algorithm. |
+| < 30 | POOR | Strongly recommend algorithm replacement. |
+
+输入：Simulator 输出的 performance dict（含 `score` 字段）
+输出：`{"grade": "GOOD", "recommendation": "..."}`
+
+### ReportGenerator 设计
+
+`agent/report_generator.py` — `ReportGenerator` 类：
+
+将 execution result 和 evaluation result 格式化为多行文本报告，包含 6 个段落：
+Algorithm / Latency / Bandwidth / Score / Evaluation / Recommendation
+
+### Agent 执行→评价→报告流程
+
+`HCCLAgent.generate_execution_report(algorithm, input_data)`:
+
+1. **Execution**: 调用 `execution_skill.execute()` → C plugin 执行
+2. **Simulation**: 调用 `simulator.evaluate()` → 获取 latency/bandwidth/score
+3. **Evaluation**: 调用 `evaluation_skill.evaluate()` → 评级
+4. **Report**: 调用 `report_generator.generate_report()` → 文本报告
+
+与 `run()` 和 `run_execution_demo()` 完全独立，不破坏兼容性。
+
+### 新增文件
+
+1. **`agent/evaluation_skill.py`** — `EvaluationSkill`：4 级评分制
+2. **`agent/report_generator.py`** — `ReportGenerator`：文本报告格式化
+3. **`logs/sample_execution_report.txt`** — 示例输出
+4. **`tests/test_evaluation_skill.py`** — 10 个测试：EXCELLENT/GOOD/FAIR/POOR + 边界值 + 缺失字段
+5. **`tests/test_report_generator.py`** — 3 个测试：关键字段存在、完整内容、缺失处理
+6. **`tests/test_execution_report_flow.py`** — 4 个测试：完整 Execution→Evaluation→Report 链路
+
+### 修改文件
+
+1. **`agent/hccl_agent.py`** — 3 处最小改动：
+   - import EvaluationSkill / ReportGenerator
+   - `__init__` 中创建实例
+   - 新增 `generate_execution_report()`
+
+### 测试命令
+
+```bash
+python3 -m unittest tests/test_evaluation_skill -v
+python3 -m unittest tests/test_report_generator -v
+python3 -m unittest tests/test_execution_report_flow -v
+```
+
+### 测试结果
+
+```
+test_evaluation_skill   — 10 tests ... OK
+test_report_generator   —  3 tests ... OK
+test_execution_report_flow — 4 tests ... OK
+```
+
+### 示例输出
+
+```
+Execution Report
+=================
+
+Algorithm:
+  Ring AllReduce
+
+Latency:
+  0.012 ms
+
+Bandwidth:
+  12.5 GB/s
+
+Score:
+  8.75
+
+Evaluation:
+  POOR
+
+Recommendation:
+  Strongly recommend algorithm replacement.
+```
+
+### 当前项目架构图
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  main.py  (CLI)                                                  │
+└──────────────────────────┬───────────────────────────────────────┘
+                           │
+┌──────────────────────────▼───────────────────────────────────────┐
+│  agent/hccl_agent.py                                             │
+│    ├─ run()                     ├─ run_execution_demo()          │
+│    └─ generate_execution_report()  ← NEW                        │
+│         │                              │                         │
+│         ▼                              ▼                         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐       │
+│  │ ExecutionSkill│  │EvaluationSkill│  │ ReportGenerator  │       │
+│  └──────┬───────┘  └──────────────┘  └──────────────────┘       │
+│         │                             (NEW)          (NEW)       │
+└─────────┼───────────────────────────────────────────────────────┘
+          │
+┌─────────▼───────────────────────────────────────────────────────┐
+│  plugin/execution_engine.py  (ctypes)                            │
+└─────────┬───────────────────────────────────────────────────────┘
+          │  ctypes.CDLL
+┌─────────▼───────────────────────────────────────────────────────┐
+│  hcccl/build/libhccl_plugin.so                                   │
+│    └─ ring_allreduce()  (CPU-simulated)                          │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+测试结果：95 Python + 15 C = 110 测试全部通过。
+
+### 当前项目阶段评估
+
+| 层次 | 状态 |
+|------|------|
+| C 通信基础设施 | ✅ |
+| C Ring AllReduce (CPU) | ✅ |
+| Python ↔ C Bridge | ✅ |
+| Plugin 能力发现 | ✅ |
+| Agent 执行 Ring AllReduce | ✅ |
+| **Agent 自动评价与报告** | **✅ 本轮完成** |
+| Butterfly / Mesh / NHR / Fat-Tree | ⬜ 未实现 |
+| 真实 CANN / HCOMM 对接 | ⬜ 待 SDK |
+| LLM Agent 代码生成 | ⬜ 待后续 |
+
+### 当前项目阶段评估
+
+| 层次 | 状态 |
+|------|------|
+| C 通信基础设施 (comm/topology) | ✅ 完成 |
+| C Ring AllReduce (CPU 模拟) | ✅ 完成 |
+| Python ↔ C Bridge (ctypes) | ✅ 完成 |
+| Plugin 能力发现 | ✅ 完成 |
+| **Agent 执行 Ring AllReduce** | **✅ 本轮完成** |
+| Butterfly / Mesh / NHR / Fat-Tree | ⬜ 未实现 |
+| 真实 CANN / HCOMM 对接 | ⬜ 待 SDK |
+| LLM Agent 代码生成 | ⬜ 待后续 |
+
+## 2026-06-14（第三批）：C/C++ 骨架 + TopologyGraph + PromptEngine + 集成测试
+
+新增文件：
+1. hcccl/ 目录（6 个文件）：C/C++ HCCL 插件骨架
+2. agent/prompt_engine.py：Prompt 模板填充与调用日志
+3. scripts/integration_test.sh：11 场景集成测试
+
+修改文件：
+1. agent/hccl_agent.py：集成 TopologyGraph 构建、PromptEngine 调用、primitive 传入 StrategySkill
+2. skills/strategy_skill.py：primitive 感知的三阶段策略生成（AllReduce 两阶段环 / AllGather / ReduceScatter / Mesh）
+3. tests/test_agent.py：更新 ring 测试以匹配新策略格式，新增 2 个 primitive 策略测试
+
+新增函数：
+1. HCCLAgent._build_topology_graph()
+2. StrategySkill._generate_ring() / _generate_butterfly() / _generate_mesh() / _generate_generic()
+3. AgentPromptEngine 全部方法
+
+测试结果：47 单元测试全部通过，11 集成场景全部通过。
+
+## 2026-06-14（第二批）：拓扑图 + 故障注入 + 文档 + 报告生成
+
+（详见之前迭代记录）
+
+## 2026-06-13（第一批）：primitive 全链路 + 算法粒度 + 日志 + README
+
+（详见之前迭代记录）

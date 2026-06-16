@@ -1,0 +1,298 @@
+from skills.algorithm_skill import AlgorithmSkill
+from simulator.simulator import Simulator
+from skills.topology_skill import TopologySkill
+from skills.config_skill import ConfigSkill
+from skills.optimization_skill import OptimizationSkill
+from skills.strategy_skill import StrategySkill
+from skills.topology_graph import TopologyGraph
+from agent.experiment_logger import ExperimentLogger
+from agent.prompt_engine import AgentPromptEngine
+from agent.plugin_manager import PluginManager
+from agent.execution_skill import ExecutionSkill
+from agent.evaluation_skill import EvaluationSkill
+from agent.report_generator import ReportGenerator
+
+
+class HCCLAgent:
+
+    SUPPORTED_PRIMITIVES = {
+        "AllReduce",
+        "AllGather",
+        "ReduceScatter",
+    }
+
+    def __init__(self):
+        self.algorithm_skill = AlgorithmSkill()
+        self.topology_skill = TopologySkill()
+        self.config_skill = ConfigSkill()
+        self.simulator = Simulator()
+        self.optimization_skill = OptimizationSkill()
+        self.strategy_skill = StrategySkill()
+        self.logger = ExperimentLogger()
+        self.prompt_engine = AgentPromptEngine()
+        self.plugin_manager = PluginManager()
+        self.execution_skill = ExecutionSkill()
+        self.evaluation_skill = EvaluationSkill()
+        self.report_generator = ReportGenerator()
+
+    def run(
+        self,
+        nodes,
+        message_size,
+        primitive="AllReduce",
+    ):
+        primitive = self._normalize_primitive(primitive)
+
+        cluster_info = self.config_skill.load_cluster_info()
+
+        # ---- topology inference ----
+        topology = self.topology_skill.analyze(nodes)
+
+        # ---- topology graph ----
+        topology_graph = self._build_topology_graph(
+            nodes, topology, cluster_info
+        )
+
+        # ---- plugin capability discovery ----
+        plugin_info = self.plugin_manager.discover()
+
+        # ---- runtime config ----
+        runtime_cluster_info = dict(cluster_info)
+        runtime_cluster_info["nodes"] = nodes
+        runtime_cluster_info["topology"] = topology
+
+        # ---- algorithm selection ----
+        candidate_algorithms = (
+            self.algorithm_skill.choose_algorithms(
+                nodes,
+                message_size,
+                primitive=primitive,
+            )
+        )
+
+        # ---- optimisation / ranking ----
+        best_algorithm, best_result, ranking = (
+            self.optimization_skill.optimize(
+                self.simulator,
+                runtime_cluster_info,
+                candidate_algorithms,
+                nodes,
+                message_size,
+                primitive=primitive,
+            )
+        )
+
+        # ---- strategy generation ----
+        strategy = self.strategy_skill.generate(
+            best_algorithm,
+            nodes,
+            primitive=primitive,
+        )
+
+        # ---- prompt logging ----
+        prompt_params = {
+            "primitive": primitive,
+            "nodes": str(nodes),
+            "message_size": str(message_size),
+            "topology": topology,
+            "bandwidth_gbps": str(
+                runtime_cluster_info.get("bandwidth_gbps", "N/A")
+            ),
+            "latency_ms": str(
+                runtime_cluster_info.get("latency_ms", "N/A")
+            ),
+            "device_type": runtime_cluster_info.get(
+                "device_type", "Ascend910A"
+            ),
+        }
+        filled_prompt = self.prompt_engine.build_algorithm_selection_prompt(
+            prompt_params
+        )
+
+        # ---- recommendation reason ----
+        reason = self._build_reason(
+            primitive,
+            topology,
+            message_size,
+            candidate_algorithms,
+            best_algorithm,
+            best_result,
+        )
+
+        # ---- assemble output ----
+        output = {
+            "plugin": plugin_info,
+            "cluster": runtime_cluster_info,
+            "primitive": primitive,
+            "topology": topology,
+            "topology_graph_summary": topology_graph.summary(),
+            "message_size_mb": message_size,
+            "candidate_algorithms": candidate_algorithms,
+            "algorithm": best_algorithm,
+            "reason": reason,
+            "result": best_result,
+            "best_algorithm": best_algorithm,
+            "best_result": best_result,
+            "ranking": ranking,
+            "strategy": strategy,
+            "prompt_filled": filled_prompt[:200] + "..."
+            if len(filled_prompt) > 200 else filled_prompt,
+        }
+
+        # Persist this run for reproducible experiment tracking.
+        self.logger.log_run(output)
+
+        return output
+
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
+
+    def run_execution_demo(self, algorithm="Ring AllReduce",
+                           input_data=None):
+        """Execute *algorithm* on *input_data* via the C plugin.
+
+        This is a separate entry point from run() — it does not use the
+        Simulator or StrategySkill.  It calls the real (CPU-simulated)
+        HCCL algorithm implementation through the Execution Engine.
+
+        Parameters
+        ----------
+        algorithm : str
+            Agent display name, e.g. "Ring AllReduce".
+        input_data : list[float] or None
+            One float per rank.  Defaults to [1, 2, 3, 4].
+
+        Returns
+        -------
+        dict — ExecutionEngine result.
+        """
+        if input_data is None:
+            input_data = [1.0, 2.0, 3.0, 4.0]
+
+        return self.execution_skill.execute(algorithm, input_data)
+
+    def generate_execution_report(self, algorithm="Ring AllReduce",
+                                  input_data=None):
+        """Execute *algorithm*, evaluate performance, and return a report.
+
+        Runs the full pipeline:
+          1. Execute algorithm via C plugin
+          2. Simulate performance (latency / bandwidth / score)
+          3. Evaluate the performance result
+          4. Generate a text report
+
+        Parameters
+        ----------
+        algorithm : str
+            e.g. "Ring AllReduce".
+        input_data : list[float] or None
+            One float per rank.  Defaults to [1, 2, 3, 4].
+
+        Returns
+        -------
+        dict
+            {"execution": ..., "evaluation": ..., "report": "..."}
+        """
+        if input_data is None:
+            input_data = [1.0, 2.0, 3.0, 4.0]
+
+        # 1. Execute the algorithm via the C plugin.
+        execution = self.execution_skill.execute(algorithm, input_data)
+
+        # 2. Simulate performance using the Simulator.
+        nodes = len(input_data)
+        topology = self.topology_skill.analyze(nodes)
+        cluster_info = self.config_skill.load_cluster_info()
+
+        sim_result = self.simulator.evaluate(
+            algorithm,
+            topology,
+            nodes,
+            128.0,  # default message size for scoring
+            primitive="AllReduce",
+            bandwidth_gbps=cluster_info.get("bandwidth_gbps"),
+            latency_ms=cluster_info.get("latency_ms"),
+        )
+        sim_result["algorithm"] = algorithm  # attach name for the report
+
+        # 3. Evaluate the performance.
+        evaluation = self.evaluation_skill.evaluate(sim_result)
+
+        # 4. Generate the report.
+        report = self.report_generator.generate_report(
+            sim_result, evaluation,
+        )
+
+        return {
+            "execution": execution,
+            "evaluation": evaluation,
+            "report": report,
+        }
+
+    def _normalize_primitive(self, primitive):
+        if primitive not in self.SUPPORTED_PRIMITIVES:
+            supported = ", ".join(
+                sorted(self.SUPPORTED_PRIMITIVES)
+            )
+            raise ValueError(
+                f"Unsupported primitive: {primitive}. "
+                f"Supported primitives: {supported}"
+            )
+        return primitive
+
+    def _build_topology_graph(self, nodes, topology, cluster_info):
+        """Construct a TopologyGraph matching the inferred topology and
+        cluster link parameters.
+
+        Uses the first link entry (typically HCCS) for intra-server
+        edges.  Returns the graph instance so path computation is
+        available to the caller.
+        """
+        links = cluster_info.get("links", [])
+        if links:
+            primary = links[0]
+            bw = primary.get("bandwidth_gbps", 100)
+            lat = primary.get("latency_ms", 0.002)
+            ber = primary.get("ber", 1e-12)
+        else:
+            bw = cluster_info.get("bandwidth_gbps", 100)
+            lat = cluster_info.get("latency_ms", 0.002)
+            ber = 1e-12
+
+        kwargs = {
+            "bandwidth_gbps": bw,
+            "latency_ms": lat,
+            "ber": ber,
+        }
+
+        if topology == "Full Mesh":
+            return TopologyGraph.full_mesh(nodes, **kwargs)
+        elif topology == "Ring":
+            return TopologyGraph.ring(nodes, **kwargs)
+        elif topology == "Fat Tree":
+            return TopologyGraph.fat_tree(nodes, **kwargs)
+        else:
+            # Fallback: full mesh with whatever we have.
+            return TopologyGraph.full_mesh(nodes, **kwargs)
+
+    def _build_reason(
+        self,
+        primitive,
+        topology,
+        message_size,
+        candidate_algorithms,
+        best_algorithm,
+        best_result,
+    ):
+        return (
+            f"当前集合通信原语为 {primitive}，"
+            f"节点规模推断为 {topology} 拓扑，"
+            f"消息大小为 {message_size} MB。"
+            f"Agent 比较了 {len(candidate_algorithms)} 个候选算法，"
+            f"最终选择 {best_algorithm}，"
+            f"因为它在当前模拟模型中的 score 最高，"
+            f"latency={best_result['latency']} ms，"
+            f"bandwidth={best_result['bandwidth']} GB/s，"
+            f"score={best_result['score']}。"
+        )
