@@ -182,13 +182,79 @@ hcclResult_t butterfly_allreduce(
      *   BEST FOR: small messages (<= 64 KB) where latency dominates.
      *   CONSTRAINT: N must be a power of 2 (or handle leftovers).
      */
-    (void)send_buf;
-    (void)recv_buf;
+    /* ---- arg validation ---- */
+    if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (data_type != HCCL_FP32) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+    if (op != HCCL_SUM) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+    if (count == 0) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+
+    hcclCommInternal* ctx = (hcclCommInternal*) comm;
+    int32_t N = ctx->num_devices;
+    int32_t rank = ctx->current_rank;
+
+    /* Store this rank's input. */
+    const float* input = (const float*) send_buf;
+    ctx->rank_values[rank] = input[0];
+
+    if (count == 1) {
+        /*
+         * Butterfly / recursive-doubling AllReduce — log₂(N) steps.
+         *
+         * Step s (distance = 2^s):
+         *   Each rank i exchanges its accumulated partial sum with
+         *   partner = i XOR distance.  Both sides add the received
+         *   value to their own accumulator.
+         *
+         * A snapshot before each step prevents double-counting from
+         * in-place updates.
+         */
+        float partial[64];
+        if (N > 64) return HCCL_ERR_INTERNAL;
+
+        for (int32_t i = 0; i < N; i++) {
+            partial[i] = ctx->rank_values[i];
+        }
+
+        int32_t num_steps = 0;
+        {
+            int32_t tmp = N;
+            while (tmp > 1) { tmp >>= 1; num_steps++; }
+        }
+
+        for (int32_t step = 0; step < num_steps; step++) {
+            int32_t distance = 1 << step;
+            float snapshot[64];
+            for (int32_t i = 0; i < N; i++) {
+                snapshot[i] = partial[i];
+            }
+
+            for (int32_t i = 0; i < N; i++) {
+                int32_t partner = i ^ distance;
+                if (partner < N && i < partner) {
+                    partial[i]     += snapshot[partner];
+                    partial[partner] += snapshot[i];
+                }
+            }
+        }
+
+        /* Store results. */
+        for (int32_t i = 0; i < N; i++) {
+            ctx->rank_results[i] = partial[i];
+        }
+        *(float*) recv_buf = ctx->rank_results[rank];
+
+        return HCCL_SUCCESS;
+    }
+
     (void)count;
-    (void)data_type;
-    (void)op;
-    (void)comm;
-    fprintf(stderr, "[STUB] butterfly_allreduce — not implemented.\n");
     return HCCL_ERR_NOT_SUPPORTED;
 }
 

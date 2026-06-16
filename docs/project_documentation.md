@@ -1128,6 +1128,74 @@ Total:                 124 Python + 15 C = 139 tests PASS
 | Butterfly / Mesh / NHR / Fat-Tree | ⬜ 未实现 |
 | 真实 CANN / HCOMM 对接 | ⬜ 待 SDK |
 
+
+
+## 2026-06-14（第十二批）：Butterfly AllReduce CPU 实现 — Recursive Doubling
+
+### 目标
+
+让 Butterfly 从 "可发现但不可执行" 升级为完整可执行算法，Agent 推荐 Butterfly 后能真正运行。
+
+### Butterfly 原理 — Recursive Doubling
+
+log₂(N) 步内完成全局归约。每步 rank i 与 partner = i XOR 2^step 交换累加值：
+
+```
+N=8 示例:
+
+Step 0 (distance=1):  0<->1  2<->3  4<->5  6<->7
+Step 1 (distance=2):  0<->2  1<->3  4<->6  5<->7
+Step 2 (distance=4):  0<->4  1<->5  2<->6  3<->7
+```
+
+每步 snapshot 机制避免原地更新的重复累加。log₂(N) 步后所有 rank 持有全局和。
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `hcccl/src/hccl_algorithms.c` | 替换 `butterfly_allreduce()` 桩为真实实现（参数校验 → 存储输入 → log₂(N) 步 pairwise exchange → 返回结果） |
+| `hcccl/tests/test_butterfly.c` | **新文件**。6 个测试：4 rank/8 rank/NULL args/FP16/PROD |
+| `hcccl/CMakeLists.txt` | 新增 `test_butterfly` 目标 |
+| `plugin/execution_engine.py` | 新增 `butterfly_allreduce` ctypes 绑定 + `_execute_butterfly()` + `_IMPLEMENTED` 增加 "butterfly" |
+| `tests/test_execution_engine.py` | Butterfly 从 not_implemented → success（+2 测试） |
+| `tests/test_execution_skill.py` | 新增 `test_execute_butterfly_success` |
+| `tests/test_execution_report_flow.py` | 新增 `test_full_flow_butterfly_success` |
+
+### Agent 执行链路变化
+
+```
+Before:  Butterfly → "not_implemented"
+After:   Butterfly → butterfly_allreduce() → [sum, sum, ...]
+```
+
+### 测试结果
+
+```
+C:  test_topology  9/9
+    test_ring       6/6
+    test_butterfly  6/6  ← NEW
+    Total C:       21/21
+
+Python:  127 tests PASS (+3 new, existing updated)
+Total:   148 tests PASS
+```
+
+### 当前项目阶段评估
+
+| 层次 | 状态 |
+|------|------|
+| C 通信基础设施 | ✅ |
+| C Ring AllReduce (CPU) | ✅ |
+| **C Butterfly AllReduce (CPU)** | **✅ 本轮完成** |
+| Python ↔ C Bridge | ✅ |
+| Plugin 能力发现 + 执行 | ✅ (Ring + Butterfly) |
+| Agent 自动评价与报告 | ✅ |
+| DeepSeek LLM 推理 | ✅ |
+| 标准化 0–100 性能评分 | ✅ |
+| Mesh / NHR / Fat-Tree | ⬜ 未实现 |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
 ## 2026-06-14（第三批）：C/C++ 骨架 + TopologyGraph + PromptEngine + 集成测试
 
 新增文件：

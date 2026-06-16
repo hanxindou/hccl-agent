@@ -35,7 +35,7 @@ _ALGO_TABLE = {
     "PairWise":       "pairwise",
 }
 
-_IMPLEMENTED = {"ring"}  # only Ring AllReduce is implemented so far
+_IMPLEMENTED = {"ring", "butterfly"}
 
 
 class ExecutionEngine:
@@ -93,6 +93,17 @@ class ExecutionEngine:
         ]
         lib.ring_allreduce.restype = ctypes.c_int
 
+        # -- butterfly_allreduce --
+        lib.butterfly_allreduce.argtypes = [
+            ctypes.POINTER(ctypes.c_float),
+            ctypes.POINTER(ctypes.c_float),
+            ctypes.c_size_t,
+            ctypes.c_int,
+            ctypes.c_int,
+            ctypes.c_void_p,
+        ]
+        lib.butterfly_allreduce.restype = ctypes.c_int
+
         self._lib = lib
 
     # ------------------------------------------------------------------
@@ -135,7 +146,16 @@ class ExecutionEngine:
                 "result": None,
             }
 
-        return self._execute_ring_allreduce(input_data)
+        if algo_key == "ring":
+            return self._execute_ring_allreduce(input_data)
+        elif algo_key == "butterfly":
+            return self._execute_butterfly(input_data)
+
+        return {
+            "algorithm": algorithm_name,
+            "status": "not_implemented",
+            "result": None,
+        }
 
     # ------------------------------------------------------------------
     # Ring AllReduce execution
@@ -194,6 +214,57 @@ class ExecutionEngine:
 
         return {
             "algorithm": "Ring AllReduce",
+            "status": "success",
+            "result": results,
+        }
+
+    # ------------------------------------------------------------------
+    # Butterfly execution
+    # ------------------------------------------------------------------
+
+    def _execute_butterfly(self, input_data):
+        """Run Butterfly AllReduce(SUM) on *input_data*."""
+        self.load_library()
+        lib = self._lib
+        N = len(input_data)
+
+        comm = ctypes.c_void_p()
+        device_ids = (ctypes.c_int32 * N)(*range(N))
+        rc = lib.hcclCommInit(ctypes.byref(comm), N, device_ids)
+        if rc != HCCL_SUCCESS:
+            return {
+                "algorithm": "Butterfly",
+                "status": "comm_init_failed",
+                "result": None,
+            }
+
+        try:
+            send = ctypes.c_float()
+            recv = ctypes.c_float()
+
+            for rank in range(N):
+                lib.hcclSetRank(comm, rank)
+                send.value = input_data[rank]
+                lib.butterfly_allreduce(
+                    ctypes.byref(send), ctypes.byref(recv),
+                    1, HCCL_FP32, HCCL_SUM, comm,
+                )
+
+            results = []
+            for rank in range(N):
+                lib.hcclSetRank(comm, rank)
+                send.value = input_data[rank]
+                lib.butterfly_allreduce(
+                    ctypes.byref(send), ctypes.byref(recv),
+                    1, HCCL_FP32, HCCL_SUM, comm,
+                )
+                results.append(round(recv.value, 6))
+
+        finally:
+            lib.hcclCommDestroy(comm)
+
+        return {
+            "algorithm": "Butterfly",
             "status": "success",
             "result": results,
         }

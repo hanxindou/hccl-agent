@@ -42,9 +42,19 @@ class TestExecutionReportFlow(unittest.TestCase):
         self.assertIn("Execution Report", result["report"])
         self.assertIn("Ring AllReduce", result["report"])
 
-    def test_full_flow_not_implemented(self):
+    def test_full_flow_butterfly_success(self):
         result = self.agent.generate_execution_report(
             algorithm="Butterfly",
+            input_data=[1.0, 2.0, 3.0, 4.0],
+        )
+        self.assertEqual(result["execution"]["status"], "success")
+        self.assertEqual(result["execution"]["result"], [10.0] * 4)
+        self.assertIn("evaluation", result)
+        self.assertIn("report", result)
+
+    def test_full_flow_not_implemented(self):
+        result = self.agent.generate_execution_report(
+            algorithm="Mesh",
             input_data=[1.0, 2.0],
         )
         self.assertEqual(result["execution"]["status"], "not_implemented")

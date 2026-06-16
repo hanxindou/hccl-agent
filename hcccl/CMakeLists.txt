@@ -50,6 +50,14 @@ target_include_directories(test_ring
 
 target_link_libraries(test_ring PRIVATE hccl_plugin)
 
+add_executable(test_butterfly tests/test_butterfly.c)
+
+target_include_directories(test_butterfly
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(test_butterfly PRIVATE hccl_plugin)
+
 # ---- Install rules ------------------------------------------------------
 
 install(TARGETS hccl_plugin

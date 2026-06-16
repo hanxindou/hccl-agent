@@ -42,11 +42,23 @@ class TestExecutionEngine(unittest.TestCase):
             [36.0] * 8,
         )
 
-    # ---- unimplemented algorithms ----
+    # ---- Butterfly AllReduce ----
 
-    def test_butterfly_not_implemented(self):
-        result = self.engine.execute_algorithm("Butterfly", [1.0, 2.0])
-        self.assertEqual(result["status"], "not_implemented")
+    def test_butterfly_4_ranks(self):
+        result = self.engine.execute_algorithm(
+            "Butterfly", [1.0, 2.0, 3.0, 4.0],
+        )
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["algorithm"], "Butterfly")
+        self.assertEqual(result["result"], [10.0, 10.0, 10.0, 10.0])
+
+    def test_butterfly_8_ranks(self):
+        data = [float(i) for i in range(1, 9)]
+        result = self.engine.execute_algorithm("Butterfly", data)
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], [36.0] * 8)
+
+    # ---- unimplemented algorithms ----
 
     def test_mesh_not_implemented(self):
         result = self.engine.execute_algorithm("Mesh", [1.0, 2.0])
