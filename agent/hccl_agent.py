@@ -16,6 +16,7 @@ from agent.decision_skill import DecisionSkill
 from agent.benchmark_skill import BenchmarkSkill
 from agent.experience_store import ExperienceStore
 from agent.policy_engine import PolicyEngine
+from agent.reflection_skill import ReflectionSkill
 
 
 class HCCLAgent:
@@ -43,6 +44,7 @@ class HCCLAgent:
         self.decision_skill = DecisionSkill()
         self.benchmark_skill = BenchmarkSkill(self.execution_skill)
         self.experience_store = ExperienceStore()
+        self.reflection_skill = ReflectionSkill()
 
     def run(
         self,
@@ -169,6 +171,13 @@ class HCCLAgent:
         except Exception:
             pass
 
+        # ---- self-reflection ----
+        reflection = self.reflection_skill.reflect(
+            predicted_score=best_result["score"],
+            actual_execution_time_ms=benchmark.get("execution_time_ms", 0.0),
+            algorithm=chosen_algorithm,
+        )
+
         # ---- strategy generation ----
         strategy = self.strategy_skill.generate(
             chosen_algorithm,
@@ -222,6 +231,7 @@ class HCCLAgent:
             "best_result": best_result,
             "llm_decision": decision,
             "benchmark": benchmark,
+            "reflection": reflection,
             "policy_ranking": policy_ranking,
             "ranking": ranking,
             "strategy": strategy,

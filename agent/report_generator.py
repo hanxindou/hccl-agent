@@ -7,7 +7,7 @@ class ReportGenerator:
     @staticmethod
     def generate_report(execution_result, evaluation_result,
                         benchmark=None, historical_stats=None,
-                        policy_ranking=None):
+                        policy_ranking=None, reflection=None):
         algo  = execution_result.get("algorithm", "Unknown")
         lat   = execution_result.get("latency", "N/A")
         bw    = execution_result.get("bandwidth", "N/A")
@@ -69,5 +69,14 @@ class ReportGenerator:
             "Recommendation:",
             f"  {rec}",
         ]
+
+        if reflection:
+            lines += [
+                "",
+                "Reflection:",
+                f"  Status: {reflection.get('status', 'N/A').upper()}",
+                f"  Message: {reflection.get('message', '')}",
+                f"  Need Replan: {reflection.get('need_replan', False)}",
+            ]
 
         return "\n".join(lines) + "\n"
