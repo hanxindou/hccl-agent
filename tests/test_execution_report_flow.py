@@ -41,6 +41,9 @@ class TestExecutionReportFlow(unittest.TestCase):
         self.assertIn("report", result)
         self.assertIn("Execution Report", result["report"])
         self.assertIn("Ring AllReduce", result["report"])
+        self.assertIn("benchmark", result)
+        self.assertGreater(result["benchmark"]["execution_time_ms"], 0)
+        self.assertIn("Actual Execution Time", result["report"])
 
     def test_full_flow_butterfly_success(self):
         result = self.agent.generate_execution_report(

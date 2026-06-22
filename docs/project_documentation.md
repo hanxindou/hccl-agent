@@ -1321,6 +1321,71 @@ Ring      ✅   Butterfly ✅   NHR  ✅   Mesh ✅   Fat-Tree ✅
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
 
+## 2026-06-14（第十六批）：LLM Decision Engine + Execution Benchmark
+
+### 目标
+
+将 LLM 从 Commentator 升级为 Decision Maker，并增加真实执行计时。
+
+### 架构变化
+
+```
+Before:                                  After:
+AlgorithmSkill                           AlgorithmSkill
+  ↓                                        ↓
+Simulator.evaluate()                     Simulator.evaluate()
+  ↓                                        ↓
+OptimizationSkill (max score)            OptimizationSkill (ranking)
+  ↓                                        ↓
+ReasoningSkill (解释)                     DecisionSkill (LLM 选择)
+  ↓                                        ↓
+                                          ExecutionSkill + BenchmarkSkill
+                                            ↓
+                                          EvaluationSkill + ReportGenerator
+                                          
+LLM 从"旁白"升级为"决策者"
+```
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `agent/decision_skill.py` | LLM 算法选择：构造候选算法 Prompt → 调用 DeepSeek → 解析 Algorithm/Reason → 失败回退 None |
+| `agent/benchmark_skill.py` | 执行计时：`time.perf_counter()` 测量 `ExecutionSkill.execute()` 耗时 |
+| `tests/test_decision_skill.py` | 5 测试：正常解析/缺失字段/空返回/API异常/大小写 |
+| `tests/test_benchmark_skill.py` | 3 测试：耗时>0/结果正确/无execution_skill |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/hccl_agent.py` | 集成 DecisionSkill（选择或回退）+ BenchmarkSkill（计时执行）+ `chosen_algorithm` 替换 `best_algorithm` + 输出新增 `llm_decision`/`benchmark` |
+| `agent/report_generator.py` | 新增 Predicted Score + Actual Execution Time 段落 |
+| `tests/test_execution_report_flow.py` | 验证 benchmark 字段 + 报告含计时 |
+| `tests/test_report_generator.py` | +1 benchmark 报告测试 |
+
+### 测试结果
+
+```
+C:      41/41 (unchanged)
+Python: 146/146 (+9 new: 5 decision + 3 benchmark + 1 report)
+Total:  187 PASS
+```
+
+### 当前项目阶段评估
+
+| 层次 | 状态 |
+|------|------|
+| C 基础设施 + 5/5 算法 | ✅ |
+| Python ↔ C Bridge | ✅ |
+| Plugin 执行 + 能力发现 | ✅ |
+| Agent 自动评价与报告 | ✅ |
+| **LLM 决策引擎** | **✅ 本轮完成** |
+| **执行 Benchmark** | **✅ 本轮完成** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
+
 
 ## 2026-06-14（第十四批）：Mesh AllReduce CPU 实现 — 全互联归约
 

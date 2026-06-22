@@ -1,25 +1,11 @@
-"""Report Generator — format execution and evaluation results into text."""
+"""Report Generator — format execution, evaluation, and benchmark results."""
 
 
 class ReportGenerator:
 
     @staticmethod
-    def generate_report(execution_result, evaluation_result):
-        """Produce a human-readable execution report.
-
-        Parameters
-        ----------
-        execution_result : dict
-            From Simulator or ExecutionEngine.  Expected keys:
-            "algorithm", "latency", "bandwidth", "score".
-        evaluation_result : dict
-            From EvaluationSkill.evaluate().  Expected keys:
-            "grade", "recommendation".
-
-        Returns
-        -------
-        str — multi-line report.
-        """
+    def generate_report(execution_result, evaluation_result,
+                        benchmark=None):
         algo   = execution_result.get("algorithm", "Unknown")
         lat    = execution_result.get("latency", "N/A")
         bw     = execution_result.get("bandwidth", "N/A")
@@ -27,25 +13,38 @@ class ReportGenerator:
         grade  = evaluation_result.get("grade", "N/A")
         rec    = evaluation_result.get("recommendation", "")
 
-        return (
-            f"Execution Report\n"
-            f"=================\n"
-            f"\n"
-            f"Algorithm:\n"
-            f"  {algo}\n"
-            f"\n"
-            f"Latency:\n"
-            f"  {lat} ms\n"
-            f"\n"
-            f"Bandwidth:\n"
-            f"  {bw} GB/s\n"
-            f"\n"
-            f"Score:\n"
-            f"  {score}\n"
-            f"\n"
-            f"Evaluation:\n"
-            f"  {grade}\n"
-            f"\n"
-            f"Recommendation:\n"
-            f"  {rec}\n"
-        )
+        lines = [
+            "Execution Report",
+            "=================",
+            "",
+            "Algorithm:",
+            f"  {algo}",
+            "",
+            "Predicted Score:",
+            f"  {score}",
+            "",
+            "Latency:",
+            f"  {lat} ms",
+            "",
+            "Bandwidth:",
+            f"  {bw} GB/s",
+        ]
+
+        if benchmark:
+            t = benchmark.get("execution_time_ms", "N/A")
+            lines += [
+                "",
+                "Actual Execution Time:",
+                f"  {t} ms",
+            ]
+
+        lines += [
+            "",
+            "Evaluation:",
+            f"  {grade}",
+            "",
+            "Recommendation:",
+            f"  {rec}",
+        ]
+
+        return "\n".join(lines) + "\n"

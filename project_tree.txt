@@ -1,0 +1,133 @@
+.
+├── README.MD
+├── __pycache__
+│   └── main.cpython-310.pyc
+├── agent
+│   ├── __pycache__
+│   │   ├── evaluation_skill.cpython-310.pyc
+│   │   ├── execution_skill.cpython-310.pyc
+│   │   ├── experiment_logger.cpython-310.pyc
+│   │   ├── hccl_agent.cpython-310.pyc
+│   │   ├── llm_client.cpython-310.pyc
+│   │   ├── plugin_capability.cpython-310.pyc
+│   │   ├── plugin_manager.cpython-310.pyc
+│   │   ├── prompt_engine.cpython-310.pyc
+│   │   ├── reasoning_skill.cpython-310.pyc
+│   │   └── report_generator.cpython-310.pyc
+│   ├── evaluation_skill.py
+│   ├── execution_skill.py
+│   ├── experiment_logger.py
+│   ├── hccl_agent.py
+│   ├── llm_client.py
+│   ├── plugin_capability.py
+│   ├── plugin_manager.py
+│   ├── prompt_engine.py
+│   ├── reasoning_skill.py
+│   └── report_generator.py
+├── config
+│   └── cluster.json
+├── docs
+│   ├── 2026年中国研究生人工智能大赛--华为赛题.docx
+│   ├── agent_capabilities.md
+│   ├── competition_analysis.md
+│   ├── deepseek_setup.md
+│   ├── gap_analysis.md
+│   ├── project_documentation.md
+│   └── simulator_guide.md
+├── hcccl
+│   ├── CMakeLists.txt
+│   ├── README.md
+│   ├── build
+│   │   ├── CMakeCache.txt
+│   │   ├── CMakeFiles
+│   │   ├── Makefile
+│   │   ├── cmake_install.cmake
+│   │   ├── libhccl_plugin.so
+│   │   ├── test_butterfly
+│   │   ├── test_fattree
+│   │   ├── test_mesh
+│   │   ├── test_nhr
+│   │   ├── test_ring
+│   │   └── test_topology
+│   ├── include
+│   │   ├── hccl_algorithms.h
+│   │   └── hccl_comm.h
+│   ├── src
+│   │   ├── hccl_algorithms.c
+│   │   └── hccl_comm.c
+│   └── tests
+│       ├── test_butterfly.c
+│       ├── test_fattree.c
+│       ├── test_mesh.c
+│       ├── test_nhr.c
+│       ├── test_ring.c
+│       └── test_topology.c
+├── logs
+│   ├── performance_report.md
+│   ├── prompt_calls.jsonl
+│   ├── runs.jsonl
+│   ├── sample_execution_report.txt
+│   └── summary.json
+├── main.py
+├── plugin
+│   ├── __pycache__
+│   │   ├── execution_engine.cpython-310.pyc
+│   │   └── hccl_bridge.cpython-310.pyc
+│   ├── execution_engine.py
+│   └── hccl_bridge.py
+├── project_tree.txt
+├── prompts
+│   └── algorithm_prompt.txt
+├── scripts
+│   ├── generate_report.py
+│   └── integration_test.sh
+├── simulator
+│   ├── __pycache__
+│   │   ├── fault_injector.cpython-310.pyc
+│   │   └── simulator.cpython-310.pyc
+│   ├── fault_injector.py
+│   └── simulator.py
+├── skills
+│   ├── __pycache__
+│   │   ├── algorithm_skill.cpython-310.pyc
+│   │   ├── config_skill.cpython-310.pyc
+│   │   ├── optimization_skill.cpython-310.pyc
+│   │   ├── performance_model.cpython-310.pyc
+│   │   ├── strategy_skill.cpython-310.pyc
+│   │   ├── topology_graph.cpython-310.pyc
+│   │   └── topology_skill.cpython-310.pyc
+│   ├── algorithm_skill.py
+│   ├── config_skill.py
+│   ├── optimization_skill.py
+│   ├── performance_model.py
+│   ├── strategy_skill.py
+│   ├── topology_graph.py
+│   └── topology_skill.py
+└── tests
+    ├── __pycache__
+    │   ├── test_agent.cpython-310.pyc
+    │   ├── test_evaluation_skill.cpython-310.pyc
+    │   ├── test_execution_engine.cpython-310.pyc
+    │   ├── test_execution_report_flow.cpython-310.pyc
+    │   ├── test_execution_skill.cpython-310.pyc
+    │   ├── test_llm_client.cpython-310.pyc
+    │   ├── test_performance_model.cpython-310.pyc
+    │   ├── test_plugin_bridge.cpython-310.pyc
+    │   ├── test_plugin_manager.cpython-310.pyc
+    │   ├── test_reasoning_skill.cpython-310.pyc
+    │   ├── test_report_generator.cpython-310.pyc
+    │   └── test_simulator_model.cpython-310.pyc
+    ├── test_agent.py
+    ├── test_evaluation_skill.py
+    ├── test_execution_engine.py
+    ├── test_execution_report_flow.py
+    ├── test_execution_skill.py
+    ├── test_llm_client.py
+    ├── test_performance_model.py
+    ├── test_plugin_bridge.py
+    ├── test_plugin_manager.py
+    ├── test_reasoning_skill.py
+    ├── test_report_generator.py
+    └── test_simulator_model.py
+
+22 directories, 108 files

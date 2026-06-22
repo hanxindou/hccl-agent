@@ -49,6 +49,15 @@ class TestReportGenerator(unittest.TestCase):
         self.assertIn("Evaluation:", report)
         self.assertIn("Recommendation:", report)
 
+    def test_report_with_benchmark(self):
+        report = self.gen.generate_report(
+            {"algorithm": "Ring AllReduce", "latency": 1.0, "bandwidth": 10.0, "score": 50},
+            {"grade": "GOOD", "recommendation": "ok"},
+            benchmark={"execution_time_ms": 0.28},
+        )
+        self.assertIn("Actual Execution Time:", report)
+        self.assertIn("0.28", report)
+
     def test_report_with_missing_keys(self):
         report = self.gen.generate_report({}, {})
         self.assertIn("Unknown", report)

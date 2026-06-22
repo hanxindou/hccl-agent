@@ -12,6 +12,8 @@ from agent.execution_skill import ExecutionSkill
 from agent.evaluation_skill import EvaluationSkill
 from agent.report_generator import ReportGenerator
 from agent.reasoning_skill import ReasoningSkill
+from agent.decision_skill import DecisionSkill
+from agent.benchmark_skill import BenchmarkSkill
 
 
 class HCCLAgent:
@@ -36,6 +38,8 @@ class HCCLAgent:
         self.evaluation_skill = EvaluationSkill()
         self.report_generator = ReportGenerator()
         self.reasoning_skill = ReasoningSkill()
+        self.decision_skill = DecisionSkill()
+        self.benchmark_skill = BenchmarkSkill(self.execution_skill)
 
     def run(
         self,
@@ -101,9 +105,52 @@ class HCCLAgent:
             )
         )
 
+        # ---- LLM decision (best-effort, overrides max-score) ----
+        decision = None
+        try:
+            candidate_results = []
+            for algo, score in ranking:
+                sim_res = self.simulator.evaluate(
+                    algo, topology, nodes, message_size,
+                    primitive=primitive,
+                    bandwidth_gbps=runtime_cluster_info.get("bandwidth_gbps"),
+                    latency_ms=runtime_cluster_info.get("latency_ms"),
+                )
+                candidate_results.append({
+                    "algorithm": algo,
+                    "score": score,
+                    "latency": sim_res["latency"],
+                    "bandwidth": sim_res["bandwidth"],
+                })
+            decision = self.decision_skill.choose_algorithm(
+                nodes, message_size, topology, primitive, candidate_results,
+            )
+        except Exception:
+            pass
+
+        # If LLM returned a valid algorithm in our candidate list, use it.
+        chosen_algorithm = best_algorithm
+        if decision and decision.get("algorithm"):
+            for algo, _ in ranking:
+                if algo == decision["algorithm"]:
+                    chosen_algorithm = algo
+                    break
+
+        # ---- benchmark actual execution ----
+        benchmark = {"execution_time_ms": 0.0}
+        try:
+            benchmark_input = [
+                float(i + 1) for i in range(nodes)
+            ]
+            benchmark = self.benchmark_skill.benchmark_execution(
+                chosen_algorithm, benchmark_input,
+            )
+        except Exception:
+            pass
+
         # ---- strategy generation ----
         strategy = self.strategy_skill.generate(
-            best_algorithm,
+            chosen_algorithm,
             nodes,
             primitive=primitive,
         )
@@ -134,7 +181,7 @@ class HCCLAgent:
             topology,
             message_size,
             candidate_algorithms,
-            best_algorithm,
+            chosen_algorithm,
             best_result,
         )
 
@@ -147,11 +194,13 @@ class HCCLAgent:
             "topology_graph_summary": topology_graph.summary(),
             "message_size_mb": message_size,
             "candidate_algorithms": candidate_algorithms,
-            "algorithm": best_algorithm,
+            "algorithm": chosen_algorithm,
             "reason": reason,
             "result": best_result,
             "best_algorithm": best_algorithm,
             "best_result": best_result,
+            "llm_decision": decision,
+            "benchmark": benchmark,
             "ranking": ranking,
             "strategy": strategy,
             "prompt_filled": filled_prompt[:200] + "..."
@@ -217,8 +266,12 @@ class HCCLAgent:
         if input_data is None:
             input_data = [1.0, 2.0, 3.0, 4.0]
 
-        # 1. Execute the algorithm via the C plugin.
-        execution = self.execution_skill.execute(algorithm, input_data)
+        # 1. Execute the algorithm via the C plugin (timed).
+        benchmark = self.benchmark_skill.benchmark_execution(
+            algorithm, input_data,
+        )
+        execution = benchmark.get("execution_result",
+                                  self.execution_skill.execute(algorithm, input_data))
 
         # 2. Simulate performance using the Simulator.
         nodes = len(input_data)
@@ -229,25 +282,26 @@ class HCCLAgent:
             algorithm,
             topology,
             nodes,
-            128.0,  # default message size for scoring
+            128.0,
             primitive="AllReduce",
             bandwidth_gbps=cluster_info.get("bandwidth_gbps"),
             latency_ms=cluster_info.get("latency_ms"),
         )
-        sim_result["algorithm"] = algorithm  # attach name for the report
+        sim_result["algorithm"] = algorithm
 
         # 3. Evaluate the performance.
         evaluation = self.evaluation_skill.evaluate(sim_result)
 
         # 4. Generate the report.
         report = self.report_generator.generate_report(
-            sim_result, evaluation,
+            sim_result, evaluation, benchmark=benchmark,
         )
 
         return {
             "execution": execution,
             "evaluation": evaluation,
             "report": report,
+            "benchmark": benchmark,
         }
 
     def _normalize_primitive(self, primitive):
