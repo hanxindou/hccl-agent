@@ -14,6 +14,7 @@ from agent.report_generator import ReportGenerator
 from agent.reasoning_skill import ReasoningSkill
 from agent.decision_skill import DecisionSkill
 from agent.benchmark_skill import BenchmarkSkill
+from agent.experience_store import ExperienceStore
 
 
 class HCCLAgent:
@@ -40,6 +41,7 @@ class HCCLAgent:
         self.reasoning_skill = ReasoningSkill()
         self.decision_skill = DecisionSkill()
         self.benchmark_skill = BenchmarkSkill(self.execution_skill)
+        self.experience_store = ExperienceStore()
 
     def run(
         self,
@@ -122,8 +124,16 @@ class HCCLAgent:
                     "latency": sim_res["latency"],
                     "bandwidth": sim_res["bandwidth"],
                 })
+            similar_records = self.experience_store.query_similar(
+                nodes, topology, primitive,
+            )
+            historical = ExperienceStore.aggregate_statistics(
+                similar_records,
+            ) if similar_records else None
+
             decision = self.decision_skill.choose_algorithm(
                 nodes, message_size, topology, primitive, candidate_results,
+                historical_stats=historical,
             )
         except Exception:
             pass
@@ -210,6 +220,17 @@ class HCCLAgent:
 
         # Persist this run for reproducible experiment tracking.
         self.logger.log_run(output)
+
+        # Save to experience memory for historical learning.
+        self.experience_store.save({
+            "nodes": nodes,
+            "message_size": message_size,
+            "topology": topology,
+            "primitive": primitive,
+            "algorithm": chosen_algorithm,
+            "score": best_result["score"],
+            "execution_time_ms": benchmark.get("execution_time_ms", 0.0),
+        })
 
         return output
 

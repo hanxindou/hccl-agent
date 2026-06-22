@@ -1,17 +1,18 @@
-"""Report Generator — format execution, evaluation, and benchmark results."""
+"""Report Generator — format execution, evaluation, benchmark, and
+historical statistics into a text report."""
 
 
 class ReportGenerator:
 
     @staticmethod
     def generate_report(execution_result, evaluation_result,
-                        benchmark=None):
-        algo   = execution_result.get("algorithm", "Unknown")
-        lat    = execution_result.get("latency", "N/A")
-        bw     = execution_result.get("bandwidth", "N/A")
-        score  = execution_result.get("score", "N/A")
-        grade  = evaluation_result.get("grade", "N/A")
-        rec    = evaluation_result.get("recommendation", "")
+                        benchmark=None, historical_stats=None):
+        algo  = execution_result.get("algorithm", "Unknown")
+        lat   = execution_result.get("latency", "N/A")
+        bw    = execution_result.get("bandwidth", "N/A")
+        score = execution_result.get("score", "N/A")
+        grade = evaluation_result.get("grade", "N/A")
+        rec   = evaluation_result.get("recommendation", "")
 
         lines = [
             "Execution Report",
@@ -37,6 +38,18 @@ class ReportGenerator:
                 "Actual Execution Time:",
                 f"  {t} ms",
             ]
+
+        if historical_stats:
+            lines += [
+                "",
+                "Historical Performance:",
+            ]
+            for a, s in sorted(historical_stats.items()):
+                lines.append(
+                    f"  {a}:  runs={s['count']}, "
+                    f"avg_score={s['avg_score']}, "
+                    f"avg_time={s['avg_time_ms']}ms"
+                )
 
         lines += [
             "",

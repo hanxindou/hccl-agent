@@ -1384,6 +1384,46 @@ Total:  187 PASS
 | **执行 Benchmark** | **✅ 本轮完成** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（第十七批）：Experience Memory & Historical Learning
+
+### 目标
+
+让 Agent 从历史运行中学习，LLM 决策时同时参考当前模拟结果和历史统计数据。
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `agent/experience_store.py` | `save()` → JSONL，`query_similar()` → 相似场景，`aggregate_statistics()` → 按算法统计 |
+| `tests/test_experience_store.py` | 7 测试：save/load/query/match/aggregate/empty/timestamp |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/hccl_agent.py` | init ExperienceStore → query historical → 传入 DecisionSkill → auto-save |
+| `agent/decision_skill.py` | `historical_stats` 参数 → Prompt 增加 Historical Performance 段落 |
+| `agent/report_generator.py` | `historical_stats` → 报告增加 Historical Performance 段落 |
+
+### 测试结果
+
+```
+Python: 153/153 (+7)
+C:      41/41
+Total:  194 PASS
+```
+
+### 当前项目阶段
+
+| 层次 | 状态 |
+|------|------|
+| C 基础设施 + 5/5 算法 | ✅ |
+| Python ↔ C Bridge | ✅ |
+| LLM 决策引擎 + Benchmark | ✅ |
+| **Experience Memory** | **✅ 本轮完成** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 
 

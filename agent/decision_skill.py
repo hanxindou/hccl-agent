@@ -19,6 +19,9 @@ Candidates with simulated performance:
 
 {candidates_text}
 
+Historical Performance (from past runs in similar scenarios):
+{historical_text}
+
 Choose ONE algorithm.  Reply EXACTLY in this format:
 
 Algorithm: <name>
@@ -32,19 +35,20 @@ class DecisionSkill:
         self.client = client or LLMClient()
 
     def choose_algorithm(self, nodes, message_size, topology,
-                         primitive, candidate_results):
+                         primitive, candidate_results,
+                         historical_stats=None):
         """Ask the LLM to pick the best algorithm.
 
         Parameters
         ----------
         nodes, message_size, topology, primitive : same as Agent.run()
         candidate_results : list[dict]
-            Each dict has "algorithm", "score", "latency", "bandwidth".
+        historical_stats : dict or None
+            {"Ring AllReduce": {"count": 5, "avg_score": 84.3, ...}, ...}
 
         Returns
         -------
-        dict  {"algorithm": "Ring AllReduce", "reason": "..."}
-              Returns None on failure (caller should fall back).
+        dict or None
         """
         candidate_text = "\n".join(
             f"  {r['algorithm']}\n"
@@ -54,12 +58,23 @@ class DecisionSkill:
             for r in candidate_results
         )
 
+        if historical_stats:
+            historical_text = "\n".join(
+                f"  {algo}:  runs={s['count']}, "
+                f"avg_score={s['avg_score']}, "
+                f"avg_time={s['avg_time_ms']}ms"
+                for algo, s in sorted(historical_stats.items())
+            )
+        else:
+            historical_text = "  (no historical data yet)"
+
         prompt = _DECISION_PROMPT.format(
             nodes=nodes,
             message_size=message_size,
             topology=topology,
             primitive=primitive,
             candidates_text=candidate_text,
+            historical_text=historical_text,
         )
 
         try:
