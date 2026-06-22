@@ -73,6 +73,27 @@ class ExperienceStore:
     # ------------------------------------------------------------------
 
     @staticmethod
+    def get_win_rate_summary(records):
+        """Return per-algorithm selection frequency (win rate).
+
+        Parameters
+        ----------
+        records : list[dict]  — output of load_all() or query_similar()
+
+        Returns
+        -------
+        dict  {"Mesh": 0.67, "Butterfly": 0.33, ...}
+        """
+        counts = {}
+        for r in records:
+            algo = r.get("algorithm", "unknown")
+            counts[algo] = counts.get(algo, 0) + 1
+        total = sum(counts.values())
+        if total == 0:
+            return {}
+        return {a: round(c / total, 4) for a, c in counts.items()}
+
+    @staticmethod
     def aggregate_statistics(records):
         """Group records by algorithm and compute per-algorithm stats."""
         groups = {}

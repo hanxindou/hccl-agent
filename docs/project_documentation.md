@@ -1423,6 +1423,71 @@ Total:  194 PASS
 | **Experience Memory** | **✅ 本轮完成** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（第十八批）：Adaptive Policy Engine — 历史经验驱动决策
+
+### 目标
+
+将历史经验从"展示参考"升级为"驱动决策"。
+
+### PolicyEngine 设计
+
+```
+simulation_score × 0.7 + win_rate × 100 × 0.3 = final_score
+```
+
+`calculate_win_rates(historical_stats)` → 按算法出现频率计算 win rate
+`rank_algorithms(sim_scores, win_rates)` → 融合排序（降序）
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `agent/policy_engine.py` | PolicyEngine 类 |
+| `tests/test_policy_engine.py` | 9 测试 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/experience_store.py` | 新增 `get_win_rate_summary()` |
+| `agent/decision_skill.py` | `choose_algorithm()` 新增 `win_rates` → Prompt 增加 Win Rate 段落 |
+| `agent/hccl_agent.py` | import PolicyEngine → `rank_algorithms()` → 传入 DecisionSkill → `output["policy_ranking"]` |
+| `agent/report_generator.py` | 新增 Policy Ranking 段落 |
+
+### Agent 调用链路图
+
+```
+run()
+  ├── Simulator → candidate_results
+  ├── ExperienceStore.query_similar() → records
+  ├── ExperienceStore.aggregate_statistics() → historical_stats
+  ├── ExperienceStore.get_win_rate_summary() → win_rates
+  ├── PolicyEngine.rank_algorithms(sim, win_rates) → policy_ranking
+  ├── DecisionSkill.choose_algorithm(..., win_rates, historical_stats) → chosen
+  ├── ExecutionSkill + BenchmarkSkill
+  └── ExperienceStore.save()
+```
+
+### 测试结果
+
+```
+C:      41/41
+Python: 162/162 (+9)
+Total:  203 PASS
+```
+
+### 当前项目阶段
+
+| 层次 | 状态 |
+|------|------|
+| C 5/5 算法 | ✅ |
+| Python Bridge + 执行 | ✅ |
+| LLM 决策 + Benchmark | ✅ |
+| Experience Memory | ✅ |
+| **Adaptive Policy Engine** | **✅ 本轮完成** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 
 

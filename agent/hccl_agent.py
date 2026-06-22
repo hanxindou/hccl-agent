@@ -15,6 +15,7 @@ from agent.reasoning_skill import ReasoningSkill
 from agent.decision_skill import DecisionSkill
 from agent.benchmark_skill import BenchmarkSkill
 from agent.experience_store import ExperienceStore
+from agent.policy_engine import PolicyEngine
 
 
 class HCCLAgent:
@@ -130,10 +131,20 @@ class HCCLAgent:
             historical = ExperienceStore.aggregate_statistics(
                 similar_records,
             ) if similar_records else None
+            win_rates = ExperienceStore.get_win_rate_summary(
+                similar_records,
+            ) if similar_records else None
+
+            # Policy-based ranking (simulation + historical win rates).
+            sim_scores = {r["algorithm"]: r["score"] for r in candidate_results}
+            policy_ranking = PolicyEngine.rank_algorithms(
+                sim_scores, win_rates or {},
+            ) if win_rates else None
 
             decision = self.decision_skill.choose_algorithm(
                 nodes, message_size, topology, primitive, candidate_results,
                 historical_stats=historical,
+                win_rates=win_rates,
             )
         except Exception:
             pass
@@ -211,6 +222,7 @@ class HCCLAgent:
             "best_result": best_result,
             "llm_decision": decision,
             "benchmark": benchmark,
+            "policy_ranking": policy_ranking,
             "ranking": ranking,
             "strategy": strategy,
             "prompt_filled": filled_prompt[:200] + "..."

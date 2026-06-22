@@ -19,6 +19,9 @@ Candidates with simulated performance:
 
 {candidates_text}
 
+Historical Win Rate (fraction of past runs where each algorithm won):
+{win_rates_text}
+
 Historical Performance (from past runs in similar scenarios):
 {historical_text}
 
@@ -36,7 +39,8 @@ class DecisionSkill:
 
     def choose_algorithm(self, nodes, message_size, topology,
                          primitive, candidate_results,
-                         historical_stats=None):
+                         historical_stats=None,
+                         win_rates=None):
         """Ask the LLM to pick the best algorithm.
 
         Parameters
@@ -58,6 +62,15 @@ class DecisionSkill:
             for r in candidate_results
         )
 
+        if win_rates:
+            win_rates_text = "\n".join(
+                f"  {algo}: {rate*100:.1f}%"
+                for algo, rate in sorted(win_rates.items(),
+                                         key=lambda x: x[1], reverse=True)
+            )
+        else:
+            win_rates_text = "  (no historical win-rate data yet)"
+
         if historical_stats:
             historical_text = "\n".join(
                 f"  {algo}:  runs={s['count']}, "
@@ -74,6 +87,7 @@ class DecisionSkill:
             topology=topology,
             primitive=primitive,
             candidates_text=candidate_text,
+            win_rates_text=win_rates_text,
             historical_text=historical_text,
         )
 

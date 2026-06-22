@@ -6,7 +6,8 @@ class ReportGenerator:
 
     @staticmethod
     def generate_report(execution_result, evaluation_result,
-                        benchmark=None, historical_stats=None):
+                        benchmark=None, historical_stats=None,
+                        policy_ranking=None):
         algo  = execution_result.get("algorithm", "Unknown")
         lat   = execution_result.get("latency", "N/A")
         bw    = execution_result.get("bandwidth", "N/A")
@@ -38,6 +39,15 @@ class ReportGenerator:
                 "Actual Execution Time:",
                 f"  {t} ms",
             ]
+
+        if policy_ranking:
+            lines += [
+                "",
+                "Policy Ranking:",
+            ]
+            max_len = max(len(a) for a, _ in policy_ranking) if policy_ranking else 0
+            for algo, score in policy_ranking:
+                lines.append(f"  {algo + ' ':.{max_len + 2}} {score}")
 
         if historical_stats:
             lines += [
