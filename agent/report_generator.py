@@ -10,7 +10,7 @@ class ReportGenerator:
                         policy_ranking=None, reflection=None,
                         replanned=False, replan_algorithm=None,
                         plan=None, hccl_result=None,
-                        selection_info=None):
+                        selection_info=None, decision_trace=None):
         algo  = execution_result.get("algorithm", "Unknown")
         lat   = execution_result.get("latency", "N/A")
         bw    = execution_result.get("bandwidth", "N/A")
@@ -99,6 +99,15 @@ class ReportGenerator:
             f"  {rec}",
         ]
 
+        if decision_trace:
+            lines += [
+                "",
+                "Decision Trace:",
+                "---------------",
+            ]
+            for line in decision_trace.get("decision_trace", []):
+                lines.append(f"  {line}")
+
         if reflection:
             lines += [
                 "",
@@ -107,6 +116,19 @@ class ReportGenerator:
                 f"  Message: {reflection.get('message', '')}",
                 f"  Need Replan: {reflection.get('need_replan', False)}",
             ]
+            dq = reflection.get("decision_quality")
+            if dq:
+                lines += [
+                    "",
+                    "Reflection on Decision:",
+                    "-----------------------",
+                    f"  Selected:          {dq.get('selected_algorithm', '?')}",
+                    f"  Selected Score:    {dq.get('selected_score', '?')}",
+                    f"  Best Alternative:  {dq.get('best_alternative', '?')}",
+                    f"  Alt Score:         {dq.get('best_alternative_score', '?')}",
+                    f"  Score Gap:         {dq.get('score_gap', '?')}",
+                    f"  Verdict:           {dq.get('recommendation', '')}",
+                ]
 
         if replanned:
             lines += [

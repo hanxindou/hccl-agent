@@ -19,6 +19,7 @@ from agent.policy_engine import PolicyEngine
 from agent.reflection_skill import ReflectionSkill
 from agent.replanning_skill import ReplanningSkill
 from agent.planning_skill import PlanningSkill
+from agent.explanation_skill import ExplanationSkill
 
 
 class HCCLAgent:
@@ -48,6 +49,7 @@ class HCCLAgent:
         self.experience_store = ExperienceStore()
         self.reflection_skill = ReflectionSkill()
         self.planning_skill = PlanningSkill()
+        self.explanation_skill = ExplanationSkill()
 
     def run(
         self,
@@ -179,11 +181,25 @@ class HCCLAgent:
         except Exception:
             pass
 
+        # ---- explanation / decision trace ----
+        # Use topology graph summary as proxy for topology_analysis.
+        topo_analysis = {
+            "topology_type": topology,
+            "node_count": nodes,
+            "dominant_link": runtime_cluster_info.get("links", [{}])[0].get("type", "HCCS") if runtime_cluster_info.get("links") else "HCCS",
+        }
+        candidate_scores_list = [
+            {"algorithm": algo, "score": score,
+             "latency": 0.0, "bandwidth": 0.0}
+            for algo, score in ranking
+        ]
+
         # ---- self-reflection ----
         reflection = self.reflection_skill.reflect(
             predicted_score=best_result["score"],
             actual_execution_time_ms=benchmark.get("execution_time_ms", 0.0),
             algorithm=chosen_algorithm,
+            candidate_scores=candidate_scores_list,
         )
 
         # ---- replanning (max 1 iteration) ----
@@ -205,6 +221,18 @@ class HCCLAgent:
                     replan_algorithm = alt
                 except Exception:
                     pass
+
+        # ---- decision trace ----
+        decision_trace = self.explanation_skill.generate_decision_trace(
+            topology_analysis=topo_analysis,
+            candidate_scores=candidate_scores_list,
+            selected_algorithm=chosen_algorithm,
+            selection_reason=(
+                decision["reason"] if decision and decision.get("reason")
+                else f"Highest score among {len(ranking)} candidates"
+            ),
+            reflection_result=reflection,
+        )
 
         # ---- strategy generation ----
         strategy = self.strategy_skill.generate(
@@ -261,6 +289,7 @@ class HCCLAgent:
             "llm_decision": decision,
             "benchmark": benchmark,
             "reflection": reflection,
+            "decision_trace": decision_trace,
             "replanned": replanned,
             "replan_algorithm": replan_algorithm,
             "replan_benchmark": replan_benchmark,

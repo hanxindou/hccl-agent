@@ -74,16 +74,21 @@ class AlgorithmSelector:
         details.sort(key=lambda x: x["score"], reverse=True)
         best = details[0]
 
+        reason = (
+            f"Selected {best['algorithm']} — "
+            f"score={best['score']:.1f}, "
+            f"latency={best['latency']:.4f}ms, "
+            f"bandwidth={best['bandwidth']:.2f}GB/s. "
+            f"Compared {len(details)} candidates on graph topology."
+        )
+
         return {
             "algorithm": best["algorithm"],
             "score": best["score"],
-            "reason": (
-                f"Selected {best['algorithm']} — "
-                f"score={best['score']:.1f}, "
-                f"latency={best['latency']:.4f}ms, "
-                f"bandwidth={best['bandwidth']:.2f}GB/s. "
-                f"Compared {len(details)} candidates on graph topology."
-            ),
+            "reason": reason,
+            "selection_reason": reason,
             "candidates": details,
+            "candidate_scores": details,
             "scores": scores,
+            "ranking": [(c["algorithm"], c["score"]) for c in details],
         }

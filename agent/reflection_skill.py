@@ -8,25 +8,20 @@ if a re-plan is needed.
 class ReflectionSkill:
 
     def reflect(self, predicted_score, actual_execution_time_ms,
-                algorithm):
+                algorithm, candidate_scores=None):
         """Analyse execution results against predictions.
 
         Parameters
         ----------
         predicted_score : float
-            Simulated performance score (0–100).
         actual_execution_time_ms : float
-            Measured wall-clock time from BenchmarkSkill.
         algorithm : str
-            The algorithm that was executed.
+        candidate_scores : list[dict] or None
+            Optional — enables decision quality analysis.
 
         Returns
         -------
         dict
-            {"status": "good"|"warning"|"poor",
-             "message": "...",
-             "need_replan": bool,
-             "prediction_deviation": bool}
         """
         t = actual_execution_time_ms
 
@@ -70,9 +65,31 @@ class ReflectionSkill:
                     f"got {t:.4f} ms)."
                 )
 
+        # ---- decision quality analysis (optional) ----
+        decision_quality = None
+        if candidate_scores:
+            best_alt = max(
+                (c for c in candidate_scores if c["algorithm"] != algorithm),
+                key=lambda c: c["score"], default=None,
+            )
+            if best_alt:
+                gap = best_alt["score"] - predicted_score
+                decision_quality = {
+                    "selected_algorithm": algorithm,
+                    "selected_score": predicted_score,
+                    "best_alternative": best_alt["algorithm"],
+                    "best_alternative_score": best_alt["score"],
+                    "score_gap": round(gap, 2),
+                    "recommendation": (
+                        "Selection is suboptimal — consider replanning."
+                        if gap > 5 else "Selection is near-optimal."
+                    ),
+                }
+
         return {
             "status": status,
             "message": base_msg,
             "need_replan": need_replan,
             "prediction_deviation": deviation,
+            "decision_quality": decision_quality,
         }

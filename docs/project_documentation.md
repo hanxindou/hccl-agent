@@ -1858,6 +1858,62 @@ Total:  280 PASS
 | HCCL Compatibility | ✅ |
 | **Topology-Aware Algorithm Selection** | **✅ 本轮完成** |
 
+## 2026-06-14（第二十五批）：Explainable Decision Engine
+
+### 目标
+
+新增完整决策可解释性：Decision Trace、Candidate Ranking、Selection Justification、Reflection-based Quality Analysis。
+
+### Decision Trace 结构（6 步）
+
+```
+[1] Topology: FatTree  Nodes: 32  Dominant Link: RoCE
+[2] Candidates: Ring, Butterfly, Fat-Tree
+[3] Simulation: Ring=82  Butterfly=86  Fat-Tree=93
+[4] Cost: latency=0.2ms  bandwidth=11GB/s
+[5] Selected: Fat-Tree
+     Reason: Highest score among 3 candidates
+[6] Reflection: status=good  need_replan=False
+```
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `agent/explanation_skill.py` | generate_decision_trace() |
+| `tests/test_explanation_skill.py` | 4 测试 |
+| `tests/test_decision_trace_flow.py` | 2 测试 |
+| `tests/test_reflection_decision_quality.py` | 3 测试 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `skills/algorithm_selector.py` | 新增 ranking + candidate_scores |
+| `skills/topology_reasoning_skill.py` | 新增 topology_summary() |
+| `agent/reflection_skill.py` | 新增 decision_quality 分析 |
+| `agent/report_generator.py` | 新增 Decision Trace + Reflection on Decision 段落 |
+| `agent/hccl_agent.py` | 集成 ExplanationSkill → output["decision_trace"] |
+
+### 测试结果
+
+```
+C:      41/41
+Python: 248/248 (+9 new)
+Total:  289 PASS
+```
+
+### 当前项目阶段
+
+| 层次 | 状态 |
+|------|------|
+| C 5/5 算法 | ✅ |
+| Graph Engine + HW Abstraction | ✅ |
+| Topology-Aware Selection | ✅ |
+| **Explainable Decision Engine** | **✅ 本轮完成** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 ### Key Enhancements
 

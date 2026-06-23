@@ -43,3 +43,32 @@ class TopologyReasoningSkill:
             "average_degree": round(avg_deg, 2),
             "dominant_link": dominant,
         }
+
+    @staticmethod
+    def topology_summary(analysis: Dict[str, Any]) -> str:
+        """Return a human-readable topology characteristic string."""
+        deg = analysis.get("average_degree", 0)
+        dom = analysis.get("dominant_link", "N/A")
+        n = analysis.get("node_count", 0)
+
+        parts = []
+        if deg > 6:
+            parts.append("High connectivity")
+        elif deg > 2:
+            parts.append("Medium connectivity")
+        else:
+            parts.append("Low diameter")
+
+        if dom == "RoCE":
+            parts.append("RoCE-dominated")
+        elif dom == "HCCS":
+            parts.append("HCCS-dominated")
+
+        if n <= 8:
+            parts.append("Single-node structure")
+        elif n <= 64:
+            parts.append("Hierarchical structure")
+        else:
+            parts.append("Large-scale distributed structure")
+
+        return ", ".join(parts) if parts else "Unknown topology characteristics"
