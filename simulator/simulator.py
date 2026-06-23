@@ -121,3 +121,96 @@ class Simulator:
             "bandwidth": round(bandwidth_gb_s, 2),
             "score": score,
         }
+
+    def simulate_collective(
+        self,
+        primitive,
+        algorithm,
+        topology,
+        nodes,
+        message_size_mb=128.0,
+    ):
+        """Unified entry point for HCCL collective simulation.
+
+        Delegates to ``evaluate()`` so all existing modelling
+        (algorithm efficiency, contention, etc.) is reused.
+
+        Parameters
+        ----------
+        primitive : str
+            AllReduce / AllGather / ReduceScatter.
+        algorithm : str
+            e.g. "Ring AllReduce".
+        topology : str
+        nodes : int
+        message_size_mb : float
+
+        Returns
+        -------
+        dict  with keys latency, bandwidth, score.
+        """
+        return self.evaluate(
+            algorithm=algorithm,
+            topology=topology,
+            nodes=nodes,
+            message_size_mb=message_size_mb,
+            primitive=primitive,
+        )
+
+    def simulate_with_graph(
+        self,
+        graph,
+        primitive,
+        algorithm,
+        message_size_mb=128.0,
+        profile=None,
+    ):
+        """Graph-based collective simulation.
+
+        Uses CostModelEngine to traverse the communication graph
+        and compute end-to-end latency and bandwidth.
+
+        Parameters
+        ----------
+        graph : CommunicationGraph
+            From topology/graph_builder.py.
+        primitive : str
+        algorithm : str
+        message_size_mb : float
+        profile : HardwareProfile or None
+
+        Returns
+        -------
+        dict  with latency_ms, bandwidth_gbps, algorithm, primitive, nodes.
+        """
+        from cost_model.engine import CostModelEngine
+        engine = CostModelEngine()
+
+        if algorithm in ("Ring AllReduce", "NHR"):
+            raw = engine.estimate_allreduce_ring(
+                graph, message_size_mb, algorithm, primitive,
+            )
+        elif algorithm in ("Butterfly", "Fat-Tree", "Mesh"):
+            raw = engine.estimate_allreduce_tree(
+                graph, message_size_mb, algorithm, primitive,
+            )
+        else:
+            raw = engine.estimate_generic(
+                graph, message_size_mb, algorithm, primitive,
+            )
+
+        # Convert to the same format as evaluate() for downstream consumption.
+        bw_gb_s = raw["bandwidth_gbps"] / 8.0
+        score = self.model.calculate_score(
+            raw["latency_ms"], bw_gb_s,
+            theoretical_max_bandwidth_gb_s=bw_gb_s if bw_gb_s > 0 else 12.5,
+        )
+
+        return {
+            "latency": raw["latency_ms"],
+            "bandwidth": round(bw_gb_s, 2),
+            "score": score,
+            "algorithm": algorithm,
+            "primitive": primitive,
+            "topology": "graph",
+        }

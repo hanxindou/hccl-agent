@@ -193,6 +193,34 @@ main.py
 
 # 本次迭代记录
 
+## 2026-06-13（第一批）：primitive 全链路 + 算法粒度 + 日志 + README
+
+（详见之前迭代记录）
+
+## 2026-06-14（第二批）：拓扑图 + 故障注入 + 文档 + 报告生成
+
+（详见之前迭代记录）
+
+## 2026-06-14（第三批）：C/C++ 骨架 + TopologyGraph + PromptEngine + 集成测试
+
+新增文件：
+1. hcccl/ 目录（6 个文件）：C/C++ HCCL 插件骨架
+2. agent/prompt_engine.py：Prompt 模板填充与调用日志
+3. scripts/integration_test.sh：11 场景集成测试
+
+修改文件：
+1. agent/hccl_agent.py：集成 TopologyGraph 构建、PromptEngine 调用、primitive 传入 StrategySkill
+2. skills/strategy_skill.py：primitive 感知的三阶段策略生成（AllReduce 两阶段环 / AllGather / ReduceScatter / Mesh）
+3. tests/test_agent.py：更新 ring 测试以匹配新策略格式，新增 2 个 primitive 策略测试
+
+新增函数：
+1. HCCLAgent._build_topology_graph()
+2. StrategySkill._generate_ring() / _generate_butterfly() / _generate_mesh() / _generate_generic()
+3. AgentPromptEngine 全部方法
+
+测试结果：47 单元测试全部通过，11 集成场景全部通过。
+
+
 ## 2026-06-14（第四批）：CPU 模拟通信基础设施 — hcclCommInit / hcclCommDestroy / hcclGetTopology
 
 修改文件：
@@ -1266,6 +1294,59 @@ Fat-Tree  ⬜ → not_implemented
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
 
+## 2026-06-14（第十四批）：Mesh AllReduce CPU 实现 — 全互联归约
+
+### Mesh 原理
+
+Full Mesh 拓扑中所有节点直接互联。AllReduce 只需一步：
+1. 收集所有 rank 的输入 → 计算全局和
+2. 将全局和写入所有 rank → 完成
+
+CPU 模拟实现：
+```
+global_sum = Σ rank_values[0..N-1]
+rank_results[i] = global_sum  (for all i)
+```
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `hcccl/src/hccl_algorithms.c` | 替换 `mesh_allreduce()` 桩 |
+| `hcccl/tests/test_mesh.c` | **新文件**。6 测试 |
+| `hcccl/CMakeLists.txt` | 新增 `test_mesh` |
+| `plugin/execution_engine.py` | ctypes 绑定 + `_execute_mesh()` + mesh 加入 `_IMPLEMENTED` |
+| `tests/test_execution_engine.py` | +2 Mesh 测试，移除 not_implemented |
+| `tests/test_execution_skill.py` | +1 Mesh 测试 |
+| `tests/test_execution_report_flow.py` | +1 Mesh 端到端 |
+
+### 测试结果
+
+```
+C:  topology 9 + ring 6 + butterfly 6 + nhr 7 + mesh 6 = 34 PASS
+Python: 134 PASS
+Total:  168 PASS
+```
+
+### Agent 执行链路
+
+```
+Ring      ✅   Butterfly ✅   NHR  ✅   Mesh ✅
+Fat-Tree  ⬜
+```
+
+### 当前项目阶段评估
+
+| 层次 | 状态 |
+|------|------|
+| C 基础设施 | ✅ |
+| **可执行算法** | **✅ 4/5 (Ring + Butterfly + NHR + Mesh)** |
+| Python ↔ C Bridge | ✅ |
+| Agent 评价/报告/推理 | ✅ |
+| Fat-Tree | ⬜ |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 ## 2026-06-14（第十五批）：Fat-Tree AllReduce CPU 实现 — 树形聚合
 
@@ -1550,87 +1631,294 @@ Total:  213 PASS
 | **Self Reflection** | **✅ 本轮完成** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（第二十批）：Replanning Engine — 自动重规划
 
+### 目标
 
+Reflection 发现问题后自动触发 RePlan，形成 Plan→Execute→Reflect→RePlan 闭环。
 
+### ReplanningSkill 设计
 
+`choose_alternative(current, ranking)` → 返回 ranking 中第一个不等于 current 的算法。无替代时返回 current。最多重规划一次。
 
+### 新增文件
 
-## 2026-06-14（第十四批）：Mesh AllReduce CPU 实现 — 全互联归约
-
-### Mesh 原理
-
-Full Mesh 拓扑中所有节点直接互联。AllReduce 只需一步：
-1. 收集所有 rank 的输入 → 计算全局和
-2. 将全局和写入所有 rank → 完成
-
-CPU 模拟实现：
-```
-global_sum = Σ rank_values[0..N-1]
-rank_results[i] = global_sum  (for all i)
-```
+| 文件 | 说明 |
+|------|------|
+| `agent/replanning_skill.py` | ReplanningSkill 类 |
+| `tests/test_replanning_skill.py` | 8 测试 |
 
 ### 修改文件
 
 | 文件 | 改动 |
 |------|------|
-| `hcccl/src/hccl_algorithms.c` | 替换 `mesh_allreduce()` 桩 |
-| `hcccl/tests/test_mesh.c` | **新文件**。6 测试 |
-| `hcccl/CMakeLists.txt` | 新增 `test_mesh` |
-| `plugin/execution_engine.py` | ctypes 绑定 + `_execute_mesh()` + mesh 加入 `_IMPLEMENTED` |
-| `tests/test_execution_engine.py` | +2 Mesh 测试，移除 not_implemented |
-| `tests/test_execution_skill.py` | +1 Mesh 测试 |
-| `tests/test_execution_report_flow.py` | +1 Mesh 端到端 |
+| `agent/hccl_agent.py` | Reflection → need_replan → ReplanningSkill → 再次执行 → `output["replanned"]` |
+| `agent/report_generator.py` | 新增 Replanning 段落（Triggered / Original / Replanned） |
+
+### Agent 调用链路图
+
+```
+DecisionSkill → Execution → Benchmark → Reflection
+                                              │
+                                    need_replan? ──No──→ done
+                                              │
+                                             Yes
+                                              │
+                                    ReplanningSkill.choose_alternative()
+                                              │
+                                    Execution + Benchmark (replanned)
+                                              │
+                                    done  (max 1 replan)
+```
 
 ### 测试结果
 
 ```
-C:  topology 9 + ring 6 + butterfly 6 + nhr 7 + mesh 6 = 34 PASS
-Python: 134 PASS
-Total:  168 PASS
+C:      41/41
+Python: 180/180 (+8)
+Total:  221 PASS
 ```
 
-### Agent 执行链路
-
-```
-Ring      ✅   Butterfly ✅   NHR  ✅   Mesh ✅
-Fat-Tree  ⬜
-```
-
-### 当前项目阶段评估
+### 当前项目阶段
 
 | 层次 | 状态 |
 |------|------|
-| C 基础设施 | ✅ |
-| **可执行算法** | **✅ 4/5 (Ring + Butterfly + NHR + Mesh)** |
-| Python ↔ C Bridge | ✅ |
-| Agent 评价/报告/推理 | ✅ |
-| Fat-Tree | ⬜ |
+| C 5/5 算法 | ✅ |
+| Python Bridge + 执行 | ✅ |
+| LLM 决策 + Benchmark | ✅ |
+| Experience + Policy + Reflection | ✅ |
+| **Auto Replanning** | **✅ 本轮完成** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
-## 2026-06-14（第三批）：C/C++ 骨架 + TopologyGraph + PromptEngine + 集成测试
+## 2026-06-14（第二十一批）：Task Decomposition & Multi-Step Planning
 
-新增文件：
-1. hcccl/ 目录（6 个文件）：C/C++ HCCL 插件骨架
-2. agent/prompt_engine.py：Prompt 模板填充与调用日志
-3. scripts/integration_test.sh：11 场景集成测试
+### 目标
 
-修改文件：
-1. agent/hccl_agent.py：集成 TopologyGraph 构建、PromptEngine 调用、primitive 传入 StrategySkill
-2. skills/strategy_skill.py：primitive 感知的三阶段策略生成（AllReduce 两阶段环 / AllGather / ReduceScatter / Mesh）
-3. tests/test_agent.py：更新 ring 测试以匹配新策略格式，新增 2 个 primitive 策略测试
+新增 Planning Layer，将优化目标分解为有序可执行子任务。
 
-新增函数：
-1. HCCLAgent._build_topology_graph()
-2. StrategySkill._generate_ring() / _generate_butterfly() / _generate_mesh() / _generate_generic()
-3. AgentPromptEngine 全部方法
+### Plan 结构（8 步骤）
 
-测试结果：47 单元测试全部通过，11 集成场景全部通过。
+1. Analyze topology
+2. Simulate candidate algorithms
+3. Rank algorithms by predicted performance
+4. Select best algorithm via policy engine
+5. Execute [primitive] on chosen algorithm
+6. Evaluate execution performance
+7. Reflect on result and replan if needed
+8. Record experience for future learning
 
-## 2026-06-14（第二批）：拓扑图 + 故障注入 + 文档 + 报告生成
+### 新增文件
 
-（详见之前迭代记录）
+| 文件 | 说明 |
+|------|------|
+| `agent/planning_skill.py` | PlanningSkill 类 |
+| `tests/test_planning_skill.py` | 8 测试 |
 
-## 2026-06-13（第一批）：primitive 全链路 + 算法粒度 + 日志 + README
+### 修改文件
 
-（详见之前迭代记录）
+| 文件 | 改动 |
+|------|------|
+| `agent/hccl_agent.py` | init → `create_plan()` → `output["plan"]` |
+| `agent/report_generator.py` | 新增 Planning 段落 |
+
+### 测试结果
+
+```
+C:      41/41
+Python: 188/188 (+8)
+Total:  229 PASS
+```
+
+### 当前项目阶段
+
+| 层次 | 状态 |
+|------|------|
+| C 5/5 算法 | ✅ |
+| Python Bridge + 执行 | ✅ |
+| LLM 决策 + Benchmark | ✅ |
+| Experience + Policy + Reflection + Replan | ✅ |
+| **Multi-Step Planning** | **✅ 本轮完成** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
+## 2026-06-14（第二十二批）：HCCL Compatibility Layer
+
+### 目标
+
+新增 HCCL 标准接口兼容层，使 Agent 通过 `HcclAllReduce` / `HcclAllGather` / `HcclReduceScatter` 调用 Simulator，形成标准 HCCL 接口 + 模拟验证闭环。
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `plugin/hccl_api.py` | HcclComm + HcclCommInitClusterInfo + 3 个集体通信函数 |
+| `tests/test_hccl_api.py` | 6 测试：init/allreduce/allgather/reducescatter/algorithm/score range |
+| `tests/test_execution_hccl_flow.py` | 3 测试：simulate_collective → HCCL API → Simulator 调用链 |
+| `tests/test_planning_hccl_integration.py` | 5 测试：plan 含 primitive/algorithm 字段 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `simulator/simulator.py` | 新增 `simulate_collective()` — 统一 HCCL 调用入口 |
+| `agent/planning_skill.py` | 新增 `_DEFAULT_ALGORITHM` 映射 + 步骤 5 含 primitive/algorithm |
+| `agent/report_generator.py` | 新增 HCCL Compatibility Report 段落 |
+
+### 执行链路
+
+```
+Cluster Config → Planning (primitive selection)
+    → HcclAllReduce / HcclAllGather / HcclReduceScatter
+    → Simulator.simulate_collective()
+    → Evaluation → Reflection → Replanning → Report
+```
+
+### 测试结果
+
+```
+C:      41/41
+Python: 202/202 (+14 new)
+Total:  243 PASS
+```
+
+### 当前项目阶段
+
+| 层次 | 状态 |
+|------|------|
+| C 5/5 算法 | ✅ |
+| Python Bridge + 执行 | ✅ |
+| LLM 决策 + Benchmark | ✅ |
+| Experience + Policy + Reflection + Replan | ✅ |
+| Multi-Step Planning | ✅ |
+| **HCCL Compatibility Layer** | **✅ 本轮完成** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+## 2026-06-14（第二十三批）：Graph-Based Communication Engine
+
+### Overview
+
+Batch23 引入 graph-based 通信建模，替换 flat bandwidth/latency 模拟。
+新增 Hardware Abstraction Layer、Topology Graph Builder、Cost Model Engine。
+
+## 2026-06-14（第二十四批）：Topology-Aware Algorithm Selection
+
+### 目标
+
+将固定算法映射升级为图拓扑感知的算法自动选择。Agent 现在分析拓扑图，在图模拟器上评估候选算法，自动选出最优。
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `skills/algorithm_selector.py` | AlgorithmSelector — 图模拟 → 排序 → 选择 |
+| `skills/topology_reasoning_skill.py` | TopologyReasoningSkill — 提取图结构属性 |
+| `tests/test_algorithm_selector.py` | 5 测试 |
+| `tests/test_topology_reasoning.py` | 5 测试 |
+| `tests/test_algorithm_selection_flow.py` | 2 测试 |
+| `tests/test_algorithm_reflection.py` | 3 测试 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/planning_skill.py` | 重构：候选算法 + 图模拟选择替代固定映射 |
+| `agent/report_generator.py` | 新增 Algorithm Selection Report 段落 |
+| `tests/test_planning_hccl_integration.py` | 适配新 plan 结构 |
+
+### Algorithm Selection Report（示例）
+
+```
+Algorithm Selection Report:
+---------------------------
+  Candidates: Ring AllReduce, Butterfly, Mesh, NHR, Fat-Tree
+    Ring AllReduce       score=78.3
+    Butterfly            score=85.2
+    Mesh                 score=64.1
+    NHR                  score=82.0
+    Fat-Tree             score=71.5
+  Selected:  Butterfly
+  Reason:    Selected Butterfly — score=85.2...
+```
+
+### 测试结果
+
+```
+C:      41/41
+Python: 239/239 (+15 new)
+Total:  280 PASS
+```
+
+### 当前项目阶段
+
+| 层次 | 状态 |
+|------|------|
+| C 5/5 算法 | ✅ |
+| Graph-Based Comm Engine | ✅ |
+| Hardware Abstraction | ✅ |
+| HCCL Compatibility | ✅ |
+| **Topology-Aware Algorithm Selection** | **✅ 本轮完成** |
+
+
+### Key Enhancements
+
+**(1) Hardware Abstraction Layer** (`hardware/profile.py`)
+- `HardwareProfile` — 可配置链路行为模型（HCCS/RoCE/PCIe）
+- 三级预设（high/medium/low），不硬编码真实 Ascend 数值
+- `from_json()` / `to_json()` / `get_link_properties()`
+
+**(2) Topology Graph Engine** (`topology/graph_builder.py`)
+- `CommunicationGraph` — 加权有向图，边含 bandwidth/latency/link_type/contention_weight
+- 三种模式：SINGLE_NODE（Full Mesh）、MULTI_NODE（HCCS+RoCE Fat-Tree）、HETEROGENEOUS（非对称混合链路）
+
+**(3) Cost Model Engine** (`cost_model/engine.py`)
+- `estimate_allreduce_ring()` — 环形路径遍历 + chunk 分解
+- `estimate_allreduce_tree()` — log-N 树形估算
+- 竞争惩罚 + 计算-通信重叠因子
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `hardware/profile.py` | HardwareProfile 抽象层 |
+| `topology/graph_builder.py` | CommunicationGraph + TopologyGraphBuilder |
+| `cost_model/engine.py` | CostModelEngine |
+| `tests/test_hardware_profile.py` | 6 测试 |
+| `tests/test_topology_graph.py` | 6 测试 |
+| `tests/test_cost_model.py` | 5 测试 |
+| `tests/test_graph_simulator.py` | 5 测试 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `simulator/simulator.py` | 新增 `simulate_with_graph()` — 图遍历通信模拟 |
+| `plugin/hccl_api.py` | `_simulate()` 支持可选的 graph + profile 参数 |
+| `agent/planning_skill.py` | 新增 hardware_profile/topology_mode/graph_strategy 字段 |
+
+### 执行链路（升级后）
+
+```
+Planning → ExecutionSkill → HCCL API
+    → Topology Graph Simulator → Cost Model Engine
+    → Evaluation → Reflection → Replanning → Report
+```
+
+### 测试结果
+
+```
+C:      41/41
+Python: 224/224 (+22 new)
+Total:  265 PASS
+```
+
+### 当前项目阶段
+
+| 层次 | 状态 |
+|------|------|
+| C 5/5 算法 | ✅ |
+| HCCL Compatibility Layer | ✅ |
+| Agent Decision Loop | ✅ |
+| **Graph-Based Comm Engine** | **✅ 本轮完成** |
+| **Hardware Abstraction + Cost Model** | **✅ 本轮完成** |
+
+

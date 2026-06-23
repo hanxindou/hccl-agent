@@ -7,7 +7,10 @@ class ReportGenerator:
     @staticmethod
     def generate_report(execution_result, evaluation_result,
                         benchmark=None, historical_stats=None,
-                        policy_ranking=None, reflection=None):
+                        policy_ranking=None, reflection=None,
+                        replanned=False, replan_algorithm=None,
+                        plan=None, hccl_result=None,
+                        selection_info=None):
         algo  = execution_result.get("algorithm", "Unknown")
         lat   = execution_result.get("latency", "N/A")
         bw    = execution_result.get("bandwidth", "N/A")
@@ -18,6 +21,32 @@ class ReportGenerator:
         lines = [
             "Execution Report",
             "=================",
+        ]
+
+        if plan:
+            lines += ["", "Planning:", "---------"]
+            for step_item in plan:
+                lines.append(
+                    f"  {step_item['step']}. {step_item['task']}"
+                )
+
+        if selection_info:
+            lines += [
+                "",
+                "Algorithm Selection Report:",
+                "---------------------------",
+                f"  Candidates: {', '.join(c['algorithm'] for c in selection_info.get('candidates', []))}",
+            ]
+            for c in selection_info.get("candidates", []):
+                lines.append(
+                    f"    {c['algorithm']:20s}  score={c['score']:.1f}"
+                )
+            lines += [
+                f"  Selected:  {selection_info.get('algorithm', 'N/A')}",
+                f"  Reason:    {selection_info.get('reason', '')}",
+            ]
+
+        lines += [
             "",
             "Algorithm:",
             f"  {algo}",
@@ -77,6 +106,28 @@ class ReportGenerator:
                 f"  Status: {reflection.get('status', 'N/A').upper()}",
                 f"  Message: {reflection.get('message', '')}",
                 f"  Need Replan: {reflection.get('need_replan', False)}",
+            ]
+
+        if replanned:
+            lines += [
+                "",
+                "Replanning:",
+                f"  Triggered: True",
+                f"  Original Algorithm: {execution_result.get('algorithm', 'N/A')}",
+                f"  Replanned Algorithm: {replan_algorithm or 'N/A'}",
+            ]
+
+        if hccl_result:
+            lines += [
+                "",
+                "HCCL Compatibility Report:",
+                "-----------------------------",
+                f"  Primitive:  {hccl_result.get('primitive', 'N/A')}",
+                f"  Algorithm:  {hccl_result.get('algorithm', 'N/A')}",
+                f"  Topology:   {hccl_result.get('topology', 'N/A')}",
+                f"  Latency:    {hccl_result.get('latency', 'N/A')} ms",
+                f"  Bandwidth:  {hccl_result.get('bandwidth', 'N/A')} GB/s",
+                f"  Score:      {hccl_result.get('score', 'N/A')}",
             ]
 
         return "\n".join(lines) + "\n"

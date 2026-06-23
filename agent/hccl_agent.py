@@ -17,6 +17,8 @@ from agent.benchmark_skill import BenchmarkSkill
 from agent.experience_store import ExperienceStore
 from agent.policy_engine import PolicyEngine
 from agent.reflection_skill import ReflectionSkill
+from agent.replanning_skill import ReplanningSkill
+from agent.planning_skill import PlanningSkill
 
 
 class HCCLAgent:
@@ -45,6 +47,7 @@ class HCCLAgent:
         self.benchmark_skill = BenchmarkSkill(self.execution_skill)
         self.experience_store = ExperienceStore()
         self.reflection_skill = ReflectionSkill()
+        self.planning_skill = PlanningSkill()
 
     def run(
         self,
@@ -71,6 +74,11 @@ class HCCLAgent:
         runtime_cluster_info = dict(cluster_info)
         runtime_cluster_info["nodes"] = nodes
         runtime_cluster_info["topology"] = topology
+
+        # ---- multi-step planning ----
+        plan = self.planning_skill.create_plan(
+            nodes, message_size, primitive,
+        )
 
         # ---- algorithm selection ----
         candidate_algorithms = (
@@ -178,6 +186,26 @@ class HCCLAgent:
             algorithm=chosen_algorithm,
         )
 
+        # ---- replanning (max 1 iteration) ----
+        replanned = False
+        replan_algorithm = None
+        replan_benchmark = None
+        if reflection["need_replan"] and ranking:
+            alt = ReplanningSkill.choose_alternative(
+                chosen_algorithm, ranking,
+            )
+            if alt != chosen_algorithm:
+                try:
+                    replan_benchmark = self.benchmark_skill.benchmark_execution(
+                        alt,
+                        [float(i + 1) for i in range(nodes)],
+                    )
+                    chosen_algorithm = alt
+                    replanned = True
+                    replan_algorithm = alt
+                except Exception:
+                    pass
+
         # ---- strategy generation ----
         strategy = self.strategy_skill.generate(
             chosen_algorithm,
@@ -217,6 +245,7 @@ class HCCLAgent:
 
         # ---- assemble output ----
         output = {
+            "plan": plan,
             "plugin": plugin_info,
             "cluster": runtime_cluster_info,
             "primitive": primitive,
@@ -232,6 +261,9 @@ class HCCLAgent:
             "llm_decision": decision,
             "benchmark": benchmark,
             "reflection": reflection,
+            "replanned": replanned,
+            "replan_algorithm": replan_algorithm,
+            "replan_benchmark": replan_benchmark,
             "policy_ranking": policy_ranking,
             "ranking": ranking,
             "strategy": strategy,
@@ -336,8 +368,11 @@ class HCCLAgent:
         evaluation = self.evaluation_skill.evaluate(sim_result)
 
         # 4. Generate the report.
+        plan = self.planning_skill.create_plan(
+            nodes, 128.0, "AllReduce",
+        )
         report = self.report_generator.generate_report(
-            sim_result, evaluation, benchmark=benchmark,
+            sim_result, evaluation, benchmark=benchmark, plan=plan,
         )
 
         return {

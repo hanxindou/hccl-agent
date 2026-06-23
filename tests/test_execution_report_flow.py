@@ -44,6 +44,8 @@ class TestExecutionReportFlow(unittest.TestCase):
         self.assertIn("benchmark", result)
         self.assertGreater(result["benchmark"]["execution_time_ms"], 0)
         self.assertIn("Actual Execution Time", result["report"])
+        self.assertIn("Planning:", result["report"])
+        self.assertIn("Analyze topology", result["report"])
 
     def test_full_flow_butterfly_success(self):
         result = self.agent.generate_execution_report(
