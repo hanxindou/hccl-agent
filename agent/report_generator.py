@@ -139,6 +139,17 @@ class ReportGenerator:
                 f"  Replanned Algorithm: {replan_algorithm or 'N/A'}",
             ]
 
+        score_bd = execution_result.get("score_breakdown")
+        if score_bd:
+            lines += [
+                "",
+                "Performance Score Breakdown:",
+                "-----------------------------",
+                f"  Bandwidth Contribution:  {score_bd.get('bandwidth_score', 0):.1f} × {score_bd.get('bandwidth_weight', 0)} = {score_bd.get('bw_weighted', 0):.2f}",
+                f"  Latency Contribution:    {score_bd.get('latency_score', 0):.1f} × {score_bd.get('latency_weight', 0)} = {score_bd.get('lat_weighted', 0):.2f}",
+                f"  Final Score:             {score_bd.get('score', 0):.2f}",
+            ]
+
         if hccl_result:
             lines += [
                 "",

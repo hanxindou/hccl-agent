@@ -39,10 +39,12 @@ class TestPerformanceModel(unittest.TestCase):
         score = self.model.calculate_score(0.0, 12.5, 12.5)
         self.assertGreaterEqual(score, 99.0)
 
-    def test_high_latency_gives_low_score(self):
-        """2ms latency → latency sub-score = 0, final = 40."""
-        score = self.model.calculate_score(2.0, 12.5, 12.5)
-        self.assertEqual(score, 40.0)
+    def test_high_latency_gives_lower_score(self):
+        """2ms latency → lower than 0.01ms (smooth decay, no hard cutoff)."""
+        s_low = self.model.calculate_score(0.01, 12.5, 12.5)
+        s_high = self.model.calculate_score(2.0, 12.5, 12.5)
+        self.assertGreater(s_low, s_high)
+        self.assertGreater(s_high, 0.0)
 
     # ---- bandwidth differentiation ----
 

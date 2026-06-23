@@ -1972,6 +1972,72 @@ Total:  295 PASS
 | **Scenario Benchmark Suite** | **✅ M1 完成** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（Batch26）：Performance Model Calibration & Validation
+
+### Overview
+
+Batch26 introduces calibrated performance scoring with smooth latency decay,
+score breakdown, scaling validation, and decision optimality checks.
+
+### Key Enhancements
+
+**(1) Smooth Latency Decay Model**
+- Old: `max(0, 100 - latency * LATENCY_PENALTY)` — hard cutoff at 0
+- New: `100 / (1 + latency_ms / LATENCY_SCALE)` — smooth decay, never hits zero
+- LATENCY_SCALE=30 (configurable): 30ms → lat_score=50
+
+**(2) Score Breakdown**
+- `calculate_score_breakdown()` returns bandwidth_score, latency_score, bw_weighted, lat_weighted
+- Backward-compatible: `calculate_score()` unchanged
+
+**(3) Scaling Validation** (`analysis/scaling_analysis.py`)
+- 4→128 nodes: scores decrease monotonically, latency decays smoothly
+
+**(4) Algorithm & Topology Sensitivity** (2 analysis scripts)
+
+**(5) Decision Validation Layer** (`skills/decision_validation_skill.py`)
+- Validates selected algorithm is truly optimal; confidence levels
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `skills/decision_validation_skill.py` | DecisionValidationSkill |
+| `analysis/scaling_analysis.py` | 4→128 节点扩展分析 |
+| `analysis/algorithm_sensitivity.py` | 5 算法比较 |
+| `analysis/topology_sensitivity.py` | 5 拓扑比较 |
+| `tests/test_performance_calibration.py` | 6 测试 |
+| `tests/test_score_breakdown.py` | 3 测试 |
+| `tests/test_decision_validation.py` | 4 测试 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `skills/performance_model.py` | 重构：smooth decay + breakdown |
+| `agent/report_generator.py` | Score Breakdown 段落 |
+| `tests/test_performance_model.py` | 适配新模型 |
+
+### 测试结果
+
+```
+C:      41/41
+Python: 267/267 (+13 new)
+Total:  308 PASS
+```
+
+### 当前项目阶段
+
+| 层次 | 状态 |
+|------|------|
+| C 5/5 算法 | ✅ |
+| Graph Engine + Topology Selection | ✅ |
+| Explainable Decision | ✅ |
+| Benchmark Suite (M1) | ✅ |
+| **Calibrated Performance Model** | **✅ 本轮完成** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
 
