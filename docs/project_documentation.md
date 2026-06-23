@@ -1911,6 +1911,67 @@ Total:  289 PASS
 | Graph Engine + HW Abstraction | ✅ |
 | Topology-Aware Selection | ✅ |
 | **Explainable Decision Engine** | **✅ 本轮完成** |
+
+## Milestone M1: Scenario Benchmark Suite
+
+### Benchmark Motivation
+
+构建 5 个标准集群场景，自动运行 Agent 全流程并生成可复现报告，用于比赛演示、答辩展示和实验验证。
+
+### Benchmark Scenarios
+
+| # | Scenario | Nodes | Topology | Primitive | Msg Size | Selected | Score |
+|---|----------|-------|----------|-----------|----------|----------|-------|
+| 1 | single_node_8gpu | 8 | Full Mesh | AllReduce | 128 MB | Butterfly | 90.4 |
+| 2 | dual_node_16gpu | 16 | Hierarchical | AllReduce | 256 MB | NHR | 61.2 |
+| 3 | fattree_32gpu | 32 | Fat Tree | AllReduce | 512 MB | NHR | 37.2 |
+| 4 | hierarchical_64gpu | 64 | Hierarchical | Broadcast | 1024 MB | Fat-Tree | 36.0 |
+| 5 | heterogeneous_cluster | 24 | Heterogeneous | AllReduce | 256 MB | NHR | 42.0 |
+
+### Benchmark Pipeline
+
+```
+Scenario JSON → Agent.run() → Algorithm Selection → Decision Trace
+    → Reflection → Per-scenario Markdown Report → Summary Table
+```
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `experiments/scenarios/` (5 JSON) | 标准场景配置 |
+| `experiments/benchmark_runner.py` | 批量执行 + 报告生成 |
+| `experiments/reports/` (6 MD) | 5 场景报告 + 1 汇总表 |
+| `skills/benchmark_suite_skill.py` | BenchmarkSuiteSkill |
+| `tests/test_benchmark_runner.py` | 4 测试 |
+| `tests/test_benchmark_reports.py` | 2 测试 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/hccl_agent.py` | SUPPORTED_PRIMITIVES 增加 Broadcast |
+| `tests/test_agent.py` | 不支持的 primitive 改用 AlltoAll |
+
+### 测试结果
+
+```
+C:      41/41
+Python: 254/254 (+6 new)
+Total:  295 PASS
+5 scenarios: all executed successfully
+```
+
+### 当前项目阶段
+
+| 层次 | 状态 |
+|------|------|
+| C 5/5 算法 | ✅ |
+| Graph Engine + Topology Selection | ✅ |
+| Explainable Decision + Reflection | ✅ |
+| **Scenario Benchmark Suite** | **✅ M1 完成** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
 

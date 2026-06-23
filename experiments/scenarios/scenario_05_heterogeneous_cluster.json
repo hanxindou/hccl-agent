@@ -1,0 +1,7 @@
+{
+  "name": "heterogeneous_cluster",
+  "nodes": 24,
+  "topology": "Heterogeneous",
+  "primitive": "AllReduce",
+  "message_size_mb": 256
+}

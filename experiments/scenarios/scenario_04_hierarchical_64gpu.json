@@ -1,0 +1,7 @@
+{
+  "name": "hierarchical_64gpu",
+  "nodes": 64,
+  "topology": "Hierarchical",
+  "primitive": "Broadcast",
+  "message_size_mb": 1024
+}

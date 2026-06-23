@@ -32,7 +32,7 @@ class TestHCCLAgent(unittest.TestCase):
     def test_agent_rejects_unsupported_primitive(self):
         agent = HCCLAgent()
         with self.assertRaises(ValueError):
-            agent.run(nodes=8, message_size=128, primitive="Broadcast")
+            agent.run(nodes=8, message_size=128, primitive="AlltoAll")
 
 
 class TestMainCli(unittest.TestCase):

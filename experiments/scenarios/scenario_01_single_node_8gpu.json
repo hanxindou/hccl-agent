@@ -1,0 +1,7 @@
+{
+  "name": "single_node_8gpu",
+  "nodes": 8,
+  "topology": "Full Mesh",
+  "primitive": "AllReduce",
+  "message_size_mb": 128
+}

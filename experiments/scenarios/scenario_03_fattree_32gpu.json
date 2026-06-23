@@ -1,0 +1,7 @@
+{
+  "name": "fattree_32gpu",
+  "nodes": 32,
+  "topology": "Fat Tree",
+  "primitive": "AllReduce",
+  "message_size_mb": 512
+}

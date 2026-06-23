@@ -28,6 +28,7 @@ class HCCLAgent:
         "AllReduce",
         "AllGather",
         "ReduceScatter",
+        "Broadcast",
     }
 
     def __init__(self):

@@ -1,0 +1,7 @@
+{
+  "name": "dual_node_16gpu",
+  "nodes": 16,
+  "topology": "Hierarchical",
+  "primitive": "AllReduce",
+  "message_size_mb": 256
+}
