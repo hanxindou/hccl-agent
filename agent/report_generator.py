@@ -189,6 +189,32 @@ class ReportGenerator:
                 f"  Score:      {hccl_result.get('score', 'N/A')}",
             ]
 
+        tuning = execution_result.get("auto_tuning")
+        if tuning:
+            bc = tuning.get("best_config", {})
+            lines += [
+                "",
+                "Auto-Tuning Report:",
+                "--------------------",
+                f"  Evaluated Configurations: {tuning.get('evaluated_configs', 0)}",
+                f"  Best Configuration:",
+                f"    chunk_size_mb:  {bc.get('chunk_size_mb', 'N/A')}",
+                f"    pipeline_depth: {bc.get('pipeline_depth', 'N/A')}",
+                f"    overlap_factor: {bc.get('overlap_factor', 'N/A')}",
+                f"  Best Score:            {tuning.get('best_score', 'N/A')}",
+            ]
+            top = tuning.get("top_k", [])
+            if top:
+                lines.append("  Top Configurations:")
+                for i, entry in enumerate(top[:5]):
+                    c = entry["config"]
+                    lines.append(
+                        f"    {i+1}. chunk={c['chunk_size_mb']:.0f} "
+                        f"depth={c['pipeline_depth']:.0f} "
+                        f"overlap={c['overlap_factor']:.2f} "
+                        f"→ score={entry['score']:.1f}"
+                    )
+
         exp = execution_result.get("experience_learning")
         if exp:
             lines += [

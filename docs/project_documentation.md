@@ -2582,6 +2582,91 @@ Total:  393 PASS (41 C + 352 Python)
 | **Experience Learning Engine** | **✅ M1.7** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（M1.8）：Auto-Tuning Engine
+
+### Overview
+
+新增 Auto-Tuning Engine，使 Agent 从 Auto-Advisor 升级为 Auto-Tuning Optimizer。
+自动搜索参数空间（chunk_size, pipeline_depth, overlap_factor），找到最佳通信配置。
+
+### 参数空间设计
+
+| 参数 | 取值范围 | 说明 |
+|------|---------|------|
+| chunk_size_mb | [1, 2, 4, 8, 16] | 消息分块大小 — 过小有延迟惩罚，过大有带宽惩罚 |
+| pipeline_depth | [1, 2, 4] | 流水线深度 — depth=4 有 +5% score 加成 |
+| overlap_factor | [0.0, 0.25, 0.5] | 计算-通信重叠度 — 0.5 可提高 +5% |
+
+共计 5×3×3 = **45 种配置组合**。
+
+### 评分调整规则（Deterministic）
+
+| 条件 | 调整 | 说明 |
+|------|------|------|
+| chunk=1 | ×0.85 | 过小 → 延迟惩罚 |
+| chunk=2 | ×0.95 | 略小 |
+| chunk=4 | ×1.00 | **最优** |
+| chunk=8 | ×0.97 | 略大 → 轻微带宽损失 |
+| chunk=16 | ×0.90 | 过大 → 带宽惩罚 |
+| depth=2 | ×1.03 | 双缓冲流水线 |
+| depth=4 | ×1.05 | 深度流水线 |
+| overlap>0 | ×(1 + overlap×0.1) | 计算通信重叠 |
+
+### Grid Search 策略
+
+穷举全部 45 种配置 → 按调整后 score 降序排列 → 返回 best_config + top-5。
+
+### Agent 集成位置
+
+```
+Algorithm Selection → Auto-Tuning → Code Generation
+```
+
+输出字段：`output["auto_tuning"]` = `{best_config, best_score, top_k, evaluated_configs}`
+
+### Decision Trace 步骤升级
+
+```
+[0] Hardware → [1] Topology → [2] Experience → [3] Algorithm Selection
+    → [4] Auto-Tuning → [5] Code Generation → [6] Execution → [7] Reflection
+```
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `agent/auto_tuning_skill.py` | AutoTuningSkill — grid search + 评分调整 |
+| `analysis/auto_tuning_analysis.py` | 参数敏感度分析脚本 |
+| `tests/test_auto_tuning_skill.py` | 6 测试 |
+| `tests/test_auto_tuning_flow.py` | 1 测试 |
+| `tests/test_auto_tuning_report.py` | 1 测试 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/hccl_agent.py` | Auto-Tuning step → `output["auto_tuning"]` |
+| `agent/report_generator.py` | 新增 Auto-Tuning Report 段落 |
+
+### 测试结果
+
+```
+Python: +8 tests  (全部通过)
+Total:  401 PASS (41 C + 360 Python)
+```
+
+### 当前项目状态
+
+| Capability | Status |
+|------------|--------|
+| Graph Engine + 5/5 Algorithms | ✅ |
+| Reliability + Dynamic Topology | ✅ |
+| Code Gen + Optimization Proposal | ✅ |
+| Hardware Awareness + Experience Learning | ✅ |
+| **Auto-Tuning Engine** | **✅ M1.8** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 ### 最终系统能力总览
 
 | 维度 | 能力 | 状态 |

@@ -24,6 +24,7 @@ from agent.code_generation_skill import CodeGenerationSkill
 from skills.hardware_reasoning_skill import HardwareReasoningSkill
 from agent.optimization_proposal_skill import OptimizationProposalSkill
 from skills.experience_learning_skill import ExperienceLearningSkill
+from agent.auto_tuning_skill import AutoTuningSkill
 from hardware.resource_manager import ResourceManager
 from hardware.node_profile import NodeProfile
 
@@ -266,6 +267,15 @@ class HCCLAgent:
                 except Exception:
                     pass
 
+        # ---- auto-tuning (after algorithm selection) ----
+        auto_tuning = AutoTuningSkill.grid_search(
+            algorithm=chosen_algorithm,
+            topology=topology,
+            nodes=nodes,
+            message_size_mb=message_size,
+            base_score=best_result["score"],
+        )
+
         # ---- code generation ----
         code_gen_result = {
             "hccl_config": self.code_generation_skill.generate_hccl_config(
@@ -365,6 +375,7 @@ class HCCLAgent:
             "hardware_analysis": hw_analysis,
             "optimization_proposal": optimization_proposal,
             "experience_learning": experience_info,
+            "auto_tuning": auto_tuning,
             "replanned": replanned,
             "replan_algorithm": replan_algorithm,
             "replan_benchmark": replan_benchmark,
