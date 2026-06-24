@@ -29,6 +29,8 @@ from knowledge.knowledge_base import KnowledgeBase
 from skills.case_retrieval_skill import CaseRetrievalSkill
 from skills.knowledge_extraction_skill import KnowledgeExtractionSkill
 from agent.knowledge_report_skill import KnowledgeReportSkill
+from agent.optimization_loop_skill import OptimizationLoopSkill
+from agent.convergence_analysis_skill import ConvergenceAnalysisSkill
 from hardware.resource_manager import ResourceManager
 from hardware.node_profile import NodeProfile
 
@@ -289,6 +291,22 @@ class HCCLAgent:
             base_score=best_result["score"],
         )
 
+        # ---- optimization loop ----
+        initial_plan = {
+            "algorithm": chosen_algorithm,
+            "score": best_result["score"],
+            "topology": topology,
+            "nodes": nodes,
+        }
+        opt_loop_result = OptimizationLoopSkill.run_until_converged(
+            initial_plan=initial_plan,
+            cluster_config=runtime_cluster_info,
+            max_iterations=5,
+        )
+        convergence = ConvergenceAnalysisSkill.analyze(
+            opt_loop_result["iterations"],
+        )
+
         # ---- code generation ----
         code_gen_result = {
             "hccl_config": self.code_generation_skill.generate_hccl_config(
@@ -389,6 +407,8 @@ class HCCLAgent:
             "optimization_proposal": optimization_proposal,
             "experience_learning": experience_info,
             "auto_tuning": auto_tuning,
+            "optimization_history": opt_loop_result,
+            "convergence_analysis": convergence,
             "knowledge_context": {
                 "cases": knowledge_context.get("cases", []),
                 "count": knowledge_context.get("count", 0),

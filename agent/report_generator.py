@@ -189,6 +189,32 @@ class ReportGenerator:
                 f"  Score:      {hccl_result.get('score', 'N/A')}",
             ]
 
+        hist = execution_result.get("optimization_history")
+        if hist:
+            lines += [
+                "",
+                "Optimization Loop Report:",
+                "-------------------------",
+                f"  Iterations:     {hist.get('total_iterations', 0)}",
+                f"  Best Score:     {hist.get('best_score', 'N/A')}",
+                f"  Improvement:    {hist.get('improvement_percent', 'N/A')}%",
+                f"  Converged:      {hist.get('converged', 'N/A')}",
+            ]
+            for it in hist.get("iterations", []):
+                lines.append(
+                    f"  [{it['iteration']}] {it['algorithm']:20s} "
+                    f"score={it['score']:.1f}  changes={it['changes']}"
+                )
+            conv = execution_result.get("convergence_analysis")
+            if conv:
+                lines += [
+                    "",
+                    "Convergence Analysis:",
+                    f"  Trend:              {conv.get('trend', 'N/A')}",
+                    f"  Best Iteration:     {conv.get('best_iteration', 'N/A')}",
+                    f"  Stagnation:         {conv.get('stagnation_detected', 'N/A')}",
+                ]
+
         kc = execution_result.get("knowledge_context")
         if kc and kc.get("count", 0) > 0:
             bp = kc.get("best_practice") or {}

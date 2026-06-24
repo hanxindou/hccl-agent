@@ -2757,6 +2757,63 @@ Total:  410 PASS (41 C + 369 Python)
 | **Knowledge Base + Case Retrieval** | **✅ M1.9** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（M2.0）：Autonomous Optimization Loop
+
+### Overview
+
+新增 Autonomous Optimization Loop，实现 Plan→Execute→Reflect→Optimize→Re-Execute
+闭环节，使 Agent 从单次决策升级为迭代优化。
+
+### 收敛条件
+
+| 条件 | 说明 |
+|------|------|
+| score 提升 < 2% | 当前轮收益不足 |
+| 连续 2 轮无提升 | stagnation limit |
+| 达到 max_iterations | 默认 5 轮 |
+
+### 每轮允许修改
+
+- algorithm（切换到 alternative）
+- chunk_size / pipeline_depth / overlap_factor（参数调优）
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `agent/optimization_loop_skill.py` | `run_until_converged()` — 迭代优化主循环 |
+| `agent/convergence_analysis_skill.py` | trend / stagnation / best iteration 分析 |
+| `tests/test_optimization_loop.py` | 4 测试 |
+| `tests/test_convergence_analysis.py` | 4 测试 |
+| `tests/test_optimization_history.py` | 2 测试 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/hccl_agent.py` | Optimization Loop + Convergence Analysis → output |
+| `agent/report_generator.py` | 新增 Optimization Loop Report + Convergence Analysis 段落 |
+
+### 测试结果
+
+```
+Python: +10 tests  (全部通过)
+Total:  420 PASS (41 C + 379 Python)
+```
+
+### 当前项目状态
+
+| Capability | Status |
+|------------|--------|
+| Graph Engine + 5/5 Algorithms | ✅ |
+| Reliability + Dynamic Topology | ✅ |
+| Code Gen + Optimization Proposal | ✅ |
+| Hardware + Experience + Auto-Tuning | ✅ |
+| Knowledge Base + Case Retrieval | ✅ |
+| **Autonomous Optimization Loop** | **✅ M2.0** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 
 ### 最终系统能力总览
