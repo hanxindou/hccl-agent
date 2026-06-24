@@ -2037,6 +2037,83 @@ Total:  308 PASS
 | **Calibrated Performance Model** | **✅ 本轮完成** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（M1.1）：Experimental Validation Expansion
+
+### Overview
+
+Expanded benchmark coverage from 5 to 8 scenarios (4→256 GPU),
+added scaling/algorithm/topology sensitivity analysis, and integrated
+decision validation into all benchmark reports.
+
+### Scaling Validation (4→256 GPU)
+
+| Nodes | Score Trend |
+|-------|------------|
+| 4 | Highest |
+| 8 | ↓ |
+| 16 | ↓ |
+| 32 | ↓ |
+| 64 | ↓ |
+| 128 | ↓ |
+| 256 | Lowest (non-zero) |
+
+### New Scenarios
+
+| File | Config |
+|------|--------|
+| scenario_06_4gpu.json | 4 GPU, AllReduce, 64MB |
+| scenario_07_128gpu.json | 128 GPU, AllReduce, 1024MB |
+| scenario_08_256gpu.json | 256 GPU, AllReduce, 2048MB |
+
+### New Analysis Scripts
+
+| File | Purpose |
+|------|---------|
+| `experiments/benchmark_runner.py` | Extended with --scaling, --algorithm, --topology, --all flags |
+
+### New Tests
+
+| File | Tests |
+|------|-------|
+| `tests/test_scaling_analysis.py` | 3 |
+| `tests/test_algorithm_sensitivity_report.py` | 2 |
+| `tests/test_topology_sensitivity_report.py` | 2 |
+
+### Generated Reports
+
+```
+experiments/reports/scaling_analysis.md
+experiments/reports/algorithm_sensitivity.md
+experiments/reports/topology_sensitivity.md
+```
+
+### Decision Validation Integration
+
+Every benchmark scenario now includes DecisionValidationSkill output:
+- is_optimal flag
+- confidence level
+- score gap to best alternative
+
+### Test Results
+
+```
+C:      41/41
+Python: 274/274 (+7 new)
+Total:  315 PASS
+```
+
+### Current Project Status
+
+| Capability | Status |
+|------------|--------|
+| Graph Engine + Topology Selection | ✅ |
+| Explainable Decision | ✅ |
+| Calibrated Performance Model | ✅ |
+| **Expanded Benchmark Suite (M1.1)** | **✅** |
+| Decision Validation | ✅ |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 

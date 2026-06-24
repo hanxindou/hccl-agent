@@ -1,0 +1,1 @@
+{"name": "scaling_256gpu", "nodes": 256, "topology": "Fat Tree", "primitive": "AllReduce", "message_size_mb": 2048}
