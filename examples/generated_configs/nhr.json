@@ -1,0 +1,9 @@
+{
+  "algorithm": "NHR",
+  "primitive": "AllReduce",
+  "chunk_size_mb": 1.0,
+  "pipeline_depth": 2,
+  "communication_pattern": "Hierarchical Ring (group reduce \u2192 leader ring \u2192 broadcast)",
+  "expected_bandwidth_gbps": 100.0,
+  "expected_latency_ms": 0.064
+}

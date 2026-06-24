@@ -10,7 +10,8 @@ class ReportGenerator:
                         policy_ranking=None, reflection=None,
                         replanned=False, replan_algorithm=None,
                         plan=None, hccl_result=None,
-                        selection_info=None, decision_trace=None):
+                        selection_info=None, decision_trace=None,
+                        code_generation=None):
         algo  = execution_result.get("algorithm", "Unknown")
         lat   = execution_result.get("latency", "N/A")
         bw    = execution_result.get("bandwidth", "N/A")
@@ -140,6 +141,31 @@ class ReportGenerator:
             ]
 
         score_bd = execution_result.get("score_breakdown")
+        if code_generation:
+            cfg = code_generation.get("hccl_config", {})
+            plan_phases = code_generation.get("execution_plan", {})
+            skeleton = code_generation.get("algorithm_skeleton", "")
+            notes = code_generation.get("optimization_notes", [])
+            lines += [
+                "",
+                "Generated Communication Strategy:",
+                "----------------------------------",
+                f"  Algorithm:            {cfg.get('algorithm', 'N/A')}",
+                f"  Chunk Size:           {cfg.get('chunk_size_mb', 'N/A')} MB",
+                f"  Pipeline Depth:       {cfg.get('pipeline_depth', 'N/A')}",
+                f"  Pattern:              {cfg.get('communication_pattern', 'N/A')}",
+            ]
+            for phase, desc in plan_phases.items():
+                lines.append(f"  {phase}: {desc}")
+            if skeleton:
+                lines += ["", "  Algorithm Skeleton:", ""]
+                for line in skeleton.splitlines():
+                    lines.append(f"    {line}")
+            if notes:
+                lines += ["", "  Optimization Notes:"]
+                for n in notes:
+                    lines.append(f"    - {n}")
+
         if score_bd:
             lines += [
                 "",

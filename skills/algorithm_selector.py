@@ -88,8 +88,15 @@ class AlgorithmSelector:
             "score": best["score"],
             "reason": reason,
             "selection_reason": reason,
+            "selection_metadata": {
+                "winner": best["algorithm"],
+                "ranking": [(c["algorithm"], c["score"]) for c in details],
+                "selection_reason": reason,
+                "expected_score": best["score"],
+            },
             "candidates": details,
             "candidate_scores": details,
             "scores": scores,
             "ranking": [(c["algorithm"], c["score"]) for c in details],
+            "topology_version": topology_version,
         }

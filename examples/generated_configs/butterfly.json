@@ -1,0 +1,9 @@
+{
+  "algorithm": "Butterfly",
+  "primitive": "AllReduce",
+  "chunk_size_mb": 1.0,
+  "pipeline_depth": 1,
+  "communication_pattern": "Recursive Doubling (log-N pairwise)",
+  "expected_bandwidth_gbps": 100.0,
+  "expected_latency_ms": 0.064
+}

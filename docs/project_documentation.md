@@ -2234,6 +2234,58 @@ Total:  345 PASS
 | **Dynamic Topology** | **✅ M1.3** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（M1.4）：Code Generation Agent
+
+### Overview
+
+新增 Code Generation Agent，自动生成 HCCL 配置、执行计划、算法骨架伪代码和优化建议。
+
+### 生成能力
+
+| 功能 | 方法 | 输出 |
+|------|------|------|
+| HCCL Config | `generate_hccl_config()` | chunk_size, pipeline_depth, communication_pattern |
+| Execution Plan | `generate_execution_plan()` | 2-3 phase descriptions |
+| Algorithm Skeleton | `generate_algorithm_skeleton()` | Python pseudo-code class |
+| Optimization Notes | `generate_optimization_notes()` | 4-5 bullet recommendations |
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `agent/code_generation_skill.py` | CodeGenerationSkill — 4 类生成器 |
+| `tests/test_code_generation_skill.py` | 6 测试 |
+| `tests/test_code_generation_flow.py` | 2 测试 |
+| `examples/generated_configs/` (4 JSON) | 算法配置示例 |
+| `examples/generated_code/` (4 Python) | 算法骨架示例 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/hccl_agent.py` | 集成 CodeGenerationSkill → `output["code_generation"]` |
+| `agent/report_generator.py` | 新增 Generated Communication Strategy 段落 |
+| `skills/algorithm_selector.py` | 新增 `selection_metadata` |
+
+### 测试结果
+
+```
+C:      41/41
+Python: 312/312 (+8)
+Total:  353 PASS
+```
+
+### 当前项目阶段
+
+| Capability | Status |
+|------------|--------|
+| Graph Engine + 5/5 Algorithms | ✅ |
+| Reliability + Dynamic Topology | ✅ |
+| Benchmark Suite | ✅ |
+| **Code Generation Agent** | **✅ M1.4** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 
 

@@ -20,6 +20,7 @@ from agent.reflection_skill import ReflectionSkill
 from agent.replanning_skill import ReplanningSkill
 from agent.planning_skill import PlanningSkill
 from agent.explanation_skill import ExplanationSkill
+from agent.code_generation_skill import CodeGenerationSkill
 
 
 class HCCLAgent:
@@ -51,6 +52,7 @@ class HCCLAgent:
         self.reflection_skill = ReflectionSkill()
         self.planning_skill = PlanningSkill()
         self.explanation_skill = ExplanationSkill()
+        self.code_generation_skill = CodeGenerationSkill()
 
     def run(
         self,
@@ -223,6 +225,22 @@ class HCCLAgent:
                 except Exception:
                     pass
 
+        # ---- code generation ----
+        code_gen_result = {
+            "hccl_config": self.code_generation_skill.generate_hccl_config(
+                primitive, chosen_algorithm, topo_analysis,
+            ),
+            "execution_plan": self.code_generation_skill.generate_execution_plan(
+                chosen_algorithm, primitive,
+            ),
+            "algorithm_skeleton": self.code_generation_skill.generate_algorithm_skeleton(
+                chosen_algorithm, primitive,
+            ),
+            "optimization_notes": self.code_generation_skill.generate_optimization_notes(
+                chosen_algorithm, topo_analysis,
+            ),
+        }
+
         # ---- decision trace ----
         decision_trace = self.explanation_skill.generate_decision_trace(
             topology_analysis=topo_analysis,
@@ -291,6 +309,7 @@ class HCCLAgent:
             "benchmark": benchmark,
             "reflection": reflection,
             "decision_trace": decision_trace,
+            "code_generation": code_gen_result,
             "replanned": replanned,
             "replan_algorithm": replan_algorithm,
             "replan_benchmark": replan_benchmark,
