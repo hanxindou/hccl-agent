@@ -2813,6 +2813,65 @@ Total:  420 PASS (41 C + 379 Python)
 | **Autonomous Optimization Loop** | **✅ M2.0** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（M2.1）：Simulation Calibration Framework
+
+### Overview
+
+新增 Simulation Calibration Framework，使所有关键模拟参数可追踪、可解释、可校准。
+
+### 三个默认 Profile
+
+| Profile | Author | Purpose |
+|---------|--------|---------|
+| `baseline_v1` | hccl-agent | Conservative, unoptimized defaults |
+| `research_v1` | hccl-agent-research | Tuned for paper evaluation |
+| `competition_v1` | hccl-agent-competition | Balanced for defence presentation |
+
+### 可校准参数
+
+| 参数组 | 包含 |
+|--------|------|
+| algorithm_efficiency | 6 算法效率系数 |
+| contention_coefficients | Mesh/Fat-Tree 竞争系数 |
+| scoring | latency_scale, bw/lat weights |
+| hardware | hardware_tier, overlap_factor, mesh_steps_coeff |
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `calibration/calibration_profile.py` | CalibrationProfile — 版本化参数容器 |
+| `calibration/calibration_registry.py` | CalibrationRegistry — 注册/加载/切换 profile |
+| `calibration/default_profiles/` (3 JSON) | 预设 profile |
+| `analysis/calibration_report.py` | 参数表报告生成脚本 |
+| `agent/calibration_explanation_skill.py` | 参数含义解释 |
+| `tests/test_calibration_profile.py` | 3 测试 |
+| `tests/test_calibration_registry.py` | 3 测试 |
+| `tests/test_calibration_report.py` | 2 测试 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/report_generator.py` | 新增 Simulation Calibration Report 段落 |
+
+### 测试结果
+
+```
+Python: +8 tests  (全部通过)
+Total:  428 PASS (41 C + 387 Python)
+```
+
+### 当前项目状态
+
+| Capability | Status |
+|------------|--------|
+| Graph Engine + 5/5 Algorithms | ✅ |
+| Autonomous Optimization Loop (M2.0) | ✅ |
+| **Simulation Calibration Framework** | **✅ M2.1** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 
 

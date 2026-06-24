@@ -11,7 +11,7 @@ class ReportGenerator:
                         replanned=False, replan_algorithm=None,
                         plan=None, hccl_result=None,
                         selection_info=None, decision_trace=None,
-                        code_generation=None):
+                        code_generation=None, calibration_info=None):
         algo  = execution_result.get("algorithm", "Unknown")
         lat   = execution_result.get("latency", "N/A")
         bw    = execution_result.get("bandwidth", "N/A")
@@ -342,5 +342,18 @@ class ReportGenerator:
                 f"  Retry Attempts:  {retry.get('attempts', 'N/A')}",
                 f"  Failover:        triggered={fo.get('triggered', 'N/A')}, found={fo.get('found', 'N/A')}",
             ]
+
+        if calibration_info:
+            lines += [
+                "",
+                "Simulation Calibration Report:",
+                "------------------------------",
+                f"  Profile:  {calibration_info.get('profile_version', 'N/A')}",
+                f"  Author:   {calibration_info.get('author', 'N/A')}",
+                f"  Params:   {calibration_info.get('parameter_count', 'N/A')}",
+                f"  Desc:     {calibration_info.get('description', '')}",
+            ]
+            for name, meaning in calibration_info.get("parameter_summary", {}).items():
+                lines.append(f"  {name}: {meaning[:100]}")
 
         return "\n".join(lines) + "\n"

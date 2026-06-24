@@ -1,0 +1,18 @@
+{
+  "version": "v1",
+  "author": "hccl-agent-research",
+  "description": "Research calibration — tuned for paper-style evaluation, higher latency penalty.",
+  "algorithm_efficiency": {
+    "Ring AllReduce": 0.92, "Butterfly": 0.87, "Mesh": 0.90,
+    "NHR": 0.94, "Fat-Tree": 0.96, "PairWise": 0.83
+  },
+  "contention_coefficients": {
+    "Mesh": 0.15, "Fat-Tree": 0.05
+  },
+  "latency_scale": 25.0,
+  "bandwidth_weight": 0.45,
+  "latency_weight": 0.55,
+  "overlap_factor_default": 0.0,
+  "mesh_effective_steps_coeff": 0.18,
+  "hardware_tier": "high"
+}

@@ -1,0 +1,18 @@
+{
+  "version": "v1",
+  "author": "hccl-agent",
+  "description": "Baseline calibration — conservative, unoptimized defaults.",
+  "algorithm_efficiency": {
+    "Ring AllReduce": 0.90, "Butterfly": 0.85, "Mesh": 0.88,
+    "NHR": 0.93, "Fat-Tree": 0.95, "PairWise": 0.82
+  },
+  "contention_coefficients": {
+    "Mesh": 0.12, "Fat-Tree": 0.04
+  },
+  "latency_scale": 30.0,
+  "bandwidth_weight": 0.4,
+  "latency_weight": 0.6,
+  "overlap_factor_default": 0.0,
+  "mesh_effective_steps_coeff": 0.15,
+  "hardware_tier": "medium"
+}
