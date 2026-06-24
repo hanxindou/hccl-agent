@@ -106,3 +106,23 @@ class TopologyReasoningSkill:
                 ),
             }
         return {"changed": False, "reason": "No significant change detected."}
+
+    @staticmethod
+    def hardware_summary(node_profiles):
+        """Aggregate hardware resource info across all node profiles."""
+        if not node_profiles:
+            return {}
+        total_hbm = sum(np.hbm_capacity_gb for np in node_profiles)
+        total_ub = sum(np.ub_capacity_mb for np in node_profiles)
+        numa = node_profiles[0].numa_domains if node_profiles else 0
+        devices = sum(np.num_devices for np in node_profiles)
+        from hardware.affinity_engine import AffinityEngine
+        loc = AffinityEngine.evaluate_locality(node_profiles[0])
+        return {
+            "num_nodes": len(node_profiles),
+            "total_devices": devices,
+            "numa_domains": numa,
+            "hbm_capacity_gb": total_hbm,
+            "ub_capacity_mb": total_ub,
+            "locality_score": loc["locality_score"],
+        }

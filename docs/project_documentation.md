@@ -2285,6 +2285,61 @@ Total:  353 PASS
 | **Code Generation Agent** | **✅ M1.4** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（M1.5）：Hardware Awareness Engine
+
+### Overview
+
+Added NUMA, HBM, UB, device/NIC affinity awareness. Hardware reasoning now
+informs algorithm selection and decision explanation.
+
+### New Modules
+
+| Module | Purpose |
+|--------|---------|
+| `hardware/node_profile.py` | NodeProfile — per-node resource model |
+| `hardware/resource_manager.py` | ResourceManager — HBM/UB allocation |
+| `hardware/affinity_engine.py` | AffinityEngine — device/NIC affinity scores |
+| `skills/hardware_reasoning_skill.py` | analyze resources, detect bottlenecks, recommend placement |
+
+### Modified Files
+
+| File | Change |
+|------|--------|
+| `skills/topology_reasoning_skill.py` | Added `hardware_summary()` |
+| `agent/explanation_skill.py` | Added hardware step [0] in decision trace |
+| `agent/hccl_agent.py` | Integrated HardwareReasoningSkill → `output["hardware_analysis"]` |
+| `agent/report_generator.py` | Added Hardware Awareness Report section |
+
+### New Tests
+
+| File | Tests |
+|------|-------|
+| `tests/test_node_profile.py` | 4 |
+| `tests/test_resource_manager.py` | 4 |
+| `tests/test_affinity_engine.py` | 4 |
+| `tests/test_hardware_reasoning_skill.py` | 4 |
+| `tests/test_hardware_aware_selection.py` | 2 |
+| `tests/test_hardware_decision_trace.py` | 1 |
+
+### Test Results
+
+```
+C:      41/41
+Python: 331/331 (+19)
+Total:  372 PASS
+```
+
+### Current Project Status
+
+| Capability | Status |
+|------------|--------|
+| Graph Engine + 5/5 Algorithms | ✅ |
+| Reliability + Dynamic Topology | ✅ |
+| Code Generation Agent | ✅ |
+| **Hardware Awareness Engine** | **✅ M1.5** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 
 

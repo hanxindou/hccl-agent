@@ -14,6 +14,7 @@ class ExplanationSkill:
         selected_algorithm: str,
         selection_reason: str = "",
         reflection_result: Optional[Dict[str, Any]] = None,
+        hardware_analysis: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """Build a full decision trace from raw data.
 
@@ -38,6 +39,15 @@ class ExplanationSkill:
         rejected = [c for c in ranked if c["algorithm"] != selected_algorithm]
 
         trace: List[str] = []
+
+        # Step 0: Hardware
+        if hardware_analysis:
+            trace.append(
+                f"[0] Hardware: {hardware_analysis.get('num_nodes', '?')} nodes, "
+                f"{hardware_analysis.get('total_devices', '?')} devices, "
+                f"NUMA domains={hardware_analysis.get('numa_domains', '?')}, "
+                f"HBM={hardware_analysis.get('hbm_capacity_gb', '?')}GB"
+            )
 
         # Step 1: Topology
         trace.append(

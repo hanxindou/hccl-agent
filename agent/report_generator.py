@@ -189,6 +189,22 @@ class ReportGenerator:
                 f"  Score:      {hccl_result.get('score', 'N/A')}",
             ]
 
+        hw = execution_result.get("hardware_analysis")
+        if hw:
+            res = hw.get("resources", {})
+            place = hw.get("placement", {})
+            lines += [
+                "",
+                "Hardware Awareness Report:",
+                "---------------------------",
+                f"  Resource Pressure: {res.get('resource_pressure', 'N/A')}",
+                f"  HBM Available:     {res.get('hbm_available', 'N/A')} GB",
+                f"  UB Available:      {res.get('ub_available', 'N/A')} MB",
+                f"  Locality Score:    {place.get('locality_score', 'N/A')}",
+                f"  Ranks per NUMA:    {place.get('ranks_per_numa', 'N/A')}",
+                f"  Bottlenecks:       {', '.join(hw.get('bottlenecks', [])) or 'None'}",
+            ]
+
         topo_change = execution_result.get("topology_changed")
         if topo_change is not None:
             lines += [

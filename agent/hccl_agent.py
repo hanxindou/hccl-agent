@@ -21,6 +21,9 @@ from agent.replanning_skill import ReplanningSkill
 from agent.planning_skill import PlanningSkill
 from agent.explanation_skill import ExplanationSkill
 from agent.code_generation_skill import CodeGenerationSkill
+from skills.hardware_reasoning_skill import HardwareReasoningSkill
+from hardware.resource_manager import ResourceManager
+from hardware.node_profile import NodeProfile
 
 
 class HCCLAgent:
@@ -71,6 +74,21 @@ class HCCLAgent:
         topology_graph = self._build_topology_graph(
             nodes, topology, cluster_info
         )
+
+        # ---- hardware reasoning ----
+        node_profiles = [NodeProfile(node_id=0, num_devices=nodes)]
+        resource_mgr = ResourceManager(node_profiles)
+        hw_analysis = {
+            "resources": HardwareReasoningSkill.analyze_resources(
+                resource_mgr, 0,
+            ),
+            "bottlenecks": HardwareReasoningSkill.detect_bottlenecks(
+                node_profiles, resource_mgr,
+            ),
+            "placement": HardwareReasoningSkill.recommend_placement(
+                node_profiles[0], nodes,
+            ),
+        }
 
         # ---- plugin capability discovery ----
         plugin_info = self.plugin_manager.discover()
@@ -310,6 +328,7 @@ class HCCLAgent:
             "reflection": reflection,
             "decision_trace": decision_trace,
             "code_generation": code_gen_result,
+            "hardware_analysis": hw_analysis,
             "replanned": replanned,
             "replan_algorithm": replan_algorithm,
             "replan_benchmark": replan_benchmark,
