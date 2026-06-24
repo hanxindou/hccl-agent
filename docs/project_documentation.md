@@ -2340,75 +2340,260 @@ Total:  372 PASS
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
 
+## 2026-06-14（M1.6）：Optimization Proposal Agent
 
+### Overview
 
+新增 Optimization Proposal Agent，使 Agent 从"自动决策"升级为"自动优化顾问"。
+能够输出：当前问题 → 为何发生 → 如何优化 → 预期收益 → 实施步骤 → 可信度。
 
+### 五大核心能力
 
+| 能力 | 方法 | 说明 |
+|------|------|------|
+| Bottleneck Detection | `_detect_bottlenecks()` | 识别 Latency / Bandwidth / Topology / Hardware / Reliability 五类瓶颈 |
+| Recommendation Generation | `_generate_recommendations()` | 算法切换建议、pipeline depth 调优、chunk size 优化、affinity 改善 |
+| Improvement Estimation | `_estimate_improvements()` | **确定性**计算 latency 降幅%、bandwidth 增幅%、score 增幅% |
+| Confidence Evaluation | `_compute_confidence()` | 0.0~1.0，基于 score gap + topology stability |
+| Migration Planning | `_generate_migration_plan()` | 5~7 步可执行部署计划 |
 
-| 真实 CANN / HCOMM | ⬜ 待 SDK |
+### 瓶颈分析规则
 
+| 条件 | 瓶颈类型 | 说明 |
+|------|---------|------|
+| latency > 1ms | Latency | 建议使用低步数算法 |
+| bandwidth < 5 GB/s | Bandwidth | 链路竞争或拓扑限制 |
+| score < 50 且 latency ≤ 1ms | Topology | 拓扑与算法不匹配 |
+| resource_pressure > 0.5 | Hardware | 建议 hardware-aware placement |
+| error_rate > 0 | Reliability | 链路故障影响性能 |
 
+### 推荐逻辑
 
-### Key Enhancements
+1. 若存在更高分数的候选算法 → 推荐切换
+2. 针对每个检测到的瓶颈 → 生成对应优化建议
+3. 若无瓶颈 → 输出"当前配置已最优"
 
-**(1) Hardware Abstraction Layer** (`hardware/profile.py`)
-- `HardwareProfile` — 可配置链路行为模型（HCCS/RoCE/PCIe）
-- 三级预设（high/medium/low），不硬编码真实 Ascend 数值
-- `from_json()` / `to_json()` / `get_link_properties()`
+### 收益估算（Deterministic）
 
-**(2) Topology Graph Engine** (`topology/graph_builder.py`)
-- `CommunicationGraph` — 加权有向图，边含 bandwidth/latency/link_type/contention_weight
-- 三种模式：SINGLE_NODE（Full Mesh）、MULTI_NODE（HCCS+RoCE Fat-Tree）、HETEROGENEOUS（非对称混合链路）
+```
+score_gain = (best_score - current_score) / current_score × 100
+latency_reduction = score_gain × 0.8
+bandwidth_gain = score_gain × 0.5
+```
 
-**(3) Cost Model Engine** (`cost_model/engine.py`)
-- `estimate_allreduce_ring()` — 环形路径遍历 + chunk 分解
-- `estimate_allreduce_tree()` — log-N 树形估算
-- 竞争惩罚 + 计算-通信重叠因子
+禁止随机数，必须可复现。
+
+### 置信度公式
+
+```
+base = 0.5 + min(gap / 50, 0.4)      // gap = best_score - current_score
+if nodes ≤ 8: base += 0.1            // 小规模拓扑更稳定
+confidence = min(base, 1.0)
+```
+
+### 迁移计划结构
+
+```
+1. Backup current configuration
+2. Apply algorithm change per recommendation
+3. Deploy updated communication strategy
+4. Run validation benchmark
+5. Monitor latency and bandwidth metrics
+6. Confirm improvement and finalize
+```
+
+### Agent 集成位置
+
+```
+Hardware Analysis → Topology Analysis → Algorithm Selection
+    → Code Generation → Optimization Proposal → Execution
+```
+
+输出字段：`output["optimization_proposal"]`
 
 ### 新增文件
 
 | 文件 | 说明 |
 |------|------|
-| `hardware/profile.py` | HardwareProfile 抽象层 |
-| `topology/graph_builder.py` | CommunicationGraph + TopologyGraphBuilder |
-| `cost_model/engine.py` | CostModelEngine |
-| `tests/test_hardware_profile.py` | 6 测试 |
-| `tests/test_topology_graph.py` | 6 测试 |
-| `tests/test_cost_model.py` | 5 测试 |
-| `tests/test_graph_simulator.py` | 5 测试 |
+| `agent/optimization_proposal_skill.py` | OptimizationProposalSkill — 5 大核心方法 |
+| `tests/test_optimization_proposal.py` | 4 测试：生成结构 / 置信度范围 / 确定性 / 迁移计划 |
+| `tests/test_bottleneck_detection.py` | 3 测试：高延迟 / 低带宽 / 无瓶颈 |
+| `tests/test_optimization_flow.py` | 2 测试：Agent 集成 + Hardware Analysis |
 
 ### 修改文件
 
 | 文件 | 改动 |
 |------|------|
-| `simulator/simulator.py` | 新增 `simulate_with_graph()` — 图遍历通信模拟 |
-| `plugin/hccl_api.py` | `_simulate()` 支持可选的 graph + profile 参数 |
-| `agent/planning_skill.py` | 新增 hardware_profile/topology_mode/graph_strategy 字段 |
-
-### 执行链路（升级后）
-
-```
-Planning → ExecutionSkill → HCCL API
-    → Topology Graph Simulator → Cost Model Engine
-    → Evaluation → Reflection → Replanning → Report
-```
+| `agent/hccl_agent.py` | 集成 OptimizationProposalSkill → `output["optimization_proposal"]` |
+| `agent/report_generator.py` | 新增 Optimization Proposal Report 段落（Summary / Bottlenecks / Recommendations / Improvements / Confidence / Migration Plan） |
 
 ### 测试结果
 
 ```
-C:      41/41
-Python: 224/224 (+22 new)
-Total:  265 PASS
+Python: +9 tests  (全部通过)
+Total:  381 PASS (41 C + 340 Python)
 ```
 
-### 当前项目阶段
+### 当前项目状态
 
-| 层次 | 状态 |
+| Capability | Status |
+|------------|--------|
+| Graph Engine + 5/5 Algorithms | ✅ |
+| Reliability + Dynamic Topology | ✅ |
+| Code Generation Agent | ✅ |
+| Hardware Awareness Engine | ✅ |
+| **Optimization Proposal Agent** | **✅ M1.6** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
+## 2026-06-14（M1.7）：Experience Learning Engine
+
+### Overview
+
+新增 Experience Learning Engine，使系统从 Rule-based Optimization 升级为
+**Experience-driven Optimization**。历史运行经验直接影响未来决策。
+
+### 四大核心能力
+
+| 能力 | 方法 | 说明 |
+|------|------|------|
+| Similarity Search | `find_similar()` | 按 primitive 精确匹配 + topology 宽松匹配 + nodes ±20% 容差 |
+| Aggregation | `aggregate()` | 按算法分组统计 avg_score / avg_latency / runs |
+| Recommendation | `recommend_algorithm()` | 基于 avg_score × log(runs+1) 评分排名 |
+| Experience Bonus | `compute_experience_bonus()` | +3（推荐算法）/ −2（历史表现差）/ 0（无数据） |
+
+### 相似度检索规则
+
+1. primitive 必须精确匹配
+2. topology 宽松匹配
+3. nodes 允许 ±20% 容差（例：64 GPU 可匹配 52~76 GPU）
+4. 按 node 数量接近度排序，返回 top-K
+
+### 聚合统计结构
+
+```json
+{
+  "NHR": {"avg_score": 42.3, "avg_latency": 0.5, "runs": 8},
+  "Ring AllReduce": {"avg_score": 35.1, "avg_latency": 0.8, "runs": 5}
+}
+```
+
+### 推荐算法逻辑
+
+```
+best_algo = argmax(avg_score × log(runs + 1))
+```
+
+同时考虑历史质量（avg_score）和数据量（runs）。
+
+### 置信度公式
+
+```
+gap = best_avg_score - second_best_avg_score
+run_factor = min(runs / 10, 1.0)
+confidence = min(0.5 + gap/30 + run_factor × 0.3, 1.0)
+```
+
+runs=20 且 gap=15 → confidence ≈ 0.9（高可信）
+runs=2 且 gap=1 → confidence ≈ 0.5（低可信）
+
+### 经验奖励（Experience Bonus）
+
+| 条件 | Bonus | 说明 |
+|------|-------|------|
+| algo == recommended | +3 | 匹配历史最优 |
+| best_avg - algo_avg > 10 | −2 | 历史表现明显差 |
+| 其他 | 0 | 无影响 |
+
+**Simulator 仍是主导**：bonus 仅 ±2~3，不影响 0-100 评分主体。
+
+### Agent 集成位置
+
+```
+Hardware Reasoning → Topology Reasoning → Experience Learning → Algorithm Selection
+```
+
+输出字段：`output["experience_learning"]`
+
+### Decision Trace 步骤升级
+
+```
+[0] Hardware
+[1] Topology
+[2] Experience Learning  ← NEW
+[3] Algorithm Selection
+[4] Code Generation
+[5] Execution
+[6] Reflection
+```
+
+### Reflection 增强
+
+新增 `experience_consistency` 字段：
+```json
+{
+  "matched": true/false,
+  "historical_best": "NHR"
+}
+```
+
+判断当前选择的算法是否与历史经验一致。
+
+### Report 增强
+
+新增 Experience Learning Report 段落：
+- Historical Similar Runs 数量
+- 推荐算法 + 置信度
+- 每个算法的历史 avg_score + runs 统计
+
+### 新增文件
+
+| 文件 | 说明 |
 |------|------|
-| C 5/5 算法 | ✅ |
-| HCCL Compatibility Layer | ✅ |
-| Agent Decision Loop | ✅ |
-| **Graph-Based Comm Engine** | **✅ 本轮完成** |
-| **Hardware Abstraction + Cost Model** | **✅ 本轮完成** |
+| `skills/experience_learning_skill.py` | ExperienceLearningSkill — 4 大核心方法 |
+| `tests/test_experience_learning.py` | 7 测试：聚合 / 推荐 / 置信度 / bonus / 空数据 |
+| `tests/test_experience_driven_selection.py` | 2 测试：selector 集成 / bonus 不覆盖 simulator |
+| `tests/test_experience_report.py` | 1 测试：Agent output 含 experience_learning |
+| `tests/test_experience_reflection.py` | 2 测试：consistency matched / not matched |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/hccl_agent.py` | Experience Learning step → `output["experience_learning"]` |
+| `agent/reflection_skill.py` | 新增 `experience_consistency` 字段 |
+| `agent/report_generator.py` | 新增 Experience Learning Report 段落 |
+
+### 测试结果
+
+```
+Python: +12 tests  (全部通过)
+Total:  393 PASS (41 C + 352 Python)
+```
+
+### 当前项目状态
+
+| Capability | Status |
+|------------|--------|
+| Graph Engine + 5/5 Algorithms | ✅ |
+| Reliability + Dynamic Topology | ✅ |
+| Code Gen + Optimization Proposal | ✅ |
+| Hardware Awareness Engine | ✅ |
+| **Experience Learning Engine** | **✅ M1.7** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+### 最终系统能力总览
+
+| 维度 | 能力 | 状态 |
+|------|------|------|
+| 硬件感知 | NUMA / HBM / UB / NIC Affinity | ✅ |
+| 拓扑感知 | Graph-based + Dynamic Topology | ✅ |
+| 可靠性 | Health Monitor + Retry + Failover | ✅ |
+| 可解释性 | Decision Trace + Score Breakdown | ✅ |
+| 代码生成 | HCCL Config + Execution Plan + Skeleton | ✅ |
+| 优化建议 | Bottleneck + Recommendation + Migration | ✅ |
+| 经验学习 | Similarity + Aggregation + Bonus | ✅ |
+| 基准验证 | 8 Scenarios + Scaling/Sensitivity Analysis | ✅ |
+| 决策闭环 | Plan → Execute → Reflect → Replan | ✅ |
 
 

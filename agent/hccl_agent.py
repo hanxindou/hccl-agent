@@ -22,6 +22,8 @@ from agent.planning_skill import PlanningSkill
 from agent.explanation_skill import ExplanationSkill
 from agent.code_generation_skill import CodeGenerationSkill
 from skills.hardware_reasoning_skill import HardwareReasoningSkill
+from agent.optimization_proposal_skill import OptimizationProposalSkill
+from skills.experience_learning_skill import ExperienceLearningSkill
 from hardware.resource_manager import ResourceManager
 from hardware.node_profile import NodeProfile
 
@@ -56,6 +58,8 @@ class HCCLAgent:
         self.planning_skill = PlanningSkill()
         self.explanation_skill = ExplanationSkill()
         self.code_generation_skill = CodeGenerationSkill()
+        self.optimization_proposal_skill = OptimizationProposalSkill()
+        self.experience_learning = ExperienceLearningSkill(self.experience_store)
 
     def run(
         self,
@@ -102,6 +106,25 @@ class HCCLAgent:
         plan = self.planning_skill.create_plan(
             nodes, message_size, primitive,
         )
+
+        # ---- experience learning ----
+        experience_info = None
+        try:
+            similar = self.experience_learning.find_similar(
+                topology, primitive, nodes,
+            )
+            stats = ExperienceLearningSkill.aggregate(similar) if similar else {}
+            rec = ExperienceLearningSkill.recommend_algorithm(stats)
+            experience_info = {
+                "recommended_algorithm": rec["recommended_algorithm"],
+                "confidence": rec["confidence"],
+                "historical_runs": rec["historical_runs"],
+                "reason": rec["reason"],
+                "similar_runs": len(similar),
+                "stats": stats,
+            }
+        except Exception:
+            pass
 
         # ---- algorithm selection ----
         candidate_algorithms = (
@@ -259,6 +282,17 @@ class HCCLAgent:
             ),
         }
 
+        # ---- optimization proposal ----
+        optimization_proposal = self.optimization_proposal_skill.generate_proposal(
+            current_result={"algorithm": chosen_algorithm,
+                            "score": best_result["score"],
+                            "latency": best_result.get("latency", 0),
+                            "bandwidth": best_result.get("bandwidth", 0)},
+            candidate_scores=candidate_scores_list,
+            topology_analysis=topo_analysis,
+            hardware_analysis=hw_analysis,
+        )
+
         # ---- decision trace ----
         decision_trace = self.explanation_skill.generate_decision_trace(
             topology_analysis=topo_analysis,
@@ -329,6 +363,8 @@ class HCCLAgent:
             "decision_trace": decision_trace,
             "code_generation": code_gen_result,
             "hardware_analysis": hw_analysis,
+            "optimization_proposal": optimization_proposal,
+            "experience_learning": experience_info,
             "replanned": replanned,
             "replan_algorithm": replan_algorithm,
             "replan_benchmark": replan_benchmark,

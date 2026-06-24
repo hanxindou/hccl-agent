@@ -189,6 +189,46 @@ class ReportGenerator:
                 f"  Score:      {hccl_result.get('score', 'N/A')}",
             ]
 
+        exp = execution_result.get("experience_learning")
+        if exp:
+            lines += [
+                "",
+                "Experience Learning Report:",
+                "----------------------------",
+                f"  Historical Similar Runs: {exp.get('similar_runs', 0)}",
+                f"  Recommended Algorithm:   {exp.get('recommended_algorithm', 'N/A')}",
+                f"  Confidence:              {exp.get('confidence', 'N/A')}",
+                f"  Reason:                  {exp.get('reason', '')}",
+            ]
+            stats = exp.get("stats", {})
+            for algo, s in sorted(stats.items(), key=lambda x: x[1].get("avg_score", 0), reverse=True):
+                lines.append(
+                    f"  {algo:20s}  avg_score={s['avg_score']:.1f}  runs={s['runs']}"
+                )
+
+        proposal = execution_result.get("optimization_proposal")
+        if proposal:
+            lines += [
+                "",
+                "Optimization Proposal Report:",
+                "-----------------------------",
+                f"  Summary: {proposal.get('summary', '')}",
+                f"  Confidence: {proposal.get('confidence', 'N/A')}",
+            ]
+            for b in proposal.get("detected_bottlenecks", []):
+                lines.append(f"  Bottleneck [{b['type']}]: {b['description']}")
+            for r in proposal.get("recommendations", []):
+                lines.append(f"  Recommendation: {r}")
+            imp = proposal.get("expected_improvements", {})
+            if imp:
+                lines.append(
+                    f"  Expected: latency {imp.get('latency_reduction_pct', 0):.1f}%↓, "
+                    f"bandwidth {imp.get('bandwidth_gain_pct', 0):.1f}%↑, "
+                    f"score {imp.get('score_gain_pct', 0):.1f}%↑"
+                )
+            for step in proposal.get("migration_plan", []):
+                lines.append(f"  {step}")
+
         hw = execution_result.get("hardware_analysis")
         if hw:
             res = hw.get("resources", {})

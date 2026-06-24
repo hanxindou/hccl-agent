@@ -86,10 +86,23 @@ class ReflectionSkill:
                     ),
                 }
 
+        # ---- experience consistency ----
+        experience_consistency = None
+        if candidate_scores:
+            best_hist = max(
+                candidate_scores, key=lambda c: c["score"], default=None,
+            )
+            if best_hist:
+                experience_consistency = {
+                    "matched": best_hist["algorithm"] == algorithm,
+                    "historical_best": best_hist["algorithm"],
+                }
+
         return {
             "status": status,
             "message": base_msg,
             "need_replan": need_replan,
             "prediction_deviation": deviation,
             "decision_quality": decision_quality,
+            "experience_consistency": experience_consistency,
         }
