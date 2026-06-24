@@ -189,6 +189,24 @@ class ReportGenerator:
                 f"  Score:      {hccl_result.get('score', 'N/A')}",
             ]
 
+        kc = execution_result.get("knowledge_context")
+        if kc and kc.get("count", 0) > 0:
+            bp = kc.get("best_practice") or {}
+            lines += [
+                "",
+                "Knowledge Base Report:",
+                "-----------------------",
+                f"  Retrieved Cases:     {kc.get('count', 0)}",
+                f"  Best Practice:       {bp.get('algorithm', 'N/A')} "
+                f"(score={bp.get('score', 'N/A')})",
+            ]
+            for c in kc.get("cases", [])[:3]:
+                lines.append(
+                    f"  Case: {c.get('algorithm', '?')} "
+                    f"score={c.get('score', '?')} "
+                    f"lesson: {c.get('lesson_learned', '')[:80]}"
+                )
+
         tuning = execution_result.get("auto_tuning")
         if tuning:
             bc = tuning.get("best_config", {})

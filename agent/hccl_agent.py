@@ -25,6 +25,10 @@ from skills.hardware_reasoning_skill import HardwareReasoningSkill
 from agent.optimization_proposal_skill import OptimizationProposalSkill
 from skills.experience_learning_skill import ExperienceLearningSkill
 from agent.auto_tuning_skill import AutoTuningSkill
+from knowledge.knowledge_base import KnowledgeBase
+from skills.case_retrieval_skill import CaseRetrievalSkill
+from skills.knowledge_extraction_skill import KnowledgeExtractionSkill
+from agent.knowledge_report_skill import KnowledgeReportSkill
 from hardware.resource_manager import ResourceManager
 from hardware.node_profile import NodeProfile
 
@@ -61,6 +65,10 @@ class HCCLAgent:
         self.code_generation_skill = CodeGenerationSkill()
         self.optimization_proposal_skill = OptimizationProposalSkill()
         self.experience_learning = ExperienceLearningSkill(self.experience_store)
+        self.knowledge_base = KnowledgeBase()
+        self.case_retrieval = CaseRetrievalSkill(self.knowledge_base)
+        self.knowledge_extraction = KnowledgeExtractionSkill()
+        self.knowledge_report_skill = KnowledgeReportSkill()
 
     def run(
         self,
@@ -126,6 +134,11 @@ class HCCLAgent:
             }
         except Exception:
             pass
+
+        # ---- knowledge retrieval ----
+        knowledge_context = self.case_retrieval.retrieve(
+            primitive, topology, nodes,
+        )
 
         # ---- algorithm selection ----
         candidate_algorithms = (
@@ -376,6 +389,11 @@ class HCCLAgent:
             "optimization_proposal": optimization_proposal,
             "experience_learning": experience_info,
             "auto_tuning": auto_tuning,
+            "knowledge_context": {
+                "cases": knowledge_context.get("cases", []),
+                "count": knowledge_context.get("count", 0),
+                "best_practice": knowledge_context.get("best_practice"),
+            },
             "replanned": replanned,
             "replan_algorithm": replan_algorithm,
             "replan_benchmark": replan_benchmark,
@@ -389,6 +407,24 @@ class HCCLAgent:
 
         # Persist this run for reproducible experiment tracking.
         self.logger.log_run(output)
+
+        # Save to knowledge base as a structured case.
+        lesson = KnowledgeExtractionSkill.generate_lesson({
+            "algorithm": chosen_algorithm,
+            "score": best_result["score"],
+            "nodes": nodes,
+            "topology": topology,
+        })
+        self.knowledge_base.add_case({
+            "primitive": primitive,
+            "topology": topology,
+            "nodes": nodes,
+            "algorithm": chosen_algorithm,
+            "score": best_result["score"],
+            "latency": best_result.get("latency", 0),
+            "bandwidth": best_result.get("bandwidth", 0),
+            "lesson_learned": lesson,
+        })
 
         # Save to experience memory for historical learning.
         self.experience_store.save({

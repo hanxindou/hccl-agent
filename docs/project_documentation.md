@@ -2666,6 +2666,98 @@ Total:  401 PASS (41 C + 360 Python)
 | **Auto-Tuning Engine** | **✅ M1.8** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（M1.9）：Knowledge Base + Case Retrieval Engine
+
+### Overview
+
+新增 Knowledge Base Engine，使系统具备案例积累、相似检索、最佳实践推荐和知识增强决策。
+
+### KnowledgeBase
+
+| 方法 | 功能 |
+|------|------|
+| `add_case()` | 追加结构化案例（含 lesson_learned） |
+| `load_all()` | 加载全部历史案例 |
+| `retrieve_cases()` | primitive + topology 精确匹配，nodes ±25% 容差 |
+| `get_best_practice()` | 返回匹配过滤器的最高分案例 |
+| `export_summary()` | 总案例数 / 按 primitive 分布 / 最高分 |
+
+### Case 结构
+
+```json
+{
+  "primitive": "AllReduce",
+  "topology": "Fat Tree",
+  "nodes": 32,
+  "algorithm": "NHR",
+  "score": 90.0,
+  "latency": 0.01,
+  "bandwidth": 12.0,
+  "lesson_learned": "NHR shows excellent performance on mid-scale Fat Tree clusters..."
+}
+```
+
+### Knowledge Extraction
+
+`KnowledgeExtractionSkill.generate_lesson()` — 基于规则生成经验教训（无需 LLM）：
+
+| 条件 | 描述 |
+|------|------|
+| score ≥ 80 | "excellent performance" |
+| score 50-80 | "good performance" |
+| score < 50 | "below-average performance" |
+
+节点规模描述：≤8 → "small-scale" / ≤64 → "mid-scale" / >64 → "large-scale"
+
+### Agent 集成
+
+```
+Experience Learning → Knowledge Retrieval → Algorithm Selection
+```
+
+输出：`output["knowledge_context"]` = `{cases, count, best_practice}`
+
+每次 `run()` 自动将结果作为案例存入 KnowledgeBase。
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `knowledge/knowledge_base.py` | KnowledgeBase — 案例 CRUD + 检索 |
+| `skills/case_retrieval_skill.py` | CaseRetrievalSkill |
+| `skills/knowledge_extraction_skill.py` | KnowledgeExtractionSkill |
+| `agent/knowledge_report_skill.py` | KnowledgeReportSkill |
+| `tests/test_knowledge_base.py` | 4 测试 |
+| `tests/test_case_retrieval.py` | 1 测试 |
+| `tests/test_knowledge_extraction.py` | 2 测试 |
+| `tests/test_knowledge_flow.py` | 2 测试 |
+
+### 修改文件
+
+| 文件 | 改动 |
+|------|------|
+| `agent/hccl_agent.py` | Knowledge Retrieval step + auto-save case to KB |
+| `agent/report_generator.py` | 新增 Knowledge Base Report 段落 |
+
+### 测试结果
+
+```
+Python: +9 tests  (全部通过)
+Total:  410 PASS (41 C + 369 Python)
+```
+
+### 当前项目状态
+
+| Capability | Status |
+|------------|--------|
+| Graph Engine + 5/5 Algorithms | ✅ |
+| Reliability + Dynamic Topology | ✅ |
+| Code Gen + Optimization Proposal | ✅ |
+| Hardware + Experience + Auto-Tuning | ✅ |
+| **Knowledge Base + Case Retrieval** | **✅ M1.9** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 ### 最终系统能力总览
 
