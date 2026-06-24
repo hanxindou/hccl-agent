@@ -27,6 +27,7 @@ class AlgorithmSelector:
         hardware_profile: Any,
         candidate_algorithms: List[str] | None = None,
         message_size_mb: float = 128.0,
+        topology_version: int = 0,
     ) -> Dict[str, Any]:
         """Evaluate each candidate on *topology_graph*, return the best.
 

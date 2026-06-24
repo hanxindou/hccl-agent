@@ -163,6 +163,16 @@ class ReportGenerator:
                 f"  Score:      {hccl_result.get('score', 'N/A')}",
             ]
 
+        topo_change = execution_result.get("topology_changed")
+        if topo_change is not None:
+            lines += [
+                "",
+                "Dynamic Topology Report:",
+                "-------------------------",
+                f"  Topology Changed: {topo_change}",
+                f"  Reason: {execution_result.get('topology_change_reason', 'N/A')}",
+            ]
+
         reliability = execution_result.get("reliability")
         if reliability:
             health = reliability.get("health", {})

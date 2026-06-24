@@ -2175,6 +2175,66 @@ Total:  328 PASS
 | **Reliability Engine** | **✅ M1.2** |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（M1.3）：Dynamic Topology Engine
+
+### Overview
+
+Added support for dynamic topology events (node join/leave, link add/remove/failure/recovery),
+incremental graph rebuilding, topology change detection, and topology-driven replanning.
+
+### New Modules
+
+| Module | Purpose |
+|--------|---------|
+| `topology/topology_events.py` | TopologyEvent — 6 mutation types |
+| `topology/dynamic_topology.py` | DynamicTopologyManager — event application + graph rebuild |
+
+### Modified Files
+
+| File | Change |
+|------|--------|
+| `topology/graph_builder.py` | Added `incremental_update()` |
+| `skills/topology_reasoning_skill.py` | Added `detect_topology_change()` |
+| `skills/algorithm_selector.py` | Added `topology_version` parameter |
+| `agent/replanning_skill.py` | Added `topology_changed` force-replan trigger |
+| `agent/report_generator.py` | Added Dynamic Topology Report section |
+
+### New Tests
+
+| File | Tests |
+|------|-------|
+| `tests/test_topology_events.py` | 5 |
+| `tests/test_dynamic_topology.py` | 5 |
+| `tests/test_topology_change_detection.py` | 4 |
+| `tests/test_topology_replanning.py` | 3 |
+
+### Event Flow
+
+```
+NodeJoin/NodeLeave → DynamicTopologyManager.apply_event()
+    → rebuild graph → detect_topology_change()
+    → AlgorithmSelector re-evaluates → ReplanningSkill force-replan
+```
+
+### Test Results
+
+```
+C:      41/41
+Python: 304/304 (+17)
+Total:  345 PASS
+```
+
+### Current Project Status
+
+| Capability | Status |
+|------------|--------|
+| Graph Engine + Topology | ✅ |
+| 5/5 Algorithms (C) | ✅ |
+| Reliability Engine | ✅ |
+| **Dynamic Topology** | **✅ M1.3** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 
 

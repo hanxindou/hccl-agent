@@ -114,6 +114,28 @@ class TopologyGraphBuilder:
     # ------------------------------------------------------------------
 
     @staticmethod
+    def incremental_update(
+        graph: CommunicationGraph,
+        events: List[Any],
+        profile: HardwareProfile | None = None,
+    ) -> CommunicationGraph:
+        """Apply topology events to an existing graph via full rebuild.
+
+        For efficiency, future versions may support true incremental
+        updates; currently delegates to a full rebuild from scratch.
+        """
+        # Determine current node count from graph.
+        N = graph.num_nodes
+        for e in events:
+            if e.event_type == "NodeJoin":
+                N += 1
+            elif e.event_type == "NodeLeave":
+                N = max(1, N - 1)
+        return TopologyGraphBuilder.build(
+            N, profile=profile, mode="SINGLE_NODE" if N <= 8 else "MULTI_NODE",
+        )[0]
+
+    @staticmethod
     def _build_single(
         N: int, profile: HardwareProfile,
     ) -> Tuple[CommunicationGraph, Dict[str, Any]]:

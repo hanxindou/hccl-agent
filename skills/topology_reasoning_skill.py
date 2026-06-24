@@ -72,3 +72,37 @@ class TopologyReasoningSkill:
             parts.append("Large-scale distributed structure")
 
         return ", ".join(parts) if parts else "Unknown topology characteristics"
+
+    @staticmethod
+    def detect_topology_change(
+        old_analysis: Dict[str, Any],
+        new_analysis: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Compare two topology snapshots.
+
+        Returns
+        -------
+        dict  {"changed": bool, "reason": str}
+        """
+        if old_analysis["node_count"] != new_analysis["node_count"]:
+            return {
+                "changed": True,
+                "reason": (
+                    f"Node count changed: "
+                    f"{old_analysis['node_count']} → {new_analysis['node_count']}"
+                ),
+            }
+        if old_analysis["edge_count"] != new_analysis["edge_count"]:
+            return {
+                "changed": True,
+                "reason": "Edge count changed — links added or removed.",
+            }
+        if old_analysis["dominant_link"] != new_analysis["dominant_link"]:
+            return {
+                "changed": True,
+                "reason": (
+                    f"Dominant link type changed: "
+                    f"{old_analysis['dominant_link']} → {new_analysis['dominant_link']}"
+                ),
+            }
+        return {"changed": False, "reason": "No significant change detected."}
