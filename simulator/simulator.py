@@ -214,3 +214,78 @@ class Simulator:
             "primitive": primitive,
             "topology": "graph",
         }
+
+    def simulate_with_failures(
+        self,
+        graph,
+        primitive,
+        algorithm,
+        message_size_mb=128.0,
+        link_failure_rate=0.0,
+        node_failure_rate=0.0,
+        max_retry=3,
+        seed=None,
+    ):
+        """Simulate collective communication with reliability mechanisms.
+
+        Parameters
+        ----------
+        graph : CommunicationGraph
+        primitive : str
+        algorithm : str
+        message_size_mb : float
+        link_failure_rate : float  — probability per link
+        node_failure_rate : float  — probability per node
+        max_retry : int
+        seed : int or None
+
+        Returns
+        -------
+        dict  with base_result + reliability section.
+        """
+        from simulator.health_monitor import HealthMonitor
+        from simulator.retry_policy import RetryPolicy
+        from simulator.failover_engine import FailoverEngine
+
+        monitor = HealthMonitor(seed=seed)
+        monitor.inject_failures(
+            graph.num_nodes, link_failure_rate, node_failure_rate,
+        )
+
+        health = monitor.evaluate_cluster_health(graph)
+
+        retry = RetryPolicy(max_retry=max_retry)
+        failover = FailoverEngine()
+
+        def _run():
+            return self.simulate_with_graph(
+                graph, primitive, algorithm, message_size_mb,
+            )
+
+        retry_result = retry.execute_with_retry(_run)
+        base = retry_result["result"] or {
+            "latency": 0.0, "bandwidth": 0.0, "score": 0.0,
+            "algorithm": algorithm, "primitive": primitive,
+        }
+
+        # Test a failover on a random edge.
+        fo_result = None
+        if graph.num_nodes >= 2:
+            fo_result = failover.reroute(
+                graph, 0, graph.num_nodes - 1, monitor=monitor,
+            )
+
+        base["reliability"] = {
+            "health": health,
+            "retry": {
+                "success": retry_result["success"],
+                "attempts": retry_result["attempts"],
+            },
+            "failover": (
+                {"triggered": fo_result["failover_triggered"],
+                 "found": fo_result["found"],
+                 "hops": fo_result["hops"]}
+                if fo_result else {"triggered": False, "found": True, "hops": 1}
+            ),
+        }
+        return base

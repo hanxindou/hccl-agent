@@ -2113,6 +2113,69 @@ Total:  315 PASS
 | Decision Validation | ✅ |
 | 真实 CANN / HCOMM | ⬜ 待 SDK |
 
+## 2026-06-14（M1.2）：Reliability Engine
+
+### Overview
+
+Added link failure injection, retry with exponential backoff, failover routing,
+and cluster health monitoring — satisfying the competition's reliability requirements.
+
+### New Modules
+
+| Module | Purpose |
+|--------|---------|
+| `simulator/health_monitor.py` | HealthMonitor — link/node health + failure injection |
+| `simulator/retry_policy.py` | RetryPolicy — exponential backoff retry wrapper |
+| `simulator/failover_engine.py` | FailoverEngine — alternative path routing |
+
+### Modified Files
+
+| File | Change |
+|------|--------|
+| `simulator/simulator.py` | Added `simulate_with_failures()` integration |
+| `agent/report_generator.py` | Added Reliability Report section |
+
+### New Tests
+
+| File | Tests |
+|------|-------|
+| `tests/test_health_monitor.py` | 5 |
+| `tests/test_retry_policy.py` | 3 |
+| `tests/test_failover_engine.py` | 3 |
+| `tests/test_reliability_flow.py` | 2 |
+
+### Reliability Report Sample
+
+```
+Cluster Health:  DEGRADED
+Error Rate:      0.05
+Failed Links:    3
+Retry Success:   True
+Retry Attempts:  1
+Failover:        triggered=True, found=True
+```
+
+### Test Results
+
+```
+C:      41/41
+Python: 287/287 (+13)
+Total:  328 PASS
+```
+
+### Current Project Status
+
+| Capability | Status |
+|------------|--------|
+| Graph Engine + Topology | ✅ |
+| 5/5 Algorithms (C) | ✅ |
+| Decision + Explanation | ✅ |
+| Benchmark Suite | ✅ |
+| Calibrated Performance | ✅ |
+| **Reliability Engine** | **✅ M1.2** |
+| 真实 CANN / HCOMM | ⬜ 待 SDK |
+
+
 
 
 | 真实 CANN / HCOMM | ⬜ 待 SDK |

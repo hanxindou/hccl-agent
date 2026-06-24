@@ -163,4 +163,22 @@ class ReportGenerator:
                 f"  Score:      {hccl_result.get('score', 'N/A')}",
             ]
 
+        reliability = execution_result.get("reliability")
+        if reliability:
+            health = reliability.get("health", {})
+            retry = reliability.get("retry", {})
+            fo = reliability.get("failover", {})
+            lines += [
+                "",
+                "Reliability Report:",
+                "--------------------",
+                f"  Cluster Health:  {health.get('status', 'N/A')}",
+                f"  Error Rate:      {health.get('error_rate', 'N/A')}",
+                f"  Failed Links:    {health.get('failed_links', 'N/A')}",
+                f"  Failed Nodes:    {health.get('failed_nodes', 'N/A')}",
+                f"  Retry Success:   {retry.get('success', 'N/A')}",
+                f"  Retry Attempts:  {retry.get('attempts', 'N/A')}",
+                f"  Failover:        triggered={fo.get('triggered', 'N/A')}, found={fo.get('found', 'N/A')}",
+            ]
+
         return "\n".join(lines) + "\n"
