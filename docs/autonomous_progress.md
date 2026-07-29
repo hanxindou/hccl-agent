@@ -298,7 +298,7 @@
 
 ### 本地提交
 
-- commit：待创建
+- commit：`45cc247 feat: add F1 reliability validation flow`
 - message：`feat: add F1 reliability validation flow`
 
 ### 未验证边界
@@ -306,3 +306,47 @@
 - F1 是 CPU/模拟器可靠性模型，不代表真实 Ascend/HCCL 链路恢复、CRC 或重传能力。
 - 未验证真实 100ms failover。
 - 未执行长时间可靠性压测。
+
+## Stage G1：CANN/Ascend 适配准备
+
+开始时间：2026-07-29 22:49:00 +08:00
+结束时间：2026-07-29 23:03:00 +08:00
+状态：COMPLETED
+
+### 修改文件
+
+- `hcccl/CMakeLists.txt`
+- `tests/test_g1_cann_backend_config.py`
+- `docs/cann_hccl_interface_guide.md`
+- `docs/autonomous_progress.md`
+- `docs/research_notes.md`
+- `docs/user_actions.md`
+
+### 当前结果
+
+- 新增 `HCCL_BACKEND` CMake 选项，默认 `CPU_SIM`。
+- `ASCEND_CANN` 模式只做真实 SDK 头文件/库探测；缺 SDK 时配置阶段快速失败。
+- `ASCEND_CANN` 适配边界标记为 `HCCL_ASCEND_CANN_STUB_UNVERIFIED=1`，不参与默认 CPU_SIM 构建。
+- 接口指南更新 CANN 8.0+ 目标、SDK 组件、CMake 参数、接口映射、实机正确性和 msprof 模板。
+- 用户待办更新为需要提供 SDK 路径、CANN/HCCL 头库、构建输出和实机正确性结果。
+
+### 验收结果
+
+- CPU_SIM CMake：`cmake -S hcccl -B C:\tmp\hccl-agent-hcccl-g1 -DHCCL_BACKEND=CPU_SIM`，配置成功
+- CPU_SIM Build：Release 构建成功，生成 `C:\tmp\hccl-agent-hcccl-g1\Release\hccl_plugin.dll`，未出现 C4819
+- CPU_SIM CTest：`ctest --test-dir C:\tmp\hccl-agent-hcccl-g1 -C Release --output-on-failure`，11/11 passed
+- ASCEND_CANN 缺 SDK 检查：配置阶段按预期失败，错误明确提示缺少 `hccl/hccl.h`/`hccl.h`、`hccl` library、`HCCL_CANN_ROOT` 或 `ASCEND_HOME_PATH`/`CANN_HOME`
+- 定向 Python：`tests.test_g1_cann_backend_config tests.test_hccl_api tests.test_execution_engine`，34 tests，OK
+- 完整 Python：`python -m unittest discover tests -q`，454 tests，OK
+- 外部 API：清空 `DEEPSEEK_API_KEY`、`OPENAI_API_KEY`、`ANTHROPIC_API_KEY`；DeepSeek 输出来自无 Key 降级和 MagicMock 测试，未发送真实请求
+
+### 本地提交
+
+- commit：待创建
+- message：`chore: prepare G1 CANN integration layer`
+
+### 未验证边界
+
+- 未访问 WSL/Linux。
+- 未接入真实 CANN/HCOMM。
+- 未验证 Ascend 设备、真实 `.so`、msprof 或实机正确性。

@@ -142,3 +142,27 @@ F1 只使用 Python 标准库 `zlib.crc32` 对模拟 payload 计算 CRC32，并�
 ### 是否直接复制代码
 
 否。
+
+## Stage G1：CANN/Ascend 适配准备
+
+访问日期：2026-07-29
+状态：未使用外部网络参考
+
+### 参考来源
+
+- 自主执行计划：本地文件 `docs/autonomous_goal_plan.md`
+- 当前 CMake 配置：`hcccl/CMakeLists.txt`
+- 当前接口指南：`docs/cann_hccl_interface_guide.md`
+- 当前用户待办：`docs/user_actions.md`
+
+### License
+
+未引入外部代码，未复制第三方实现，因此无新增第三方 License 义务。
+
+### 借鉴内容
+
+G1 只建立项目内 `CPU_SIM` 与 `ASCEND_CANN` 的条件编译边界、缺 SDK 快速失败提示和用户实机验证模板。未复制 CANN/HCCL 源码，未链接本地不存在的 SDK，未使用 Stub 库冒充真实 CANN。
+
+### 是否直接复制代码
+
+否。

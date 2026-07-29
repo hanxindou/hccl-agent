@@ -6,6 +6,19 @@ project(hccl_plugin LANGUAGES C VERSION 0.1.0)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+set(HCCL_BACKEND "CPU_SIM" CACHE STRING "HCCL backend: CPU_SIM or ASCEND_CANN")
+set_property(CACHE HCCL_BACKEND PROPERTY STRINGS CPU_SIM ASCEND_CANN)
+string(TOUPPER "${HCCL_BACKEND}" HCCL_BACKEND)
+set(HCCL_BACKEND_OPTIONS CPU_SIM ASCEND_CANN)
+
+if(NOT HCCL_BACKEND STREQUAL "CPU_SIM" AND
+   NOT HCCL_BACKEND STREQUAL "ASCEND_CANN")
+    message(FATAL_ERROR
+        "Unsupported HCCL_BACKEND='${HCCL_BACKEND}'. "
+        "Use -DHCCL_BACKEND=CPU_SIM or -DHCCL_BACKEND=ASCEND_CANN."
+    )
+endif()
+
 if(WIN32)
     # Export all symbols by default so Visual Studio/MSVC builds produce
     # both hccl_plugin.dll and the import library needed by test executables.
@@ -38,9 +51,46 @@ target_include_directories(hccl_plugin
         $<INSTALL_INTERFACE:include>
 )
 
-# No special link dependencies — this is a CPU-simulated build.
-# When CANN SDK is available, add:
-#   target_link_libraries(hccl_plugin PRIVATE hccl)
+if(HCCL_BACKEND STREQUAL "CPU_SIM")
+    target_compile_definitions(hccl_plugin PRIVATE HCCL_BACKEND_CPU_SIM=1)
+else()
+    set(HCCL_CANN_ROOT "" CACHE PATH "CANN/Ascend SDK root for ASCEND_CANN backend")
+    set(_HCCL_CANN_HINTS
+        "${HCCL_CANN_ROOT}"
+        "$ENV{ASCEND_HOME_PATH}"
+        "$ENV{ASCEND_HOME}"
+        "$ENV{CANN_HOME}"
+    )
+    find_path(HCCL_CANN_INCLUDE_DIR
+        NAMES hccl/hccl.h hccl.h
+        PATHS ${_HCCL_CANN_HINTS}
+        PATH_SUFFIXES include include/hccl latest/include latest/include/hccl
+        NO_DEFAULT_PATH
+    )
+    find_library(HCCL_CANN_LIBRARY
+        NAMES hccl libhccl
+        PATHS ${_HCCL_CANN_HINTS}
+        PATH_SUFFIXES lib lib64 latest/lib64 latest/lib
+        NO_DEFAULT_PATH
+    )
+
+    if(NOT HCCL_CANN_INCLUDE_DIR OR NOT HCCL_CANN_LIBRARY)
+        message(FATAL_ERROR
+            "HCCL_BACKEND=ASCEND_CANN requires a real CANN/HCCL SDK. "
+            "Missing: HCCL header (hccl/hccl.h or hccl.h) and/or hccl library. "
+            "Set HCCL_CANN_ROOT or ASCEND_HOME_PATH/CANN_HOME to the SDK root. "
+            "CPU_SIM remains the default and does not require CANN."
+        )
+    endif()
+
+    target_compile_definitions(hccl_plugin
+        PRIVATE
+            HCCL_BACKEND_ASCEND_CANN=1
+            HCCL_ASCEND_CANN_STUB_UNVERIFIED=1
+    )
+    target_include_directories(hccl_plugin PRIVATE ${HCCL_CANN_INCLUDE_DIR})
+    target_link_libraries(hccl_plugin PRIVATE ${HCCL_CANN_LIBRARY})
+endif()
 
 # ---- Tests --------------------------------------------------------------
 
@@ -202,12 +252,18 @@ install(FILES ${HEADERS}
 # ---- Build instructions -------------------------------------------------
 
 message(STATUS "")
-message(STATUS "HCCL Plugin - CPU-simulated build configured.")
-message(STATUS "No CANN SDK required.")
+message(STATUS "HCCL Plugin backend: ${HCCL_BACKEND}")
+if(HCCL_BACKEND STREQUAL "CPU_SIM")
+    message(STATUS "CPU_SIM build configured. No CANN SDK required.")
+else()
+    message(STATUS "ASCEND_CANN build configured with STUB_UNVERIFIED adapter boundary.")
+    message(STATUS "CANN include: ${HCCL_CANN_INCLUDE_DIR}")
+    message(STATUS "CANN library: ${HCCL_CANN_LIBRARY}")
+endif()
 message(STATUS "")
 message(STATUS "Build & test:")
 message(STATUS "  cd hcccl && mkdir -p build && cd build")
-message(STATUS "  cmake .. && make")
+message(STATUS "  cmake .. -DHCCL_BACKEND=CPU_SIM && make")
 message(STATUS "  ctest --output-on-failure")
 message(STATUS "  ldd libhccl_plugin.so   # verify: no CANN deps")
 message(STATUS "")

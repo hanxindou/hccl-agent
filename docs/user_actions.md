@@ -75,7 +75,8 @@ Windows `hccl_plugin.dll` 已验证；Linux `.so` 标记为未验证。
 
 1. 安装并初始化 CANN 环境。
 2. 提供 SDK 路径、版本信息和环境初始化命令输出。
-3. 在 G1 后执行 ASCEND_CANN 模式构建和正确性测试。
+3. 使用 `-DHCCL_BACKEND=ASCEND_CANN` 和真实 SDK 根目录执行配置。
+4. 运行单机正确性、FP16/BF16 正确性和 profiling 模板。
 
 ### 执行命令
 
@@ -83,6 +84,12 @@ Windows `hccl_plugin.dll` 已验证；Linux `.so` 标记为未验证。
 which npu-smi || true
 npu-smi info
 python3 -c "import os; print(os.environ.get('ASCEND_HOME_PATH'))"
+source /usr/local/Ascend/ascend-toolkit/set_env.sh
+cmake -S hcccl -B /tmp/hccl-agent-hcccl-cann \
+  -DHCCL_BACKEND=ASCEND_CANN \
+  -DHCCL_CANN_ROOT="$ASCEND_HOME_PATH"
+cmake --build /tmp/hccl-agent-hcccl-cann
+ctest --test-dir /tmp/hccl-agent-hcccl-cann --output-on-failure
 ```
 
 ### 预期输出
@@ -99,6 +106,8 @@ npu-smi 能列出设备或模拟器状态
 - HCOMM/HCCL 头文件和库路径
 - `npu-smi info` 输出
 - msprof 可用性
+- `ASCEND_CANN` 配置、构建和 CTest 输出
+- 单机 AllReduce、AllGather、ReduceScatter、FP16/BF16 正确性输出
 
 ### 当前降级状态
 

@@ -1,16 +1,120 @@
 # HCCL Agent 项目接口参考与仿真实现指南
 
+## Stage G1 CANN/Ascend 适配准备
+
+当前项目支持两个明确隔离的后端配置：
+
+| 后端 | CMake 参数 | 当前状态 | SDK 要求 | 验证边界 |
+|------|------------|----------|----------|----------|
+| CPU_SIM | `-DHCCL_BACKEND=CPU_SIM` | 默认可构建 | 不需要 CANN | Windows DLL、CTest、Python 回归 |
+| ASCEND_CANN | `-DHCCL_BACKEND=ASCEND_CANN` | `STUB_UNVERIFIED` 适配边界 | 需要真实 CANN/HCCL SDK | 当前环境未验证，缺 SDK 时快速失败 |
+
+G1 不接入真实 HCOMM 运行时，不使用 Stub 库冒充 CANN，也不生成虚假 msprof 结果。`ASCEND_CANN` 模式只准备条件编译、头文件/库探测和用户实机验收入口；默认 `CPU_SIM` 路径必须继续不依赖 SDK。
+
+### 目标 CANN 版本和组件
+
+目标版本以赛题最终通知为准，当前准备项按 CANN 8.0+ 组织。用户需要提供：
+
+| 组件 | 用途 | 典型线索 |
+|------|------|----------|
+| HCCL/HCOMM 头文件 | 标准接口声明 | `hccl/hccl.h`、`hccl.h`、`hccl_types.h` |
+| HCCL 运行库 | 链接真实通信库 | `libhccl.so` 或平台等价库 |
+| 环境初始化脚本 | 设置 SDK 路径和运行库路径 | `set_env.sh` 或 CANN 安装文档指定脚本 |
+| Profiling 工具 | 性能和可靠性证据 | `msprof` 或当前 CANN 版本等价工具 |
+| 设备工具 | 设备状态采集 | `npu-smi` |
+
+可能的安装目录包括：
+
+```text
+/usr/local/Ascend/ascend-toolkit/latest
+/usr/local/Ascend/latest
+```
+
+也可以通过以下变量显式传入：
+
+```text
+HCCL_CANN_ROOT
+ASCEND_HOME_PATH
+ASCEND_HOME
+CANN_HOME
+```
+
+### CMake 使用方式
+
+CPU_SIM 默认构建：
+
+```powershell
+cmake -S hcccl -B C:\tmp\hccl-agent-hcccl-g1 -DHCCL_BACKEND=CPU_SIM
+cmake --build C:\tmp\hccl-agent-hcccl-g1 --config Release
+ctest --test-dir C:\tmp\hccl-agent-hcccl-g1 -C Release --output-on-failure
+```
+
+ASCEND_CANN 探测构建：
+
+```bash
+source /usr/local/Ascend/ascend-toolkit/set_env.sh
+cmake -S hcccl -B /tmp/hccl-agent-hcccl-cann \
+  -DHCCL_BACKEND=ASCEND_CANN \
+  -DHCCL_CANN_ROOT="$ASCEND_HOME_PATH"
+```
+
+如果 SDK 缺失，配置阶段必须失败，并指出缺少 HCCL 头文件、库或环境变量。该失败是预期行为，不应通过 Stub 库绕过。
+
+### 标准接口映射表
+
+| 标准能力 | 当前 CPU_SIM 状态 | ASCEND_CANN 准备状态 | 真实验收要求 |
+|----------|-------------------|----------------------|--------------|
+| Communicator | 项目自有 `HcclComm` 句柄模拟 | 待映射真实 HCOMM/HCCL communicator | 初始化、rank、rank size 与标准一致 |
+| AllReduce | FP32/FP16/BF16 CPU_SIM 数据路径 | 待实机 wrapper 对齐 | 与 HCCL reference 数值一致 |
+| AllGather | FP32/FP16/BF16 CPU_SIM 数据路径 | 待实机 wrapper 对齐 | 各 rank 扁平 buffer 一致 |
+| ReduceScatter | FP32/FP16/BF16 CPU_SIM 数据路径 | 待实机 wrapper 对齐 | scatter 分片与 reference 一致 |
+| Broadcast | wrapper 仍为未实现边界 | 待后续阶段 | 不得伪造成功 |
+| ReduceOp | SUM/PROD/MAX/MIN CPU_SIM | 待实机 op 枚举映射 | 枚举值、错误码和 dtype 行为一致 |
+| Stream | 当前不执行真实 device stream | 待 Ascend stream 绑定 | 需要真实运行时验证 |
+| 错误码 | 项目自定义兼容码 | 待与 HCCL 标准错误码校正 | 参数错误、未支持、运行时错误可区分 |
+
+### 实机测试命令模板
+
+单机正确性：
+
+```bash
+export HCCL_PLUGIN_PATH=/path/to/libhccl_plugin.so
+unset DEEPSEEK_API_KEY OPENAI_API_KEY ANTHROPIC_API_KEY
+python -m unittest tests.test_hccl_api tests.test_execution_engine -q
+python -m unittest tests.test_allgather tests.test_reducescatter tests.test_dtype_emulation -q
+```
+
+FP16/BF16 误差采集：
+
+```bash
+python -m unittest tests.test_dtype_emulation -q
+```
+
+Profiling 模板：
+
+```bash
+msprof --application="./path/to/correctness_or_benchmark" --output="./msprof_output"
+```
+
+baseline 对比方法：
+
+1. 使用相同 rank、dtype、op、count 和 message size。
+2. 分别运行项目 wrapper 与官方 HCCL reference。
+3. 记录最大绝对误差、最大相对误差、NaN/Inf/overflow 行为。
+4. 记录 latency、bandwidth、错误码和 profiling 摘要。
+5. 将结果标注为真实硬件测量，不与 CPU_SIM 数学模型混写。
+
 ## Batch A1 接口与验证边界
 
 当前项目的 `hcccl/` 目录提供的是 CPU 模拟基线和 HCCL-like 接口声明，不声明已经完成真实 CANN/HCOMM ABI 兼容。Windows CPU 模式、Linux CPU 模式和 Ascend/CANN 模式必须分开记录：
 
 | 模式 | 当前状态 | 说明 |
 |------|----------|------|
-| Windows CPU | 本 Batch 目标 | 默认 CMake 构建 DLL/import lib，CTest 运行 6 个 C 测试 |
+| Windows CPU | 已验证 | 默认 CMake 构建 DLL/import lib，CTest 运行 11 个 C 测试 |
 | Linux CPU | 待环境验证 | 应使用外部 `/tmp` 构建目录生成 `.so` 并运行 CTest |
 | Ascend/CANN | 未接入 | 需要 CANN 8.0+、HCOMM 头库和硬件或官方模拟器 |
 
-当前 C 数据路径主要覆盖 FP32/SUM/`count == 1` AllReduce CPU 模拟。AllGather、ReduceScatter、Broadcast、FP16/BF16、通用 ReduceOp 和标准 wrapper 闭合留待后续 Batch。
+当前 C 数据路径覆盖 AllReduce、AllGather、ReduceScatter 的 CPU_SIM 正确性基线，并已覆盖 FP32 SUM/PROD/MAX/MIN 与 FP16/BF16 软件模拟。Broadcast 仍不得伪造成功，真实 CANN/HCOMM 适配仍未验证。
 
 ## 1. 文档目的
 
