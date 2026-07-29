@@ -212,7 +212,7 @@
 
 ### 本地提交
 
-- commit：待创建
+- commit：`de501ad feat: add E1 autonomous code development loop`
 - message：`feat: add E1 autonomous code development loop`
 
 ### 未验证边界
@@ -255,7 +255,7 @@
 
 ### 本地提交
 
-- commit：待创建
+- commit：`17f09a5 feat: converge D1 topology and cost models`
 - message：`feat: converge D1 topology and cost models`
 
 ### 未验证边界
@@ -263,3 +263,46 @@
 - D1 是 `ANALYTICAL_MODEL`，不代表真实 HCCL/CANN/Ascend 性能。
 - 参数未经过实机校准。
 - Linux `.so`、CANN SDK、HCOMM 和 msprof 仍未验证。
+
+## Stage F1：可靠性模拟验证闭环
+
+开始时间：2026-07-29 22:31:00 +08:00
+结束时间：2026-07-29 22:42:00 +08:00
+状态：COMPLETED
+
+### 修改文件
+
+- `simulator/fault_injector.py`
+- `simulator/reliability_validation.py`
+- `tests/test_f1_reliability_validation.py`
+- `docs/reliability_report.md`
+- `docs/autonomous_progress.md`
+- `docs/research_notes.md`
+- `docs/user_actions.md`
+
+### 当前结果
+
+- 新增 `ReliabilityValidationFlow`，固定 seed 生成 link_down、timeout、corruption、congestion 事件序列。
+- `FaultInjector` 支持 D1 主拓扑 `topology.graph_builder.CommunicationGraph` 的 edge list。
+- CRC32 针对模拟 payload 计算，可检测 corruption。
+- retry、成功、失败、丢弃、恢复和 failover 模型时间均进入结构化结果。
+- 报告由代码生成到 `docs/reliability_report.md`，标记为 `CPU_SIMULATED / RELIABILITY_MODEL`。
+- wall-clock 仅作为观察值，不声明真实硬件 failover SLA。
+
+### 验收结果
+
+- 定向 Python：`tests.test_f1_reliability_validation tests.test_reliability_flow tests.test_failover_engine tests.test_retry_policy`，13 tests，OK
+- CTest：`C:\tmp\hccl-agent-hcccl-c3a`，11/11 passed
+- 完整 Python：`python -m unittest discover tests -q`，451 tests，OK
+- 外部 API：清空 `DEEPSEEK_API_KEY`、`OPENAI_API_KEY`、`ANTHROPIC_API_KEY`；DeepSeek 输出来自无 Key 降级和 MagicMock 测试，未发送真实请求
+
+### 本地提交
+
+- commit：待创建
+- message：`feat: add F1 reliability validation flow`
+
+### 未验证边界
+
+- F1 是 CPU/模拟器可靠性模型，不代表真实 Ascend/HCCL 链路恢复、CRC 或重传能力。
+- 未验证真实 100ms failover。
+- 未执行长时间可靠性压测。

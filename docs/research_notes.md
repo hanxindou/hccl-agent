@@ -117,3 +117,28 @@ FP32 ReduceOp 语义使用本项目已有 `hcclRedOp_t` 枚举：`HCCL_SUM`、`H
 ### 是否直接复制代码
 
 否。
+
+## Stage F1：可靠性模拟验证闭环
+
+访问日期：2026-07-29
+状态：未使用外部网络参考
+
+### 参考来源
+
+- 自主执行计划：本地文件 `docs/autonomous_goal_plan.md`
+- 当前项目可靠性模块：`simulator/fault_injector.py`
+- 当前项目健康检测模块：`simulator/health_monitor.py`
+- 当前项目重试模块：`simulator/retry_policy.py`
+- 当前项目故障切换模块：`simulator/failover_engine.py`
+
+### License
+
+未引入外部代码，未复制第三方实现，因此无新增第三方 License 义务。
+
+### 借鉴内容
+
+F1 只使用 Python 标准库 `zlib.crc32` 对模拟 payload 计算 CRC32，并将项目已有 fault injection、health monitor、retry policy 和 failover engine 串成固定 seed 的 CPU_SIM 可靠性验证流。
+
+### 是否直接复制代码
+
+否。

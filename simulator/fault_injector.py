@@ -6,7 +6,7 @@ key requirement for the competition's reliability report.
 """
 
 import random
-import time
+import zlib
 
 
 class FaultEvent:
@@ -20,6 +20,7 @@ class FaultEvent:
         self.timestamp = timestamp
         self.duration_ms = duration_ms
         self.description = description
+        self.model_time_ms = int(round(timestamp * 1000.0))
 
     def __repr__(self):
         return (
@@ -35,10 +36,45 @@ class FaultInjector:
 
     def __init__(self, seed=None):
         self.rng = random.Random(seed)
+        self.seed = seed
         self.fault_log = []            # list of FaultEvent
         self.retransmit_count = 0
         self.total_packets = 0
         self.corrupted_packets = 0
+        self.dropped_packets = 0
+
+    def _next_model_time(self):
+        return len(self.fault_log) * 0.001
+
+    @staticmethod
+    def _iter_edges(graph):
+        edges = getattr(graph, "edges", {})
+        if isinstance(edges, dict):
+            return edges.values()
+        return edges
+
+    @staticmethod
+    def _find_edge(graph, src, dst):
+        edges = getattr(graph, "edges", {})
+        if isinstance(edges, dict):
+            return edges.get((src, dst))
+        for edge in edges:
+            if getattr(edge, "src", None) == src and getattr(edge, "dst", None) == dst:
+                return edge
+        return None
+
+    @staticmethod
+    def compute_crc32(payload):
+        """Return CRC32 for bytes-like payloads used by CPU_SIM tests."""
+        return zlib.crc32(bytes(payload)) & 0xFFFFFFFF
+
+    @classmethod
+    def detect_corruption(cls, reference_payload, candidate_payload):
+        """Detect simulated payload corruption through CRC32 mismatch."""
+        return (
+            cls.compute_crc32(reference_payload)
+            != cls.compute_crc32(candidate_payload)
+        )
 
     # ------------------------------------------------------------------
     # Fault generation
@@ -46,11 +82,15 @@ class FaultInjector:
 
     def inject_link_failure(self, graph, src, dst, duration_ms=100):
         """Bring down a specific link for *duration_ms*."""
-        graph.set_link_health(src, dst, False)
+        if hasattr(graph, "set_link_health"):
+            graph.set_link_health(src, dst, False)
+        edge = self._find_edge(graph, src, dst)
+        if edge is not None:
+            edge.healthy = False
         event = FaultEvent(
             "link_down",
             (src, dst),
-            time.time(),
+            self._next_model_time(),
             duration_ms,
             f"Link {src}->{dst} down for {duration_ms}ms",
         )
@@ -61,7 +101,12 @@ class FaultInjector:
         """Randomly pick one edge and bring it down."""
         if not graph.edges:
             return None
-        edge_key = self.rng.choice(list(graph.edges.keys()))
+        edge = self.rng.choice(list(self._iter_edges(graph)))
+        edge_key = (
+            (edge.src, edge.dst)
+            if hasattr(edge, "src")
+            else edge
+        )
         return self.inject_link_failure(
             graph, edge_key[0], edge_key[1], duration_ms
         )
@@ -71,7 +116,7 @@ class FaultInjector:
         event = FaultEvent(
             "timeout",
             (src, dst),
-            time.time(),
+            self._next_model_time(),
             timeout_ms,
             f"Timeout on {src}->{dst} ({timeout_ms}ms)",
         )
@@ -84,7 +129,7 @@ class FaultInjector:
         event = FaultEvent(
             "corruption",
             (src, dst),
-            time.time(),
+            self._next_model_time(),
             0,
             f"Data corruption on {src}->{dst}",
         )
@@ -99,7 +144,7 @@ class FaultInjector:
         event = FaultEvent(
             "congestion",
             (src, dst),
-            time.time(),
+            self._next_model_time(),
             duration_ms,
             f"Congestion on {src}->{dst} "
             f"(BW reduced {bandwidth_reduction*100:.0f}%)",
@@ -107,9 +152,8 @@ class FaultInjector:
         self.fault_log.append(event)
 
         # Temporarily reduce bandwidth on the edge.
-        key = (src, dst)
-        if key in graph.edges:
-            edge = graph.edges[key]
+        edge = self._find_edge(graph, src, dst)
+        if edge is not None:
             original_bw = edge.bandwidth_gbps
             edge.bandwidth_gbps *= (1.0 - bandwidth_reduction)
             # Store original so the caller can restore it.
@@ -123,12 +167,16 @@ class FaultInjector:
 
     def recover_link(self, graph, src, dst):
         """Restore a previously failed link to healthy state."""
-        graph.set_link_health(src, dst, True)
+        if hasattr(graph, "set_link_health"):
+            graph.set_link_health(src, dst, True)
+        edge = self._find_edge(graph, src, dst)
+        if edge is not None:
+            edge.healthy = True
 
     def recover_all_links(self, graph):
         """Restore all links in the graph to healthy."""
-        for key in graph.edges:
-            graph.edges[key].healthy = True
+        for edge in self._iter_edges(graph):
+            edge.healthy = True
 
     # ------------------------------------------------------------------
     # Simulation helpers
@@ -151,10 +199,10 @@ class FaultInjector:
         Returns a dict with success rate and retransmission stats.
         """
         self.total_packets += num_packets
-        key = (src, dst)
-        edge = graph.edges.get(key)
+        edge = self._find_edge(graph, src, dst)
 
-        if edge is None or not edge.healthy:
+        if edge is None or not getattr(edge, "healthy", True):
+            self.dropped_packets += num_packets
             return {
                 "success": False,
                 "packets_sent": num_packets,
@@ -166,7 +214,8 @@ class FaultInjector:
         # Corruption from BER: prob = 1 - (1 - BER)^bits_per_packet
         # Assume 4096-byte packets for the model.
         bits_per_packet = 4096 * 8
-        ber_prob = 1.0 - (1.0 - edge.ber) ** bits_per_packet
+        ber = getattr(edge, "ber", 0.0)
+        ber_prob = 1.0 - (1.0 - ber) ** bits_per_packet
         effective_corruption_prob = max(corruption_prob, ber_prob)
 
         corrupted = 0
@@ -220,6 +269,8 @@ class FaultInjector:
             "total_retransmissions": self.retransmit_count,
             "retransmission_rate": round(retransmit_rate, 6),
             "corrupted_packets": self.corrupted_packets,
+            "dropped_packets": self.dropped_packets,
+            "seed": self.seed,
             "target_retransmission_rate": 0.001,   # <=0.1% per contest spec
             "retransmission_ok": retransmit_rate <= 0.001,
         }

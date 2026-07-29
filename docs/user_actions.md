@@ -162,3 +162,27 @@ D1 输出为 `CPU_SIMULATED / ANALYTICAL_MODEL`。参数来自项目相对 tier�
 - 8/64/128/256/1024 rank 的 latency 和 bandwidth
 - HCCS/RoCE/PCIe 或等效链路实测参数
 - msprof 或同等 profiling 摘要
+
+## UA-006：F1 真实可靠性验收
+
+状态：待用户执行
+阻塞阶段：H1/比赛最终验收
+优先级：P1
+
+### 原因
+
+F1 当前结果来自 `CPU_SIMULATED / RELIABILITY_MODEL`。固定 seed、CRC32、retry 和 failover 统计可复现，但不能证明真实 Ascend/HCCL 链路故障、硬件 CRC、重传或故障切换时间。
+
+### 用户需要准备
+
+- Ascend 设备或赛题认可的可靠性测试环境
+- CANN/HCCL 运行时和故障注入权限
+- 可观察链路状态、错误计数和 profiling 的工具
+
+### 反馈内容
+
+- link down、timeout、corruption、congestion 的实机注入方式
+- 真实检测次数、重试次数、恢复次数和失败案例
+- 实测 failover 时间分布
+- 硬件 CRC 或等效校验路径
+- 长时间可靠性压测摘要
