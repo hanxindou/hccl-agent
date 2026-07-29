@@ -137,6 +137,19 @@ set_tests_properties(test_api_wrappers PROPERTIES
     WORKING_DIRECTORY $<TARGET_FILE_DIR:test_api_wrappers>
 )
 
+add_executable(test_allgather tests/test_allgather.c)
+
+target_include_directories(test_allgather
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(test_allgather PRIVATE hccl_plugin)
+
+add_test(NAME test_allgather COMMAND test_allgather)
+set_tests_properties(test_allgather PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_allgather>
+)
+
 # ---- Install rules ------------------------------------------------------
 
 install(TARGETS hccl_plugin

@@ -160,6 +160,14 @@ def configure_ctypes_signatures(lib, lib_path, attempts=None,
                   [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t,
                    ctypes.c_int, ctypes.c_int, ctypes.c_void_p],
                   ctypes.c_int, lib_path, attempts)
+        for name in [
+            "ring_allgather",
+            "butterfly_allgather",
+        ]:
+            _bind(lib, name,
+                  [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t,
+                   ctypes.c_int, ctypes.c_void_p],
+                  ctypes.c_int, lib_path, attempts)
 
 
 class HCCLBridge:

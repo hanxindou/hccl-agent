@@ -22,6 +22,8 @@ HCCL_ERR_INVALID_ARG   = -1
 HCCL_ERR_NOT_SUPPORTED = -6
 
 HCCL_FP32 = 0
+HCCL_FP16 = 1
+HCCL_BF16 = 2
 HCCL_SUM  = 0
 
 # ---- Algorithm name mapping (Agent display name → internal key) ----
@@ -120,6 +122,96 @@ class ExecutionEngine:
             "algorithm": algorithm_name,
             "status": "not_implemented",
             "result": None,
+        }
+
+    def execute_allgather(self, send_data, algorithm="Wrapper",
+                          data_type=HCCL_FP32):
+        """Run CPU_SIM AllGather on a rectangular rank-by-element matrix.
+
+        send_data uses the C1 CPU_SIM input layout [N][C]. The returned
+        result uses [N][N*C], one flattened gathered vector per dst rank.
+        """
+        if not send_data:
+            return {
+                "primitive": "AllGather",
+                "algorithm": algorithm,
+                "status": "invalid_input",
+                "return_code": HCCL_ERR_INVALID_ARG,
+                "result": None,
+            }
+        count = len(send_data[0])
+        if count == 0 or any(len(row) != count for row in send_data):
+            return {
+                "primitive": "AllGather",
+                "algorithm": algorithm,
+                "status": "invalid_input",
+                "return_code": HCCL_ERR_INVALID_ARG,
+                "result": None,
+            }
+
+        self.load_library()
+        lib = self._lib
+        n = len(send_data)
+        flat_input = [float(value) for row in send_data for value in row]
+        send = (ctypes.c_float * (n * count))(*flat_input)
+        recv = (ctypes.c_float * (n * n * count))()
+
+        comm = ctypes.c_void_p()
+        device_ids = (ctypes.c_int32 * n)(*range(n))
+        rc = lib.hcclCommInit(ctypes.byref(comm), n, device_ids)
+        if rc != HCCL_SUCCESS:
+            return {
+                "primitive": "AllGather",
+                "algorithm": algorithm,
+                "status": "comm_init_failed",
+                "return_code": rc,
+                "result": None,
+            }
+
+        try:
+            normalized = algorithm.lower()
+            if normalized in {"wrapper", "hcclallgather", "standard"}:
+                call = lib.hcclAllGather
+            elif normalized in {"ring", "ring allgather"}:
+                call = lib.ring_allgather
+            elif normalized in {"butterfly", "butterfly allgather"}:
+                call = lib.butterfly_allgather
+            else:
+                return {
+                    "primitive": "AllGather",
+                    "algorithm": algorithm,
+                    "status": "unknown_algorithm",
+                    "return_code": HCCL_ERR_NOT_SUPPORTED,
+                    "result": None,
+                }
+
+            rc = call(send, recv, count, data_type, comm)
+            if rc != HCCL_SUCCESS:
+                return {
+                    "primitive": "AllGather",
+                    "algorithm": algorithm,
+                    "status": "not_supported" if rc == HCCL_ERR_NOT_SUPPORTED else "error",
+                    "return_code": rc,
+                    "result": None,
+                }
+
+            rows = []
+            row_len = n * count
+            for dst in range(n):
+                offset = dst * row_len
+                rows.append([
+                    round(float(recv[offset + idx]), 6)
+                    for idx in range(row_len)
+                ])
+        finally:
+            lib.hcclCommDestroy(comm)
+
+        return {
+            "primitive": "AllGather",
+            "algorithm": algorithm,
+            "status": "success",
+            "return_code": rc,
+            "result": rows,
         }
 
     # ------------------------------------------------------------------

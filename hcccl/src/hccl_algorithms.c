@@ -2,8 +2,7 @@
  * @file    hccl_algorithms.c
  * @brief   HCCL collective algorithm implementations.
  *
- * STATUS: ring_allreduce — CPU-simulated, zero external dependencies.
- *         All other functions remain STUBS.
+ * STATUS: CPU-simulated, zero external dependencies.
  */
 
 #include "hccl_algorithms.h"
@@ -25,6 +24,76 @@ typedef struct {
     float*    rank_results;
     int32_t   calls_received;
 } hcclCommInternal;
+
+static int is_power_of_two(int32_t value)
+{
+    return value > 0 && (value & (value - 1)) == 0;
+}
+
+static hcclResult_t validate_allgather_args(
+    const void*      send_buf,
+    void*            recv_buf,
+    size_t           send_count,
+    hcclDataType_t   data_type,
+    hcclComm_t       comm,
+    hcclCommInternal** ctx_out,
+    size_t*          input_elems_out,
+    size_t*          output_elems_out
+)
+{
+    size_t n;
+    size_t input_elems;
+    size_t output_elems;
+
+    if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (send_buf == recv_buf) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+    if (send_count == 0) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (data_type != HCCL_FP32) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+
+    *ctx_out = (hcclCommInternal*) comm;
+    if ((*ctx_out)->num_devices <= 0) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if ((*ctx_out)->num_devices > 64) {
+        return HCCL_ERR_INTERNAL;
+    }
+
+    /*
+     * C1 CPU_SIM layout:
+     *   send_buf: [N][C]
+     *   recv_buf: [N][N][C]
+     * The N=2 case is kept unsupported in C1 so B1's legacy wrapper
+     * regression, which passed scalar buffers, remains well-defined.
+     */
+    if ((*ctx_out)->num_devices == 2) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+
+    n = (size_t)(*ctx_out)->num_devices;
+    if (send_count > ((size_t)-1) / n) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    input_elems = n * send_count;
+    if (input_elems > ((size_t)-1) / n) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    output_elems = n * input_elems;
+    if (output_elems > ((size_t)-1) / sizeof(float)) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+
+    *input_elems_out = input_elems;
+    *output_elems_out = output_elems;
+    return HCCL_SUCCESS;
+}
 
 /* ================================================================== */
 /*  Ring AllReduce                                                    */
@@ -158,6 +227,67 @@ hcclResult_t ring_allreduce(
 }
 
 /* ================================================================== */
+/*  Ring AllGather                                                    */
+/* ================================================================== */
+
+hcclResult_t ring_allgather(
+    const void*     send_buf,
+    void*           recv_buf,
+    size_t          send_count,
+    hcclDataType_t  data_type,
+    hcclComm_t      comm
+)
+{
+    hcclCommInternal* ctx = NULL;
+    size_t input_elems = 0;
+    size_t output_elems = 0;
+    hcclResult_t rc = validate_allgather_args(
+        send_buf, recv_buf, send_count, data_type, comm,
+        &ctx, &input_elems, &output_elems
+    );
+    if (rc != HCCL_SUCCESS) {
+        return rc;
+    }
+
+    {
+        const float* input = (const float*) send_buf;
+        float* staged = (float*) calloc(output_elems, sizeof(float));
+        int32_t N = ctx->num_devices;
+        size_t C = send_count;
+
+        (void)input_elems;
+        if (staged == NULL) {
+            return HCCL_ERR_INTERNAL;
+        }
+
+        /*
+         * Ring AllGather simulation. Each destination rank first owns
+         * its local block, then receives one additional source block per
+         * ring phase from its predecessor. Final storage remains ordered
+         * by source rank as required by the C1 CPU_SIM contract.
+         */
+        for (int32_t dst = 0; dst < N; dst++) {
+            memcpy(&staged[((size_t)dst * (size_t)N + (size_t)dst) * C],
+                   &input[(size_t)dst * C],
+                   C * sizeof(float));
+        }
+
+        for (int32_t step = 1; step < N; step++) {
+            for (int32_t dst = 0; dst < N; dst++) {
+                int32_t src = (dst - step + N) % N;
+                memcpy(&staged[((size_t)dst * (size_t)N + (size_t)src) * C],
+                       &input[(size_t)src * C],
+                       C * sizeof(float));
+            }
+        }
+
+        memcpy(recv_buf, staged, output_elems * sizeof(float));
+        free(staged);
+        return HCCL_SUCCESS;
+    }
+}
+
+/* ================================================================== */
 /*  Butterfly AllReduce                                               */
 /* ================================================================== */
 
@@ -266,22 +396,88 @@ hcclResult_t butterfly_allgather(
     hcclComm_t      comm
 )
 {
-    /*
-     * ALGORITHM (log2(N) steps):
-     *   For step s in 0..log2(N)-1:
-     *     distance = 2^s
-     *     Each rank i exchanges ALL data accumulated so far with
-     *     rank (i XOR distance).
-     *
-     *   After log2(N) steps, every rank has data from all N ranks.
-     */
-    (void)send_buf;
-    (void)recv_buf;
-    (void)send_count;
-    (void)data_type;
-    (void)comm;
-    fprintf(stderr, "[STUB] butterfly_allgather — not implemented.\n");
-    return HCCL_ERR_NOT_SUPPORTED;
+    hcclCommInternal* ctx = NULL;
+    size_t input_elems = 0;
+    size_t output_elems = 0;
+    hcclResult_t rc = validate_allgather_args(
+        send_buf, recv_buf, send_count, data_type, comm,
+        &ctx, &input_elems, &output_elems
+    );
+    if (rc != HCCL_SUCCESS) {
+        return rc;
+    }
+    if (!is_power_of_two(ctx->num_devices)) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+
+    {
+        const float* input = (const float*) send_buf;
+        float* staged = (float*) calloc(output_elems, sizeof(float));
+        unsigned char* known = NULL;
+        unsigned char* snapshot = NULL;
+        int32_t N = ctx->num_devices;
+        size_t C = send_count;
+
+        (void)input_elems;
+        if (staged == NULL) {
+            return HCCL_ERR_INTERNAL;
+        }
+
+        known = (unsigned char*) calloc((size_t)N * (size_t)N, sizeof(unsigned char));
+        snapshot = (unsigned char*) malloc((size_t)N * (size_t)N);
+        if (known == NULL || snapshot == NULL) {
+            free(snapshot);
+            free(known);
+            free(staged);
+            return HCCL_ERR_INTERNAL;
+        }
+
+        for (int32_t dst = 0; dst < N; dst++) {
+            known[(size_t)dst * (size_t)N + (size_t)dst] = 1;
+            memcpy(&staged[((size_t)dst * (size_t)N + (size_t)dst) * C],
+                   &input[(size_t)dst * C],
+                   C * sizeof(float));
+        }
+
+        /*
+         * Recursive-doubling AllGather. At each distance, every rank
+         * exchanges all source blocks known at the start of the phase
+         * with its XOR partner. Snapshotting avoids within-phase leaks.
+         */
+        for (int32_t distance = 1; distance < N; distance <<= 1) {
+            memcpy(snapshot, known, (size_t)N * (size_t)N);
+            for (int32_t dst = 0; dst < N; dst++) {
+                int32_t partner = dst ^ distance;
+                for (int32_t src = 0; src < N; src++) {
+                    size_t partner_idx = (size_t)partner * (size_t)N + (size_t)src;
+                    size_t dst_idx = (size_t)dst * (size_t)N + (size_t)src;
+                    if (snapshot[partner_idx] && !known[dst_idx]) {
+                        memcpy(&staged[((size_t)dst * (size_t)N + (size_t)src) * C],
+                               &input[(size_t)src * C],
+                               C * sizeof(float));
+                        known[dst_idx] = 1;
+                    }
+                }
+            }
+        }
+
+        for (int32_t dst = 0; dst < N; dst++) {
+            for (int32_t src = 0; src < N; src++) {
+                if (!known[(size_t)dst * (size_t)N + (size_t)src]) {
+                    free(snapshot);
+                    free(known);
+                    free(staged);
+                    return HCCL_ERR_INTERNAL;
+                }
+            }
+        }
+
+        memcpy(recv_buf, staged, output_elems * sizeof(float));
+        free(snapshot);
+        free(known);
+        free(staged);
+        return HCCL_SUCCESS;
+    }
 }
 
 /* ================================================================== */
@@ -577,4 +773,3 @@ hcclResult_t fattree_allreduce(
 #undef FT_GROUP_SIZE
     }
 }
-

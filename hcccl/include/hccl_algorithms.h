@@ -27,6 +27,14 @@ hcclResult_t ring_allreduce(
     hcclComm_t      comm
 );
 
+hcclResult_t ring_allgather(
+    const void*     send_buf,
+    void*           recv_buf,
+    size_t          send_count,
+    hcclDataType_t  data_type,
+    hcclComm_t      comm
+);
+
 /* ---- Butterfly (recursive doubling) --------------------------------- */
 
 hcclResult_t butterfly_allreduce(

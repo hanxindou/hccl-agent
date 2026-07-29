@@ -8,6 +8,8 @@ depending on real Ascend hardware.
 
 from typing import Any, Dict, List, Optional, Tuple
 
+from plugin.execution_engine import ExecutionEngine
+
 HCCL_SUCCESS: int = 0
 
 
@@ -100,6 +102,39 @@ def HcclAllGather(
 ) -> Dict[str, Any]:
     """HCCL AllGather — simulated via the performance model."""
     return _simulate("AllGather", algorithm, comm)
+
+
+def HcclAllGatherReference(send_data: List[List[float]]) -> List[List[float]]:
+    """Return the C1 CPU_SIM AllGather reference result.
+
+    Input layout is [N][C]. Each destination rank receives the same
+    flattened source-rank-ordered vector [N*C].
+    """
+    if not send_data:
+        return []
+    count = len(send_data[0])
+    if count == 0 or any(len(row) != count for row in send_data):
+        raise ValueError("send_data must be a non-empty rectangular matrix")
+
+    expected_for_one_rank = [
+        float(element)
+        for src_rank in send_data
+        for element in src_rank
+    ]
+    return [list(expected_for_one_rank) for _ in send_data]
+
+
+def HcclAllGatherCpuData(
+    send_data: List[List[float]],
+    algorithm: str = "Wrapper",
+    engine: Optional[ExecutionEngine] = None,
+) -> Dict[str, Any]:
+    """Execute AllGather through the C CPU_SIM plugin data path."""
+    runner = engine or ExecutionEngine()
+    result = runner.execute_allgather(send_data, algorithm=algorithm)
+    if result["status"] == "success":
+        result["reference"] = HcclAllGatherReference(send_data)
+    return result
 
 
 def HcclReduceScatter(

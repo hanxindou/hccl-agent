@@ -221,17 +221,12 @@ hcclResult_t hcclAllGather(
     hcclComm_t      comm
 )
 {
-    if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
-        return HCCL_ERR_INVALID_ARG;
-    }
-    if (send_count == 0) {
-        return HCCL_ERR_INVALID_ARG;
-    }
-    if (data_type != HCCL_FP32) {
-        return HCCL_ERR_NOT_SUPPORTED;
-    }
-
-    return HCCL_ERR_NOT_SUPPORTED;
+    /*
+     * C1 maps the standard AllGather wrapper to the CPU Ring
+     * AllGather implementation using the project-local CPU_SIM
+     * [N][C] -> [N][N][C] flat buffer contract.
+     */
+    return ring_allgather(send_buf, recv_buf, send_count, data_type, comm);
 }
 
 hcclResult_t hcclReduceScatter(

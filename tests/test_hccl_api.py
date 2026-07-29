@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 from plugin.hccl_api import (
     HCCL_SUCCESS, HcclComm, HcclCommInitClusterInfo,
     HcclAllReduce, HcclAllGather, HcclReduceScatter,
+    HcclAllGatherReference, HcclAllGatherCpuData,
 )
 
 
@@ -58,6 +59,18 @@ class TestHcclApi(unittest.TestCase):
             r = prim_func(comm)
             self.assertGreaterEqual(r["score"], 0)
             self.assertLessEqual(r["score"], 100)
+
+    def test_allgather_reference_layout(self):
+        send_data = [[0.0, 1.0], [10.0, 11.0], [20.0, 21.0], [30.0, 31.0]]
+        expected = [[0.0, 1.0, 10.0, 11.0, 20.0, 21.0, 30.0, 31.0]] * 4
+        self.assertEqual(HcclAllGatherReference(send_data), expected)
+
+    def test_allgather_cpu_data_uses_explicit_data_entry(self):
+        send_data = [[float(rank * 10 + elem) for elem in range(2)]
+                     for rank in range(4)]
+        result = HcclAllGatherCpuData(send_data, algorithm="Wrapper")
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], HcclAllGatherReference(send_data))
 
 
 if __name__ == "__main__":

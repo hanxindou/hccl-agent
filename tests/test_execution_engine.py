@@ -10,6 +10,7 @@ sys.path.insert(
 )
 
 from plugin.execution_engine import ExecutionEngine
+from plugin.hccl_api import HcclAllGatherReference
 
 
 class TestExecutionEngine(unittest.TestCase):
@@ -112,6 +113,22 @@ class TestExecutionEngine(unittest.TestCase):
     def test_empty_input(self):
         result = self.engine.execute_algorithm("Ring AllReduce", [])
         self.assertEqual(result["status"], "invalid_input")
+
+    # ---- AllGather data execution ----
+
+    def test_allgather_wrapper_4_ranks_count_2(self):
+        send_data = [[float(rank * 100 + elem + 1) for elem in range(2)]
+                     for rank in range(4)]
+        result = self.engine.execute_allgather(send_data, algorithm="Wrapper")
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], HcclAllGatherReference(send_data))
+
+    def test_allgather_butterfly_8_ranks_count_3(self):
+        send_data = [[float(rank * 100 + elem + 1) for elem in range(3)]
+                     for rank in range(8)]
+        result = self.engine.execute_allgather(send_data, algorithm="Butterfly")
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], HcclAllGatherReference(send_data))
 
 
 if __name__ == "__main__":
