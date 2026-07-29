@@ -12,6 +12,7 @@ Usage::
 """
 
 import ctypes
+import struct
 
 from plugin.hccl_bridge import configure_ctypes_signatures, resolve_library_path
 
@@ -25,6 +26,9 @@ HCCL_FP32 = 0
 HCCL_FP16 = 1
 HCCL_BF16 = 2
 HCCL_SUM  = 0
+HCCL_PROD = 1
+HCCL_MAX  = 2
+HCCL_MIN  = 3
 
 # ---- Algorithm name mapping (Agent display name → internal key) ----
 
@@ -38,6 +42,114 @@ _ALGO_TABLE = {
 }
 
 _IMPLEMENTED = {"ring", "butterfly", "nhr", "mesh", "fattree"}
+
+
+def _float_to_bits(value):
+    return struct.unpack("<I", struct.pack("<f", float(value)))[0]
+
+
+def _bits_to_float(bits):
+    return struct.unpack("<f", struct.pack("<I", bits & 0xFFFFFFFF))[0]
+
+
+def float_to_bf16_bits(value):
+    bits = _float_to_bits(value)
+    if (bits & 0x7F800000) == 0x7F800000 and (bits & 0x007FFFFF):
+        return ((bits >> 16) | 0x0040) & 0xFFFF
+    bits = (bits + 0x7FFF + ((bits >> 16) & 1)) & 0xFFFFFFFF
+    return (bits >> 16) & 0xFFFF
+
+
+def bf16_bits_to_float(value):
+    return _bits_to_float((int(value) & 0xFFFF) << 16)
+
+
+def float_to_fp16_bits(value):
+    bits = _float_to_bits(value)
+    sign = (bits >> 16) & 0x8000
+    raw_exp = (bits >> 23) & 0xFF
+    mant = bits & 0x007FFFFF
+    exp = int(raw_exp) - 127 + 15
+
+    if raw_exp == 0xFF:
+        if mant == 0:
+            return sign | 0x7C00
+        return sign | 0x7C00 | (mant >> 13) | 0x0001
+    if exp <= 0:
+        if exp < -10:
+            return sign
+        mant = (mant | 0x00800000) >> (1 - exp)
+        return sign | ((mant + 0x00001000) >> 13)
+    if exp >= 31:
+        return sign | 0x7C00
+
+    mant += 0x00001000
+    if mant & 0x00800000:
+        mant = 0
+        exp += 1
+        if exp >= 31:
+            return sign | 0x7C00
+    return sign | (exp << 10) | (mant >> 13)
+
+
+def fp16_bits_to_float(value):
+    half = int(value) & 0xFFFF
+    sign = (half & 0x8000) << 16
+    exp = (half >> 10) & 0x1F
+    mant = half & 0x03FF
+
+    if exp == 0:
+        if mant == 0:
+            bits = sign
+        else:
+            shift = 0
+            while (mant & 0x0400) == 0:
+                mant <<= 1
+                shift += 1
+            mant &= 0x03FF
+            bits = sign | ((127 - 15 - shift) << 23) | (mant << 13)
+    elif exp == 0x1F:
+        bits = sign | 0x7F800000 | (mant << 13)
+        if mant:
+            bits |= 0x00000001
+    else:
+        bits = sign | ((exp + (127 - 15)) << 23) | (mant << 13)
+
+    return _bits_to_float(bits)
+
+
+def roundtrip_dtype_value(value, data_type):
+    if data_type == HCCL_FP16:
+        return fp16_bits_to_float(float_to_fp16_bits(value))
+    if data_type == HCCL_BF16:
+        return bf16_bits_to_float(float_to_bf16_bits(value))
+    return float(value)
+
+
+def _make_input_array(values, data_type):
+    if data_type == HCCL_FP16:
+        return (ctypes.c_uint16 * len(values))(
+            *[float_to_fp16_bits(value) for value in values]
+        )
+    if data_type == HCCL_BF16:
+        return (ctypes.c_uint16 * len(values))(
+            *[float_to_bf16_bits(value) for value in values]
+        )
+    return (ctypes.c_float * len(values))(*[float(value) for value in values])
+
+
+def _make_output_array(length, data_type):
+    if data_type in {HCCL_FP16, HCCL_BF16}:
+        return (ctypes.c_uint16 * length)()
+    return (ctypes.c_float * length)()
+
+
+def _read_output_value(buffer, index, data_type):
+    if data_type == HCCL_FP16:
+        return fp16_bits_to_float(buffer[index])
+    if data_type == HCCL_BF16:
+        return bf16_bits_to_float(buffer[index])
+    return float(buffer[index])
 
 
 class ExecutionEngine:
@@ -153,8 +265,8 @@ class ExecutionEngine:
         lib = self._lib
         n = len(send_data)
         flat_input = [float(value) for row in send_data for value in row]
-        send = (ctypes.c_float * (n * count))(*flat_input)
-        recv = (ctypes.c_float * (n * n * count))()
+        send = _make_input_array(flat_input, data_type)
+        recv = _make_output_array(n * n * count, data_type)
 
         comm = ctypes.c_void_p()
         device_ids = (ctypes.c_int32 * n)(*range(n))
@@ -200,7 +312,7 @@ class ExecutionEngine:
             for dst in range(n):
                 offset = dst * row_len
                 rows.append([
-                    round(float(recv[offset + idx]), 6)
+                    round(_read_output_value(recv, offset + idx, data_type), 6)
                     for idx in range(row_len)
                 ])
         finally:
@@ -216,7 +328,7 @@ class ExecutionEngine:
 
     def execute_reducescatter(self, send_data, data_type=HCCL_FP32,
                               op=HCCL_SUM):
-        """Run CPU_SIM ReduceScatter on [N][N][C] FP32/SUM data."""
+        """Run CPU_SIM ReduceScatter on [N][N][C] FP32 data."""
         if not send_data:
             return {
                 "primitive": "ReduceScatter",
@@ -262,8 +374,8 @@ class ExecutionEngine:
             for shard in src_row
             for value in shard
         ]
-        send = (ctypes.c_float * (n * n * count))(*flat_input)
-        recv = (ctypes.c_float * (n * count))()
+        send = _make_input_array(flat_input, data_type)
+        recv = _make_output_array(n * count, data_type)
 
         comm = ctypes.c_void_p()
         device_ids = (ctypes.c_int32 * n)(*range(n))
@@ -292,7 +404,7 @@ class ExecutionEngine:
             for dst in range(n):
                 offset = dst * count
                 rows.append([
-                    round(float(recv[offset + elem]), 6)
+                    round(_read_output_value(recv, offset + elem, data_type), 6)
                     for elem in range(count)
                 ])
         finally:
@@ -304,6 +416,88 @@ class ExecutionEngine:
             "status": "success",
             "return_code": rc,
             "result": rows,
+        }
+
+    def execute_allreduce_data(self, input_data, algorithm="Ring", op=HCCL_SUM,
+                               data_type=HCCL_FP32):
+        """Run CPU_SIM FP32 AllReduce over one scalar per rank."""
+        if not input_data:
+            return {
+                "primitive": "AllReduce",
+                "algorithm": algorithm,
+                "status": "invalid_input",
+                "return_code": HCCL_ERR_INVALID_ARG,
+                "result": None,
+            }
+
+        self.load_library()
+        lib = self._lib
+        n = len(input_data)
+        comm = ctypes.c_void_p()
+        device_ids = (ctypes.c_int32 * n)(*range(n))
+        rc = lib.hcclCommInit(ctypes.byref(comm), n, device_ids)
+        if rc != HCCL_SUCCESS:
+            return {
+                "primitive": "AllReduce",
+                "algorithm": algorithm,
+                "status": "comm_init_failed",
+                "return_code": rc,
+                "result": None,
+            }
+
+        try:
+            normalized = algorithm.lower()
+            if normalized in {"wrapper", "hcclallreduce", "standard"}:
+                call = lib.hcclAllReduce
+            elif normalized in {"ring", "ring allreduce"}:
+                call = lib.ring_allreduce
+            elif normalized in {"butterfly", "butterfly allreduce"}:
+                call = lib.butterfly_allreduce
+            elif normalized in {"mesh", "mesh allreduce"}:
+                call = lib.mesh_allreduce
+            elif normalized in {"nhr", "nhr allreduce"}:
+                call = lib.nhr_allreduce
+            elif normalized in {"fattree", "fat-tree", "fat-tree allreduce"}:
+                call = lib.fattree_allreduce
+            else:
+                return {
+                    "primitive": "AllReduce",
+                    "algorithm": algorithm,
+                    "status": "unknown_algorithm",
+                    "return_code": HCCL_ERR_NOT_SUPPORTED,
+                    "result": None,
+                }
+
+            for rank, value in enumerate(input_data):
+                lib.hcclSetRank(comm, rank)
+                send = _make_input_array([value], data_type)
+                recv = _make_output_array(1, data_type)
+                call(send, recv, 1, data_type, op, comm)
+
+            results = []
+            for rank, value in enumerate(input_data):
+                lib.hcclSetRank(comm, rank)
+                send = _make_input_array([value], data_type)
+                recv = _make_output_array(1, data_type)
+                rc = call(send, recv, 1, data_type, op, comm)
+                if rc != HCCL_SUCCESS:
+                    return {
+                        "primitive": "AllReduce",
+                        "algorithm": algorithm,
+                        "status": "not_supported" if rc == HCCL_ERR_NOT_SUPPORTED else "error",
+                        "return_code": rc,
+                        "result": None,
+                    }
+                results.append(round(_read_output_value(recv, 0, data_type), 6))
+        finally:
+            lib.hcclCommDestroy(comm)
+
+        return {
+            "primitive": "AllReduce",
+            "algorithm": algorithm,
+            "status": "success",
+            "return_code": rc,
+            "result": results,
         }
 
     # ------------------------------------------------------------------

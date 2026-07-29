@@ -82,16 +82,18 @@ class TestAllGatherDataCorrectness(unittest.TestCase):
         self.assertEqual(butterfly["status"], "success")
         self.assertEqual(ring["result"], butterfly["result"])
 
-    def test_fp16_and_bf16_remain_not_supported(self):
+    def test_fp16_and_bf16_match_reference(self):
         send_data = _send_data(4, 1)
         for data_type in [HCCL_FP16, HCCL_BF16]:
             with self.subTest(data_type=data_type):
                 result = self.engine.execute_allgather(
                     send_data, algorithm="Wrapper", data_type=data_type,
                 )
-                self.assertEqual(result["status"], "not_supported")
-                self.assertEqual(result["return_code"], HCCL_ERR_NOT_SUPPORTED)
-                self.assertIsNone(result["result"])
+                self.assertEqual(result["status"], "success")
+                self.assertEqual(
+                    result["result"],
+                    HcclAllGatherReference(send_data, data_type=data_type),
+                )
 
     def test_butterfly_rejects_non_power_of_two(self):
         result = self.engine.execute_allgather(_send_data(3, 1), algorithm="Butterfly")

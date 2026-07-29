@@ -23,3 +23,51 @@ ReduceScatter CPU_SIM 语义来自本项目自主计划：`send[N][N][C] -> recv
 ### 是否直接复制代码
 
 否。
+
+## Stage C3-B：FP16/BF16 CPU 软件模拟
+
+访问日期：2026-07-29
+状态：未使用外部网络参考
+
+### 参考来源
+
+- 赛题原始 DOCX：本地文件 `docs/2026年中国研究生人工智能大赛--华为赛题.docx`
+- 自主执行计划：本地文件 `docs/autonomous_goal_plan.md`
+- 项目路线图：本地文件 `docs/roadmap_v2.md`
+- C3-A 当前实现与测试
+
+### License
+
+未引入外部代码，未复制第三方实现，因此无新增第三方 License 义务。
+
+### 借鉴内容
+
+FP16/BF16 仅实现为本项目 CPU 软件模拟：输入和输出使用 16-bit 编码，CPU 内部转换到 FP32 完成累加，再按 dtype 重新编码。该实现用于正确性测试和后续实机迁移准备，不声明 Ascend 硬件混合精度行为。
+
+### 是否直接复制代码
+
+否。
+
+## Stage C3-A：FP32 ReduceOp 与统一正确性基准
+
+访问日期：2026-07-29
+状态：未使用外部网络参考
+
+### 参考来源
+
+- 赛题原始 DOCX：本地文件 `docs/2026年中国研究生人工智能大赛--华为赛题.docx`
+- 自主执行计划：本地文件 `docs/autonomous_goal_plan.md`
+- 项目路线图：本地文件 `docs/roadmap_v2.md`
+- C2 已提交实现：`4109491 feat: complete C2 ReduceScatter correctness`
+
+### License
+
+未引入外部代码，未复制第三方实现，因此无新增第三方 License 义务。
+
+### 借鉴内容
+
+FP32 ReduceOp 语义使用本项目已有 `hcclRedOp_t` 枚举：`HCCL_SUM`、`HCCL_PROD`、`HCCL_MAX`、`HCCL_MIN`。实现保持 CPU_SIM 单进程 buffer 语义，不声明真实 HCCL/CANN 行为。
+
+### 是否直接复制代码
+
+否。

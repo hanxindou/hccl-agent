@@ -163,6 +163,32 @@ set_tests_properties(test_reducescatter PROPERTIES
     WORKING_DIRECTORY $<TARGET_FILE_DIR:test_reducescatter>
 )
 
+add_executable(test_reduce_ops tests/test_reduce_ops.c)
+
+target_include_directories(test_reduce_ops
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(test_reduce_ops PRIVATE hccl_plugin)
+
+add_test(NAME test_reduce_ops COMMAND test_reduce_ops)
+set_tests_properties(test_reduce_ops PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_reduce_ops>
+)
+
+add_executable(test_dtype_emulation tests/test_dtype_emulation.c)
+
+target_include_directories(test_dtype_emulation
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(test_dtype_emulation PRIVATE hccl_plugin)
+
+add_test(NAME test_dtype_emulation COMMAND test_dtype_emulation)
+set_tests_properties(test_dtype_emulation PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_dtype_emulation>
+)
+
 # ---- Install rules ------------------------------------------------------
 
 install(TARGETS hccl_plugin

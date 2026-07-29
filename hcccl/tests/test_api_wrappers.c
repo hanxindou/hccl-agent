@@ -117,16 +117,16 @@ static void test_allreduce_invalid_args(void)
         FAIL("zero count should be invalid");
         return;
     }
-    if (hcclAllReduce(&send, &recv, 1, HCCL_FP16, HCCL_SUM, comm)
+    if (hcclAllReduce(&send, &recv, 1, HCCL_INT8, HCCL_SUM, comm)
         != HCCL_ERR_NOT_SUPPORTED) {
         hcclCommDestroy(comm);
-        FAIL("FP16 should be unsupported");
+        FAIL("INT8 should be unsupported");
         return;
     }
-    if (hcclAllReduce(&send, &recv, 1, HCCL_FP32, HCCL_PROD, comm)
+    if (hcclAllReduce(&send, &recv, 1, HCCL_FP32, (hcclRedOp_t)99, comm)
         != HCCL_ERR_NOT_SUPPORTED) {
         hcclCommDestroy(comm);
-        FAIL("PROD should be unsupported");
+        FAIL("unknown ReduceOp should be unsupported");
         return;
     }
     if (hcclAllReduce(&send, &recv, 1, HCCL_FP32, HCCL_SUM, NULL)
@@ -207,10 +207,10 @@ static void test_reducescatter_not_supported(void)
         FAIL("recv buffer was modified");
         return;
     }
-    if (hcclReduceScatter(send, &recv, 1, HCCL_FP32, HCCL_PROD, comm)
+    if (hcclReduceScatter(send, &recv, 1, HCCL_FP32, (hcclRedOp_t)99, comm)
         != HCCL_ERR_NOT_SUPPORTED) {
         hcclCommDestroy(comm);
-        FAIL("PROD should be unsupported");
+        FAIL("unknown ReduceOp should be unsupported");
         return;
     }
     if (hcclReduceScatter(send, &recv, 0, HCCL_FP32, HCCL_SUM, comm)

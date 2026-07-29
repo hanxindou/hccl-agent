@@ -56,17 +56,33 @@ static void fill_input(float* send, int32_t n, size_t count)
     }
 }
 
+static float apply_reference(float current, float value, hcclRedOp_t op)
+{
+    if (op == HCCL_PROD) return current * value;
+    if (op == HCCL_MAX)  return current > value ? current : value;
+    if (op == HCCL_MIN)  return current < value ? current : value;
+    return current + value;
+}
+
+static float initial_reference(hcclRedOp_t op)
+{
+    if (op == HCCL_PROD) return 1.0f;
+    if (op == HCCL_MAX)  return -3.402823466e+38F;
+    if (op == HCCL_MIN)  return 3.402823466e+38F;
+    return 0.0f;
+}
+
 static int check_reference(const float* recv, const float* send,
-                           int32_t n, size_t count)
+                           int32_t n, size_t count, hcclRedOp_t op)
 {
     for (int32_t dst = 0; dst < n; dst++) {
         for (size_t elem = 0; elem < count; elem++) {
-            float expected = 0.0f;
+            float expected = initial_reference(op);
             size_t out_idx = (size_t)dst * count + elem;
             for (int32_t src = 0; src < n; src++) {
                 size_t in_idx =
                     ((size_t)src * (size_t)n + (size_t)dst) * count + elem;
-                expected += send[in_idx];
+                expected = apply_reference(expected, send[in_idx], op);
             }
             if (fabsf(recv[out_idx] - expected) > EPS) {
                 return 0;
@@ -81,7 +97,8 @@ static int run_case(
     hcclResult_t (*fn)(const void*, void*, size_t, hcclDataType_t,
                        hcclRedOp_t, hcclComm_t),
     int32_t n,
-    size_t count
+    size_t count,
+    hcclRedOp_t op
 )
 {
     size_t input_elems = (size_t)n * (size_t)n * count;
@@ -104,7 +121,7 @@ static int run_case(
         recv[i] = -999.0f;
     }
 
-    rc = fn(send, recv, count, HCCL_FP32, HCCL_SUM, comm);
+    rc = fn(send, recv, count, HCCL_FP32, op, comm);
     if (rc != HCCL_SUCCESS) {
         free(send);
         free(recv);
@@ -112,7 +129,7 @@ static int run_case(
         FAIL("expected HCCL_SUCCESS");
         return 0;
     }
-    if (!check_reference(recv, send, n, count)) {
+    if (!check_reference(recv, send, n, count, op)) {
         free(send);
         free(recv);
         hcclCommDestroy(comm);
@@ -130,7 +147,7 @@ static int run_case(
 static void test_mesh_case(const char* label, int32_t n, size_t count)
 {
     TEST(label);
-    if (run_case(label, mesh_reducescatter, n, count)) {
+    if (run_case(label, mesh_reducescatter, n, count, HCCL_SUM)) {
         PASS();
     }
 }
@@ -138,9 +155,19 @@ static void test_mesh_case(const char* label, int32_t n, size_t count)
 static void test_wrapper_case(void)
 {
     TEST("hcclReduceScatter wrapper uses Mesh CPU_SIM path");
-    if (run_case("wrapper", hcclReduceScatter, 4, 3)) {
+    if (run_case("wrapper", hcclReduceScatter, 4, 3, HCCL_SUM)) {
         PASS();
     }
+}
+
+static void test_reduce_ops_case(void)
+{
+    TEST("Mesh ReduceScatter FP32 SUM/PROD/MAX/MIN");
+    if (!run_case("sum", mesh_reducescatter, 4, 2, HCCL_SUM)) return;
+    if (!run_case("prod", mesh_reducescatter, 4, 2, HCCL_PROD)) return;
+    if (!run_case("max", mesh_reducescatter, 4, 2, HCCL_MAX)) return;
+    if (!run_case("min", mesh_reducescatter, 4, 2, HCCL_MIN)) return;
+    PASS();
 }
 
 static void test_invalid_args(void)
@@ -177,22 +204,16 @@ static void test_invalid_args(void)
         FAIL("zero count should be invalid");
         return;
     }
-    if (mesh_reducescatter(send, recv, 1, HCCL_FP16, HCCL_SUM, comm)
+    if (mesh_reducescatter(send, recv, 1, HCCL_INT8, HCCL_SUM, comm)
         != HCCL_ERR_NOT_SUPPORTED) {
         hcclCommDestroy(comm);
-        FAIL("FP16 should be unsupported");
+        FAIL("INT8 should be unsupported");
         return;
     }
-    if (mesh_reducescatter(send, recv, 1, HCCL_BF16, HCCL_SUM, comm)
+    if (mesh_reducescatter(send, recv, 1, HCCL_FP32, (hcclRedOp_t)99, comm)
         != HCCL_ERR_NOT_SUPPORTED) {
         hcclCommDestroy(comm);
-        FAIL("BF16 should be unsupported");
-        return;
-    }
-    if (mesh_reducescatter(send, recv, 1, HCCL_FP32, HCCL_PROD, comm)
-        != HCCL_ERR_NOT_SUPPORTED) {
-        hcclCommDestroy(comm);
-        FAIL("PROD should be unsupported in C2");
+        FAIL("unknown ReduceOp should be unsupported");
         return;
     }
     if (mesh_reducescatter(send, send, 1, HCCL_FP32, HCCL_SUM, comm)
@@ -259,6 +280,7 @@ int main(void)
     test_mesh_case("Mesh 8 ranks count 3", 8, 3);
     test_mesh_case("Mesh 16 ranks count 2", 16, 2);
     test_wrapper_case();
+    test_reduce_ops_case();
     test_invalid_args();
     test_legacy_two_rank_scalar_case();
 

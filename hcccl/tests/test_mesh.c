@@ -42,15 +42,15 @@ static void tnr(void){T("NULL recv_buf -> INVALID_ARG");
     float s=1;int rc=mesh_allreduce(&s,NULL,1,HCCL_FP32,HCCL_SUM,c);
     if(rc==HCCL_ERR_INVALID_ARG)OK();else NO("expected INVALID_ARG");hcclCommDestroy(c);}
 
-static void tf16(void){T("FP16 -> NOT_SUPPORTED");
+static void tf16(void){T("FP16 -> HCCL_SUCCESS");
     int32_t ids[]={0};hcclComm_t c=NULL;hcclCommInit(&c,1,ids);hcclSetRank(c,0);
-    float s=1,r;int rc=mesh_allreduce(&s,&r,1,HCCL_FP16,HCCL_SUM,c);
-    if(rc==HCCL_ERR_NOT_SUPPORTED)OK();else NO("expected NOT_SUPPORTED");hcclCommDestroy(c);}
+    uint16_t s=0x3c00,r=0;int rc=mesh_allreduce(&s,&r,1,HCCL_FP16,HCCL_SUM,c);
+    if(rc==HCCL_SUCCESS&&r==0x3c00)OK();else NO("expected success");hcclCommDestroy(c);}
 
-static void tp(void){T("PROD -> NOT_SUPPORTED");
+static void tp(void){T("PROD -> HCCL_SUCCESS");
     int32_t ids[]={0};hcclComm_t c=NULL;hcclCommInit(&c,1,ids);hcclSetRank(c,0);
     float s=1,r;int rc=mesh_allreduce(&s,&r,1,HCCL_FP32,HCCL_PROD,c);
-    if(rc==HCCL_ERR_NOT_SUPPORTED)OK();else NO("expected NOT_SUPPORTED");hcclCommDestroy(c);}
+    if(rc==HCCL_SUCCESS&&fabsf(r-1.0f)<=EPS)OK();else NO("expected success");hcclCommDestroy(c);}
 
 int main(void){
     printf("\n============================================\n");

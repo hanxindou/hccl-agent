@@ -15,12 +15,13 @@ from plugin.execution_engine import (
     HCCL_ERR_NOT_SUPPORTED,
     HCCL_FP16,
     HCCL_FP32,
+    HCCL_MAX,
+    HCCL_MIN,
+    HCCL_PROD,
     HCCL_SUM,
     ExecutionEngine,
 )
 from plugin.hccl_api import HcclReduceScatterReference
-
-HCCL_PROD = 1
 
 
 def _send_data(ranks, count):
@@ -62,20 +63,39 @@ class TestReduceScatterDataCorrectness(unittest.TestCase):
             with self.subTest(ranks=ranks, count=count):
                 self.assert_reducescatter_matches_reference(ranks, count)
 
-    def test_fp16_bf16_and_prod_remain_not_supported(self):
+    def test_fp16_bf16_match_reference(self):
         send_data = _send_data(4, 1)
-        for data_type, op in [
-            (HCCL_FP16, HCCL_SUM),
-            (HCCL_BF16, HCCL_SUM),
-            (HCCL_FP32, HCCL_PROD),
-        ]:
-            with self.subTest(data_type=data_type, op=op):
+        for data_type in [HCCL_FP16, HCCL_BF16]:
+            with self.subTest(data_type=data_type):
                 result = self.engine.execute_reducescatter(
-                    send_data, data_type=data_type, op=op,
+                    send_data, data_type=data_type, op=HCCL_SUM,
                 )
-                self.assertEqual(result["status"], "not_supported")
-                self.assertEqual(result["return_code"], HCCL_ERR_NOT_SUPPORTED)
-                self.assertIsNone(result["result"])
+                self.assertEqual(result["status"], "success")
+                self.assertEqual(
+                    result["result"],
+                    HcclReduceScatterReference(
+                        send_data, op=HCCL_SUM, data_type=data_type,
+                    ),
+                )
+
+    def test_fp32_reduce_ops_match_reference(self):
+        send_data = [
+            [
+                [float((src - 2) * (dst + 1)) + elem * 0.5
+                 for elem in range(2)]
+                for dst in range(4)
+            ]
+            for src in range(4)
+        ]
+        send_data[1][2][0] = 0.0
+        for op in [HCCL_SUM, HCCL_PROD, HCCL_MAX, HCCL_MIN]:
+            with self.subTest(op=op):
+                result = self.engine.execute_reducescatter(send_data, op=op)
+                self.assertEqual(result["status"], "success")
+                self.assertEqual(
+                    result["result"],
+                    HcclReduceScatterReference(send_data, op=op),
+                )
 
     def test_invalid_python_input_is_reported(self):
         self.assertEqual(

@@ -103,3 +103,26 @@ npu-smi 能列出设备或模拟器状态
 ### 当前降级状态
 
 项目当前为 `CPU_SIMULATED`，不得宣称真实 CANN/HCOMM 或 Ascend 已验证。
+
+## UA-003：FP16/BF16 Ascend 实机误差验证
+
+状态：待用户执行
+阻塞阶段：G1/H1
+优先级：P0
+
+### 原因
+
+C3-B 已完成 FP16/BF16 CPU 软件模拟，但该结果不能代表 Ascend 混合精度硬件行为或赛题最终精度结论。
+
+### 用户需要准备
+
+- Ascend 设备或赛题允许的 Ascend 模拟环境
+- CANN/HCCL 运行环境
+- 实机可执行的 AllReduce、AllGather、ReduceScatter correctness case
+
+### 反馈内容
+
+- FP16/BF16 最大绝对误差
+- FP16/BF16 最大相对误差
+- NaN、Inf、overflow 行为
+- CANN/HCCL 版本和设备型号

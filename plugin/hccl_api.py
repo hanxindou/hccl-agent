@@ -8,9 +8,39 @@ depending on real Ascend hardware.
 
 from typing import Any, Dict, List, Optional, Tuple
 
-from plugin.execution_engine import ExecutionEngine
+from plugin.execution_engine import (
+    HCCL_BF16,
+    HCCL_FP16,
+    HCCL_FP32,
+    HCCL_MAX,
+    HCCL_MIN,
+    HCCL_PROD,
+    HCCL_SUM,
+    ExecutionEngine,
+    roundtrip_dtype_value,
+)
 
 HCCL_SUCCESS: int = 0
+
+_REDUCE_OP_NAMES = {
+    HCCL_SUM: "SUM",
+    HCCL_PROD: "PROD",
+    HCCL_MAX: "MAX",
+    HCCL_MIN: "MIN",
+}
+
+_SUPPORTED_DTYPES = {HCCL_FP32, HCCL_FP16, HCCL_BF16}
+
+
+def _normalize_dtype(data_type: int) -> int:
+    if data_type in _SUPPORTED_DTYPES:
+        return data_type
+    raise ValueError(f"unsupported dtype: {data_type}")
+
+
+def _quantize_input_values(values: List[float], data_type: int) -> List[float]:
+    data_type = _normalize_dtype(data_type)
+    return [roundtrip_dtype_value(float(value), data_type) for value in values]
 
 
 class HcclComm:
@@ -104,7 +134,10 @@ def HcclAllGather(
     return _simulate("AllGather", algorithm, comm)
 
 
-def HcclAllGatherReference(send_data: List[List[float]]) -> List[List[float]]:
+def HcclAllGatherReference(
+    send_data: List[List[float]],
+    data_type: int = HCCL_FP32,
+) -> List[List[float]]:
     """Return the C1 CPU_SIM AllGather reference result.
 
     Input layout is [N][C]. Each destination rank receives the same
@@ -117,7 +150,7 @@ def HcclAllGatherReference(send_data: List[List[float]]) -> List[List[float]]:
         raise ValueError("send_data must be a non-empty rectangular matrix")
 
     expected_for_one_rank = [
-        float(element)
+        roundtrip_dtype_value(float(element), data_type)
         for src_rank in send_data
         for element in src_rank
     ]
@@ -127,20 +160,93 @@ def HcclAllGatherReference(send_data: List[List[float]]) -> List[List[float]]:
 def HcclAllGatherCpuData(
     send_data: List[List[float]],
     algorithm: str = "Wrapper",
+    data_type: int = HCCL_FP32,
     engine: Optional[ExecutionEngine] = None,
 ) -> Dict[str, Any]:
     """Execute AllGather through the C CPU_SIM plugin data path."""
     runner = engine or ExecutionEngine()
-    result = runner.execute_allgather(send_data, algorithm=algorithm)
+    result = runner.execute_allgather(
+        send_data, algorithm=algorithm, data_type=data_type,
+    )
     if result["status"] == "success":
-        result["reference"] = HcclAllGatherReference(send_data)
+        result["reference"] = HcclAllGatherReference(send_data, data_type=data_type)
+    return result
+
+
+def _normalize_reduce_op(op: int) -> int:
+    if op in _REDUCE_OP_NAMES:
+        return op
+    raise ValueError(f"unsupported ReduceOp: {op}")
+
+
+def _apply_reduce(values: List[float], op: int) -> float:
+    op = _normalize_reduce_op(op)
+    if op == HCCL_SUM:
+        result = 0.0
+        for value in values:
+            result += float(value)
+        return result
+    if op == HCCL_PROD:
+        result = 1.0
+        for value in values:
+            result *= float(value)
+        return result
+    if op == HCCL_MAX:
+        result = float(values[0])
+        for value in values[1:]:
+            candidate = float(value)
+            if candidate > result:
+                result = candidate
+        return result
+    if op == HCCL_MIN:
+        result = float(values[0])
+        for value in values[1:]:
+            candidate = float(value)
+            if candidate < result:
+                result = candidate
+        return result
+    raise ValueError(f"unsupported ReduceOp: {op}")
+
+
+def HcclAllReduceReference(
+    input_data: List[float],
+    op: int = HCCL_SUM,
+    data_type: int = HCCL_FP32,
+) -> List[float]:
+    """Return the FP32 CPU_SIM AllReduce reference for one scalar per rank."""
+    if not input_data:
+        return []
+    values = _quantize_input_values(input_data, data_type)
+    reduced = _apply_reduce(values, op)
+    reduced = roundtrip_dtype_value(reduced, data_type)
+    return [reduced for _ in input_data]
+
+
+def HcclAllReduceCpuData(
+    input_data: List[float],
+    algorithm: str = "Wrapper",
+    op: int = HCCL_SUM,
+    data_type: int = HCCL_FP32,
+    engine: Optional[ExecutionEngine] = None,
+) -> Dict[str, Any]:
+    """Execute AllReduce through the C CPU_SIM plugin data path."""
+    runner = engine or ExecutionEngine()
+    result = runner.execute_allreduce_data(
+        input_data, algorithm=algorithm, op=op, data_type=data_type,
+    )
+    if result["status"] == "success":
+        result["reference"] = HcclAllReduceReference(
+            input_data, op=op, data_type=data_type,
+        )
     return result
 
 
 def HcclReduceScatterReference(
     send_data: List[List[List[float]]],
+    op: int = HCCL_SUM,
+    data_type: int = HCCL_FP32,
 ) -> List[List[float]]:
-    """Return the C2 CPU_SIM ReduceScatter FP32/SUM reference.
+    """Return the CPU_SIM ReduceScatter FP32 reference.
 
     Input layout is [N][N][C], indexed as send[src][dst][element].
     Output layout is [N][C], one reduced shard per dst rank.
@@ -160,7 +266,16 @@ def HcclReduceScatterReference(
 
     return [
         [
-            sum(float(send_data[src][dst][elem]) for src in range(rank_count))
+            roundtrip_dtype_value(
+                _apply_reduce(
+                    _quantize_input_values(
+                        [float(send_data[src][dst][elem]) for src in range(rank_count)],
+                        data_type,
+                    ),
+                    op,
+                ),
+                data_type,
+            )
             for elem in range(recv_count)
         ]
         for dst in range(rank_count)
@@ -169,13 +284,17 @@ def HcclReduceScatterReference(
 
 def HcclReduceScatterCpuData(
     send_data: List[List[List[float]]],
+    op: int = HCCL_SUM,
+    data_type: int = HCCL_FP32,
     engine: Optional[ExecutionEngine] = None,
 ) -> Dict[str, Any]:
     """Execute ReduceScatter through the C CPU_SIM plugin data path."""
     runner = engine or ExecutionEngine()
-    result = runner.execute_reducescatter(send_data)
+    result = runner.execute_reducescatter(send_data, data_type=data_type, op=op)
     if result["status"] == "success":
-        result["reference"] = HcclReduceScatterReference(send_data)
+        result["reference"] = HcclReduceScatterReference(
+            send_data, op=op, data_type=data_type,
+        )
     return result
 
 

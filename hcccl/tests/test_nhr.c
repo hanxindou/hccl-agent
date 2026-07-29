@@ -60,18 +60,18 @@ static void tnr(void){
     else NO("expected INVALID_ARG"); hcclCommDestroy(c);}
 
 static void tf16(void){
-    T("FP16 -> NOT_SUPPORTED");
+    T("FP16 -> HCCL_SUCCESS");
     int32_t ids[]={0}; hcclComm_t c=NULL; hcclCommInit(&c,1,ids); hcclSetRank(c,0);
-    float s=1,r;
-    if(nhr_allreduce(&s,&r,1,HCCL_FP16,HCCL_SUM,c)==HCCL_ERR_NOT_SUPPORTED) OK();
-    else NO("expected NOT_SUPPORTED"); hcclCommDestroy(c);}
+    uint16_t s=0x3c00,r=0;
+    if(nhr_allreduce(&s,&r,1,HCCL_FP16,HCCL_SUM,c)==HCCL_SUCCESS&&r==0x3c00) OK();
+    else NO("expected success"); hcclCommDestroy(c);}
 
 static void tp(void){
-    T("PROD -> NOT_SUPPORTED");
+    T("PROD -> HCCL_SUCCESS");
     int32_t ids[]={0}; hcclComm_t c=NULL; hcclCommInit(&c,1,ids); hcclSetRank(c,0);
     float s=1,r;
-    if(nhr_allreduce(&s,&r,1,HCCL_FP32,HCCL_PROD,c)==HCCL_ERR_NOT_SUPPORTED) OK();
-    else NO("expected NOT_SUPPORTED"); hcclCommDestroy(c);}
+    if(nhr_allreduce(&s,&r,1,HCCL_FP32,HCCL_PROD,c)==HCCL_SUCCESS&&fabsf(r-1.0f)<=EPS) OK();
+    else NO("expected success"); hcclCommDestroy(c);}
 
 int main(void){
     printf("\n============================================\n");

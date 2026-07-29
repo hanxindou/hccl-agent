@@ -227,14 +227,9 @@ static void test_invalid_args(void)
         FAIL("zero count should be invalid");
         return;
     }
-    if (ring_allgather(send, recv, 1, HCCL_FP16, comm) != HCCL_ERR_NOT_SUPPORTED) {
+    if (ring_allgather(send, recv, 1, HCCL_INT8, comm) != HCCL_ERR_NOT_SUPPORTED) {
         hcclCommDestroy(comm);
-        FAIL("FP16 should be unsupported");
-        return;
-    }
-    if (ring_allgather(send, recv, 1, HCCL_BF16, comm) != HCCL_ERR_NOT_SUPPORTED) {
-        hcclCommDestroy(comm);
-        FAIL("BF16 should be unsupported");
+        FAIL("INT8 should be unsupported");
         return;
     }
     if (ring_allgather(send, send, 1, HCCL_FP32, comm) != HCCL_ERR_NOT_SUPPORTED) {

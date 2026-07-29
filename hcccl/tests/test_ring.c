@@ -120,24 +120,24 @@ static void test_ring_8_ranks(void)
 }
 
 /* ------------------------------------------------------------------ */
-/*  Test 3: unsupported data type -> HCCL_ERR_NOT_SUPPORTED            */
+/*  Test 3: FP16 software emulation smoke                              */
 /* ------------------------------------------------------------------ */
 
-static void test_rejects_unsupported_dtype(void)
+static void test_supports_fp16_dtype(void)
 {
-    TEST("FP16 data type -> HCCL_ERR_NOT_SUPPORTED");
+    TEST("FP16 data type -> HCCL_SUCCESS");
 
-    int32_t ids[] = {0, 1};
+    int32_t ids[] = {0};
     hcclComm_t comm = NULL;
-    hcclCommInit(&comm, 2, ids);
+    hcclCommInit(&comm, 1, ids);
     hcclSetRank(comm, 0);
 
-    float send = 1.0f, recv = 0.0f;
+    uint16_t send = 0x3c00, recv = 0;
     hcclResult_t rc = ring_allreduce(&send, &recv, 1,
                                      HCCL_FP16, HCCL_SUM, comm);
 
-    if (rc == HCCL_ERR_NOT_SUPPORTED) { PASS(); }
-    else { FAIL("expected HCCL_ERR_NOT_SUPPORTED"); }
+    if (rc == HCCL_SUCCESS && recv == 0x3c00) { PASS(); }
+    else { FAIL("expected HCCL_SUCCESS and FP16 1.0"); }
 
     hcclCommDestroy(comm);
 }
@@ -146,21 +146,36 @@ static void test_rejects_unsupported_dtype(void)
 /*  Test 4: unsupported ReduceOp -> HCCL_ERR_NOT_SUPPORTED             */
 /* ------------------------------------------------------------------ */
 
-static void test_rejects_unsupported_op(void)
+static void test_supports_prod_op(void)
 {
-    TEST("PROD ReduceOp -> HCCL_ERR_NOT_SUPPORTED");
+    TEST("4 ranks PROD -> all get 24");
 
-    int32_t ids[] = {0, 1};
+    int32_t ids[] = {0, 1, 2, 3};
     hcclComm_t comm = NULL;
-    hcclCommInit(&comm, 2, ids);
-    hcclSetRank(comm, 0);
+    hcclCommInit(&comm, 4, ids);
 
-    float send = 1.0f, recv = 0.0f;
-    hcclResult_t rc = ring_allreduce(&send, &recv, 1,
-                                     HCCL_FP32, HCCL_PROD, comm);
+    float inputs[] = {1.0f, 2.0f, 3.0f, 4.0f};
+    int ok = 1;
 
-    if (rc == HCCL_ERR_NOT_SUPPORTED) { PASS(); }
-    else { FAIL("expected HCCL_ERR_NOT_SUPPORTED"); }
+    for (int i = 0; i < 4; i++) {
+        float recv = -999.0f;
+        hcclSetRank(comm, i);
+        ring_allreduce(&inputs[i], &recv, 1, HCCL_FP32, HCCL_PROD, comm);
+    }
+
+    for (int i = 0; i < 4; i++) {
+        float recv = -999.0f;
+        hcclResult_t rc;
+        hcclSetRank(comm, i);
+        rc = ring_allreduce(&inputs[i], &recv, 1, HCCL_FP32, HCCL_PROD, comm);
+        if (rc != HCCL_SUCCESS || fabsf(recv - 24.0f) > EPS) {
+            ok = 0;
+            break;
+        }
+    }
+
+    if (ok) { PASS(); }
+    else { FAIL("expected all 24.0"); }
 
     hcclCommDestroy(comm);
 }
@@ -220,8 +235,8 @@ int main(void)
 
     test_ring_4_ranks();
     test_ring_8_ranks();
-    test_rejects_unsupported_dtype();
-    test_rejects_unsupported_op();
+    test_supports_fp16_dtype();
+    test_supports_prod_op();
     test_rejects_null_sendbuf();
     test_rejects_null_recvbuf();
 

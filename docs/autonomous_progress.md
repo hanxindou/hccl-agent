@@ -46,7 +46,7 @@
 
 ### 本地提交
 
-- commit：待创建
+- commit：`4109491 feat: complete C2 ReduceScatter correctness`
 - message：`feat: complete C2 ReduceScatter correctness`
 
 ### 未验证边界
@@ -55,3 +55,131 @@
 - 未接入 CANN SDK、真实 HCOMM 或 Ascend 设备。
 - 未验证真实多进程、多设备 ReduceScatter。
 - 当前结果不得描述为真实 HCCL 性能或 Ascend 实机正确性。
+
+## Stage C3-A：FP32 ReduceOp 与统一正确性基准
+
+开始时间：2026-07-29 21:05:00 +08:00
+结束时间：2026-07-29 21:42:50 +08:00
+状态：COMPLETED
+
+### 修改文件
+
+- `hcccl/src/hccl_algorithms.c`
+- `hcccl/CMakeLists.txt`
+- `hcccl/tests/test_ring.c`
+- `hcccl/tests/test_butterfly.c`
+- `hcccl/tests/test_mesh.c`
+- `hcccl/tests/test_nhr.c`
+- `hcccl/tests/test_fattree.c`
+- `hcccl/tests/test_api_wrappers.c`
+- `hcccl/tests/test_reducescatter.c`
+- `hcccl/tests/test_reduce_ops.c`
+- `plugin/execution_engine.py`
+- `plugin/hccl_api.py`
+- `tests/test_execution_engine.py`
+- `tests/test_hccl_api.py`
+- `tests/test_reducescatter.py`
+- `tests/test_reduce_ops.py`
+- `docs/correctness_matrix.md`
+- `docs/autonomous_progress.md`
+
+### 验收结果
+
+- CMake：Visual Studio 17 2022 x64，Release 配置成功，构建目录 `C:\tmp\hccl-agent-hcccl-c3a`
+- Build：Release 构建成功，`hccl_plugin.dll` 已生成
+- CTest：10/10 passed，新增 `test_reduce_ops` 通过
+- 定向 Python：`tests.test_reduce_ops tests.test_reducescatter tests.test_execution_engine tests.test_hccl_api tests.test_allgather`，55 tests，OK
+- 完整 Python：`python -m unittest discover tests -q`，435 tests，OK
+- DLL/SO：实际加载 `C:\tmp\hccl-agent-hcccl-c3a\Release\hccl_plugin.dll`；Linux `.so` 未验证
+
+### 完成能力
+
+- FP32 AllReduce 支持 SUM/PROD/MAX/MIN，覆盖 wrapper、Ring、Butterfly、Mesh、NHR、Fat-Tree CPU_SIM 路径。
+- FP32 ReduceScatter 支持 SUM/PROD/MAX/MIN，覆盖 Mesh 和 `hcclReduceScatter` wrapper CPU_SIM 路径。
+- AllGather 不增加 ReduceOp 参数，C1 回归保持通过。
+- FP16/BF16 仍明确返回 `HCCL_ERR_NOT_SUPPORTED`，留给 C3-B。
+- 未知 ReduceOp 仍返回 `HCCL_ERR_NOT_SUPPORTED`。
+
+### 数值边界
+
+- 覆盖正数、负数、零、小数。
+- PROD 覆盖零和负数。
+- MAX/MIN 使用非零 identity，避免错误零初始化。
+- Inf、NaN 和 FP32 PROD overflow 已有 Python/C 测试证据。
+
+### 外部参考
+
+- 本阶段未访问外部网络，依据赛题 DOCX、`docs/autonomous_goal_plan.md`、`docs/roadmap_v2.md` 和当前代码完成。
+
+### 未验证边界
+
+- 未验证 Linux `.so`。
+- 未接入 CANN SDK、真实 HCOMM 或 Ascend 设备。
+- 当前结果不得描述为真实 HCCL 性能、真实网络通信或 Ascend 实机正确性。
+
+## Stage C3-B：FP16/BF16 CPU 软件模拟
+
+开始时间：2026-07-29 21:43:00 +08:00
+结束时间：2026-07-29 22:10:00 +08:00
+状态：COMPLETED
+
+### 修改文件
+
+- `hcccl/src/hccl_algorithms.c`
+- `hcccl/CMakeLists.txt`
+- `hcccl/tests/test_allgather.c`
+- `hcccl/tests/test_api_wrappers.c`
+- `hcccl/tests/test_butterfly.c`
+- `hcccl/tests/test_fattree.c`
+- `hcccl/tests/test_mesh.c`
+- `hcccl/tests/test_nhr.c`
+- `hcccl/tests/test_reducescatter.c`
+- `hcccl/tests/test_ring.c`
+- `hcccl/tests/test_dtype_emulation.c`
+- `plugin/execution_engine.py`
+- `plugin/hccl_api.py`
+- `tests/test_allgather.py`
+- `tests/test_dtype_emulation.py`
+- `tests/test_hccl_api.py`
+- `tests/test_reducescatter.py`
+- `docs/correctness_matrix.md`
+- `docs/autonomous_progress.md`
+- `docs/research_notes.md`
+
+### 验收结果
+
+- CMake：Visual Studio 17 2022 x64，Release 配置成功，构建目录 `C:\tmp\hccl-agent-hcccl-c3a`
+- Build：Release 构建成功，`hccl_plugin.dll` 已生成，未出现 C4819
+- CTest：11/11 passed，新增 `test_dtype_emulation` 通过
+- 定向 Python：`tests.test_dtype_emulation tests.test_reduce_ops tests.test_allgather tests.test_reducescatter tests.test_execution_engine tests.test_hccl_api`，60 tests，OK
+- 完整 Python：`python -m unittest discover tests -q`，440 tests，OK
+- DLL/SO：实际加载 `C:\tmp\hccl-agent-hcccl-c3a\Release\hccl_plugin.dll`；Linux `.so` 未验证
+
+### 完成能力
+
+- FP16 使用 16-bit half 编码，CPU 内部转 FP32，输出重新编码为 FP16。
+- BF16 使用 `uint16_t` bit 表示，CPU 内部转 FP32，输出重新编码为 BF16。
+- AllReduce、AllGather、ReduceScatter 均具备 FP16/BF16 CPU 软件模拟证据。
+- FP32 SUM/PROD/MAX/MIN 基线保持通过。
+- AllGather 不引入 ReduceOp。
+
+### 数值边界
+
+- 覆盖正数、负数、零、小数、较大值、较小值、NaN、正负 Inf、舍入边界和 overflow。
+- tolerance：FP16 `1e-3`，BF16 `2e-2`。
+- 最大误差随测试数据由 Python reference 比较约束；真实 Ascend 误差仍未验证。
+
+### 外部参考
+
+- 本阶段未访问外部网络，未复制第三方代码。
+
+### 本地提交
+
+- commit：待创建
+- message：`feat: add C3 numeric correctness baseline`
+
+### 未验证边界
+
+- FP16/BF16 是 CPU 软件模拟，不代表 Ascend 混合精度硬件行为。
+- 未验证 Linux `.so`。
+- 未接入 CANN SDK、真实 HCOMM 或 Ascend 设备。

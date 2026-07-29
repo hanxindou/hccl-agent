@@ -9,8 +9,18 @@ sys.path.insert(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."),
 )
 
-from plugin.execution_engine import ExecutionEngine
-from plugin.hccl_api import HcclAllGatherReference, HcclReduceScatterReference
+from plugin.execution_engine import (
+    HCCL_MAX,
+    HCCL_MIN,
+    HCCL_PROD,
+    HCCL_SUM,
+    ExecutionEngine,
+)
+from plugin.hccl_api import (
+    HcclAllGatherReference,
+    HcclAllReduceReference,
+    HcclReduceScatterReference,
+)
 
 
 class TestExecutionEngine(unittest.TestCase):
@@ -102,6 +112,14 @@ class TestExecutionEngine(unittest.TestCase):
         self.assertEqual(result["status"], "success")
         self.assertEqual(result["result"], [136.0] * 16)
 
+    def test_allreduce_data_reduce_ops(self):
+        data = [1.5, -2.0, 0.0, 4.0]
+        for op in [HCCL_SUM, HCCL_PROD, HCCL_MAX, HCCL_MIN]:
+            with self.subTest(op=op):
+                result = self.engine.execute_allreduce_data(data, op=op)
+                self.assertEqual(result["status"], "success")
+                self.assertEqual(result["result"], HcclAllReduceReference(data, op=op))
+
     # ---- unknown algorithm ----
 
     def test_unknown_algorithm(self):
@@ -157,6 +175,25 @@ class TestExecutionEngine(unittest.TestCase):
         result = self.engine.execute_reducescatter(send_data)
         self.assertEqual(result["status"], "success")
         self.assertEqual(result["result"], HcclReduceScatterReference(send_data))
+
+    def test_reducescatter_reduce_ops(self):
+        send_data = [
+            [
+                [float((src - 2) * (dst + 1)) + elem * 0.5
+                 for elem in range(2)]
+                for dst in range(4)
+            ]
+            for src in range(4)
+        ]
+        send_data[1][2][0] = 0.0
+        for op in [HCCL_SUM, HCCL_PROD, HCCL_MAX, HCCL_MIN]:
+            with self.subTest(op=op):
+                result = self.engine.execute_reducescatter(send_data, op=op)
+                self.assertEqual(result["status"], "success")
+                self.assertEqual(
+                    result["result"],
+                    HcclReduceScatterReference(send_data, op=op),
+                )
 
 
 if __name__ == "__main__":

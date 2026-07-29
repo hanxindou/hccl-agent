@@ -116,23 +116,23 @@ static void test_null_recvbuf(void)
 
 static void test_fp16_rejected(void)
 {
-    TEST("FP16 -> NOT_SUPPORTED");
+    TEST("FP16 -> HCCL_SUCCESS");
     int32_t ids[] = {0};  hcclComm_t c = NULL;
     hcclCommInit(&c, 1, ids);  hcclSetRank(c, 0);
-    float s=1, r;
+    uint16_t s=0x3c00, r=0;
     if (butterfly_allreduce(&s, &r, 1, HCCL_FP16, HCCL_SUM, c)
-        == HCCL_ERR_NOT_SUPPORTED) PASS(); else FAIL("expected NOT_SUPPORTED");
+        == HCCL_SUCCESS && r == 0x3c00) PASS(); else FAIL("expected success");
     hcclCommDestroy(c);
 }
 
-static void test_prod_rejected(void)
+static void test_prod_supported(void)
 {
-    TEST("PROD -> NOT_SUPPORTED");
+    TEST("PROD -> HCCL_SUCCESS");
     int32_t ids[] = {0};  hcclComm_t c = NULL;
     hcclCommInit(&c, 1, ids);  hcclSetRank(c, 0);
     float s=1, r;
     if (butterfly_allreduce(&s, &r, 1, HCCL_FP32, HCCL_PROD, c)
-        == HCCL_ERR_NOT_SUPPORTED) PASS(); else FAIL("expected NOT_SUPPORTED");
+        == HCCL_SUCCESS && fabsf(r - 1.0f) <= EPS) PASS(); else FAIL("expected success");
     hcclCommDestroy(c);
 }
 
@@ -151,7 +151,7 @@ int main(void)
     test_null_sendbuf();
     test_null_recvbuf();
     test_fp16_rejected();
-    test_prod_rejected();
+    test_prod_supported();
 
     printf("\n============================================\n");
     printf(" Results: %d run, %d passed, %d failed\n",

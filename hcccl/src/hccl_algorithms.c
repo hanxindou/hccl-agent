@@ -7,6 +7,7 @@
 
 #include "hccl_algorithms.h"
 #include "hccl_comm.h"
+#include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,6 +29,159 @@ typedef struct {
 static int is_power_of_two(int32_t value)
 {
     return value > 0 && (value & (value - 1)) == 0;
+}
+
+static int is_supported_reduce_op(hcclRedOp_t op)
+{
+    return op == HCCL_SUM || op == HCCL_PROD ||
+           op == HCCL_MAX || op == HCCL_MIN;
+}
+
+static int is_supported_data_type(hcclDataType_t data_type)
+{
+    return data_type == HCCL_FP32 ||
+           data_type == HCCL_FP16 ||
+           data_type == HCCL_BF16;
+}
+
+static size_t data_type_size(hcclDataType_t data_type)
+{
+    if (data_type == HCCL_FP16 || data_type == HCCL_BF16) {
+        return sizeof(uint16_t);
+    }
+    return sizeof(float);
+}
+
+static float bits_to_float(uint32_t bits)
+{
+    float value;
+    memcpy(&value, &bits, sizeof(value));
+    return value;
+}
+
+static uint32_t float_to_bits(float value)
+{
+    uint32_t bits;
+    memcpy(&bits, &value, sizeof(bits));
+    return bits;
+}
+
+static float fp16_to_float(uint16_t half)
+{
+    uint32_t sign = ((uint32_t)half & 0x8000U) << 16;
+    uint32_t exp = ((uint32_t)half >> 10) & 0x1FU;
+    uint32_t mant = (uint32_t)half & 0x03FFU;
+    uint32_t bits;
+
+    if (exp == 0) {
+        if (mant == 0) {
+            bits = sign;
+        } else {
+            int shift = 0;
+            while ((mant & 0x0400U) == 0) {
+                mant <<= 1;
+                shift++;
+            }
+            mant &= 0x03FFU;
+            bits = sign |
+                   ((uint32_t)(127 - 15 - shift) << 23) |
+                   (mant << 13);
+        }
+    } else if (exp == 0x1FU) {
+        bits = sign | 0x7F800000U | (mant << 13);
+        if (mant != 0) bits |= 0x00000001U;
+    } else {
+        bits = sign | ((exp + (127 - 15)) << 23) | (mant << 13);
+    }
+
+    return bits_to_float(bits);
+}
+
+static uint16_t float_to_fp16(float value)
+{
+    uint32_t bits = float_to_bits(value);
+    uint32_t sign = (bits >> 16) & 0x8000U;
+    int32_t exp = (int32_t)((bits >> 23) & 0xFFU) - 127 + 15;
+    uint32_t mant = bits & 0x007FFFFFU;
+
+    if (((bits >> 23) & 0xFFU) == 0xFFU) {
+        if (mant == 0) return (uint16_t)(sign | 0x7C00U);
+        return (uint16_t)(sign | 0x7C00U | (mant >> 13) | 0x0001U);
+    }
+    if (exp <= 0) {
+        uint32_t rounded;
+        if (exp < -10) return (uint16_t)sign;
+        mant = (mant | 0x00800000U) >> (uint32_t)(1 - exp);
+        rounded = (mant + 0x00001000U) >> 13;
+        return (uint16_t)(sign | rounded);
+    }
+    if (exp >= 31) return (uint16_t)(sign | 0x7C00U);
+
+    mant = mant + 0x00001000U;
+    if (mant & 0x00800000U) {
+        mant = 0;
+        exp++;
+        if (exp >= 31) return (uint16_t)(sign | 0x7C00U);
+    }
+    return (uint16_t)(sign | ((uint32_t)exp << 10) | (mant >> 13));
+}
+
+static float bf16_to_float(uint16_t bfloat)
+{
+    return bits_to_float((uint32_t)bfloat << 16);
+}
+
+static uint16_t float_to_bf16(float value)
+{
+    uint32_t bits = float_to_bits(value);
+    uint32_t exp = bits & 0x7F800000U;
+    uint32_t mant = bits & 0x007FFFFFU;
+
+    if (exp == 0x7F800000U && mant != 0) {
+        return (uint16_t)((bits >> 16) | 0x0040U);
+    }
+
+    bits += 0x00007FFFU + ((bits >> 16) & 1U);
+    return (uint16_t)(bits >> 16);
+}
+
+static float load_value(const void* buffer, size_t index, hcclDataType_t data_type)
+{
+    if (data_type == HCCL_FP16) {
+        return fp16_to_float(((const uint16_t*)buffer)[index]);
+    }
+    if (data_type == HCCL_BF16) {
+        return bf16_to_float(((const uint16_t*)buffer)[index]);
+    }
+    return ((const float*)buffer)[index];
+}
+
+static void store_value(void* buffer, size_t index,
+                        hcclDataType_t data_type, float value)
+{
+    if (data_type == HCCL_FP16) {
+        ((uint16_t*)buffer)[index] = float_to_fp16(value);
+    } else if (data_type == HCCL_BF16) {
+        ((uint16_t*)buffer)[index] = float_to_bf16(value);
+    } else {
+        ((float*)buffer)[index] = value;
+    }
+}
+
+static float reduce_identity(hcclRedOp_t op)
+{
+    if (op == HCCL_PROD) return 1.0f;
+    if (op == HCCL_MAX) return -FLT_MAX;
+    if (op == HCCL_MIN) return FLT_MAX;
+    return 0.0f;
+}
+
+static float apply_reduce_op(float lhs, float rhs, hcclRedOp_t op)
+{
+    if (op == HCCL_PROD) return lhs * rhs;
+    if (op == HCCL_MAX) return lhs > rhs ? lhs : rhs;
+    if (op == HCCL_MIN) return lhs < rhs ? lhs : rhs;
+    return lhs + rhs;
 }
 
 static hcclResult_t validate_allgather_args(
@@ -54,7 +208,7 @@ static hcclResult_t validate_allgather_args(
     if (send_count == 0) {
         return HCCL_ERR_INVALID_ARG;
     }
-    if (data_type != HCCL_FP32) {
+    if (!is_supported_data_type(data_type)) {
         return HCCL_ERR_NOT_SUPPORTED;
     }
 
@@ -86,7 +240,7 @@ static hcclResult_t validate_allgather_args(
         return HCCL_ERR_INVALID_ARG;
     }
     output_elems = n * input_elems;
-    if (output_elems > ((size_t)-1) / sizeof(float)) {
+    if (output_elems > ((size_t)-1) / data_type_size(data_type)) {
         return HCCL_ERR_INVALID_ARG;
     }
 
@@ -120,10 +274,10 @@ static hcclResult_t validate_reducescatter_args(
     if (recv_count == 0) {
         return HCCL_ERR_INVALID_ARG;
     }
-    if (data_type != HCCL_FP32) {
+    if (!is_supported_data_type(data_type)) {
         return HCCL_ERR_NOT_SUPPORTED;
     }
-    if (op != HCCL_SUM) {
+    if (!is_supported_reduce_op(op)) {
         return HCCL_ERR_NOT_SUPPORTED;
     }
 
@@ -154,8 +308,8 @@ static hcclResult_t validate_reducescatter_args(
         return HCCL_ERR_INVALID_ARG;
     }
     input_elems = n * output_elems;
-    if (input_elems > ((size_t)-1) / sizeof(float) ||
-        output_elems > ((size_t)-1) / sizeof(float)) {
+    if (input_elems > ((size_t)-1) / data_type_size(data_type) ||
+        output_elems > ((size_t)-1) / data_type_size(data_type)) {
         return HCCL_ERR_INVALID_ARG;
     }
 
@@ -181,10 +335,10 @@ hcclResult_t ring_allreduce(
     if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
         return HCCL_ERR_INVALID_ARG;
     }
-    if (data_type != HCCL_FP32) {
+    if (!is_supported_data_type(data_type)) {
         return HCCL_ERR_NOT_SUPPORTED;
     }
-    if (op != HCCL_SUM) {
+    if (!is_supported_reduce_op(op)) {
         return HCCL_ERR_NOT_SUPPORTED;
     }
     if (count == 0) {
@@ -196,9 +350,8 @@ hcclResult_t ring_allreduce(
     int32_t rank = ctx->current_rank;
 
     /* ---- store this rank's input ---- */
-    const float* input = (const float*) send_buf;
-    /* count==1: one float per rank, direct index. */
-    ctx->rank_values[rank] = input[0];
+    /* count==1: one scalar per rank, decoded to FP32 internally. */
+    ctx->rank_values[rank] = load_value(send_buf, 0, data_type);
 
     /*
      * Ring AllReduce — 2*(N-1) steps on a unidirectional ring.
@@ -255,7 +408,7 @@ hcclResult_t ring_allreduce(
 
             for (int32_t i = 0; i < N; i++) {
                 forward[i] = received[i];   /* pass on what we got   */
-                partial[i] += received[i];  /* accumulate locally    */
+                partial[i] = apply_reduce_op(partial[i], received[i], op);
             }
         }
         /* After N−1 Reduce steps every rank holds the full sum.     */
@@ -285,7 +438,7 @@ hcclResult_t ring_allreduce(
         for (int32_t i = 0; i < N; i++) {
             ctx->rank_results[i] = partial[i];
         }
-        *(float*) recv_buf = ctx->rank_results[rank];
+        store_value(recv_buf, 0, data_type, ctx->rank_results[rank]);
 
         return HCCL_SUCCESS;
     }
@@ -319,12 +472,14 @@ hcclResult_t ring_allgather(
     }
 
     {
-        const float* input = (const float*) send_buf;
-        float* staged = (float*) calloc(output_elems, sizeof(float));
+        const unsigned char* input = (const unsigned char*) send_buf;
+        unsigned char* staged = NULL;
         int32_t N = ctx->num_devices;
         size_t C = send_count;
+        size_t elem_size = data_type_size(data_type);
 
         (void)input_elems;
+        staged = (unsigned char*) calloc(output_elems, elem_size);
         if (staged == NULL) {
             return HCCL_ERR_INTERNAL;
         }
@@ -336,21 +491,25 @@ hcclResult_t ring_allgather(
          * by source rank as required by the C1 CPU_SIM contract.
          */
         for (int32_t dst = 0; dst < N; dst++) {
-            memcpy(&staged[((size_t)dst * (size_t)N + (size_t)dst) * C],
-                   &input[(size_t)dst * C],
-                   C * sizeof(float));
+            memcpy(
+                &staged[((size_t)dst * (size_t)N + (size_t)dst) * C * elem_size],
+                &input[(size_t)dst * C * elem_size],
+                C * elem_size
+            );
         }
 
         for (int32_t step = 1; step < N; step++) {
             for (int32_t dst = 0; dst < N; dst++) {
                 int32_t src = (dst - step + N) % N;
-                memcpy(&staged[((size_t)dst * (size_t)N + (size_t)src) * C],
-                       &input[(size_t)src * C],
-                       C * sizeof(float));
+                memcpy(
+                    &staged[((size_t)dst * (size_t)N + (size_t)src) * C * elem_size],
+                    &input[(size_t)src * C * elem_size],
+                    C * elem_size
+                );
             }
         }
 
-        memcpy(recv_buf, staged, output_elems * sizeof(float));
+        memcpy(recv_buf, staged, output_elems * elem_size);
         free(staged);
         return HCCL_SUCCESS;
     }
@@ -385,10 +544,10 @@ hcclResult_t butterfly_allreduce(
     if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
         return HCCL_ERR_INVALID_ARG;
     }
-    if (data_type != HCCL_FP32) {
+    if (!is_supported_data_type(data_type)) {
         return HCCL_ERR_NOT_SUPPORTED;
     }
-    if (op != HCCL_SUM) {
+    if (!is_supported_reduce_op(op)) {
         return HCCL_ERR_NOT_SUPPORTED;
     }
     if (count == 0) {
@@ -400,8 +559,7 @@ hcclResult_t butterfly_allreduce(
     int32_t rank = ctx->current_rank;
 
     /* Store this rank's input. */
-    const float* input = (const float*) send_buf;
-    ctx->rank_values[rank] = input[0];
+    ctx->rank_values[rank] = load_value(send_buf, 0, data_type);
 
     if (count == 1) {
         /*
@@ -438,8 +596,10 @@ hcclResult_t butterfly_allreduce(
             for (int32_t i = 0; i < N; i++) {
                 int32_t partner = i ^ distance;
                 if (partner < N && i < partner) {
-                    partial[i]     += snapshot[partner];
-                    partial[partner] += snapshot[i];
+                    partial[i] =
+                        apply_reduce_op(partial[i], snapshot[partner], op);
+                    partial[partner] =
+                        apply_reduce_op(partial[partner], snapshot[i], op);
                 }
             }
         }
@@ -448,7 +608,7 @@ hcclResult_t butterfly_allreduce(
         for (int32_t i = 0; i < N; i++) {
             ctx->rank_results[i] = partial[i];
         }
-        *(float*) recv_buf = ctx->rank_results[rank];
+        store_value(recv_buf, 0, data_type, ctx->rank_results[rank]);
 
         return HCCL_SUCCESS;
     }
@@ -480,14 +640,16 @@ hcclResult_t butterfly_allgather(
     }
 
     {
-        const float* input = (const float*) send_buf;
-        float* staged = (float*) calloc(output_elems, sizeof(float));
+        const unsigned char* input = (const unsigned char*) send_buf;
+        unsigned char* staged = NULL;
         unsigned char* known = NULL;
         unsigned char* snapshot = NULL;
         int32_t N = ctx->num_devices;
         size_t C = send_count;
+        size_t elem_size = data_type_size(data_type);
 
         (void)input_elems;
+        staged = (unsigned char*) calloc(output_elems, elem_size);
         if (staged == NULL) {
             return HCCL_ERR_INTERNAL;
         }
@@ -503,9 +665,11 @@ hcclResult_t butterfly_allgather(
 
         for (int32_t dst = 0; dst < N; dst++) {
             known[(size_t)dst * (size_t)N + (size_t)dst] = 1;
-            memcpy(&staged[((size_t)dst * (size_t)N + (size_t)dst) * C],
-                   &input[(size_t)dst * C],
-                   C * sizeof(float));
+            memcpy(
+                &staged[((size_t)dst * (size_t)N + (size_t)dst) * C * elem_size],
+                &input[(size_t)dst * C * elem_size],
+                C * elem_size
+            );
         }
 
         /*
@@ -521,9 +685,11 @@ hcclResult_t butterfly_allgather(
                     size_t partner_idx = (size_t)partner * (size_t)N + (size_t)src;
                     size_t dst_idx = (size_t)dst * (size_t)N + (size_t)src;
                     if (snapshot[partner_idx] && !known[dst_idx]) {
-                        memcpy(&staged[((size_t)dst * (size_t)N + (size_t)src) * C],
-                               &input[(size_t)src * C],
-                               C * sizeof(float));
+                        memcpy(
+                            &staged[((size_t)dst * (size_t)N + (size_t)src) * C * elem_size],
+                            &input[(size_t)src * C * elem_size],
+                            C * elem_size
+                        );
                         known[dst_idx] = 1;
                     }
                 }
@@ -541,7 +707,7 @@ hcclResult_t butterfly_allgather(
             }
         }
 
-        memcpy(recv_buf, staged, output_elems * sizeof(float));
+        memcpy(recv_buf, staged, output_elems * elem_size);
         free(snapshot);
         free(known);
         free(staged);
@@ -575,17 +741,16 @@ hcclResult_t mesh_allreduce(
      */
     if (send_buf == NULL || recv_buf == NULL || comm == NULL)
         return HCCL_ERR_INVALID_ARG;
-    if (data_type != HCCL_FP32)   return HCCL_ERR_NOT_SUPPORTED;
-    if (op != HCCL_SUM)           return HCCL_ERR_NOT_SUPPORTED;
-    if (count == 0)               return HCCL_ERR_INVALID_ARG;
+    if (!is_supported_data_type(data_type)) return HCCL_ERR_NOT_SUPPORTED;
+    if (!is_supported_reduce_op(op))   return HCCL_ERR_NOT_SUPPORTED;
+    if (count == 0)                    return HCCL_ERR_INVALID_ARG;
 
     {
         hcclCommInternal* ctx = (hcclCommInternal*) comm;
         int32_t N = ctx->num_devices;
         int32_t rank = ctx->current_rank;
 
-        const float* input = (const float*) send_buf;
-        ctx->rank_values[rank] = input[0];
+        ctx->rank_values[rank] = load_value(send_buf, 0, data_type);
 
         if (count != 1) return HCCL_ERR_NOT_SUPPORTED;
         if (N > 64)     return HCCL_ERR_INTERNAL;
@@ -596,14 +761,14 @@ hcclResult_t mesh_allreduce(
          * Every rank sees every other rank's value directly.
          * CPU simulation: sum all stored values, broadcast to all.
          */
-        float global_sum = 0.0f;
+        float global_sum = reduce_identity(op);
         for (int32_t i = 0; i < N; i++)
-            global_sum += ctx->rank_values[i];
+            global_sum = apply_reduce_op(global_sum, ctx->rank_values[i], op);
 
         for (int32_t i = 0; i < N; i++)
             ctx->rank_results[i] = global_sum;
 
-        *(float*) recv_buf = global_sum;
+        store_value(recv_buf, 0, data_type, global_sum);
         return HCCL_SUCCESS;
     }
 }
@@ -629,7 +794,6 @@ hcclResult_t mesh_reducescatter(
     }
 
     {
-        const float* input = (const float*) send_buf;
         float* staged = (float*) calloc(output_elems, sizeof(float));
         int32_t N = ctx->num_devices;
         size_t C = recv_count;
@@ -645,17 +809,27 @@ hcclResult_t mesh_reducescatter(
          * can receive all source shards directly and reduce locally.
          */
         for (int32_t dst = 0; dst < N; dst++) {
+            for (size_t elem = 0; elem < C; elem++) {
+                staged[(size_t)dst * C + elem] = reduce_identity(op);
+            }
             for (int32_t src = 0; src < N; src++) {
                 for (size_t elem = 0; elem < C; elem++) {
                     size_t in_idx =
                         ((size_t)src * (size_t)N + (size_t)dst) * C + elem;
                     size_t out_idx = (size_t)dst * C + elem;
-                    staged[out_idx] += input[in_idx];
+                    staged[out_idx] =
+                        apply_reduce_op(
+                            staged[out_idx],
+                            load_value(send_buf, in_idx, data_type),
+                            op
+                        );
                 }
             }
         }
 
-        memcpy(recv_buf, staged, output_elems * sizeof(float));
+        for (size_t out_idx = 0; out_idx < output_elems; out_idx++) {
+            store_value(recv_buf, out_idx, data_type, staged[out_idx]);
+        }
         free(staged);
         return HCCL_SUCCESS;
     }
@@ -689,17 +863,16 @@ hcclResult_t nhr_allreduce(
     /* ---- arg validation ---- */
     if (send_buf == NULL || recv_buf == NULL || comm == NULL)
         return HCCL_ERR_INVALID_ARG;
-    if (data_type != HCCL_FP32)   return HCCL_ERR_NOT_SUPPORTED;
-    if (op != HCCL_SUM)           return HCCL_ERR_NOT_SUPPORTED;
-    if (count == 0)               return HCCL_ERR_INVALID_ARG;
+    if (!is_supported_data_type(data_type)) return HCCL_ERR_NOT_SUPPORTED;
+    if (!is_supported_reduce_op(op))   return HCCL_ERR_NOT_SUPPORTED;
+    if (count == 0)                    return HCCL_ERR_INVALID_ARG;
 
     {
         hcclCommInternal* ctx = (hcclCommInternal*) comm;
         int32_t N = ctx->num_devices;
         int32_t rank = ctx->current_rank;
 
-        const float* input = (const float*) send_buf;
-        ctx->rank_values[rank] = input[0];
+        ctx->rank_values[rank] = load_value(send_buf, 0, data_type);
 
         if (count != 1) return HCCL_ERR_NOT_SUPPORTED;
         if (N > 64)     return HCCL_ERR_INTERNAL;
@@ -727,7 +900,7 @@ hcclResult_t nhr_allreduce(
         /* ---- phase 1: group-local ring reduce ---- */
         float group_sum[16];  /* per-group accumulated sum  */
         for (int32_t g = 0; g < num_groups; g++)
-            group_sum[g] = 0.0f;
+            group_sum[g] = reduce_identity(op);
 
         for (int32_t g = 0; g < num_groups; g++) {
             int32_t start = g * NHR_GROUP_SIZE;
@@ -755,7 +928,7 @@ hcclResult_t nhr_allreduce(
                 }
                 for (int32_t j = 0; j < gsize; j++) {
                     forward[j] = received[j];
-                    accum[j]  += received[j];
+                    accum[j] = apply_reduce_op(accum[j], received[j], op);
                 }
             }
 
@@ -779,7 +952,8 @@ hcclResult_t nhr_allreduce(
             }
             for (int32_t g = 0; g < num_groups; g++) {
                 leader_fwd[g]  = received[g];
-                leader_accum[g] += received[g];
+                leader_accum[g] =
+                    apply_reduce_op(leader_accum[g], received[g], op);
             }
         }
         /* After num_groups-1 steps every leader has the global sum. */
@@ -789,7 +963,7 @@ hcclResult_t nhr_allreduce(
         for (int32_t i = 0; i < N; i++) {
             ctx->rank_results[i] = global_sum;
         }
-        *(float*) recv_buf = global_sum;
+        store_value(recv_buf, 0, data_type, global_sum);
 
         return HCCL_SUCCESS;
 #undef NHR_GROUP_SIZE
@@ -811,17 +985,16 @@ hcclResult_t fattree_allreduce(
 {
     if (send_buf == NULL || recv_buf == NULL || comm == NULL)
         return HCCL_ERR_INVALID_ARG;
-    if (data_type != HCCL_FP32)   return HCCL_ERR_NOT_SUPPORTED;
-    if (op != HCCL_SUM)           return HCCL_ERR_NOT_SUPPORTED;
-    if (count == 0)               return HCCL_ERR_INVALID_ARG;
+    if (!is_supported_data_type(data_type)) return HCCL_ERR_NOT_SUPPORTED;
+    if (!is_supported_reduce_op(op))   return HCCL_ERR_NOT_SUPPORTED;
+    if (count == 0)                    return HCCL_ERR_INVALID_ARG;
 
     {
         hcclCommInternal* ctx = (hcclCommInternal*) comm;
         int32_t N = ctx->num_devices;
         int32_t rank = ctx->current_rank;
 
-        const float* input = (const float*) send_buf;
-        ctx->rank_values[rank] = input[0];
+        ctx->rank_values[rank] = load_value(send_buf, 0, data_type);
 
         if (count != 1) return HCCL_ERR_NOT_SUPPORTED;
         if (N > 64)     return HCCL_ERR_INTERNAL;
@@ -847,23 +1020,24 @@ hcclResult_t fattree_allreduce(
         /* ---- phase 1: leaf aggregation ---- */
         float leader_sum[16];
         for (int32_t g = 0; g < num_groups; g++) {
-            leader_sum[g] = 0.0f;
+            leader_sum[g] = reduce_identity(op);
             int32_t start = g * FT_GROUP_SIZE;
             int32_t end   = (start + FT_GROUP_SIZE < N)
                             ? start + FT_GROUP_SIZE : N;
             for (int32_t r = start; r < end; r++)
-                leader_sum[g] += ctx->rank_values[r];
+                leader_sum[g] =
+                    apply_reduce_op(leader_sum[g], ctx->rank_values[r], op);
         }
 
         /* ---- phase 2: core aggregation ---- */
-        float global_sum = 0.0f;
+        float global_sum = reduce_identity(op);
         for (int32_t g = 0; g < num_groups; g++)
-            global_sum += leader_sum[g];
+            global_sum = apply_reduce_op(global_sum, leader_sum[g], op);
 
         /* ---- phase 3: broadcast ---- */
         for (int32_t i = 0; i < N; i++)
             ctx->rank_results[i] = global_sum;
-        *(float*) recv_buf = global_sum;
+        store_value(recv_buf, 0, data_type, global_sum);
 
         return HCCL_SUCCESS;
 #undef FT_GROUP_SIZE
