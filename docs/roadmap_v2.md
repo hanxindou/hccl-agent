@@ -638,155 +638,639 @@ git push
 ## Batch B1：标准 C 接口与跨平台插件加载闭环
 
 优先级：P0  
-对应赛题要求：基于 HCOMM/HCCL 风格接口形成可编译、可调用、可测试的 C/C++ 通信接口层。
+对应赛题要求：基于 HCOMM/HCCL 风格接口，形成可编译、可调用、可测试的 C/C++ 通信接口层。
 
 ### Batch 定位
 
-本 Batch 建立 CPU 模拟层的统一标准接口和跨平台动态库调用闭环。
+本 Batch 建立 CPU 模拟层的统一标准 C 接口，以及 Windows/Linux 跨平台动态库调用闭环。
 
-Batch A1 已负责：
+Batch A1 已完成：
 
 - Windows 默认 DLL 构建；
 - Windows 导入库生成；
 - CTest 注册；
-- MSVC UTF-8；
-- Windows/Linux 基础构建说明。
+- MSVC UTF-8 编译配置；
+- Windows/Linux 基础构建说明；
+- 跨平台临时目录修复；
+- Windows C/C++ 测试基线。
 
 本 Batch 不重复处理上述工程基线问题。
+
+本 Batch 只负责：
+
+1. 闭合标准 C wrapper；
+2. 明确 wrapper 与现有 CPU 算法实现之间的映射；
+3. 支持 Windows `.dll` 与 Linux `.so` 的统一 Python 加载；
+4. 支持显式指定动态库路径；
+5. 建立真实 DLL 加载和 ABI 测试。
+
+本 Batch 不实现完整 AllGather、ReduceScatter 数据算法，不增加混合精度，不接入真实 CANN/HCOMM。
+
+---
 
 ### 当前差距
 
 - `hcccl/include/hccl_comm.h` 声明了 `hcclAllReduce`、`hcclAllGather`、`hcclReduceScatter`、`hcclBroadcast` 等接口；
 - C 源码当前主要实现算法级函数，标准 wrapper 与算法实现之间尚未完全闭合；
-- Python `plugin/hccl_bridge.py` 和 `plugin/execution_engine.py` 固定寻找 Linux `libhccl_plugin.so`；
-- Windows 已能生成 `hccl_plugin.dll`，但 Python 尚未验证对 DLL 的 `ctypes` 调用；
-- 动态库路径不能通过构造参数、配置或环境变量显式指定；
-- Python 兼容 API、C wrapper 和底层算法函数之间存在接口分裂。
+- Python `plugin/hccl_bridge.py` 和 `plugin/execution_engine.py` 当前主要按 Linux `libhccl_plugin.so` 组织动态库发现；
+- Windows 已能生成 `hccl_plugin.dll`，但 Python 尚未完成对本轮实际 DLL 的 `ctypes` 集成验证；
+- 动态库路径不能通过构造参数或环境变量显式指定，默认候选路径也缺少统一的跨平台解析规则；
+- Python 兼容 API、C wrapper 和底层算法函数之间存在接口分裂；
+- 部分标准接口可能存在“头文件有声明，但动态库中没有可调用符号”的风险；
+- Python Bridge 尚未为全部实际调用的 C 函数明确配置 `argtypes` 和 `restype`；
+- 动态库缺失、路径无效或符号缺失时，错误信息不够明确。
+
+---
 
 ### 开发目标
 
-1. 实现并闭合统一 C wrapper：
-   - `hcclAllReduce`
-   - `hcclAllGather`
-   - `hcclReduceScatter`
-   - `hcclBroadcast` 的接口边界至少应明确；
-2. 标准 wrapper 与现有算法函数建立明确映射；
-3. Python Bridge 根据平台加载：
-   - Windows：`hccl_plugin.dll`
-   - Linux：`libhccl_plugin.so`
-4. 支持通过以下方式显式指定动态库路径：
-   - 构造参数；
-   - 环境变量；
-   - 必要时配置文件；
-5. 动态库不存在、符号缺失或路径无效时返回清晰错误；
-6. Windows和 Linux 使用相同的 Python调用接口；
-7. 不将 CPU 模拟 wrapper 宣称为真实 CANN/HCOMM 实现。
+#### 1. 闭合统一标准 C wrapper
+
+需要检查并闭合以下接口：
+
+- `hcclAllReduce`
+- `hcclAllGather`
+- `hcclReduceScatter`
+- `hcclBroadcast`
+
+B1 对各 wrapper 的实现边界如下。
+
+##### `hcclAllReduce`
+
+- 必须复用当前 `ExecutionEngine` 或现有调用链已经采用的算法路由；
+- 不得在 B1 中新增算法选择策略；
+- 如果标准 wrapper 本身没有算法参数，应沿用当前默认路由；
+- 必须实际进入已有 CPU AllReduce 实现；
+- 不能只返回固定成功状态码；
+- 不扩展当前支持的 `count`、数据类型、ReduceOp 或 rank 范围；
+- 不修改已有 Ring、Butterfly、Mesh、NHR、Fat-Tree 算法逻辑。
+
+##### `hcclAllGather`
+
+- 必须存在可导出的函数定义；
+- 必须完成基础参数校验和错误码闭合；
+- 完整数据算法尚未实现时，应明确返回 `HCCL_ERR_NOT_SUPPORTED`；
+- 不得返回伪造的成功状态；
+- 不得伪造输出数据；
+- 完整 AllGather 数据正确性实现留到 Batch C1。
+
+##### `hcclReduceScatter`
+
+- 必须存在可导出的函数定义；
+- 必须完成基础参数校验和错误码闭合；
+- 完整数据算法尚未实现时，应明确返回 `HCCL_ERR_NOT_SUPPORTED`；
+- 不得返回伪造的成功状态；
+- 不得伪造输出数据；
+- 完整 ReduceScatter 数据正确性实现留到 Batch C2。
+
+##### `hcclBroadcast`
+
+- 必须消除“头文件声明但无符号定义”的问题；
+- 必须完成基础参数校验；
+- 如果本阶段不实现数据算法，应明确返回 `HCCL_ERR_NOT_SUPPORTED`；
+- 不得返回伪造的成功状态或输出结果。
+
+所有未实现的 primitive：
+
+- 不得返回 `HCCL_SUCCESS`；
+- 不得修改输出缓冲区；
+- 不得伪造数据正确性结果；
+- 必须通过明确错误码说明当前不支持。
+
+#### 2. 建立 wrapper 与现有算法函数的映射
+
+- 标准 wrapper 与底层算法函数之间必须有明确、可追踪的调用关系；
+- 不得在多个模块中重复实现同一层路由；
+- 不得在 wrapper 中重新复制已有算法逻辑；
+- 不得改变现有 AllReduce 算法的计算结果和错误码语义；
+- CPU wrapper 必须明确标注为 CPU 模拟兼容层，不得宣称是真实 HCCL/HCOMM 实现。
+
+#### 3. 实现统一跨平台动态库加载
+
+Python Bridge 根据运行平台支持：
+
+Windows：
+
+```text
+hccl_plugin.dll
+```
+
+Linux：
+
+```text
+libhccl_plugin.so
+```
+
+Windows 和 Linux 必须使用同一套 Python 调用接口。
+
+#### 4. 支持显式动态库路径
+
+支持以下三种动态库定位方式：
+
+1. 构造参数 `library_path`；
+2. 环境变量 `HCCL_PLUGIN_PATH`；
+3. 项目默认候选路径。
+
+路径解析优先级必须为：
+
+```text
+library_path
+> HCCL_PLUGIN_PATH
+> 项目默认候选路径
+```
+
+默认候选路径必须满足：
+
+- 集中定义，避免多个模块分别拼接路径；
+- 相对于项目根目录或 Python 模块位置解析；
+- 不得写死 `F:\build`；
+- 不得写死用户名、盘符或其他机器绝对路径；
+- Windows 和 Linux 使用同一个路径解析入口；
+- 外部构建目录必须通过 `library_path` 或 `HCCL_PLUGIN_PATH` 传入；
+- 不得扫描整个磁盘寻找动态库。
+
+#### 5. 完善动态库加载错误
+
+以下情况必须产生清晰异常：
+
+- 显式指定的动态库路径不存在；
+- 环境变量路径不存在；
+- 默认候选路径全部不存在；
+- 文件存在但无法被 `ctypes` 加载；
+- 动态库加载成功但缺少必要符号；
+- 动态库架构或依赖不匹配；
+- wrapper 调用参数不符合 ABI。
+
+错误信息应包含：
+
+- 尝试加载的路径；
+- 已检查的默认候选路径；
+- 缺失的符号名称；
+- 原始系统错误信息；
+- 当前操作系统平台。
+
+#### 6. 保持当前 ABI 边界
+
+- 以 `hcccl/include/hccl_comm.h` 当前声明作为本项目现阶段 ABI 合同；
+- 在缺少官方接口证据时，不得擅自修改函数名称；
+- 不得擅自改变参数顺序、参数类型或返回值类型；
+- 不得擅自改变调用约定；
+- Windows 默认 C ABI 使用 `ctypes.CDLL`；
+- 只有现有头文件明确声明其他调用约定时，才允许采用其他加载方式。
+
+#### 7. 明确 ctypes 函数签名
+
+Python Bridge 必须为实际调用的 C 函数设置明确的：
+
+```text
+argtypes
+restype
+```
+
+至少覆盖：
+
+- `hcclCommInit`
+- `hcclCommDestroy`
+- `hcclGetTopology`
+- `hcclAllReduce`
+- `hcclAllGather`
+- `hcclReduceScatter`
+- `hcclBroadcast`
+
+不得依赖 `ctypes` 的隐式参数转换。
+
+#### 8. 建立真实 DLL 集成验证
+
+Windows 集成测试必须：
+
+- 使用本轮实际生成的 `hccl_plugin.dll`；
+- 通过 `ctypes.CDLL` 真正加载动态库；
+- 检查四个标准 wrapper 的实际导出符号；
+- 至少实际调用一次 `hcclAllReduce` wrapper；
+- 验证未实现 wrapper 返回 `HCCL_ERR_NOT_SUPPORTED`；
+- 不得只使用 Mock 证明 DLL 加载成功。
+
+Mock 只允许用于：
+
+- 模拟 Windows/Linux 平台差异；
+- 测试路径优先级；
+- 测试不存在路径；
+- 测试缺失符号异常；
+- 测试加载失败异常。
+
+---
 
 ### 主要修改文件
+
+允许修改：
 
 ```text
 hcccl/include/hccl_comm.h
 hcccl/src/hccl_comm.c
-hcccl/src/hccl_algorithms.c
 plugin/hccl_bridge.py
 plugin/execution_engine.py
 plugin/hccl_api.py
 tests/test_plugin_bridge.py
 tests/test_execution_engine.py
-hcccl/tests/*
+tests/test_hccl_api.py
+hcccl/tests/test_api_wrappers.c
 ```
 
-仅在确有必要时允许修改：
+仅在确有必要时允许最小修改：
 
 ```text
+hcccl/src/hccl_algorithms.c
 hcccl/CMakeLists.txt
+agent/plugin_manager.py
+tests/test_plugin_manager.py
 ```
 
-但不得重新处理 A1 已完成的 CTest、编码和基础 DLL 导出问题。
+限制如下：
+
+- `hcccl/src/hccl_algorithms.c` 只允许暴露或复用现有算法入口，不允许改变算法行为；
+- `hcccl/CMakeLists.txt` 只允许增加 B1 新测试目标、必要的源文件关系或必要符号导出，不得重新设计 A1 已完成的 CTest、UTF-8 和基础 DLL 构建逻辑；
+- `agent/plugin_manager.py` 只允许传递动态库路径或复用统一 Bridge；
+- `tests/test_plugin_manager.py` 只允许验证上述最小调用链变更；
+- 不得修改其他 Agent 模块；
+- 不得修改 A1 已稳定的六个既有 C 测试文件，除非新增 wrapper 后出现真实接口兼容问题，并且修改不得改变原有断言语义。
+
+---
 
 ### 禁止事项
 
-- 不实现完整 AllGather 数据算法；
-- 不实现完整 ReduceScatter 数据算法；
-- 不增加 FP16/BF16；
-- 不增加新的 ReduceOp；
-- 不接入真实 CANN/HCOMM；
-- 不改变 Simulator 性能公式；
-- 不增加新的 Agent Skill；
-- 不重新修改与本 Batch 无关的文档。
+本 Batch 禁止：
 
-AllGather 和 ReduceScatter 的完整数据正确性分别留到 C1 和 C2。
+- 实现完整 AllGather 数据算法；
+- 实现完整 ReduceScatter 数据算法；
+- 修改现有 AllReduce 算法逻辑；
+- 新增 AllReduce 算法选择策略；
+- 扩展现有 `count` 范围；
+- 增加 FP16；
+- 增加 BF16；
+- 增加新的 ReduceOp；
+- 接入真实 CANN；
+- 接入真实 HCOMM；
+- 修改 Simulator 性能公式；
+- 修改拓扑模型；
+- 修改成本模型；
+- 增加新的 Agent Skill；
+- 修改与本 Batch 无关的文档；
+- 扫描整个磁盘寻找动态库；
+- 将本机绝对构建路径写入源码；
+- 使用 Mock 冒充真实 DLL 集成验证；
+- 发送真实 DeepSeek 或其他外部 LLM 网络请求。
+
+AllGather 和 ReduceScatter 的完整数据正确性分别留到 Batch C1 和 Batch C2。
+
+---
+
+### C wrapper 测试要求
+
+建议新增：
+
+```text
+hcccl/tests/test_api_wrappers.c
+```
+
+至少覆盖：
+
+- 四个 wrapper 符号能够编译并链接；
+- `hcclAllReduce` 能进入已有 CPU AllReduce 路径；
+- `hcclAllReduce` 在当前支持范围内得到正确结果；
+- `hcclAllGather` 未实现时返回 `HCCL_ERR_NOT_SUPPORTED`；
+- `hcclReduceScatter` 未实现时返回 `HCCL_ERR_NOT_SUPPORTED`；
+- `hcclBroadcast` 未实现时返回 `HCCL_ERR_NOT_SUPPORTED`；
+- 未实现 primitive 不修改输出缓冲区；
+- 空指针返回正确错误码；
+- 无效 communicator 返回正确错误码；
+- 无效 count 返回正确错误码；
+- 不支持的数据类型返回正确错误码；
+- 不支持的 ReduceOp 返回正确错误码；
+- A1 已有 41 个 C 用例的预期结果不改变。
+
+新增测试必须注册到 CTest。
+
+CTest 测试程序总数允许从 6 增加，不得将总数固定为 6。
+
+---
+
+### Python 测试要求
+
+至少覆盖：
+
+- 构造参数 `library_path` 优先于环境变量；
+- `HCCL_PLUGIN_PATH` 优先于默认候选路径；
+- Windows 默认 DLL 文件名；
+- Linux 默认 SO 文件名；
+- Windows 默认候选路径；
+- Linux 默认候选路径；
+- 显式路径不存在；
+- 环境变量路径不存在；
+- 所有默认候选路径均不存在；
+- 动态库加载失败；
+- 动态库缺少必要符号；
+- 异常信息包含尝试路径；
+- 异常信息包含缺失符号名称；
+- `argtypes` 和 `restype` 已明确配置；
+- 实际 Windows DLL 能加载；
+- 实际 DLL 中存在四个标准 wrapper；
+- `hcclAllReduce` wrapper 能实际调用；
+- 未实现 wrapper 返回 `HCCL_ERR_NOT_SUPPORTED`；
+- 原有 Plugin Bridge 行为不回归；
+- 原有 Execution Engine 行为不回归；
+- 如果修改 Plugin Manager，其原有行为不回归。
+
+---
 
 ### Windows 验收命令
+
+以下命令在已激活 `hccl-agent` Conda 环境的 CMD 或 Anaconda Prompt 中执行。
+
+#### 1. 创建独立构建目录
 
 ```cmd
 set BUILD_DIR=F:\build\hccl-agent-hcccl-b1
 
 if exist "%BUILD_DIR%" rmdir /s /q "%BUILD_DIR%"
+```
 
+#### 2. 配置 Visual Studio 2022 构建
+
+```cmd
 cmake -S hcccl -B "%BUILD_DIR%" ^
   -G "Visual Studio 17 2022" ^
   -A x64
-
-cmake --build "%BUILD_DIR%" --config Release
-
-ctest --test-dir "%BUILD_DIR%" ^
-  -C Release ^
-  --output-on-failure
-
-python -m unittest ^
-  tests.test_plugin_bridge ^
-  tests.test_execution_engine ^
-  -q
 ```
 
-不得再额外传入：
+不得额外传入：
 
 ```text
 CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 CMAKE_C_FLAGS
 ```
 
-因为这些基础能力应由 A1 的默认 CMake 配置提供。
+这些基础能力已由 Batch A1 的默认 CMake 配置提供。
+
+#### 3. 构建
+
+```cmd
+cmake --build "%BUILD_DIR%" --config Release
+echo CMAKE_BUILD_EXIT_CODE=%ERRORLEVEL%
+```
+
+通过标准：
+
+```text
+CMAKE_BUILD_EXIT_CODE=0
+```
+
+并生成：
+
+```text
+%BUILD_DIR%\Release\hccl_plugin.dll
+%BUILD_DIR%\Release\hccl_plugin.lib
+```
+
+#### 4. 运行 CTest
+
+```cmd
+ctest --test-dir "%BUILD_DIR%" ^
+  -C Release ^
+  --output-on-failure
+
+echo CTEST_EXIT_CODE=%ERRORLEVEL%
+```
+
+通过标准：
+
+- A1 原有 6 个 C 测试程序继续通过；
+- 新增 wrapper C 测试通过；
+- 原有 41 个 C 测试用例继续全部通过；
+- `CTEST_EXIT_CODE=0`。
+
+#### 5. 设置实际 DLL 和关闭真实 LLM Key
+
+必须在同一个 CMD 或 Anaconda Prompt 会话中执行：
+
+```cmd
+set HCCL_PLUGIN_PATH=%BUILD_DIR%\Release\hccl_plugin.dll
+set DEEPSEEK_API_KEY=
+```
+
+#### 6. 验证实际 DLL 和导出符号
+
+```cmd
+python -c "import ctypes,os; p=os.environ['HCCL_PLUGIN_PATH']; lib=ctypes.CDLL(p); names=['hcclAllReduce','hcclAllGather','hcclReduceScatter','hcclBroadcast']; missing=[n for n in names if not hasattr(lib,n)]; print('DLL_PATH='+p); print('MISSING_SYMBOLS='+str(missing)); raise SystemExit(1 if missing else 0)"
+```
+
+通过标准：
+
+```text
+MISSING_SYMBOLS=[]
+```
+
+该命令必须加载本轮实际生成的 DLL，不得替换为 Mock。
+
+#### 7. 运行定向 Python 测试
+
+```cmd
+python -m unittest ^
+  tests.test_plugin_bridge ^
+  tests.test_execution_engine ^
+  tests.test_hccl_api ^
+  -q
+```
+
+如果本轮修改了 `agent/plugin_manager.py`，还必须执行：
+
+```cmd
+python -m unittest tests.test_plugin_manager -q
+```
+
+#### 8. 运行完整 Python 回归
+
+```cmd
+python -m unittest discover tests -q
+```
+
+完整回归要求：
+
+- `0 failures`；
+- `0 errors`；
+- 允许存在明确设计的 skipped；
+- 不得发送真实网络请求；
+- 不得调用真实 DeepSeek API；
+- 必须实际加载本轮生成的 Windows DLL；
+- 不得仅使用 Mock 结果证明 DLL 集成成功；
+- 不得在项目目录留下临时构建文件。
+
+---
 
 ### Linux CPU 验收
 
+Linux CPU 验收命令：
+
 ```bash
-cmake -S hcccl -B /tmp/hccl-agent-hcccl-b1
-cmake --build /tmp/hccl-agent-hcccl-b1
-ctest --test-dir /tmp/hccl-agent-hcccl-b1 --output-on-failure
+BUILD_DIR=/tmp/hccl-agent-hcccl-b1
+
+rm -rf "$BUILD_DIR"
+
+cmake -S hcccl -B "$BUILD_DIR"
+cmake --build "$BUILD_DIR"
+
+ctest \
+  --test-dir "$BUILD_DIR" \
+  --output-on-failure
+
+export HCCL_PLUGIN_PATH="$BUILD_DIR/libhccl_plugin.so"
+unset DEEPSEEK_API_KEY
 
 python -m unittest \
   tests.test_plugin_bridge \
   tests.test_execution_engine \
+  tests.test_hccl_api \
   -q
+
+python -m unittest discover tests -q
 ```
 
-Linux环境暂时不可用时：
+实际 `.so` 输出位置必须以 CMake 构建结果为准。
+
+如果 `.so` 位于其他目录：
+
+- 应使用实际生成路径；
+- 不得通过复制或重命名伪造验证结果；
+- 不得把 Windows DLL 重命名为 `.so`；
+- 不得将未执行的 Linux 验收写成已经通过。
+
+当前 Linux/WSL 环境暂时不可用时：
 
 - 不阻塞 Windows B1 初步完成；
-- Linux `.so` 验收保持为待办；
-- 不得写成 Linux Bridge 已验证。
+- Linux `.so` 动态验证保持为待办；
+- 不得写成 Linux Bridge 已验证；
+- 不得写成 Linux CMake 已验证；
+- 不得访问旧 WSL 项目。
+
+---
 
 ### 通过标准
 
-- [ ] 核心标准 C wrapper 均有定义且能够链接；
-- [ ] wrapper 与底层算法函数映射清晰；
-- [ ] Windows Python Bridge 能加载 `hccl_plugin.dll`；
-- [ ] Linux Python Bridge 设计上支持 `libhccl_plugin.so`；
-- [ ] 支持显式指定动态库路径；
-- [ ] 缺失库、错误路径和缺失符号均有明确异常；
-- [ ] Windows CTest 继续全部通过；
-- [ ] Plugin Bridge 和 Execution Engine Python 测试通过；
-- [ ] 不存在标准接口“只声明、不实现”的核心问题；
-- [ ] 没有提前实现 C1/C2 的完整 primitive 算法；
-- [ ] 没有宣称已经接入真实 HCOMM/CANN。
+本 Batch 只有同时满足以下条件才算完成：
 
-依赖：Batch A1。
-难度：中。
-风险：中。
-Ascend 环境：CPU 初版不需要，最终标准兼容验证需要。
-交付物：标准 C wrapper 与跨平台 Python插件加载闭环。
+- [ ] `hcclAllReduce` 有可导出的定义并能够链接；
+- [ ] `hcclAllGather` 有可导出的定义并能够链接；
+- [ ] `hcclReduceScatter` 有可导出的定义并能够链接；
+- [ ] `hcclBroadcast` 有可导出的定义并能够链接；
+- [ ] wrapper 与底层算法函数映射清晰；
+- [ ] `hcclAllReduce` 实际进入已有 CPU AllReduce 路径；
+- [ ] `hcclAllReduce` 不是固定返回成功；
+- [ ] `hcclAllGather` 未实现时返回 `HCCL_ERR_NOT_SUPPORTED`；
+- [ ] `hcclReduceScatter` 未实现时返回 `HCCL_ERR_NOT_SUPPORTED`；
+- [ ] `hcclBroadcast` 未实现时返回 `HCCL_ERR_NOT_SUPPORTED`；
+- [ ] 未实现 primitive 不修改输出缓冲区；
+- [ ] 未实现 primitive 不返回伪造成功结果；
+- [ ] Windows Python Bridge 能加载本轮实际生成的 `hccl_plugin.dll`；
+- [ ] Linux Python Bridge 设计上支持 `libhccl_plugin.so`；
+- [ ] 构造参数 `library_path` 可以指定动态库；
+- [ ] 环境变量 `HCCL_PLUGIN_PATH` 可以指定动态库；
+- [ ] 默认候选路径可正常解析；
+- [ ] 路径优先级为构造参数、环境变量、默认候选路径；
+- [ ] 默认路径中不存在本机用户名、盘符或 `F:\build` 等绝对路径；
+- [ ] 缺失库、错误路径和缺失符号均产生明确异常；
+- [ ] 异常信息包含尝试加载的路径或缺失的符号名称；
+- [ ] Python Bridge 为实际调用函数设置明确的 `argtypes` 和 `restype`；
+- [ ] 实际 DLL 中可以找到四个标准 wrapper；
+- [ ] Windows 集成测试不是仅使用 Mock；
+- [ ] Windows 路径解析有单元测试；
+- [ ] Linux 候选文件名和路径逻辑有单元测试；
+- [ ] A1 已有 6 个 C 测试程序继续全部通过；
+- [ ] A1 已有 41 个 C 用例继续全部通过；
+- [ ] 新增标准 wrapper C 测试全部通过；
+- [ ] Plugin Bridge Python 测试通过；
+- [ ] Execution Engine Python 测试通过；
+- [ ] HCCL API Python 测试通过；
+- [ ] 完整 Python 回归为 0 failures、0 errors；
+- [ ] 本轮没有真实网络请求；
+- [ ] 没有提前实现 C1/C2 的完整 primitive 数据算法；
+- [ ] 没有增加 FP16、BF16 或新的 ReduceOp；
+- [ ] 没有宣称已经接入真实 HCOMM/CANN；
+- [ ] 没有宣称 Linux `.so` 已经验证；
+- [ ] 没有修改与 B1 无关的 Agent、Simulator、Topology 或 Cost Model。
+
+---
+
+### 完成后的 Git 检查
+
+执行：
+
+```cmd
+git status --short
+git diff --name-only
+git diff --stat
+git diff --check
+```
+
+确认：
+
+- 修改文件全部位于 B1 允许范围；
+- 不存在意外生成的 DLL、LIB、EXE、OBJ 或构建目录；
+- 不存在无关文档修改；
+- 不存在算法范围外修改。
+
+不得自动执行：
+
+```text
+git add
+git commit
+git push
+```
+
+用户人工确认验收结果后再决定是否提交。
+
+---
+
+### 依赖、难度与风险
+
+依赖：Batch A1。  
+难度：中。  
+风险：中。  
+Ascend 环境：CPU 初版不需要，最终标准兼容验证需要。  
+Linux 环境：设计支持必须完成，实际动态验证可暂时保留为待办。  
+可完全通过 Windows CPU 模式完成：大部分可以。  
+可完全替代 CANN/HCOMM 实机验证：否。
+
+主要风险：
+
+1. B1 越界进入 C1/C2，提前实现完整 primitive；
+2. 修改 `hcccl/src/hccl_algorithms.c` 时改变已有算法行为；
+3. 将本机外部构建路径写死到 Python 源码；
+4. 使用 Mock 代替真实 DLL 集成验证；
+5. wrapper 返回成功但没有执行实际算法；
+6. 未实现 primitive 返回成功或修改输出缓冲区；
+7. 修改 CMake 时破坏 A1 已稳定的构建和 CTest；
+8. 将 CPU 模拟接口错误描述为真实 HCOMM/HCCL 兼容实现。
+
+---
+
+### 交付物
+
+本 Batch 应交付：
+
+1. 闭合的四个标准 C wrapper；
+2. wrapper 与现有算法实现的明确映射；
+3. 新增的标准 wrapper C 测试；
+4. Windows `.dll` 与 Linux `.so` 统一路径解析；
+5. `library_path` 显式路径支持；
+6. `HCCL_PLUGIN_PATH` 环境变量支持；
+7. 集中的默认候选路径规则；
+8. 明确的动态库加载异常；
+9. 完整的 ctypes `argtypes` 和 `restype`；
+10. Windows 实际 DLL 加载证据；
+11. 四个 wrapper 的实际导出符号检查；
+12. CMake、CTest、定向 Python 测试和完整回归结果；
+13. Linux `.so` 和 CANN/Ascend 的未验证边界说明。
+
+完成后停止，不自动进入 Batch C1。
 
 ## Batch C1：AllGather CPU 数据正确性
 
