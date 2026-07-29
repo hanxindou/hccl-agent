@@ -1,5 +1,7 @@
 # HCCL Agent 赛题路线图 v2
 
+> H1 更新说明：本路线图是审计后路线规划。A1/B1/C1/C2/C3/E1/D1/F1/G1 已按自主计划推进完成，当前剩余重点是 H1 最终材料收敛，以及用户在 Linux/CANN/Ascend 环境中的实机验证。当前状态汇总见 `docs/competition_readiness_report.md`。
+
 本路线图从本轮审计差距出发，目标是把项目从“Python Agent + 数学模拟 + CPU AllReduce 原型”收敛到“可被赛题验收的 HCCL/HCOMM 兼容 Agent 工程”。原则：先补齐赛题硬性要求，再做 Agent 展示与工程优化；先让至少三种 primitive 正确，再谈性能创新；先减少平行模块，再新增功能。
 
 ## 总体阶段

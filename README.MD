@@ -8,16 +8,23 @@
 
 ## 当前阶段
 
-**工程基线阶段（Batch A1）** — 当前系统是 **Python Agent + 数学模拟器 + CPU C 插件原型**。
+**自主执行 H1 前置阶段已完成至 G1** — 当前系统是 **Python Agent + 数学/可靠性模拟器 + Windows CPU_SIM C 插件原型 + CANN/Ascend 适配准备层**。
 
 已验证和未验证边界：
 
 - Python Agent 主流程可进行规则候选选择、模拟评分、Prompt 记录和实验日志记录。
 - C 插件当前是 CPU 模拟实现，不是 CANN/HCOMM/Ascend 实机实现。
-- C 层已覆盖有限的 FP32 / SUM / `count == 1` AllReduce CPU 模拟算法，包括 Ring、Butterfly、Mesh、NHR、Fat-Tree。
-- AllGather、ReduceScatter、Broadcast 目前仅在 Python/接口或策略层可表示，尚未形成完整 C 数据正确性实现。
-- FP16、BF16、通用 ReduceOp、真实多设备通信、CANN/HCOMM 链接和 Ascend 实机验证尚未完成。
-- 当前 latency/bandwidth/score 来自数学模型或 CPU 模拟，不能直接作为真实 HCCL 性能结论。
+- C 层已覆盖 AllReduce、AllGather、ReduceScatter 的 CPU_SIM 数据正确性基线；Broadcast 仍为未支持边界。
+- FP32 SUM/PROD/MAX/MIN、FP16 和 BF16 CPU 软件模拟已通过 Windows DLL、CTest 和 Python 回归验证。
+- Agent 代码开发闭环当前为 `OFFLINE_TEMPLATE` 最小演示，不调用真实外部 LLM。
+- 拓扑/成本/可靠性结果来自 `ANALYTICAL_MODEL` 或 `RELIABILITY_MODEL`，不能直接作为真实 HCCL 性能或可靠性结论。
+- Linux `.so`、真实多设备通信、CANN/HCOMM 链接、Ascend 实机正确性、msprof 和硬件可靠性仍未验证。
+
+H1 交付汇总见：
+
+```text
+docs/competition_readiness_report.md
+```
 
 ## 目录结构
 

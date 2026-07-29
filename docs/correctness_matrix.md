@@ -1,6 +1,6 @@
 # HCCL Agent 正确性矩阵
 
-更新时间：2026-07-29 22:10:00 +08:00
+更新时间：2026-07-29 23:10:00 +08:00
 
 ## 状态标记
 
@@ -18,7 +18,7 @@
 
 | Primitive | DType | ReduceOp | 状态 | 环境 | 测试证据 |
 | --------- | ----- | -------- | ---- | ---- | -------- |
-| AllReduce | FP32 | SUM | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, full regression 435 OK |
+| AllReduce | FP32 | SUM | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, H1 full regression 454 OK |
 | AllReduce | FP32 | PROD | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, overflow case verified |
 | AllReduce | FP32 | MAX | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, negative/zero/decimal data |
 | AllReduce | FP32 | MIN | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, negative/zero/decimal data |

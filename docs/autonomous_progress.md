@@ -342,7 +342,7 @@
 
 ### 本地提交
 
-- commit：待创建
+- commit：`bfe23ea chore: prepare G1 CANN integration layer`
 - message：`chore: prepare G1 CANN integration layer`
 
 ### 未验证边界
@@ -350,3 +350,48 @@
 - 未访问 WSL/Linux。
 - 未接入真实 CANN/HCOMM。
 - 未验证 Ascend 设备、真实 `.so`、msprof 或实机正确性。
+
+## Stage H1：最终集成、审计和比赛材料收敛
+
+开始时间：2026-07-29 23:08:00 +08:00
+结束时间：2026-07-29 23:18:00 +08:00
+状态：COMPLETED
+
+### 修改文件
+
+- `README.MD`
+- `docs/project_documentation.md`
+- `docs/project_audit.md`
+- `docs/roadmap_v2.md`
+- `docs/autonomous_progress.md`
+- `docs/correctness_matrix.md`
+- `docs/competition_readiness_report.md`
+- `docs/research_notes.md`
+
+### 当前结果
+
+- 新增 `docs/competition_readiness_report.md`，覆盖当前架构、三种 primitive、dtype/ReduceOp、CPU_SIM、Agent 闭环、D1/F1/G1 模型与未验证边界。
+- README 当前阶段从 A1 早期基线更新为 H1 前置阶段已完成至 G1。
+- `docs/project_documentation.md` 顶部事实基线更新为当前 CPU_SIM/CANN 准备状态。
+- `docs/project_audit.md` 与 `docs/roadmap_v2.md` 增加 H1 更新说明，避免旧基线被误读为当前状态。
+- `docs/correctness_matrix.md` 更新 H1 full regression 证据。
+
+### 验收结果
+
+- Windows Release CMake：`cmake -S hcccl -B C:\tmp\hccl-agent-hcccl-h1 -DHCCL_BACKEND=CPU_SIM`，配置成功
+- Windows Release Build：`cmake --build C:\tmp\hccl-agent-hcccl-h1 --config Release`，构建成功，生成 `hccl_plugin.dll`，未出现 C4819
+- CTest：`ctest --test-dir C:\tmp\hccl-agent-hcccl-h1 -C Release --output-on-failure`，11/11 passed
+- 定向 correctness / Agent / simulator / reliability suite：71 tests，OK
+- 完整 Python：`python -m unittest discover tests -q`，454 tests，OK
+- ASCEND_CANN 缺失环境检测：按预期配置失败，错误明确提示缺少 HCCL header、library、`HCCL_CANN_ROOT` 或 `ASCEND_HOME_PATH`/`CANN_HOME`
+- Git 构建产物：构建目录位于 `C:\tmp`，未写入仓库
+
+### 本地提交
+
+- commit：待创建
+- message：`docs: complete autonomous competition readiness audit`
+
+### 未验证边界
+
+- H1 不新增功能，不补 Broadcast，不接入 CANN/HCOMM。
+- Linux `.so`、CANN SDK、Ascend 实机和 msprof 仍需用户验证。

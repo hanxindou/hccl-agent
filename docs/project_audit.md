@@ -1,5 +1,7 @@
 # HCCL Agent 项目审计报告
 
+> H1 更新说明：本报告主体记录的是综合审计时的基线事实。后续自主阶段 A1/B1/C1/C2/C3/E1/D1/F1/G1 已陆续完成并创建本地提交。当前比赛准备度、Windows 验收结果和仍未验证边界以 `docs/competition_readiness_report.md`、`docs/correctness_matrix.md`、`docs/reliability_report.md` 和 `docs/user_actions.md` 为准。
+
 审计基线：`e67a18d31e7bf7b88975a2ae2816d42945aaf290`（`e67a18d baseline-before-comprehensive-audit`）  
 审计环境：Windows Native，项目路径 `F:\projects\hccl-agent`，分支 `main`。  
 审计范围：赛题 DOCX、项目文档、Git 跟踪文件清单、入口调用链、Agent/Skills/Simulator/Plugin/C/test/config/script 等当前实现。  

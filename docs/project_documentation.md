@@ -1,14 +1,14 @@
 # 项目概述
 
-## Batch A1 当前事实基线
+## H1 当前事实基线
 
 本文档保留历史 Batch 记录，但后续开发和验收应以本节事实为准。
 
-当前项目是一个面向 HCCL 通信优化赛题的 **Python Agent + 数学模拟器 + CPU C 插件原型**。Python 主流程能够根据节点数、消息大小、集群配置和性能模型选择候选通信算法、模拟性能得分、输出通信策略，并记录 Prompt、经验和实验日志。
+当前项目是一个面向 HCCL 通信优化赛题的 **Python Agent + 数学/可靠性模拟器 + CPU_SIM C 插件原型 + CANN/Ascend 适配准备层**。Python 主流程能够根据节点数、消息大小、集群配置和性能模型选择候选通信算法、模拟性能得分、输出通信策略，并记录 Prompt、经验和实验日志。
 
-当前 C 插件是 CPU 模拟，不是 CANN/HCOMM/Ascend 实机实现。C 层已具备有限的 FP32/SUM/`count == 1` AllReduce CPU 模拟算法，包括 Ring、Butterfly、Mesh、NHR、Fat-Tree；AllGather、ReduceScatter、Broadcast 尚未形成完整 C 数据正确性实现。FP16、BF16、通用 ReduceOp、真实多进程/多设备通信、Linux `.so` 动态验证、CANN/HCOMM 链接和 Ascend 实机验证均未完成。
+当前 C 插件是 CPU 模拟，不是 CANN/HCOMM/Ascend 实机实现。C 层已具备 AllReduce、AllGather、ReduceScatter 的 CPU_SIM 数据正确性基线，覆盖 FP32 SUM/PROD/MAX/MIN 与 FP16/BF16 软件模拟；Broadcast 仍为明确未支持边界。真实多进程/多设备通信、Linux `.so` 动态验证、CANN/HCOMM 链接、Ascend 实机正确性、性能和可靠性验证均未完成。
 
-Windows CPU 模式的目标基线是：默认 CMake 生成 DLL 与 import library，CTest 发现 6 个 C 测试程序，现有 41 个 C 用例继续通过，MSVC 不再出现 `C4819`，测试输出不依赖非 ASCII 展示字符。Linux CPU 与 Ascend/CANN 验证应分别记录，不能相互替代。
+Windows CPU 模式当前已验证：`HCCL_BACKEND=CPU_SIM` 默认 CMake 生成 DLL 与 import library，CTest 发现并通过 11 个 C 测试，完整 Python 回归通过。`HCCL_BACKEND=ASCEND_CANN` 已作为 G1 适配准备项加入，缺少真实 SDK 时配置阶段快速失败并提示头文件、库和环境变量；Linux CPU 与 Ascend/CANN 验证仍需分别记录，不能相互替代。
 
 当前项目是一个面向 HCCL 通信优化赛题的 Agent 工程。它用 Agent + Skills + Simulator 的方式，根据节点数、消息大小、集群配置和性能模型，选择候选通信算法、模拟性能得分、输出通信策略，并记录可复现的实验日志。
 
