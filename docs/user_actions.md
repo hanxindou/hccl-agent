@@ -140,3 +140,25 @@ E1 使用 `OFFLINE_TEMPLATE` 离线模式，不需要用户提供 API Key、网�
 ### 后续说明
 
 若未来人工启用 `EXTERNAL_LLM` 模式，必须由用户显式提供凭据并确认允许调用外部模型；自主 Goal 不启用该模式。
+
+## UA-005：D1 模型实机校准
+
+状态：待用户执行
+阻塞阶段：G1/H1
+优先级：P1
+
+### 原因
+
+D1 输出为 `CPU_SIMULATED / ANALYTICAL_MODEL`。参数来自项目相对 tier，尚未用 Ascend、CANN/HCCL 或 msprof 校准。
+
+### 用户需要准备
+
+- Ascend 实机或赛题允许的模拟环境
+- CANN/HCCL 运行时
+- 不同 message size、rank scale 和 link type 的 profiling 数据
+
+### 反馈内容
+
+- 8/64/128/256/1024 rank 的 latency 和 bandwidth
+- HCCS/RoCE/PCIe 或等效链路实测参数
+- msprof 或同等 profiling 摘要

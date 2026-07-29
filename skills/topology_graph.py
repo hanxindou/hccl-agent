@@ -4,6 +4,10 @@ Moves beyond the simple string-based topology (Full Mesh / Ring / Fat Tree)
 to a graph that supports link types, bandwidth, latency, BER, and path
 computation — a key requirement for the competition's hardware-aware
 algorithm selection.
+
+D1 status: this module is retained for legacy skill-level tests and
+fault-injection helpers. The main topology model for Simulator and cost
+estimation is ``topology.graph_builder.CommunicationGraph``.
 """
 
 import heapq

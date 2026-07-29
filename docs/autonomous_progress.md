@@ -220,3 +220,46 @@
 - E1 是离线模板闭环，不代表真实 LLM 自动开发能力。
 - 未启用 `EXTERNAL_LLM`，未调用外部模型。
 - 未把生成代码写入生产目录。
+
+## Stage D1：拓扑与成本模型收敛
+
+开始时间：2026-07-29 22:12:00 +08:00
+结束时间：2026-07-29 22:23:01 +08:00
+状态：COMPLETED
+
+### 修改文件
+
+- `cost_model/engine.py`
+- `simulator/simulator.py`
+- `skills/topology_graph.py`
+- `tests/test_d1_topology_cost_model.py`
+- `docs/topology_cost_model.md`
+- `docs/autonomous_progress.md`
+- `docs/research_notes.md`
+- `docs/user_actions.md`
+
+### 当前结果
+
+- 主拓扑模型明确为 `topology.graph_builder.CommunicationGraph`。
+- `skills/topology_graph.py` 标记为 legacy skill-level graph，保留兼容。
+- `Simulator.evaluate()` 默认通过 `TopologyGraphBuilder` 构建 graph，并调用 `CostModelEngine`。
+- D1 统一公式已实现：startup、communication steps、transferred bytes、effective bandwidth、contention penalty。
+- 输出包含 `model_type=ANALYTICAL_MODEL`、`communication_steps`、`transferred_bytes`、`link_types`、`parameter_sources`。
+- D1 定向 Python：`tests.test_d1_topology_cost_model tests.test_cost_model tests.test_graph_simulator tests.test_simulator_model tests.test_scaling_analysis`，25 tests，OK。
+
+### 验收结果
+
+- 定向 Python：`tests.test_d1_topology_cost_model tests.test_cost_model tests.test_graph_simulator tests.test_simulator_model tests.test_scaling_analysis`，25 tests，OK
+- CTest：`C:\tmp\hccl-agent-hcccl-c3a`，11/11 passed
+- 完整 Python：`python -m unittest discover tests -q`，446 tests，OK
+
+### 本地提交
+
+- commit：待创建
+- message：`feat: converge D1 topology and cost models`
+
+### 未验证边界
+
+- D1 是 `ANALYTICAL_MODEL`，不代表真实 HCCL/CANN/Ascend 性能。
+- 参数未经过实机校准。
+- Linux `.so`、CANN SDK、HCOMM 和 msprof 仍未验证。

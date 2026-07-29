@@ -24,6 +24,30 @@ ReduceScatter CPU_SIM 语义来自本项目自主计划：`send[N][N][C] -> recv
 
 否。
 
+## Stage D1：拓扑与成本模型收敛
+
+访问日期：2026-07-29
+状态：未使用外部网络参考
+
+### 参考来源
+
+- 自主执行计划：本地文件 `docs/autonomous_goal_plan.md`
+- 项目主拓扑模型：`topology/graph_builder.py`
+- 项目硬件相对参数：`hardware/profile.py`
+- 项目已有 cost model：`cost_model/engine.py`
+
+### License
+
+未引入外部代码，未复制第三方实现，因此无新增第三方 License 义务。
+
+### 借鉴内容
+
+D1 只按自主计划中的可解释近似公式收敛项目内部模型：startup cost、通信步数、传输字节、有效带宽和 contention penalty。未复制 ASTRA-sim、SimAI、NCCL 或 HCCL 外部代码。
+
+### 是否直接复制代码
+
+否。
+
 ## Stage E1：Agent 自动代码开发最小闭环
 
 访问日期：2026-07-29

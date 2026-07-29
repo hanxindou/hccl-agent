@@ -39,88 +39,18 @@ class Simulator:
         bandwidth_gbps=None,
         latency_ms=None,
     ):
-        import math
-
-        link_bw_gbps = (bandwidth_gbps
-                        if bandwidth_gbps is not None
-                        else 100.0)
-        link_lat_us = ((latency_ms * 1000.0)
-                       if latency_ms is not None
-                       else 2.0)
-
-        algo_eff = ALGORITHM_EFFICIENCY.get(algorithm, 0.85)
-
-        # ---- step count ----
-        if algorithm == "Ring AllReduce":
-            steps = 2 * (nodes - 1)
-        elif algorithm == "Butterfly":
-            steps = int(math.ceil(math.log2(max(nodes, 1))))
-        elif algorithm == "PairWise":
-            steps = nodes - 1
-        elif algorithm == "NHR":
-            steps = 2 * (nodes - 1)
-        elif algorithm == "Mesh":
-            # 1 logical round, but wall-clock grows with N due to queue depth.
-            steps = 1 + nodes * MESH_EFFECTIVE_STEPS_COEFF
-        elif algorithm == "Fat-Tree":
-            steps = int(2 * math.ceil(math.log2(max(nodes, 1))))
-        else:
-            steps = nodes
-
-        # ---- latency (ms) ----
-        # Topology factor.
-        if topology == "Full Mesh":
-            topo_lat_factor = 1.0
-        elif topology == "Ring":
-            topo_lat_factor = 1.0
-        elif topology == "Fat Tree":
-            topo_lat_factor = 1.15
-        else:
-            topo_lat_factor = 1.2
-
-        # Algorithm-specific latency contention.
-        # Mesh: N-1 simultaneous sends per node cause NIC queue depth.
-        algo_lat_contention = 1.0
-        if algorithm == "Mesh":
-            algo_lat_contention = 1.0 + nodes * 0.15
-        elif algorithm == "Fat-Tree":
-            algo_lat_contention = 1.0 + nodes * 0.04
-
-        # Primitive factor.
-        if primitive == "AllGather":
-            prim_factor = 0.9
-        elif primitive == "ReduceScatter":
-            prim_factor = 0.95
-        else:
-            prim_factor = 1.0
-
-        latency_us = (steps * link_lat_us * topo_lat_factor
-                      * prim_factor * algo_lat_contention)
-        latency_ms_result = latency_us / 1000.0
-
-        # ---- bandwidth (GB/s) ----
-        bw_contention = 1.0
-        bw_coeff = BW_CONTENTION_COEFF.get(algorithm, 0.0)
-        if bw_coeff > 0:
-            bw_contention = 1.0 / (1.0 + (nodes - 1) * bw_coeff)
-
-        effective_bw_gbps = (link_bw_gbps * algo_eff
-                             * prim_factor * bw_contention)
-        bandwidth_gb_s = effective_bw_gbps / 8.0
-
-        # ---- score (0–100) ----
-        theoretical_max_gb_s = link_bw_gbps / 8.0
-        score = self.model.calculate_score(
-            latency_ms_result,
-            bandwidth_gb_s,
-            theoretical_max_bandwidth_gb_s=theoretical_max_gb_s,
+        graph, metadata = self._build_graph_for_evaluate(
+            topology, nodes, bandwidth_gbps, latency_ms,
         )
-
-        return {
-            "latency": round(latency_ms_result, 4),
-            "bandwidth": round(bandwidth_gb_s, 2),
-            "score": score,
-        }
+        result = self.simulate_with_graph(
+            graph=graph,
+            primitive=primitive,
+            algorithm=algorithm,
+            message_size_mb=message_size_mb,
+        )
+        result["topology"] = topology
+        result["topology_metadata"] = metadata
+        return result
 
     def simulate_collective(
         self,
@@ -213,6 +143,14 @@ class Simulator:
             "algorithm": algorithm,
             "primitive": primitive,
             "topology": "graph",
+            "model_type": raw.get("model_type", "ANALYTICAL_MODEL"),
+            "communication_steps": raw.get("communication_steps", 0),
+            "transferred_bytes": raw.get("transferred_bytes", 0),
+            "contention_penalty_ms": raw.get("contention_penalty_ms", 0.0),
+            "link_types": raw.get("link_types", []),
+            "edge_count": raw.get("edge_count", 0),
+            "parameter_sources": raw.get("parameter_sources", {}),
+            "model_assumptions": raw.get("model_assumptions", []),
         }
 
     def simulate_with_failures(
@@ -289,3 +227,45 @@ class Simulator:
             ),
         }
         return base
+
+    def _build_graph_for_evaluate(
+        self,
+        topology,
+        nodes,
+        bandwidth_gbps=None,
+        latency_ms=None,
+    ):
+        from hardware.profile import HardwareProfile
+        from topology.graph_builder import TopologyGraphBuilder
+
+        profile = HardwareProfile.tier_medium()
+        if bandwidth_gbps is not None or latency_ms is not None:
+            links = {}
+            for link_type, values in profile.link_types.items():
+                links[link_type] = dict(values)
+                if bandwidth_gbps is not None:
+                    links[link_type]["bandwidth_gbps"] = float(bandwidth_gbps)
+                if latency_ms is not None:
+                    links[link_type]["latency_ms"] = float(latency_ms)
+            profile = HardwareProfile(
+                device_type="evaluate-override",
+                link_types=links,
+            )
+
+        normalized = (topology or "").lower().replace("_", " ")
+        if normalized in {"full mesh", "single node", "hccs"} and nodes <= 8:
+            mode = "SINGLE_NODE"
+        elif normalized in {"mixed", "heterogeneous", "pcie"}:
+            mode = "HETEROGENEOUS"
+        else:
+            mode = "MULTI_NODE" if nodes > 8 else "SINGLE_NODE"
+
+        graph, metadata = TopologyGraphBuilder.build(
+            nodes,
+            num_gpus_per_node=8,
+            profile=profile,
+            mode=mode,
+        )
+        metadata["main_topology_model"] = "topology.graph_builder.CommunicationGraph"
+        metadata["requested_topology"] = topology
+        return graph, metadata
