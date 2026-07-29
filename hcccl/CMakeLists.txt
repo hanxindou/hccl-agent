@@ -150,6 +150,19 @@ set_tests_properties(test_allgather PROPERTIES
     WORKING_DIRECTORY $<TARGET_FILE_DIR:test_allgather>
 )
 
+add_executable(test_reducescatter tests/test_reducescatter.c)
+
+target_include_directories(test_reducescatter
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(test_reducescatter PRIVATE hccl_plugin)
+
+add_test(NAME test_reducescatter COMMAND test_reducescatter)
+set_tests_properties(test_reducescatter PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_reducescatter>
+)
+
 # ---- Install rules ------------------------------------------------------
 
 install(TARGETS hccl_plugin

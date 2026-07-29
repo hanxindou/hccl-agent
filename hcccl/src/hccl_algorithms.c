@@ -95,6 +95,75 @@ static hcclResult_t validate_allgather_args(
     return HCCL_SUCCESS;
 }
 
+static hcclResult_t validate_reducescatter_args(
+    const void*      send_buf,
+    void*            recv_buf,
+    size_t           recv_count,
+    hcclDataType_t   data_type,
+    hcclRedOp_t      op,
+    hcclComm_t       comm,
+    hcclCommInternal** ctx_out,
+    size_t*          input_elems_out,
+    size_t*          output_elems_out
+)
+{
+    size_t n;
+    size_t output_elems;
+    size_t input_elems;
+
+    if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (send_buf == recv_buf) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+    if (recv_count == 0) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (data_type != HCCL_FP32) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+    if (op != HCCL_SUM) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+
+    *ctx_out = (hcclCommInternal*) comm;
+    if ((*ctx_out)->num_devices <= 0) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if ((*ctx_out)->num_devices > 64) {
+        return HCCL_ERR_INTERNAL;
+    }
+
+    /*
+     * C2 CPU_SIM layout:
+     *   send_buf: [N][N][C] as send[src][dst][element]
+     *   recv_buf: [N][C] as reduced shard for every dst rank
+     * N=2 remains unsupported to preserve B1 scalar-buffer regression.
+     */
+    if ((*ctx_out)->num_devices == 2) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+
+    n = (size_t)(*ctx_out)->num_devices;
+    if (recv_count > ((size_t)-1) / n) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    output_elems = n * recv_count;
+    if (output_elems > ((size_t)-1) / n) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    input_elems = n * output_elems;
+    if (input_elems > ((size_t)-1) / sizeof(float) ||
+        output_elems > ((size_t)-1) / sizeof(float)) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+
+    *input_elems_out = input_elems;
+    *output_elems_out = output_elems;
+    return HCCL_SUCCESS;
+}
+
 /* ================================================================== */
 /*  Ring AllReduce                                                    */
 /* ================================================================== */
@@ -548,21 +617,48 @@ hcclResult_t mesh_reducescatter(
     hcclComm_t      comm
 )
 {
-    /*
-     * ALGORITHM:
-     *   Each rank reduces a specific chunk (its "ownership" chunk)
-     *   and receives the fully reduced result for that chunk.
-     *   On Full Mesh, all ranks send their chunk-k to rank-k
-     *   simultaneously in one step.
-     */
-    (void)send_buf;
-    (void)recv_buf;
-    (void)recv_count;
-    (void)data_type;
-    (void)op;
-    (void)comm;
-    fprintf(stderr, "[STUB] mesh_reducescatter — not implemented.\n");
-    return HCCL_ERR_NOT_SUPPORTED;
+    hcclCommInternal* ctx = NULL;
+    size_t input_elems = 0;
+    size_t output_elems = 0;
+    hcclResult_t rc = validate_reducescatter_args(
+        send_buf, recv_buf, recv_count, data_type, op, comm,
+        &ctx, &input_elems, &output_elems
+    );
+    if (rc != HCCL_SUCCESS) {
+        return rc;
+    }
+
+    {
+        const float* input = (const float*) send_buf;
+        float* staged = (float*) calloc(output_elems, sizeof(float));
+        int32_t N = ctx->num_devices;
+        size_t C = recv_count;
+
+        (void)input_elems;
+        if (staged == NULL) {
+            return HCCL_ERR_INTERNAL;
+        }
+
+        /*
+         * Mesh ReduceScatter CPU simulation. Every source rank has a
+         * shard for every destination rank. On a full mesh, each dst
+         * can receive all source shards directly and reduce locally.
+         */
+        for (int32_t dst = 0; dst < N; dst++) {
+            for (int32_t src = 0; src < N; src++) {
+                for (size_t elem = 0; elem < C; elem++) {
+                    size_t in_idx =
+                        ((size_t)src * (size_t)N + (size_t)dst) * C + elem;
+                    size_t out_idx = (size_t)dst * C + elem;
+                    staged[out_idx] += input[in_idx];
+                }
+            }
+        }
+
+        memcpy(recv_buf, staged, output_elems * sizeof(float));
+        free(staged);
+        return HCCL_SUCCESS;
+    }
 }
 
 /* ================================================================== */

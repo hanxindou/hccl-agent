@@ -1,0 +1,103 @@
+"""ReduceScatter CPU_SIM data correctness tests using the real plugin DLL."""
+
+import os
+import sys
+import unittest
+
+sys.path.insert(
+    0,
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."),
+)
+
+from plugin.execution_engine import (
+    HCCL_BF16,
+    HCCL_ERR_INVALID_ARG,
+    HCCL_ERR_NOT_SUPPORTED,
+    HCCL_FP16,
+    HCCL_FP32,
+    HCCL_SUM,
+    ExecutionEngine,
+)
+from plugin.hccl_api import HcclReduceScatterReference
+
+HCCL_PROD = 1
+
+
+def _send_data(ranks, count):
+    return [
+        [
+            [float(src * 1000 + dst * 100 + elem + 1)
+             for elem in range(count)]
+            for dst in range(ranks)
+        ]
+        for src in range(ranks)
+    ]
+
+
+class TestReduceScatterDataCorrectness(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.engine = ExecutionEngine()
+        cls.engine.load_library()
+
+    def assert_reducescatter_matches_reference(self, ranks, count):
+        send_data = _send_data(ranks, count)
+        result = self.engine.execute_reducescatter(send_data)
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["return_code"], 0)
+        self.assertEqual(result["result"], HcclReduceScatterReference(send_data))
+
+    def test_actual_library_path_is_loaded(self):
+        self.assertTrue(os.path.exists(self.engine.lib_path))
+        self.assertIsNotNone(self.engine._lib)
+
+    def test_count_1_for_required_ranks(self):
+        for ranks in [1, 4, 8, 16]:
+            with self.subTest(ranks=ranks):
+                self.assert_reducescatter_matches_reference(ranks, 1)
+
+    def test_count_gt_1_for_required_ranks(self):
+        for ranks, count in [(4, 2), (8, 3), (16, 2)]:
+            with self.subTest(ranks=ranks, count=count):
+                self.assert_reducescatter_matches_reference(ranks, count)
+
+    def test_fp16_bf16_and_prod_remain_not_supported(self):
+        send_data = _send_data(4, 1)
+        for data_type, op in [
+            (HCCL_FP16, HCCL_SUM),
+            (HCCL_BF16, HCCL_SUM),
+            (HCCL_FP32, HCCL_PROD),
+        ]:
+            with self.subTest(data_type=data_type, op=op):
+                result = self.engine.execute_reducescatter(
+                    send_data, data_type=data_type, op=op,
+                )
+                self.assertEqual(result["status"], "not_supported")
+                self.assertEqual(result["return_code"], HCCL_ERR_NOT_SUPPORTED)
+                self.assertIsNone(result["result"])
+
+    def test_invalid_python_input_is_reported(self):
+        self.assertEqual(
+            self.engine.execute_reducescatter([])["return_code"],
+            HCCL_ERR_INVALID_ARG,
+        )
+        self.assertEqual(
+            self.engine.execute_reducescatter([[[1.0]], [[2.0]]])
+            ["return_code"],
+            HCCL_ERR_INVALID_ARG,
+        )
+        self.assertEqual(
+            self.engine.execute_reducescatter([[[1.0], [2.0]], [[3.0], []]])
+            ["return_code"],
+            HCCL_ERR_INVALID_ARG,
+        )
+
+    def test_two_rank_legacy_shape_is_not_supported(self):
+        result = self.engine.execute_reducescatter(_send_data(2, 1))
+        self.assertEqual(result["status"], "not_supported")
+        self.assertEqual(result["return_code"], HCCL_ERR_NOT_SUPPORTED)
+
+
+if __name__ == "__main__":
+    unittest.main()

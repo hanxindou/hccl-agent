@@ -137,6 +137,48 @@ def HcclAllGatherCpuData(
     return result
 
 
+def HcclReduceScatterReference(
+    send_data: List[List[List[float]]],
+) -> List[List[float]]:
+    """Return the C2 CPU_SIM ReduceScatter FP32/SUM reference.
+
+    Input layout is [N][N][C], indexed as send[src][dst][element].
+    Output layout is [N][C], one reduced shard per dst rank.
+    """
+    if not send_data:
+        return []
+    rank_count = len(send_data)
+    if any(len(src_row) != rank_count for src_row in send_data):
+        raise ValueError("send_data must have shape [N][N][C]")
+    recv_count = len(send_data[0][0])
+    if recv_count == 0:
+        raise ValueError("recv_count must be greater than zero")
+    for src_row in send_data:
+        for shard in src_row:
+            if len(shard) != recv_count:
+                raise ValueError("all shards must have the same length")
+
+    return [
+        [
+            sum(float(send_data[src][dst][elem]) for src in range(rank_count))
+            for elem in range(recv_count)
+        ]
+        for dst in range(rank_count)
+    ]
+
+
+def HcclReduceScatterCpuData(
+    send_data: List[List[List[float]]],
+    engine: Optional[ExecutionEngine] = None,
+) -> Dict[str, Any]:
+    """Execute ReduceScatter through the C CPU_SIM plugin data path."""
+    runner = engine or ExecutionEngine()
+    result = runner.execute_reducescatter(send_data)
+    if result["status"] == "success":
+        result["reference"] = HcclReduceScatterReference(send_data)
+    return result
+
+
 def HcclReduceScatter(
     send_buf: Optional[List[float]],
     recv_buf: Optional[List[float]],

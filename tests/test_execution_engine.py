@@ -10,7 +10,7 @@ sys.path.insert(
 )
 
 from plugin.execution_engine import ExecutionEngine
-from plugin.hccl_api import HcclAllGatherReference
+from plugin.hccl_api import HcclAllGatherReference, HcclReduceScatterReference
 
 
 class TestExecutionEngine(unittest.TestCase):
@@ -129,6 +129,34 @@ class TestExecutionEngine(unittest.TestCase):
         result = self.engine.execute_allgather(send_data, algorithm="Butterfly")
         self.assertEqual(result["status"], "success")
         self.assertEqual(result["result"], HcclAllGatherReference(send_data))
+
+    # ---- ReduceScatter data execution ----
+
+    def test_reducescatter_wrapper_4_ranks_count_2(self):
+        send_data = [
+            [
+                [float(src * 1000 + dst * 100 + elem + 1)
+                 for elem in range(2)]
+                for dst in range(4)
+            ]
+            for src in range(4)
+        ]
+        result = self.engine.execute_reducescatter(send_data)
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], HcclReduceScatterReference(send_data))
+
+    def test_reducescatter_wrapper_8_ranks_count_3(self):
+        send_data = [
+            [
+                [float(src * 1000 + dst * 100 + elem + 1)
+                 for elem in range(3)]
+                for dst in range(8)
+            ]
+            for src in range(8)
+        ]
+        result = self.engine.execute_reducescatter(send_data)
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], HcclReduceScatterReference(send_data))
 
 
 if __name__ == "__main__":

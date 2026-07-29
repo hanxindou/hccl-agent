@@ -5,6 +5,7 @@ from plugin.hccl_api import (
     HCCL_SUCCESS, HcclComm, HcclCommInitClusterInfo,
     HcclAllReduce, HcclAllGather, HcclReduceScatter,
     HcclAllGatherReference, HcclAllGatherCpuData,
+    HcclReduceScatterReference, HcclReduceScatterCpuData,
 )
 
 
@@ -71,6 +72,29 @@ class TestHcclApi(unittest.TestCase):
         result = HcclAllGatherCpuData(send_data, algorithm="Wrapper")
         self.assertEqual(result["status"], "success")
         self.assertEqual(result["result"], HcclAllGatherReference(send_data))
+
+    def test_reducescatter_reference_layout(self):
+        send_data = [
+            [[1.0, 2.0], [10.0, 20.0]],
+            [[3.0, 4.0], [30.0, 40.0]],
+        ]
+        self.assertEqual(
+            HcclReduceScatterReference(send_data),
+            [[4.0, 6.0], [40.0, 60.0]],
+        )
+
+    def test_reducescatter_cpu_data_uses_explicit_data_entry(self):
+        send_data = [
+            [
+                [float(src * 1000 + dst * 100 + elem + 1)
+                 for elem in range(2)]
+                for dst in range(4)
+            ]
+            for src in range(4)
+        ]
+        result = HcclReduceScatterCpuData(send_data)
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["result"], HcclReduceScatterReference(send_data))
 
 
 if __name__ == "__main__":

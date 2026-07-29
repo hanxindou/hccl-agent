@@ -238,20 +238,13 @@ hcclResult_t hcclReduceScatter(
     hcclComm_t      comm
 )
 {
-    if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
-        return HCCL_ERR_INVALID_ARG;
-    }
-    if (recv_count == 0) {
-        return HCCL_ERR_INVALID_ARG;
-    }
-    if (data_type != HCCL_FP32) {
-        return HCCL_ERR_NOT_SUPPORTED;
-    }
-    if (op != HCCL_SUM) {
-        return HCCL_ERR_NOT_SUPPORTED;
-    }
-
-    return HCCL_ERR_NOT_SUPPORTED;
+    /*
+     * C2 maps the standard ReduceScatter wrapper to the CPU Mesh
+     * implementation using the project-local CPU_SIM [N][N][C] ->
+     * [N][C] flat buffer contract.
+     */
+    return mesh_reducescatter(send_buf, recv_buf, recv_count,
+                              data_type, op, comm);
 }
 
 hcclResult_t hcclBroadcast(

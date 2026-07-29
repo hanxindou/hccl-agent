@@ -214,6 +214,98 @@ class ExecutionEngine:
             "result": rows,
         }
 
+    def execute_reducescatter(self, send_data, data_type=HCCL_FP32,
+                              op=HCCL_SUM):
+        """Run CPU_SIM ReduceScatter on [N][N][C] FP32/SUM data."""
+        if not send_data:
+            return {
+                "primitive": "ReduceScatter",
+                "algorithm": "Mesh",
+                "status": "invalid_input",
+                "return_code": HCCL_ERR_INVALID_ARG,
+                "result": None,
+            }
+        n = len(send_data)
+        if any(len(src_row) != n for src_row in send_data):
+            return {
+                "primitive": "ReduceScatter",
+                "algorithm": "Mesh",
+                "status": "invalid_input",
+                "return_code": HCCL_ERR_INVALID_ARG,
+                "result": None,
+            }
+        count = len(send_data[0][0]) if n else 0
+        if count == 0:
+            return {
+                "primitive": "ReduceScatter",
+                "algorithm": "Mesh",
+                "status": "invalid_input",
+                "return_code": HCCL_ERR_INVALID_ARG,
+                "result": None,
+            }
+        for src_row in send_data:
+            for shard in src_row:
+                if len(shard) != count:
+                    return {
+                        "primitive": "ReduceScatter",
+                        "algorithm": "Mesh",
+                        "status": "invalid_input",
+                        "return_code": HCCL_ERR_INVALID_ARG,
+                        "result": None,
+                    }
+
+        self.load_library()
+        lib = self._lib
+        flat_input = [
+            float(value)
+            for src_row in send_data
+            for shard in src_row
+            for value in shard
+        ]
+        send = (ctypes.c_float * (n * n * count))(*flat_input)
+        recv = (ctypes.c_float * (n * count))()
+
+        comm = ctypes.c_void_p()
+        device_ids = (ctypes.c_int32 * n)(*range(n))
+        rc = lib.hcclCommInit(ctypes.byref(comm), n, device_ids)
+        if rc != HCCL_SUCCESS:
+            return {
+                "primitive": "ReduceScatter",
+                "algorithm": "Mesh",
+                "status": "comm_init_failed",
+                "return_code": rc,
+                "result": None,
+            }
+
+        try:
+            rc = lib.hcclReduceScatter(send, recv, count, data_type, op, comm)
+            if rc != HCCL_SUCCESS:
+                return {
+                    "primitive": "ReduceScatter",
+                    "algorithm": "Mesh",
+                    "status": "not_supported" if rc == HCCL_ERR_NOT_SUPPORTED else "error",
+                    "return_code": rc,
+                    "result": None,
+                }
+
+            rows = []
+            for dst in range(n):
+                offset = dst * count
+                rows.append([
+                    round(float(recv[offset + elem]), 6)
+                    for elem in range(count)
+                ])
+        finally:
+            lib.hcclCommDestroy(comm)
+
+        return {
+            "primitive": "ReduceScatter",
+            "algorithm": "Mesh",
+            "status": "success",
+            "return_code": rc,
+            "result": rows,
+        }
+
     # ------------------------------------------------------------------
     # Ring AllReduce execution
     # ------------------------------------------------------------------
