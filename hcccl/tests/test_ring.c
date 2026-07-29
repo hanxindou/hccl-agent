@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file    test_ring.c
  * @brief   Unit tests for ring_allreduce CPU simulation.
  *
@@ -27,7 +27,7 @@ static int tests_fail = 0;
 } while (0)
 
 #define FAIL(msg)  do {                                    \
-    printf("FAIL — %s\n", msg);                            \
+    printf("FAIL - %s\n", msg);                            \
     tests_fail++;                                          \
 } while (0)
 
@@ -49,12 +49,12 @@ static float run_one_rank(hcclComm_t comm, int32_t rank,
 }
 
 /* ------------------------------------------------------------------ */
-/*  Test 1: 4 ranks, values 1/2/3/4  →  sum = 10                     */
+/*  Test 1: 4 ranks, values 1/2/3/4  ->  sum = 10                     */
 /* ------------------------------------------------------------------ */
 
 static void test_ring_4_ranks(void)
 {
-    TEST("4 ranks [1,2,3,4] → all get 10");
+    TEST("4 ranks [1,2,3,4] -> all get 10");
 
     int32_t ids[] = {0, 1, 2, 3};
     hcclComm_t comm = NULL;
@@ -63,12 +63,12 @@ static void test_ring_4_ranks(void)
     float inputs[]  = {1.0f, 2.0f, 3.0f, 4.0f};
     float results[4];
 
-    /* Pass 1 — submit all values (last call triggers simulation). */
+    /* Pass 1 - submit all values (last call triggers simulation). */
     for (int i = 0; i < 4; i++) {
         run_one_rank(comm, i, inputs[i], NULL);
     }
 
-    /* Pass 2 — retrieve all results (simulation runs again, all correct). */
+    /* Pass 2 - retrieve all results (simulation runs again, all correct). */
     for (int i = 0; i < 4; i++) {
         results[i] = run_one_rank(comm, i, inputs[i], NULL);
     }
@@ -87,12 +87,12 @@ static void test_ring_4_ranks(void)
 }
 
 /* ------------------------------------------------------------------ */
-/*  Test 2: 8 ranks, values 1..8  →  sum = 36                        */
+/*  Test 2: 8 ranks, values 1..8  ->  sum = 36                        */
 /* ------------------------------------------------------------------ */
 
 static void test_ring_8_ranks(void)
 {
-    TEST("8 ranks [1..8] → all get 36");
+    TEST("8 ranks [1..8] -> all get 36");
 
     int32_t ids[] = {0, 1, 2, 3, 4, 5, 6, 7};
     hcclComm_t comm = NULL;
@@ -120,12 +120,12 @@ static void test_ring_8_ranks(void)
 }
 
 /* ------------------------------------------------------------------ */
-/*  Test 3: unsupported data type → HCCL_ERR_NOT_SUPPORTED            */
+/*  Test 3: unsupported data type -> HCCL_ERR_NOT_SUPPORTED            */
 /* ------------------------------------------------------------------ */
 
 static void test_rejects_unsupported_dtype(void)
 {
-    TEST("FP16 data type → HCCL_ERR_NOT_SUPPORTED");
+    TEST("FP16 data type -> HCCL_ERR_NOT_SUPPORTED");
 
     int32_t ids[] = {0, 1};
     hcclComm_t comm = NULL;
@@ -143,12 +143,12 @@ static void test_rejects_unsupported_dtype(void)
 }
 
 /* ------------------------------------------------------------------ */
-/*  Test 4: unsupported ReduceOp → HCCL_ERR_NOT_SUPPORTED             */
+/*  Test 4: unsupported ReduceOp -> HCCL_ERR_NOT_SUPPORTED             */
 /* ------------------------------------------------------------------ */
 
 static void test_rejects_unsupported_op(void)
 {
-    TEST("PROD ReduceOp → HCCL_ERR_NOT_SUPPORTED");
+    TEST("PROD ReduceOp -> HCCL_ERR_NOT_SUPPORTED");
 
     int32_t ids[] = {0, 1};
     hcclComm_t comm = NULL;
@@ -171,7 +171,7 @@ static void test_rejects_unsupported_op(void)
 
 static void test_rejects_null_sendbuf(void)
 {
-    TEST("NULL send_buf → HCCL_ERR_INVALID_ARG");
+    TEST("NULL send_buf -> HCCL_ERR_INVALID_ARG");
 
     int32_t ids[] = {0};
     hcclComm_t comm = NULL;
@@ -190,7 +190,7 @@ static void test_rejects_null_sendbuf(void)
 
 static void test_rejects_null_recvbuf(void)
 {
-    TEST("NULL recv_buf → HCCL_ERR_INVALID_ARG");
+    TEST("NULL recv_buf -> HCCL_ERR_INVALID_ARG");
 
     int32_t ids[] = {0};
     hcclComm_t comm = NULL;
@@ -215,7 +215,7 @@ int main(void)
 {
     printf("\n");
     printf("============================================\n");
-    printf(" test_ring — Ring AllReduce CPU simulation\n");
+    printf(" test_ring - Ring AllReduce CPU simulation\n");
     printf("============================================\n\n");
 
     test_ring_4_ranks();

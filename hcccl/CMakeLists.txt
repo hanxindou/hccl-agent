@@ -6,6 +6,16 @@ project(hccl_plugin LANGUAGES C VERSION 0.1.0)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+if(WIN32)
+    # Export all symbols by default so Visual Studio/MSVC builds produce
+    # both hccl_plugin.dll and the import library needed by test executables.
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
+if(MSVC)
+    add_compile_options(/source-charset:utf-8 /execution-charset:utf-8 /wd4819)
+endif()
+
 # ---- Source files -------------------------------------------------------
 
 set(SOURCES
@@ -34,6 +44,8 @@ target_include_directories(hccl_plugin
 
 # ---- Tests --------------------------------------------------------------
 
+enable_testing()
+
 add_executable(test_topology tests/test_topology.c)
 
 target_include_directories(test_topology
@@ -41,6 +53,11 @@ target_include_directories(test_topology
 )
 
 target_link_libraries(test_topology PRIVATE hccl_plugin)
+
+add_test(NAME test_topology COMMAND test_topology)
+set_tests_properties(test_topology PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_topology>
+)
 
 add_executable(test_ring tests/test_ring.c)
 
@@ -50,6 +67,11 @@ target_include_directories(test_ring
 
 target_link_libraries(test_ring PRIVATE hccl_plugin)
 
+add_test(NAME test_ring COMMAND test_ring)
+set_tests_properties(test_ring PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_ring>
+)
+
 add_executable(test_butterfly tests/test_butterfly.c)
 
 target_include_directories(test_butterfly
@@ -57,6 +79,11 @@ target_include_directories(test_butterfly
 )
 
 target_link_libraries(test_butterfly PRIVATE hccl_plugin)
+
+add_test(NAME test_butterfly COMMAND test_butterfly)
+set_tests_properties(test_butterfly PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_butterfly>
+)
 
 add_executable(test_nhr tests/test_nhr.c)
 
@@ -66,6 +93,11 @@ target_include_directories(test_nhr
 
 target_link_libraries(test_nhr PRIVATE hccl_plugin)
 
+add_test(NAME test_nhr COMMAND test_nhr)
+set_tests_properties(test_nhr PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_nhr>
+)
+
 add_executable(test_mesh tests/test_mesh.c)
 
 target_include_directories(test_mesh
@@ -74,6 +106,11 @@ target_include_directories(test_mesh
 
 target_link_libraries(test_mesh PRIVATE hccl_plugin)
 
+add_test(NAME test_mesh COMMAND test_mesh)
+set_tests_properties(test_mesh PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_mesh>
+)
+
 add_executable(test_fattree tests/test_fattree.c)
 
 target_include_directories(test_fattree
@@ -81,6 +118,11 @@ target_include_directories(test_fattree
 )
 
 target_link_libraries(test_fattree PRIVATE hccl_plugin)
+
+add_test(NAME test_fattree COMMAND test_fattree)
+set_tests_properties(test_fattree PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_fattree>
+)
 
 # ---- Install rules ------------------------------------------------------
 
@@ -95,12 +137,12 @@ install(FILES ${HEADERS}
 # ---- Build instructions -------------------------------------------------
 
 message(STATUS "")
-message(STATUS "HCCL Plugin — CPU-simulated build configured.")
+message(STATUS "HCCL Plugin - CPU-simulated build configured.")
 message(STATUS "No CANN SDK required.")
 message(STATUS "")
 message(STATUS "Build & test:")
 message(STATUS "  cd hcccl && mkdir -p build && cd build")
 message(STATUS "  cmake .. && make")
-message(STATUS "  ./test_topology")
+message(STATUS "  ctest --output-on-failure")
 message(STATUS "  ldd libhccl_plugin.so   # verify: no CANN deps")
 message(STATUS "")

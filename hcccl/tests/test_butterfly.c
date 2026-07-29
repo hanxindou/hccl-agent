@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file    test_butterfly.c
  * @brief   Unit tests for butterfly_allreduce CPU simulation.
  */
@@ -14,7 +14,7 @@ static int tests_fail = 0;
 
 #define TEST(name)  do { tests_run++; printf("  %-52s ", name); } while (0)
 #define PASS()      do { printf("PASS\n"); tests_pass++; } while (0)
-#define FAIL(msg)   do { printf("FAIL — %s\n", msg); tests_fail++; } while (0)
+#define FAIL(msg)   do { printf("FAIL - %s\n", msg); tests_fail++; } while (0)
 
 #define EPS  0.0001f
 
@@ -33,12 +33,12 @@ static float run_one(hcclComm_t comm, int32_t rank, float input,
 }
 
 /* ------------------------------------------------------------------ */
-/*  4 ranks [1,2,3,4] → 10                                            */
+/*  4 ranks [1,2,3,4] -> 10                                            */
 /* ------------------------------------------------------------------ */
 
 static void test_butterfly_4_ranks(void)
 {
-    TEST("4 ranks [1,2,3,4] → all get 10");
+    TEST("4 ranks [1,2,3,4] -> all get 10");
 
     int32_t ids[] = {0,1,2,3};
     hcclComm_t comm = NULL;
@@ -59,12 +59,12 @@ static void test_butterfly_4_ranks(void)
 }
 
 /* ------------------------------------------------------------------ */
-/*  8 ranks [1..8] → 36                                               */
+/*  8 ranks [1..8] -> 36                                               */
 /* ------------------------------------------------------------------ */
 
 static void test_butterfly_8_ranks(void)
 {
-    TEST("8 ranks [1..8] → all get 36");
+    TEST("8 ranks [1..8] -> all get 36");
 
     int32_t ids[] = {0,1,2,3,4,5,6,7};
     hcclComm_t comm = NULL;
@@ -90,7 +90,7 @@ static void test_butterfly_8_ranks(void)
 
 static void test_null_sendbuf(void)
 {
-    TEST("NULL send_buf → INVALID_ARG");
+    TEST("NULL send_buf -> INVALID_ARG");
     int32_t ids[] = {0};  hcclComm_t c = NULL;
     hcclCommInit(&c, 1, ids);  hcclSetRank(c, 0);
     float r;
@@ -101,7 +101,7 @@ static void test_null_sendbuf(void)
 
 static void test_null_recvbuf(void)
 {
-    TEST("NULL recv_buf → INVALID_ARG");
+    TEST("NULL recv_buf -> INVALID_ARG");
     int32_t ids[] = {0};  hcclComm_t c = NULL;
     hcclCommInit(&c, 1, ids);  hcclSetRank(c, 0);
     float s = 1;
@@ -116,7 +116,7 @@ static void test_null_recvbuf(void)
 
 static void test_fp16_rejected(void)
 {
-    TEST("FP16 → NOT_SUPPORTED");
+    TEST("FP16 -> NOT_SUPPORTED");
     int32_t ids[] = {0};  hcclComm_t c = NULL;
     hcclCommInit(&c, 1, ids);  hcclSetRank(c, 0);
     float s=1, r;
@@ -127,7 +127,7 @@ static void test_fp16_rejected(void)
 
 static void test_prod_rejected(void)
 {
-    TEST("PROD → NOT_SUPPORTED");
+    TEST("PROD -> NOT_SUPPORTED");
     int32_t ids[] = {0};  hcclComm_t c = NULL;
     hcclCommInit(&c, 1, ids);  hcclSetRank(c, 0);
     float s=1, r;
@@ -143,7 +143,7 @@ static void test_prod_rejected(void)
 int main(void)
 {
     printf("\n============================================\n");
-    printf(" test_butterfly — Butterfly AllReduce\n");
+    printf(" test_butterfly - Butterfly AllReduce\n");
     printf("============================================\n\n");
 
     test_butterfly_4_ranks();

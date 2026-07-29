@@ -1,5 +1,17 @@
 # HCCL Agent 项目接口参考与仿真实现指南
 
+## Batch A1 接口与验证边界
+
+当前项目的 `hcccl/` 目录提供的是 CPU 模拟基线和 HCCL-like 接口声明，不声明已经完成真实 CANN/HCOMM ABI 兼容。Windows CPU 模式、Linux CPU 模式和 Ascend/CANN 模式必须分开记录：
+
+| 模式 | 当前状态 | 说明 |
+|------|----------|------|
+| Windows CPU | 本 Batch 目标 | 默认 CMake 构建 DLL/import lib，CTest 运行 6 个 C 测试 |
+| Linux CPU | 待环境验证 | 应使用外部 `/tmp` 构建目录生成 `.so` 并运行 CTest |
+| Ascend/CANN | 未接入 | 需要 CANN 8.0+、HCOMM 头库和硬件或官方模拟器 |
+
+当前 C 数据路径主要覆盖 FP32/SUM/`count == 1` AllReduce CPU 模拟。AllGather、ReduceScatter、Broadcast、FP16/BF16、通用 ReduceOp 和标准 wrapper 闭合留待后续 Batch。
+
 ## 1. 文档目的
 
 本文档用于记录 HCCL（Huawei Collective Communication Library）在本项目中的关键接口、数据结构以及后续仿真实现方案。

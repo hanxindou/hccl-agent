@@ -1,10 +1,23 @@
-# Generated algorithm skeleton for Fat-Tree
-# Primitive: AllReduce
+"""Generated example artifact for Fat-Tree AllReduce.
 
-class Fat-Tree:
+This file is intentionally a syntax-valid Python sketch produced by the
+Agent code-generation prototype. It is not a CANN/HCCL implementation and
+is not submitted as a real collective communication algorithm.
+"""
+
+
+class FatTreeExample:
 
     def execute(self):
-        leaf_aggregation()  # Leaf aggregation — intra-group sum
-        core_aggregation()  # Core aggregation — inter-group leader sum
-        broadcast()  # Broadcast — global result to all leaves
+        self.leaf_aggregation()
+        self.core_aggregation()
+        self.broadcast()
 
+    def leaf_aggregation(self):
+        """Sketch: intra-group sum."""
+
+    def core_aggregation(self):
+        """Sketch: inter-group leader sum."""
+
+    def broadcast(self):
+        """Sketch: global result to all leaves."""

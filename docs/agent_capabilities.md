@@ -1,5 +1,21 @@
 # Agent 能力清单 (Agent Capabilities)
 
+## Batch A1 能力声明边界
+
+本清单描述当前 Agent 工程的模块能力，但不等同于赛题核心通信能力已经完成。当前系统定位为 **Python Agent + 数学模拟器 + CPU C 插件原型**。
+
+能力类型统一说明：
+
+| 类型 | 含义 |
+|------|------|
+| 真实实现 | 当前代码路径可运行并有测试证据 |
+| CPU 模拟 | 在普通 CPU 内存中模拟通信行为，不代表真实设备通信 |
+| 数学模型 | 通过公式估算 latency/bandwidth/score |
+| Stub | 接口或函数存在，但返回 `NOT_SUPPORTED` 或无真实数据逻辑 |
+| 未验证 | 当前 Windows/CPU 审计未运行通过或依赖环境缺失 |
+
+当前 C 层真实可测范围是有限 FP32/SUM/`count == 1` AllReduce CPU 模拟。AllGather、ReduceScatter、Broadcast 的完整 C 数据正确性、FP16/BF16、通用 ReduceOp、CANN/HCOMM 和 Ascend 实机尚未完成。
+
 本文档列出 HCCL-Agent 当前具备的能力模块，每个模块说明其功能、输入输出、能力和局限。这是赛题要求的正式交付物之一。
 
 ---

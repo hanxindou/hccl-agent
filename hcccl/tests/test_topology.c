@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file    test_topology.c
  * @brief   Unit test for communicator init, topology discovery, and destroy.
  *
@@ -28,7 +28,7 @@ static int tests_fail = 0;
 } while (0)
 
 #define FAIL(msg)  do {                                     \
-    printf("FAIL — %s\n", msg);                             \
+    printf("FAIL - %s\n", msg);                             \
     tests_fail++;                                           \
 } while (0)
 
@@ -104,7 +104,7 @@ static void test_comm_destroy_null(void)
 }
 
 /* ------------------------------------------------------------------ */
-/*  Test: hcclGetTopology — Full Mesh for 4 devices                   */
+/*  Test: hcclGetTopology - Full Mesh for 4 devices                   */
 /* ------------------------------------------------------------------ */
 
 static void test_topology_full_mesh_4(void)
@@ -234,7 +234,7 @@ int main(void)
 {
     printf("\n");
     printf("============================================\n");
-    printf(" test_topology — communicator + topology\n");
+    printf(" test_topology - communicator + topology\n");
     printf("============================================\n\n");
 
     test_comm_init_valid();

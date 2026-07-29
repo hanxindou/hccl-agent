@@ -1,69 +1,86 @@
-# HCCL Plugin — C/C++ Skeleton
+# HCCL Plugin - CPU Simulation Baseline
 
-This directory contains the C/C++ HCCL plugin skeleton required by the
-competition.  **It cannot currently be compiled** — the CANN 8.0 SDK is
-required.
+This directory contains the C CPU-simulated plugin baseline used by the
+HCCL-Agent project. It is useful for local algorithm and bridge testing,
+but it is not a real CANN/HCOMM/Ascend implementation.
 
-## What is REAL
+## What Is Real
 
-- **Interface declarations** in `include/hccl_comm.h` and
-  `include/hccl_algorithms.h` match the HCOMM open-source public API
-  (Gitee: ascend/cann-hcomm).
-- **Algorithm descriptions** in the `src/*.c` comments document the
-  intended implementation for each algorithm (Ring, Butterfly, Mesh,
-  NHR, Fat-Tree).
-- **CMakeLists.txt** is a valid CMake build that will work once the
-  CANN SDK paths are configured.
+- `hcclCommInit`, `hcclCommDestroy`, `hcclGetTopology`, and
+  `hcclFreeTopology` are implemented as CPU-only simulation helpers.
+- `ring_allreduce`, `butterfly_allreduce`, `mesh_allreduce`,
+  `nhr_allreduce`, and `fattree_allreduce` execute FP32/SUM
+  AllReduce-style CPU simulations for `count == 1`.
+- `CMakeLists.txt` builds a shared library and six C test programs in
+  CPU mode on Windows/MSVC and Linux-like toolchains.
+- CTest registers the six C test executables: `test_topology`,
+  `test_ring`, `test_butterfly`, `test_nhr`, `test_mesh`, and
+  `test_fattree`.
 
-## What is STUB
+## What Is Stub or Not Yet Implemented
 
-- All function bodies in `src/*.c` return `HCCL_ERR_NOT_SUPPORTED` and
-  log a message to stderr.  They are placeholders.
+- This build does not link CANN, HCOMM, Ascend drivers, RDMA, or real
+  device communication libraries.
+- FP16, BF16, and ReduceOps other than SUM are not implemented.
+- Multi-element collective data paths are not implemented in the current
+  C simulation.
+- `butterfly_allgather` and `mesh_reducescatter` are still stubs.
+- Standard HCCL wrapper closure and Python loader changes are intentionally
+  left for a later batch.
 
-## What you need to make this real
+## Windows CPU Build
 
-1. **CANN 8.0 SDK** — installed on a machine with Ascend NPU drivers.
-   Download from https://www.hiascend.com/.
-2. **HCOMM headers & libraries** — part of the CANN SDK.
-3. **Ascend NPU hardware** (910A2/910A3/910B/910C) or the Ascend
-   simulator for verification.
+```cmd
+set BUILD_DIR=F:\build\hccl-agent-hcccl-a1
+cmake -S hcccl -B "%BUILD_DIR%" -G "Visual Studio 17 2022" -A x64
+cmake --build "%BUILD_DIR%" --config Release
+ctest --test-dir "%BUILD_DIR%" -C Release --output-on-failure
+```
 
-## Build (once SDK is available)
+The default Windows configuration enables symbol export so the build
+produces both:
+
+```text
+Release\hccl_plugin.dll
+Release\hccl_plugin.lib
+```
+
+## Linux CPU Build
+
+When Linux or WSL is available, use an external build directory:
 
 ```bash
-cd hcccl
-mkdir build && cd build
-cmake -DCANN_HOME=/usr/local/Ascend/ascend-toolkit/latest ..
-make -j$(nproc)
-# Output: libhccl_plugin.so
+cmake -S hcccl -B /tmp/hccl-agent-hcccl-a1
+cmake --build /tmp/hccl-agent-hcccl-a1
+ctest --test-dir /tmp/hccl-agent-hcccl-a1 --output-on-failure
 ```
+
+Do not treat a Windows DLL build as proof that Linux `.so` or Ascend
+deployment has been verified.
+
+## Ascend/CANN Boundary
+
+Real competition deployment still requires CANN 8.0+ / HCOMM headers and
+libraries, Ascend hardware or an approved simulator, and validation
+against HCCL-compatible baselines. That work is outside Batch A1.
 
 ## Structure
 
-```
+```text
 hcccl/
-├── CMakeLists.txt           # CMake build (valid, needs SDK)
+├── CMakeLists.txt           # CPU simulation CMake build
 ├── README.md                # This file
 ├── include/
-│   ├── hccl_comm.h          # Comm lifecycle, topology, primitives
+│   ├── hccl_comm.h          # HCCL-like declarations
 │   └── hccl_algorithms.h    # Algorithm entry points
 ├── src/
-│   ├── hccl_comm.c          # STUB — comm init/finalize/topology
-│   └── hccl_algorithms.c    # STUB — AllReduce/AllGather/ReduceScatter
-└── tests/                   # Reserved for future test code
+│   ├── hccl_comm.c          # CPU-simulated comm init/finalize/topology
+│   └── hccl_algorithms.c    # CPU-simulated AllReduce family + stubs
+└── tests/                   # C test executables registered with CTest
 ```
 
-## Interface provenance
+## Interface Provenance
 
-The following interfaces are declared based on the public HCOMM
-repository (Gitee: ascend/cann-hcomm):
-
-| Function | Source |
-|----------|--------|
-| `hcclCommInit` | HCOMM public API |
-| `hcclCommDestroy` | HCOMM public API |
-| `hcclGetTopology` | HCOMM public API |
-| `hcclAllReduce` | HCOMM public API |
-| `hcclAllGather` | HCOMM public API |
-| `hcclReduceScatter` | HCOMM public API |
-| `hcclBroadcast` | HCOMM public API |
+The declarations are HCCL-like project declarations inspired by public
+HCOMM/HCCL concepts. Full HCOMM/CANN ABI compatibility is not claimed
+until the dedicated interface-compatibility batch is completed.

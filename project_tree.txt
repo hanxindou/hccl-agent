@@ -1,133 +1,228 @@
-.
-├── README.MD
-├── __pycache__
-│   └── main.cpython-310.pyc
-├── agent
-│   ├── __pycache__
-│   │   ├── evaluation_skill.cpython-310.pyc
-│   │   ├── execution_skill.cpython-310.pyc
-│   │   ├── experiment_logger.cpython-310.pyc
-│   │   ├── hccl_agent.cpython-310.pyc
-│   │   ├── llm_client.cpython-310.pyc
-│   │   ├── plugin_capability.cpython-310.pyc
-│   │   ├── plugin_manager.cpython-310.pyc
-│   │   ├── prompt_engine.cpython-310.pyc
-│   │   ├── reasoning_skill.cpython-310.pyc
-│   │   └── report_generator.cpython-310.pyc
-│   ├── evaluation_skill.py
-│   ├── execution_skill.py
-│   ├── experiment_logger.py
-│   ├── hccl_agent.py
-│   ├── llm_client.py
-│   ├── plugin_capability.py
-│   ├── plugin_manager.py
-│   ├── prompt_engine.py
-│   ├── reasoning_skill.py
-│   └── report_generator.py
-├── config
-│   └── cluster.json
-├── docs
-│   ├── 2026年中国研究生人工智能大赛--华为赛题.docx
-│   ├── agent_capabilities.md
-│   ├── competition_analysis.md
-│   ├── deepseek_setup.md
-│   ├── gap_analysis.md
-│   ├── project_documentation.md
-│   └── simulator_guide.md
-├── hcccl
-│   ├── CMakeLists.txt
-│   ├── README.md
-│   ├── build
-│   │   ├── CMakeCache.txt
-│   │   ├── CMakeFiles
-│   │   ├── Makefile
-│   │   ├── cmake_install.cmake
-│   │   ├── libhccl_plugin.so
-│   │   ├── test_butterfly
-│   │   ├── test_fattree
-│   │   ├── test_mesh
-│   │   ├── test_nhr
-│   │   ├── test_ring
-│   │   └── test_topology
-│   ├── include
-│   │   ├── hccl_algorithms.h
-│   │   └── hccl_comm.h
-│   ├── src
-│   │   ├── hccl_algorithms.c
-│   │   └── hccl_comm.c
-│   └── tests
-│       ├── test_butterfly.c
-│       ├── test_fattree.c
-│       ├── test_mesh.c
-│       ├── test_nhr.c
-│       ├── test_ring.c
-│       └── test_topology.c
-├── logs
-│   ├── performance_report.md
-│   ├── prompt_calls.jsonl
-│   ├── runs.jsonl
-│   ├── sample_execution_report.txt
-│   └── summary.json
+﻿.
+├── .gitignore
+├── agent/
+│   ├── auto_tuning_skill.py
+│   ├── benchmark_skill.py
+│   ├── calibration_explanation_skill.py
+│   ├── code_generation_skill.py
+│   ├── convergence_analysis_skill.py
+│   ├── decision_skill.py
+│   ├── evaluation_skill.py
+│   ├── execution_skill.py
+│   ├── experience_store.py
+│   ├── experiment_logger.py
+│   ├── explanation_skill.py
+│   ├── hccl_agent.py
+│   ├── knowledge_report_skill.py
+│   ├── llm_client.py
+│   ├── optimization_loop_skill.py
+│   ├── optimization_proposal_skill.py
+│   ├── planning_skill.py
+│   ├── plugin_capability.py
+│   ├── plugin_manager.py
+│   ├── policy_engine.py
+│   ├── prompt_engine.py
+│   ├── reasoning_skill.py
+│   ├── reflection_skill.py
+│   ├── replanning_skill.py
+│   ├── report_generator.py
+├── analysis/
+│   ├── algorithm_sensitivity.py
+│   ├── auto_tuning_analysis.py
+│   ├── calibration_report.py
+│   ├── scaling_analysis.py
+│   ├── topology_sensitivity.py
+├── calibration/
+│   ├── calibration_profile.py
+│   ├── calibration_registry.py
+│   ├── default_profiles/
+│   │   ├── baseline_v1.json
+│   │   ├── competition_v1.json
+│   │   ├── research_v1.json
+├── CLAUDE.md
+├── config/
+│   ├── cluster.json
+├── cost_model/
+│   ├── __init__.py
+│   ├── engine.py
+├── docs/
+│   ├── 2026年中国研究生人工智能大赛--华为赛题.docx
+│   ├── agent_capabilities.md
+│   ├── cann_hccl_interface_guide.md
+│   ├── competition_analysis.md
+│   ├── deepseek_setup.md
+│   ├── gap_analysis.md
+│   ├── project_documentation.md
+│   ├── simulator_guide.md
+├── examples/
+│   ├── generated_code/
+│   │   ├── butterfly.py
+│   │   ├── fat-tree.py
+│   │   ├── nhr.py
+│   │   ├── ring_allreduce.py
+│   ├── generated_configs/
+│   │   ├── butterfly.json
+│   │   ├── fat-tree.json
+│   │   ├── nhr.json
+│   │   ├── ring_allreduce.json
+├── experiments/
+│   ├── benchmark_runner.py
+│   ├── reports/
+│   │   ├── benchmark_summary.md
+│   │   ├── dual_node_16gpu.md
+│   │   ├── fattree_32gpu.md
+│   │   ├── heterogeneous_cluster.md
+│   │   ├── hierarchical_64gpu.md
+│   │   ├── single_node_8gpu.md
+│   ├── scenarios/
+│   │   ├── scenario_01_single_node_8gpu.json
+│   │   ├── scenario_02_dual_node_16gpu.json
+│   │   ├── scenario_03_fattree_32gpu.json
+│   │   ├── scenario_04_hierarchical_64gpu.json
+│   │   ├── scenario_05_heterogeneous_cluster.json
+│   │   ├── scenario_06_4gpu.json
+│   │   ├── scenario_07_128gpu.json
+│   │   ├── scenario_08_256gpu.json
+├── hardware/
+│   ├── __init__.py
+│   ├── affinity_engine.py
+│   ├── node_profile.py
+│   ├── profile.py
+│   ├── resource_manager.py
+├── hcccl/
+│   ├── CMakeLists.txt
+│   ├── include/
+│   │   ├── hccl_algorithms.h
+│   │   ├── hccl_comm.h
+│   ├── README.md
+│   ├── src/
+│   │   ├── hccl_algorithms.c
+│   │   ├── hccl_comm.c
+│   ├── tests/
+│   │   ├── test_butterfly.c
+│   │   ├── test_fattree.c
+│   │   ├── test_mesh.c
+│   │   ├── test_nhr.c
+│   │   ├── test_ring.c
+│   │   ├── test_topology.c
+├── knowledge/
+│   ├── knowledge_base.py
 ├── main.py
-├── plugin
-│   ├── __pycache__
-│   │   ├── execution_engine.cpython-310.pyc
-│   │   └── hccl_bridge.cpython-310.pyc
-│   ├── execution_engine.py
-│   └── hccl_bridge.py
+├── plugin/
+│   ├── execution_engine.py
+│   ├── hccl_api.py
+│   ├── hccl_bridge.py
 ├── project_tree.txt
-├── prompts
-│   └── algorithm_prompt.txt
-├── scripts
-│   ├── generate_report.py
-│   └── integration_test.sh
-├── simulator
-│   ├── __pycache__
-│   │   ├── fault_injector.cpython-310.pyc
-│   │   └── simulator.cpython-310.pyc
-│   ├── fault_injector.py
-│   └── simulator.py
-├── skills
-│   ├── __pycache__
-│   │   ├── algorithm_skill.cpython-310.pyc
-│   │   ├── config_skill.cpython-310.pyc
-│   │   ├── optimization_skill.cpython-310.pyc
-│   │   ├── performance_model.cpython-310.pyc
-│   │   ├── strategy_skill.cpython-310.pyc
-│   │   ├── topology_graph.cpython-310.pyc
-│   │   └── topology_skill.cpython-310.pyc
-│   ├── algorithm_skill.py
-│   ├── config_skill.py
-│   ├── optimization_skill.py
-│   ├── performance_model.py
-│   ├── strategy_skill.py
-│   ├── topology_graph.py
-│   └── topology_skill.py
-└── tests
-    ├── __pycache__
-    │   ├── test_agent.cpython-310.pyc
-    │   ├── test_evaluation_skill.cpython-310.pyc
-    │   ├── test_execution_engine.cpython-310.pyc
-    │   ├── test_execution_report_flow.cpython-310.pyc
-    │   ├── test_execution_skill.cpython-310.pyc
-    │   ├── test_llm_client.cpython-310.pyc
-    │   ├── test_performance_model.cpython-310.pyc
-    │   ├── test_plugin_bridge.cpython-310.pyc
-    │   ├── test_plugin_manager.cpython-310.pyc
-    │   ├── test_reasoning_skill.cpython-310.pyc
-    │   ├── test_report_generator.cpython-310.pyc
-    │   └── test_simulator_model.cpython-310.pyc
-    ├── test_agent.py
-    ├── test_evaluation_skill.py
-    ├── test_execution_engine.py
-    ├── test_execution_report_flow.py
-    ├── test_execution_skill.py
-    ├── test_llm_client.py
-    ├── test_performance_model.py
-    ├── test_plugin_bridge.py
-    ├── test_plugin_manager.py
-    ├── test_reasoning_skill.py
-    ├── test_report_generator.py
-    └── test_simulator_model.py
+├── prompts/
+│   ├── algorithm_prompt.txt
+├── README.MD
+├── scripts/
+│   ├── generate_report.py
+│   ├── integration_test.sh
+├── simulator/
+│   ├── failover_engine.py
+│   ├── fault_injector.py
+│   ├── health_monitor.py
+│   ├── retry_policy.py
+│   ├── simulator.py
+├── skills/
+│   ├── algorithm_selector.py
+│   ├── algorithm_skill.py
+│   ├── benchmark_suite_skill.py
+│   ├── case_retrieval_skill.py
+│   ├── config_skill.py
+│   ├── decision_validation_skill.py
+│   ├── experience_learning_skill.py
+│   ├── hardware_reasoning_skill.py
+│   ├── knowledge_extraction_skill.py
+│   ├── optimization_skill.py
+│   ├── performance_model.py
+│   ├── strategy_skill.py
+│   ├── topology_graph.py
+│   ├── topology_reasoning_skill.py
+│   ├── topology_skill.py
+├── tests/
+│   ├── test_affinity_engine.py
+│   ├── test_agent.py
+│   ├── test_algorithm_reflection.py
+│   ├── test_algorithm_selection_flow.py
+│   ├── test_algorithm_selector.py
+│   ├── test_algorithm_sensitivity_report.py
+│   ├── test_auto_tuning_flow.py
+│   ├── test_auto_tuning_report.py
+│   ├── test_auto_tuning_skill.py
+│   ├── test_benchmark_reports.py
+│   ├── test_benchmark_runner.py
+│   ├── test_benchmark_skill.py
+│   ├── test_bottleneck_detection.py
+│   ├── test_calibration_profile.py
+│   ├── test_calibration_registry.py
+│   ├── test_calibration_report.py
+│   ├── test_case_retrieval.py
+│   ├── test_code_generation_flow.py
+│   ├── test_code_generation_skill.py
+│   ├── test_convergence_analysis.py
+│   ├── test_cost_model.py
+│   ├── test_decision_skill.py
+│   ├── test_decision_trace_flow.py
+│   ├── test_decision_validation.py
+│   ├── test_dynamic_topology.py
+│   ├── test_evaluation_skill.py
+│   ├── test_execution_engine.py
+│   ├── test_execution_hccl_flow.py
+│   ├── test_execution_report_flow.py
+│   ├── test_execution_skill.py
+│   ├── test_experience_driven_selection.py
+│   ├── test_experience_learning.py
+│   ├── test_experience_reflection.py
+│   ├── test_experience_report.py
+│   ├── test_experience_store.py
+│   ├── test_explanation_skill.py
+│   ├── test_failover_engine.py
+│   ├── test_graph_simulator.py
+│   ├── test_hardware_aware_selection.py
+│   ├── test_hardware_decision_trace.py
+│   ├── test_hardware_profile.py
+│   ├── test_hardware_reasoning_skill.py
+│   ├── test_hccl_api.py
+│   ├── test_health_monitor.py
+│   ├── test_knowledge_base.py
+│   ├── test_knowledge_extraction.py
+│   ├── test_knowledge_flow.py
+│   ├── test_llm_client.py
+│   ├── test_node_profile.py
+│   ├── test_optimization_flow.py
+│   ├── test_optimization_history.py
+│   ├── test_optimization_loop.py
+│   ├── test_optimization_proposal.py
+│   ├── test_performance_calibration.py
+│   ├── test_performance_model.py
+│   ├── test_planning_hccl_integration.py
+│   ├── test_planning_skill.py
+│   ├── test_plugin_bridge.py
+│   ├── test_plugin_manager.py
+│   ├── test_policy_engine.py
+│   ├── test_reasoning_skill.py
+│   ├── test_reflection_decision_quality.py
+│   ├── test_reflection_skill.py
+│   ├── test_reliability_flow.py
+│   ├── test_replanning_skill.py
+│   ├── test_report_generator.py
+│   ├── test_resource_manager.py
+│   ├── test_retry_policy.py
+│   ├── test_scaling_analysis.py
+│   ├── test_score_breakdown.py
+│   ├── test_simulator_model.py
+│   ├── test_topology_change_detection.py
+│   ├── test_topology_events.py
+│   ├── test_topology_graph.py
+│   ├── test_topology_reasoning.py
+│   ├── test_topology_replanning.py
+│   ├── test_topology_sensitivity_report.py
+├── topology/
+│   ├── __init__.py
+│   ├── dynamic_topology.py
+│   ├── graph_builder.py
+│   ├── topology_events.py
 
-22 directories, 108 files
+# Generated from git ls-files for Batch A1; excludes third_party, build outputs, logs, virtualenvs, caches, and binary artifacts.

@@ -1,10 +1,23 @@
-# Generated algorithm skeleton for Ring AllReduce
-# Primitive: AllReduce
+"""Generated example artifact for Ring AllReduce.
+
+This file is intentionally a syntax-valid Python sketch produced by the
+Agent code-generation prototype. It is not a CANN/HCCL implementation and
+is not submitted as a real collective communication algorithm.
+"""
+
 
 class RingAllReduce:
 
     def execute(self):
-        reducescatter()  # ReduceScatter — each rank splits data, circulates chunks along ring
-        ring_exchange()  # Ring Exchange — partial sums propagate through pipeline
-        allgather()  # AllGather — fully reduced chunks circulate to all ranks
+        self.reducescatter()
+        self.ring_exchange()
+        self.allgather()
 
+    def reducescatter(self):
+        """Sketch: each rank splits data and circulates chunks along ring."""
+
+    def ring_exchange(self):
+        """Sketch: partial sums propagate through the pipeline."""
+
+    def allgather(self):
+        """Sketch: fully reduced chunks circulate to all ranks."""

@@ -1,5 +1,5 @@
 """Tests for CalibrationProfile."""
-import os, sys, unittest
+import os, sys, tempfile, unittest
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 from calibration.calibration_profile import CalibrationProfile
 
@@ -16,10 +16,11 @@ class TestCalibrationProfile(unittest.TestCase):
 
     def test_roundtrip_json(self):
         p = CalibrationProfile(description="test")
-        p.to_json("/tmp/_test_calib.json")
-        p2 = CalibrationProfile.from_json("/tmp/_test_calib.json")
-        self.assertEqual(p2.description, "test")
-        os.unlink("/tmp/_test_calib.json")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "_test_calib.json")
+            p.to_json(path)
+            p2 = CalibrationProfile.from_json(path)
+            self.assertEqual(p2.description, "test")
 
 
 if __name__ == "__main__":

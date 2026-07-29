@@ -1,10 +1,23 @@
-# Generated algorithm skeleton for NHR
-# Primitive: AllReduce
+"""Generated example artifact for NHR AllReduce.
+
+This file is intentionally a syntax-valid Python sketch produced by the
+Agent code-generation prototype. It is not a CANN/HCCL implementation and
+is not submitted as a real collective communication algorithm.
+"""
+
 
 class NHR:
 
     def execute(self):
-        group_local_ring_reduce_(group_size=4)()  # Group-local ring reduce (group_size=4)
-        leader_ring_reduce_across_groups()  # Leader ring reduce across groups
-        group_broadcast()  # Group broadcast — leaders distribute to members
+        self.group_local_ring_reduce(group_size=4)
+        self.leader_ring_reduce_across_groups()
+        self.group_broadcast()
 
+    def group_local_ring_reduce(self, group_size=4):
+        """Sketch: group-local ring reduce."""
+
+    def leader_ring_reduce_across_groups(self):
+        """Sketch: leader ring reduce across groups."""
+
+    def group_broadcast(self):
+        """Sketch: leaders distribute the result to members."""

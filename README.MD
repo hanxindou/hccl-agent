@@ -8,7 +8,16 @@
 
 ## 当前阶段
 
-**Python 概念原型** — 具备最小可运行的 Agent → Skills → Simulator 闭环。后续将逐步过渡到 C/C++ HCCL 插件工程。
+**工程基线阶段（Batch A1）** — 当前系统是 **Python Agent + 数学模拟器 + CPU C 插件原型**。
+
+已验证和未验证边界：
+
+- Python Agent 主流程可进行规则候选选择、模拟评分、Prompt 记录和实验日志记录。
+- C 插件当前是 CPU 模拟实现，不是 CANN/HCOMM/Ascend 实机实现。
+- C 层已覆盖有限的 FP32 / SUM / `count == 1` AllReduce CPU 模拟算法，包括 Ring、Butterfly、Mesh、NHR、Fat-Tree。
+- AllGather、ReduceScatter、Broadcast 目前仅在 Python/接口或策略层可表示，尚未形成完整 C 数据正确性实现。
+- FP16、BF16、通用 ReduceOp、真实多设备通信、CANN/HCOMM 链接和 Ascend 实机验证尚未完成。
+- 当前 latency/bandwidth/score 来自数学模型或 CPU 模拟，不能直接作为真实 HCCL 性能结论。
 
 ## 目录结构
 
@@ -33,7 +42,13 @@
 ├── prompts/
 │   └── algorithm_prompt.txt        # Prompt 文件（Agent 引导词）
 ├── tests/
-│   └── test_agent.py               # 单元测试
+│   ├── test_agent.py               # Agent 主流程测试
+│   └── ...                         # Python 单元测试
+├── hcccl/
+│   ├── CMakeLists.txt              # CPU 模拟 C 插件构建
+│   ├── include/                    # HCCL-like 接口声明
+│   ├── src/                        # CPU 模拟通信器和 AllReduce 算法
+│   └── tests/                      # C 测试程序
 ├── docs/
 │   ├── project_documentation.md    # 详细项目文档
 │   ├── gap_analysis.md             # 差距分析
@@ -77,6 +92,17 @@ python3 main.py
 python3 -m unittest tests/test_agent.py -v
 ```
 
+### Windows C 插件验证
+
+```cmd
+set BUILD_DIR=F:\build\hccl-agent-hcccl-a1
+cmake -S hcccl -B "%BUILD_DIR%" -G "Visual Studio 17 2022" -A x64
+cmake --build "%BUILD_DIR%" --config Release
+ctest --test-dir "%BUILD_DIR%" -C Release --output-on-failure
+```
+
+Windows 默认 CMake 配置应生成 `hccl_plugin.dll` 和 `hccl_plugin.lib`，并通过 CTest 发现 6 个 C 测试程序。
+
 ## 架构
 
 ```
@@ -105,7 +131,12 @@ main.py (CLI)
 - [x] 通信策略文本生成
 - [x] 结构化实验日志（JSON-lines + summary）
 - [x] CLI 非交互式运行入口
-- [x] 最小单元测试覆盖
+- [x] Python 单元测试覆盖
+- [x] CPU 模拟 C 插件构建
+- [x] 有限 FP32/SUM AllReduce CPU 模拟测试
+- [ ] 完整 C AllGather / ReduceScatter 数据实现
+- [ ] FP16 / BF16 / 通用 ReduceOp
+- [ ] CANN/HCOMM/Ascend 实机验证
 
 ## 开发路线
 
@@ -117,11 +148,12 @@ main.py (CLI)
 - [x] 模拟器日志格式
 - [x] primitive 全链路传递
 
-### P0（待完成）
+### P0（当前优先）
 
-- [ ] 建立 C/C++ HCCL 插件目录和 CMake 骨架
-- [ ] Agent 能力清单文档
-- [ ] 模拟器配置说明文档
+- [ ] 收敛文档事实、项目树和跨平台验证基线
+- [ ] 闭合标准 C wrapper 与 Python 调用边界
+- [ ] 实现 AllGather / ReduceScatter CPU 数据正确性
+- [ ] 建立 FP32 正确性基准和后续 FP16/BF16 计划
 
 ### P1（高优先级）
 
