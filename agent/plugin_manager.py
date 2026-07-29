@@ -11,8 +11,8 @@ from agent.plugin_capability import parse_algorithm_list, map_algorithm_name
 
 class PluginManager:
 
-    def __init__(self):
-        self.bridge = HCCLBridge()
+    def __init__(self, library_path=None):
+        self.bridge = HCCLBridge(library_path=library_path)
 
     def discover(self):
         """Query the HCCL plugin for its version and supported algorithms.
@@ -24,7 +24,7 @@ class PluginManager:
                 "version": "0.1.0-prototype",
                 "algorithms": ["Ring AllReduce", "Butterfly", ...],
                 "raw_algorithms": "RingAllReduce,Butterfly,...",
-                "library_path": "/.../libhccl_plugin.so",
+                "library_path": "/.../hccl_plugin.dll or /.../libhccl_plugin.so",
             }
         """
         version = self.bridge.get_version()

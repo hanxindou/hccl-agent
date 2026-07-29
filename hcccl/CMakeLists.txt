@@ -124,6 +124,19 @@ set_tests_properties(test_fattree PROPERTIES
     WORKING_DIRECTORY $<TARGET_FILE_DIR:test_fattree>
 )
 
+add_executable(test_api_wrappers tests/test_api_wrappers.c)
+
+target_include_directories(test_api_wrappers
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(test_api_wrappers PRIVATE hccl_plugin)
+
+add_test(NAME test_api_wrappers COMMAND test_api_wrappers)
+set_tests_properties(test_api_wrappers PROPERTIES
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test_api_wrappers>
+)
+
 # ---- Install rules ------------------------------------------------------
 
 install(TARGETS hccl_plugin

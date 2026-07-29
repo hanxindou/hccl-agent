@@ -6,9 +6,9 @@
  * Gitee: ascend/cann-hcomm.  They are the contract that every HCCL
  * plugin must fulfill.
  *
- * STATUS: Interface declarations are REAL (based on HCOMM public API).
- *         Implementations in src/ are STUBS — they cannot be compiled
- *         or linked without the CANN 8.0 SDK.
+ * STATUS: Interface declarations are project-local ABI contracts inspired
+ *         by HCOMM/HCCL style APIs. Implementations in src/ are CPU
+ *         simulation compatibility code, not real CANN/HCOMM backends.
  */
 
 #ifndef HCCL_COMM_H

@@ -1,8 +1,7 @@
-"""Execution Engine — run HCCL algorithms via ctypes.
+"""Execution Engine - run HCCL algorithms via ctypes.
 
-Loads libhccl_plugin.so and calls the C implementation of ring_allreduce
-on real (CPU-simulated) data.  This is the first link that closes the
-loop from Agent decision to actual computation.
+Loads the HCCL plugin shared library and calls the C implementation of
+the current CPU-simulated AllReduce algorithms.
 
 Usage::
 
@@ -13,7 +12,8 @@ Usage::
 """
 
 import ctypes
-import os
+
+from plugin.hccl_bridge import configure_ctypes_signatures, resolve_library_path
 
 # ---- C enum constants (must match hccl_comm.h) ----
 
@@ -41,16 +41,12 @@ _IMPLEMENTED = {"ring", "butterfly", "nhr", "mesh", "fattree"}
 class ExecutionEngine:
     """Execute a named HCCL algorithm on the given input data."""
 
-    def __init__(self, lib_path=None):
-        if lib_path is None:
-            lib_path = self._find_library()
-
-        if not os.path.exists(lib_path):
-            raise FileNotFoundError(
-                f"HCCL plugin library not found: {lib_path}"
-            )
-
-        self.lib_path = lib_path
+    def __init__(self, library_path=None, lib_path=None):
+        resolved, source, attempts = resolve_library_path(library_path, lib_path)
+        self.lib_path = resolved
+        self.library_path = resolved
+        self.library_source = source
+        self.checked_paths = attempts
         self._lib = None
 
     # ------------------------------------------------------------------
@@ -62,80 +58,10 @@ class ExecutionEngine:
             return
 
         lib = ctypes.CDLL(self.lib_path)
-
-        # -- hcclCommInit --
-        lib.hcclCommInit.argtypes = [
-            ctypes.POINTER(ctypes.c_void_p),   # hcclComm_t*  (out)
-            ctypes.c_int32,                    # num_devices
-            ctypes.POINTER(ctypes.c_int32),    # device_ids*
-        ]
-        lib.hcclCommInit.restype = ctypes.c_int
-
-        # -- hcclCommDestroy --
-        lib.hcclCommDestroy.argtypes = [ctypes.c_void_p]
-        lib.hcclCommDestroy.restype = ctypes.c_int
-
-        # -- hcclSetRank --
-        lib.hcclSetRank.argtypes = [
-            ctypes.c_void_p,   # hcclComm_t
-            ctypes.c_int32,    # rank
-        ]
-        lib.hcclSetRank.restype = ctypes.c_int
-
-        # -- ring_allreduce --
-        lib.ring_allreduce.argtypes = [
-            ctypes.POINTER(ctypes.c_float),   # send_buf
-            ctypes.POINTER(ctypes.c_float),   # recv_buf
-            ctypes.c_size_t,                  # count
-            ctypes.c_int,                     # data_type
-            ctypes.c_int,                     # op
-            ctypes.c_void_p,                  # comm
-        ]
-        lib.ring_allreduce.restype = ctypes.c_int
-
-        # -- butterfly_allreduce --
-        lib.butterfly_allreduce.argtypes = [
-            ctypes.POINTER(ctypes.c_float),
-            ctypes.POINTER(ctypes.c_float),
-            ctypes.c_size_t,
-            ctypes.c_int,
-            ctypes.c_int,
-            ctypes.c_void_p,
-        ]
-        lib.butterfly_allreduce.restype = ctypes.c_int
-
-        # -- nhr_allreduce --
-        lib.nhr_allreduce.argtypes = [
-            ctypes.POINTER(ctypes.c_float),
-            ctypes.POINTER(ctypes.c_float),
-            ctypes.c_size_t,
-            ctypes.c_int,
-            ctypes.c_int,
-            ctypes.c_void_p,
-        ]
-        lib.nhr_allreduce.restype = ctypes.c_int
-
-        # -- mesh_allreduce --
-        lib.mesh_allreduce.argtypes = [
-            ctypes.POINTER(ctypes.c_float),
-            ctypes.POINTER(ctypes.c_float),
-            ctypes.c_size_t,
-            ctypes.c_int,
-            ctypes.c_int,
-            ctypes.c_void_p,
-        ]
-        lib.mesh_allreduce.restype = ctypes.c_int
-
-        # -- fattree_allreduce --
-        lib.fattree_allreduce.argtypes = [
-            ctypes.POINTER(ctypes.c_float),
-            ctypes.POINTER(ctypes.c_float),
-            ctypes.c_size_t,
-            ctypes.c_int,
-            ctypes.c_int,
-            ctypes.c_void_p,
-        ]
-        lib.fattree_allreduce.restype = ctypes.c_int
+        configure_ctypes_signatures(
+            lib, self.lib_path, self.checked_paths,
+            include_algorithm_symbols=True,
+        )
 
         self._lib = lib
 
@@ -419,11 +345,5 @@ class ExecutionEngine:
 
     @staticmethod
     def _find_library():
-        candidate = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
-            "..",
-            "hcccl",
-            "build",
-            "libhccl_plugin.so",
-        )
-        return os.path.normpath(candidate)
+        path, _, _ = resolve_library_path()
+        return path

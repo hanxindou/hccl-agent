@@ -13,6 +13,7 @@
  */
 
 #include "hccl_comm.h"
+#include "hccl_algorithms.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -190,6 +191,101 @@ void hcclFreeTopology(hcclTopology_t* topo)
         free(topo->links);
         free(topo);
     }
+}
+
+/* ================================================================== */
+/*  Standard collective wrappers (CPU simulation compatibility layer) */
+/* ================================================================== */
+
+hcclResult_t hcclAllReduce(
+    const void*     send_buf,
+    void*           recv_buf,
+    size_t          count,
+    hcclDataType_t  data_type,
+    hcclRedOp_t     op,
+    hcclComm_t      comm
+)
+{
+    /*
+     * B1 maps the standard wrapper to the existing CPU Ring AllReduce
+     * implementation.  This is not a real CANN/HCOMM backend.
+     */
+    return ring_allreduce(send_buf, recv_buf, count, data_type, op, comm);
+}
+
+hcclResult_t hcclAllGather(
+    const void*     send_buf,
+    void*           recv_buf,
+    size_t          send_count,
+    hcclDataType_t  data_type,
+    hcclComm_t      comm
+)
+{
+    if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (send_count == 0) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (data_type != HCCL_FP32) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+
+    return HCCL_ERR_NOT_SUPPORTED;
+}
+
+hcclResult_t hcclReduceScatter(
+    const void*     send_buf,
+    void*           recv_buf,
+    size_t          recv_count,
+    hcclDataType_t  data_type,
+    hcclRedOp_t     op,
+    hcclComm_t      comm
+)
+{
+    if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (recv_count == 0) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (data_type != HCCL_FP32) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+    if (op != HCCL_SUM) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+
+    return HCCL_ERR_NOT_SUPPORTED;
+}
+
+hcclResult_t hcclBroadcast(
+    const void*     send_buf,
+    void*           recv_buf,
+    size_t          count,
+    hcclDataType_t  data_type,
+    int32_t         root,
+    hcclComm_t      comm
+)
+{
+    if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (count == 0) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (data_type != HCCL_FP32) {
+        return HCCL_ERR_NOT_SUPPORTED;
+    }
+
+    {
+        hcclCommInternal* ctx = (hcclCommInternal*) comm;
+        if (root < 0 || root >= ctx->num_devices) {
+            return HCCL_ERR_INVALID_ARG;
+        }
+    }
+
+    return HCCL_ERR_NOT_SUPPORTED;
 }
 
 /* ================================================================== */

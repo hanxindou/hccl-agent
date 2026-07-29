@@ -54,7 +54,9 @@ class TestPluginManager(unittest.TestCase):
     def test_discover_library_path(self):
         info = self.mgr.discover()
         self.assertIn("library_path", info)
-        self.assertTrue(info["library_path"].endswith(".so"))
+        self.assertTrue(
+            info["library_path"].endswith(("hccl_plugin.dll", "libhccl_plugin.so"))
+        )
 
     # ---- capability report (visual inspection) ----
 
