@@ -1272,46 +1272,624 @@ Linux 环境：设计支持必须完成，实际动态验证可暂时保留为�
 
 完成后停止，不自动进入 Batch C1。
 
-## Batch C1：AllGather CPU 数据正确性
+## Batch C1：AllGather CPU 数据正确性闭环
 
 优先级：P0  
-对应赛题要求：至少 3 种核心集合通信原语正确实现。  
-前置基线：
+对应赛题要求：至少正确实现 3 种核心集合通信原语，并提供可重复的数据正确性证据。
 
-- A1 已完成 CMake、CTest 和 Windows构建基线；
-- B1 已完成标准 C wrapper 与 `.dll`/`.so` 加载闭环；
-- C1 不再修改通用插件发现机制或基础构建配置。
+### Batch 定位
 
-当前差距：Python `HcclAllGather` 只返回模拟性能指标，C `butterfly_allgather` 是 Stub。  
-开发目标：实现 FP32 `count>=1` 的 CPU AllGather，至少支持 Ring 与 Butterfly 两种路径，返回每 rank 拼接结果。  
-主要修改文件：`hcccl/src/hccl_algorithms.c`、`hcccl/tests/test_allgather.c`、`plugin/execution_engine.py`、`tests/test_execution_engine.py`。  
-Codex 负责：C 实现、ctypes 绑定、正确性测试、非法参数测试。  
-用户负责：确认输出 buffer 形态与官方接口约定。  
-验收命令：Windows验收命令：
+本 Batch 在 Batch B1 已完成的标准 C wrapper 和跨平台插件加载闭环基础上，实现 AllGather 的 CPU 数据正确性。
+
+本 Batch 只负责：
+
+1. 实现 FP32 AllGather CPU 数据路径；
+2. 实现 Ring 和 Butterfly 两种 AllGather 算法入口；
+3. 将 `hcclAllGather` 从 `HCCL_ERR_NOT_SUPPORTED` 接入真实 CPU 数据实现；
+4. 通过 C 和 Python reference 验证数据布局与结果；
+5. 保证现有 AllReduce、插件加载和完整 Python 回归不退化。
+
+本 Batch 不实现 ReduceScatter，不增加混合精度，不修改插件发现机制，不接入真实 CANN/HCOMM。
+
+---
+
+### 前置基线
+
+Batch A1 已完成：
+
+- Windows 默认 DLL 和导入库构建；
+- CTest 注册；
+- MSVC UTF-8；
+- Windows/Linux 基础构建说明；
+- 跨平台临时路径；
+- Windows C 测试基线。
+
+Batch B1 已完成：
+
+- `hcclAllReduce`、`hcclAllGather`、`hcclReduceScatter`、`hcclBroadcast` 四个标准 wrapper 的符号闭合；
+- `hcclAllReduce` 复用当前 CPU Ring AllReduce；
+- `hcclAllGather`、`hcclReduceScatter`、`hcclBroadcast` 当前明确返回 `HCCL_ERR_NOT_SUPPORTED`；
+- Windows `.dll` 与 Linux `.so` 的统一路径解析；
+- `library_path > HCCL_PLUGIN_PATH > 默认候选路径`；
+- Windows DLL 真实加载和导出符号验证；
+- ctypes `argtypes` 和 `restype` 基线；
+- Windows CTest 和完整 Python 回归通过。
+
+C1 不再修改：
+
+- 通用动态库发现机制；
+- DLL/SO 路径优先级；
+- Windows基础导出配置；
+- CTest 基础设施；
+- MSVC 编码配置。
+
+---
+
+### 当前差距
+
+- `hcclAllGather` 已存在可导出符号，但当前返回 `HCCL_ERR_NOT_SUPPORTED`；
+- `hcccl/src/hccl_algorithms.c` 中现有 AllGather 相关实现仍为 Stub 或未形成通用数据路径；
+- Python `HcclAllGather` 当前主要返回模拟性能指标，尚未提供真实 C 数据正确性调用；
+- 没有明确 CPU 单进程模拟下多个 rank 的输入和输出 buffer 布局；
+- 没有针对 rank 顺序、`count > 1`、非法参数和算法一致性的 reference 测试；
+- Ring 与 Butterfly AllGather 尚未形成可独立验证的数据实现；
+- 当前不能提供 AllGather primitive 的数据正确性证据。
+
+---
+
+### CPU_SIM 数据契约
+
+C1 不得擅自修改 Batch B1 已闭合的公共 C ABI。
+
+在现有 ABI 能够表达的前提下，CPU 单进程模拟采用以下扁平化数据语义。
+
+设：
+
+```text
+N = communicator 中的 rank 数
+C = 每个 rank 贡献的元素数量 count
+```
+
+输入 `send_buf`：
+
+```text
+形状：[N][C]
+扁平元素数量：N * C
+索引：send_buf[src_rank * C + element]
+```
+
+输出 `recv_buf`：
+
+```text
+形状：[N][N][C]
+扁平元素数量：N * N * C
+索引：recv_buf[(dst_rank * N + src_rank) * C + element]
+```
+
+正确性关系：
+
+```text
+recv_buf[(dst_rank * N + src_rank) * C + element]
+=
+send_buf[src_rank * C + element]
+```
+
+即每个目标 rank 都按源 rank 从小到大的顺序，获得所有 rank 输入数据的完整拼接副本。
+
+示例：
+
+```text
+N = 4
+C = 2
+
+send:
+rank 0 -> [0, 1]
+rank 1 -> [10, 11]
+rank 2 -> [20, 21]
+rank 3 -> [30, 31]
+
+每个 rank 的接收结果：
+[0, 1, 10, 11, 20, 21, 30, 31]
+```
+
+该布局仅是本项目 CPU 单进程多 rank 模拟约定，不得宣称为真实多进程 HCCL 内存模型。
+
+如果 Batch B1 当前 ABI 无法安全表达上述布局：
+
+- 不得擅自改变公共 ABI；
+- 不得静默采用其他布局；
+- 应停止相关实现并报告 ABI 冲突及最小调整建议。
+
+---
+
+### 开发目标
+
+#### 1. 实现 Ring AllGather
+
+实现 FP32 Ring AllGather CPU 数据路径。
+
+要求：
+
+- 支持 `count >= 1`；
+- 支持至少 1、4、8、16 rank；
+- 每个目标 rank 获得按源 rank 顺序拼接的完整数据；
+- 不得通过一次 `memcpy` 后直接伪装成 Ring 算法；
+- 应保留能够反映 Ring 分阶段数据传播的清晰实现结构；
+- 正确性优先，不在本 Batch 进行性能优化；
+- 不修改已有 Ring AllReduce 行为。
+
+#### 2. 实现 Butterfly AllGather
+
+实现 FP32 Butterfly AllGather CPU 数据路径。
+
+要求：
+
+- 支持 `count >= 1`；
+- 支持 1、4、8、16 等 2 的幂 rank；
+- 结果必须与 Ring AllGather 和 Python reference 一致；
+- 对不满足 2 的幂的 rank 数，必须返回明确错误；
+- 建议返回 `HCCL_ERR_NOT_SUPPORTED`，不得产生部分输出或伪造成功；
+- 不修改已有 Butterfly AllReduce 行为。
+
+#### 3. 接入标准 `hcclAllGather` wrapper
+
+将 Batch B1 中返回 `HCCL_ERR_NOT_SUPPORTED` 的 `hcclAllGather` 接入真实 CPU AllGather 实现。
+
+要求：
+
+- 不改变 `hcclAllGather` 的公共签名；
+- 默认路由采用一个稳定且明确的算法，建议采用 Ring；
+- 不在公共 wrapper 中新增没有 ABI 依据的算法参数；
+- Ring 与 Butterfly 的独立正确性通过算法级测试验证；
+- wrapper 成功时必须真实写入正确输出；
+- wrapper 不得继续固定返回 `HCCL_ERR_NOT_SUPPORTED`；
+- wrapper 不得伪造成功。
+
+#### 4. 建立 Python C 数据调用
+
+Python 层必须能够：
+
+- 通过 Batch B1 的 Bridge 加载实际 DLL；
+- 构造 FP32 输入 buffer；
+- 调用 `hcclAllGather`；
+- 读取完整输出 buffer；
+- 将输出转换为稳定、可测试的 Python 数据结构；
+- 与 Python reference 逐元素比较。
+
+如果 `plugin/hccl_api.py` 现有接口用于返回性能模拟指标：
+
+- 不得静默破坏现有调用方；
+- 应优先保留原接口兼容性；
+- 可以增加明确命名的数据执行入口；
+- 不得把性能指标返回值冒充数据正确性结果。
+
+#### 5. 建立 reference checker
+
+Python reference 应采用直接拼接语义：
+
+```python
+expected_for_one_rank = [
+    element
+    for src_rank in ranks
+    for element in send_data[src_rank]
+]
+```
+
+所有目标 rank 的结果均应等于该 reference。
+
+不得使用待测 C 实现生成 expected 结果。
+
+---
+
+### 参数和错误行为
+
+至少处理以下情况：
+
+- `comm == NULL`；
+- communicator 已销毁或无效；
+- `send_buf == NULL`；
+- `recv_buf == NULL`；
+- `count == 0`；
+- count 计算发生整数溢出；
+- 不支持的数据类型；
+- `send_buf == recv_buf` 的原地调用；
+- Butterfly 使用非 2 的幂 rank；
+- rank 数为 0；
+- 动态库符号存在但调用返回错误。
+
+C1 只支持 FP32。
+
+FP16、BF16 和其他数据类型必须继续返回：
+
+```text
+HCCL_ERR_NOT_SUPPORTED
+```
+
+AllGather 不包含 ReduceOp 参数，因此本 Batch 不测试或新增 ReduceOp 行为。
+
+失败时：
+
+- 不得返回 `HCCL_SUCCESS`；
+- 不得写入伪造结果；
+- 在能够合理保证的情况下，输出 buffer 应保持原有内容；
+- Python 层应保留可诊断的错误码或异常信息。
+
+---
+
+### 主要修改文件
+
+允许修改：
+
+```text
+hcccl/include/hccl_algorithms.h
+hcccl/src/hccl_algorithms.c
+hcccl/src/hccl_comm.c
+hcccl/tests/test_allgather.c
+hcccl/CMakeLists.txt
+plugin/execution_engine.py
+plugin/hccl_api.py
+tests/test_execution_engine.py
+tests/test_hccl_api.py
+tests/test_allgather.py
+```
+
+仅在确有必要时允许最小修改：
+
+```text
+hcccl/include/hccl_comm.h
+plugin/hccl_bridge.py
+```
+
+限制：
+
+- `hcccl/include/hccl_comm.h` 不得改变 B1 已确定的公共 ABI；只允许补充注释或必要的非破坏性声明；
+- `plugin/hccl_bridge.py` 只允许补充 AllGather 数据调用所需的绑定，不得修改路径解析优先级；
+- `hcccl/CMakeLists.txt` 只允许增加 `test_allgather` 测试目标和注册；
+- 不得修改 `agent/plugin_manager.py`；
+- 不得修改 Batch B1 的通用插件发现逻辑；
+- 不得修改与 AllGather 无关的既有 C 测试断言。
+
+---
+
+### 禁止事项
+
+本 Batch 禁止：
+
+- 实现 ReduceScatter；
+- 修改 `hcclReduceScatter` 当前错误行为；
+- 实现 Broadcast 数据算法；
+- 修改 AllReduce 算法逻辑；
+- 新增 AllReduce 路由策略；
+- 增加 FP16；
+- 增加 BF16；
+- 增加新的 ReduceOp；
+- 修改 DLL/SO 路径优先级；
+- 修改通用插件发现机制；
+- 修改 Simulator 性能公式；
+- 修改拓扑或成本模型；
+- 增加新的 Agent Skill；
+- 接入真实 CANN/HCOMM；
+- 将 CPU AllGather 描述为真实设备通信；
+- 为追求性能而使用缺乏正确性证据的优化；
+- 访问网络或调用真实 DeepSeek API。
+
+---
+
+### C 测试要求
+
+新增：
+
+```text
+hcccl/tests/test_allgather.c
+```
+
+至少覆盖以下情况。
+
+#### 正确性场景
+
+Ring：
+
+- 1 rank，`count = 1`；
+- 4 rank，`count = 1`；
+- 8 rank，`count = 1`；
+- 16 rank，`count = 1`；
+- 4 rank，`count = 2`；
+- 8 rank，`count > 1`；
+- 使用每个 rank 不同且每个元素不同的数据；
+- 验证每个目标 rank 的完整输出；
+- 验证源 rank 拼接顺序。
+
+Butterfly：
+
+- 1 rank，`count = 1`；
+- 4 rank，`count = 1`；
+- 8 rank，`count = 1`；
+- 16 rank，`count = 1`；
+- 4 rank，`count > 1`；
+- 8 rank，`count > 1`；
+- 与 Ring 输出逐元素一致；
+- 与 reference 输出逐元素一致。
+
+标准 wrapper：
+
+- `hcclAllGather` 在支持范围内返回 `HCCL_SUCCESS`；
+- `hcclAllGather` 实际写入正确结果；
+- `hcclAllGather` 不再固定返回 `HCCL_ERR_NOT_SUPPORTED`。
+
+#### 非法参数场景
+
+至少覆盖：
+
+- NULL communicator；
+- NULL send buffer；
+- NULL receive buffer；
+- `count == 0`；
+- FP16 返回 `HCCL_ERR_NOT_SUPPORTED`；
+- BF16 返回 `HCCL_ERR_NOT_SUPPORTED`；
+- send/recv 使用不支持的原地布局；
+- Butterfly 非 2 的幂 rank 返回明确错误；
+- 失败路径不产生伪造成功结果。
+
+新增测试必须注册到 CTest。
+
+A1 和 B1 的既有 C 测试必须继续通过。
+
+---
+
+### Python 测试要求
+
+至少覆盖：
+
+- 使用实际 Windows DLL 调用 `hcclAllGather`；
+- 4、8、16 rank；
+- `count = 1`；
+- `count > 1`；
+- 每个 rank 使用不同数据；
+- 每个元素使用不同数据；
+- 每个目标 rank 的输出均正确；
+- 输出按源 rank 顺序拼接；
+- C 输出与 Python reference 完全一致；
+- wrapper 返回值正确；
+- FP16/BF16 保持 `HCCL_ERR_NOT_SUPPORTED`；
+- 空指针或无效参数错误能够传递到 Python；
+- Batch B1 的路径解析和真实 DLL 加载不回归；
+- AllReduce、Plugin Bridge 和 Execution Engine 原有测试不回归；
+- 不发送真实网络请求。
+
+测试不得仅使用 Mock 证明 AllGather 数据正确。
+
+---
+
+### Windows 验收命令
+
+以下命令在已激活 `hccl-agent` Conda 环境的 CMD 或 Anaconda Prompt 中执行。
+
+#### 1. 创建干净构建目录
 
 ```cmd
 set BUILD_DIR=F:\build\hccl-agent-hcccl-c1
 
+if exist "%BUILD_DIR%" rmdir /s /q "%BUILD_DIR%"
+```
+
+#### 2. 配置和构建
+
+```cmd
 cmake -S hcccl -B "%BUILD_DIR%" ^
   -G "Visual Studio 17 2022" ^
   -A x64
 
 cmake --build "%BUILD_DIR%" --config Release
+echo CMAKE_BUILD_EXIT_CODE=%ERRORLEVEL%
+```
 
+通过标准：
+
+```text
+CMAKE_BUILD_EXIT_CODE=0
+```
+
+不得额外传入：
+
+```text
+CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
+CMAKE_C_FLAGS
+```
+
+#### 3. 运行完整 CTest
+
+```cmd
 ctest --test-dir "%BUILD_DIR%" ^
   -C Release ^
   --output-on-failure
 
-python -m unittest tests.test_execution_engine -q
+echo CTEST_EXIT_CODE=%ERRORLEVEL%
 ```
 
-通过标准：4/8/16 rank、count=1 与 count>1 均通过；非法 dtype/op 正确返回。  
-依赖：B1。  
+要求：
+
+- A1/B1 既有测试全部通过；
+- 新增 `test_allgather` 通过；
+- `CTEST_EXIT_CODE=0`。
+
+#### 4. 设置实际 DLL 和禁用真实 LLM Key
+
+```cmd
+set HCCL_PLUGIN_PATH=%BUILD_DIR%\Release\hccl_plugin.dll
+set DEEPSEEK_API_KEY=
+```
+
+#### 5. 运行定向 Python 测试
+
+```cmd
+python -m unittest ^
+  tests.test_allgather ^
+  tests.test_execution_engine ^
+  tests.test_hccl_api ^
+  -q
+```
+
+#### 6. 运行完整 Python 回归
+
+```cmd
+python -m unittest discover tests -q
+```
+
+完整回归要求：
+
+- `0 failures`；
+- `0 errors`；
+- 允许明确设计的 skipped；
+- 实际加载本轮构建的 DLL；
+- 不得仅使用 Mock 证明 AllGather 数据正确；
+- 不得发送真实网络请求；
+- 不得调用真实 DeepSeek API；
+- 不得在项目目录留下临时构建产物。
+
+---
+
+### Linux CPU 验收
+
+Linux 实际可用后执行：
+
+```bash
+BUILD_DIR=/tmp/hccl-agent-hcccl-c1
+
+rm -rf "$BUILD_DIR"
+
+cmake -S hcccl -B "$BUILD_DIR"
+cmake --build "$BUILD_DIR"
+ctest --test-dir "$BUILD_DIR" --output-on-failure
+
+export HCCL_PLUGIN_PATH="$BUILD_DIR/libhccl_plugin.so"
+unset DEEPSEEK_API_KEY
+
+python -m unittest \
+  tests.test_allgather \
+  tests.test_execution_engine \
+  tests.test_hccl_api \
+  -q
+
+python -m unittest discover tests -q
+```
+
+实际 `.so` 路径以 CMake 输出为准。
+
+Linux环境暂时不可用时：
+
+- 不阻塞 Windows C1 初步完成；
+- Linux `.so` 数据正确性验证保持待办；
+- 不得将 Windows DLL 结果写成 Linux 已验证；
+- 不得访问旧 WSL 项目。
+
+---
+
+### 通过标准
+
+本 Batch 只有同时满足以下条件才算完成：
+
+- [ ] Ring AllGather 已实现真实 FP32 CPU 数据路径；
+- [ ] Butterfly AllGather 已实现真实 FP32 CPU 数据路径；
+- [ ] 支持 `count = 1`；
+- [ ] 支持 `count > 1`；
+- [ ] 4、8、16 rank 正确性通过；
+- [ ] 每个目标 rank 获得完整拼接结果；
+- [ ] 输出按源 rank 顺序排列；
+- [ ] Ring 结果与 Python reference 一致；
+- [ ] Butterfly 结果与 Python reference 一致；
+- [ ] Ring 与 Butterfly 输出一致；
+- [ ] `hcclAllGather` 实际调用 CPU AllGather；
+- [ ] `hcclAllGather` 在支持范围内返回 `HCCL_SUCCESS`；
+- [ ] `hcclAllGather` 不再固定返回 `HCCL_ERR_NOT_SUPPORTED`；
+- [ ] 不支持的数据类型返回明确错误；
+- [ ] Butterfly 非 2 的幂 rank 返回明确错误；
+- [ ] 未支持的原地调用返回明确错误；
+- [ ] 失败路径不返回伪造成功结果；
+- [ ] 新增 C 测试已注册到 CTest；
+- [ ] A1/B1 既有全部 C 测试继续通过；
+- [ ] Python 使用实际 DLL 验证数据正确性；
+- [ ] Python reference 独立于 C 实现；
+- [ ] 定向 Python 测试通过；
+- [ ] 完整 Python 回归为 0 failures、0 errors；
+- [ ] Batch B1 动态库路径逻辑没有回归；
+- [ ] 没有实现 ReduceScatter；
+- [ ] 没有增加 FP16、BF16 或 ReduceOp；
+- [ ] 没有修改 AllReduce 算法；
+- [ ] 没有接入真实 CANN/HCOMM；
+- [ ] 没有发送真实网络请求；
+- [ ] 没有宣称 Linux或 Ascend 已验证。
+
+---
+
+### 完成后的 Git 检查
+
+执行：
+
+```cmd
+git status --short
+git diff --name-only
+git diff --stat
+git diff --check
+```
+
+确认：
+
+- 修改文件全部位于 C1 允许范围；
+- 不存在构建产物进入仓库；
+- 不存在 B1 路径解析机制的无关修改；
+- 不存在 ReduceScatter、混合精度或 Agent 模块修改。
+
+不得自动执行：
+
+```text
+git add
+git commit
+git push
+```
+
+用户人工确认结果后再决定是否提交。
+
+---
+
+### 依赖、难度与风险
+
+依赖：Batch B1。  
 难度：中。  
 风险：中。  
-Ascend 环境：不需要。  
-可完全模拟完成：是。  
-交付物：AllGather CPU 正确性证据。
+Ascend 环境：CPU 初版不需要。  
+Linux 环境：设计兼容必须保留，实际验证可以暂缓。  
+可完全通过 Windows CPU 模式完成：是。  
+可替代真实 HCCL/Ascend 验证：否。
+
+主要风险：
+
+1. 未明确 buffer 布局导致 C/Python 结果含义不一致；
+2. 为实现 Butterfly 擅自改变公共 ABI；
+3. 只复制最终结果，未形成可辨识的算法路径；
+4. `hcclAllGather` 仍固定返回状态码；
+5. Python 仅验证性能指标，没有验证数据；
+6. C1 越界进入 ReduceScatter 或混合精度；
+7. 修改 B1 的插件加载逻辑并造成回归；
+8. 将 CPU 单进程模拟错误描述为真实集合通信。
+
+---
+
+### 交付物
+
+本 Batch 应交付：
+
+1. Ring AllGather FP32 CPU 实现；
+2. Butterfly AllGather FP32 CPU 实现；
+3. 标准 `hcclAllGather` wrapper 数据调用；
+4. 明确的 CPU_SIM buffer 布局；
+5. C AllGather 正确性测试；
+6. Python reference checker；
+7. 实际 DLL AllGather 集成测试；
+8. 4/8/16 rank 和 `count > 1` 正确性证据；
+9. CTest、定向 Python 测试和完整回归结果；
+10. Linux `.so`、CANN/HCOMM 和 Ascend 的未验证说明。
+
+完成后停止，不自动进入 Batch C2。
 
 ## Batch C2：ReduceScatter CPU 数据正确性
 
