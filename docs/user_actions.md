@@ -126,3 +126,17 @@ C3-B 已完成 FP16/BF16 CPU 软件模拟，但该结果不能代表 Ascend 混�
 - FP16/BF16 最大相对误差
 - NaN、Inf、overflow 行为
 - CANN/HCCL 版本和设备型号
+
+## UA-004：Stage E1 用户待办
+
+状态：无新增用户操作
+阻塞阶段：无
+优先级：P2
+
+### 原因
+
+E1 使用 `OFFLINE_TEMPLATE` 离线模式，不需要用户提供 API Key、网络权限、管理员权限、SDK 或硬件。
+
+### 后续说明
+
+若未来人工启用 `EXTERNAL_LLM` 模式，必须由用户显式提供凭据并确认允许调用外部模型；自主 Goal 不启用该模式。

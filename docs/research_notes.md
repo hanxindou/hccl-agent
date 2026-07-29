@@ -24,6 +24,28 @@ ReduceScatter CPU_SIM 语义来自本项目自主计划：`send[N][N][C] -> recv
 
 否。
 
+## Stage E1：Agent 自动代码开发最小闭环
+
+访问日期：2026-07-29
+状态：未使用外部网络参考
+
+### 参考来源
+
+- 自主执行计划：本地文件 `docs/autonomous_goal_plan.md`
+- 当前项目代码生成相关模块：`agent/code_generation_skill.py`
+
+### License
+
+未引入外部代码，未复制第三方实现，因此无新增第三方 License 义务。
+
+### 借鉴内容
+
+E1 使用项目内离线模板实现最小闭环：生成临时 reference checker、执行 `py_compile`、读取确定性语法错误、模板修复、再次编译并运行自测。
+
+### 是否直接复制代码
+
+否。
+
 ## Stage C3-B：FP16/BF16 CPU 软件模拟
 
 访问日期：2026-07-29
