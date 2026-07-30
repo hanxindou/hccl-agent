@@ -14,8 +14,8 @@ Linux 验证方式：Docker Desktop Linux 容器
 | Stage | 名称                                | 状态        | Commit |
 | ----- | ----------------------------------- | ----------- | ------ |
 | V1-A  | 事实与文档基线修正                  | COMPLETED | eeda43d |
-| V1-B  | Collective 多元素与 rank 连续性加固 | COMPLETED | -      |
-| V1-C  | 确定性随机化 correctness            | NOT_STARTED | -      |
+| V1-B  | Collective 多元素与 rank 连续性加固 | COMPLETED | 7691922 |
+| V1-C  | 确定性随机化 correctness            | COMPLETED | -      |
 | V1-D  | Docker Linux `.so` 验证             | NOT_STARTED | -      |
 | V1-E  | Linux CI 与最终材料收敛             | NOT_STARTED | -      |
 
@@ -358,7 +358,8 @@ git diff --check：
 
 ```text
 commit：
-message：
+7691922
+message：feat: harden collective buffer correctness
 ```
 
 ## 4.11 未验证边界
@@ -373,130 +374,139 @@ message：
 
 # 5. Stage V1-C：确定性随机化 Correctness
 
-开始时间：  
-结束时间：  
-状态：NOT_STARTED
+开始时间：2026-07-30 08:33:31 +08:00
+结束时间：2026-07-30 08:33:31 +08:00
+状态：COMPLETED
 
 ## 5.1 修改文件
 
-- 待填写
+- `tests/test_randomized_collective_correctness.py`
+- `docs/correctness_matrix.md`
+- `docs/v1_progress.md`
 
 ## 5.2 测试配置
 
 ### 固定 seed
 
 ```text
--
--
--
+20260730
+424242
+13371337
 ```
 
 ### Case 数量
 
 ```text
 每个 seed：
+20
 总 case：
+60
 ```
 
 ### 参数空间
 
 ```text
 Primitive：
+AllReduce, AllGather, ReduceScatter
 Rank：
+1, 2, 4, 8, 16
 Count：
+1, 2, 3, 7, 17, 32, 64
 DType：
+FP32, FP16, BF16
 ReduceOp：
+SUM, PROD, MAX, MIN；AllGather 为 N/A
 ```
 
 ## 5.3 覆盖结果
 
 | 能力          | 是否覆盖 | 证据 |
 | ------------- | -------- | ---- |
-| AllReduce     | -        | -    |
-| AllGather     | -        | -    |
-| ReduceScatter | -        | -    |
-| rank=1        | -        | -    |
-| rank=2        | -        | -    |
-| rank=4        | -        | -    |
-| rank=8        | -        | -    |
-| rank=16       | -        | -    |
-| count>1       | -        | -    |
-| FP32          | -        | -    |
-| FP16          | -        | -    |
-| BF16          | -        | -    |
-| SUM           | -        | -    |
-| PROD          | -        | -    |
-| MAX           | -        | -    |
-| MIN           | -        | -    |
+| AllReduce     | 是       | randomized cases |
+| AllGather     | 是       | randomized cases |
+| ReduceScatter | 是       | randomized cases |
+| rank=1        | 是       | randomized cases |
+| rank=2        | 是       | randomized cases |
+| rank=4        | 是       | randomized cases |
+| rank=8        | 是       | randomized cases |
+| rank=16       | 是       | randomized cases |
+| count>1       | 是       | counts 2/3/7/17/32/64 |
+| FP32          | 是       | randomized cases |
+| FP16          | 是       | randomized cases |
+| BF16          | 是       | randomized cases |
+| SUM           | 是       | randomized cases |
+| PROD          | 是       | randomized cases |
+| MAX           | 是       | randomized cases |
+| MIN           | 是       | randomized cases |
 
 ## 5.4 可复现性
 
 ```text
 第一次运行：
-待填写
+PASS，`python -m unittest tests.test_randomized_collective_correctness -v`，60 cases，Ran 1 test in 12.902s，OK
 
 第二次运行：
-待填写
+PASS，`python -m unittest tests.test_randomized_collective_correctness -v`，60 cases，Ran 1 test in 13.007s，OK
 
 结果是否一致：
-待填写
+是
 
 失败复现参数支持：
-待填写
+支持 `HCCL_RANDOM_SEED` 和 `HCCL_RANDOM_CASE`
 ```
 
 ## 5.5 验收结果
 
 ```text
 随机定向 suite：
-待填写
+PASS，seeds 20260730/424242/13371337，60 cases
 
 Correctness 定向 suite：
-待填写
+PASS，`tests.test_reduce_ops tests.test_reducescatter tests.test_allgather tests.test_dtype_emulation tests.test_randomized_collective_correctness -q`，35 tests OK
 
 CTest：
-待填写
+PASS，`ctest --test-dir F:\build\hccl-agent-v1b -C Release --output-on-failure`，11/11
 
 完整 Python：
-待填写
+PASS，`python -m unittest discover tests -q`，461 tests OK
 
 测试时长：
-待填写
+随机 suite 单次约 13 秒；完整 Python 14.617 秒
 
 git diff --check：
-待填写
+待提交前执行
 ```
 
 ## 5.6 失败样例
 
 ```text
-无，或填写：
+无最终失败。中间定位信息：
 
-seed：
-case_index：
-primitive：
-rank：
-count：
-dtype：
-reduce_op：
-expected：
-actual：
-修复：
+seed：20260730
+case_index：15
+primitive：AllGather
+rank：16
+count：64
+dtype：FP32
+reduce_op：N/A
+expected：未失败；该 case 运行时间超出随机 suite 目标
+actual：未失败；被手动停止后收紧随机生成规则
+修复：保留 count=64 覆盖，但避免将大 rank 的 AllGather/ReduceScatter 随机 case 变成慢速压力测试
 ```
 
 ## 5.7 修复轮次
 
 | 问题   | 第一次处理 | 第二次处理 | 最终状态 |
 | ------ | ---------- | ---------- | -------- |
-| 待填写 | -          | -          | -        |
+| 随机 suite 生成 AllGather rank=16 count=64 导致运行时间超目标 | 限制大 rank AllGather/ReduceScatter 随机 count，同时保留 count=64 覆盖 | 不需要 | PASS |
 
 ## 5.8 降级状态
 
-- 无，或待填写
+- 无
 
 ## 5.9 用户待办
 
-- 无，或待填写
+- Linux `.so`、CANN/HCOMM、Ascend 实机仍待 V1-D/V1-E 或用户环境验证。
 
 ## 5.10 本地提交
 

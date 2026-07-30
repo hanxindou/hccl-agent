@@ -1,6 +1,6 @@
 # HCCL Agent 正确性矩阵
 
-更新时间：2026-07-30 08:20:53 +08:00
+更新时间：2026-07-30 08:33:31 +08:00
 
 ## 状态标记
 
@@ -61,6 +61,7 @@
 | AllReduce 多元素 | `tests/test_reduce_ops.py::test_allreduce_v1b_required_rank_count_matrix` | FP32 ranks 1/2/4/8/16, counts 1/3/17/256, SUM/PROD/MAX/MIN |
 | AllReduce FP16/BF16 多元素 | `tests/test_reduce_ops.py::test_allreduce_fp16_bf16_v1b_minimum_coverage`, `tests/test_dtype_emulation.py::test_allreduce_fp16_bf16_multi_element_sum` | rank 2/4, count 1/3/17, SUM；CPU 软件模拟 tolerance |
 | ReduceScatter 2-rank | `hcccl/tests/test_reducescatter.c`, `tests/test_reducescatter.py::test_two_rank_contract_matches_reference` | `[N][N][C] -> [N][C]` 正确长度 buffer 已验证 |
+| 固定 seed 随机 correctness | `tests/test_randomized_collective_correctness.py` | seeds 20260730/424242/13371337；60 cases；AllReduce/AllGather/ReduceScatter；rank 1/2/4/8/16；count 1/2/3/7/17/32/64；FP32/FP16/BF16；SUM/PROD/MAX/MIN |
 
 ## 未验证边界
 
