@@ -6,6 +6,12 @@ project(hccl_plugin LANGUAGES C VERSION 0.1.0)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+option(HCCL_ENABLE_ASCEND_HCCL_DIRECT
+    "Build the isolated C++17 direct-HCCL adapter in compile-only mode"
+    OFF)
+set(HCCL_CANN_ROOT "" CACHE PATH
+    "CANN/Ascend SDK root for the direct HCCL adapter")
+
 set(HCCL_BACKEND "CPU_SIM" CACHE STRING "HCCL backend: CPU_SIM or ASCEND_CANN")
 set_property(CACHE HCCL_BACKEND PROPERTY STRINGS CPU_SIM ASCEND_CANN)
 string(TOUPPER "${HCCL_BACKEND}" HCCL_BACKEND)
@@ -90,6 +96,54 @@ else()
     )
     target_include_directories(hccl_plugin PRIVATE ${HCCL_CANN_INCLUDE_DIR})
     target_link_libraries(hccl_plugin PRIVATE ${HCCL_CANN_LIBRARY})
+endif()
+
+# ---- G2-F direct adapter (compile-only; no official libraries linked) ---
+
+if(HCCL_ENABLE_ASCEND_HCCL_DIRECT)
+    if(NOT HCCL_CANN_ROOT)
+        message(FATAL_ERROR
+            "HCCL_ENABLE_ASCEND_HCCL_DIRECT=ON requires HCCL_CANN_ROOT. "
+            "This G2-F-2 target only compiles against official headers; it does not link or load CANN libraries."
+        )
+    endif()
+
+    find_path(HCCL_DIRECT_CANN_INCLUDE_DIR
+        NAMES hccl/hccl.h
+        PATHS "${HCCL_CANN_ROOT}"
+        PATH_SUFFIXES include
+        NO_DEFAULT_PATH
+    )
+    if(NOT HCCL_DIRECT_CANN_INCLUDE_DIR)
+        message(FATAL_ERROR
+            "HCCL_ENABLE_ASCEND_HCCL_DIRECT=ON requires ${HCCL_CANN_ROOT}/include/hccl/hccl.h."
+        )
+    endif()
+
+    enable_language(CXX)
+    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+
+    add_library(hccl_direct_adapter STATIC
+        direct/src/hccl_direct_adapter.cpp
+    )
+    target_include_directories(hccl_direct_adapter
+        PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/direct/include>
+        PRIVATE ${HCCL_DIRECT_CANN_INCLUDE_DIR}
+    )
+    target_compile_definitions(hccl_direct_adapter PRIVATE HCCL_DIRECT_BUILD_ONLY=1)
+    target_compile_features(hccl_direct_adapter PUBLIC cxx_std_17)
+
+    add_library(hccl_direct_adapter_abi_compile OBJECT
+        direct/tests/direct_adapter_abi_compile.c
+    )
+    target_include_directories(hccl_direct_adapter_abi_compile
+        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/direct/include
+    )
+    add_dependencies(hccl_direct_adapter_abi_compile hccl_direct_adapter)
+
+    message(STATUS "G2-F direct adapter: compile-only target enabled; no official CANN library is linked.")
 endif()
 
 # ---- Tests --------------------------------------------------------------

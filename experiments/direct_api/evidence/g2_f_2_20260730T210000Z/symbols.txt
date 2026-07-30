@@ -1,0 +1,4 @@
+hccl_direct_session_create
+hccl_direct_session_destroy
+hccl_direct_session_state
+hccl_direct_status_string

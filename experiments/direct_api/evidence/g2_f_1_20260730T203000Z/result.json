@@ -1,0 +1,78 @@
+{
+  "checkpoint": "G2-F-1",
+  "manifest": {
+    "headers": [
+      {
+        "passed": true,
+        "path": "/home/workspace/Ascend/cann-9.1.0/x86_64-linux/include/hccl/hccl.h",
+        "sha256": "4bcdbf905fbf330bae14ce0bed9e38bb6d7f4c7b920e7e673124445e52f06046"
+      },
+      {
+        "passed": true,
+        "path": "/home/workspace/Ascend/cann-9.1.0/x86_64-linux/include/hccl/hccl_comm.h",
+        "sha256": "79d5b731270266a43ec8c639f59a0daf5e938a6c4e4716cb9378b6475c9a9d7f"
+      },
+      {
+        "passed": true,
+        "path": "/home/workspace/Ascend/cann-9.1.0/x86_64-linux/include/hccl/hccl_types.h",
+        "sha256": "a6e47f94f578f4b176c32c6f44e95295b2e27814554b325902c241eded60a03c"
+      },
+      {
+        "passed": true,
+        "path": "/home/workspace/Ascend/cann-9.1.0/x86_64-linux/include/acl/acl_rt.h",
+        "sha256": "0f836ba6cfac7356ec824821ab6b08508f1e28d86bcc74e332b962d7eff1cace"
+      }
+    ],
+    "libraries": [
+      {
+        "missing_symbols": [],
+        "name": "hccl",
+        "needed_ok": true,
+        "passed": true,
+        "path": "/home/workspace/Ascend/cann-9.1.0/x86_64-linux/lib64/libhccl.so",
+        "sha256": "5dcce36878d093d7e9561e4526e5bfcdabb4d32cff19c13e2793590e66789c78",
+        "soname_ok": true
+      },
+      {
+        "missing_symbols": [],
+        "name": "hcomm",
+        "needed_ok": true,
+        "passed": true,
+        "path": "/home/workspace/Ascend/cann-9.1.0/x86_64-linux/lib64/libhcomm.so",
+        "sha256": "f7c88b0f17cb4528b84e93e02b2db8e2b572644d09d9ff02685875177ba5d214",
+        "soname_ok": true
+      },
+      {
+        "missing_symbols": [],
+        "name": "acl_rt",
+        "needed_ok": true,
+        "passed": true,
+        "path": "/home/workspace/Ascend/cann-9.1.0/x86_64-linux/lib64/libacl_rt.so",
+        "sha256": "46b5c18ba6794ffc834770d5e4399fec872528f813c12fcb8e8fbab72cc3c862",
+        "soname_ok": true
+      }
+    ],
+    "passed": true
+  },
+  "official_repositories": {
+    "passed": true,
+    "repositories": {
+      "hccl": {
+        "branch": "competition/campus-2026",
+        "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+        "passed": true,
+        "status_short": ""
+      },
+      "hcomm": {
+        "branch": "competition/campus-2026",
+        "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+        "passed": true,
+        "status_short": ""
+      }
+    }
+  },
+  "passed": true,
+  "runtime_api_calls": [],
+  "schema_version": "g2-f-readiness-v1",
+  "status": "SYMBOL_DISCOVERY_PASS"
+}
