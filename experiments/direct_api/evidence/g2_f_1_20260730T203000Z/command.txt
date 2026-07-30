@@ -1,0 +1,1 @@
+verify_manifest.py --manifest hcccl/direct/manifest/cann_hccl_9.1.0.json --cann-root /home/workspace/Ascend/cann-9.1.0 --output experiments/direct_api/evidence/g2_f_1_20260730T203000Z
