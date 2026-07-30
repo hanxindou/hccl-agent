@@ -60,6 +60,14 @@ class HcclVmConfig:
         object.__setattr__(self, "backend", normalize_backend(self.backend))
         if self.timeout_seconds <= 0:
             raise ValueError("timeout_seconds must be greater than zero")
+        for field in fields(self):
+            value = getattr(self, field.name)
+            if isinstance(value, str) and (
+                "\x00" in value or "\n" in value or "\r" in value
+            ):
+                raise ValueError(
+                    f"{field.name} must not contain NUL or newline characters"
+                )
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

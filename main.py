@@ -7,6 +7,10 @@ from plugin.hccl_vm_backend import (
     load_hccl_vm_config,
 )
 from plugin.hccl_vm_env import HcclVmEnvironment
+from plugin.hccl_vm_runner import (
+    HcclVmRunner,
+    OfficialAllReduceRequest,
+)
 
 
 def _add_backend_options(parser, *, default_backend=None):
@@ -148,7 +152,16 @@ def _run_official_command(args, config):
             raise SystemExit(2)
         return
 
-    # Implemented incrementally by G2-D-3 through G2-D-6.
+    if args.command == "dry-run":
+        try:
+            request = _official_request_from_args(args)
+            report = HcclVmRunner(config).dry_run(request)
+        except ValueError as exc:
+            raise SystemExit(str(exc)) from exc
+        print(json.dumps(report, indent=2, ensure_ascii=False))
+        return
+
+    # Implemented incrementally by G2-D-4 through G2-D-6.
     print(json.dumps(
         {
             "command": args.command,
@@ -159,6 +172,16 @@ def _run_official_command(args, config):
     ))
     raise SystemExit(
         f"{args.command} is configured but not implemented yet"
+    )
+
+
+def _official_request_from_args(args):
+    return OfficialAllReduceRequest(
+        primitive=args.primitive,
+        rank_count=args.nodes,
+        dtype=args.dtype,
+        reduce_op=args.op,
+        elements=args.elements,
     )
 
 
