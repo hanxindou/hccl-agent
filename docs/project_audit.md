@@ -256,3 +256,25 @@ HCCLAgent.run
 | Evidence | `experiments/hccl_vm/evidence/g2_d_20260730T081052.668860Z` |
 
 审计边界：CPU_SIM 是工程模拟；`ASCEND_HCCL_VM` 是 subprocess 驱动官方 hccl_test/checker 的官方模拟验证；两者都不是真实 Ascend NPU 验证，且后者不是 hccl-agent 直接 HCCL API 调用。G2-D 的完成不改变真实多设备正确性、真实性能、硬件可靠性和直接 HCOMM/HCCL 集成仍未验证的边界。详细命令、commits、SHA256 和 G2-E 入口见 `docs/g2_d_validation_report.md`。
+
+## 11. 2026-07-30 G2-E 增量审计
+
+| 审计项 | 当前证据 |
+| --- | --- |
+| Registry | 不可变白名单：AllReduce、AllGather、ReduceScatter；无 executable CLI 覆盖 |
+| CLI | `--suite g2-e` 与 `--primitive` 互斥，suite 不是第四种 primitive |
+| 单原语环境边界 | 选中原语仅依赖公共环境和自身 binary；diagnose 顶层仍在任一 registry binary 缺失时 `ENV_BLOCKED` |
+| Checker 契约 | 每个 Op block 均要求 GenGraph、SingleTaskCheck、MemConflict、SemanticCheck 成功 |
+| Warning | 每原语 ErrorCode 103 基线为 4；计数或 normalized form 漂移标记 regression，但正数 warning 只能是 `PASS_WITH_WARNING` |
+| AllReduce | 2-rank INT32 SUM、16 elements、64/64 B，Checker Success 2，PASS_WITH_WARNING |
+| AllGather | 2-rank INT32、每 rank 8 input elements、32/64 B，argv 无 `-o`，Checker Success 2，PASS_WITH_WARNING |
+| ReduceScatter | 2-rank INT32 SUM、每 rank 8 output elements、64/32 B，Checker Success 2，PASS_WITH_WARNING |
+| Suite | `g2_e_summary_20260730T095800.105217Z` 为 COMPLETED，环境/commit/registry version 一致 |
+| Cleanup | 每次有效运行有 `cleanup_audit=CLEAN`；最终精确进程名检查无输出 |
+| 官方源码 | HCOMM/HCCL tracked status 最终为空；未修改 CANN、HCOMM 或 HCCL 已跟踪源码 |
+| Windows 回归 | Python 531 OK（1 skipped），CTest 11/11 PASS，CPU_SIM CLI 成功 |
+| Linux 回归 | CPU_SIM 临时构建成功，Python 531 OK（1 skipped），CTest 11/11 PASS |
+
+最新 suite summary 的 `SHA256SUMS` 文件 SHA256 为 `42e12f11293419ee2866709068a249452529dedec1c34117c827608a48f804d4`。前序单原语和 suite 运行 archive 均保留为原始记录，不被改写或删减。
+
+审计边界不变：G2-E 仅是 subprocess 驱动的官方 HCCL-VM/hccl_test/checker 模拟验证。它不构成真实 Ascend NPU 验证、硬件性能结论、直接 HCCL API 调用或官方 HCOMM/HCCL 源码集成。G2-F 的技术入口是：在独立许可和实机环境下定义 direct API integration 的编译/链接边界、真实设备拓扑发现、数据正确性与性能基线；该工作不属于 G2-E。
