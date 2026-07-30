@@ -1,6 +1,6 @@
 # HCCL Agent 用户待办
 
-## UA-001：Linux .so 验证
+## UA-V1-001：启动 Docker Desktop 并执行 Linux CPU_SIM 验证
 
 状态：待用户执行
 阻塞阶段：V1-D
@@ -8,7 +8,14 @@
 
 ### 原因
 
-本轮 V1 执行优先使用 Windows Docker Desktop 的 Linux 容器验证。若 Docker 不可用，则保持 `ENV_BLOCKED`；Windows DLL 已验证不能等同于 Linux `.so`。
+V1-D 低风险复查确认 Docker Desktop Linux engine 可用，但 `docker build` 拉取 `ubuntu:22.04` metadata 时访问 `auth.docker.io` 超时，无法构建 Linux 验证镜像。Windows DLL 已验证不能等同于 Linux `.so`。
+
+实际错误摘要：
+
+```text
+failed to fetch anonymous token:
+Get "https://auth.docker.io/token?...": dial tcp 199.16.158.190:443: connectex timeout
+```
 
 ### 用户需要准备
 
@@ -18,22 +25,27 @@
 
 ### 操作步骤
 
-1. 在 Linux 容器或 Linux 项目目录进入当前仓库。
-2. 使用独立构建目录构建 CPU_SIM 插件。
-3. 指向实际生成的 `.so` 运行 CTest 和 Python 回归。
+1. 确认 Docker Desktop Engine 正常。
+2. 确认当前网络能拉取 `ubuntu:22.04`，或在可联网环境预先准备等价 Ubuntu 22.04 镜像。
+3. 在 Windows 终端进入当前仓库。
+4. 执行 Docker build/run，或在 Linux 环境直接运行 `scripts/validate_linux_cpu_sim.sh`。
 
 ### 执行命令
 
+Windows Docker Desktop：
+
+```cmd
+docker version
+docker info
+docker build -f docker/linux-cpu-sim.Dockerfile -t hccl-agent-linux-cpu-sim:v1 .
+docker run --rm -v "%CD%:/workspace" -w /workspace hccl-agent-linux-cpu-sim:v1 bash scripts/validate_linux_cpu_sim.sh
+```
+
+Linux 环境直接执行：
+
 ```bash
 BUILD_DIR=/tmp/hccl-agent-linux-review
-rm -rf "$BUILD_DIR"
-cmake -S hcccl -B "$BUILD_DIR"
-cmake --build "$BUILD_DIR"
-ctest --test-dir "$BUILD_DIR" --output-on-failure
-export HCCL_PLUGIN_PATH="$BUILD_DIR/libhccl_plugin.so"
-unset DEEPSEEK_API_KEY OPENAI_API_KEY ANTHROPIC_API_KEY
-python -m unittest tests.test_reducescatter tests.test_execution_engine tests.test_hccl_api -q
-python -m unittest discover tests -q
+bash scripts/validate_linux_cpu_sim.sh "$BUILD_DIR"
 ```
 
 ### 预期输出
@@ -41,6 +53,7 @@ python -m unittest discover tests -q
 ```text
 CTest 100% tests passed
 Python unittest 0 failures, 0 errors
+LINUX_CPU_SIM_VALIDATION_OK
 ```
 
 ### 反馈内容
@@ -48,10 +61,11 @@ Python unittest 0 failures, 0 errors
 - CMake/CTest 完整输出
 - 实际 `.so` 路径
 - Python 测试输出
+- `LINUX_CPU_SIM_VALIDATION_OK`
 
 ### 当前降级状态
 
-Windows `hccl_plugin.dll` 已验证；Linux `.so` 标记为未验证。
+`ENV_BLOCKED`。Windows `hccl_plugin.dll` 已验证；Linux `libhccl_plugin.so` 未验证，不得宣称 Linux 已通过。
 
 ## UA-002：CANN/HCOMM/Ascend 实机验证准备
 

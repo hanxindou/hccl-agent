@@ -15,8 +15,8 @@ Linux 验证方式：Docker Desktop Linux 容器
 | ----- | ----------------------------------- | ----------- | ------ |
 | V1-A  | 事实与文档基线修正                  | COMPLETED | eeda43d |
 | V1-B  | Collective 多元素与 rank 连续性加固 | COMPLETED | 7691922 |
-| V1-C  | 确定性随机化 correctness            | COMPLETED | -      |
-| V1-D  | Docker Linux `.so` 验证             | NOT_STARTED | -      |
+| V1-C  | 确定性随机化 correctness            | COMPLETED | 9652b83 |
+| V1-D  | Docker Linux `.so` 验证             | ENV_BLOCKED | -      |
 | V1-E  | Linux CI 与最终材料收敛             | NOT_STARTED | -      |
 
 允许的阶段状态：
@@ -512,7 +512,8 @@ actual：未失败；被手动停止后收紧随机生成规则
 
 ```text
 commit：
-message：
+9652b83
+message：test: add deterministic randomized correctness
 ```
 
 ## 5.11 未验证边界
@@ -525,88 +526,94 @@ message：
 
 # 6. Stage V1-D：Docker Linux `.so` 验证
 
-开始时间：  
-结束时间：  
-状态：NOT_STARTED
+开始时间：2026-07-30 08:38:05 +08:00
+结束时间：2026-07-30 08:38:05 +08:00
+状态：ENV_BLOCKED
 
 ## 6.1 Docker 前置检查
 
 ```text
 docker version：
-待填写
+正常检查：Client 29.5.3 可见，但 sandbox 内访问 `C:\Users\86159\.docker\config.json` 和 docker pipe 被拒绝。
+低风险复查：PASS，Client/Server 29.5.3，Docker Desktop 4.79.0，context `desktop-linux`。
 
 docker info：
-待填写
+正常检查：permission denied while trying to connect to docker API。
+低风险复查：PASS，OSType linux, Architecture x86_64, Docker Root Dir `/var/lib/docker`。
 
 Docker Engine 状态：
-待填写
+可用，但镜像 metadata 下载失败，V1-D 按有限尝试规则停止 Docker 执行。
 ```
 
 ## 6.2 修改文件
 
-- 待填写
+- `.dockerignore`
+- `docker/linux-cpu-sim.Dockerfile`
+- `scripts/validate_linux_cpu_sim.sh`
+- `docs/user_actions.md`
+- `docs/v1_progress.md`
 
 ## 6.3 Docker 环境
 
 ```text
 基础镜像：
-待填写
+ubuntu:22.04
 
 Linux 发行版：
-待填写
+未进入容器，镜像下载阻塞
 
 Compiler：
-待填写
+未验证
 
 CMake：
-待填写
+未验证
 
 Python：
-待填写
+未验证
 ```
 
 ## 6.4 Linux 构建结果
 
 ```text
 Docker container exit code：
-待填写
+未执行容器；Docker build exit code 1
 
 Linux build directory：
-待填写
+/tmp/hccl-agent-linux-review（脚本默认值，未执行）
 
 CMake：
-待填写
+ENV_BLOCKED
 
 Build：
-待填写
+ENV_BLOCKED
 
 实际 .so 路径：
-待填写
+未生成
 
 .so 文件存在：
-待填写
+未验证
 ```
 
 ## 6.5 Linux 测试结果
 
 ```text
 CTest：
-待填写
+ENV_BLOCKED
 
 ctypes 加载：
-待填写
+ENV_BLOCKED
 
 实际 HCCL_PLUGIN_PATH：
-待填写
+未设置 Linux `.so`
 
 定向 Python：
-待填写
+ENV_BLOCKED
 
 完整 Python：
-待填写
+ENV_BLOCKED
 
 LINUX_CPU_SIM_VALIDATION_OK：
-待填写
+未出现
 ```
 
 ## 6.6 Windows 回归结果
@@ -615,16 +622,16 @@ Linux 相关修复后重新执行：
 
 ```text
 Windows CMake：
-待填写
+V1-B/V1-C 已通过，V1-D 未做 Linux 代码修复，无需额外 Windows 重建
 
 Windows Build：
-待填写
+V1-B/V1-C 已通过
 
 Windows CTest：
-待填写
+V1-C 复跑 11/11 PASS
 
 Windows完整 Python：
-待填写
+V1-C 完整 Python 461 tests OK
 ```
 
 ## 6.7 Docker 阻塞记录
@@ -641,26 +648,26 @@ Windows完整 Python：
 状态：ENV_BLOCKED
 
 首次错误：
-待填写
+`docker version` / `docker info` 在 sandbox 内无法访问 Docker config 和 docker pipe。
 
 低风险复查：
-待填写
+使用升级权限复查 `docker version; docker info` 通过；随后 `docker build` 拉取 `ubuntu:22.04` metadata 失败，`auth.docker.io` token 获取超时。
 
 停止原因：
-待填写
+Docker 镜像 metadata 下载失败；根据有限尝试规则不反复重试、不修复 Docker Desktop、WSL、代理或系统环境。
 
 生成的验证脚本：
-待填写
+`scripts/validate_linux_cpu_sim.sh`
 
 用户待办：
-待填写
+见 `docs/user_actions.md` 的 `UA-V1-001`。
 ```
 
 ## 6.8 修复轮次
 
 | 问题   | 第一次处理 | 第二次处理 | 最终状态 |
 | ------ | ---------- | ---------- | -------- |
-| 待填写 | -          | -          | -        |
+| Docker access / image metadata download | 正常检查失败后做一次低风险复查 | 镜像下载失败后停止重试 | ENV_BLOCKED |
 
 ## 6.9 状态结论
 
@@ -671,6 +678,7 @@ LINUX_DOCKER_VERIFIED
 ENV_BLOCKED
 PARTIAL
 ```
+选择：`ENV_BLOCKED`
 
 ## 6.10 本地提交
 
