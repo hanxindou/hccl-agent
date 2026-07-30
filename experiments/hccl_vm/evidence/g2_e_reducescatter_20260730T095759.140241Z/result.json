@@ -1,0 +1,124 @@
+{
+  "backend": "ASCEND_HCCL_VM",
+  "byte_count": 64,
+  "checker_exit_code": 0,
+  "checker_stages": {
+    "GenGraph": "success",
+    "MemConflict": "success",
+    "SemanticCheck": "success",
+    "SingleTaskCheck": "success"
+  },
+  "checker_success": true,
+  "checker_success_count": 2,
+  "cleanup_audit": {
+    "exit_code": 0,
+    "residual_processes": [],
+    "status": "CLEAN"
+  },
+  "diagnose_status": "OK",
+  "dtype": "int32",
+  "duration_seconds": 14.59,
+  "element_semantics": "output_elements_per_rank",
+  "elements": 8,
+  "executable_basename": "reduce_scatter_test",
+  "execution_mode": "subprocess_hccl_test",
+  "failure_reasons": [],
+  "fatal_signals": [],
+  "hccl_config_exit_code": 0,
+  "hccl_test_bytes": 64,
+  "input_alias": "ReduceScatter",
+  "input_bytes_per_rank": 64,
+  "input_elements_per_rank": 16,
+  "metadata_match": true,
+  "mock_comm": "112",
+  "mock_exit_code": 0,
+  "op_summaries": [
+    {
+      "collective_type": "ReduceScatter",
+      "data_type": "INT32",
+      "element_count": 8,
+      "op_index": 0,
+      "rank_count": 2,
+      "reduce_type": "SUM"
+    },
+    {
+      "collective_type": "ReduceScatter",
+      "data_type": "INT32",
+      "element_count": 8,
+      "op_index": 1,
+      "rank_count": 2,
+      "reduce_type": "SUM"
+    }
+  ],
+  "operation_results": [
+    {
+      "failed_observed_stages": [],
+      "metadata_match": true,
+      "missing_or_unsuccessful_required_stages": [],
+      "op_summary": {
+        "collective_type": "ReduceScatter",
+        "data_type": "INT32",
+        "element_count": 8,
+        "op_index": 0,
+        "rank_count": 2,
+        "reduce_type": "SUM"
+      },
+      "stages": {
+        "GenGraph": "success",
+        "MemConflict": "success",
+        "SemanticCheck": "success",
+        "SingleTaskCheck": "success"
+      }
+    },
+    {
+      "failed_observed_stages": [],
+      "metadata_match": true,
+      "missing_or_unsuccessful_required_stages": [],
+      "op_summary": {
+        "collective_type": "ReduceScatter",
+        "data_type": "INT32",
+        "element_count": 8,
+        "op_index": 1,
+        "rank_count": 2,
+        "reduce_type": "SUM"
+      },
+      "stages": {
+        "GenGraph": "success",
+        "MemConflict": "success",
+        "SemanticCheck": "success",
+        "SingleTaskCheck": "success"
+      }
+    }
+  ],
+  "outer_exit_code": 0,
+  "output_bytes_per_rank": 32,
+  "output_elements_per_rank": 8,
+  "passed": true,
+  "primitive": "ReduceScatter",
+  "rank_count": 2,
+  "reduce_op": "sum",
+  "registry_version": "g2-e-v1",
+  "required_checker_stages": [
+    "GenGraph",
+    "SingleTaskCheck",
+    "MemConflict",
+    "SemanticCheck"
+  ],
+  "stage_failures": [],
+  "status": "PASS_WITH_WARNING",
+  "test_exit_code": 0,
+  "timed_out": false,
+  "topology": "ascend950_cluster_32_server_normal.yaml",
+  "vm_exit_code": 0,
+  "vm_normal_shutdown": true,
+  "warning_103_count": 4,
+  "warning_baseline_count": 4,
+  "warning_baseline_summaries": [
+    "found ccu post/local-post tasks that were never consumed by any wait task"
+  ],
+  "warning_regression": false,
+  "warning_regression_reasons": [],
+  "warning_summaries": [
+    "found ccu post/local-post tasks that were never consumed by any wait task"
+  ]
+}

@@ -58,7 +58,12 @@ class TestBackendSelection(unittest.TestCase):
     def test_official_subcommands_default_to_official_backend(self):
         for command in ("diagnose", "dry-run", "verify-official"):
             with self.subTest(command=command):
-                args = parse_args([command])
+                argv = [command]
+                if command == "verify-official":
+                    argv.extend([
+                        "--primitive", "AllReduce", "--op", "sum",
+                    ])
+                args = parse_args(argv)
                 self.assertEqual(
                     args.backend,
                     Backend.ASCEND_HCCL_VM.value,

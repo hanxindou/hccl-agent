@@ -1,0 +1,68 @@
+{
+  "direct_hccl_api_call": false,
+  "environment_consistent": true,
+  "environment_records": [
+    {
+      "cann_version": "9.1.0",
+      "hccl_branch": "competition/campus-2026",
+      "hccl_commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "hcomm_branch": "competition/campus-2026",
+      "hcomm_commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "registry_version": "g2-e-v1"
+    },
+    {
+      "cann_version": "9.1.0",
+      "hccl_branch": "competition/campus-2026",
+      "hccl_commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "hcomm_branch": "competition/campus-2026",
+      "hcomm_commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "registry_version": "g2-e-v1"
+    },
+    {
+      "cann_version": "9.1.0",
+      "hccl_branch": "competition/campus-2026",
+      "hccl_commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "hcomm_branch": "competition/campus-2026",
+      "hcomm_commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "registry_version": "g2-e-v1"
+    }
+  ],
+  "execution_mode": "subprocess_hccl_test",
+  "passed": true,
+  "primitive_results": [
+    {
+      "checker_success_count": 2,
+      "evidence_dir": "experiments/hccl_vm/evidence/g2_e_allreduce_20260730T095559.079796Z",
+      "evidence_sha256": "c6fbca64efd6b3b67421e76fdb4eb1c8e3045d04d8247480ac017e3a8aaedd65",
+      "passed": true,
+      "primitive": "AllReduce",
+      "status": "PASS_WITH_WARNING",
+      "warning_103_count": 4,
+      "warning_regression": false
+    },
+    {
+      "checker_success_count": 2,
+      "evidence_dir": "experiments/hccl_vm/evidence/g2_e_allgather_20260730T095612.112602Z",
+      "evidence_sha256": "09ceb0f3f13b0424cee21ea0712a3892db595e9cb1247e1b459b25b782e66c2e",
+      "passed": true,
+      "primitive": "AllGather",
+      "status": "PASS_WITH_WARNING",
+      "warning_103_count": 4,
+      "warning_regression": false
+    },
+    {
+      "checker_success_count": 2,
+      "evidence_dir": "experiments/hccl_vm/evidence/g2_e_reducescatter_20260730T095626.920392Z",
+      "evidence_sha256": "55fae7d44f235241e66c86b5ec3b3aa3b6f2ada0df368973fa6e0c0822ac25b3",
+      "passed": true,
+      "primitive": "ReduceScatter",
+      "status": "PASS_WITH_WARNING",
+      "warning_103_count": 4,
+      "warning_regression": false
+    }
+  ],
+  "real_ascend_npu_validated": false,
+  "schema_version": "g2-e-suite-v1",
+  "status": "COMPLETED",
+  "suite": "g2-e"
+}

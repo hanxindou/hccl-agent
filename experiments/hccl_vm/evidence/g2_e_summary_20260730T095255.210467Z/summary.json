@@ -1,0 +1,41 @@
+{
+  "direct_hccl_api_call": false,
+  "execution_mode": "subprocess_hccl_test",
+  "passed": true,
+  "primitive_results": [
+    {
+      "checker_success_count": 2,
+      "evidence_dir": "experiments/hccl_vm/evidence/g2_e_allreduce_20260730T095231.274525Z",
+      "evidence_sha256": "43eab9b04781d3870ac14c1cf925971174be0cebd57b57ae4fc0d525eff6f2c3",
+      "passed": true,
+      "primitive": "AllReduce",
+      "status": "PASS_WITH_WARNING",
+      "warning_103_count": 4,
+      "warning_regression": false
+    },
+    {
+      "checker_success_count": 2,
+      "evidence_dir": "experiments/hccl_vm/evidence/g2_e_allgather_20260730T095242.135368Z",
+      "evidence_sha256": "baa7e6b45baf1c5a881527bdc3f1459c4e85c1f8f019dd4fe633314dfe7e6ebd",
+      "passed": true,
+      "primitive": "AllGather",
+      "status": "PASS_WITH_WARNING",
+      "warning_103_count": 4,
+      "warning_regression": false
+    },
+    {
+      "checker_success_count": 2,
+      "evidence_dir": "experiments/hccl_vm/evidence/g2_e_reducescatter_20260730T095254.776939Z",
+      "evidence_sha256": "1cfe46f0e8df2d8ba7ad6932f460d97a977eb79ccbbccabfa7a861fdfe0201c2",
+      "passed": true,
+      "primitive": "ReduceScatter",
+      "status": "PASS_WITH_WARNING",
+      "warning_103_count": 4,
+      "warning_regression": false
+    }
+  ],
+  "real_ascend_npu_validated": false,
+  "schema_version": "g2-e-suite-v1",
+  "status": "COMPLETED",
+  "suite": "g2-e"
+}

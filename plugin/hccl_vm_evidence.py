@@ -33,6 +33,14 @@ class EvidenceArchive:
     checksum_file_sha256: str
 
 
+@dataclass(frozen=True)
+class SuiteEvidenceArchive:
+    directory: Path
+    checksums: dict[str, str]
+    checksum_file_sha256: str
+    summary: dict[str, Any]
+
+
 def archive_official_evidence(
     outcome: OfficialRunOutcome,
     request: OfficialCollectiveRequest,
@@ -117,6 +125,95 @@ def archive_official_evidence(
     )
 
 
+def archive_g2_e_suite_evidence(
+    entries: list[dict[str, Any]],
+    config: HcclVmConfig,
+    *,
+    command: str,
+    generated_at: datetime | None = None,
+) -> SuiteEvidenceArchive:
+    """Create a compact suite index that references, never copies, raw logs."""
+    timestamp = generated_at or datetime.now(timezone.utc)
+    if timestamp.tzinfo is None:
+        timestamp = timestamp.replace(tzinfo=timezone.utc)
+    timestamp = timestamp.astimezone(timezone.utc)
+    directory = _create_evidence_directory(
+        Path(config.evidence_root),
+        timestamp.strftime("g2_e_summary_%Y%m%dT%H%M%S.%fZ"),
+    )
+    primitive_results = []
+    for entry in entries:
+        request = entry["request"]
+        archive = entry["archive"]
+        result = entry["result"]
+        contract = request.resolve()
+        primitive_results.append({
+            "primitive": contract.canonical_primitive,
+            "passed": bool(result.get("passed")),
+            "status": result.get("status"),
+            "checker_success_count": result.get("checker_success_count"),
+            "warning_103_count": result.get("warning_103_count"),
+            "warning_regression": result.get("warning_regression"),
+            "evidence_dir": str(archive.directory),
+            "evidence_sha256": archive.checksum_file_sha256,
+        })
+    expected_primitives = ["AllReduce", "AllGather", "ReduceScatter"]
+    environment_records = [
+        _suite_environment_record(entry)
+        for entry in entries
+    ]
+    environment_consistent = len({
+        json.dumps(record, sort_keys=True)
+        for record in environment_records
+    }) == 1
+    passed = (
+        [result["primitive"] for result in primitive_results]
+        == expected_primitives
+        and all(result["passed"] for result in primitive_results)
+        and environment_consistent
+    )
+    status = "COMPLETED" if passed else "INCOMPLETE"
+    if not environment_consistent:
+        status = "ENV_BLOCKED_ENVIRONMENT_MISMATCH"
+    summary = {
+        "schema_version": "g2-e-suite-v1",
+        "suite": "g2-e",
+        "execution_mode": "subprocess_hccl_test",
+        "direct_hccl_api_call": False,
+        "real_ascend_npu_validated": False,
+        "status": status,
+        "passed": passed,
+        "environment_consistent": environment_consistent,
+        "environment_records": environment_records,
+        "primitive_results": primitive_results,
+    }
+    manifest = {
+        "schema_version": "g2-e-suite-v1",
+        "generated_at_utc": timestamp.isoformat().replace("+00:00", "Z"),
+        "validation_class": VALIDATION_CLASS,
+        "command": command.rstrip(),
+        "configuration": config.to_dict(),
+        "environment_consistent": environment_consistent,
+        "primitive_evidence_references": primitive_results,
+        "raw_logs_copied": False,
+    }
+    _write_json(directory / "summary.json", summary)
+    _write_json(directory / "manifest.json", manifest)
+    _write_text(directory / "README.md", _suite_readme(summary))
+    evidence_files = sorted(path for path in directory.iterdir() if path.is_file())
+    checksums = {path.name: _sha256(path) for path in evidence_files}
+    checksum_path = directory / "SHA256SUMS"
+    _write_text(checksum_path, "".join(
+        f"{digest}  {name}\n" for name, digest in sorted(checksums.items())
+    ))
+    return SuiteEvidenceArchive(
+        directory=directory,
+        checksums=checksums,
+        checksum_file_sha256=_sha256(checksum_path),
+        summary=summary,
+    )
+
+
 def _create_evidence_directory(root: Path, name: str) -> Path:
     root.mkdir(parents=True, exist_ok=True)
     candidate = root / name
@@ -183,3 +280,46 @@ def _readme(result: dict[str, Any], report: str) -> str:
         "Use `SHA256SUMS` to verify every archived evidence file.",
         "",
     ])
+
+
+def _suite_readme(summary: dict[str, Any]) -> str:
+    lines = [
+        "# G2-E Official HCCL-VM Suite Evidence",
+        "",
+        "This suite references per-primitive subprocess-driven official "
+        "HCCL-VM evidence. It does not copy raw logs, call HCCL directly, "
+        "or claim real Ascend NPU validation.",
+        "",
+        f"- Status: `{summary['status']}`",
+        f"- Passed: `{summary['passed']}`",
+        "",
+        "## Primitive References",
+        "",
+    ]
+    for result in summary["primitive_results"]:
+        lines.append(
+            f"- `{result['primitive']}`: `{result['status']}`, "
+            f"evidence `{result['evidence_dir']}`, "
+            f"SHA256SUMS SHA256 `{result['evidence_sha256']}`"
+        )
+    lines.extend([
+        "",
+        "Use `SHA256SUMS` to verify every suite file.",
+        "",
+    ])
+    return "\n".join(lines)
+
+
+def _suite_environment_record(entry: dict[str, Any]) -> dict[str, Any]:
+    outcome = entry.get("outcome")
+    diagnosis = getattr(outcome, "diagnosis", {}) if outcome is not None else {}
+    request = entry["request"]
+    contract = request.resolve()
+    return {
+        "registry_version": contract.registry_version,
+        "cann_version": diagnosis.get("cann", {}).get("version"),
+        "hcomm_branch": diagnosis.get("hcomm", {}).get("branch"),
+        "hcomm_commit": diagnosis.get("hcomm", {}).get("commit"),
+        "hccl_branch": diagnosis.get("hccl", {}).get("branch"),
+        "hccl_commit": diagnosis.get("hccl", {}).get("commit"),
+    }
