@@ -130,17 +130,17 @@ class TestHcclVmRegistry(unittest.TestCase):
         with self.assertRaises(TypeError):
             OfficialCollectiveRequest(executable="/tmp/anything")
 
-    def test_non_allreduce_verify_is_rejected_before_environment_probe(self):
+    def test_not_yet_enabled_verify_is_rejected_before_environment_probe(self):
         request = OfficialCollectiveRequest(
-            primitive="AllGather",
+            primitive="ReduceScatter",
             rank_count=2,
             dtype="int32",
-            reduce_op=None,
+            reduce_op="sum",
             elements=8,
         )
         runner = HcclVmRunner(HcclVmConfig(backend="ASCEND_HCCL_VM"))
         with mock.patch("plugin.hccl_vm_runner.HcclVmEnvironment") as env:
-            with self.assertRaisesRegex(ValueError, "dry-run only"):
+            with self.assertRaisesRegex(ValueError, "later G2-E checkpoint"):
                 runner.verify(request)
         env.assert_not_called()
 

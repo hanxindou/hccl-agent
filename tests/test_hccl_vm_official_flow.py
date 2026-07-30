@@ -9,6 +9,7 @@ from plugin.hccl_vm_runner import (
     HcclVmRunner,
     InteractiveStep,
     OfficialAllReduceRequest,
+    OfficialCollectiveRequest,
     ProcessExecution,
     _audit_related_processes,
     _execute_interactive_process,
@@ -111,6 +112,31 @@ class TestHcclVmOfficialFlow(unittest.TestCase):
             "ENV_BLOCKED_CANN",
         )
         self.assertEqual(executor.calls, [])
+
+    def test_allgather_flow_uses_the_allgather_contract(self):
+        allgather_log = SUCCESS_LOG.replace(
+            "AllReduce", "AllGather"
+        ).replace("elementCount=16", "elementCount=8")
+        executor = FakeExecutor(ProcessExecution(
+            raw_log=allgather_log,
+            returncode=0,
+            timed_out=False,
+        ))
+        request = OfficialCollectiveRequest(
+            primitive="AllGather",
+            rank_count=2,
+            dtype="int32",
+            reduce_op=None,
+            elements=8,
+        )
+        outcome = HcclVmRunner(
+            self.config,
+            process_executor=executor,
+        ).verify(request, environment=FakeEnvironment())
+        self.assertTrue(outcome.result["passed"])
+        test_command = executor.calls[0][1][1].command
+        self.assertIn("all_gather_test -b 64 -e 64 -d int32", test_command)
+        self.assertNotIn(" -o ", test_command)
 
     def test_timeout_terminates_process_and_cannot_pass(self):
         executor = FakeExecutor(ProcessExecution(

@@ -140,10 +140,10 @@ class HcclVmRunner:
         environment: HcclVmEnvironment | None = None,
     ) -> "OfficialRunOutcome":
         contract = request.resolve()
-        if contract.canonical_primitive != "AllReduce":
+        if contract.canonical_primitive not in {"AllReduce", "AllGather"}:
             raise ValueError(
-                "G2-E-2 enables non-AllReduce dry-run only; "
-                "official verification is introduced by later checkpoints"
+                "official verification for this primitive is introduced by "
+                "a later G2-E checkpoint"
             )
         environment_probe = environment or HcclVmEnvironment(
             self.config,
