@@ -16,8 +16,8 @@ Linux 验证方式：Docker Desktop Linux 容器
 | V1-A  | 事实与文档基线修正                  | COMPLETED | eeda43d |
 | V1-B  | Collective 多元素与 rank 连续性加固 | COMPLETED | 7691922 |
 | V1-C  | 确定性随机化 correctness            | COMPLETED | 9652b83 |
-| V1-D  | Docker Linux `.so` 验证             | ENV_BLOCKED | -      |
-| V1-E  | Linux CI 与最终材料收敛             | NOT_STARTED | -      |
+| V1-D  | Docker Linux `.so` 验证             | ENV_BLOCKED | f7e96f8 |
+| V1-E  | Linux CI 与最终材料收敛             | COMPLETED | -      |
 
 允许的阶段状态：
 
@@ -684,7 +684,8 @@ PARTIAL
 
 ```text
 commit：
-message：
+f7e96f8
+message：chore: add Linux CPU_SIM validation tooling
 ```
 
 ## 6.11 未验证边界
@@ -698,34 +699,38 @@ message：
 
 # 7. Stage V1-E：Linux CI 与最终材料收敛
 
-开始时间：  
-结束时间：  
-状态：NOT_STARTED
+开始时间：2026-07-30 08:42:39 +08:00
+结束时间：2026-07-30 08:42:39 +08:00
+状态：COMPLETED
 
 ## 7.1 修改文件
 
-- 待填写
+- `.github/workflows/linux-cpu-sim.yml`
+- `README.MD`
+- `docs/competition_readiness_report.md`
+- `docs/v1_progress.md`
+- `docs/v1_validation_report.md`
 
 ## 7.2 GitHub Actions 配置
 
 ```text
 Workflow：
-待填写
+.github/workflows/linux-cpu-sim.yml
 
 触发条件：
-待填写
+pull_request, workflow_dispatch
 
 Python：
-待填写
+3.10
 
 Compiler：
-待填写
+ubuntu-22.04 runner `build-essential`
 
 CMake：
-待填写
+system package
 
 是否复用 Linux validation script：
-待填写
+是，`bash scripts/validate_linux_cpu_sim.sh /tmp/hccl-agent-linux-review`
 ```
 
 ## 7.3 CI 当前状态
@@ -734,14 +739,12 @@ CMake：
 
 ```text
 CI_CONFIGURED_UNRUN
-CI_REMOTE_VERIFIED
-ENV_BLOCKED
 ```
 
 说明：
 
 ```text
-待填写
+Workflow 已创建但未执行 git push；远端 GitHub Actions 未运行。
 ```
 
 未执行 `git push` 时不得填写 `CI_REMOTE_VERIFIED`。
@@ -750,56 +753,56 @@ ENV_BLOCKED
 
 ```text
 Build directory：
-待填写
+F:\build\hccl-agent-v1-final
 
 CMake Release：
-待填写
+PASS，Visual Studio 17 2022 x64，`-DHCCL_BACKEND=CPU_SIM`
 
 Build：
-待填写
+PASS，Release，生成 `F:\build\hccl-agent-v1-final\Release\hccl_plugin.dll`
 
 CTest：
-待填写
+PASS，11/11
 
 定向 Python：
-待填写
+PASS，66 tests OK
 
 完整 Python：
-待填写
+PASS，461 tests OK
 
 实际 DLL：
-待填写
+F:\build\hccl-agent-v1-final\Release\hccl_plugin.dll
 
 ASCEND_CANN 缺 SDK 快速失败：
-待填写
+PASS，配置阶段失败并提示缺 HCCL header/library、`HCCL_CANN_ROOT` 或 `ASCEND_HOME_PATH`/`CANN_HOME`
 
 C4819：
-待填写
+未出现
 ```
 
 ## 7.5 最终 Linux 验收
 
 ```text
 Docker：
-待填写
+ENV_BLOCKED，Docker Desktop engine 可用，但 `docker build` 拉取 `ubuntu:22.04` metadata 时访问 `auth.docker.io` 超时
 
 CMake：
-待填写
+未执行
 
 Build：
-待填写
+未执行
 
 CTest：
-待填写
+未执行
 
 ctypes 加载：
-待填写
+未执行
 
 完整 Python：
-待填写
+未执行
 
 实际 .so：
-待填写
+未生成
 ```
 
 Docker 被阻塞时应明确填写 `ENV_BLOCKED`，不得填写通过。
@@ -808,51 +811,62 @@ Docker 被阻塞时应明确填写 `ENV_BLOCKED`，不得填写通过。
 
 | 文件                                   | 状态 |
 | -------------------------------------- | ---- |
-| `docs/v1_progress.md`                  | -    |
-| `docs/v1_validation_report.md`         | -    |
-| `docs/correctness_matrix.md`           | -    |
-| `docs/competition_readiness_report.md` | -    |
-| `docs/user_actions.md`                 | -    |
-| `README.MD`                            | -    |
+| `docs/v1_progress.md`                  | UPDATED |
+| `docs/v1_validation_report.md`         | CREATED |
+| `docs/correctness_matrix.md`           | UPDATED |
+| `docs/competition_readiness_report.md` | UPDATED |
+| `docs/user_actions.md`                 | UPDATED |
+| `README.MD`                            | UPDATED |
 
 ## 7.7 构建产物检查
 
 ```text
 .dll：
+未新增跟踪
 .lib：
+未新增跟踪
 .exe：
+未新增跟踪
 .obj：
+未新增跟踪
 .pdb：
+未新增跟踪
 .so：
+未新增跟踪
 build/：
+未新增跟踪
 CMakeFiles/：
+未新增跟踪
 __pycache__/：
+未新增跟踪
 密钥：
+未发现真实凭据；扫描命中仅为文档/测试占位示例
 ```
 
 ## 7.8 本地提交
 
 ```text
 commit：
-message：
+待本阶段提交
+message：ci: add Linux CPU_SIM validation
 ```
 
 ---
 
 # 8. V1 最终总结
 
-完成时间：  
-总体状态：NOT_STARTED
+完成时间：2026-07-30 08:42:39 +08:00
+总体状态：COMPLETED_WITH_ENV_BLOCKED_LINUX
 
 ## 8.1 阶段与提交
 
 | Stage | 状态 | Commit | Message |
 | ----- | ---- | ------ | ------- |
-| V1-A  | -    | -      | -       |
-| V1-B  | -    | -      | -       |
-| V1-C  | -    | -      | -       |
-| V1-D  | -    | -      | -       |
-| V1-E  | -    | -      | -       |
+| V1-A  | COMPLETED | eeda43d | docs: correct V1 baseline evidence |
+| V1-B  | COMPLETED | 7691922 | feat: harden collective buffer correctness |
+| V1-C  | COMPLETED | 9652b83 | test: add deterministic randomized correctness |
+| V1-D  | ENV_BLOCKED | f7e96f8 | chore: add Linux CPU_SIM validation tooling |
+| V1-E  | COMPLETED | 待本阶段提交 | ci: add Linux CPU_SIM validation |
 
 ## 8.2 最终能力
 
@@ -860,86 +874,86 @@ message：
 
 ```text
 AllReduce 多元素：
-待填写
+WINDOWS_VERIFIED，FP32 ranks 1/2/4/8/16 and counts 1/3/17/256
 
 ReduceScatter 2-rank：
-待填写
+WINDOWS_VERIFIED，正确长度 `[N][N][C] -> [N][C]` buffer
 
 AllGather：
-待填写
+WINDOWS_VERIFIED，含 rank=2 回归
 
 FP32 ReduceOps：
-待填写
+SUM/PROD/MAX/MIN PASS
 
 FP16：
-待填写
+CPU_EMULATED_FP16，Windows regression PASS
 
 BF16：
-待填写
+CPU_EMULATED_BF16，Windows regression PASS
 ```
 
 ### 随机化验证
 
 ```text
 Seed 数：
-待填写
+3
 
 Case 数：
-待填写
+60
 
 覆盖 Primitive：
-待填写
+AllReduce, AllGather, ReduceScatter
 
 覆盖 Rank：
-待填写
+1, 2, 4, 8, 16
 
 覆盖 Count：
-待填写
+1, 2, 3, 7, 17, 32, 64
 
 连续运行一致：
-待填写
+是，两次随机 suite 均 OK
 ```
 
 ### Windows
 
 ```text
 CMake：
-待填写
+PASS
 
 CTest：
-待填写
+PASS，11/11
 
 定向 Python：
-待填写
+PASS，66 tests OK
 
 完整 Python：
-待填写
+PASS，461 tests OK
 ```
 
 ### Linux
 
 ```text
 状态：
-待填写
+ENV_BLOCKED
 
 Docker：
-待填写
+Engine 可用；Docker build 拉取 `ubuntu:22.04` metadata 失败
 
 .so：
-待填写
+未生成
 
 CTest：
-待填写
+未执行
 
 Python：
-待填写
+未执行
 ```
 
 ### CI
 
 ```text
 状态：
-待填写
+CI_CONFIGURED_UNRUN
 ```
 
 ## 8.3 仍未验证边界
@@ -957,22 +971,24 @@ Python：
 
 ## 8.4 用户仍需执行
 
-- 待填写
+- 执行 `UA-V1-001`：在可拉取 `ubuntu:22.04` 的 Docker/Linux 环境运行 Linux CPU_SIM 验证。
+- 执行 CANN/HCOMM/Ascend 实机验证和 FP16/BF16 实机误差验证。
+- push 后观察 `.github/workflows/linux-cpu-sim.yml` 的远端 Actions 结果。
 
 ## 8.5 最终 Git 状态
 
 ```text
 git status --short：
-待填写
+待最终提交后复查
 
 git status -sb：
-待填写
+待最终提交后复查
 
 当前 HEAD：
-待填写
+待最终提交后复查
 
 相对 origin/main：
-待填写
+待最终提交后复查
 
 是否执行 git push：
 NO
@@ -985,15 +1001,13 @@ NO
 停止原因：
 
 ```text
-V1 完成
-或
-触发整体停止条件
+V1 完成；Linux Docker 验证为 ENV_BLOCKED
 ```
 
 说明：
 
 ```text
-待填写
+Docker image metadata 下载失败后按有限尝试规则停止 V1-D，不声明 Linux 已验证；V1-E 仍完成 Linux 脚本、CI 配置和最终审计。
 ```
 
 不得自行进入：

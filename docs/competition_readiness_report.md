@@ -1,6 +1,6 @@
 # HCCL Agent 比赛准备度报告
 
-更新时间：2026-07-30 08:20:53 +08:00
+更新时间：2026-07-30 08:42:39 +08:00
 
 ## 1. 当前架构
 
@@ -22,6 +22,7 @@ main.py
 | Python Agent | 真实工程编排 | 可执行 planning、selection、simulation、execution、evaluation、reflection、logging |
 | C 插件 | `CPU_SIMULATED` | 单进程 CPU buffer 正确性基线，不是真实多卡通信 |
 | ctypes bridge | Windows DLL 已验证 | `HCCL_PLUGIN_PATH` 可指向本轮构建 DLL |
+| Linux CPU_SIM validation | `ENV_BLOCKED`, `CI_CONFIGURED_UNRUN` | 脚本和 workflow 已配置；Docker build 因 `auth.docker.io` token 获取超时未完成 |
 | Simulator | `ANALYTICAL_MODEL` | latency/bandwidth/score 为模型趋势，不是实机 profiling |
 | Reliability | `RELIABILITY_MODEL` | 固定 seed 可靠性模拟，不是硬件故障切换证明 |
 | ASCEND_CANN | `STUB_UNVERIFIED` 准备边界 | 缺 SDK 时快速失败，未链接真实 CANN/HCOMM |
@@ -55,13 +56,13 @@ main.py
 
 CPU_SIM 使用项目自有 C 动态库在单进程 CPU 内存上计算扁平 buffer。它用于证明接口、数据布局、dtype 编码和 reference correctness，不代表真实 HCCL/CANN 通信性能。
 
-当前 H1 Windows 验证使用：
+当前 V1 Windows 验证使用：
 
 ```text
-C:\tmp\hccl-agent-hcccl-h1\Release\hccl_plugin.dll
+F:\build\hccl-agent-v1-final\Release\hccl_plugin.dll
 ```
 
-Linux `.so` 仍需用户在 Linux/WSL 环境中独立验证。
+Linux `.so` 验证脚本和 CI workflow 已生成，但 Docker build 阶段因镜像 metadata 下载超时标记为 `ENV_BLOCKED`，不得宣称 Linux 已验证。
 
 ## 5. Agent 开发闭环
 
@@ -101,21 +102,22 @@ F1 可靠性验证提供固定 seed 场景：
 
 ## 8. Windows 动态验证
 
-当前最近一次 H1 验证结果：
+当前最近一次 V1 验证结果：
 
 | 验证项 | 结果 |
 |--------|------|
-| Windows Release CMake | 通过，`C:\tmp\hccl-agent-hcccl-h1`，`HCCL_BACKEND=CPU_SIM` |
-| Release Build | 通过，生成 `C:\tmp\hccl-agent-hcccl-h1\Release\hccl_plugin.dll`，未出现 C4819 |
+| Windows Release CMake | 通过，`F:\build\hccl-agent-v1-final`，`HCCL_BACKEND=CPU_SIM` |
+| Release Build | 通过，生成 `F:\build\hccl-agent-v1-final\Release\hccl_plugin.dll`，未出现 C4819 |
 | CTest | 11/11 passed |
-| 定向 correctness / Agent / simulator / reliability suite | 71 tests OK |
-| 完整 Python unittest | 454 tests OK |
+| 定向 correctness suite | 66 tests OK |
+| 完整 Python unittest | 461 tests OK |
+| 固定 seed 随机 correctness | 3 seeds，60 cases，两次连续运行 OK |
 | ASCEND_CANN 缺 SDK检测 | 按预期快速失败，错误说明缺头文件、库和环境变量 |
 | 外部 API | API Key 已清空；无真实网络请求 |
 
 ## 9. Linux/CANN/Ascend 未验证项
 
-- Linux `libhccl_plugin.so` 构建、CTest 和 Python 加载未验证。
+- Linux `libhccl_plugin.so` 构建、CTest 和 Python 加载未验证；Docker build 被镜像 metadata 下载环境阻塞。
 - CANN SDK 未安装，未链接真实 HCCL/HCOMM 库。
 - Ascend 设备、真实多卡 rank、stream、communicator 和 profiling 未验证。
 - FP16/BF16 硬件精度、溢出、NaN/Inf 行为未验证。
@@ -147,7 +149,7 @@ F1 可靠性验证提供固定 seed 场景：
 
 用户必须提供或执行：
 
-- Linux/WSL `.so` 构建与加载验证。
+- Docker/Linux `.so` 构建与加载验证。
 - CANN 8.0+ 或赛题指定版本 SDK。
 - Ascend 设备或赛题认可模拟环境。
 - HCCL/HCOMM 头文件、库和环境初始化脚本。
@@ -163,7 +165,7 @@ F1 可靠性验证提供固定 seed 场景：
 |------|------|----------|
 | 无真实 CANN/HCOMM 链接 | 不能满足最终硬性验收 | 用户提供 SDK 后执行 ASCEND_CANN 适配 |
 | 无 Ascend 实机 | 性能、精度、可靠性无法最终证明 | 获取设备或官方模拟环境 |
-| Linux `.so` 未验证 | 比赛交付环境可能不兼容 | 用户执行 UA-001 |
+| Linux `.so` 未验证 | 比赛交付环境可能不兼容 | 用户执行 UA-V1-001 或等待 CI 远端运行 |
 | 模型性能未校准 | score 不能作为比赛性能结论 | 使用 msprof 数据校准 D1 |
 | Broadcast 未实现 | 若赛题要求 Broadcast 会缺口明显 | 后续单独 Batch，不在 H1 新增 |
 

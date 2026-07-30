@@ -1,0 +1,29 @@
+name: Linux CPU_SIM Validation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux-cpu-sim:
+    runs-on: ubuntu-22.04
+    env:
+      DEEPSEEK_API_KEY: ""
+      OPENAI_API_KEY: ""
+      ANTHROPIC_API_KEY: ""
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential cmake
+
+      - name: Validate Linux CPU_SIM
+        run: bash scripts/validate_linux_cpu_sim.sh /tmp/hccl-agent-linux-review
