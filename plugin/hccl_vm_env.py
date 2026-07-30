@@ -193,6 +193,12 @@ class HcclVmEnvironment:
                 "implementation": None,
                 "available": False,
             },
+            "runner_tools": {
+                "script_path": None,
+                "timeout_path": None,
+                "sudo_non_interactive": False,
+                "available": False,
+            },
             "hcomm": {
                 "path": self.config.hcomm_source_dir,
                 "branch": None,
@@ -289,6 +295,13 @@ if [ -n "$mpi_path" ]; then
 else
     emit mpi_implementation ""
 fi
+emit script_path "$(command -v script 2>/dev/null)"
+emit timeout_path "$(command -v timeout 2>/dev/null)"
+if [ "$(id -u)" -eq 0 ] || sudo -n true >/dev/null 2>&1; then
+    emit sudo_non_interactive true
+else
+    emit sudo_non_interactive false
+fi
 
 dependencies_resolved=false
 if [ -f "$set_env" ] && [ -x "$all_reduce" ]; then
@@ -301,18 +314,22 @@ if [ -f "$set_env" ] && [ -x "$all_reduce" ]; then
 fi
 emit dependencies_resolved "$dependencies_resolved"
 
-for repo_name in hcomm hccl; do
-    eval repo_path="\\${{${{repo_name}}}}"
-    if git -C "$repo_path" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-        emit "${{repo_name}}_branch" "$(git -C "$repo_path" branch --show-current 2>/dev/null)"
-        emit "${{repo_name}}_commit" "$(git -C "$repo_path" rev-parse HEAD 2>/dev/null)"
-        if [ -n "$(git -C "$repo_path" status --porcelain 2>/dev/null)" ]; then
+probe_git_repo() {{
+    repo_name="$1"
+    repo_path="$2"
+    git_safe=(git -c "safe.directory=$repo_path" -C "$repo_path")
+    if "${{git_safe[@]}}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        emit "${{repo_name}}_branch" "$("${{git_safe[@]}}" branch --show-current 2>/dev/null)"
+        emit "${{repo_name}}_commit" "$("${{git_safe[@]}}" rev-parse HEAD 2>/dev/null)"
+        if [ -n "$("${{git_safe[@]}}" status --porcelain 2>/dev/null)" ]; then
             emit "${{repo_name}}_worktree" dirty
         else
             emit "${{repo_name}}_worktree" clean
         fi
     fi
-done
+}}
+probe_git_repo hcomm "$hcomm"
+probe_git_repo hccl "$hccl"
 exit 0
 """
 
@@ -349,6 +366,19 @@ exit 0
             values.get("mpi_implementation") or None
         )
         report["mpi"]["available"] = bool(report["mpi"]["path"])
+        report["runner_tools"]["script_path"] = (
+            values.get("script_path") or None
+        )
+        report["runner_tools"]["timeout_path"] = (
+            values.get("timeout_path") or None
+        )
+        report["runner_tools"]["sudo_non_interactive"] = _as_bool(
+            values.get("sudo_non_interactive")
+        )
+        report["runner_tools"]["available"] = bool(
+            report["runner_tools"]["script_path"]
+            and report["runner_tools"]["timeout_path"]
+        )
         for repo_name in ("hcomm", "hccl"):
             report[repo_name]["branch"] = values.get(f"{repo_name}_branch")
             report[repo_name]["commit"] = values.get(f"{repo_name}_commit")
@@ -375,6 +405,14 @@ exit 0
             ("topology profile", report["topology"]["available"]),
             ("mock-comm profile", report["mock_comm"]["available"]),
             ("mpirun", report["mpi"]["available"]),
+            (
+                "script and timeout runner tools",
+                report["runner_tools"]["available"],
+            ),
+            (
+                "root or non-interactive sudo for HCCL-VM startup",
+                report["runner_tools"]["sudo_non_interactive"],
+            ),
         ]
         report["missing_items"].extend(
             name for name, available in required if not available

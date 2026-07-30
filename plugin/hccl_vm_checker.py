@@ -6,8 +6,6 @@ import re
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
-from plugin.hccl_vm_runner import OfficialAllReduceRequest
-
 
 ANSI_ESCAPE_RE = re.compile(
     r"(?:\x1B[@-_][0-?]*[ -/]*[@-~])|(?:\x9B[0-?]*[ -/]*[@-~])"
@@ -26,6 +24,11 @@ STAGE_RE = re.compile(
     re.IGNORECASE,
 )
 TEST_EXIT_RE = re.compile(r"__HCCL_AGENT_TEST_EXIT_CODE=(-?\d+)")
+MOCK_EXIT_RE = re.compile(r"__HCCL_AGENT_MOCK_EXIT_CODE=(-?\d+)")
+CHECKER_EXIT_RE = re.compile(r"__HCCL_AGENT_CHECKER_EXIT_CODE=(-?\d+)")
+HCCL_CONFIG_EXIT_RE = re.compile(
+    r"__HCCL_AGENT_HCCL_CONFIG_EXIT_CODE=(-?\d+)"
+)
 VM_EXIT_RE = re.compile(r"__HCCL_AGENT_VM_EXIT_CODE=(-?\d+)")
 
 
@@ -39,6 +42,16 @@ class CheckerOpSummary:
     reduce_type: str
 
 
+@dataclass(frozen=True)
+class _DefaultRequest:
+    primitive: str = "AllReduce"
+    rank_count: int = 2
+    dtype: str = "int32"
+    reduce_op: str = "sum"
+    elements: int = 16
+    byte_count: int = 64
+
+
 @dataclass
 class OfficialVerificationResult:
     backend: str = "ASCEND_HCCL_VM"
@@ -49,7 +62,10 @@ class OfficialVerificationResult:
     reduce_op: str = "sum"
     elements: int = 16
     byte_count: int = 64
+    hccl_config_exit_code: int | None = None
+    mock_exit_code: int | None = None
     test_exit_code: int | None = None
+    checker_exit_code: int | None = None
     vm_exit_code: int | None = None
     outer_exit_code: int | None = None
     checker_success: bool = False
@@ -73,11 +89,11 @@ def parse_official_result(
     log_text: str,
     *,
     outer_exit_code: int,
-    request: OfficialAllReduceRequest | None = None,
+    request: Any | None = None,
 ) -> OfficialVerificationResult:
     """Parse output conservatively; missing evidence always means failure."""
 
-    expected = request or OfficialAllReduceRequest()
+    expected = request or _DefaultRequest()
     clean = ANSI_ESCAPE_RE.sub("", log_text)
     compact = re.sub(r"\s+", "", clean)
     lower_compact = compact.lower()
@@ -111,6 +127,11 @@ def parse_official_result(
     }
     fatal_signals = _fatal_signals(lower_compact)
     test_exit_code = _last_exit_code(TEST_EXIT_RE, compact)
+    hccl_config_exit_code = _last_exit_code(
+        HCCL_CONFIG_EXIT_RE, compact
+    )
+    mock_exit_code = _last_exit_code(MOCK_EXIT_RE, compact)
+    checker_exit_code = _last_exit_code(CHECKER_EXIT_RE, compact)
     vm_exit_code = _last_exit_code(VM_EXIT_RE, compact)
     vm_normal_shutdown = (
         vm_exit_code == 0
@@ -124,7 +145,10 @@ def parse_official_result(
         reduce_op=expected.reduce_op,
         elements=expected.elements,
         byte_count=expected.byte_count,
+        hccl_config_exit_code=hccl_config_exit_code,
+        mock_exit_code=mock_exit_code,
         test_exit_code=test_exit_code,
+        checker_exit_code=checker_exit_code,
         vm_exit_code=vm_exit_code,
         outer_exit_code=outer_exit_code,
         checker_success=checker_success_count > 0,
@@ -184,6 +208,14 @@ def _failure_reasons(
     result: OfficialVerificationResult,
 ) -> list[str]:
     failures: list[str] = []
+    if result.hccl_config_exit_code != 0:
+        failures.append(
+            "HCCL-VM hccl_config.sh exit code is not 0 or was not captured"
+        )
+    if result.mock_exit_code != 0:
+        failures.append(
+            "hccl-vm mock-comm exit code is not 0 or was not captured"
+        )
     if result.test_exit_code != 0:
         failures.append(
             "all_reduce_test exit code is not 0 or was not captured"
@@ -195,6 +227,10 @@ def _failure_reasons(
         )
     if not result.checker_success:
         failures.append("Checker Success was not observed")
+    if result.checker_exit_code != 0:
+        failures.append(
+            "checker command exit code is not 0 or was not captured"
+        )
     if result.fatal_signals:
         failures.append(
             "fatal signals observed: " + ", ".join(result.fatal_signals)

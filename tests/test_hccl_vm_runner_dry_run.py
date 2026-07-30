@@ -46,6 +46,13 @@ class TestHcclVmRunnerDryRun(unittest.TestCase):
             "script/hccl_config.sh",
             script,
         )
+        self.assertEqual(
+            script.count(
+                "source /home/workspace/Ascend/cann-9.1.0/set_env.sh"
+            ),
+            2,
+        )
+        self.assertIn("__HCCL_AGENT_HCCL_CONFIG_EXIT_CODE", script)
         self.assertIn(
             "start ascend950_cluster_32_server_normal.yaml --check-only",
             script,
@@ -55,10 +62,14 @@ class TestHcclVmRunnerDryRun(unittest.TestCase):
         commands = HcclVmRunner(self.config).dry_run(
             self.request
         )["interactive_commands"]
-        self.assertEqual(commands[0], "hccl-vm mock-comm 112")
+        self.assertTrue(commands[0].startswith("hccl-vm mock-comm 112;"))
+        self.assertIn("__HCCL_AGENT_MOCK_EXIT_CODE", commands[0])
         self.assertIn("mpirun --allow-run-as-root --oversubscribe -np 2", commands[1])
         self.assertIn("all_reduce_test -b 64 -e 64 -d int32 -o sum", commands[1])
-        self.assertEqual(commands[2], "hccl-vm plugin run @checker")
+        self.assertTrue(
+            commands[2].startswith("hccl-vm plugin run @checker;")
+        )
+        self.assertIn("__HCCL_AGENT_CHECKER_EXIT_CODE", commands[2])
         self.assertEqual(commands[3], "exit")
 
     def test_dry_run_does_not_start_subprocess(self):

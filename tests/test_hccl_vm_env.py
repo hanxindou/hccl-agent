@@ -26,6 +26,9 @@ def _probe_output(**overrides):
         "mock_comm_available": "true",
         "mpi_path": "/usr/bin/mpirun",
         "mpi_implementation": "mpirun (Open MPI) 4.1.2",
+        "script_path": "/usr/bin/script",
+        "timeout_path": "/usr/bin/timeout",
+        "sudo_non_interactive": "true",
         "hcomm_branch": "competition/campus-2026",
         "hcomm_commit": EXPECTED_HCOMM_COMMIT,
         "hcomm_worktree": "clean",
@@ -113,6 +116,21 @@ class TestHcclVmEnvironment(unittest.TestCase):
         self.assertEqual(report["status"], "ENV_BLOCKED")
         self.assertIn("checker plugin", report["missing_items"])
 
+    def test_interactive_sudo_requirement_is_env_blocked(self):
+        report = HcclVmEnvironment(
+            self.config,
+            host_system="Linux",
+            command_runner=FakeRunner(
+                _probe_output(sudo_non_interactive="false")
+            ),
+            which=lambda name: f"/usr/bin/{name}",
+        ).diagnose()
+        self.assertEqual(report["status"], "ENV_BLOCKED")
+        self.assertIn(
+            "root or non-interactive sudo for HCCL-VM startup",
+            report["missing_items"],
+        )
+
     def test_branch_mismatch_is_env_blocked(self):
         report = HcclVmEnvironment(
             self.config,
@@ -126,6 +144,49 @@ class TestHcclVmEnvironment(unittest.TestCase):
             "hcomm branch/commit mismatch",
             report["missing_items"],
         )
+
+    def test_empty_git_commit_metadata_is_env_blocked(self):
+        report = HcclVmEnvironment(
+            self.config,
+            host_system="Linux",
+            command_runner=FakeRunner(
+                _probe_output(hcomm_commit="")
+            ),
+            which=lambda name: f"/usr/bin/{name}",
+        ).diagnose()
+        self.assertEqual(report["status"], "ENV_BLOCKED")
+        self.assertIn("hcomm git metadata", report["missing_items"])
+
+    def test_git_probe_uses_exact_process_local_safe_directory(self):
+        config = HcclVmConfig(
+            backend="ASCEND_HCCL_VM",
+            hcomm_source_dir="/srv/official/hcomm",
+            hccl_source_dir="/srv/official/hccl",
+        )
+        script = HcclVmEnvironment(
+            config,
+            host_system="Linux",
+        )._build_probe_script()
+        self.assertIn(
+            'git_safe=(git -c "safe.directory=$repo_path" '
+            '-C "$repo_path")',
+            script,
+        )
+        self.assertIn('hcomm=/srv/official/hcomm', script)
+        self.assertIn('hccl=/srv/official/hccl', script)
+        self.assertNotIn("git config --global", script)
+        self.assertNotIn("git config --system", script)
+        self.assertNotIn("safe.directory=*", script)
+
+    def test_git_repo_paths_reject_wildcards_and_broad_roots(self):
+        invalid_values = ("*", "/srv/*", "/", "relative/repo")
+        for path in invalid_values:
+            with self.subTest(path=path):
+                with self.assertRaises(ValueError):
+                    HcclVmConfig(
+                        backend="ASCEND_HCCL_VM",
+                        hcomm_source_dir=path,
+                    )
 
     def test_command_timeout_is_reported(self):
         def timeout_runner(command, **kwargs):

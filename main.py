@@ -161,7 +161,19 @@ def _run_official_command(args, config):
         print(json.dumps(report, indent=2, ensure_ascii=False))
         return
 
-    # Implemented incrementally by G2-D-4 through G2-D-6.
+    if args.command == "verify-official":
+        try:
+            request = _official_request_from_args(args)
+            outcome = HcclVmRunner(config).verify(request)
+        except ValueError as exc:
+            raise SystemExit(str(exc)) from exc
+        report = outcome.to_public_dict()
+        print(json.dumps(report, indent=2, ensure_ascii=False))
+        if not report.get("passed", False):
+            raise SystemExit(2)
+        return
+
+    # No other official commands are currently supported.
     print(json.dumps(
         {
             "command": args.command,

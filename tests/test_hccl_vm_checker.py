@@ -6,6 +6,8 @@ from plugin.hccl_vm_checker import parse_official_result
 
 
 SUCCESS_LOG = """
+__HCCL_AGENT_HCCL_CONFIG_EXIT_CODE=0
+__HCCL_AGENT_MOCK_EXIT_CODE=0
 __HCCL_AGENT_TEST_EXIT_CODE=0
 [info] Op summary, opIndex=0, collectiveType=AllReduce, rankCount=2,
 dataType=INT32, elementCount=16, reduceType=SUM, opGroupSize=2
@@ -14,6 +16,7 @@ dataType=INT32, elementCount=16, reduceType=SUM, opGroupSize=2
 [info] CheckerV3 stage finished, stage=MemConflict, status=success
 [info] CheckerV3 stage finished, stage=SemanticCheck, status=success
 [info] op[0] Checker Success
+__HCCL_AGENT_CHECKER_EXIT_CODE=0
 [info] Shell exited. Host shutting down.
 __HCCL_AGENT_VM_EXIT_CODE=0
 """

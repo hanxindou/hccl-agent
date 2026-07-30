@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import posixpath
 from dataclasses import asdict, dataclass, fields
 from enum import Enum
 from pathlib import Path
@@ -68,6 +69,8 @@ class HcclVmConfig:
                 raise ValueError(
                     f"{field.name} must not contain NUL or newline characters"
                 )
+        for field_name in ("hcomm_source_dir", "hccl_source_dir"):
+            _validate_exact_repo_path(field_name, getattr(self, field_name))
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -145,3 +148,12 @@ def _coerce_value(field_name: str, value: Any) -> Any:
     if field_name == "backend":
         return normalize_backend(value)
     return str(value)
+
+
+def _validate_exact_repo_path(field_name: str, value: str) -> None:
+    if not posixpath.isabs(value):
+        raise ValueError(f"{field_name} must be an absolute POSIX path")
+    if posixpath.normpath(value) == "/":
+        raise ValueError(f"{field_name} must not be the filesystem root")
+    if any(character in value for character in ("*", "?", "[", "]")):
+        raise ValueError(f"{field_name} must not contain glob characters")
