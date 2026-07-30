@@ -1,0 +1,27 @@
+generated_at=2026-07-30T14:17:35+08:00
+platform=Linux xiaowang 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+ASCEND_HOME_PATH=/home/workspace/Ascend/cann-9.1.0
+
+[CANN]
+version=9.1.0
+path=/home/workspace/Ascend/cann-9.1.0
+
+[HCOMM]
+branch=competition/campus-2026
+commit=c8a3dc68a37315aa1e908a971fa706abe612f6ee
+tracked_status:
+
+[HCCL]
+branch=competition/campus-2026
+commit=2c87cc1937bab23b8574ef24017c03572d3340e2
+tracked_status:
+
+[HCCL_VM]
+checker=/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/bin/hccl-vm
+topology=ascend950_cluster_32_server_normal.yaml
+mock_comm=112
+
+[LOG_SHA256]
+c251880a05591dc9a17ff2cc9d89269e46df1c1b26d35d8ed8eec7d2c355ca43  /home/workspace/evidence/logs/allgather_baseline_20260730_140015.log
+597a90bed31c1c526ae667ebc5a202f1afdd9f901b08910ef465010451ace8a0  /home/workspace/evidence/logs/allreduce_baseline_20260730_135904.log
+88b2352cffb3d735030d5f670953ab37675e52c69464934d03fa2974e87bc9a1  /home/workspace/evidence/logs/reducescatter_baseline_20260730_140432.log

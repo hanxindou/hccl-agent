@@ -43,3 +43,5 @@ env/
 
 # Jupyter
 .ipynb_checkpoints/
+# Local HCCL-VM discovery artifacts
+/experiments/hccl_vm/discovery/

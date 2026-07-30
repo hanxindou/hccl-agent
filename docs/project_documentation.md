@@ -2898,3 +2898,13 @@ Total:  428 PASS (41 C + 387 Python)
 | 经验学习 | Similarity + Aggregation + Bonus | ✅ |
 | 基准验证 | 8 Scenarios + Scaling/Sensitivity Analysis | ✅ |
 | 决策闭环 | Plan → Execute → Reflect → Replan | ✅ |
+
+## 2026-07-30：G2-D HCCL-VM 官方验证后端
+
+新增 `ASCEND_HCCL_VM` 外部验证后端，`CPU_SIM` 仍为默认后端。新后端通过 `diagnose`、`dry-run` 和 `verify-official` 显式进入，并通过 subprocess 驱动官方 HCCL-VM、mock-comm、hccl_test 和 checker。该路径不是 hccl-agent 直接链接或直接调用真实 HCCL API。
+
+正式验证以 WSL Ubuntu-22.04 root 运行固定的 2-rank INT32 SUM AllReduce（16 elements / 64 bytes），结果为 `PASS_WITH_WARNING`：所有内部和外层退出码为 0，两个 op summary 的 metadata 完全匹配，观察到两次 `Checker Success`、五个 success stage 和 HCCL-VM 正常关闭；记录 4 条 ErrorCode 103 warning，未观察到 Segmentation fault、MPI_ABORT、undefined symbol 或 fatal failure。
+
+验证 evidence 位于 `experiments/hccl_vm/evidence/g2_d_20260730T081052.668860Z`，包含 manifest、复现命令、结构化结果、精简日志、gzip 原始日志、Agent 报告和 SHA256 清单。`SHA256SUMS` 文件自身 SHA256 为 `bc8e82663a989e458311ccbbbb1b23a951635f4d19d4707ab6f71bbc1a8c70dc`。
+
+回归结果：Windows 与 Linux 全量 Python 各 507 tests，均 OK（1 项 opt-in 真实环境测试 skipped）；Windows 与 Linux CTest 均 11/11 PASS；两平台默认 CPU_SIM CLI 均通过。该结果只证明 CPU_SIM 工程回归和官方 HCCL-VM 模拟验证，不证明真实 Ascend NPU、多设备性能或硬件可靠性。完整完成审计见 `docs/g2_d_validation_report.md`。

@@ -1,0 +1,58 @@
+{
+  "backend": "ASCEND_HCCL_VM",
+  "byte_count": 64,
+  "checker_exit_code": 0,
+  "checker_stages": {
+    "CollectReachableTaskNodesToScanMemoryBuckets": "success",
+    "GenGraph": "success",
+    "MemConflict": "success",
+    "SemanticCheck": "success",
+    "SingleTaskCheck": "success"
+  },
+  "checker_success": true,
+  "checker_success_count": 2,
+  "diagnose_status": "OK",
+  "dtype": "int32",
+  "duration_seconds": 9.516,
+  "elements": 16,
+  "execution_mode": "subprocess_hccl_test",
+  "failure_reasons": [],
+  "fatal_signals": [],
+  "hccl_config_exit_code": 0,
+  "metadata_match": true,
+  "mock_comm": "112",
+  "mock_exit_code": 0,
+  "op_summaries": [
+    {
+      "collective_type": "AllReduce",
+      "data_type": "INT32",
+      "element_count": 16,
+      "op_index": 0,
+      "rank_count": 2,
+      "reduce_type": "SUM"
+    },
+    {
+      "collective_type": "AllReduce",
+      "data_type": "INT32",
+      "element_count": 16,
+      "op_index": 1,
+      "rank_count": 2,
+      "reduce_type": "SUM"
+    }
+  ],
+  "outer_exit_code": 0,
+  "passed": true,
+  "primitive": "AllReduce",
+  "rank_count": 2,
+  "reduce_op": "sum",
+  "status": "PASS_WITH_WARNING",
+  "test_exit_code": 0,
+  "timed_out": false,
+  "topology": "ascend950_cluster_32_server_normal.yaml",
+  "vm_exit_code": 0,
+  "vm_normal_shutdown": true,
+  "warning_103_count": 4,
+  "warning_summaries": [
+    "[warning][PID:107556][TID:107586][ccu_all_rank_param_recorder_v3.cc][CheckAllPostMatch] [HCCL-VM-CHECKER][ErrorCode: 103] Found CCU post/local-post tasks that were never consumed by any Wait task:"
+  ]
+}

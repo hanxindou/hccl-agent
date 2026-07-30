@@ -5,6 +5,56 @@ historical statistics into a text report."""
 class ReportGenerator:
 
     @staticmethod
+    def generate_official_validation_report(
+            result, evidence_directory=None):
+        """Format an auditable report for the external HCCL-VM backend."""
+        summaries = result.get("op_summaries", [])
+        lines = [
+            "Official HCCL-VM Validation Report",
+            "==================================",
+            "Validation Class: OFFICIAL_HCCL_VM_SIMULATOR",
+            "Integration: subprocess-driven official hccl_test and checker",
+            "Direct HCCL API Call: No",
+            "Real Ascend NPU Validated: No",
+            f"Status: {result.get('status', 'UNKNOWN')}",
+            f"Passed: {result.get('passed', False)}",
+            f"Primitive: {result.get('primitive', 'N/A')}",
+            f"Rank Count: {result.get('rank_count', 'N/A')}",
+            f"Data Type: {result.get('dtype', 'N/A')}",
+            f"Reduce Operation: {result.get('reduce_op', 'N/A')}",
+            f"Element Count: {result.get('elements', 'N/A')}",
+            f"Byte Count: {result.get('byte_count', 'N/A')}",
+            f"Checker Success: {result.get('checker_success', False)}",
+            f"Metadata Match: {result.get('metadata_match', False)}",
+            f"ErrorCode 103 Warnings: {result.get('warning_103_count', 0)}",
+            f"Test Exit Code: {result.get('test_exit_code')}",
+            f"Checker Exit Code: {result.get('checker_exit_code')}",
+            f"HCCL-VM Exit Code: {result.get('vm_exit_code')}",
+            f"Outer Exit Code: {result.get('outer_exit_code')}",
+            f"HCCL-VM Normal Shutdown: "
+            f"{result.get('vm_normal_shutdown', False)}",
+        ]
+        if evidence_directory:
+            lines.append(f"Evidence Directory: {evidence_directory}")
+        if summaries:
+            lines.append("Checker Operation Summaries:")
+            for summary in summaries:
+                lines.append(
+                    "  "
+                    f"opIndex={summary.get('op_index')}, "
+                    f"collectiveType={summary.get('collective_type')}, "
+                    f"rankCount={summary.get('rank_count')}, "
+                    f"dataType={summary.get('data_type')}, "
+                    f"elementCount={summary.get('element_count')}, "
+                    f"reduceType={summary.get('reduce_type')}"
+                )
+        failures = result.get("failure_reasons", [])
+        if failures:
+            lines.append("Failure Reasons:")
+            lines.extend(f"  - {reason}" for reason in failures)
+        return "\n".join(lines) + "\n"
+
+    @staticmethod
     def generate_report(execution_result, evaluation_result,
                         benchmark=None, historical_stats=None,
                         policy_ranking=None, reflection=None,
