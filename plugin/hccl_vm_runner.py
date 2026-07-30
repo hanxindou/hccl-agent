@@ -116,6 +116,10 @@ class HcclVmRunner:
             "not_executed": True,
             "request": request.to_dict(),
             "registry": contract.to_dict(),
+            "hccl_test_argv": build_hccl_test_argv(
+                contract,
+                self.config.hccl_test_bin,
+            ),
             "topology": self.config.topology,
             "mock_comm": self.config.mock_comm,
             "startup_script": startup_script,
@@ -145,7 +149,7 @@ class HcclVmRunner:
             self.config,
             host_system=self.host_system,
         )
-        diagnosis = environment_probe.diagnose()
+        diagnosis = environment_probe.diagnose_for(contract)
         plan = self.dry_run(request)
         if diagnosis["status"] != "OK":
             return OfficialRunOutcome(
@@ -175,6 +179,17 @@ class HcclVmRunner:
             outer_exit_code=execution.returncode,
             request=request,
         ).to_dict()
+        cleanup_audit = _audit_related_processes(
+            environment_probe,
+            contract,
+        )
+        parsed["cleanup_audit"] = cleanup_audit
+        if cleanup_audit["status"] not in {"CLEAN", "NOT_RUN_TEST_DOUBLE"}:
+            parsed["passed"] = False
+            parsed["failure_reasons"].append(
+                "postflight process cleanup audit failed"
+            )
+            parsed["status"] = "FAIL_CLEANUP"
         if execution.timed_out:
             parsed["status"] = "ENV_BLOCKED_TIMEOUT"
             parsed["passed"] = False
@@ -423,6 +438,48 @@ def _evidence_directory_pattern(
 ) -> str:
     primitive = contract.canonical_primitive.casefold()
     return f"g2_e_{primitive}_<timestamp>"
+
+
+def _audit_related_processes(
+    environment: Any,
+    contract: ResolvedCollectiveContract,
+) -> dict[str, Any]:
+    """Read only exact process names; never kill a potentially foreign run."""
+    runner = getattr(environment, "run_linux_script", None)
+    if not callable(runner):
+        return {
+            "status": "NOT_RUN_TEST_DOUBLE",
+            "residual_processes": [],
+        }
+    result = runner("ps -eo pid=,comm=,args=")
+    if result.returncode != 0:
+        return {
+            "status": "AUDIT_ERROR",
+            "exit_code": result.returncode,
+            "stderr": result.stderr.strip()[:1000],
+            "residual_processes": [],
+        }
+    expected_names = {
+        "hccl-vm",
+        "mpirun",
+        "checker",
+        contract.executable_basename,
+    }
+    residual = []
+    for line in result.stdout.splitlines():
+        fields = line.strip().split(None, 2)
+        if len(fields) < 2 or fields[1] not in expected_names:
+            continue
+        residual.append({
+            "pid": fields[0],
+            "comm": fields[1],
+            "args": fields[2] if len(fields) == 3 else "",
+        })
+    return {
+        "status": "CLEAN" if not residual else "RESIDUAL_PROCESSES",
+        "exit_code": result.returncode,
+        "residual_processes": residual,
+    }
 
 
 def _execute_interactive_process(

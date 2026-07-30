@@ -10,6 +10,7 @@ from plugin.hccl_vm_runner import (
     InteractiveStep,
     OfficialAllReduceRequest,
     ProcessExecution,
+    _audit_related_processes,
     _execute_interactive_process,
 )
 
@@ -20,6 +21,10 @@ __HCCL_AGENT_MOCK_EXIT_CODE=0
 __HCCL_AGENT_TEST_EXIT_CODE=0
 [info] Op summary, opIndex=0, collectiveType=AllReduce, rankCount=2,
 dataType=INT32, elementCount=16, reduceType=SUM, opGroupSize=2
+[info] CheckerV3 stage finished, stage=GenGraph, status=success
+[info] CheckerV3 stage finished, stage=SingleTaskCheck, status=success
+[info] CheckerV3 stage finished, stage=MemConflict, status=success
+[info] CheckerV3 stage finished, stage=SemanticCheck, status=success
 [info] op[0] Checker Success
 __HCCL_AGENT_CHECKER_EXIT_CODE=0
 [info] Shell exited. Host shutting down.
@@ -39,6 +44,9 @@ class FakeEnvironment:
                 [] if self.status == "OK" else ["test environment missing"]
             ),
         }
+
+    def diagnose_for(self, contract):
+        return self.diagnose()
 
 
 class FakeExecutor:
@@ -133,6 +141,25 @@ class TestHcclVmOfficialFlow(unittest.TestCase):
         self.assertIn("timeout --signal=TERM --kill-after=10s 30s", script)
         self.assertIn("script -qef -E never -c", script)
         self.assertIn("__HCCL_AGENT_VM_EXIT_CODE", script)
+
+    def test_process_audit_reports_only_exact_residual_names(self):
+        class AuditEnvironment:
+            def run_linux_script(self, script):
+                return type("Result", (), {
+                    "returncode": 0,
+                    "stderr": "",
+                    "stdout": (
+                        "  12 hccl-vm hccl-vm start\n"
+                        "  13 unrelated all_reduce_test_helper\n"
+                    ),
+                })()
+
+        audit = _audit_related_processes(
+            AuditEnvironment(),
+            self.request.resolve(),
+        )
+        self.assertEqual(audit["status"], "RESIDUAL_PROCESSES")
+        self.assertEqual(audit["residual_processes"][0]["comm"], "hccl-vm")
 
     def test_process_driver_waits_for_prompt_and_each_marker(self):
         helper = "\n".join([

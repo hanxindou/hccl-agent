@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from typing import Any, Callable
 
 from plugin.hccl_vm_backend import Backend, HcclVmConfig
+from plugin.hccl_vm_registry import PRIMITIVE_REGISTRY, ResolvedCollectiveContract
 
 
 EXPECTED_HCOMM_BRANCH = "competition/campus-2026"
@@ -70,6 +71,26 @@ class HcclVmEnvironment:
         values = parse_probe_output(result.stdout)
         self._apply_probe_values(report, values)
         self._classify_report(report, result.returncode)
+        return report
+
+    def diagnose_for(
+        self,
+        contract: ResolvedCollectiveContract,
+    ) -> dict[str, Any]:
+        """Return selected-primitive readiness while retaining full diagnosis."""
+        report = self.diagnose()
+        report["overall_status"] = report["status"]
+        primitive = report["hccl_test"]["executables"][
+            contract.canonical_primitive
+        ]
+        selected_missing = [
+            *report.get("common_missing_items", []),
+            *primitive["missing_items"],
+        ]
+        report["selected_primitive"] = contract.canonical_primitive
+        report["selected_missing_items"] = selected_missing
+        report["missing_items"] = selected_missing
+        report["status"] = "OK" if not selected_missing else "ENV_BLOCKED"
         return report
 
     def run_linux_script(self, script: str) -> LinuxCommandResult:
@@ -153,11 +174,18 @@ class HcclVmEnvironment:
             },
             "hccl_test": {
                 "bin_dir": self.config.hccl_test_bin,
-                "all_reduce_path": posixpath.join(
-                    self.config.hccl_test_bin, "all_reduce_test"
-                ),
-                "executable": False,
-                "dependencies_resolved": False,
+                "executables": {
+                    spec.canonical_name: {
+                        "path": posixpath.join(
+                            self.config.hccl_test_bin,
+                            spec.executable_basename,
+                        ),
+                        "executable": False,
+                        "dependencies_resolved": False,
+                        "missing_items": [],
+                    }
+                    for spec in PRIMITIVE_REGISTRY.values()
+                },
             },
             "checker": {
                 "path": posixpath.join(
@@ -237,9 +265,6 @@ class HcclVmEnvironment:
             "hccl_config": posixpath.join(
                 self.config.hccl_vm_install_dir, "script", "hccl_config.sh"
             ),
-            "all_reduce": posixpath.join(
-                self.config.hccl_test_bin, "all_reduce_test"
-            ),
             "checker": posixpath.join(
                 self.config.hccl_vm_install_dir,
                 "plugin",
@@ -261,8 +286,23 @@ class HcclVmEnvironment:
             "hcomm": self.config.hcomm_source_dir,
             "hccl": self.config.hccl_source_dir,
         }
+        for spec in PRIMITIVE_REGISTRY.values():
+            paths[_primitive_probe_key(spec.canonical_name)] = posixpath.join(
+                self.config.hccl_test_bin,
+                spec.executable_basename,
+            )
         assignments = "\n".join(
             f"{name}={shlex.quote(value)}" for name, value in paths.items()
+        )
+        test_probe_lines = "\n".join(
+            "bool_exec hccl_test_"
+            f"{spec.canonical_name}_executable \"${_primitive_probe_key(spec.canonical_name)}\""
+            for spec in PRIMITIVE_REGISTRY.values()
+        )
+        dependency_probe_lines = "\n".join(
+            "probe_hccl_test_dependencies "
+            f"{spec.canonical_name} \"${_primitive_probe_key(spec.canonical_name)}\""
+            for spec in PRIMITIVE_REGISTRY.values()
         )
         return f"""set +e
 {assignments}
@@ -273,7 +313,7 @@ bool_exec() {{ if [ -x "$2" ]; then emit "$1" true; else emit "$1" false; fi; }}
 bool_file cann_available "$set_env"
 bool_exec hccl_vm_executable "$hccl_vm"
 bool_file hccl_config_available "$hccl_config"
-bool_exec hccl_test_executable "$all_reduce"
+{test_probe_lines}
 bool_exec checker_available "$checker"
 bool_file topology_available "$topology"
 bool_file mock_comm_available "$mock_comm"
@@ -303,16 +343,21 @@ else
     emit sudo_non_interactive false
 fi
 
-dependencies_resolved=false
-if [ -f "$set_env" ] && [ -x "$all_reduce" ]; then
-    source "$set_env" >/dev/null 2>&1
-    if ldd "$all_reduce" 2>&1 | grep -q 'not found'; then
-        dependencies_resolved=false
-    else
-        dependencies_resolved=true
+probe_hccl_test_dependencies() {{
+    primitive="$1"
+    executable="$2"
+    dependencies_resolved=false
+    if [ -f "$set_env" ] && [ -x "$executable" ]; then
+        source "$set_env" >/dev/null 2>&1
+        if ldd "$executable" 2>&1 | grep -q 'not found'; then
+            dependencies_resolved=false
+        else
+            dependencies_resolved=true
+        fi
     fi
-fi
-emit dependencies_resolved "$dependencies_resolved"
+    emit "hccl_test_${{primitive}}_dependencies_resolved" "$dependencies_resolved"
+}}
+{dependency_probe_lines}
 
 probe_git_repo() {{
     repo_name="$1"
@@ -346,12 +391,15 @@ exit 0
         report["hccl_vm"]["config_available"] = _as_bool(
             values.get("hccl_config_available")
         )
-        report["hccl_test"]["executable"] = _as_bool(
-            values.get("hccl_test_executable")
-        )
-        report["hccl_test"]["dependencies_resolved"] = _as_bool(
-            values.get("dependencies_resolved")
-        )
+        for canonical, executable in report["hccl_test"][
+            "executables"
+        ].items():
+            executable["executable"] = _as_bool(values.get(
+                f"hccl_test_{canonical}_executable"
+            ))
+            executable["dependencies_resolved"] = _as_bool(values.get(
+                f"hccl_test_{canonical}_dependencies_resolved"
+            ))
         report["checker"]["available"] = _as_bool(
             values.get("checker_available")
         )
@@ -396,11 +444,6 @@ exit 0
             ("CANN version", bool(report["cann"]["version"])),
             ("hccl-vm executable", report["hccl_vm"]["executable"]),
             ("HCCL-VM hccl_config.sh", report["hccl_vm"]["config_available"]),
-            ("all_reduce_test executable", report["hccl_test"]["executable"]),
-            (
-                "all_reduce_test shared libraries",
-                report["hccl_test"]["dependencies_resolved"],
-            ),
             ("checker plugin", report["checker"]["available"]),
             ("topology profile", report["topology"]["available"]),
             ("mock-comm profile", report["mock_comm"]["available"]),
@@ -414,26 +457,39 @@ exit 0
                 report["runner_tools"]["sudo_non_interactive"],
             ),
         ]
-        report["missing_items"].extend(
+        common_missing = [
             name for name, available in required if not available
-        )
+        ]
         if returncode != 0:
-            report["missing_items"].append(
+            common_missing.append(
                 f"environment probe exited with code {returncode}"
             )
 
         for repo_name in ("hcomm", "hccl"):
             repo = report[repo_name]
             if not repo["branch"] or not repo["commit"]:
-                report["missing_items"].append(f"{repo_name} git metadata")
+                common_missing.append(f"{repo_name} git metadata")
                 continue
             if (
                 repo["branch"] != repo["expected_branch"]
                 or repo["commit"] != repo["expected_commit"]
             ):
-                report["missing_items"].append(
+                common_missing.append(
                     f"{repo_name} branch/commit mismatch"
                 )
+
+        report["common_missing_items"] = common_missing
+        report["missing_items"].extend(common_missing)
+        for canonical, executable in report["hccl_test"][
+            "executables"
+        ].items():
+            missing = []
+            if not executable["executable"]:
+                missing.append(f"{canonical} executable")
+            if not executable["dependencies_resolved"]:
+                missing.append(f"{canonical} shared libraries")
+            executable["missing_items"] = missing
+            report["missing_items"].extend(missing)
 
         report["status"] = (
             "OK" if not report["missing_items"] else "ENV_BLOCKED"
@@ -454,6 +510,10 @@ def parse_probe_output(stdout: str) -> dict[str, str]:
 
 def _as_bool(value: str | None) -> bool:
     return value == "true"
+
+
+def _primitive_probe_key(canonical_primitive: str) -> str:
+    return "test_" + canonical_primitive.casefold()
 
 
 def _display_command(command: list[str]) -> list[str]:

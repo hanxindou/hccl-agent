@@ -13,10 +13,10 @@ from typing import Any
 
 from agent.report_generator import ReportGenerator
 from plugin.hccl_vm_backend import HcclVmConfig
-from plugin.hccl_vm_runner import OfficialAllReduceRequest, OfficialRunOutcome
+from plugin.hccl_vm_runner import OfficialCollectiveRequest, OfficialRunOutcome
 
 
-EVIDENCE_SCHEMA_VERSION = "g2-d-v1"
+EVIDENCE_SCHEMA_VERSION = "g2-e-primitive-v1"
 VALIDATION_CLASS = "OFFICIAL_HCCL_VM_SIMULATOR"
 _IMPORTANT_LOG_RE = re.compile(
     r"__HCCL_AGENT_|Opsummary|Op summary|Checker (?:Success|Failed)|"
@@ -35,7 +35,7 @@ class EvidenceArchive:
 
 def archive_official_evidence(
     outcome: OfficialRunOutcome,
-    request: OfficialAllReduceRequest,
+    request: OfficialCollectiveRequest,
     config: HcclVmConfig,
     *,
     command: str,
@@ -47,9 +47,14 @@ def archive_official_evidence(
     if timestamp.tzinfo is None:
         timestamp = timestamp.replace(tzinfo=timezone.utc)
     timestamp = timestamp.astimezone(timezone.utc)
+    contract = request.resolve()
     directory = _create_evidence_directory(
         Path(config.evidence_root),
-        timestamp.strftime("g2_d_%Y%m%dT%H%M%S.%fZ"),
+        timestamp.strftime(
+            "g2_e_"
+            + contract.canonical_primitive.casefold()
+            + "_%Y%m%dT%H%M%S.%fZ"
+        ),
     )
 
     public_result = outcome.to_public_dict()
@@ -60,7 +65,11 @@ def archive_official_evidence(
         "execution_mode": "subprocess_hccl_test",
         "direct_hccl_api_call": False,
         "real_ascend_npu_validated": False,
+        "primitive": contract.canonical_primitive,
+        "input_alias": contract.input_alias,
         "request": request.to_dict(),
+        "resolved_contract": contract.to_dict(),
+        "hccl_test_argv": outcome.plan.get("hccl_test_argv", []),
         "configuration": config.to_dict(),
         "diagnosis": outcome.diagnosis,
     }
@@ -151,7 +160,7 @@ def _concise_log(raw_log: str) -> str:
 
 def _readme(result: dict[str, Any], report: str) -> str:
     return "\n".join([
-        "# G2-D Official HCCL-VM Validation Evidence",
+        "# G2-E Official HCCL-VM Primitive Validation Evidence",
         "",
         "This archive records a subprocess-driven run of the official HCCL-VM, "
         "hccl_test, and checker tools. It is not a direct HCCL API integration "
@@ -159,6 +168,7 @@ def _readme(result: dict[str, Any], report: str) -> str:
         "",
         f"- Status: `{result.get('status', 'UNKNOWN')}`",
         f"- Passed: `{result.get('passed', False)}`",
+        f"- Primitive: `{result.get('primitive', 'UNKNOWN')}`",
         f"- Checker Success: `{result.get('checker_success', False)}`",
         f"- ErrorCode 103 warnings: `{result.get('warning_103_count', 0)}`",
         f"- Outer exit code: `{result.get('outer_exit_code')}`",

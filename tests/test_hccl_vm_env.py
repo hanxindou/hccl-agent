@@ -11,6 +11,7 @@ from plugin.hccl_vm_env import (
     PROBE_PREFIX,
     parse_probe_output,
 )
+from plugin.hccl_vm_registry import resolve_collective_request
 
 
 def _probe_output(**overrides):
@@ -19,8 +20,12 @@ def _probe_output(**overrides):
         "cann_version": "9.1.0",
         "hccl_vm_executable": "true",
         "hccl_config_available": "true",
-        "hccl_test_executable": "true",
-        "dependencies_resolved": "true",
+        "hccl_test_AllReduce_executable": "true",
+        "hccl_test_AllReduce_dependencies_resolved": "true",
+        "hccl_test_AllGather_executable": "true",
+        "hccl_test_AllGather_dependencies_resolved": "true",
+        "hccl_test_ReduceScatter_executable": "true",
+        "hccl_test_ReduceScatter_dependencies_resolved": "true",
         "checker_available": "true",
         "topology_available": "true",
         "mock_comm_available": "true",
@@ -91,6 +96,9 @@ class TestHcclVmEnvironment(unittest.TestCase):
         self.assertEqual(runner.calls[0][0][:4], [
             "wsl.exe", "-d", "Ubuntu-22.04", "--",
         ])
+        self.assertTrue(
+            report["hccl_test"]["executables"]["AllGather"]["executable"]
+        )
 
     def test_missing_wsl_is_reported_without_subprocess(self):
         runner = FakeRunner(_probe_output())
@@ -214,6 +222,25 @@ class TestHcclVmEnvironment(unittest.TestCase):
         ).diagnose()
         self.assertEqual(report["status"], "ENV_BLOCKED_BACKEND")
         self.assertEqual(runner.calls, [])
+
+    def test_selected_primitive_can_run_when_another_is_missing(self):
+        report = HcclVmEnvironment(
+            self.config,
+            host_system="Linux",
+            command_runner=FakeRunner(_probe_output(
+                hccl_test_AllGather_executable="false",
+            )),
+            which=lambda name: f"/usr/bin/{name}",
+        ).diagnose_for(resolve_collective_request(
+            primitive="AllReduce",
+            rank_count=2,
+            dtype="int32",
+            reduce_op="sum",
+            elements=16,
+        ))
+        self.assertEqual(report["overall_status"], "ENV_BLOCKED")
+        self.assertEqual(report["status"], "OK")
+        self.assertEqual(report["selected_primitive"], "AllReduce")
 
 
 if __name__ == "__main__":
