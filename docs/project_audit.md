@@ -44,19 +44,19 @@ HCCLAgent.run
 
 实现类型判定：
 
-| 模块                              | 当前事实                                                                                                                                           | 实现类型                        |
-| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| Python Agent 主流程               | `agent/hccl_agent.py` 串联大量模块，返回完整 dict                                                                                                  | 真实实现 + 规则编排             |
-| LLM Reasoning/Decision            | `agent/llm_client.py` 读取 `DEEPSEEK_API_KEY` 并调用 DeepSeek；无 Key 抛错后主流程降级                                                             | 可选外部 API，测试为 Mock       |
-| Simulator                         | `simulator/simulator.py` 使用算法效率、步数、拓扑因子和固定权重算 latency/bandwidth/score                                                          | 数学预测                        |
-| TopologyGraph                     | `skills/topology_graph.py` / `topology/graph_builder.py` 构图和路径计算                                                                            | 数学图模型                      |
-| Hardware awareness                | `hardware/`、`skills/hardware_reasoning_skill.py` 使用静态容量/亲和度                                                                              | 人工配置 + 模拟                 |
-| C 动态库                          | Linux 设计目标为 `libhccl_plugin.so`；Windows 在启用自动符号导出后可生成 `hccl_plugin.dll` 和 `hccl_plugin.lib`，但 Python loader 仍固定寻找 `.so` | CPU 模拟 + 跨平台适配不完整     |
-| C AllReduce 算法                  | Ring/Butterfly/Mesh/NHR/Fat-Tree 的现有 Windows C 测试共 32 个算法用例通过；仍只覆盖 FP32、SUM、有限 rank 和 CPU 模拟                              | 已动态验证的有限 CPU 模拟       |
-| AllGather/ReduceScatter/Broadcast | Python 兼容层只返回模拟指标；C 层相关函数多为 STUB 或无通用 wrapper 实现                                                                           | Stub/数学模型                   |
-| CodeGenerationSkill               | 生成配置、执行计划和 Python 伪代码 skeleton                                                                                                        | 文本/伪代码生成，不写入生产代码 |
-| Knowledge/Experience              | 写入 `logs/*.jsonl`                                                                                                                                | 真实持久化，但数据来自模拟      |
-| third_party/cann-hccl             | Git 只跟踪 `third_party/cann-hccl` 路径线索                                                                                                        | 第三方参考边界不完整/未展开     |
+| 模块                              | 当前事实                                                                                                                                           | 实现类型                                    |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Python Agent 主流程               | `agent/hccl_agent.py` 串联大量模块，返回完整 dict                                                                                                  | 真实实现 + 规则编排                         |
+| LLM Reasoning/Decision            | `agent/llm_client.py` 读取 `DEEPSEEK_API_KEY` 并调用 DeepSeek；无 Key 抛错后主流程降级                                                             | 可选外部 API，测试为 Mock                   |
+| Simulator                         | `simulator/simulator.py` 使用算法效率、步数、拓扑因子和固定权重算 latency/bandwidth/score                                                          | 数学预测                                    |
+| TopologyGraph                     | `skills/topology_graph.py` / `topology/graph_builder.py` 构图和路径计算                                                                            | 数学图模型                                  |
+| Hardware awareness                | `hardware/`、`skills/hardware_reasoning_skill.py` 使用静态容量/亲和度                                                                              | 人工配置 + 模拟                             |
+| C 动态库                          | Linux 设计目标为 `libhccl_plugin.so`；Windows 在启用自动符号导出后可生成 `hccl_plugin.dll` 和 `hccl_plugin.lib`，但 Python loader 仍固定寻找 `.so` | CPU 模拟 + 跨平台适配不完整                 |
+| C AllReduce 算法                  | Ring/Butterfly/Mesh/NHR/Fat-Tree 的现有 Windows C 测试共 32 个算法用例通过；仍只覆盖 FP32、SUM、有限 rank 和 CPU 模拟                              | 已动态验证的有限 CPU 模拟                   |
+| AllGather/ReduceScatter/Broadcast | Python 兼容层只返回模拟指标；C 层相关函数多为 STUB 或无通用 wrapper 实现                                                                           | Stub/数学模型                               |
+| CodeGenerationSkill               | 生成配置、执行计划和 Python 伪代码 skeleton                                                                                                        | 文本/伪代码生成，不写入生产代码             |
+| Knowledge/Experience              | 写入 `logs/*.jsonl`                                                                                                                                | 真实持久化，但数据来自模拟                  |
+| third_party/cann-hccl             | 历史孤立 gitlink 已在 V1 Linux CI 清理阶段移除                                                                                                     | 当前未引入第三方 CANN/HCCL 源码或 submodule |
 
 ## 3. 已实现能力矩阵
 
@@ -111,23 +111,23 @@ HCCLAgent.run
 
 ## 5. 代码和架构健康度
 
-| 问题                                           | 证据文件                                                               | 严重程度 | 影响                                                             | 修复建议                                                        | 优先级 | 下一阶段 |
-| ---------------------------------------------- | ---------------------------------------------------------------------- | -------- | ---------------------------------------------------------------- | --------------------------------------------------------------- | ------ | -------- |
-| README 与当前 CMake/C 源码冲突                 | `hcccl/README.md`, `hcccl/CMakeLists.txt`                              | 高       | 文档误导，影响评审可信度                                         | 下一阶段统一事实表述                                            | P0     | 是       |
-| C 标准 wrapper 声明未见实现                    | `hcccl/include/hccl_comm.h`, `hcccl/src/*.c`                           | 高       | `hcclAllReduce` 等标准接口不闭合                                 | 实现 wrapper 或调整接口边界                                     | P0     | 是       |
-| AllGather/ReduceScatter/Broadcast 数据实现缺失 | `hcccl/src/hccl_algorithms.c`                                          | 高       | 不满足至少三种 primitive                                         | 先实现 CPU 正确性版本                                           | P0     | 是       |
-| 精度支持严重不足                               | C tests 对 FP16/PROD 期望 `NOT_SUPPORTED`                              | 高       | 不满足 FP16/BF16/FP32 混精度                                     | 增加 dtype/op 与误差测试                                        | P0     | 是       |
-| 生成代码示例语法错误                           | `examples/generated_code/fat-tree.py`, `butterfly.py`, `nhr.py`        | 中       | Code Generation 可信度低                                         | 生成合法 C/C++ 或明确为伪代码                                   | P1     | 是       |
-| 主流程运行会写入 logs                          | `ExperimentLogger`, `PromptEngine`, `KnowledgeBase`, `ExperienceStore` | 中       | 测试和 demo 有副作用                                             | 提供 dry-run/audit 模式或临时路径注入                           | P1     | 是       |
-| LLM 调用只支持 DeepSeek 且可能外网             | `agent/llm_client.py`                                                  | 中       | 无 Key/断网时不是完整 LLM Agent                                  | 明确离线降级与可复现日志                                        | P1     | 是       |
-| 高级模块平行实现较多                           | `skills/topology_graph.py`, `topology/graph_builder.py` 等             | 中       | 架构膨胀、主流程不一致                                           | 收敛到一套拓扑/成本模型                                         | P1     | 是       |
-| 性能分数无实机校准                             | `simulator/simulator.py`, `calibration/`                               | 高       | 不能作为比赛性能结论                                             | 引入校准数据和参数 provenance                                   | P1     | 是       |
-| third_party 边界不清                           | `third_party/cann-hccl` 仅路径被跟踪                                   | 中       | 难证明 HCOMM 来源/版本                                           | 记录来源、版本、引用接口                                        | P0     | 是       |
-| Python loader 写死 Linux `.so` 路径            | `plugin/hccl_bridge.py`, `plugin/execution_engine.py`                  | 高       | Windows Python 测试无法加载已生成的 DLL，多个 Agent 流程测试报错 | 支持 `.dll`/`.so` 平台检测，并允许参数或环境变量指定库路径      | P0     | 是       |
-| 测试写死 POSIX `/tmp` 路径                     | `tests/test_calibration_profile.py`                                    | 中       | Windows 原生测试产生 `FileNotFoundError`                         | 使用 `tempfile.TemporaryDirectory()` 或 `tempfile.gettempdir()` | P0     | 是       |
-| Windows DLL 默认未导出符号                     | `hcccl/CMakeLists.txt`                                                 | 高       | 默认构建生成 DLL 但不生成导入库，测试程序出现 `LNK1181`          | 为 Windows target 正式配置导出宏或 `WINDOWS_EXPORT_ALL_SYMBOLS` | P0     | 是       |
-| CTest 未注册测试                               | `hcccl/CMakeLists.txt`                                                 | 中       | `ctest` 返回 `No tests were found`，无法统一自动验收             | 增加 `enable_testing()` 与各测试目标的 `add_test()`             | P0     | 是       |
-| MSVC UTF-8 编码与控制台乱码                    | `hcccl/src/*`, `hcccl/include/*`, `hcccl/tests/*`                      | 中       | 构建出现 `C4819`，测试标题和箭头乱码                             | 核验源码编码，正式增加 MSVC `/utf-8`，避免批量无依据转码        | P1     | 是       |
+| 问题                                           | 证据文件                                                                                      | 严重程度 | 影响                                                             | 修复建议                                                        | 优先级 | 下一阶段 |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------- | --------------------------------------------------------------- | ------ | -------- |
+| README 与当前 CMake/C 源码冲突                 | `hcccl/README.md`, `hcccl/CMakeLists.txt`                                                     | 高       | 文档误导，影响评审可信度                                         | 下一阶段统一事实表述                                            | P0     | 是       |
+| C 标准 wrapper 声明未见实现                    | `hcccl/include/hccl_comm.h`, `hcccl/src/*.c`                                                  | 高       | `hcclAllReduce` 等标准接口不闭合                                 | 实现 wrapper 或调整接口边界                                     | P0     | 是       |
+| AllGather/ReduceScatter/Broadcast 数据实现缺失 | `hcccl/src/hccl_algorithms.c`                                                                 | 高       | 不满足至少三种 primitive                                         | 先实现 CPU 正确性版本                                           | P0     | 是       |
+| 精度支持严重不足                               | C tests 对 FP16/PROD 期望 `NOT_SUPPORTED`                                                     | 高       | 不满足 FP16/BF16/FP32 混精度                                     | 增加 dtype/op 与误差测试                                        | P0     | 是       |
+| 生成代码示例语法错误                           | `examples/generated_code/fat-tree.py`, `butterfly.py`, `nhr.py`                               | 中       | Code Generation 可信度低                                         | 生成合法 C/C++ 或明确为伪代码                                   | P1     | 是       |
+| 主流程运行会写入 logs                          | `ExperimentLogger`, `PromptEngine`, `KnowledgeBase`, `ExperienceStore`                        | 中       | 测试和 demo 有副作用                                             | 提供 dry-run/audit 模式或临时路径注入                           | P1     | 是       |
+| LLM 调用只支持 DeepSeek 且可能外网             | `agent/llm_client.py`                                                                         | 中       | 无 Key/断网时不是完整 LLM Agent                                  | 明确离线降级与可复现日志                                        | P1     | 是       |
+| 高级模块平行实现较多                           | `skills/topology_graph.py`, `topology/graph_builder.py` 等                                    | 中       | 架构膨胀、主流程不一致                                           | 收敛到一套拓扑/成本模型                                         | P1     | 是       |
+| 性能分数无实机校准                             | `simulator/simulator.py`, `calibration/`                                                      | 高       | 不能作为比赛性能结论                                             | 引入校准数据和参数 provenance                                   | P1     | 是       |
+| 第三方 CANN/HCCL 依赖尚未引入                  | V1 已移除无 .gitmodules 配置的孤立 gitlink 后续 G2 必须核验官方来源、版本、License 和集成方式 | 中       | 难证明 HCOMM 来源/版本                                           | 记录来源、版本、引用接口                                        | P0     | 是       |
+| Python loader 写死 Linux `.so` 路径            | `plugin/hccl_bridge.py`, `plugin/execution_engine.py`                                         | 高       | Windows Python 测试无法加载已生成的 DLL，多个 Agent 流程测试报错 | 支持 `.dll`/`.so` 平台检测，并允许参数或环境变量指定库路径      | P0     | 是       |
+| 测试写死 POSIX `/tmp` 路径                     | `tests/test_calibration_profile.py`                                                           | 中       | Windows 原生测试产生 `FileNotFoundError`                         | 使用 `tempfile.TemporaryDirectory()` 或 `tempfile.gettempdir()` | P0     | 是       |
+| Windows DLL 默认未导出符号                     | `hcccl/CMakeLists.txt`                                                                        | 高       | 默认构建生成 DLL 但不生成导入库，测试程序出现 `LNK1181`          | 为 Windows target 正式配置导出宏或 `WINDOWS_EXPORT_ALL_SYMBOLS` | P0     | 是       |
+| CTest 未注册测试                               | `hcccl/CMakeLists.txt`                                                                        | 中       | `ctest` 返回 `No tests were found`，无法统一自动验收             | 增加 `enable_testing()` 与各测试目标的 `add_test()`             | P0     | 是       |
+| MSVC UTF-8 编码与控制台乱码                    | `hcccl/src/*`, `hcccl/include/*`, `hcccl/tests/*`                                             | 中       | 构建出现 `C4819`，测试标题和箭头乱码                             | 核验源码编码，正式增加 MSVC `/utf-8`，避免批量无依据转码        | P1     | 是       |
 
 ## 6. 模拟器真实性审计
 
@@ -205,7 +205,7 @@ HCCLAgent.run
 
 部分读取文件：`experiments/reports/*`、`experiments/scenarios/*`、`analysis/*`。理由：多为自动生成报告或辅助分析，已抽样核验与主流程关系。
 
-未展开读取：`third_party/cann-hccl`。理由：Git 仅显示该路径线索，按审计规则只核验存在和引用，不全量读取第三方源码。
+历史记录：third_party/cann-hccl 曾以无 .gitmodules 配置的孤立 gitlink 存在，未包含可读取源码；V1 Linux CI 清理阶段已将该无效索引项移除。
 
 执行命令摘要：Windows 预检、`git ls-files` 受控清单、UTF-8 文档读取、DOCX XML 提取、源码/测试定向读取、Conda Python unittest、Visual Studio 2022 CMake/MSBuild 构建、CTest 检查以及 6 个 C 测试程序手动执行。未执行 `git add`、`git commit`、`git push`，未安装额外项目依赖。
 
