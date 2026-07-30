@@ -1,0 +1,111 @@
+{
+  "configuration": {
+    "backend": "ASCEND_HCCL_VM",
+    "cann_path": "/home/workspace/Ascend/cann-9.1.0",
+    "check_only": true,
+    "evidence_root": "experiments/hccl_vm/evidence",
+    "expansion_mode": "CCU_SCHED",
+    "hccl_source_dir": "/home/workspace/hccl",
+    "hccl_test_bin": "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin",
+    "hccl_vm_install_dir": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install",
+    "hcomm_source_dir": "/home/workspace/hcomm",
+    "mock_comm": "112",
+    "timeout_seconds": 900,
+    "topology": "ascend950_cluster_32_server_normal.yaml",
+    "wsl_distro": "Ubuntu-22.04"
+  },
+  "diagnosis": {
+    "cann": {
+      "available": true,
+      "path": "/home/workspace/Ascend/cann-9.1.0",
+      "set_env_path": "/home/workspace/Ascend/cann-9.1.0/set_env.sh",
+      "version": "9.1.0"
+    },
+    "checker": {
+      "available": true,
+      "path": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/plugin/checker/checker"
+    },
+    "execution_mode": "subprocess_hccl_test",
+    "hccl": {
+      "branch": "competition/campus-2026",
+      "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "expected_branch": "competition/campus-2026",
+      "expected_commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "path": "/home/workspace/hccl",
+      "worktree": "clean"
+    },
+    "hccl_test": {
+      "all_reduce_path": "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin/all_reduce_test",
+      "bin_dir": "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin",
+      "dependencies_resolved": true,
+      "executable": true
+    },
+    "hccl_vm": {
+      "config_available": true,
+      "config_path": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/script/hccl_config.sh",
+      "executable": true,
+      "executable_path": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/bin/hccl-vm",
+      "install_dir": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install"
+    },
+    "hcomm": {
+      "branch": "competition/campus-2026",
+      "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "expected_branch": "competition/campus-2026",
+      "expected_commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "path": "/home/workspace/hcomm",
+      "worktree": "clean"
+    },
+    "host_os": "Linux",
+    "missing_items": [],
+    "mock_comm": {
+      "available": true,
+      "name": "112",
+      "path": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/config/topo_meta/112.yaml"
+    },
+    "mpi": {
+      "available": true,
+      "implementation": "mpirun (Open MPI) 4.1.2",
+      "path": "/usr/bin/mpirun"
+    },
+    "runner_tools": {
+      "available": true,
+      "script_path": "/usr/bin/script",
+      "sudo_non_interactive": true,
+      "timeout_path": "/usr/bin/timeout"
+    },
+    "selected_backend": "ASCEND_HCCL_VM",
+    "status": "OK",
+    "topology": {
+      "available": true,
+      "name": "ascend950_cluster_32_server_normal.yaml",
+      "path": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/config/cluster/ascend950_cluster_32_server_normal.yaml"
+    },
+    "wsl": {
+      "available": true,
+      "command": [
+        "bash",
+        "-lc",
+        "<probe script>"
+      ],
+      "distro": "Ubuntu-22.04",
+      "exit_code": 0,
+      "running_in_wsl": true,
+      "stderr": "",
+      "transport": "direct_bash"
+    }
+  },
+  "direct_hccl_api_call": false,
+  "execution_mode": "subprocess_hccl_test",
+  "generated_at_utc": "2026-07-30T08:10:52.668860Z",
+  "real_ascend_npu_validated": false,
+  "request": {
+    "byte_count": 64,
+    "dtype": "int32",
+    "elements": 16,
+    "primitive": "AllReduce",
+    "rank_count": 2,
+    "reduce_op": "sum"
+  },
+  "schema_version": "g2-d-v1",
+  "validation_class": "OFFICIAL_HCCL_VM_SIMULATOR"
+}

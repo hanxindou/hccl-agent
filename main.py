@@ -1,5 +1,7 @@
 import argparse
 import json
+import shlex
+import sys
 
 from agent.hccl_agent import HCCLAgent
 from plugin.hccl_vm_backend import (
@@ -7,6 +9,7 @@ from plugin.hccl_vm_backend import (
     load_hccl_vm_config,
 )
 from plugin.hccl_vm_env import HcclVmEnvironment
+from plugin.hccl_vm_evidence import archive_official_evidence
 from plugin.hccl_vm_runner import (
     HcclVmRunner,
     OfficialAllReduceRequest,
@@ -165,9 +168,17 @@ def _run_official_command(args, config):
         try:
             request = _official_request_from_args(args)
             outcome = HcclVmRunner(config).verify(request)
+            evidence = archive_official_evidence(
+                outcome,
+                request,
+                config,
+                command=shlex.join([sys.executable, *sys.argv]),
+            )
         except ValueError as exc:
             raise SystemExit(str(exc)) from exc
         report = outcome.to_public_dict()
+        report["evidence_dir"] = str(evidence.directory)
+        report["evidence_sha256"] = evidence.checksum_file_sha256
         print(json.dumps(report, indent=2, ensure_ascii=False))
         if not report.get("passed", False):
             raise SystemExit(2)
