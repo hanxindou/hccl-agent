@@ -135,23 +135,24 @@ Workflow：
 
 ## 13. V1 阶段 commit
 
-| Stage | Commit | Message |
-| ----- | ------ | ------- |
-| V1-A | eeda43d | docs: correct V1 baseline evidence |
-| V1-B | 7691922 | feat: harden collective buffer correctness |
-| V1-C | 9652b83 | test: add deterministic randomized correctness |
-| V1-D | f7e96f8 | chore: add Linux CPU_SIM validation tooling |
-| V1-E | 待本阶段提交 | ci: add Linux CPU_SIM validation |
+| Stage | Commit  | Message                                        |
+| ----- | ------- | ---------------------------------------------- |
+| V1-A  | eeda43d | docs: correct V1 baseline evidence             |
+| V1-B  | 7691922 | feat: harden collective buffer correctness     |
+| V1-C  | 9652b83 | test: add deterministic randomized correctness |
+| V1-D  | f7e96f8 | chore: add Linux CPU_SIM validation tooling    |
+| V1-E  | a0ee8f2 | ci: add Linux CPU_SIM validation               |
 
 ## 14. 最终 Git 状态
 
 本报告生成时 V1-E 文件尚未提交；最终提交后应再次执行：
 
 ```text
-git status --short
-git diff --check
-git log --oneline --decorate -15
-git ls-files
+git status --short：无输出
+git status -sb：## main...origin/main [ahead 6]
+当前 HEAD：a0ee8f2 ci: add Linux CPU_SIM validation
+是否执行 git push：NO
+随机测试覆盖所列参数空间中的 60 个确定性抽样 case，不代表所有参数组合的完整笛卡尔积穷举。
 ```
 
 是否执行 `git push`：NO。

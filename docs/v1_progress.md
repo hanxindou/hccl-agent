@@ -5,19 +5,19 @@
 项目路径：`F:\projects\hccl-agent`  
 Codex 环境：Windows Native  
 Linux 验证方式：Docker Desktop Linux 容器  
-状态：IN_PROGRESS
+状态：COMPLETED_WITH_ENV_BLOCKED_LINUX
 
 ---
 
 ## 1. V1 总体状态
 
-| Stage | 名称                                | 状态        | Commit |
-| ----- | ----------------------------------- | ----------- | ------ |
-| V1-A  | 事实与文档基线修正                  | COMPLETED | eeda43d |
-| V1-B  | Collective 多元素与 rank 连续性加固 | COMPLETED | 7691922 |
-| V1-C  | 确定性随机化 correctness            | COMPLETED | 9652b83 |
+| Stage | 名称                                | 状态        | Commit  |
+| ----- | ----------------------------------- | ----------- | ------- |
+| V1-A  | 事实与文档基线修正                  | COMPLETED   | eeda43d |
+| V1-B  | Collective 多元素与 rank 连续性加固 | COMPLETED   | 7691922 |
+| V1-C  | 确定性随机化 correctness            | COMPLETED   | 9652b83 |
 | V1-D  | Docker Linux `.so` 验证             | ENV_BLOCKED | f7e96f8 |
-| V1-E  | Linux CI 与最终材料收敛             | COMPLETED | -      |
+| V1-E  | Linux CI 与最终材料收敛             | COMPLETED   | a0ee8f2 |
 
 允许的阶段状态：
 
@@ -274,8 +274,8 @@ ReduceOp：
 
 ### FP16/BF16
 
-| DType | Rank 覆盖 | Count 覆盖 | ReduceOp | 状态 |
-| ----- | --------- | ---------- | -------- | ---- |
+| DType | Rank 覆盖 | Count 覆盖 | ReduceOp                                                  | 状态 |
+| ----- | --------- | ---------- | --------------------------------------------------------- | ---- |
 | FP16  | 2, 4      | 1, 3, 17   | SUM; existing SUM/PROD/MAX/MIN scalar regression retained | PASS |
 | BF16  | 2, 4      | 1, 3, 17   | SUM; existing SUM/PROD/MAX/MIN scalar regression retained | PASS |
 
@@ -342,9 +342,9 @@ git diff --check：
 
 ## 4.7 修复轮次
 
-| 问题   | 第一次处理 | 第二次处理 | 最终状态 |
-| ------ | ---------- | ---------- | -------- |
-| FP32 reference 未模拟 C float rounding | 改为每步 `_float32` 截断 | 补充 overflow 到有符号 Inf | PASS |
+| 问题                                   | 第一次处理               | 第二次处理                 | 最终状态 |
+| -------------------------------------- | ------------------------ | -------------------------- | -------- |
+| FP32 reference 未模拟 C float rounding | 改为每步 `_float32` 截断 | 补充 overflow 到有符号 Inf | PASS     |
 
 ## 4.8 降级状态
 
@@ -420,24 +420,24 @@ SUM, PROD, MAX, MIN；AllGather 为 N/A
 
 ## 5.3 覆盖结果
 
-| 能力          | 是否覆盖 | 证据 |
-| ------------- | -------- | ---- |
-| AllReduce     | 是       | randomized cases |
-| AllGather     | 是       | randomized cases |
-| ReduceScatter | 是       | randomized cases |
-| rank=1        | 是       | randomized cases |
-| rank=2        | 是       | randomized cases |
-| rank=4        | 是       | randomized cases |
-| rank=8        | 是       | randomized cases |
-| rank=16       | 是       | randomized cases |
+| 能力          | 是否覆盖 | 证据                  |
+| ------------- | -------- | --------------------- |
+| AllReduce     | 是       | randomized cases      |
+| AllGather     | 是       | randomized cases      |
+| ReduceScatter | 是       | randomized cases      |
+| rank=1        | 是       | randomized cases      |
+| rank=2        | 是       | randomized cases      |
+| rank=4        | 是       | randomized cases      |
+| rank=8        | 是       | randomized cases      |
+| rank=16       | 是       | randomized cases      |
 | count>1       | 是       | counts 2/3/7/17/32/64 |
-| FP32          | 是       | randomized cases |
-| FP16          | 是       | randomized cases |
-| BF16          | 是       | randomized cases |
-| SUM           | 是       | randomized cases |
-| PROD          | 是       | randomized cases |
-| MAX           | 是       | randomized cases |
-| MIN           | 是       | randomized cases |
+| FP32          | 是       | randomized cases      |
+| FP16          | 是       | randomized cases      |
+| BF16          | 是       | randomized cases      |
+| SUM           | 是       | randomized cases      |
+| PROD          | 是       | randomized cases      |
+| MAX           | 是       | randomized cases      |
+| MIN           | 是       | randomized cases      |
 
 ## 5.4 可复现性
 
@@ -496,9 +496,9 @@ actual：未失败；被手动停止后收紧随机生成规则
 
 ## 5.7 修复轮次
 
-| 问题   | 第一次处理 | 第二次处理 | 最终状态 |
-| ------ | ---------- | ---------- | -------- |
-| 随机 suite 生成 AllGather rank=16 count=64 导致运行时间超目标 | 限制大 rank AllGather/ReduceScatter 随机 count，同时保留 count=64 覆盖 | 不需要 | PASS |
+| 问题                                                          | 第一次处理                                                             | 第二次处理 | 最终状态 |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------- | ---------- | -------- |
+| 随机 suite 生成 AllGather rank=16 count=64 导致运行时间超目标 | 限制大 rank AllGather/ReduceScatter 随机 count，同时保留 count=64 覆盖 | 不需要     | PASS     |
 
 ## 5.8 降级状态
 
@@ -665,8 +665,8 @@ Docker 镜像 metadata 下载失败；根据有限尝试规则不反复重试、
 
 ## 6.8 修复轮次
 
-| 问题   | 第一次处理 | 第二次处理 | 最终状态 |
-| ------ | ---------- | ---------- | -------- |
+| 问题                                    | 第一次处理                     | 第二次处理             | 最终状态    |
+| --------------------------------------- | ------------------------------ | ---------------------- | ----------- |
 | Docker access / image metadata download | 正常检查失败后做一次低风险复查 | 镜像下载失败后停止重试 | ENV_BLOCKED |
 
 ## 6.9 状态结论
@@ -678,6 +678,7 @@ LINUX_DOCKER_VERIFIED
 ENV_BLOCKED
 PARTIAL
 ```
+
 选择：`ENV_BLOCKED`
 
 ## 6.10 本地提交
@@ -809,8 +810,8 @@ Docker 被阻塞时应明确填写 `ENV_BLOCKED`，不得填写通过。
 
 ## 7.6 最终文档
 
-| 文件                                   | 状态 |
-| -------------------------------------- | ---- |
+| 文件                                   | 状态    |
+| -------------------------------------- | ------- |
 | `docs/v1_progress.md`                  | UPDATED |
 | `docs/v1_validation_report.md`         | CREATED |
 | `docs/correctness_matrix.md`           | UPDATED |
@@ -847,7 +848,7 @@ __pycache__/：
 
 ```text
 commit：
-待本阶段提交
+a0ee8f2
 message：ci: add Linux CPU_SIM validation
 ```
 
@@ -860,13 +861,13 @@ message：ci: add Linux CPU_SIM validation
 
 ## 8.1 阶段与提交
 
-| Stage | 状态 | Commit | Message |
-| ----- | ---- | ------ | ------- |
-| V1-A  | COMPLETED | eeda43d | docs: correct V1 baseline evidence |
-| V1-B  | COMPLETED | 7691922 | feat: harden collective buffer correctness |
-| V1-C  | COMPLETED | 9652b83 | test: add deterministic randomized correctness |
-| V1-D  | ENV_BLOCKED | f7e96f8 | chore: add Linux CPU_SIM validation tooling |
-| V1-E  | COMPLETED | 待本阶段提交 | ci: add Linux CPU_SIM validation |
+| Stage | 状态        | Commit  | Message                                        |
+| ----- | ----------- | ------- | ---------------------------------------------- |
+| V1-A  | COMPLETED   | eeda43d | docs: correct V1 baseline evidence             |
+| V1-B  | COMPLETED   | 7691922 | feat: harden collective buffer correctness     |
+| V1-C  | COMPLETED   | 9652b83 | test: add deterministic randomized correctness |
+| V1-D  | ENV_BLOCKED | f7e96f8 | chore: add Linux CPU_SIM validation tooling    |
+| V1-E  | COMPLETED   | a0ee8f2 | ci: add Linux CPU_SIM validation               |
 
 ## 8.2 最终能力
 
@@ -979,16 +980,16 @@ CI_CONFIGURED_UNRUN
 
 ```text
 git status --short：
-待最终提交后复查
+无输出
 
 git status -sb：
-待最终提交后复查
+## main...origin/main [ahead 6]
 
 当前 HEAD：
-待最终提交后复查
+a0ee8f2 ci: add Linux CPU_SIM validation
 
 相对 origin/main：
-待最终提交后复查
+ahead 6
 
 是否执行 git push：
 NO
