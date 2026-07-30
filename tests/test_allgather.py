@@ -50,7 +50,7 @@ class TestAllGatherDataCorrectness(unittest.TestCase):
         self.assert_allgather_matches_reference(4, 2, "Wrapper")
 
     def test_ring_count_1_for_required_ranks(self):
-        for ranks in [4, 8, 16]:
+        for ranks in [2, 4, 8, 16]:
             with self.subTest(ranks=ranks):
                 self.assert_allgather_matches_reference(ranks, 1, "Ring")
 
@@ -60,7 +60,7 @@ class TestAllGatherDataCorrectness(unittest.TestCase):
                 self.assert_allgather_matches_reference(ranks, count, "Ring")
 
     def test_butterfly_count_1_for_required_ranks(self):
-        for ranks in [4, 8, 16]:
+        for ranks in [2, 4, 8, 16]:
             with self.subTest(ranks=ranks):
                 self.assert_allgather_matches_reference(ranks, 1, "Butterfly")
 

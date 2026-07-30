@@ -1,6 +1,6 @@
 # HCCL Agent 正确性矩阵
 
-更新时间：2026-07-30 08:07:11 +08:00
+更新时间：2026-07-30 08:20:53 +08:00
 
 ## 状态标记
 
@@ -19,12 +19,12 @@
 
 | Primitive | DType | ReduceOp | 状态 | 环境 | 测试证据 |
 | --------- | ----- | -------- | ---- | ---- | -------- |
-| AllReduce | FP32 | SUM | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, H1 full regression 454 OK；V1-B 前主要证明 `count=1` 标量路径 |
-| AllReduce | FP32 | PROD | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, overflow case verified；V1-B 前主要证明 `count=1` 标量路径 |
-| AllReduce | FP32 | MAX | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, negative/zero/decimal data；V1-B 前主要证明 `count=1` 标量路径 |
-| AllReduce | FP32 | MIN | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, negative/zero/decimal data；V1-B 前主要证明 `count=1` 标量路径 |
+| AllReduce | FP32 | SUM | `CPU_SIMULATED`, `REFERENCE_VERIFIED`, `WINDOWS_VERIFIED` | Windows DLL | V1-B: ranks 1/2/4/8/16, counts 1/3/17/256, `tests/test_reduce_ops.py`, CTest 11/11 |
+| AllReduce | FP32 | PROD | `CPU_SIMULATED`, `REFERENCE_VERIFIED`, `WINDOWS_VERIFIED` | Windows DLL | V1-B: ranks 1/2/4/8/16, counts 1/3/17/256, overflow case verified |
+| AllReduce | FP32 | MAX | `CPU_SIMULATED`, `REFERENCE_VERIFIED`, `WINDOWS_VERIFIED` | Windows DLL | V1-B: ranks 1/2/4/8/16, counts 1/3/17/256, negative/zero/decimal data |
+| AllReduce | FP32 | MIN | `CPU_SIMULATED`, `REFERENCE_VERIFIED`, `WINDOWS_VERIFIED` | Windows DLL | V1-B: ranks 1/2/4/8/16, counts 1/3/17/256, negative/zero/decimal data |
 | AllGather | FP32 | N/A | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_allgather.c`, `tests/test_allgather.py`, C3-A regression unchanged |
-| ReduceScatter | FP32 | SUM | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reducescatter.c`, `tests/test_reducescatter.py`, 1/4/8/16 rank coverage |
+| ReduceScatter | FP32 | SUM | `CPU_SIMULATED`, `REFERENCE_VERIFIED`, `WINDOWS_VERIFIED` | Windows DLL | V1-B: 1/2/4/8/16 rank coverage, `[N][N][C] -> [N][C]` contract |
 | ReduceScatter | FP32 | PROD | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, zero and negative data |
 | ReduceScatter | FP32 | MAX | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, non-zero identity coverage |
 | ReduceScatter | FP32 | MIN | `CPU_SIMULATED`, `REFERENCE_VERIFIED` | Windows DLL | `hcccl/tests/test_reduce_ops.c`, `tests/test_reduce_ops.py`, non-zero identity coverage |
@@ -34,9 +34,9 @@
 
 | Primitive | DType | 当前状态 | 说明 |
 | --------- | ----- | -------- | ---- |
-| AllReduce | FP32 | `CPU_SIMULATED` | `count=1` 标量路径；SUM/PROD/MAX/MIN 已验证。 |
+| AllReduce | FP32 | `CPU_SIMULATED`, `REFERENCE_VERIFIED`, `WINDOWS_VERIFIED` | `[N][C] -> [N][C]` 多元素路径；rank 1/2/4/8/16；count 1/3/17/256；SUM/PROD/MAX/MIN 已验证。 |
 | AllGather | FP32 | `CPU_SIMULATED` | `[N][C] -> [N][N*C]` 扁平布局；无 ReduceOp。 |
-| ReduceScatter | FP32 | `CPU_SIMULATED` | `[N][N][C] -> [N][C]` 扁平布局；SUM/PROD/MAX/MIN 已验证；2-rank legacy 标量形状仍返回 `NOT_SUPPORTED`。 |
+| ReduceScatter | FP32 | `CPU_SIMULATED`, `REFERENCE_VERIFIED`, `WINDOWS_VERIFIED` | `[N][N][C] -> [N][C]` 扁平布局；SUM/PROD/MAX/MIN 已验证；2-rank 正确长度 buffer 已通过。 |
 | AllReduce | FP16 | `CPU_EMULATED_FP16`, `REFERENCE_VERIFIED` | 16-bit encoded buffer；CPU FP32 累加；`tests/test_dtype_emulation.py` 和 `hcccl/tests/test_dtype_emulation.c`。 |
 | AllGather | FP16 | `CPU_EMULATED_FP16`, `REFERENCE_VERIFIED` | 16-bit encoded buffer；按元素宽度 gather；`tests/test_allgather.py` 和 `hcccl/tests/test_dtype_emulation.c`。 |
 | ReduceScatter | FP16 | `CPU_EMULATED_FP16`, `REFERENCE_VERIFIED` | 16-bit encoded buffer；CPU FP32 reduce 后 scatter；`tests/test_dtype_emulation.py`。 |
@@ -58,6 +58,9 @@
 | FP16/BF16 tolerance | `tests/test_dtype_emulation.py` | FP16 `1e-3`，BF16 `2e-2`；仅适用于 CPU 软件模拟回归 |
 | 赛题精度口径 | 赛题原文要求 FP16/BF16/FP32 混精度通信误差 `<=1e-6`，且无溢出/下溢 | `REQUIRES_COMPETITION_CLARIFICATION`：当前不能断言该阈值适用于 FP16/BF16 最终量化输出，也不能用 CPU tolerance 代表 Ascend 硬件达标 |
 | FP16/BF16 overflow | `tests/test_dtype_emulation.py::test_inf_nan_and_overflow` | PROD 溢出为 Inf 已覆盖 |
+| AllReduce 多元素 | `tests/test_reduce_ops.py::test_allreduce_v1b_required_rank_count_matrix` | FP32 ranks 1/2/4/8/16, counts 1/3/17/256, SUM/PROD/MAX/MIN |
+| AllReduce FP16/BF16 多元素 | `tests/test_reduce_ops.py::test_allreduce_fp16_bf16_v1b_minimum_coverage`, `tests/test_dtype_emulation.py::test_allreduce_fp16_bf16_multi_element_sum` | rank 2/4, count 1/3/17, SUM；CPU 软件模拟 tolerance |
+| ReduceScatter 2-rank | `hcccl/tests/test_reducescatter.c`, `tests/test_reducescatter.py::test_two_rank_contract_matches_reference` | `[N][N][C] -> [N][C]` 正确长度 buffer 已验证 |
 
 ## 未验证边界
 

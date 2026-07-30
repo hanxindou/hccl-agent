@@ -12,7 +12,6 @@ sys.path.insert(
 from plugin.execution_engine import (
     HCCL_BF16,
     HCCL_ERR_INVALID_ARG,
-    HCCL_ERR_NOT_SUPPORTED,
     HCCL_FP16,
     HCCL_FP32,
     HCCL_MAX,
@@ -113,10 +112,14 @@ class TestReduceScatterDataCorrectness(unittest.TestCase):
             HCCL_ERR_INVALID_ARG,
         )
 
-    def test_two_rank_legacy_shape_is_not_supported(self):
+    def test_two_rank_contract_matches_reference(self):
         result = self.engine.execute_reducescatter(_send_data(2, 1))
-        self.assertEqual(result["status"], "not_supported")
-        self.assertEqual(result["return_code"], HCCL_ERR_NOT_SUPPORTED)
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["return_code"], 0)
+        self.assertEqual(
+            result["result"],
+            HcclReduceScatterReference(_send_data(2, 1)),
+        )
 
 
 if __name__ == "__main__":

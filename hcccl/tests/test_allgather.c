@@ -288,6 +288,7 @@ int main(void)
     printf("============================================\n\n");
 
     test_ring_case("Ring 1 rank count 1", 1, 1);
+    test_ring_case("Ring 2 ranks count 1", 2, 1);
     test_ring_case("Ring 4 ranks count 1", 4, 1);
     test_ring_case("Ring 8 ranks count 1", 8, 1);
     test_ring_case("Ring 16 ranks count 1", 16, 1);
@@ -295,6 +296,7 @@ int main(void)
     test_ring_case("Ring 8 ranks count 3", 8, 3);
 
     test_butterfly_case("Butterfly 1 rank count 1", 1, 1);
+    test_butterfly_case("Butterfly 2 ranks count 1", 2, 1);
     test_butterfly_case("Butterfly 4 ranks count 1", 4, 1);
     test_butterfly_case("Butterfly 8 ranks count 1", 8, 1);
     test_butterfly_case("Butterfly 16 ranks count 1", 16, 1);

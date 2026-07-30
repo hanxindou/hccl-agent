@@ -13,8 +13,8 @@ Linux 验证方式：Docker Desktop Linux 容器
 
 | Stage | 名称                                | 状态        | Commit |
 | ----- | ----------------------------------- | ----------- | ------ |
-| V1-A  | 事实与文档基线修正                  | COMPLETED | -      |
-| V1-B  | Collective 多元素与 rank 连续性加固 | NOT_STARTED | -      |
+| V1-A  | 事实与文档基线修正                  | COMPLETED | eeda43d |
+| V1-B  | Collective 多元素与 rank 连续性加固 | COMPLETED | -      |
 | V1-C  | 确定性随机化 correctness            | NOT_STARTED | -      |
 | V1-D  | Docker Linux `.so` 验证             | NOT_STARTED | -      |
 | V1-E  | Linux CI 与最终材料收敛             | NOT_STARTED | -      |
@@ -170,7 +170,8 @@ BF16：2e-2
 
 ```text
 commit：
-message：
+eeda43d
+message：docs: correct V1 baseline evidence
 ```
 
 ## 3.8 未验证边界
@@ -184,13 +185,28 @@ message：
 
 # 4. Stage V1-B：Collective 多元素与 rank 连续性加固
 
-开始时间：  
-结束时间：  
-状态：NOT_STARTED
+开始时间：2026-07-30 08:20:53 +08:00
+结束时间：2026-07-30 08:20:53 +08:00
+状态：COMPLETED
 
 ## 4.1 修改文件
 
-- 待填写
+- `hcccl/src/hccl_algorithms.c`
+- `hcccl/src/hccl_comm.c`
+- `hcccl/tests/test_api_wrappers.c`
+- `hcccl/tests/test_allgather.c`
+- `hcccl/tests/test_reduce_ops.c`
+- `hcccl/tests/test_reducescatter.c`
+- `plugin/execution_engine.py`
+- `plugin/hccl_api.py`
+- `tests/test_allgather.py`
+- `tests/test_dtype_emulation.py`
+- `tests/test_plugin_bridge.py`
+- `tests/test_reduce_ops.py`
+- `tests/test_reducescatter.py`
+- `docs/competition_readiness_report.md`
+- `docs/correctness_matrix.md`
+- `docs/v1_progress.md`
 
 ## 4.2 最终数据契约
 
@@ -211,7 +227,7 @@ recv[dst_rank][element]
 REDUCE(send[src_rank][element] for all src_rank)
 ```
 
-实际实现是否符合：待填写
+实际实现是否符合：是。C/Python CPU_SIM AllReduce 使用 `send[src_rank * C + element]` 输入并向每个目标 rank 返回相同逐元素归约结果；当前算法名共享统一 CPU_SIM reference kernel，不声称独立真实通信调度。
 
 ### ReduceScatter
 
@@ -233,7 +249,7 @@ REDUCE(
 )
 ```
 
-实际实现是否符合：待填写
+实际实现是否符合：是。`N=2` 已使用与 1/4/8/16 相同的 `[N][N][C] -> [N][C]` 契约验证。
 
 ## 4.3 覆盖矩阵
 
@@ -241,101 +257,102 @@ REDUCE(
 
 | Rank | count=1 | count=3 | count=17 | count=256 |
 | ---: | ------- | ------- | -------- | --------- |
-|    1 | -       | -       | -        | -         |
-|    2 | -       | -       | -        | -         |
-|    4 | -       | -       | -        | -         |
-|    8 | -       | -       | -        | -         |
-|   16 | -       | -       | -        | -         |
+|    1 | PASS    | PASS    | PASS     | PASS      |
+|    2 | PASS    | PASS    | PASS     | PASS      |
+|    4 | PASS    | PASS    | PASS     | PASS      |
+|    8 | PASS    | PASS    | PASS     | PASS      |
+|   16 | PASS    | PASS    | PASS     | PASS      |
 
 ReduceOp：
 
 | ReduceOp | 状态 |
 | -------- | ---- |
-| SUM      | -    |
-| PROD     | -    |
-| MAX      | -    |
-| MIN      | -    |
+| SUM      | PASS |
+| PROD     | PASS |
+| MAX      | PASS |
+| MIN      | PASS |
 
 ### FP16/BF16
 
 | DType | Rank 覆盖 | Count 覆盖 | ReduceOp | 状态 |
 | ----- | --------- | ---------- | -------- | ---- |
-| FP16  | -         | -          | -        | -    |
-| BF16  | -         | -          | -        | -    |
+| FP16  | 2, 4      | 1, 3, 17   | SUM; existing SUM/PROD/MAX/MIN scalar regression retained | PASS |
+| BF16  | 2, 4      | 1, 3, 17   | SUM; existing SUM/PROD/MAX/MIN scalar regression retained | PASS |
 
 ### ReduceScatter rank 连续性
 
 | Rank | 状态 |
 | ---: | ---- |
-|    1 | -    |
-|    2 | -    |
-|    4 | -    |
-|    8 | -    |
-|   16 | -    |
+|    1 | PASS |
+|    2 | PASS |
+|    4 | PASS |
+|    8 | PASS |
+|   16 | PASS |
 
 ## 4.4 Windows 验收结果
 
 ```text
 Build directory：
-待填写
+F:\build\hccl-agent-v1b
 
 CMake：
-待填写
+PASS，Visual Studio 17 2022 x64，`-DHCCL_BACKEND=CPU_SIM`
 
 Build：
-待填写
+PASS，Release，生成 `F:\build\hccl-agent-v1b\Release\hccl_plugin.dll`
 
 CTest：
-待填写
+PASS，11/11
 
 定向 Python：
-待填写
+PASS，`tests.test_reduce_ops tests.test_reducescatter tests.test_allgather tests.test_dtype_emulation tests.test_hccl_api tests.test_execution_engine -q`，65 tests OK
 
 完整 Python：
-待填写
+PASS，`python -m unittest discover tests -q`，460 tests OK
 
 实际 DLL：
-待填写
+F:\build\hccl-agent-v1b\Release\hccl_plugin.dll
 
 DLL_LOAD_OK：
-待填写
+PASS
 
 C4819：
-待填写
+未出现
 
 git diff --check：
-待填写
+待提交前执行
 ```
 
 ## 4.5 回归情况
 
-- AllReduce：
-- AllGather：
-- ReduceScatter：
-- FP32：
-- FP16：
-- BF16：
-- SUM/PROD/MAX/MIN：
-- B1 动态库加载：
-- G1 backend 配置：
+- AllReduce：多元素 `count>1` 已验证，FP32 覆盖 ranks 1/2/4/8/16 与 counts 1/3/17/256。
+- AllGather：既有回归保持通过，并补充 rank=2。
+- ReduceScatter：2-rank 正确长度 buffer 已验证，1/4/8/16 回归保持通过。
+- FP32：SUM/PROD/MAX/MIN 通过。
+- FP16：CPU 软件模拟 SUM 多元素覆盖 rank 2/4、count 1/3/17，既有 dtype 回归通过。
+- BF16：CPU 软件模拟 SUM 多元素覆盖 rank 2/4、count 1/3/17，既有 dtype 回归通过。
+- SUM/PROD/MAX/MIN：FP32 多元素通过；FP16/BF16 既有 ReduceOp 回归保持通过。
+- B1 动态库加载：`HCCL_PLUGIN_PATH` 指向 V1-B DLL，Python ctypes 加载通过。
+- G1 backend 配置：未修改 ASCEND_CANN 路径；V1-E 将复验缺 SDK 快速失败。
 
 ## 4.6 遇到的问题
 
-- 无，或待填写
+- Python FP32 reference 初始使用 Python double，PROD 在较大 rank/count 下与 C float 结果存在差异。
+- Python FP32 reference 初始未将 overflow 转为有符号 Inf。
 
 ## 4.7 修复轮次
 
 | 问题   | 第一次处理 | 第二次处理 | 最终状态 |
 | ------ | ---------- | ---------- | -------- |
-| 待填写 | -          | -          | -        |
+| FP32 reference 未模拟 C float rounding | 改为每步 `_float32` 截断 | 补充 overflow 到有符号 Inf | PASS |
 
 ## 4.8 降级状态
 
-- 无，或待填写
+- 无
 
 ## 4.9 用户待办
 
-- 无，或待填写
+- Linux `.so`、CANN/HCOMM、Ascend 实机仍待 V1-D/V1-E 或用户环境验证。
 
 ## 4.10 本地提交
 

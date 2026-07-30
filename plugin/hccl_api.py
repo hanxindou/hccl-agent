@@ -6,6 +6,8 @@ so the Agent can interact through a recognised interface without
 depending on real Ascend hardware.
 """
 
+import math
+import struct
 from typing import Any, Dict, List, Optional, Tuple
 
 from plugin.execution_engine import (
@@ -32,6 +34,13 @@ _REDUCE_OP_NAMES = {
 _SUPPORTED_DTYPES = {HCCL_FP32, HCCL_FP16, HCCL_BF16}
 
 
+def _float32(value: float) -> float:
+    try:
+        return struct.unpack("<f", struct.pack("<f", float(value)))[0]
+    except OverflowError:
+        return math.copysign(math.inf, float(value))
+
+
 def _normalize_dtype(data_type: int) -> int:
     if data_type in _SUPPORTED_DTYPES:
         return data_type
@@ -40,6 +49,8 @@ def _normalize_dtype(data_type: int) -> int:
 
 def _quantize_input_values(values: List[float], data_type: int) -> List[float]:
     data_type = _normalize_dtype(data_type)
+    if data_type == HCCL_FP32:
+        return [_float32(value) for value in values]
     return [roundtrip_dtype_value(float(value), data_type) for value in values]
 
 
@@ -182,26 +193,26 @@ def _normalize_reduce_op(op: int) -> int:
 def _apply_reduce(values: List[float], op: int) -> float:
     op = _normalize_reduce_op(op)
     if op == HCCL_SUM:
-        result = 0.0
+        result = _float32(0.0)
         for value in values:
-            result += float(value)
+            result = _float32(result + _float32(value))
         return result
     if op == HCCL_PROD:
-        result = 1.0
+        result = _float32(1.0)
         for value in values:
-            result *= float(value)
+            result = _float32(result * _float32(value))
         return result
     if op == HCCL_MAX:
-        result = float(values[0])
+        result = _float32(values[0])
         for value in values[1:]:
-            candidate = float(value)
+            candidate = _float32(value)
             if candidate > result:
                 result = candidate
         return result
     if op == HCCL_MIN:
-        result = float(values[0])
+        result = _float32(values[0])
         for value in values[1:]:
-            candidate = float(value)
+            candidate = _float32(value)
             if candidate < result:
                 result = candidate
         return result
@@ -209,13 +220,28 @@ def _apply_reduce(values: List[float], op: int) -> float:
 
 
 def HcclAllReduceReference(
-    input_data: List[float],
+    input_data: List[Any],
     op: int = HCCL_SUM,
     data_type: int = HCCL_FP32,
-) -> List[float]:
-    """Return the FP32 CPU_SIM AllReduce reference for one scalar per rank."""
+) -> List[Any]:
+    """Return the CPU_SIM AllReduce reference for [N] or [N][C] input."""
     if not input_data:
         return []
+    matrix_input = isinstance(input_data[0], (list, tuple))
+    if matrix_input:
+        count = len(input_data[0])
+        if count == 0 or any(len(row) != count for row in input_data):
+            raise ValueError("input_data must be a non-empty rectangular matrix")
+        reduced_row = []
+        for elem in range(count):
+            values = _quantize_input_values(
+                [float(input_data[src][elem]) for src in range(len(input_data))],
+                data_type,
+            )
+            reduced = _apply_reduce(values, op)
+            reduced_row.append(roundtrip_dtype_value(reduced, data_type))
+        return [list(reduced_row) for _ in input_data]
+
     values = _quantize_input_values(input_data, data_type)
     reduced = _apply_reduce(values, op)
     reduced = roundtrip_dtype_value(reduced, data_type)
