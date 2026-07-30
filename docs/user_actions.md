@@ -3,29 +3,29 @@
 ## UA-001：Linux .so 验证
 
 状态：待用户执行
-阻塞阶段：C2/G1
+阻塞阶段：V1-D
 优先级：P1
 
 ### 原因
 
-本轮自主执行按当前限制未访问 WSL/Linux。Windows DLL 已验证，但不能等同于 Linux `.so`。
+本轮 V1 执行优先使用 Windows Docker Desktop 的 Linux 容器验证。若 Docker 不可用，则保持 `ENV_BLOCKED`；Windows DLL 已验证不能等同于 Linux `.so`。
 
 ### 用户需要准备
 
-- Linux 或 WSL2 环境
+- Docker Desktop Linux 容器，或用户自行准备的 Linux 环境
 - CMake 与 C 编译器
 - Python 3.10
 
 ### 操作步骤
 
-1. 在 Linux 项目目录进入当前仓库。
+1. 在 Linux 容器或 Linux 项目目录进入当前仓库。
 2. 使用独立构建目录构建 CPU_SIM 插件。
 3. 指向实际生成的 `.so` 运行 CTest 和 Python 回归。
 
 ### 执行命令
 
 ```bash
-BUILD_DIR=/tmp/hccl-agent-hcccl-c2
+BUILD_DIR=/tmp/hccl-agent-linux-review
 rm -rf "$BUILD_DIR"
 cmake -S hcccl -B "$BUILD_DIR"
 cmake --build "$BUILD_DIR"

@@ -5,7 +5,7 @@
 项目路径：`F:\projects\hccl-agent`  
 Codex 环境：Windows Native  
 Linux 验证方式：Docker Desktop Linux 容器  
-状态：NOT_STARTED
+状态：IN_PROGRESS
 
 ---
 
@@ -13,7 +13,7 @@ Linux 验证方式：Docker Desktop Linux 容器
 
 | Stage | 名称                                | 状态        | Commit |
 | ----- | ----------------------------------- | ----------- | ------ |
-| V1-A  | 事实与文档基线修正                  | NOT_STARTED | -      |
+| V1-A  | 事实与文档基线修正                  | COMPLETED | -      |
 | V1-B  | Collective 多元素与 rank 连续性加固 | NOT_STARTED | -      |
 | V1-C  | 确定性随机化 correctness            | NOT_STARTED | -      |
 | V1-D  | Docker Linux `.so` 验证             | NOT_STARTED | -      |
@@ -35,47 +35,60 @@ SKIPPED
 
 ## 2. 开始基线
 
-开始时间：待填写  
-当前分支：待填写  
-开始 HEAD：待填写  
-远端基线：待填写
+开始时间：2026-07-30 08:07:11 +08:00
+当前分支：main
+开始 HEAD：865df5b72928aba07dd5ad783435c4449caed603
+远端基线：origin/main；本地 `main` ahead 1
 
 ### Git 检查
 
 ```text
 git status --short：
-待执行
+无输出
 
 git status -sb：
-待执行
+## main...origin/main [ahead 1]
 
 git log -10 --oneline：
-待执行
+865df5b docs: add V1 Linux and correctness plan
+ede07dc docs: complete autonomous competition readiness audit
+bfe23ea chore: prepare G1 CANN integration layer
+45cc247 feat: add F1 reliability validation flow
+17f09a5 feat: converge D1 topology and cost models
+de501ad feat: add E1 autonomous code development loop
+d7c45f6 feat: add C3 numeric correctness baseline
+4109491 feat: complete C2 ReduceScatter correctness
+d054a9a docs: add autonomous competition goal plan
+d604308 feat: complete C1 AllGather correctness
 ```
 
 ### 开始条件
 
-- [ ] 当前目录为 `F:\projects\hccl-agent`
-- [ ] Codex 使用 Windows Native 环境
-- [ ] 未使用 WSL Codex
-- [ ] 工作区干净
-- [ ] 无其他活动线程修改同一仓库
-- [ ] `docs/v1_execution_plan.md` 已提交
-- [ ] `docs/v1_progress.md` 已提交
-- [ ] 未发现密钥或凭据
-- [ ] 未发现仓库内构建产物
+- [x] 当前目录为 `F:\projects\hccl-agent`
+- [x] Codex 使用 Windows Native 环境
+- [x] 未使用 WSL Codex
+- [x] 工作区干净
+- [x] 无其他活动线程修改同一仓库
+- [x] `docs/v1_execution_plan.md` 已提交
+- [x] `docs/v1_progress.md` 已提交
+- [x] 未发现密钥或凭据
+- [x] 未发现仓库内构建产物
 
 ---
 
 # 3. Stage V1-A：事实与文档基线修正
 
-开始时间：  
-结束时间：  
-状态：NOT_STARTED
+开始时间：2026-07-30 08:07:11 +08:00
+结束时间：2026-07-30 08:07:11 +08:00
+状态：COMPLETED
 
 ## 3.1 修改文件
 
-- 待填写
+- `docs/autonomous_progress.md`
+- `docs/competition_readiness_report.md`
+- `docs/correctness_matrix.md`
+- `docs/user_actions.md`
+- `docs/v1_progress.md`
 
 ## 3.2 核验事实
 
@@ -83,75 +96,75 @@ git log -10 --oneline：
 
 ```text
 实际 H1 commit：
-待填写
+ede07dc docs: complete autonomous competition readiness audit
 ```
 
 ### 阶段时间记录
 
 ```text
 是否存在重叠：
-待填写
+存在 C3-B 与 E1 记录时间重叠。
 
 处理说明：
-待填写
+未臆造新时间；在 `docs/autonomous_progress.md` H1 记录中补充说明：时间来自自主执行记录，部分阶段准备或记录可能重叠，commit 与测试结果为主要阶段证据。
 ```
 
 ### Linux 待办路径
 
 ```text
 旧路径：
-待填写
+/tmp/hccl-agent-hcccl-c2
 
 新路径：
-待填写
+/tmp/hccl-agent-linux-review
 ```
 
 ### AllReduce 当前限制
 
 ```text
 V1-B 前状态：
-待填写
+AllReduce 当前主要证明 `count=1` 标量路径；多元素 `count>1` 留给 V1-B 验证。
 ```
 
 ### ReduceScatter 2-rank 当前限制
 
 ```text
 V1-B 前状态：
-待填写
+ReduceScatter 2-rank legacy 标量形状当前返回 `HCCL_ERR_NOT_SUPPORTED`；V1-B 将改为统一 `[N][N][C] -> [N][C]` 契约。
 ```
 
 ### FP16/BF16 精度口径
 
 ```text
 赛题原文：
-待填写
+FP16/BF16/FP32 混精度通信，误差 <= 1e-6，无精度溢出/下溢。
 
 当前 CPU tolerance：
-FP16：
-BF16：
+FP16：1e-3
+BF16：2e-2
 
 结论：
-待填写
+`REQUIRES_COMPETITION_CLARIFICATION`。当前不能断言赛题 `1e-6` 一定适用于 FP16/BF16 最终量化输出；CPU 软件模拟 tolerance 仅用于本地回归，不代表 Ascend 硬件混合精度达标。
 ```
 
 ## 3.3 验收结果
 
-- `git diff --check`：
-- 是否仅修改文档：
-- 是否保留所有未验证边界：
-- 是否修改运行逻辑：
+- `git diff --check`：待提交前执行
+- 是否仅修改文档：是
+- 是否保留所有未验证边界：是
+- 是否修改运行逻辑：否
 
 ## 3.4 遇到的问题
 
-- 无，或待填写
+- PowerShell 默认编码会导致中文文档和赛题 `.docx` 抽取乱码；已改用 UTF-8 输出重新读取。
 
 ## 3.5 降级状态
 
-- 无，或待填写
+- 无
 
 ## 3.6 用户待办
 
-- 无，或待填写
+- Linux `.so`、CANN/HCOMM、Ascend 实机和赛题 FP16/BF16 最终误差口径仍需用户或赛事环境确认。
 
 ## 3.7 本地提交
 

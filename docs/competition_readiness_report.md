@@ -1,6 +1,6 @@
 # HCCL Agent 比赛准备度报告
 
-更新时间：2026-07-29 23:10:00 +08:00
+更新时间：2026-07-30 08:07:11 +08:00
 
 ## 1. 当前架构
 
@@ -30,7 +30,7 @@ main.py
 
 | Primitive | CPU_SIM 状态 | C/Python 证据 | 未验证边界 |
 |-----------|--------------|---------------|------------|
-| AllReduce | 已实现 | `hcccl/src/hccl_algorithms.c`、`tests/test_reduce_ops.py`、CTest | 真实 HCCL 多 rank 未验证 |
+| AllReduce | 已实现；V1-B 前主要证明 `count=1` 标量路径 | `hcccl/src/hccl_algorithms.c`、`tests/test_reduce_ops.py`、CTest | 多元素 `count>1`、真实 HCCL 多 rank 未验证 |
 | AllGather | 已实现 | `hcccl/tests/test_allgather.c`、`tests/test_allgather.py` | 真实 HCCL 多 rank 未验证 |
 | ReduceScatter | 已实现 | `hcccl/tests/test_reducescatter.c`、`tests/test_reducescatter.py` | 真实 HCCL 多 rank 未验证 |
 | Broadcast | 明确未支持 | `hcccl/tests/test_api_wrappers.c` | 不得宣称已实现 |
@@ -48,6 +48,8 @@ main.py
 | MIN | 已验证 | AllReduce、ReduceScatter |
 
 详细矩阵见 `docs/correctness_matrix.md`。
+
+赛题原文要求 FP16/BF16/FP32 混精度通信误差 `<=1e-6` 且无溢出/下溢。当前 FP16 `1e-3`、BF16 `2e-2` 是 CPU 软件模拟回归 tolerance，不代表 Ascend 硬件精度或最终赛题阈值已满足；该口径标记为 `REQUIRES_COMPETITION_CLARIFICATION`。
 
 ## 4. CPU_SIM 说明
 
