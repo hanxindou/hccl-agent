@@ -235,3 +235,24 @@ HCCLAgent.run
 | Linux/CANN/Ascend          | Linux `.so`、CANN/HCOMM 和 Ascend 实机仍未动态验证                                                        |
 
 审计完成后的允许修改范围：仅应包含 `docs/project_audit.md` 与 `docs/roadmap_v2.md`。
+
+## 10. 2026-07-30 G2-D 增量审计
+
+本节覆盖基线审计后的 G2-D 事实，旧章节中的历史测试数量和“Linux `.so` 未验证”等结论不得再作为当前状态引用。
+
+| 审计项 | 当前证据 |
+|---|---|
+| 默认后端 | `CPU_SIM`，Windows/Linux CLI 均实际通过 |
+| 官方模拟后端 | `ASCEND_HCCL_VM`，仅显式 CLI 启用 |
+| 官方闭环 | 2-rank INT32 SUM AllReduce，16 elements，外层退出码 0 |
+| Checker | 两次 `Checker Success`，五个 stage success，metadata 完全匹配 |
+| Warning | ErrorCode 103 共 4 条，状态为 `PASS_WITH_WARNING` |
+| 致命错误 | 无 Segmentation fault、MPI_ABORT、undefined symbol、fatal failure |
+| HCCL-VM | 正常关闭，无相关遗留进程 |
+| Windows Python | 507 tests，OK，1 skipped |
+| Linux Python | 507 tests，OK，1 skipped，使用新构建 CPU_SIM `.so` |
+| Windows/Linux CTest | 各 11/11 PASS |
+| 官方源码 | HCOMM/HCCL 已跟踪工作树最终均为空 |
+| Evidence | `experiments/hccl_vm/evidence/g2_d_20260730T081052.668860Z` |
+
+审计边界：CPU_SIM 是工程模拟；`ASCEND_HCCL_VM` 是 subprocess 驱动官方 hccl_test/checker 的官方模拟验证；两者都不是真实 Ascend NPU 验证，且后者不是 hccl-agent 直接 HCCL API 调用。G2-D 的完成不改变真实多设备正确性、真实性能、硬件可靠性和直接 HCOMM/HCCL 集成仍未验证的边界。详细命令、commits、SHA256 和 G2-E 入口见 `docs/g2_d_validation_report.md`。

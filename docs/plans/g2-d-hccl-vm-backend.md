@@ -365,7 +365,7 @@ wsl.exe -d Ubuntu-22.04 -- bash -lc "cd /mnt/f/projects/hccl-agent && python -m 
 wsl.exe -d Ubuntu-22.04 -- bash -lc "cd /mnt/f/projects/hccl-agent && python -m unittest tests.test_hccl_vm_checker -q"
 wsl.exe -d Ubuntu-22.04 -- bash -lc "cd /mnt/f/projects/hccl-agent && python main.py diagnose --backend ASCEND_HCCL_VM"
 wsl.exe -d Ubuntu-22.04 -- bash -lc "cd /mnt/f/projects/hccl-agent && python main.py dry-run --backend ASCEND_HCCL_VM --primitive AllReduce --nodes 2 --dtype int32 --op sum --elements 16"
-wsl.exe -d Ubuntu-22.04 -- bash -lc "cd /mnt/f/projects/hccl-agent && python main.py verify-official --primitive AllReduce --nodes 2 --dtype int32 --op sum --elements 16"
+wsl.exe -d Ubuntu-22.04 -u root -- bash -lc "cd /mnt/f/projects/hccl-agent && python3 main.py verify-official --backend ASCEND_HCCL_VM --primitive AllReduce --nodes 2 --dtype int32 --op sum --elements 16"
 ```
 
 Windows 原生回归命令：
@@ -513,7 +513,7 @@ python -m unittest tests.test_hccl_vm_checker -q
 验证命令：
 
 ```powershell
-wsl.exe -d Ubuntu-22.04 -- bash -lc "cd /mnt/f/projects/hccl-agent && python main.py verify-official --primitive AllReduce --nodes 2 --dtype int32 --op sum --elements 16"
+wsl.exe -d Ubuntu-22.04 -u root -- bash -lc "cd /mnt/f/projects/hccl-agent && python3 main.py verify-official --backend ASCEND_HCCL_VM --primitive AllReduce --nodes 2 --dtype int32 --op sum --elements 16"
 ```
 
 建议 commit：
@@ -532,7 +532,7 @@ wsl.exe -d Ubuntu-22.04 -- bash -lc "cd /mnt/f/projects/hccl-agent && python mai
 
 ```powershell
 python -m unittest tests.test_hccl_vm_report -q
-wsl.exe -d Ubuntu-22.04 -- bash -lc "cd /mnt/f/projects/hccl-agent && python main.py verify-official --primitive AllReduce --nodes 2 --dtype int32 --op sum --elements 16"
+wsl.exe -d Ubuntu-22.04 -u root -- bash -lc "cd /mnt/f/projects/hccl-agent && python3 main.py verify-official --backend ASCEND_HCCL_VM --primitive AllReduce --nodes 2 --dtype int32 --op sum --elements 16"
 ```
 
 建议 commit：
