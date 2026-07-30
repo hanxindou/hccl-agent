@@ -1,39 +1,72 @@
 # HCCL Agent 用户待办
 
-## UA-001：Linux .so 验证
+## UA-V1-001：可选本地 Docker/Linux CPU_SIM 复现
 
-状态：待用户执行
-阻塞阶段：C2/G1
+状态：GitHub Actions Linux CI 已验证；本地 Docker 复现可选
+阻塞阶段：无；V1-D 本地 Docker 状态仍记录为 ENV_BLOCKED
 优先级：P1
 
 ### 原因
 
-本轮自主执行按当前限制未访问 WSL/Linux。Windows DLL 已验证，但不能等同于 Linux `.so`。
+V1-D 低风险复查确认 Docker Desktop Linux engine 可用，但 `docker build` 拉取 `ubuntu:22.04` metadata 时访问 `auth.docker.io` 超时，无法在本机 Docker 构建 Linux 验证镜像。Windows DLL 已验证不能等同于 Linux `.so`。
+
+后续 GitHub Actions 已在 Linux runner 完成 CPU_SIM 验证，因此本地 Docker 阻塞不再阻塞 V1。Linux 状态记录为 `LINUX_CI_VERIFIED`，CI 状态记录为 `CI_REMOTE_VERIFIED`，不得写成 `LINUX_DOCKER_VERIFIED`。
+
+实际错误摘要：
+
+```text
+failed to fetch anonymous token:
+Get "https://auth.docker.io/token?...": dial tcp 199.16.158.190:443: connectex timeout
+```
+
+### 已通过的 GitHub Actions 结果
+
+```text
+Event：pull_request
+Job：linux-cpu-sim
+Result：PASS
+Python：3.10.20
+CMake：3.31.6
+Compiler：GCC 11.4.0
+Backend：CPU_SIM
+Linux plugin：/tmp/hccl-agent-linux-review/libhccl_plugin.so
+CTest：11/11 passed
+Targeted Python：66 tests OK
+Full Python：461 tests OK
+LINUX_CPU_SIM_VALIDATION_OK：observed
+```
+
+Checkout warning 已通过升级 GitHub Actions runtime 和移除孤立 `third_party/cann-hccl` gitlink 解决。
 
 ### 用户需要准备
 
-- Linux 或 WSL2 环境
+- Docker Desktop Linux 容器，或用户自行准备的 Linux 环境
 - CMake 与 C 编译器
 - Python 3.10
 
 ### 操作步骤
 
-1. 在 Linux 项目目录进入当前仓库。
-2. 使用独立构建目录构建 CPU_SIM 插件。
-3. 指向实际生成的 `.so` 运行 CTest 和 Python 回归。
+1. 确认 Docker Desktop Engine 正常。
+2. 确认当前网络能拉取 `ubuntu:22.04`，或在可联网环境预先准备等价 Ubuntu 22.04 镜像。
+3. 在 Windows 终端进入当前仓库。
+4. 执行 Docker build/run，或在 Linux 环境直接运行 `scripts/validate_linux_cpu_sim.sh`。
 
 ### 执行命令
 
+Windows Docker Desktop：
+
+```cmd
+docker version
+docker info
+docker build -f docker/linux-cpu-sim.Dockerfile -t hccl-agent-linux-cpu-sim:v1 .
+docker run --rm -v "%CD%:/workspace" -w /workspace hccl-agent-linux-cpu-sim:v1 bash scripts/validate_linux_cpu_sim.sh
+```
+
+Linux 环境直接执行：
+
 ```bash
-BUILD_DIR=/tmp/hccl-agent-hcccl-c2
-rm -rf "$BUILD_DIR"
-cmake -S hcccl -B "$BUILD_DIR"
-cmake --build "$BUILD_DIR"
-ctest --test-dir "$BUILD_DIR" --output-on-failure
-export HCCL_PLUGIN_PATH="$BUILD_DIR/libhccl_plugin.so"
-unset DEEPSEEK_API_KEY OPENAI_API_KEY ANTHROPIC_API_KEY
-python -m unittest tests.test_reducescatter tests.test_execution_engine tests.test_hccl_api -q
-python -m unittest discover tests -q
+BUILD_DIR=/tmp/hccl-agent-linux-review
+bash scripts/validate_linux_cpu_sim.sh "$BUILD_DIR"
 ```
 
 ### 预期输出
@@ -41,17 +74,21 @@ python -m unittest discover tests -q
 ```text
 CTest 100% tests passed
 Python unittest 0 failures, 0 errors
+LINUX_CPU_SIM_VALIDATION_OK
 ```
 
-### 反馈内容
+### 可选反馈内容
 
 - CMake/CTest 完整输出
 - 实际 `.so` 路径
 - Python 测试输出
+- `LINUX_CPU_SIM_VALIDATION_OK`
 
 ### 当前降级状态
 
-Windows `hccl_plugin.dll` 已验证；Linux `.so` 标记为未验证。
+本地 Docker：`ENV_BLOCKED`，原因是 `auth.docker.io` token timeout。
+
+远端 Linux CI：`LINUX_CI_VERIFIED` / `CI_REMOTE_VERIFIED`。Linux `libhccl_plugin.so` 已在 GitHub Actions CPU_SIM runner 验证通过，实际路径为 `/tmp/hccl-agent-linux-review/libhccl_plugin.so`。该结果仍不代表 CANN/HCOMM、Ascend 实机、真实多设备、msprof、硬件混合精度、真实性能或真实可靠性。
 
 ## UA-002：CANN/HCOMM/Ascend 实机验证准备
 

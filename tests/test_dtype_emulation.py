@@ -83,6 +83,29 @@ class TestDtypeEmulation(unittest.TestCase):
                             self, actual, reference, tolerances[data_type],
                         )
 
+    def test_allreduce_fp16_bf16_multi_element_sum(self):
+        tolerances = {HCCL_FP16: 1.0e-3, HCCL_BF16: 2.0e-2}
+        for data_type in [HCCL_FP16, HCCL_BF16]:
+            for ranks in [2, 4]:
+                for count in [1, 3, 17]:
+                    values = [
+                        [float(rank - elem) / 4.0 for elem in range(count)]
+                        for rank in range(ranks)
+                    ]
+                    with self.subTest(data_type=data_type, ranks=ranks, count=count):
+                        result = self.engine.execute_allreduce_data(
+                            values, op=HCCL_SUM, data_type=data_type,
+                        )
+                        self.assertEqual(result["status"], "success")
+                        expected = HcclAllReduceReference(
+                            values, op=HCCL_SUM, data_type=data_type,
+                        )
+                        for actual_row, expected_row in zip(result["result"], expected):
+                            for actual, reference in zip(actual_row, expected_row):
+                                _assert_close_or_same_special(
+                                    self, actual, reference, tolerances[data_type],
+                                )
+
     def test_allgather_fp16_bf16(self):
         send_data = [[0.5, -2.25], [3.75, 0.0], [65504.0, 1.0], [2.0, -4.0]]
         for data_type in [HCCL_FP16, HCCL_BF16]:

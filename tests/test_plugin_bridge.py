@@ -176,7 +176,40 @@ class TestPluginBridge(unittest.TestCase):
         finally:
             lib.hcclCommDestroy(comm)
 
-    def test_unimplemented_wrappers_return_not_supported(self):
+    def test_allgather_and_reducescatter_wrappers_execute(self):
+        self.bridge.load_library()
+        lib = self.bridge._lib
+        comm = ctypes.c_void_p()
+        device_ids = (ctypes.c_int32 * 2)(0, 1)
+        self.assertEqual(lib.hcclCommInit(ctypes.byref(comm), 2, device_ids), 0)
+        try:
+            allgather_send = (ctypes.c_float * 2)(1.0, 2.0)
+            allgather_recv = (ctypes.c_float * 4)()
+            rc = lib.hcclAllGather(
+                allgather_send, allgather_recv, 1, HCCL_FP32, comm,
+            )
+            self.assertEqual(rc, 0)
+            self.assertEqual(
+                [round(allgather_recv[i], 6) for i in range(4)],
+                [1.0, 2.0, 1.0, 2.0],
+            )
+
+            reducescatter_send = (ctypes.c_float * 4)(1.0, 2.0, 10.0, 20.0)
+            reducescatter_recv = (ctypes.c_float * 2)()
+            rc = lib.hcclReduceScatter(
+                reducescatter_send, reducescatter_recv, 1,
+                HCCL_FP32, HCCL_SUM, comm,
+            )
+            self.assertEqual(rc, 0)
+            self.assertEqual(
+                [round(reducescatter_recv[i], 6) for i in range(2)],
+                [11.0, 22.0],
+            )
+
+        finally:
+            lib.hcclCommDestroy(comm)
+
+    def test_broadcast_wrapper_remains_not_supported(self):
         self.bridge.load_library()
         lib = self.bridge._lib
         comm = ctypes.c_void_p()
@@ -185,18 +218,6 @@ class TestPluginBridge(unittest.TestCase):
         try:
             send = ctypes.c_float(1.0)
             recv = ctypes.c_float(-123.0)
-            rc = lib.hcclAllGather(
-                ctypes.byref(send), ctypes.byref(recv), 1, HCCL_FP32, comm,
-            )
-            self.assertEqual(rc, HCCL_ERR_NOT_SUPPORTED)
-            self.assertEqual(recv.value, -123.0)
-
-            rc = lib.hcclReduceScatter(
-                ctypes.byref(send), ctypes.byref(recv),
-                1, HCCL_FP32, HCCL_SUM, comm,
-            )
-            self.assertEqual(rc, HCCL_ERR_NOT_SUPPORTED)
-            self.assertEqual(recv.value, -123.0)
 
             rc = lib.hcclBroadcast(
                 ctypes.byref(send), ctypes.byref(recv),

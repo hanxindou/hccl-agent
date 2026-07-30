@@ -140,38 +140,40 @@ static void test_allreduce_invalid_args(void)
     PASS();
 }
 
-static void test_allgather_not_supported(void)
+static void test_allgather_wrapper_uses_cpu_path(void)
 {
-    TEST("hcclAllGather returns NOT_SUPPORTED and preserves recv");
+    TEST("hcclAllGather wrapper computes 2-rank layout");
 
     hcclComm_t comm = make_comm(2);
-    float send = 1.0f;
-    float recv = -77.0f;
+    float send[2] = {1.0f, 2.0f};
+    float recv[8];
     hcclResult_t rc;
 
     if (comm == NULL) {
         FAIL("comm init failed");
         return;
     }
+    for (int i = 0; i < 8; i++) recv[i] = -77.0f;
 
-    rc = hcclAllGather(&send, &recv, 1, HCCL_FP32, comm);
-    if (rc != HCCL_ERR_NOT_SUPPORTED) {
+    rc = hcclAllGather(send, recv, 1, HCCL_FP32, comm);
+    if (rc != HCCL_SUCCESS) {
         hcclCommDestroy(comm);
-        FAIL("expected NOT_SUPPORTED");
+        FAIL("expected HCCL_SUCCESS");
         return;
     }
-    if (fabsf(recv - (-77.0f)) > EPS) {
+    if (fabsf(recv[0] - 1.0f) > EPS || fabsf(recv[1] - 2.0f) > EPS ||
+        fabsf(recv[2] - 1.0f) > EPS || fabsf(recv[3] - 2.0f) > EPS) {
         hcclCommDestroy(comm);
-        FAIL("recv buffer was modified");
+        FAIL("unexpected AllGather result");
         return;
     }
-    if (hcclAllGather(NULL, &recv, 1, HCCL_FP32, comm)
+    if (hcclAllGather(NULL, recv, 1, HCCL_FP32, comm)
         != HCCL_ERR_INVALID_ARG) {
         hcclCommDestroy(comm);
         FAIL("NULL send_buf should be invalid");
         return;
     }
-    if (hcclAllGather(&send, &recv, 0, HCCL_FP32, comm)
+    if (hcclAllGather(send, recv, 0, HCCL_FP32, comm)
         != HCCL_ERR_INVALID_ARG) {
         hcclCommDestroy(comm);
         FAIL("zero count should be invalid");
@@ -182,13 +184,13 @@ static void test_allgather_not_supported(void)
     PASS();
 }
 
-static void test_reducescatter_not_supported(void)
+static void test_reducescatter_wrapper_uses_cpu_path(void)
 {
-    TEST("hcclReduceScatter returns NOT_SUPPORTED and preserves recv");
+    TEST("hcclReduceScatter wrapper computes 2-rank layout");
 
     hcclComm_t comm = make_comm(2);
-    float send[2] = {1.0f, 2.0f};
-    float recv = -88.0f;
+    float send[4] = {1.0f, 2.0f, 10.0f, 20.0f};
+    float recv[2] = {-88.0f, -88.0f};
     hcclResult_t rc;
 
     if (comm == NULL) {
@@ -196,24 +198,24 @@ static void test_reducescatter_not_supported(void)
         return;
     }
 
-    rc = hcclReduceScatter(send, &recv, 1, HCCL_FP32, HCCL_SUM, comm);
-    if (rc != HCCL_ERR_NOT_SUPPORTED) {
+    rc = hcclReduceScatter(send, recv, 1, HCCL_FP32, HCCL_SUM, comm);
+    if (rc != HCCL_SUCCESS) {
         hcclCommDestroy(comm);
-        FAIL("expected NOT_SUPPORTED");
+        FAIL("expected HCCL_SUCCESS");
         return;
     }
-    if (fabsf(recv - (-88.0f)) > EPS) {
+    if (fabsf(recv[0] - 11.0f) > EPS || fabsf(recv[1] - 22.0f) > EPS) {
         hcclCommDestroy(comm);
-        FAIL("recv buffer was modified");
+        FAIL("unexpected ReduceScatter result");
         return;
     }
-    if (hcclReduceScatter(send, &recv, 1, HCCL_FP32, (hcclRedOp_t)99, comm)
+    if (hcclReduceScatter(send, recv, 1, HCCL_FP32, (hcclRedOp_t)99, comm)
         != HCCL_ERR_NOT_SUPPORTED) {
         hcclCommDestroy(comm);
         FAIL("unknown ReduceOp should be unsupported");
         return;
     }
-    if (hcclReduceScatter(send, &recv, 0, HCCL_FP32, HCCL_SUM, comm)
+    if (hcclReduceScatter(send, recv, 0, HCCL_FP32, HCCL_SUM, comm)
         != HCCL_ERR_INVALID_ARG) {
         hcclCommDestroy(comm);
         FAIL("zero count should be invalid");
@@ -275,8 +277,8 @@ int main(void)
 
     test_allreduce_wrapper_uses_cpu_path();
     test_allreduce_invalid_args();
-    test_allgather_not_supported();
-    test_reducescatter_not_supported();
+    test_allgather_wrapper_uses_cpu_path();
+    test_reducescatter_wrapper_uses_cpu_path();
     test_broadcast_not_supported();
 
     printf("\n");

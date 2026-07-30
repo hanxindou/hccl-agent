@@ -1,6 +1,6 @@
 # HCCL Agent 比赛准备度报告
 
-更新时间：2026-07-29 23:10:00 +08:00
+更新时间：2026-07-30 08:42:39 +08:00
 
 ## 1. 当前架构
 
@@ -22,6 +22,7 @@ main.py
 | Python Agent | 真实工程编排 | 可执行 planning、selection、simulation、execution、evaluation、reflection、logging |
 | C 插件 | `CPU_SIMULATED` | 单进程 CPU buffer 正确性基线，不是真实多卡通信 |
 | ctypes bridge | Windows DLL 已验证 | `HCCL_PLUGIN_PATH` 可指向本轮构建 DLL |
+| Linux CPU_SIM validation | `LINUX_CI_VERIFIED`, `CI_REMOTE_VERIFIED`; local Docker `ENV_BLOCKED` | GitHub Actions `pull_request` / `linux-cpu-sim` PASS；本地 Docker build 仍因 `auth.docker.io` token 获取超时未完成 |
 | Simulator | `ANALYTICAL_MODEL` | latency/bandwidth/score 为模型趋势，不是实机 profiling |
 | Reliability | `RELIABILITY_MODEL` | 固定 seed 可靠性模拟，不是硬件故障切换证明 |
 | ASCEND_CANN | `STUB_UNVERIFIED` 准备边界 | 缺 SDK 时快速失败，未链接真实 CANN/HCOMM |
@@ -30,9 +31,9 @@ main.py
 
 | Primitive | CPU_SIM 状态 | C/Python 证据 | 未验证边界 |
 |-----------|--------------|---------------|------------|
-| AllReduce | 已实现 | `hcccl/src/hccl_algorithms.c`、`tests/test_reduce_ops.py`、CTest | 真实 HCCL 多 rank 未验证 |
+| AllReduce | 已实现；V1-B 已验证多元素 `count>1` | `hcccl/src/hccl_algorithms.c`、`tests/test_reduce_ops.py`、CTest | 真实 HCCL 多 rank 未验证 |
 | AllGather | 已实现 | `hcccl/tests/test_allgather.c`、`tests/test_allgather.py` | 真实 HCCL 多 rank 未验证 |
-| ReduceScatter | 已实现 | `hcccl/tests/test_reducescatter.c`、`tests/test_reducescatter.py` | 真实 HCCL 多 rank 未验证 |
+| ReduceScatter | 已实现；V1-B 已验证 2-rank 正确长度 buffer | `hcccl/tests/test_reducescatter.c`、`tests/test_reducescatter.py` | 真实 HCCL 多 rank 未验证 |
 | Broadcast | 明确未支持 | `hcccl/tests/test_api_wrappers.c` | 不得宣称已实现 |
 
 ## 3. DType / ReduceOp 支持矩阵
@@ -49,17 +50,36 @@ main.py
 
 详细矩阵见 `docs/correctness_matrix.md`。
 
+赛题原文要求 FP16/BF16/FP32 混精度通信误差 `<=1e-6` 且无溢出/下溢。当前 FP16 `1e-3`、BF16 `2e-2` 是 CPU 软件模拟回归 tolerance，不代表 Ascend 硬件精度或最终赛题阈值已满足；该口径标记为 `REQUIRES_COMPETITION_CLARIFICATION`。
+
 ## 4. CPU_SIM 说明
 
 CPU_SIM 使用项目自有 C 动态库在单进程 CPU 内存上计算扁平 buffer。它用于证明接口、数据布局、dtype 编码和 reference correctness，不代表真实 HCCL/CANN 通信性能。
 
-当前 H1 Windows 验证使用：
+当前 V1 Windows 验证使用：
 
 ```text
-C:\tmp\hccl-agent-hcccl-h1\Release\hccl_plugin.dll
+F:\build\hccl-agent-v1-final\Release\hccl_plugin.dll
 ```
 
-Linux `.so` 仍需用户在 Linux/WSL 环境中独立验证。
+Linux `.so` 已由 GitHub Actions Linux CPU_SIM 验证通过：
+
+```text
+Event：pull_request
+Job：linux-cpu-sim
+Result：PASS
+Python：3.10.20
+CMake：3.31.6
+Compiler：GCC 11.4.0
+Backend：CPU_SIM
+Linux plugin：/tmp/hccl-agent-linux-review/libhccl_plugin.so
+CTest：11/11 passed
+Targeted Python：66 tests OK
+Full Python：461 tests OK
+LINUX_CPU_SIM_VALIDATION_OK：observed
+```
+
+本地 Docker build 阶段仍因镜像 metadata 下载超时标记为 `ENV_BLOCKED`；该本地阻塞不再阻塞 V1，因为 Linux CI 已通过。Linux 状态为 `LINUX_CI_VERIFIED`，不是 `LINUX_DOCKER_VERIFIED`。
 
 ## 5. Agent 开发闭环
 
@@ -99,21 +119,23 @@ F1 可靠性验证提供固定 seed 场景：
 
 ## 8. Windows 动态验证
 
-当前最近一次 H1 验证结果：
+当前最近一次 V1 验证结果：
 
 | 验证项 | 结果 |
 |--------|------|
-| Windows Release CMake | 通过，`C:\tmp\hccl-agent-hcccl-h1`，`HCCL_BACKEND=CPU_SIM` |
-| Release Build | 通过，生成 `C:\tmp\hccl-agent-hcccl-h1\Release\hccl_plugin.dll`，未出现 C4819 |
+| Windows Release CMake | 通过，`F:\build\hccl-agent-v1-final`，`HCCL_BACKEND=CPU_SIM` |
+| Release Build | 通过，生成 `F:\build\hccl-agent-v1-final\Release\hccl_plugin.dll`，未出现 C4819 |
 | CTest | 11/11 passed |
-| 定向 correctness / Agent / simulator / reliability suite | 71 tests OK |
-| 完整 Python unittest | 454 tests OK |
+| 定向 correctness suite | 66 tests OK |
+| 完整 Python unittest | 461 tests OK |
+| 固定 seed 随机 correctness | 3 seeds，60 个确定性抽样 cases，两次连续运行 OK；不是完整笛卡尔积穷举 |
 | ASCEND_CANN 缺 SDK检测 | 按预期快速失败，错误说明缺头文件、库和环境变量 |
 | 外部 API | API Key 已清空；无真实网络请求 |
 
-## 9. Linux/CANN/Ascend 未验证项
+## 9. Linux/CANN/Ascend 验证边界
 
-- Linux `libhccl_plugin.so` 构建、CTest 和 Python 加载未验证。
+- Linux `libhccl_plugin.so` 已在 GitHub Actions CPU_SIM runner 验证，路径为 `/tmp/hccl-agent-linux-review/libhccl_plugin.so`。
+- 本地 Docker Linux 验证仍为 `ENV_BLOCKED`，原因是 `auth.docker.io` token timeout；本地复现可选，不再阻塞 V1。
 - CANN SDK 未安装，未链接真实 HCCL/HCOMM 库。
 - Ascend 设备、真实多卡 rank、stream、communicator 和 profiling 未验证。
 - FP16/BF16 硬件精度、溢出、NaN/Inf 行为未验证。
@@ -129,6 +151,7 @@ F1 可靠性验证提供固定 seed 场景：
 | Agent 参与算法/代码开发 | 离线最小闭环已验证 | 中 |
 | 性能优化 | 有模型排序和拓扑成本模型 | 中-低 |
 | 可靠性 | 有固定 seed CPU_SIM 模型 | 中-低 |
+| Linux CPU_SIM 交付验证 | GitHub Actions 已验证 `.so`、CTest 和 Python correctness | 中 |
 | 实机验证材料 | 模板和用户待办已准备 | 低 |
 
 ## 11. 可演示内容
@@ -143,9 +166,9 @@ F1 可靠性验证提供固定 seed 场景：
 
 ## 12. 用户后续操作
 
-用户必须提供或执行：
+用户仍需提供或执行：
 
-- Linux/WSL `.so` 构建与加载验证。
+- 本地 Docker/Linux `.so` 复现可选；V1 不再因此阻塞。
 - CANN 8.0+ 或赛题指定版本 SDK。
 - Ascend 设备或赛题认可模拟环境。
 - HCCL/HCOMM 头文件、库和环境初始化脚本。
@@ -161,7 +184,7 @@ F1 可靠性验证提供固定 seed 场景：
 |------|------|----------|
 | 无真实 CANN/HCOMM 链接 | 不能满足最终硬性验收 | 用户提供 SDK 后执行 ASCEND_CANN 适配 |
 | 无 Ascend 实机 | 性能、精度、可靠性无法最终证明 | 获取设备或官方模拟环境 |
-| Linux `.so` 未验证 | 比赛交付环境可能不兼容 | 用户执行 UA-001 |
+| 本地 Docker Linux 复现阻塞 | 本机无法复现 Linux CI 结果 | 需要时由用户在网络可访问 `auth.docker.io` 的环境执行 UA-V1-001 |
 | 模型性能未校准 | score 不能作为比赛性能结论 | 使用 msprof 数据校准 D1 |
 | Broadcast 未实现 | 若赛题要求 Broadcast 会缺口明显 | 后续单独 Batch，不在 H1 新增 |
 
@@ -169,6 +192,7 @@ F1 可靠性验证提供固定 seed 场景：
 
 - 不得宣称已经接入真实 CANN/HCOMM。
 - 不得宣称 Windows DLL 等同 Linux `.so` 或 Ascend 运行结果。
+- 不得宣称本地 Docker Linux 已验证；当前 Linux 结论来自 GitHub Actions CPU_SIM。
 - 不得宣称 CPU_SIM latency/bandwidth/score 是真实 HCCL 性能。
 - 不得宣称 FP16/BF16 CPU 软件模拟等同 Ascend 硬件精度。
 - 不得宣称 F1 模型 failover 时间满足真实硬件 SLA。

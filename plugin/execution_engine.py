@@ -420,7 +420,7 @@ class ExecutionEngine:
 
     def execute_allreduce_data(self, input_data, algorithm="Ring", op=HCCL_SUM,
                                data_type=HCCL_FP32):
-        """Run CPU_SIM FP32 AllReduce over one scalar per rank."""
+        """Run CPU_SIM AllReduce over [N] scalar or [N][C] rank data."""
         if not input_data:
             return {
                 "primitive": "AllReduce",
@@ -429,10 +429,25 @@ class ExecutionEngine:
                 "return_code": HCCL_ERR_INVALID_ARG,
                 "result": None,
             }
+        matrix_input = isinstance(input_data[0], (list, tuple))
+        if matrix_input:
+            count = len(input_data[0])
+            if count == 0 or any(len(row) != count for row in input_data):
+                return {
+                    "primitive": "AllReduce",
+                    "algorithm": algorithm,
+                    "status": "invalid_input",
+                    "return_code": HCCL_ERR_INVALID_ARG,
+                    "result": None,
+                }
+            rank_rows = [[float(value) for value in row] for row in input_data]
+        else:
+            count = 1
+            rank_rows = [[float(value)] for value in input_data]
 
         self.load_library()
         lib = self._lib
-        n = len(input_data)
+        n = len(rank_rows)
         comm = ctypes.c_void_p()
         device_ids = (ctypes.c_int32 * n)(*range(n))
         rc = lib.hcclCommInit(ctypes.byref(comm), n, device_ids)
@@ -470,16 +485,16 @@ class ExecutionEngine:
 
             for rank, value in enumerate(input_data):
                 lib.hcclSetRank(comm, rank)
-                send = _make_input_array([value], data_type)
-                recv = _make_output_array(1, data_type)
-                call(send, recv, 1, data_type, op, comm)
+                send = _make_input_array(rank_rows[rank], data_type)
+                recv = _make_output_array(count, data_type)
+                call(send, recv, count, data_type, op, comm)
 
             results = []
-            for rank, value in enumerate(input_data):
+            for rank in range(n):
                 lib.hcclSetRank(comm, rank)
-                send = _make_input_array([value], data_type)
-                recv = _make_output_array(1, data_type)
-                rc = call(send, recv, 1, data_type, op, comm)
+                send = _make_input_array(rank_rows[rank], data_type)
+                recv = _make_output_array(count, data_type)
+                rc = call(send, recv, count, data_type, op, comm)
                 if rc != HCCL_SUCCESS:
                     return {
                         "primitive": "AllReduce",
@@ -488,7 +503,11 @@ class ExecutionEngine:
                         "return_code": rc,
                         "result": None,
                     }
-                results.append(round(_read_output_value(recv, 0, data_type), 6))
+                row = [
+                    round(_read_output_value(recv, elem, data_type), 6)
+                    for elem in range(count)
+                ]
+                results.append(row if matrix_input else row[0])
         finally:
             lib.hcclCommDestroy(comm)
 

@@ -28,6 +28,8 @@ typedef struct {
     int32_t   current_rank;  /* which rank is calling (set via hcclSetRank) */
     float*    rank_values;   /* [num_devices] per-rank input for simulation */
     float*    rank_results;  /* [num_devices] per-rank result for simulation */
+    size_t    rank_count;    /* current AllReduce elements per rank */
+    size_t    rank_capacity; /* allocated float elements per buffer */
     int32_t   calls_received;/* how many ranks have submitted data this round */
 } hcclCommInternal;
 
@@ -65,7 +67,7 @@ hcclResult_t hcclCommInit(
     memcpy(ctx->device_ids, device_ids,
            (size_t)num_devices * sizeof(int32_t));
 
-    /* Simulation buffers — one float per rank. */
+    /* Simulation buffers — default one element per rank, expandable by AllReduce. */
     ctx->rank_values = (float*) calloc(
         (size_t)num_devices, sizeof(float)
     );
@@ -81,6 +83,8 @@ hcclResult_t hcclCommInit(
     }
 
     ctx->current_rank   = 0;
+    ctx->rank_count     = 1;
+    ctx->rank_capacity  = (size_t)num_devices;
     ctx->calls_received = 0;
 
     *comm = (hcclComm_t) ctx;

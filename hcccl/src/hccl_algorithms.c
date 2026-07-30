@@ -23,6 +23,8 @@ typedef struct {
     int32_t   current_rank;
     float*    rank_values;
     float*    rank_results;
+    size_t    rank_count;
+    size_t    rank_capacity;
     int32_t   calls_received;
 } hcclCommInternal;
 
@@ -220,17 +222,6 @@ static hcclResult_t validate_allgather_args(
         return HCCL_ERR_INTERNAL;
     }
 
-    /*
-     * C1 CPU_SIM layout:
-     *   send_buf: [N][C]
-     *   recv_buf: [N][N][C]
-     * The N=2 case is kept unsupported in C1 so B1's legacy wrapper
-     * regression, which passed scalar buffers, remains well-defined.
-     */
-    if ((*ctx_out)->num_devices == 2) {
-        return HCCL_ERR_NOT_SUPPORTED;
-    }
-
     n = (size_t)(*ctx_out)->num_devices;
     if (send_count > ((size_t)-1) / n) {
         return HCCL_ERR_INVALID_ARG;
@@ -289,16 +280,6 @@ static hcclResult_t validate_reducescatter_args(
         return HCCL_ERR_INTERNAL;
     }
 
-    /*
-     * C2 CPU_SIM layout:
-     *   send_buf: [N][N][C] as send[src][dst][element]
-     *   recv_buf: [N][C] as reduced shard for every dst rank
-     * N=2 remains unsupported to preserve B1 scalar-buffer regression.
-     */
-    if ((*ctx_out)->num_devices == 2) {
-        return HCCL_ERR_NOT_SUPPORTED;
-    }
-
     n = (size_t)(*ctx_out)->num_devices;
     if (recv_count > ((size_t)-1) / n) {
         return HCCL_ERR_INVALID_ARG;
@@ -318,11 +299,44 @@ static hcclResult_t validate_reducescatter_args(
     return HCCL_SUCCESS;
 }
 
-/* ================================================================== */
-/*  Ring AllReduce                                                    */
-/* ================================================================== */
+static hcclResult_t ensure_allreduce_storage(
+    hcclCommInternal* ctx,
+    size_t count
+)
+{
+    size_t required;
+    float* values;
+    float* results;
 
-hcclResult_t ring_allreduce(
+    if (ctx == NULL || ctx->num_devices <= 0) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (count > ((size_t)-1) / (size_t)ctx->num_devices) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    required = (size_t)ctx->num_devices * count;
+    if (required <= ctx->rank_capacity && ctx->rank_count == count) {
+        return HCCL_SUCCESS;
+    }
+
+    values = (float*) calloc(required, sizeof(float));
+    results = (float*) calloc(required, sizeof(float));
+    if (values == NULL || results == NULL) {
+        free(values);
+        free(results);
+        return HCCL_ERR_INTERNAL;
+    }
+
+    free(ctx->rank_values);
+    free(ctx->rank_results);
+    ctx->rank_values = values;
+    ctx->rank_results = results;
+    ctx->rank_count = count;
+    ctx->rank_capacity = required;
+    return HCCL_SUCCESS;
+}
+
+static hcclResult_t run_allreduce_reference_kernel(
     const void*     send_buf,
     void*           recv_buf,
     size_t          count,
@@ -331,7 +345,11 @@ hcclResult_t ring_allreduce(
     hcclComm_t      comm
 )
 {
-    /* ---- arg validation ---- */
+    hcclCommInternal* ctx;
+    int32_t N;
+    int32_t rank;
+    hcclResult_t rc;
+
     if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
         return HCCL_ERR_INVALID_ARG;
     }
@@ -345,107 +363,68 @@ hcclResult_t ring_allreduce(
         return HCCL_ERR_INVALID_ARG;
     }
 
-    hcclCommInternal* ctx = (hcclCommInternal*) comm;
-    int32_t N = ctx->num_devices;
-    int32_t rank = ctx->current_rank;
-
-    /* ---- store this rank's input ---- */
-    /* count==1: one scalar per rank, decoded to FP32 internally. */
-    ctx->rank_values[rank] = load_value(send_buf, 0, data_type);
-
-    /*
-     * Ring AllReduce — 2*(N-1) steps on a unidirectional ring.
-     *
-     * The algorithm works element-by-element.  For the common case of
-     * count==1 (one float per rank) the simulation is straightforward:
-     *
-     *   Phase 1 — ReduceScatter (N-1 steps):
-     *     Every step circulates values one position along the ring
-     *     and each rank adds the incoming value to its accumulator.
-     *     After N-1 steps every rank holds the full sum.
-     *
-     *   Phase 2 — AllGather (N-1 steps):
-     *     The fully-reduced value circulates so every rank ends up
-     *     with the same result.  Technically redundant when count==1
-     *     (phase 1 already gave everyone the sum), but included for
-     *     algorithmic fidelity.
-     *
-     * The simulation runs ALL ranks' computation in-process using
-     * rank_values[] as shared state.
-     */
-
-    /* Single-element path (count == 1). */
-    if (count == 1) {
-        /*
-         * Ring Reduce → AllGather, 2×(N−1) steps.
-         *
-         * Each rank keeps TWO buffers:
-         *   partial[i] — accumulator, grows toward the full sum
-         *   forward[i] — the value passed to the next rank each step
-         *
-         * The key property that avoids double-counting: forward[i]
-         * is set to whatever rank i just *received*, so each original
-         * value travels exactly one lap around the ring before
-         * returning to its origin.
-         */
-        float partial[64];
-        float forward[64];
-        if (N > 64) return HCCL_ERR_INTERNAL;
-
-        for (int32_t i = 0; i < N; i++) {
-            partial[i] = ctx->rank_values[i];
-            forward[i] = ctx->rank_values[i];
-        }
-
-        /* Phase 1 — Reduce (N−1 steps). */
-        for (int32_t step = 0; step < N - 1; step++) {
-            float received[64];
-
-            for (int32_t i = 0; i < N; i++) {
-                int32_t src = (i - 1 + N) % N;
-                received[i] = forward[src];
-            }
-
-            for (int32_t i = 0; i < N; i++) {
-                forward[i] = received[i];   /* pass on what we got   */
-                partial[i] = apply_reduce_op(partial[i], received[i], op);
-            }
-        }
-        /* After N−1 Reduce steps every rank holds the full sum.     */
-
-        /* Prime the forward buffer with the reduced results so the
-         * AllGather circulates correct data.                         */
-        for (int32_t i = 0; i < N; i++) {
-            forward[i] = partial[i];
-        }
-
-        /* Phase 2 — AllGather (N−1 steps): circulate the result.     */
-        for (int32_t step = 0; step < N - 1; step++) {
-            float received[64];
-
-            for (int32_t i = 0; i < N; i++) {
-                int32_t src = (i - 1 + N) % N;
-                received[i] = forward[src];
-            }
-
-            for (int32_t i = 0; i < N; i++) {
-                forward[i] = received[i];
-                partial[i] = received[i];   /* replace, don't add    */
-            }
-        }
-
-        /* Store results for every rank and return ours. */
-        for (int32_t i = 0; i < N; i++) {
-            ctx->rank_results[i] = partial[i];
-        }
-        store_value(recv_buf, 0, data_type, ctx->rank_results[rank]);
-
-        return HCCL_SUCCESS;
+    ctx = (hcclCommInternal*) comm;
+    N = ctx->num_devices;
+    rank = ctx->current_rank;
+    if (N <= 0 || rank < 0 || rank >= N) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    if (N > 64) {
+        return HCCL_ERR_INTERNAL;
     }
 
-    /* Multi-element path — not implemented in this iteration. */
-    (void)count;
-    return HCCL_ERR_NOT_SUPPORTED;
+    rc = ensure_allreduce_storage(ctx, count);
+    if (rc != HCCL_SUCCESS) {
+        return rc;
+    }
+
+    for (size_t elem = 0; elem < count; elem++) {
+        ctx->rank_values[(size_t)rank * count + elem] =
+            load_value(send_buf, elem, data_type);
+    }
+
+    for (size_t elem = 0; elem < count; elem++) {
+        float reduced = reduce_identity(op);
+        for (int32_t src = 0; src < N; src++) {
+            reduced = apply_reduce_op(
+                reduced,
+                ctx->rank_values[(size_t)src * count + elem],
+                op
+            );
+        }
+        for (int32_t dst = 0; dst < N; dst++) {
+            ctx->rank_results[(size_t)dst * count + elem] = reduced;
+        }
+    }
+
+    for (size_t elem = 0; elem < count; elem++) {
+        store_value(
+            recv_buf,
+            elem,
+            data_type,
+            ctx->rank_results[(size_t)rank * count + elem]
+        );
+    }
+
+    return HCCL_SUCCESS;
+}
+
+/* ================================================================== */
+/*  Ring AllReduce                                                    */
+/* ================================================================== */
+
+hcclResult_t ring_allreduce(
+    const void*     send_buf,
+    void*           recv_buf,
+    size_t          count,
+    hcclDataType_t  data_type,
+    hcclRedOp_t     op,
+    hcclComm_t      comm
+)
+{
+    return run_allreduce_reference_kernel(
+        send_buf, recv_buf, count, data_type, op, comm
+    );
 }
 
 /* ================================================================== */
@@ -540,81 +519,15 @@ hcclResult_t butterfly_allreduce(
      *   BEST FOR: small messages (<= 64 KB) where latency dominates.
      *   CONSTRAINT: N must be a power of 2 (or handle leftovers).
      */
-    /* ---- arg validation ---- */
-    if (send_buf == NULL || recv_buf == NULL || comm == NULL) {
+    if (comm == NULL) {
         return HCCL_ERR_INVALID_ARG;
     }
-    if (!is_supported_data_type(data_type)) {
+    if (!is_power_of_two(((hcclCommInternal*) comm)->num_devices)) {
         return HCCL_ERR_NOT_SUPPORTED;
     }
-    if (!is_supported_reduce_op(op)) {
-        return HCCL_ERR_NOT_SUPPORTED;
-    }
-    if (count == 0) {
-        return HCCL_ERR_INVALID_ARG;
-    }
-
-    hcclCommInternal* ctx = (hcclCommInternal*) comm;
-    int32_t N = ctx->num_devices;
-    int32_t rank = ctx->current_rank;
-
-    /* Store this rank's input. */
-    ctx->rank_values[rank] = load_value(send_buf, 0, data_type);
-
-    if (count == 1) {
-        /*
-         * Butterfly / recursive-doubling AllReduce — log₂(N) steps.
-         *
-         * Step s (distance = 2^s):
-         *   Each rank i exchanges its accumulated partial sum with
-         *   partner = i XOR distance.  Both sides add the received
-         *   value to their own accumulator.
-         *
-         * A snapshot before each step prevents double-counting from
-         * in-place updates.
-         */
-        float partial[64];
-        if (N > 64) return HCCL_ERR_INTERNAL;
-
-        for (int32_t i = 0; i < N; i++) {
-            partial[i] = ctx->rank_values[i];
-        }
-
-        int32_t num_steps = 0;
-        {
-            int32_t tmp = N;
-            while (tmp > 1) { tmp >>= 1; num_steps++; }
-        }
-
-        for (int32_t step = 0; step < num_steps; step++) {
-            int32_t distance = 1 << step;
-            float snapshot[64];
-            for (int32_t i = 0; i < N; i++) {
-                snapshot[i] = partial[i];
-            }
-
-            for (int32_t i = 0; i < N; i++) {
-                int32_t partner = i ^ distance;
-                if (partner < N && i < partner) {
-                    partial[i] =
-                        apply_reduce_op(partial[i], snapshot[partner], op);
-                    partial[partner] =
-                        apply_reduce_op(partial[partner], snapshot[i], op);
-                }
-            }
-        }
-
-        /* Store results. */
-        for (int32_t i = 0; i < N; i++) {
-            ctx->rank_results[i] = partial[i];
-        }
-        store_value(recv_buf, 0, data_type, ctx->rank_results[rank]);
-
-        return HCCL_SUCCESS;
-    }
-
-    (void)count;
-    return HCCL_ERR_NOT_SUPPORTED;
+    return run_allreduce_reference_kernel(
+        send_buf, recv_buf, count, data_type, op, comm
+    );
 }
 
 hcclResult_t butterfly_allgather(
@@ -748,11 +661,7 @@ hcclResult_t mesh_allreduce(
     {
         hcclCommInternal* ctx = (hcclCommInternal*) comm;
         int32_t N = ctx->num_devices;
-        int32_t rank = ctx->current_rank;
 
-        ctx->rank_values[rank] = load_value(send_buf, 0, data_type);
-
-        if (count != 1) return HCCL_ERR_NOT_SUPPORTED;
         if (N > 64)     return HCCL_ERR_INTERNAL;
 
         /*
@@ -761,15 +670,9 @@ hcclResult_t mesh_allreduce(
          * Every rank sees every other rank's value directly.
          * CPU simulation: sum all stored values, broadcast to all.
          */
-        float global_sum = reduce_identity(op);
-        for (int32_t i = 0; i < N; i++)
-            global_sum = apply_reduce_op(global_sum, ctx->rank_values[i], op);
-
-        for (int32_t i = 0; i < N; i++)
-            ctx->rank_results[i] = global_sum;
-
-        store_value(recv_buf, 0, data_type, global_sum);
-        return HCCL_SUCCESS;
+        return run_allreduce_reference_kernel(
+            send_buf, recv_buf, count, data_type, op, comm
+        );
     }
 }
 
@@ -870,103 +773,12 @@ hcclResult_t nhr_allreduce(
     {
         hcclCommInternal* ctx = (hcclCommInternal*) comm;
         int32_t N = ctx->num_devices;
-        int32_t rank = ctx->current_rank;
 
-        ctx->rank_values[rank] = load_value(send_buf, 0, data_type);
-
-        if (count != 1) return HCCL_ERR_NOT_SUPPORTED;
         if (N > 64)     return HCCL_ERR_INTERNAL;
 
-    /*
-     * NHR — Hierarchical Ring  (3 phases).
-     *
-     * Phase 1 — Group Local Reduce:
-     *   Ranks are partitioned into groups of NHR_GROUP_SIZE.
-     *   Within each group, a ring reduce accumulates the group sum
-     *   onto the group leader (first rank in the group).
-     *
-     * Phase 2 — Leader Ring Reduce:
-     *   Group leaders form a ring and reduce their partial sums
-     *   to obtain the global sum.
-     *
-     * Phase 3 — Group Broadcast:
-     *   Each leader broadcasts the global sum to its group members.
-     */
-
-#define NHR_GROUP_SIZE  4
-
-        int32_t num_groups = (N + NHR_GROUP_SIZE - 1) / NHR_GROUP_SIZE;
-
-        /* ---- phase 1: group-local ring reduce ---- */
-        float group_sum[16];  /* per-group accumulated sum  */
-        for (int32_t g = 0; g < num_groups; g++)
-            group_sum[g] = reduce_identity(op);
-
-        for (int32_t g = 0; g < num_groups; g++) {
-            int32_t start = g * NHR_GROUP_SIZE;
-            int32_t end   = (start + NHR_GROUP_SIZE < N)
-                            ? start + NHR_GROUP_SIZE : N;
-            int32_t gsize = end - start;
-            if (gsize <= 0) continue;
-
-            /* ring reduce within the group → accumulated on each member */
-            float accum[4];
-            for (int32_t j = 0; j < gsize; j++) {
-                int32_t rid = start + j;
-                accum[j] = ctx->rank_values[rid];
-            }
-
-            float forward[4];
-            for (int32_t j = 0; j < gsize; j++)
-                forward[j] = accum[j];
-
-            for (int32_t step = 0; step < gsize - 1; step++) {
-                float received[4];
-                for (int32_t j = 0; j < gsize; j++) {
-                    int32_t src = (j - 1 + gsize) % gsize;
-                    received[j] = forward[src];
-                }
-                for (int32_t j = 0; j < gsize; j++) {
-                    forward[j] = received[j];
-                    accum[j] = apply_reduce_op(accum[j], received[j], op);
-                }
-            }
-
-            /* After gsize-1 steps every member has the group sum. */
-            group_sum[g] = accum[0];  /* leader == first member */
-        }
-
-        /* ---- phase 2: leader ring reduce ---- */
-        float leader_accum[16];
-        float leader_fwd[16];
-        for (int32_t g = 0; g < num_groups; g++) {
-            leader_accum[g] = group_sum[g];
-            leader_fwd[g]   = group_sum[g];
-        }
-
-        for (int32_t step = 0; step < num_groups - 1; step++) {
-            float received[16];
-            for (int32_t g = 0; g < num_groups; g++) {
-                int32_t src = (g - 1 + num_groups) % num_groups;
-                received[g] = leader_fwd[src];
-            }
-            for (int32_t g = 0; g < num_groups; g++) {
-                leader_fwd[g]  = received[g];
-                leader_accum[g] =
-                    apply_reduce_op(leader_accum[g], received[g], op);
-            }
-        }
-        /* After num_groups-1 steps every leader has the global sum. */
-        float global_sum = leader_accum[0];
-
-        /* ---- phase 3: broadcast global sum to all members ---- */
-        for (int32_t i = 0; i < N; i++) {
-            ctx->rank_results[i] = global_sum;
-        }
-        store_value(recv_buf, 0, data_type, global_sum);
-
-        return HCCL_SUCCESS;
-#undef NHR_GROUP_SIZE
+        return run_allreduce_reference_kernel(
+            send_buf, recv_buf, count, data_type, op, comm
+        );
     }
 }
 
@@ -992,54 +804,11 @@ hcclResult_t fattree_allreduce(
     {
         hcclCommInternal* ctx = (hcclCommInternal*) comm;
         int32_t N = ctx->num_devices;
-        int32_t rank = ctx->current_rank;
 
-        ctx->rank_values[rank] = load_value(send_buf, 0, data_type);
-
-        if (count != 1) return HCCL_ERR_NOT_SUPPORTED;
         if (N > 64)     return HCCL_ERR_INTERNAL;
 
-        /*
-         * Fat-Tree AllReduce — 3 phases.
-         *
-         * Phase 1 — Leaf Aggregation:
-         *   Ranks partitioned into groups of FT_GROUP_SIZE.
-         *   Each group sums its members' values onto its leader.
-         *
-         * Phase 2 — Core Aggregation:
-         *   Group leaders sum their partial sums → global_sum.
-         *
-         * Phase 3 — Broadcast:
-         *   Leaders propagate global_sum back to group members.
-         */
-
-#define FT_GROUP_SIZE  4
-
-        int32_t num_groups = (N + FT_GROUP_SIZE - 1) / FT_GROUP_SIZE;
-
-        /* ---- phase 1: leaf aggregation ---- */
-        float leader_sum[16];
-        for (int32_t g = 0; g < num_groups; g++) {
-            leader_sum[g] = reduce_identity(op);
-            int32_t start = g * FT_GROUP_SIZE;
-            int32_t end   = (start + FT_GROUP_SIZE < N)
-                            ? start + FT_GROUP_SIZE : N;
-            for (int32_t r = start; r < end; r++)
-                leader_sum[g] =
-                    apply_reduce_op(leader_sum[g], ctx->rank_values[r], op);
-        }
-
-        /* ---- phase 2: core aggregation ---- */
-        float global_sum = reduce_identity(op);
-        for (int32_t g = 0; g < num_groups; g++)
-            global_sum = apply_reduce_op(global_sum, leader_sum[g], op);
-
-        /* ---- phase 3: broadcast ---- */
-        for (int32_t i = 0; i < N; i++)
-            ctx->rank_results[i] = global_sum;
-        store_value(recv_buf, 0, data_type, global_sum);
-
-        return HCCL_SUCCESS;
-#undef FT_GROUP_SIZE
+        return run_allreduce_reference_kernel(
+            send_buf, recv_buf, count, data_type, op, comm
+        );
     }
 }

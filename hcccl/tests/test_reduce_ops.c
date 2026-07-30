@@ -86,6 +86,55 @@ static int check_allreduce(allreduce_fn_t fn, int32_t n, hcclRedOp_t op,
     return 1;
 }
 
+static int check_allreduce_matrix(allreduce_fn_t fn, int32_t n, size_t count,
+                                  hcclRedOp_t op, const float* inputs)
+{
+    hcclComm_t comm = make_comm(n);
+    float recv[4][256];
+
+    if (comm == NULL || count > 256) {
+        FAIL("comm init failed or count too large");
+        return 0;
+    }
+
+    for (int32_t rank = 0; rank < n; rank++) {
+        hcclSetRank(comm, rank);
+        fn(&inputs[(size_t)rank * count], recv[rank],
+           count, HCCL_FP32, op, comm);
+    }
+
+    for (int32_t rank = 0; rank < n; rank++) {
+        hcclResult_t rc;
+        hcclSetRank(comm, rank);
+        rc = fn(&inputs[(size_t)rank * count], recv[rank],
+                count, HCCL_FP32, op, comm);
+        if (rc != HCCL_SUCCESS) {
+            hcclCommDestroy(comm);
+            FAIL("expected HCCL_SUCCESS");
+            return 0;
+        }
+    }
+
+    for (int32_t dst = 0; dst < n; dst++) {
+        for (size_t elem = 0; elem < count; elem++) {
+            float values[16];
+            float expected;
+            for (int32_t src = 0; src < n; src++) {
+                values[src] = inputs[(size_t)src * count + elem];
+            }
+            expected = reduce_reference(values, n, op);
+            if (fabsf(recv[dst][elem] - expected) > EPS) {
+                hcclCommDestroy(comm);
+                FAIL("multi-element mismatch");
+                return 0;
+            }
+        }
+    }
+
+    hcclCommDestroy(comm);
+    return 1;
+}
+
 static void test_allreduce_ops_for_algorithm(
     const char* name,
     allreduce_fn_t fn
@@ -112,6 +161,37 @@ static void test_allreduce_overflow_behavior(void)
     if (check_allreduce(hcclAllReduce, 4, HCCL_PROD, values, INFINITY)) {
         PASS();
     }
+}
+
+static void test_allreduce_multi_element_for_algorithms(void)
+{
+    TEST("AllReduce FP32 multi-element algorithms");
+
+    float inputs[12] = {
+        1.0f, -2.0f, 3.5f,
+        4.0f,  0.5f, -1.0f,
+       -2.0f,  3.0f, 0.0f,
+        8.0f, -1.5f, 2.0f,
+    };
+    allreduce_fn_t fns[] = {
+        hcclAllReduce,
+        ring_allreduce,
+        butterfly_allreduce,
+        mesh_allreduce,
+        nhr_allreduce,
+        fattree_allreduce,
+    };
+    hcclRedOp_t ops[] = {HCCL_SUM, HCCL_PROD, HCCL_MAX, HCCL_MIN};
+
+    for (int fn_idx = 0; fn_idx < 6; fn_idx++) {
+        for (int op_idx = 0; op_idx < 4; op_idx++) {
+            if (!check_allreduce_matrix(fns[fn_idx], 4, 3, ops[op_idx], inputs)) {
+                return;
+            }
+        }
+    }
+
+    PASS();
 }
 
 static void test_reducescatter_reduce_ops(void)
@@ -212,6 +292,7 @@ int main(void)
     test_allreduce_ops_for_algorithm("NHR SUM/PROD/MAX/MIN", nhr_allreduce);
     test_allreduce_ops_for_algorithm("Fat-Tree SUM/PROD/MAX/MIN", fattree_allreduce);
     test_allreduce_overflow_behavior();
+    test_allreduce_multi_element_for_algorithms();
     test_reducescatter_reduce_ops();
     test_unknown_reduce_op();
 

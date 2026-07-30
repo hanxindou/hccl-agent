@@ -240,29 +240,14 @@ static void test_invalid_args(void)
     PASS();
 }
 
-static void test_legacy_two_rank_scalar_case(void)
+static void test_two_rank_contract_case(void)
 {
-    TEST("2-rank scalar legacy wrapper remains NOT_SUPPORTED");
+    TEST("2-rank ReduceScatter uses [N][N][C] contract");
 
-    hcclComm_t comm = make_comm(2);
-    float send[4] = {1.0f, 2.0f, 3.0f, 4.0f};
-    float recv = -88.0f;
-
-    if (comm == NULL) {
-        FAIL("comm init failed");
-        return;
-    }
-
-    if (hcclReduceScatter(send, &recv, 1, HCCL_FP32, HCCL_SUM, comm)
-        == HCCL_ERR_NOT_SUPPORTED &&
-        fabsf(recv - (-88.0f)) <= EPS) {
-        hcclCommDestroy(comm);
+    if (run_case("2-rank", hcclReduceScatter, 2, 3, HCCL_SUM)) {
         PASS();
         return;
     }
-
-    hcclCommDestroy(comm);
-    FAIL("expected NOT_SUPPORTED and preserved recv");
 }
 
 int main(void)
@@ -282,7 +267,7 @@ int main(void)
     test_wrapper_case();
     test_reduce_ops_case();
     test_invalid_args();
-    test_legacy_two_rank_scalar_case();
+    test_two_rank_contract_case();
 
     printf("\n");
     printf("============================================\n");

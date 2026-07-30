@@ -11,6 +11,8 @@ sys.path.insert(
 )
 
 from plugin.execution_engine import (
+    HCCL_BF16,
+    HCCL_FP16,
     HCCL_MAX,
     HCCL_MIN,
     HCCL_PROD,
@@ -90,6 +92,25 @@ class TestFp32ReduceOps(unittest.TestCase):
                 expected = [_reduce_reference(values, op)] * len(values)
                 self.assertEqual(HcclAllReduceReference(values, op=op), expected)
 
+    def test_allreduce_multi_element_reference_matches_independent_reference(self):
+        matrix = [
+            [1.5, -2.0, 0.0],
+            [4.0, 0.5, -1.0],
+            [-3.0, 2.0, 7.0],
+            [0.25, -8.0, 3.0],
+        ]
+        for op in [HCCL_SUM, HCCL_PROD, HCCL_MAX, HCCL_MIN]:
+            with self.subTest(op=op):
+                reduced = []
+                for elem in range(3):
+                    reduced.append(
+                        _reduce_reference([row[elem] for row in matrix], op)
+                    )
+                self.assertEqual(
+                    HcclAllReduceReference(matrix, op=op),
+                    [reduced for _ in matrix],
+                )
+
     def test_reducescatter_reference_matches_independent_reference(self):
         send_data = _send_data(4, 2)
         for op in [HCCL_SUM, HCCL_PROD, HCCL_MAX, HCCL_MIN]:
@@ -128,6 +149,76 @@ class TestFp32ReduceOps(unittest.TestCase):
                     self.assertEqual(result["status"], "success")
                     expected = HcclAllReduceReference(values, op=op)
                     _assert_float_lists_equal(self, result["result"], expected)
+
+    def test_allreduce_actual_dll_multi_element_reduce_ops(self):
+        values = [
+            [1.5, -2.0, 0.0],
+            [4.0, 0.5, -1.0],
+            [-3.0, 2.0, 7.0],
+            [0.25, -8.0, 3.0],
+        ]
+        for algorithm in [
+            "Wrapper",
+            "Ring",
+            "Butterfly",
+            "Mesh",
+            "NHR",
+            "Fat-Tree",
+        ]:
+            for op in [HCCL_SUM, HCCL_PROD, HCCL_MAX, HCCL_MIN]:
+                with self.subTest(algorithm=algorithm, op=op):
+                    result = self.engine.execute_allreduce_data(
+                        values, algorithm=algorithm, op=op,
+                    )
+                    self.assertEqual(result["status"], "success")
+                    expected = HcclAllReduceReference(values, op=op)
+                    for actual_row, expected_row in zip(result["result"], expected):
+                        _assert_float_lists_equal(self, actual_row, expected_row)
+
+    def test_allreduce_v1b_required_rank_count_matrix(self):
+        for ranks in [1, 2, 4, 8, 16]:
+            for count in [1, 3, 17, 256]:
+                values = [
+                    [
+                        float((rank - 3) * (elem + 1)) + 0.25 * elem
+                        for elem in range(count)
+                    ]
+                    for rank in range(ranks)
+                ]
+                for op in [HCCL_SUM, HCCL_PROD, HCCL_MAX, HCCL_MIN]:
+                    with self.subTest(ranks=ranks, count=count, op=op):
+                        result = self.engine.execute_allreduce_data(
+                            values, algorithm="Wrapper", op=op,
+                        )
+                        self.assertEqual(result["status"], "success")
+                        expected = HcclAllReduceReference(values, op=op)
+                        for actual_row, expected_row in zip(result["result"], expected):
+                            _assert_float_lists_equal(self, actual_row, expected_row)
+
+    def test_allreduce_fp16_bf16_v1b_minimum_coverage(self):
+        tolerances = {HCCL_FP16: 1.0e-3, HCCL_BF16: 2.0e-2}
+        for data_type in [HCCL_FP16, HCCL_BF16]:
+            for ranks in [2, 4]:
+                for count in [1, 3, 17]:
+                    values = [
+                        [float(rank + elem) / 3.0 for elem in range(count)]
+                        for rank in range(ranks)
+                    ]
+                    with self.subTest(data_type=data_type, ranks=ranks, count=count):
+                        result = self.engine.execute_allreduce_data(
+                            values, algorithm="Wrapper",
+                            op=HCCL_SUM, data_type=data_type,
+                        )
+                        self.assertEqual(result["status"], "success")
+                        expected = HcclAllReduceReference(
+                            values, op=HCCL_SUM, data_type=data_type,
+                        )
+                        for actual_row, expected_row in zip(result["result"], expected):
+                            for actual, reference in zip(actual_row, expected_row):
+                                self.assertLessEqual(
+                                    abs(actual - reference),
+                                    tolerances[data_type],
+                                )
 
     def test_reducescatter_actual_dll_reduce_ops(self):
         send_data = _send_data(4, 2)
