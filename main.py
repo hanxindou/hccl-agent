@@ -6,6 +6,7 @@ from plugin.hccl_vm_backend import (
     Backend,
     load_hccl_vm_config,
 )
+from plugin.hccl_vm_env import HcclVmEnvironment
 
 
 def _add_backend_options(parser, *, default_backend=None):
@@ -140,12 +141,22 @@ def main():
 
 
 def _run_official_command(args, config):
-    # Implemented incrementally by G2-D-2 through G2-D-6.
-    print(json.dumps({
-        "command": args.command,
-        "selected_backend": config.backend,
-        "status": "NOT_IMPLEMENTED",
-    }, indent=2))
+    if args.command == "diagnose":
+        report = HcclVmEnvironment(config).diagnose()
+        print(json.dumps(report, indent=2, ensure_ascii=False))
+        if report["status"] != "OK":
+            raise SystemExit(2)
+        return
+
+    # Implemented incrementally by G2-D-3 through G2-D-6.
+    print(json.dumps(
+        {
+            "command": args.command,
+            "selected_backend": config.backend,
+            "status": "NOT_IMPLEMENTED",
+        },
+        indent=2,
+    ))
     raise SystemExit(
         f"{args.command} is configured but not implemented yet"
     )
