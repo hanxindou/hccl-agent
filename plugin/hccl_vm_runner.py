@@ -17,42 +17,68 @@ from typing import Any, Callable
 from plugin.hccl_vm_backend import Backend, HcclVmConfig
 from plugin.hccl_vm_checker import parse_official_result
 from plugin.hccl_vm_env import HcclVmEnvironment
+from plugin.hccl_vm_registry import (
+    ResolvedCollectiveContract,
+    build_hccl_test_argv,
+    resolve_collective_request,
+)
 
 
 @dataclass(frozen=True)
-class OfficialAllReduceRequest:
+class OfficialCollectiveRequest:
     primitive: str = "AllReduce"
     rank_count: int = 2
     dtype: str = "int32"
-    reduce_op: str = "sum"
+    reduce_op: str | None = None
     elements: int = 16
 
-    def __post_init__(self) -> None:
-        canonical_primitive = self.primitive.strip().lower()
-        canonical_dtype = self.dtype.strip().lower()
-        canonical_op = self.reduce_op.strip().lower()
-        if canonical_primitive != "allreduce":
-            raise ValueError("G2-D supports only primitive=AllReduce")
-        if self.rank_count != 2:
-            raise ValueError("G2-D supports only rank_count=2")
-        if canonical_dtype != "int32":
-            raise ValueError("G2-D supports only dtype=int32")
-        if canonical_op != "sum":
-            raise ValueError("G2-D supports only reduce_op=sum")
-        if self.elements != 16:
-            raise ValueError("G2-D supports only elements=16")
-        object.__setattr__(self, "primitive", "AllReduce")
-        object.__setattr__(self, "dtype", "int32")
-        object.__setattr__(self, "reduce_op", "sum")
+    def resolve(self) -> ResolvedCollectiveContract:
+        return resolve_collective_request(
+            primitive=self.primitive,
+            rank_count=self.rank_count,
+            dtype=self.dtype,
+            reduce_op=self.reduce_op,
+            elements=self.elements,
+        )
 
     @property
     def byte_count(self) -> int:
-        return self.elements * 4
+        return self.resolve().byte_count
 
     def to_dict(self) -> dict[str, Any]:
+        contract = self.resolve()
         result = asdict(self)
-        result["byte_count"] = self.byte_count
+        result["primitive"] = contract.canonical_primitive
+        result["byte_count"] = contract.byte_count
+        result["resolved_contract"] = contract.to_dict()
         return result
+
+
+class OfficialAllReduceRequest(OfficialCollectiveRequest):
+    """Temporary G2-D source compatibility adapter.
+
+    New callers must use :class:`OfficialCollectiveRequest`; this adapter keeps
+    existing evidence/report fixtures importable while later checkpoints migrate
+    them to the generic type.
+    """
+
+    def __init__(
+        self,
+        primitive: str = "AllReduce",
+        rank_count: int = 2,
+        dtype: str = "int32",
+        reduce_op: str | None = "sum",
+        elements: int = 16,
+    ) -> None:
+        super().__init__(
+            primitive=primitive,
+            rank_count=rank_count,
+            dtype=dtype,
+            reduce_op=reduce_op,
+            elements=elements,
+        )
+        if self.resolve().canonical_primitive != "AllReduce":
+            raise ValueError("OfficialAllReduceRequest requires AllReduce")
 
 
 class HcclVmRunner:
@@ -77,8 +103,9 @@ class HcclVmRunner:
 
     def dry_run(
         self,
-        request: OfficialAllReduceRequest,
+        request: OfficialCollectiveRequest,
     ) -> dict[str, Any]:
+        contract = request.resolve()
         startup_script = self._build_startup_script()
         interactive_commands = self._build_interactive_commands(request)
         transport_argv = self._build_transport_argv(startup_script)
@@ -88,38 +115,32 @@ class HcclVmRunner:
             "status": "DRY_RUN",
             "not_executed": True,
             "request": request.to_dict(),
+            "registry": contract.to_dict(),
             "topology": self.config.topology,
             "mock_comm": self.config.mock_comm,
             "startup_script": startup_script,
             "transport_argv": transport_argv,
             "interactive_commands": interactive_commands,
             "cleanup_commands": ["exit"],
-            "success_requirements": [
-                "all_reduce_test exit code 0",
-                "collectiveType=AllReduce",
-                "rankCount=2",
-                "dataType=INT32",
-                "reduceType=SUM",
-                "Checker Success",
-                "no Segmentation fault",
-                "no MPI_ABORT",
-                "no undefined symbol",
-                "no fatal failure",
-                "HCCL-VM normal shutdown",
-                "outer process exit code 0",
-            ],
+            "success_requirements": _success_requirements(contract),
             "evidence_directory_pattern": posixpath.join(
                 self.config.evidence_root,
-                "g2_d_<timestamp>",
+                _evidence_directory_pattern(contract),
             ),
         }
 
     def verify(
         self,
-        request: OfficialAllReduceRequest,
+        request: OfficialCollectiveRequest,
         *,
         environment: HcclVmEnvironment | None = None,
     ) -> "OfficialRunOutcome":
+        contract = request.resolve()
+        if contract.canonical_primitive != "AllReduce":
+            raise ValueError(
+                "G2-E-2 enables non-AllReduce dry-run only; "
+                "official verification is introduced by later checkpoints"
+            )
         environment_probe = environment or HcclVmEnvironment(
             self.config,
             host_system=self.host_system,
@@ -252,7 +273,7 @@ class HcclVmRunner:
 
     def _build_interactive_commands(
         self,
-        request: OfficialAllReduceRequest,
+        request: OfficialCollectiveRequest,
     ) -> list[str]:
         return [
             step.command
@@ -261,39 +282,17 @@ class HcclVmRunner:
 
     def _build_interactive_steps(
         self,
-        request: OfficialAllReduceRequest,
+        request: OfficialCollectiveRequest,
     ) -> list["InteractiveStep"]:
         mock_command = shlex.join([
             "hccl-vm",
             "mock-comm",
             self.config.mock_comm,
         ])
-        all_reduce_path = posixpath.join(
+        test_command = shlex.join(build_hccl_test_argv(
+            request.resolve(),
             self.config.hccl_test_bin,
-            "all_reduce_test",
-        )
-        test_command = shlex.join([
-            "mpirun",
-            "--allow-run-as-root",
-            "--oversubscribe",
-            "-np",
-            str(request.rank_count),
-            all_reduce_path,
-            "-b",
-            str(request.byte_count),
-            "-e",
-            str(request.byte_count),
-            "-d",
-            request.dtype,
-            "-o",
-            request.reduce_op,
-            "-w",
-            "0",
-            "-n",
-            "1",
-            "-c",
-            "1",
-        ])
+        ))
         checker_command = shlex.join([
             "hccl-vm",
             "plugin",
@@ -386,6 +385,44 @@ def _command_with_exit_marker(command: str, marker: str) -> str:
         f"{command}; command_rc=$?; "
         f"printf '{marker}=%s\\n' \"$command_rc\""
     )
+
+
+def _success_requirements(
+    contract: ResolvedCollectiveContract,
+) -> list[str]:
+    requirements = [
+        f"{contract.executable_basename} exit code 0",
+        f"collectiveType={contract.checker_collective_type}",
+        f"rankCount={contract.rank_count}",
+        f"dataType={contract.dtype.upper()}",
+    ]
+    if contract.checker_reduce_type is not None:
+        requirements.append(
+            f"reduceType={contract.checker_reduce_type}"
+        )
+    requirements.extend(
+        [
+            f"CheckerV3 stage {stage}=success"
+            for stage in contract.required_checker_stages
+        ]
+    )
+    requirements.extend([
+        "Checker Success",
+        "no Segmentation fault",
+        "no MPI_ABORT",
+        "no undefined symbol",
+        "no fatal failure",
+        "HCCL-VM normal shutdown",
+        "outer process exit code 0",
+    ])
+    return requirements
+
+
+def _evidence_directory_pattern(
+    contract: ResolvedCollectiveContract,
+) -> str:
+    primitive = contract.canonical_primitive.casefold()
+    return f"g2_e_{primitive}_<timestamp>"
 
 
 def _execute_interactive_process(

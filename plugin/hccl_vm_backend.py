@@ -71,6 +71,7 @@ class HcclVmConfig:
                 )
         for field_name in ("hcomm_source_dir", "hccl_source_dir"):
             _validate_exact_repo_path(field_name, getattr(self, field_name))
+        _validate_hccl_test_bin(self.cann_path, self.hccl_test_bin)
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -157,3 +158,20 @@ def _validate_exact_repo_path(field_name: str, value: str) -> None:
         raise ValueError(f"{field_name} must not be the filesystem root")
     if any(character in value for character in ("*", "?", "[", "]")):
         raise ValueError(f"{field_name} must not contain glob characters")
+
+
+def _validate_hccl_test_bin(cann_path: str, hccl_test_bin: str) -> None:
+    if not posixpath.isabs(cann_path):
+        raise ValueError("cann_path must be an absolute POSIX path")
+    expected = posixpath.normpath(posixpath.join(
+        cann_path,
+        "tools",
+        "hccl_test",
+        "bin",
+    ))
+    actual = posixpath.normpath(hccl_test_bin)
+    if actual != expected:
+        raise ValueError(
+            "hccl_test_bin must be exactly "
+            "<cann_path>/tools/hccl_test/bin"
+        )

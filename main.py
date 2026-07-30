@@ -12,7 +12,7 @@ from plugin.hccl_vm_env import HcclVmEnvironment
 from plugin.hccl_vm_evidence import archive_official_evidence
 from plugin.hccl_vm_runner import (
     HcclVmRunner,
-    OfficialAllReduceRequest,
+    OfficialCollectiveRequest,
 )
 
 
@@ -45,7 +45,7 @@ def _add_official_collective_options(parser):
     parser.add_argument("--primitive", default="AllReduce")
     parser.add_argument("--nodes", type=int, default=2)
     parser.add_argument("--dtype", default="int32")
-    parser.add_argument("--op", default="sum")
+    parser.add_argument("--op", default=None)
     parser.add_argument("--elements", type=int, default=16)
 
 
@@ -199,7 +199,7 @@ def _run_official_command(args, config):
 
 
 def _official_request_from_args(args):
-    return OfficialAllReduceRequest(
+    return OfficialCollectiveRequest(
         primitive=args.primitive,
         rank_count=args.nodes,
         dtype=args.dtype,
