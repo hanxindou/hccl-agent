@@ -4,7 +4,7 @@
 
 ## 1. V1 目标
 
-V1 目标是在不接入真实 CANN SDK、HCOMM、Ascend 实机或外部 LLM API 的前提下，完成 Windows CPU_SIM correctness hardening，并准备 Linux `.so` 验证脚本和 Linux CI 配置。
+V1 目标是在不接入真实 CANN SDK、HCOMM、Ascend 实机或外部 LLM API 的前提下，完成 Windows CPU_SIM correctness hardening，并通过 GitHub Actions Linux CPU_SIM 验证 Linux `.so`、CTest 和 Python correctness。
 
 ## 2. 开始 Git 基线
 
@@ -57,7 +57,7 @@ DType：FP32, FP16, BF16
 ReduceOp：SUM, PROD, MAX, MIN
 ```
 
-两次连续运行均通过。随机测试不是形式化证明。
+两次连续运行均通过。随机测试是三个固定 seed 的 60 个确定性抽样 case，不是完整笛卡尔积穷举，也不是形式化证明。
 
 ## 7. Windows 构建和测试
 
@@ -88,27 +88,64 @@ Linux Python：未执行
 LINUX_CPU_SIM_VALIDATION_OK：未出现
 ```
 
-未声明 Linux 已验证。
+本地 Docker 状态仍为 `ENV_BLOCKED`。该本地阻塞原因是 `auth.docker.io` token timeout；由于 GitHub Actions Linux CPU_SIM 验证已经通过，本地 Docker 阻塞不再阻塞 V1。
 
 ## 9. Linux `.so` 实际路径
 
-未生成，未验证。脚本预期会动态查找：
+GitHub Actions Linux CPU_SIM 实际验证路径：
 
 ```text
-find "$BUILD_DIR" -type f -name 'libhccl_plugin.so'
+/tmp/hccl-agent-linux-review/libhccl_plugin.so
 ```
+
+状态：`LINUX_CI_VERIFIED`。该 `.so` 来自 Linux runner 的 CPU_SIM 构建，不代表 Ascend 或真实 HCCL/HCOMM。
 
 ## 10. CI 配置状态
 
-状态：`CI_CONFIGURED_UNRUN`。
-
-Workflow：
+状态：`CI_REMOTE_VERIFIED`。
 
 ```text
+Workflow：
 .github/workflows/linux-cpu-sim.yml
+
+Event：
+pull_request
+
+Job：
+linux-cpu-sim
+
+Result：
+PASS
+
+Python：
+3.10.20
+
+CMake：
+3.31.6
+
+Compiler：
+GCC 11.4.0
+
+Backend：
+CPU_SIM
+
+CTest：
+11/11 passed
+
+Targeted Python：
+66 tests OK
+
+Full Python：
+461 tests OK
+
+LINUX_CPU_SIM_VALIDATION_OK：
+observed
+
+Checkout warning：
+已通过升级 GitHub Actions runtime 和移除孤立 third_party/cann-hccl gitlink 解决。
 ```
 
-触发条件：`pull_request`, `workflow_dispatch`。未执行 `git push`，未远端运行 GitHub Actions。
+Linux 状态记录为 `LINUX_CI_VERIFIED`，不得写成 `LINUX_DOCKER_VERIFIED`。
 
 ## 11. 未验证边界
 
@@ -118,7 +155,7 @@ Workflow：
 - 真实多进程、多设备集合通信未验证；
 - msprof 未验证；
 - FP16/BF16 硬件混合精度未验证；
-- Docker Linux CPU_SIM 不代表 Ascend；
+- GitHub Actions Linux CPU_SIM 不代表 Ascend；
 - CPU_SIM 不代表真实 HCCL/HCOMM；
 - 随机化测试不是形式化证明；
 - 未声明真实性能或实机可靠性结论。
@@ -127,7 +164,7 @@ Workflow：
 
 见 `docs/user_actions.md`：
 
-- `UA-V1-001`：在可拉取 `ubuntu:22.04` 的 Docker/Linux 环境执行 Linux CPU_SIM 验证；
+- `UA-V1-001`：Linux CPU_SIM 已由 GitHub Actions 验证，本地 Docker/Linux 复现可选；
 - `UA-002`：准备 CANN/HCOMM/Ascend 实机验证；
 - `UA-003`：FP16/BF16 Ascend 实机误差验证；
 - `UA-005`：D1 模型实机校准；
@@ -142,15 +179,20 @@ Workflow：
 | V1-C  | 9652b83 | test: add deterministic randomized correctness |
 | V1-D  | f7e96f8 | chore: add Linux CPU_SIM validation tooling    |
 | V1-E  | a0ee8f2 | ci: add Linux CPU_SIM validation               |
+| CI 修复 | 0bfed12 | ci: update GitHub Actions runtimes             |
+| CI 修复 | 280eb8e | fix: remove orphan CANN HCCL submodule entry   |
 
 ## 14. 最终 Git 状态
 
-本报告生成时 V1-E 文件尚未提交；最终提交后应再次执行：
-
 ```text
-git status --short：无输出
-git status -sb：## main...origin/main [ahead 6]
-当前 HEAD：a0ee8f2 ci: add Linux CPU_SIM validation
+git status --short：
+ M docs/competition_readiness_report.md
+ M docs/correctness_matrix.md
+ M docs/user_actions.md
+ M docs/v1_progress.md
+ M docs/v1_validation_report.md
+git status -sb：## v1-linux-correctness...origin/v1-linux-correctness
+当前 HEAD：280eb8e fix: remove orphan CANN HCCL submodule entry
 是否执行 git push：NO
 随机测试覆盖所列参数空间中的 60 个确定性抽样 case，不代表所有参数组合的完整笛卡尔积穷举。
 ```

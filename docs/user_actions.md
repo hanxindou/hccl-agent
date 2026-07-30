@@ -1,14 +1,16 @@
 # HCCL Agent 用户待办
 
-## UA-V1-001：启动 Docker Desktop 并执行 Linux CPU_SIM 验证
+## UA-V1-001：可选本地 Docker/Linux CPU_SIM 复现
 
-状态：待用户执行
-阻塞阶段：V1-D
+状态：GitHub Actions Linux CI 已验证；本地 Docker 复现可选
+阻塞阶段：无；V1-D 本地 Docker 状态仍记录为 ENV_BLOCKED
 优先级：P1
 
 ### 原因
 
-V1-D 低风险复查确认 Docker Desktop Linux engine 可用，但 `docker build` 拉取 `ubuntu:22.04` metadata 时访问 `auth.docker.io` 超时，无法构建 Linux 验证镜像。Windows DLL 已验证不能等同于 Linux `.so`。
+V1-D 低风险复查确认 Docker Desktop Linux engine 可用，但 `docker build` 拉取 `ubuntu:22.04` metadata 时访问 `auth.docker.io` 超时，无法在本机 Docker 构建 Linux 验证镜像。Windows DLL 已验证不能等同于 Linux `.so`。
+
+后续 GitHub Actions 已在 Linux runner 完成 CPU_SIM 验证，因此本地 Docker 阻塞不再阻塞 V1。Linux 状态记录为 `LINUX_CI_VERIFIED`，CI 状态记录为 `CI_REMOTE_VERIFIED`，不得写成 `LINUX_DOCKER_VERIFIED`。
 
 实际错误摘要：
 
@@ -16,6 +18,25 @@ V1-D 低风险复查确认 Docker Desktop Linux engine 可用，但 `docker buil
 failed to fetch anonymous token:
 Get "https://auth.docker.io/token?...": dial tcp 199.16.158.190:443: connectex timeout
 ```
+
+### 已通过的 GitHub Actions 结果
+
+```text
+Event：pull_request
+Job：linux-cpu-sim
+Result：PASS
+Python：3.10.20
+CMake：3.31.6
+Compiler：GCC 11.4.0
+Backend：CPU_SIM
+Linux plugin：/tmp/hccl-agent-linux-review/libhccl_plugin.so
+CTest：11/11 passed
+Targeted Python：66 tests OK
+Full Python：461 tests OK
+LINUX_CPU_SIM_VALIDATION_OK：observed
+```
+
+Checkout warning 已通过升级 GitHub Actions runtime 和移除孤立 `third_party/cann-hccl` gitlink 解决。
 
 ### 用户需要准备
 
@@ -56,7 +77,7 @@ Python unittest 0 failures, 0 errors
 LINUX_CPU_SIM_VALIDATION_OK
 ```
 
-### 反馈内容
+### 可选反馈内容
 
 - CMake/CTest 完整输出
 - 实际 `.so` 路径
@@ -65,7 +86,9 @@ LINUX_CPU_SIM_VALIDATION_OK
 
 ### 当前降级状态
 
-`ENV_BLOCKED`。Windows `hccl_plugin.dll` 已验证；Linux `libhccl_plugin.so` 未验证，不得宣称 Linux 已通过。
+本地 Docker：`ENV_BLOCKED`，原因是 `auth.docker.io` token timeout。
+
+远端 Linux CI：`LINUX_CI_VERIFIED` / `CI_REMOTE_VERIFIED`。Linux `libhccl_plugin.so` 已在 GitHub Actions CPU_SIM runner 验证通过，实际路径为 `/tmp/hccl-agent-linux-review/libhccl_plugin.so`。该结果仍不代表 CANN/HCOMM、Ascend 实机、真实多设备、msprof、硬件混合精度、真实性能或真实可靠性。
 
 ## UA-002：CANN/HCOMM/Ascend 实机验证准备
 

@@ -4,8 +4,8 @@
 计划文件：`docs/v1_execution_plan.md`  
 项目路径：`F:\projects\hccl-agent`  
 Codex 环境：Windows Native  
-Linux 验证方式：Docker Desktop Linux 容器  
-状态：COMPLETED_WITH_ENV_BLOCKED_LINUX
+Linux 验证方式：GitHub Actions Linux CPU_SIM；本地 Docker Desktop Linux 容器仍 ENV_BLOCKED
+状态：COMPLETED
 
 ---
 
@@ -17,7 +17,7 @@ Linux 验证方式：Docker Desktop Linux 容器
 | V1-B  | Collective 多元素与 rank 连续性加固 | COMPLETED   | 7691922 |
 | V1-C  | 确定性随机化 correctness            | COMPLETED   | 9652b83 |
 | V1-D  | Docker Linux `.so` 验证             | ENV_BLOCKED | f7e96f8 |
-| V1-E  | Linux CI 与最终材料收敛             | COMPLETED   | a0ee8f2 |
+| V1-E  | Linux CI 与最终材料收敛             | COMPLETED   | a0ee8f2；CI fixes 0bfed12/280eb8e |
 
 允许的阶段状态：
 
@@ -674,12 +674,20 @@ Docker 镜像 metadata 下载失败；根据有限尝试规则不反复重试、
 选择其一：
 
 ```text
-LINUX_DOCKER_VERIFIED
+LINUX_CI_VERIFIED
 ENV_BLOCKED
 PARTIAL
 ```
 
 选择：`ENV_BLOCKED`
+
+补充状态：
+
+```text
+本地 Docker V1-D 状态仍为 ENV_BLOCKED，原因是 `docker build` 访问 `auth.docker.io` 获取 token 超时。
+该本地 Docker 阻塞不再阻塞 V1 总体完成，因为 GitHub Actions `pull_request` 事件的 `linux-cpu-sim` job 已完成 Linux CPU_SIM 验证并通过。
+Linux 状态记录为 LINUX_CI_VERIFIED，不记录为 LINUX_DOCKER_VERIFIED。
+```
 
 ## 6.10 本地提交
 
@@ -736,19 +744,37 @@ system package
 
 ## 7.3 CI 当前状态
 
-选择其一：
-
 ```text
-CI_CONFIGURED_UNRUN
+CI 状态：
+CI_REMOTE_VERIFIED
+
+Linux 状态：
+LINUX_CI_VERIFIED
+
+Event：
+pull_request
+
+Job：
+linux-cpu-sim
+
+Result：
+PASS
+
+Python：
+3.10.20
+
+CMake：
+3.31.6
+
+Compiler：
+GCC 11.4.0
+
+Backend：
+CPU_SIM
+
+Checkout warning：
+已通过升级 GitHub Actions runtime（0bfed12）和移除孤立 third_party/cann-hccl gitlink（280eb8e）解决。
 ```
-
-说明：
-
-```text
-Workflow 已创建但未执行 git push；远端 GitHub Actions 未运行。
-```
-
-未执行 `git push` 时不得填写 `CI_REMOTE_VERIFIED`。
 
 ## 7.4 最终 Windows 验收
 
@@ -788,25 +814,31 @@ Docker：
 ENV_BLOCKED，Docker Desktop engine 可用，但 `docker build` 拉取 `ubuntu:22.04` metadata 时访问 `auth.docker.io` 超时
 
 CMake：
-未执行
+PASS，3.31.6
 
 Build：
-未执行
+PASS，GCC 11.4.0，Backend CPU_SIM
 
 CTest：
-未执行
+PASS，11/11 passed
 
 ctypes 加载：
-未执行
+PASS，HCCL_PLUGIN_PATH 指向 Linux plugin
+
+定向 Python：
+PASS，66 tests OK
 
 完整 Python：
-未执行
+PASS，461 tests OK
 
 实际 .so：
-未生成
+/tmp/hccl-agent-linux-review/libhccl_plugin.so
+
+LINUX_CPU_SIM_VALIDATION_OK：
+observed
 ```
 
-Docker 被阻塞时应明确填写 `ENV_BLOCKED`，不得填写通过。
+本地 Docker 被阻塞时仍明确填写 `ENV_BLOCKED`，不得填写 `LINUX_DOCKER_VERIFIED`。V1 Linux 验证结论来自 GitHub Actions `pull_request` / `linux-cpu-sim` job，状态为 `LINUX_CI_VERIFIED`。
 
 ## 7.6 最终文档
 
@@ -850,6 +882,10 @@ __pycache__/：
 commit：
 a0ee8f2
 message：ci: add Linux CPU_SIM validation
+
+后续 CI 修复：
+0bfed12 ci: update GitHub Actions runtimes
+280eb8e fix: remove orphan CANN HCCL submodule entry
 ```
 
 ---
@@ -857,7 +893,7 @@ message：ci: add Linux CPU_SIM validation
 # 8. V1 最终总结
 
 完成时间：2026-07-30 08:42:39 +08:00
-总体状态：COMPLETED_WITH_ENV_BLOCKED_LINUX
+总体状态：COMPLETED
 
 ## 8.1 阶段与提交
 
@@ -868,6 +904,8 @@ message：ci: add Linux CPU_SIM validation
 | V1-C  | COMPLETED   | 9652b83 | test: add deterministic randomized correctness |
 | V1-D  | ENV_BLOCKED | f7e96f8 | chore: add Linux CPU_SIM validation tooling    |
 | V1-E  | COMPLETED   | a0ee8f2 | ci: add Linux CPU_SIM validation               |
+| CI 修复 | COMPLETED | 0bfed12 | ci: update GitHub Actions runtimes             |
+| CI 修复 | COMPLETED | 280eb8e | fix: remove orphan CANN HCCL submodule entry   |
 
 ## 8.2 最终能力
 
@@ -913,6 +951,9 @@ AllReduce, AllGather, ReduceScatter
 
 连续运行一致：
 是，两次随机 suite 均 OK
+
+覆盖口径：
+三个固定 seed 的 60 个确定性抽样 case，不代表完整笛卡尔积穷举。
 ```
 
 ### Windows
@@ -935,26 +976,49 @@ PASS，461 tests OK
 
 ```text
 状态：
-ENV_BLOCKED
+LINUX_CI_VERIFIED
 
-Docker：
-Engine 可用；Docker build 拉取 `ubuntu:22.04` metadata 失败
+本地 Docker：
+ENV_BLOCKED，Engine 可用；Docker build 拉取 `ubuntu:22.04` metadata 时访问 `auth.docker.io` token 超时
 
-.so：
-未生成
-
-CTest：
-未执行
+远端 GitHub Actions：
+pull_request / linux-cpu-sim PASS
 
 Python：
-未执行
+3.10.20
+
+CMake：
+3.31.6
+
+Compiler：
+GCC 11.4.0
+
+Backend：
+CPU_SIM
+
+Linux plugin：
+/tmp/hccl-agent-linux-review/libhccl_plugin.so
+
+CTest：
+11/11 passed
+
+定向 Python：
+66 tests OK
+
+完整 Python：
+461 tests OK
+
+LINUX_CPU_SIM_VALIDATION_OK：
+observed
 ```
+
+本地 Docker `ENV_BLOCKED` 不再阻塞 V1，因为 GitHub Actions Linux CPU_SIM 验证已经通过。Linux 状态为 `LINUX_CI_VERIFIED`，不是 `LINUX_DOCKER_VERIFIED`。
 
 ### CI
 
 ```text
 状态：
-CI_CONFIGURED_UNRUN
+CI_REMOTE_VERIFIED
 ```
 
 ## 8.3 仍未验证边界
@@ -972,24 +1036,28 @@ CI_CONFIGURED_UNRUN
 
 ## 8.4 用户仍需执行
 
-- 执行 `UA-V1-001`：在可拉取 `ubuntu:22.04` 的 Docker/Linux 环境运行 Linux CPU_SIM 验证。
+- `UA-V1-001` 已由 GitHub Actions Linux CI 验证覆盖；本地 Docker/Linux 复现仍可选，不再阻塞 V1。
 - 执行 CANN/HCOMM/Ascend 实机验证和 FP16/BF16 实机误差验证。
-- push 后观察 `.github/workflows/linux-cpu-sim.yml` 的远端 Actions 结果。
+- 执行 msprof、真实多设备、真实性能和可靠性验证。
 
 ## 8.5 最终 Git 状态
 
 ```text
 git status --short：
-无输出
+ M docs/competition_readiness_report.md
+ M docs/correctness_matrix.md
+ M docs/user_actions.md
+ M docs/v1_progress.md
+ M docs/v1_validation_report.md
 
 git status -sb：
-## main...origin/main [ahead 6]
+## v1-linux-correctness...origin/v1-linux-correctness
 
 当前 HEAD：
-a0ee8f2 ci: add Linux CPU_SIM validation
+280eb8e fix: remove orphan CANN HCCL submodule entry
 
-相对 origin/main：
-ahead 6
+相对 origin/v1-linux-correctness：
+与远端分支一致
 
 是否执行 git push：
 NO
@@ -1002,13 +1070,13 @@ NO
 停止原因：
 
 ```text
-V1 完成；Linux Docker 验证为 ENV_BLOCKED
+V1 完成；本地 Linux Docker 验证为 ENV_BLOCKED，远端 Linux CI 验证为 LINUX_CI_VERIFIED
 ```
 
 说明：
 
 ```text
-Docker image metadata 下载失败后按有限尝试规则停止 V1-D，不声明 Linux 已验证；V1-E 仍完成 Linux 脚本、CI 配置和最终审计。
+Docker image metadata 下载失败后按有限尝试规则停止 V1-D，本地 Docker 不声明通过；GitHub Actions `pull_request` / `linux-cpu-sim` 已验证 Linux CPU_SIM，V1-E 完成 Linux CI 验证和最终审计。
 ```
 
 不得自行进入：
