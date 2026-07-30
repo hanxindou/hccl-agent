@@ -140,11 +140,6 @@ class HcclVmRunner:
         environment: HcclVmEnvironment | None = None,
     ) -> "OfficialRunOutcome":
         contract = request.resolve()
-        if contract.canonical_primitive not in {"AllReduce", "AllGather"}:
-            raise ValueError(
-                "official verification for this primitive is introduced by "
-                "a later G2-E checkpoint"
-            )
         environment_probe = environment or HcclVmEnvironment(
             self.config,
             host_system=self.host_system,

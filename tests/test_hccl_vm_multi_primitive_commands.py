@@ -41,15 +41,21 @@ class TestHcclVmMultiPrimitiveCommands(unittest.TestCase):
                 elements=8,
             ))
 
-    def test_reducescatter_verify_remains_closed_until_its_checkpoint(self):
-        with self.assertRaisesRegex(ValueError, "later G2-E checkpoint"):
-            self.runner.verify(OfficialCollectiveRequest(
-                primitive="ReduceScatter",
-                rank_count=2,
-                dtype="int32",
-                reduce_op="sum",
-                elements=8,
-            ))
+    def test_reducescatter_argv_uses_input_total_bytes_and_sum(self):
+        plan = self.runner.dry_run(OfficialCollectiveRequest(
+            primitive="ReduceScatter",
+            rank_count=2,
+            dtype="int32",
+            reduce_op="sum",
+            elements=8,
+        ))
+        argv = plan["hccl_test_argv"]
+        self.assertIn("reduce_scatter_test", argv[5])
+        self.assertEqual(argv[6:14], [
+            "-b", "64", "-e", "64", "-d", "int32", "-o", "sum",
+        ])
+        self.assertEqual(plan["registry"]["input_bytes_per_rank"], 64)
+        self.assertEqual(plan["registry"]["output_bytes_per_rank"], 32)
 
 
 if __name__ == "__main__":

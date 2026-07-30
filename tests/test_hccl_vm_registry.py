@@ -130,9 +130,9 @@ class TestHcclVmRegistry(unittest.TestCase):
         with self.assertRaises(TypeError):
             OfficialCollectiveRequest(executable="/tmp/anything")
 
-    def test_not_yet_enabled_verify_is_rejected_before_environment_probe(self):
+    def test_unknown_verify_is_rejected_before_environment_probe(self):
         request = OfficialCollectiveRequest(
-            primitive="ReduceScatter",
+            primitive="UnknownCollective",
             rank_count=2,
             dtype="int32",
             reduce_op="sum",
@@ -140,7 +140,7 @@ class TestHcclVmRegistry(unittest.TestCase):
         )
         runner = HcclVmRunner(HcclVmConfig(backend="ASCEND_HCCL_VM"))
         with mock.patch("plugin.hccl_vm_runner.HcclVmEnvironment") as env:
-            with self.assertRaisesRegex(ValueError, "later G2-E checkpoint"):
+            with self.assertRaisesRegex(ValueError, "Unsupported official primitive"):
                 runner.verify(request)
         env.assert_not_called()
 

@@ -22,6 +22,10 @@ __HCCL_AGENT_CHECKER_EXIT_CODE=0
 __HCCL_AGENT_VM_EXIT_CODE=0
 """
 
+REDUCESCATTER_LOG = ALLGATHER_LOG.replace(
+    "AllGather", "ReduceScatter"
+)
+
 
 class TestHcclVmMultiPrimitiveChecker(unittest.TestCase):
 
@@ -57,6 +61,28 @@ class TestHcclVmMultiPrimitiveChecker(unittest.TestCase):
         )
         self.assertFalse(result.passed)
         self.assertFalse(result.metadata_match)
+
+    def test_reducescatter_requires_sum_and_output_element_count(self):
+        request = OfficialCollectiveRequest(
+            primitive="ReduceScatter",
+            rank_count=2,
+            dtype="int32",
+            reduce_op="sum",
+            elements=8,
+        )
+        passed = parse_official_result(
+            REDUCESCATTER_LOG,
+            outer_exit_code=0,
+            request=request,
+        )
+        wrong_reduce = parse_official_result(
+            REDUCESCATTER_LOG.replace("reduceType=SUM", "reduceType=MAX"),
+            outer_exit_code=0,
+            request=request,
+        )
+        self.assertTrue(passed.passed)
+        self.assertFalse(wrong_reduce.passed)
+        self.assertFalse(wrong_reduce.metadata_match)
 
 
 if __name__ == "__main__":

@@ -138,6 +138,33 @@ class TestHcclVmOfficialFlow(unittest.TestCase):
         self.assertIn("all_gather_test -b 64 -e 64 -d int32", test_command)
         self.assertNotIn(" -o ", test_command)
 
+    def test_reducescatter_flow_uses_sum_and_output_element_contract(self):
+        reduce_scatter_log = SUCCESS_LOG.replace(
+            "AllReduce", "ReduceScatter"
+        ).replace("elementCount=16", "elementCount=8")
+        executor = FakeExecutor(ProcessExecution(
+            raw_log=reduce_scatter_log,
+            returncode=0,
+            timed_out=False,
+        ))
+        request = OfficialCollectiveRequest(
+            primitive="ReduceScatter",
+            rank_count=2,
+            dtype="int32",
+            reduce_op="sum",
+            elements=8,
+        )
+        outcome = HcclVmRunner(
+            self.config,
+            process_executor=executor,
+        ).verify(request, environment=FakeEnvironment())
+        self.assertTrue(outcome.result["passed"])
+        test_command = executor.calls[0][1][1].command
+        self.assertIn(
+            "reduce_scatter_test -b 64 -e 64 -d int32 -o sum",
+            test_command,
+        )
+
     def test_timeout_terminates_process_and_cannot_pass(self):
         executor = FakeExecutor(ProcessExecution(
             raw_log="partial output\n",
