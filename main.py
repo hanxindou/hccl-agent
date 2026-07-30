@@ -1,13 +1,53 @@
 import argparse
+import json
 
 from agent.hccl_agent import HCCLAgent
+from plugin.hccl_vm_backend import (
+    Backend,
+    load_hccl_vm_config,
+)
 
 
-def parse_args():
+def _add_backend_options(parser, *, default_backend=None):
+    parser.add_argument(
+        "--backend",
+        choices=[backend.value for backend in Backend],
+        default=default_backend,
+        help="Execution backend. CPU_SIM remains the default for normal runs.",
+    )
+    parser.add_argument(
+        "--config",
+        dest="hccl_vm_config",
+        help="Path to an HCCL-VM JSON configuration file.",
+    )
+    parser.add_argument("--wsl-distro")
+    parser.add_argument("--cann-path")
+    parser.add_argument("--hccl-vm-install-dir")
+    parser.add_argument("--hccl-test-bin")
+    parser.add_argument("--hcomm-source-dir")
+    parser.add_argument("--hccl-source-dir")
+    parser.add_argument("--topology")
+    parser.add_argument("--mock-comm")
+    parser.add_argument("--expansion-mode")
+    parser.add_argument("--evidence-root")
+    parser.add_argument("--timeout-seconds", type=int)
+
+
+def _add_official_collective_options(parser):
+    parser.add_argument("--primitive", default="AllReduce")
+    parser.add_argument("--nodes", type=int, default=2)
+    parser.add_argument("--dtype", default="int32")
+    parser.add_argument("--op", default="sum")
+    parser.add_argument("--elements", type=int, default=16)
+
+
+def parse_args(argv=None):
     # CLI arguments make experiments reproducible while keeping interactive input available.
     parser = argparse.ArgumentParser(
         description="Run the HCCL Agent communication algorithm demo."
     )
+    parser.set_defaults(command="run")
+    _add_backend_options(parser)
     parser.add_argument(
         "--nodes",
         type=int,
@@ -24,11 +64,94 @@ def parse_args():
         help="Collective primitive: AllReduce, AllGather, or ReduceScatter."
     )
 
-    return parser.parse_args()
+    subparsers = parser.add_subparsers(dest="command")
+
+    diagnose_parser = subparsers.add_parser(
+        "diagnose",
+        help="Inspect the external official HCCL-VM validation environment.",
+    )
+    _add_backend_options(
+        diagnose_parser,
+        default_backend=Backend.ASCEND_HCCL_VM.value,
+    )
+
+    dry_run_parser = subparsers.add_parser(
+        "dry-run",
+        help="Print the official validation execution plan without running it.",
+    )
+    _add_backend_options(
+        dry_run_parser,
+        default_backend=Backend.ASCEND_HCCL_VM.value,
+    )
+    _add_official_collective_options(dry_run_parser)
+
+    verify_parser = subparsers.add_parser(
+        "verify-official",
+        help="Run the external official HCCL-VM validation workflow.",
+    )
+    _add_backend_options(
+        verify_parser,
+        default_backend=Backend.ASCEND_HCCL_VM.value,
+    )
+    _add_official_collective_options(verify_parser)
+
+    args = parser.parse_args(argv)
+    if args.command is None:
+        args.command = "run"
+    return args
+
+
+def _config_from_args(args):
+    overrides = {
+        "backend": args.backend,
+        "wsl_distro": args.wsl_distro,
+        "cann_path": args.cann_path,
+        "hccl_vm_install_dir": args.hccl_vm_install_dir,
+        "hccl_test_bin": args.hccl_test_bin,
+        "hcomm_source_dir": args.hcomm_source_dir,
+        "hccl_source_dir": args.hccl_source_dir,
+        "topology": args.topology,
+        "mock_comm": args.mock_comm,
+        "expansion_mode": args.expansion_mode,
+        "evidence_root": args.evidence_root,
+        "timeout_seconds": args.timeout_seconds,
+    }
+    return load_hccl_vm_config(
+        args.hccl_vm_config,
+        overrides=overrides,
+    )
 
 
 def main():
     args = parse_args()
+    config = _config_from_args(args)
+
+    if args.command != "run":
+        _run_official_command(args, config)
+        return
+
+    if config.backend != Backend.CPU_SIM.value:
+        raise SystemExit(
+            "ASCEND_HCCL_VM is an external validation backend; "
+            "use diagnose, dry-run, or verify-official."
+        )
+
+    _run_cpu_sim(args)
+
+
+def _run_official_command(args, config):
+    # Implemented incrementally by G2-D-2 through G2-D-6.
+    print(json.dumps({
+        "command": args.command,
+        "selected_backend": config.backend,
+        "status": "NOT_IMPLEMENTED",
+    }, indent=2))
+    raise SystemExit(
+        f"{args.command} is configured but not implemented yet"
+    )
+
+
+def _run_cpu_sim(args):
 
     # If CLI values are not provided, fall back to beginner-friendly prompts.
     nodes = args.nodes

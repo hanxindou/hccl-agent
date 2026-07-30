@@ -1,0 +1,15 @@
+{
+  "backend": "CPU_SIM",
+  "wsl_distro": "Ubuntu-22.04",
+  "cann_path": "/home/workspace/Ascend/cann-9.1.0",
+  "hccl_vm_install_dir": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install",
+  "hccl_test_bin": "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin",
+  "hcomm_source_dir": "/home/workspace/hcomm",
+  "hccl_source_dir": "/home/workspace/hccl",
+  "topology": "ascend950_cluster_32_server_normal.yaml",
+  "mock_comm": "112",
+  "expansion_mode": "CCU_SCHED",
+  "check_only": true,
+  "evidence_root": "experiments/hccl_vm/evidence",
+  "timeout_seconds": 900
+}
