@@ -1,0 +1,1 @@
+/usr/bin/python3 main.py verify-official --backend ASCEND_HCCL_VM --primitive AllGather --nodes 2 --dtype int32 --elements 8

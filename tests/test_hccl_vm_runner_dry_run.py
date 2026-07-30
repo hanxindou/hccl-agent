@@ -81,6 +81,9 @@ class TestHcclVmRunnerDryRun(unittest.TestCase):
         config = HcclVmConfig(
             backend="ASCEND_HCCL_VM",
             cann_path="/tmp/cann; touch /tmp/not-allowed",
+            hccl_test_bin=(
+                "/tmp/cann; touch /tmp/not-allowed/tools/hccl_test/bin"
+            ),
         )
         script = HcclVmRunner(config).dry_run(
             self.request

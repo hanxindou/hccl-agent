@@ -9,10 +9,13 @@ from plugin.hccl_vm_backend import (
     load_hccl_vm_config,
 )
 from plugin.hccl_vm_env import HcclVmEnvironment
-from plugin.hccl_vm_evidence import archive_official_evidence
+from plugin.hccl_vm_evidence import (
+    archive_g2_e_suite_evidence,
+    archive_official_evidence,
+)
 from plugin.hccl_vm_runner import (
     HcclVmRunner,
-    OfficialAllReduceRequest,
+    OfficialCollectiveRequest,
 )
 
 
@@ -41,11 +44,16 @@ def _add_backend_options(parser, *, default_backend=None):
     parser.add_argument("--timeout-seconds", type=int)
 
 
-def _add_official_collective_options(parser):
-    parser.add_argument("--primitive", default="AllReduce")
+def _add_official_collective_options(parser, *, allow_suite=False):
+    target = parser
+    if allow_suite:
+        target = parser.add_mutually_exclusive_group()
+    target.add_argument("--primitive", default=None if allow_suite else "AllReduce")
+    if allow_suite:
+        target.add_argument("--suite", choices=["g2-e"])
     parser.add_argument("--nodes", type=int, default=2)
     parser.add_argument("--dtype", default="int32")
-    parser.add_argument("--op", default="sum")
+    parser.add_argument("--op", default=None)
     parser.add_argument("--elements", type=int, default=16)
 
 
@@ -101,11 +109,17 @@ def parse_args(argv=None):
         verify_parser,
         default_backend=Backend.ASCEND_HCCL_VM.value,
     )
-    _add_official_collective_options(verify_parser)
+    _add_official_collective_options(verify_parser, allow_suite=True)
 
     args = parser.parse_args(argv)
     if args.command is None:
         args.command = "run"
+    if (
+        args.command == "verify-official"
+        and args.primitive is None
+        and args.suite is None
+    ):
+        parser.error("verify-official requires --primitive or --suite g2-e")
     return args
 
 
@@ -165,6 +179,9 @@ def _run_official_command(args, config):
         return
 
     if args.command == "verify-official":
+        if args.suite == "g2-e":
+            _run_g2_e_suite(args, config)
+            return
         try:
             request = _official_request_from_args(args)
             outcome = HcclVmRunner(config).verify(request)
@@ -199,13 +216,72 @@ def _run_official_command(args, config):
 
 
 def _official_request_from_args(args):
-    return OfficialAllReduceRequest(
+    return OfficialCollectiveRequest(
         primitive=args.primitive,
         rank_count=args.nodes,
         dtype=args.dtype,
         reduce_op=args.op,
         elements=args.elements,
     )
+
+
+def _g2_e_suite_requests():
+    return [
+        OfficialCollectiveRequest(
+            primitive="AllReduce",
+            rank_count=2,
+            dtype="int32",
+            reduce_op="sum",
+            elements=16,
+        ),
+        OfficialCollectiveRequest(
+            primitive="AllGather",
+            rank_count=2,
+            dtype="int32",
+            reduce_op=None,
+            elements=8,
+        ),
+        OfficialCollectiveRequest(
+            primitive="ReduceScatter",
+            rank_count=2,
+            dtype="int32",
+            reduce_op="sum",
+            elements=8,
+        ),
+    ]
+
+
+def _run_g2_e_suite(args, config):
+    runner = HcclVmRunner(config)
+    entries = []
+    for request in _g2_e_suite_requests():
+        outcome = runner.verify(request)
+        archive = archive_official_evidence(
+            outcome,
+            request,
+            config,
+            command=shlex.join([sys.executable, *sys.argv]),
+        )
+        public = outcome.to_public_dict()
+        public["evidence_dir"] = str(archive.directory)
+        public["evidence_sha256"] = archive.checksum_file_sha256
+        entries.append({
+            "request": request,
+            "outcome": outcome,
+            "archive": archive,
+            "result": public,
+        })
+    suite_archive = archive_g2_e_suite_evidence(
+        entries,
+        config,
+        command=shlex.join([sys.executable, *sys.argv]),
+    )
+    summary = suite_archive.summary
+    summary["evidence_dir"] = str(suite_archive.directory)
+    summary["evidence_sha256"] = suite_archive.checksum_file_sha256
+    print(json.dumps(summary, indent=2, ensure_ascii=False))
+    if not summary["passed"]:
+        raise SystemExit(2)
 
 
 def _run_cpu_sim(args):

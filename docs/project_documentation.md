@@ -2908,3 +2908,13 @@ Total:  428 PASS (41 C + 387 Python)
 验证 evidence 位于 `experiments/hccl_vm/evidence/g2_d_20260730T081052.668860Z`，包含 manifest、复现命令、结构化结果、精简日志、gzip 原始日志、Agent 报告和 SHA256 清单。`SHA256SUMS` 文件自身 SHA256 为 `bc8e82663a989e458311ccbbbb1b23a951635f4d19d4707ab6f71bbc1a8c70dc`。
 
 回归结果：Windows 与 Linux 全量 Python 各 507 tests，均 OK（1 项 opt-in 真实环境测试 skipped）；Windows 与 Linux CTest 均 11/11 PASS；两平台默认 CPU_SIM CLI 均通过。该结果只证明 CPU_SIM 工程回归和官方 HCCL-VM 模拟验证，不证明真实 Ascend NPU、多设备性能或硬件可靠性。完整完成审计见 `docs/g2_d_validation_report.md`。
+
+## 2026-07-30：G2-E 多原语 HCCL-VM 官方模拟验证
+
+G2-E 把 `ASCEND_HCCL_VM` 扩展为不可变 registry 驱动的三原语官方模拟验证：`AllReduce`、`AllGather` 和 `ReduceScatter`。`CPU_SIM` 仍是普通 `run` 的默认后端。未知原语、错误 rank/dtype/elements、缺失 SUM 或 AllGather 的显式 `--op` 都会在环境探测、WSL 或外部进程启动前失败。
+
+每个 registry contract 固定为 2 ranks、INT32；AllReduce 使用 16 elements，AllGather 使用每 rank 8 个输入 elements，ReduceScatter 使用每 rank 8 个输出 elements。三条 `hccl_test` 命令均为 64 B，但 AllGather 的输入/输出为 32/64 B，ReduceScatter 的输入/输出为 64/32 B。Checker 按每个 Op summary block 严格检查 `GenGraph`、`SingleTaskCheck`、`MemConflict` 和 `SemanticCheck`；AllGather 记录而不比较日志中的 `reduceType`，其余两种原语严格要求 `SUM`。
+
+`python main.py verify-official --backend ASCEND_HCCL_VM --suite g2-e` 以固定顺序运行三条闭环，生成每原语 evidence 以及只引用 digest、不复制 raw log 的 summary evidence。最新摘要位于 `experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z`，状态为 `COMPLETED`：三项均为 `PASS_WITH_WARNING`，每项有 2 个 Checker Success、4 条基线 ErrorCode 103 warning、无 warning regression、正常 HCCL-VM 关闭和 cleanup audit clean。摘要 `SHA256SUMS` 文件自身 SHA256 为 `42e12f11293419ee2866709068a249452529dedec1c34117c827608a48f804d4`。
+
+G2-E 环境一致性检查确认 CANN 9.1.0、HCOMM `competition/campus-2026@c8a3dc68a37315aa1e908a971fa706abe612f6ee` 和 HCCL `competition/campus-2026@2c87cc1937bab23b8574ef24017c03572d3340e2`；root Git probe 仅使用命令级精确 `safe.directory`。Windows 与 Linux 全量 Python 各 531 tests 通过（1 项 opt-in skip），两平台 CTest 均 11/11 PASS，默认 CPU_SIM CLI 通过。该证据仍仅证明 subprocess 驱动的官方 HCCL-VM/hccl_test/checker 模拟验证，不证明真实 Ascend NPU、真实硬件性能、直接 HCCL API 调用或对官方源码的修改。完整审计见 `docs/g2_e_validation_report.md`。

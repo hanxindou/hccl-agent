@@ -1,0 +1,214 @@
+{
+  "configuration": {
+    "backend": "ASCEND_HCCL_VM",
+    "cann_path": "/home/workspace/Ascend/cann-9.1.0",
+    "check_only": true,
+    "evidence_root": "experiments/hccl_vm/evidence",
+    "expansion_mode": "CCU_SCHED",
+    "hccl_source_dir": "/home/workspace/hccl",
+    "hccl_test_bin": "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin",
+    "hccl_vm_install_dir": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install",
+    "hcomm_source_dir": "/home/workspace/hcomm",
+    "mock_comm": "112",
+    "timeout_seconds": 900,
+    "topology": "ascend950_cluster_32_server_normal.yaml",
+    "wsl_distro": "Ubuntu-22.04"
+  },
+  "diagnosis": {
+    "cann": {
+      "available": true,
+      "path": "/home/workspace/Ascend/cann-9.1.0",
+      "set_env_path": "/home/workspace/Ascend/cann-9.1.0/set_env.sh",
+      "version": "9.1.0"
+    },
+    "checker": {
+      "available": true,
+      "path": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/plugin/checker/checker"
+    },
+    "common_missing_items": [],
+    "execution_mode": "subprocess_hccl_test",
+    "hccl": {
+      "branch": "competition/campus-2026",
+      "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "expected_branch": "competition/campus-2026",
+      "expected_commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "path": "/home/workspace/hccl",
+      "worktree": "clean"
+    },
+    "hccl_test": {
+      "bin_dir": "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin",
+      "executables": {
+        "AllGather": {
+          "dependencies_resolved": true,
+          "executable": true,
+          "missing_items": [],
+          "path": "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin/all_gather_test"
+        },
+        "AllReduce": {
+          "dependencies_resolved": true,
+          "executable": true,
+          "missing_items": [],
+          "path": "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin/all_reduce_test"
+        },
+        "ReduceScatter": {
+          "dependencies_resolved": true,
+          "executable": true,
+          "missing_items": [],
+          "path": "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin/reduce_scatter_test"
+        }
+      }
+    },
+    "hccl_vm": {
+      "config_available": true,
+      "config_path": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/script/hccl_config.sh",
+      "executable": true,
+      "executable_path": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/bin/hccl-vm",
+      "install_dir": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install"
+    },
+    "hcomm": {
+      "branch": "competition/campus-2026",
+      "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "expected_branch": "competition/campus-2026",
+      "expected_commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "path": "/home/workspace/hcomm",
+      "worktree": "clean"
+    },
+    "host_os": "Linux",
+    "missing_items": [],
+    "mock_comm": {
+      "available": true,
+      "name": "112",
+      "path": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/config/topo_meta/112.yaml"
+    },
+    "mpi": {
+      "available": true,
+      "implementation": "mpirun (Open MPI) 4.1.2",
+      "path": "/usr/bin/mpirun"
+    },
+    "overall_status": "OK",
+    "runner_tools": {
+      "available": true,
+      "script_path": "/usr/bin/script",
+      "sudo_non_interactive": true,
+      "timeout_path": "/usr/bin/timeout"
+    },
+    "selected_backend": "ASCEND_HCCL_VM",
+    "selected_missing_items": [],
+    "selected_primitive": "AllGather",
+    "status": "OK",
+    "topology": {
+      "available": true,
+      "name": "ascend950_cluster_32_server_normal.yaml",
+      "path": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install/config/cluster/ascend950_cluster_32_server_normal.yaml"
+    },
+    "wsl": {
+      "available": true,
+      "command": [
+        "bash",
+        "-lc",
+        "<probe script>"
+      ],
+      "distro": "Ubuntu-22.04",
+      "exit_code": 0,
+      "running_in_wsl": true,
+      "stderr": "",
+      "transport": "direct_bash"
+    }
+  },
+  "direct_hccl_api_call": false,
+  "execution_mode": "subprocess_hccl_test",
+  "generated_at_utc": "2026-07-30T09:57:43.054148Z",
+  "hccl_test_argv": [
+    "mpirun",
+    "--allow-run-as-root",
+    "--oversubscribe",
+    "-np",
+    "2",
+    "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin/all_gather_test",
+    "-b",
+    "64",
+    "-e",
+    "64",
+    "-d",
+    "int32",
+    "-w",
+    "0",
+    "-n",
+    "1",
+    "-c",
+    "1"
+  ],
+  "input_alias": "AllGather",
+  "primitive": "AllGather",
+  "real_ascend_npu_validated": false,
+  "request": {
+    "byte_count": 64,
+    "dtype": "int32",
+    "elements": 8,
+    "primitive": "AllGather",
+    "rank_count": 2,
+    "reduce_op": null,
+    "resolved_contract": {
+      "canonical_primitive": "AllGather",
+      "checker_collective_type": "AllGather",
+      "checker_element_count": 8,
+      "checker_reduce_type": null,
+      "dtype": "int32",
+      "dtype_size_bytes": 4,
+      "element_semantics": "input_elements_per_rank",
+      "executable_basename": "all_gather_test",
+      "hccl_test_bytes": 64,
+      "input_alias": "AllGather",
+      "input_bytes_per_rank": 32,
+      "input_elements_per_rank": 8,
+      "output_bytes_per_rank": 64,
+      "output_elements_per_rank": 16,
+      "rank_count": 2,
+      "reduce_op": null,
+      "registry_version": "g2-e-v1",
+      "request_elements": 8,
+      "required_checker_stages": [
+        "GenGraph",
+        "SingleTaskCheck",
+        "MemConflict",
+        "SemanticCheck"
+      ],
+      "warning_baseline_count": 4,
+      "warning_baseline_summaries": [
+        "found ccu post/local-post tasks that were never consumed by any wait task"
+      ]
+    }
+  },
+  "resolved_contract": {
+    "canonical_primitive": "AllGather",
+    "checker_collective_type": "AllGather",
+    "checker_element_count": 8,
+    "checker_reduce_type": null,
+    "dtype": "int32",
+    "dtype_size_bytes": 4,
+    "element_semantics": "input_elements_per_rank",
+    "executable_basename": "all_gather_test",
+    "hccl_test_bytes": 64,
+    "input_alias": "AllGather",
+    "input_bytes_per_rank": 32,
+    "input_elements_per_rank": 8,
+    "output_bytes_per_rank": 64,
+    "output_elements_per_rank": 16,
+    "rank_count": 2,
+    "reduce_op": null,
+    "registry_version": "g2-e-v1",
+    "request_elements": 8,
+    "required_checker_stages": [
+      "GenGraph",
+      "SingleTaskCheck",
+      "MemConflict",
+      "SemanticCheck"
+    ],
+    "warning_baseline_count": 4,
+    "warning_baseline_summaries": [
+      "found ccu post/local-post tasks that were never consumed by any wait task"
+    ]
+  },
+  "schema_version": "g2-e-primitive-v1",
+  "validation_class": "OFFICIAL_HCCL_VM_SIMULATOR"
+}

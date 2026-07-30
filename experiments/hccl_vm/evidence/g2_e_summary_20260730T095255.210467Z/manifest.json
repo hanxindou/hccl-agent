@@ -1,0 +1,54 @@
+{
+  "command": "/usr/bin/python3 main.py verify-official --backend ASCEND_HCCL_VM --suite g2-e",
+  "configuration": {
+    "backend": "ASCEND_HCCL_VM",
+    "cann_path": "/home/workspace/Ascend/cann-9.1.0",
+    "check_only": true,
+    "evidence_root": "experiments/hccl_vm/evidence",
+    "expansion_mode": "CCU_SCHED",
+    "hccl_source_dir": "/home/workspace/hccl",
+    "hccl_test_bin": "/home/workspace/Ascend/cann-9.1.0/tools/hccl_test/bin",
+    "hccl_vm_install_dir": "/home/workspace/hcomm/test/hccl_vm/hccl_vm_install",
+    "hcomm_source_dir": "/home/workspace/hcomm",
+    "mock_comm": "112",
+    "timeout_seconds": 900,
+    "topology": "ascend950_cluster_32_server_normal.yaml",
+    "wsl_distro": "Ubuntu-22.04"
+  },
+  "generated_at_utc": "2026-07-30T09:52:55.210467Z",
+  "primitive_evidence_references": [
+    {
+      "checker_success_count": 2,
+      "evidence_dir": "experiments/hccl_vm/evidence/g2_e_allreduce_20260730T095231.274525Z",
+      "evidence_sha256": "43eab9b04781d3870ac14c1cf925971174be0cebd57b57ae4fc0d525eff6f2c3",
+      "passed": true,
+      "primitive": "AllReduce",
+      "status": "PASS_WITH_WARNING",
+      "warning_103_count": 4,
+      "warning_regression": false
+    },
+    {
+      "checker_success_count": 2,
+      "evidence_dir": "experiments/hccl_vm/evidence/g2_e_allgather_20260730T095242.135368Z",
+      "evidence_sha256": "baa7e6b45baf1c5a881527bdc3f1459c4e85c1f8f019dd4fe633314dfe7e6ebd",
+      "passed": true,
+      "primitive": "AllGather",
+      "status": "PASS_WITH_WARNING",
+      "warning_103_count": 4,
+      "warning_regression": false
+    },
+    {
+      "checker_success_count": 2,
+      "evidence_dir": "experiments/hccl_vm/evidence/g2_e_reducescatter_20260730T095254.776939Z",
+      "evidence_sha256": "1cfe46f0e8df2d8ba7ad6932f460d97a977eb79ccbbccabfa7a861fdfe0201c2",
+      "passed": true,
+      "primitive": "ReduceScatter",
+      "status": "PASS_WITH_WARNING",
+      "warning_103_count": 4,
+      "warning_regression": false
+    }
+  ],
+  "raw_logs_copied": false,
+  "schema_version": "g2-e-suite-v1",
+  "validation_class": "OFFICIAL_HCCL_VM_SIMULATOR"
+}

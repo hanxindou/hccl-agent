@@ -58,7 +58,12 @@ class TestBackendSelection(unittest.TestCase):
     def test_official_subcommands_default_to_official_backend(self):
         for command in ("diagnose", "dry-run", "verify-official"):
             with self.subTest(command=command):
-                args = parse_args([command])
+                argv = [command]
+                if command == "verify-official":
+                    argv.extend([
+                        "--primitive", "AllReduce", "--op", "sum",
+                    ])
+                args = parse_args(argv)
                 self.assertEqual(
                     args.backend,
                     Backend.ASCEND_HCCL_VM.value,
@@ -69,6 +74,7 @@ class TestBackendSelection(unittest.TestCase):
             "diagnose",
             "--cann-path", "/cli/cann",
             "--hccl-vm-install-dir", "/cli/hccl-vm",
+            "--hccl-test-bin", "/cli/cann/tools/hccl_test/bin",
         ])
         with mock.patch.dict(
             os.environ,
@@ -82,6 +88,13 @@ class TestBackendSelection(unittest.TestCase):
     def test_importable_config_has_no_environment_side_effects(self):
         config = HcclVmConfig()
         self.assertEqual(config.backend, Backend.CPU_SIM.value)
+
+    def test_hccl_test_bin_must_use_the_fixed_cann_layout(self):
+        with self.assertRaisesRegex(ValueError, "must be exactly"):
+            HcclVmConfig(
+                cann_path="/opt/cann",
+                hccl_test_bin="/tmp/other-bin",
+            )
 
 
 if __name__ == "__main__":

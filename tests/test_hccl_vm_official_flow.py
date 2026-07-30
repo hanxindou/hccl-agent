@@ -9,7 +9,9 @@ from plugin.hccl_vm_runner import (
     HcclVmRunner,
     InteractiveStep,
     OfficialAllReduceRequest,
+    OfficialCollectiveRequest,
     ProcessExecution,
+    _audit_related_processes,
     _execute_interactive_process,
 )
 
@@ -20,6 +22,10 @@ __HCCL_AGENT_MOCK_EXIT_CODE=0
 __HCCL_AGENT_TEST_EXIT_CODE=0
 [info] Op summary, opIndex=0, collectiveType=AllReduce, rankCount=2,
 dataType=INT32, elementCount=16, reduceType=SUM, opGroupSize=2
+[info] CheckerV3 stage finished, stage=GenGraph, status=success
+[info] CheckerV3 stage finished, stage=SingleTaskCheck, status=success
+[info] CheckerV3 stage finished, stage=MemConflict, status=success
+[info] CheckerV3 stage finished, stage=SemanticCheck, status=success
 [info] op[0] Checker Success
 __HCCL_AGENT_CHECKER_EXIT_CODE=0
 [info] Shell exited. Host shutting down.
@@ -39,6 +45,9 @@ class FakeEnvironment:
                 [] if self.status == "OK" else ["test environment missing"]
             ),
         }
+
+    def diagnose_for(self, contract):
+        return self.diagnose()
 
 
 class FakeExecutor:
@@ -104,6 +113,58 @@ class TestHcclVmOfficialFlow(unittest.TestCase):
         )
         self.assertEqual(executor.calls, [])
 
+    def test_allgather_flow_uses_the_allgather_contract(self):
+        allgather_log = SUCCESS_LOG.replace(
+            "AllReduce", "AllGather"
+        ).replace("elementCount=16", "elementCount=8")
+        executor = FakeExecutor(ProcessExecution(
+            raw_log=allgather_log,
+            returncode=0,
+            timed_out=False,
+        ))
+        request = OfficialCollectiveRequest(
+            primitive="AllGather",
+            rank_count=2,
+            dtype="int32",
+            reduce_op=None,
+            elements=8,
+        )
+        outcome = HcclVmRunner(
+            self.config,
+            process_executor=executor,
+        ).verify(request, environment=FakeEnvironment())
+        self.assertTrue(outcome.result["passed"])
+        test_command = executor.calls[0][1][1].command
+        self.assertIn("all_gather_test -b 64 -e 64 -d int32", test_command)
+        self.assertNotIn(" -o ", test_command)
+
+    def test_reducescatter_flow_uses_sum_and_output_element_contract(self):
+        reduce_scatter_log = SUCCESS_LOG.replace(
+            "AllReduce", "ReduceScatter"
+        ).replace("elementCount=16", "elementCount=8")
+        executor = FakeExecutor(ProcessExecution(
+            raw_log=reduce_scatter_log,
+            returncode=0,
+            timed_out=False,
+        ))
+        request = OfficialCollectiveRequest(
+            primitive="ReduceScatter",
+            rank_count=2,
+            dtype="int32",
+            reduce_op="sum",
+            elements=8,
+        )
+        outcome = HcclVmRunner(
+            self.config,
+            process_executor=executor,
+        ).verify(request, environment=FakeEnvironment())
+        self.assertTrue(outcome.result["passed"])
+        test_command = executor.calls[0][1][1].command
+        self.assertIn(
+            "reduce_scatter_test -b 64 -e 64 -d int32 -o sum",
+            test_command,
+        )
+
     def test_timeout_terminates_process_and_cannot_pass(self):
         executor = FakeExecutor(ProcessExecution(
             raw_log="partial output\n",
@@ -133,6 +194,25 @@ class TestHcclVmOfficialFlow(unittest.TestCase):
         self.assertIn("timeout --signal=TERM --kill-after=10s 30s", script)
         self.assertIn("script -qef -E never -c", script)
         self.assertIn("__HCCL_AGENT_VM_EXIT_CODE", script)
+
+    def test_process_audit_reports_only_exact_residual_names(self):
+        class AuditEnvironment:
+            def run_linux_script(self, script):
+                return type("Result", (), {
+                    "returncode": 0,
+                    "stderr": "",
+                    "stdout": (
+                        "  12 hccl-vm hccl-vm start\n"
+                        "  13 unrelated all_reduce_test_helper\n"
+                    ),
+                })()
+
+        audit = _audit_related_processes(
+            AuditEnvironment(),
+            self.request.resolve(),
+        )
+        self.assertEqual(audit["status"], "RESIDUAL_PROCESSES")
+        self.assertEqual(audit["residual_processes"][0]["comm"], "hccl-vm")
 
     def test_process_driver_waits_for_prompt_and_each_marker(self):
         helper = "\n".join([

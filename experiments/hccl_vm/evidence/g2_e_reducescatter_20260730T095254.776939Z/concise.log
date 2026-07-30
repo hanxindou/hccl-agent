@@ -1,0 +1,28 @@
+__HCCL_AGENT_HCCL_CONFIG_EXIT_CODE=0
+__HCCL_AGENT_MOCK_EXIT_CODE=0
+__HCCL_AGENT_TEST_EXIT_CODE=0
+__HCCL_AGENT_CHECKER_EXIT_CODE=0
+[info][PID:112797][TID:112827][main.cc][ProcessOneOpGroup] [HCCL-VM-CHECKER][Main] Op summary, opIndex=0, collectiveType=ReduceScatter, rankCount=2, dataType=INT32, elementCount=8, reduceType=SUM, opGroupSize=2, containsAivTask=0
+[warning][PID:112797][TID:112827][ccu_all_rank_param_recorder_v3.cc][CheckAllPostMatch] [HCCL-VM-CHECKER][ErrorCode: 103] Found CCU post/local-post tasks that were never consumed by any Wait task:
+[warning][PID:112797][TID:112827][ccu_all_rank_param_recorder_v3.cc][CheckAllPostMatch] [HCCL-VM-CHECKER][ErrorCode: 103] Found CCU post/local-post tasks that were never consumed by any Wait task:
+[info][PID:112797][TID:112827][checker.cc][~V3StageTimer] [HCCL-VM-CHECKER]CheckerV3 stage finished, stage=GenGraph, status=success, costMs=11, taskNodeCount=54, mainStartNodeId=-1, aivExpandTotalMs=0, aivGraphCount=0, ccuExpandTotalMs=0, ccuGraphCount=2
+[info][PID:112797][TID:112827][checker.cc][~V3StageTimer] [HCCL-VM-CHECKER]CheckerV3 stage finished, stage=SingleTaskCheck, status=success, costMs=0, nodeCount=55, dataTaskNodeCount=10
+[info][PID:112797][TID:112827][task_graph_mem_conflict_v3.cc][LogMemConflictStageTime] [HCCL-VM-CHECKER]Stage finished, stage=CollectReachableTaskNodesToScanMemoryBuckets, status=success, costMs=0
+[info][PID:112797][TID:112827][task_graph_mem_conflict_v3.cc][LogMemConflictStageTime] [HCCL-VM-CHECKER]Stage finished, stage=GenReachabilityClosure(Dense), status=success, costMs=0
+[info][PID:112797][TID:112827][task_graph_mem_conflict_v3.cc][LogMemConflictStageTime] [HCCL-VM-CHECKER]Stage finished, stage=CheckCollectedConflictCandidates(Dense), status=success, costMs=0
+[info][PID:112797][TID:112827][checker.cc][~V3StageTimer] [HCCL-VM-CHECKER]CheckerV3 stage finished, stage=MemConflict, status=success, costMs=0, nodeCount=55, dataTaskNodeCount=10, processedDataTaskNodeCount=10, accessIntervalCount=20, memoryBucketCount=8, overlapCandidatePairs=10, orderedCandidatePairs=10, parallelCandidatePairs=0
+[info][PID:112797][TID:112827][checker.cc][~V3StageTimer] [HCCL-VM-CHECKER]CheckerV3 stage finished, stage=SemanticCheck, status=success, costMs=0, handledNodeCount=55, rankCount=2, normalSemanticCount=6, normalSemanticBytes=256, msBucketCount=4
+[info][PID:112797][TID:112827][main.cc][RunChecker] [HCCL-VM-CHECKER]op[0] Checker Success
+[info][PID:112797][TID:112827][main.cc][ProcessOneOpGroup] [HCCL-VM-CHECKER][Main] Op summary, opIndex=1, collectiveType=ReduceScatter, rankCount=2, dataType=INT32, elementCount=8, reduceType=SUM, opGroupSize=2, containsAivTask=0
+[warning][PID:112797][TID:112827][ccu_all_rank_param_recorder_v3.cc][CheckAllPostMatch] [HCCL-VM-CHECKER][ErrorCode: 103] Found CCU post/local-post tasks that were never consumed by any Wait task:
+[warning][PID:112797][TID:112827][ccu_all_rank_param_recorder_v3.cc][CheckAllPostMatch] [HCCL-VM-CHECKER][ErrorCode: 103] Found CCU post/local-post tasks that were never consumed by any Wait task:
+[info][PID:112797][TID:112827][checker.cc][~V3StageTimer] [HCCL-VM-CHECKER]CheckerV3 stage finished, stage=GenGraph, status=success, costMs=12, taskNodeCount=54, mainStartNodeId=-1, aivExpandTotalMs=0, aivGraphCount=0, ccuExpandTotalMs=0, ccuGraphCount=2
+[info][PID:112797][TID:112827][checker.cc][~V3StageTimer] [HCCL-VM-CHECKER]CheckerV3 stage finished, stage=SingleTaskCheck, status=success, costMs=0, nodeCount=55, dataTaskNodeCount=10
+[info][PID:112797][TID:112827][task_graph_mem_conflict_v3.cc][LogMemConflictStageTime] [HCCL-VM-CHECKER]Stage finished, stage=CollectReachableTaskNodesToScanMemoryBuckets, status=success, costMs=0
+[info][PID:112797][TID:112827][task_graph_mem_conflict_v3.cc][LogMemConflictStageTime] [HCCL-VM-CHECKER]Stage finished, stage=GenReachabilityClosure(Dense), status=success, costMs=0
+[info][PID:112797][TID:112827][task_graph_mem_conflict_v3.cc][LogMemConflictStageTime] [HCCL-VM-CHECKER]Stage finished, stage=CheckCollectedConflictCandidates(Dense), status=success, costMs=0
+[info][PID:112797][TID:112827][checker.cc][~V3StageTimer] [HCCL-VM-CHECKER]CheckerV3 stage finished, stage=MemConflict, status=success, costMs=0, nodeCount=55, dataTaskNodeCount=10, processedDataTaskNodeCount=10, accessIntervalCount=20, memoryBucketCount=8, overlapCandidatePairs=10, orderedCandidatePairs=10, parallelCandidatePairs=0
+[info][PID:112797][TID:112827][checker.cc][~V3StageTimer] [HCCL-VM-CHECKER]CheckerV3 stage finished, stage=SemanticCheck, status=success, costMs=0, handledNodeCount=55, rankCount=2, normalSemanticCount=6, normalSemanticBytes=256, msBucketCount=4
+[info][PID:112797][TID:112827][main.cc][RunChecker] [HCCL-VM-CHECKER]op[1] Checker Success
+[info][PID:112494][TID:112494][cmd_base_utils.cc][StartHvmCmd] [HCCL-VM-CMD]Shell exited. Host shutting down.
+__HCCL_AGENT_VM_EXIT_CODE=0

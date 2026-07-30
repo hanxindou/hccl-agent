@@ -1,0 +1,1 @@
+/usr/bin/python3 main.py verify-official --backend ASCEND_HCCL_VM --suite g2-e
