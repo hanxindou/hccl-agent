@@ -9,13 +9,13 @@
 
 本轮开始时已只读确认：
 
-| 检查 | 结果 |
-| --- | --- |
-| 当前分支 | `main` |
+| 检查                   | 结果                                            |
+| ---------------------- | ----------------------------------------------- |
+| 当前分支               | `main`                                          |
 | `main` / `origin/main` | 同为 `bd3b91fb072d99b6135ba1ca0529926dd1b20dec` |
-| 工作区 | clean（创建本计划前） |
-| G2-E | 已在 `main`；`b9438c6` 是 `main` 的祖先 |
-| 旧功能分支 | 未在 G2-D/G2-E 分支工作 |
+| 工作区                 | clean（创建本计划前）                           |
+| G2-E                   | 已在 `main`；`b9438c6` 是 `main` 的祖先         |
+| 旧功能分支             | 未在 G2-D/G2-E 分支工作                         |
 
 本计划只定义未来工作；不修改业务实现、不会重写 G2-D/G2-E evidence，也不把 HCCL-VM 或 CPU_SIM 的结果表述为 direct API 或真实设备结果。
 
@@ -23,11 +23,11 @@
 
 当前有三条不同的路径，必须继续独立命名、独立测试、独立出证：
 
-| 路径 | 当前入口/实现 | 可以证明 | 绝不能证明 |
-| --- | --- | --- | --- |
-| `CPU_SIM` | `hcccl/` 的项目自有 C ABI，`plugin/hccl_bridge.py` ctypes，`plugin/execution_engine.py` | CPU 内存布局、FP32/FP16/BF16 模拟结果和项目回归 | CANN/HCCL ABI、NPU 通信、性能 |
-| `ASCEND_HCCL_VM` | `main.py` → `plugin/hccl_vm_backend.py` → 官方 `hccl_test` subprocess | 官方 HCCL-VM 的固定 2-rank INT32 checker 合约 | 本进程直接 HCCL 调用或真实 NPU |
-| **未来 `ASCEND_HCCL_DIRECT`** | 新的独立 native direct adapter → `libhccl.so` / `libhcomm.so` / ACL runtime | 编译与运行的进程直接调用正式导出 API | 除非有实机 evidence，否则不宣称设备成功 |
+| 路径                          | 当前入口/实现                                                                           | 可以证明                                        | 绝不能证明                              |
+| ----------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------- | --------------------------------------- |
+| `CPU_SIM`                     | `hcccl/` 的项目自有 C ABI，`plugin/hccl_bridge.py` ctypes，`plugin/execution_engine.py` | CPU 内存布局、FP32/FP16/BF16 模拟结果和项目回归 | CANN/HCCL ABI、NPU 通信、性能           |
+| `ASCEND_HCCL_VM`              | `main.py` → `plugin/hccl_vm_backend.py` → 官方 `hccl_test` subprocess                   | 官方 HCCL-VM 的固定 2-rank INT32 checker 合约   | 本进程直接 HCCL 调用或真实 NPU          |
+| **未来 `ASCEND_HCCL_DIRECT`** | 新的独立 native direct adapter → `libhccl.so` / `libhcomm.so` / ACL runtime             | 编译与运行的进程直接调用正式导出 API            | 除非有实机 evidence，否则不宣称设备成功 |
 
 G2-E 汇总 evidence 已固定 `execution_mode=subprocess_hccl_test`、`direct_hccl_api_call=false`、`real_ascend_npu_validated=false`。G2-F 不得改写这些字段，也不得复用其 `COMPLETED` 作为 direct API 完成依据。
 
@@ -37,22 +37,22 @@ G2-E 汇总 evidence 已固定 `execution_mode=subprocess_hccl_test`、`direct_h
 
 ### 2.1 安装与源码固定点
 
-| 项目 | 实际发现 |
-| --- | --- |
-| CANN root | `/home/workspace/Ascend/cann-9.1.0` |
-| 公开 include / lib64 | `include -> x86_64-linux/include`、`lib64 -> x86_64-linux/lib64` |
-| CANN/HCCL 版本 | `9.1.0`（`version/hccl_version.h` 的 `HCCL_VERSION_STR`） |
-| 环境脚本 | `/home/workspace/Ascend/cann-9.1.0/set_env.sh`；只在子 shell 中设置 `LD_LIBRARY_PATH`、`ASCEND_HOME_PATH` 等 |
-| HCOMM | `competition/campus-2026@c8a3dc68a37315aa1e908a971fa706abe612f6ee`，tracked worktree clean |
-| HCCL | `competition/campus-2026@2c87cc1937bab23b8574ef24017c03572d3340e2`，tracked worktree clean |
+| 项目                 | 实际发现                                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ |
+| CANN root            | `/home/workspace/Ascend/cann-9.1.0`                                                                          |
+| 公开 include / lib64 | `include -> x86_64-linux/include`、`lib64 -> x86_64-linux/lib64`                                             |
+| CANN/HCCL 版本       | `9.1.0`（`version/hccl_version.h` 的 `HCCL_VERSION_STR`）                                                    |
+| 环境脚本             | `/home/workspace/Ascend/cann-9.1.0/set_env.sh`；只在子 shell 中设置 `LD_LIBRARY_PATH`、`ASCEND_HOME_PATH` 等 |
+| HCOMM                | `competition/campus-2026@c8a3dc68a37315aa1e908a971fa706abe612f6ee`，tracked worktree clean                   |
+| HCCL                 | `competition/campus-2026@2c87cc1937bab23b8574ef24017c03572d3340e2`，tracked worktree clean                   |
 
 公开候选头文件是 `hccl/hccl.h`、`hccl/hccl_comm.h`、`hccl/hccl_types.h`、`acl/acl.h`、`acl/acl_rt.h`。`hcomm/hcomm_primitives.h` 等也存在，但本计划的 host-side collective ABI 以安装包中上述 `hccl/` 公开头为准；不得直接依赖 HCOMM 私有源码头。
 
-| 库 | 路径 | SONAME | 关键依赖/用途 |
-| --- | --- | --- |
-| HCCL facade | `.../x86_64-linux/lib64/libhccl.so` | `libhccl.so` | 依赖 `libhcomm.so`、`libhccl_compat.so`、`libacl_rt.so`；导出三种集合通信 |
-| HCOMM | `.../x86_64-linux/lib64/libhcomm.so` | `libhcomm.so` | 依赖 `libhccl_alg.so`、`libhccl_plf.so`、`libhccl_v2.so`、`libacl_rt.so`；导出 communicator/root-info 管理 |
-| ACL runtime | `.../x86_64-linux/lib64/libacl_rt.so` | `libacl_rt.so` | 依赖 `libruntime.so` 等；导出 runtime、device、stream、内存 API |
+| 库          | 路径                                  | SONAME         | 关键依赖/用途                                                                                              |
+| ----------- | ------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------- |
+| HCCL facade | `.../x86_64-linux/lib64/libhccl.so`   | `libhccl.so`   | 依赖 `libhcomm.so`、`libhccl_compat.so`、`libacl_rt.so`；导出三种集合通信                                  |
+| HCOMM       | `.../x86_64-linux/lib64/libhcomm.so`  | `libhcomm.so`  | 依赖 `libhccl_alg.so`、`libhccl_plf.so`、`libhccl_v2.so`、`libacl_rt.so`；导出 communicator/root-info 管理 |
+| ACL runtime | `.../x86_64-linux/lib64/libacl_rt.so` | `libacl_rt.so` | 依赖 `libruntime.so` 等；导出 runtime、device、stream、内存 API                                            |
 
 没有执行中的 toolkit 环境时，`ldd` 不会从系统缓存解析这些库；在**仅影响子 shell 环境**地 `source set_env.sh` 后，三者依赖均解析到该 CANN root。这是依赖解析结果，不是 `dlopen`、`aclInit` 或设备调用成功。
 
@@ -60,19 +60,19 @@ G2-E 汇总 evidence 已固定 `execution_mode=subprocess_hccl_test`、`direct_h
 
 下面的名称、签名和符号均来自实际安装头文件和 `nm -D --defined-only`；没有由记忆推测。
 
-| 阶段 | 正式 API（精确签名） | 头文件 | 导出库/符号 | 合约与前置条件 |
-| --- | --- | --- | --- | --- |
-| runtime | `aclError aclInit(const char *configPath)` / `aclError aclFinalize()` | `acl/acl_rt.h` | `libacl_rt.so`，均为 `T` | 每进程 `aclInit` 仅一次；退出前 `aclFinalize`；是否可在无设备环境调用尚未由头文件证明为无副作用 |
-| device/context | `aclrtSetDevice(int32_t)`，`aclrtCreateContext(aclrtContext *, int32_t)`，`aclrtDestroyContext(aclrtContext)`，`aclrtResetDevice(int32_t)` | `acl/acl_rt.h` | `libacl_rt.so`，均为 `T` | `SetDevice` 可隐式创建默认 context；显式 context 只能销毁自己创建的对象；这些都是实机步骤 |
-| stream | `aclrtCreateStream(aclrtStream *)`，`aclrtSynchronizeStream(aclrtStream)`，`aclrtDestroyStream(aclrtStream)` | `acl/acl_rt.h` | `libacl_rt.so`，均为 `T` | 销毁前必须同步；stream 是三原语的最后一个参数 |
-| device memory | `aclrtMalloc(void **, size_t, aclrtMemMallocPolicy)`，`aclrtFree(void *)` | `acl/acl_rt.h` | `libacl_rt.so`，均为 `T` | `aclrtMalloc` 返回 device memory；只能由 `aclrtFree` 释放 |
-| transfer | `aclrtMemcpy(void *, size_t, const void *, size_t, aclrtMemcpyKind)`；`aclrtMemcpyAsync(..., aclrtMemcpyKind, aclrtStream)` | `acl/acl_rt.h` | `libacl_rt.so`，均为 `T` | count 是字节；异步拷贝需 stream 同步；使用 `ACL_MEMCPY_HOST_TO_DEVICE` / `ACL_MEMCPY_DEVICE_TO_HOST` |
-| rank-table comm | `HcclCommInitClusterInfo(const char *, uint32_t, HcclComm *)` | `hccl/hccl_comm.h` | `libhcomm.so`，`W` | `clusterInfo` 是含文件名的路径，rank 为当前 rank；返回的 `HcclComm` 由调用方销毁 |
-| root-info comm | `HcclGetRootInfo(HcclRootInfo *)`；`HcclCommInitRootInfo(uint32_t, const HcclRootInfo *, uint32_t, HcclComm *)` | `hccl/hccl_comm.h` | `libhcomm.so`，`W` | `HcclRootInfo` 长度为 4108 字节；root-info 的进程间分发、rank 启动和超时策略必须在 G2-F-1 冻结 |
-| comm destroy/error | `HcclCommDestroy(HcclComm)`；`const char *HcclGetErrorString(HcclResult)` | `hccl/hccl_comm.h` | `libhcomm.so`，`W` | 先完成/同步使用，再销毁 comm；保留原始 `HcclResult` 与字符串 |
-| AllReduce | `HcclAllReduce(void *, void *, uint64_t count, HcclDataType, HcclReduceOp, HcclComm, aclrtStream)` | `hccl/hccl.h` | `libhccl.so`，`T` | count 是输出元素数；dtype 支持列表含 FP16/FP32/FP64/BFP16 和整型；op 为 SUM/PROD/MAX/MIN |
-| AllGather | `HcclAllGather(void *, void *, uint64_t sendCount, HcclDataType, HcclComm, aclrtStream)` | `hccl/hccl.h` | `libhccl.so`，`T` | sendCount 是每 rank 输入元素数；输出容量必须按 world size 计算 |
-| ReduceScatter | `HcclReduceScatter(void *, void *, uint64_t recvCount, HcclDataType, HcclReduceOp, HcclComm, aclrtStream)` | `hccl/hccl.h` | `libhccl.so`，`T` | recvCount 是每 rank 输出元素数；输入容量必须按 world size 计算 |
+| 阶段               | 正式 API（精确签名）                                                                                                                       | 头文件             | 导出库/符号              | 合约与前置条件                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ | ------------------------ | ---------------------------------------------------------------------------------------------------- |
+| runtime            | `aclError aclInit(const char *configPath)` / `aclError aclFinalize()`                                                                      | `acl/acl_rt.h`     | `libacl_rt.so`，均为 `T` | 每进程 `aclInit` 仅一次；退出前 `aclFinalize`；是否可在无设备环境调用尚未由头文件证明为无副作用      |
+| device/context     | `aclrtSetDevice(int32_t)`，`aclrtCreateContext(aclrtContext *, int32_t)`，`aclrtDestroyContext(aclrtContext)`，`aclrtResetDevice(int32_t)` | `acl/acl_rt.h`     | `libacl_rt.so`，均为 `T` | `SetDevice` 可隐式创建默认 context；显式 context 只能销毁自己创建的对象；这些都是实机步骤            |
+| stream             | `aclrtCreateStream(aclrtStream *)`，`aclrtSynchronizeStream(aclrtStream)`，`aclrtDestroyStream(aclrtStream)`                               | `acl/acl_rt.h`     | `libacl_rt.so`，均为 `T` | 销毁前必须同步；stream 是三原语的最后一个参数                                                        |
+| device memory      | `aclrtMalloc(void **, size_t, aclrtMemMallocPolicy)`，`aclrtFree(void *)`                                                                  | `acl/acl_rt.h`     | `libacl_rt.so`，均为 `T` | `aclrtMalloc` 返回 device memory；只能由 `aclrtFree` 释放                                            |
+| transfer           | `aclrtMemcpy(void *, size_t, const void *, size_t, aclrtMemcpyKind)`；`aclrtMemcpyAsync(..., aclrtMemcpyKind, aclrtStream)`                | `acl/acl_rt.h`     | `libacl_rt.so`，均为 `T` | count 是字节；异步拷贝需 stream 同步；使用 `ACL_MEMCPY_HOST_TO_DEVICE` / `ACL_MEMCPY_DEVICE_TO_HOST` |
+| rank-table comm    | `HcclCommInitClusterInfo(const char *, uint32_t, HcclComm *)`                                                                              | `hccl/hccl_comm.h` | `libhcomm.so`，`W`       | `clusterInfo` 是含文件名的路径，rank 为当前 rank；返回的 `HcclComm` 由调用方销毁                     |
+| root-info comm     | `HcclGetRootInfo(HcclRootInfo *)`；`HcclCommInitRootInfo(uint32_t, const HcclRootInfo *, uint32_t, HcclComm *)`                            | `hccl/hccl_comm.h` | `libhcomm.so`，`W`       | `HcclRootInfo` 长度为 4108 字节；root-info 的进程间分发、rank 启动和超时策略必须在 G2-F-1 冻结       |
+| comm destroy/error | `HcclCommDestroy(HcclComm)`；`const char *HcclGetErrorString(HcclResult)`                                                                  | `hccl/hccl_comm.h` | `libhcomm.so`，`W`       | 先完成/同步使用，再销毁 comm；保留原始 `HcclResult` 与字符串                                         |
+| AllReduce          | `HcclAllReduce(void *, void *, uint64_t count, HcclDataType, HcclReduceOp, HcclComm, aclrtStream)`                                         | `hccl/hccl.h`      | `libhccl.so`，`T`        | count 是输出元素数；dtype 支持列表含 FP16/FP32/FP64/BFP16 和整型；op 为 SUM/PROD/MAX/MIN             |
+| AllGather          | `HcclAllGather(void *, void *, uint64_t sendCount, HcclDataType, HcclComm, aclrtStream)`                                                   | `hccl/hccl.h`      | `libhccl.so`，`T`        | sendCount 是每 rank 输入元素数；输出容量必须按 world size 计算                                       |
+| ReduceScatter      | `HcclReduceScatter(void *, void *, uint64_t recvCount, HcclDataType, HcclReduceOp, HcclComm, aclrtStream)`                                 | `hccl/hccl.h`      | `libhccl.so`，`T`        | recvCount 是每 rank 输出元素数；输入容量必须按 world size 计算                                       |
 
 `HcclDataType` 的已确认枚举包括 `HCCL_DATA_TYPE_FP16=3`、`FP32=4`、`FP64=10`、`BFP16=11`；`HcclReduceOp` 为 `SUM=0`、`PROD=1`、`MAX=2`、`MIN=3`；成功码是 `HCCL_SUCCESS=0`。adapter 必须使用这些官方枚举，不能复用项目 CPU_SIM 的数值定义或字符串映射。
 
@@ -152,16 +152,16 @@ WSL 中 `command -v npu-smi` 无结果、`/dev` 无 `davinci`/`ascend` 节点、
 
 ## 6. 统一状态语义
 
-| 状态 | 精确含义 | 不表示 |
-| --- | --- | --- |
-| `BUILD_ONLY_PASS` | direct target 在冻结头文件下编译成功 | 链接、加载、设备调用 |
-| `LINK_PASS` | 直接链接的目标/可执行体解析所需官方库 | device runtime 或 API 成功 |
-| `SYMBOL_DISCOVERY_PASS` | 静态/已证明安全的动态发现看到预期 SONAME/导出符号 | 签名可运行、comm 成功 |
-| `NO_DEVICE_EXPECTED` | preflight 确认设备/驱动不存在且未尝试实机 API | 实现失败或成功 |
-| `HARDWARE_BLOCKED` | 需要真实 Ascend 设备的步骤因无硬件停止 | `ENV_BLOCKED` 或代码失败 |
-| `ENV_BLOCKED` | CANN root、版本、依赖、权限、rank-table/launcher 或官方环境不满足 | hardware pass |
-| `REAL_DEVICE_PASS` | 在真实 NPU 上的直接 API、同步、D2H 正确性和证据全部通过 | 其他规模/primitive 自动通过 |
-| `FAIL` | 前置条件已满足但构建、契约、调用、数据、清理或回归失败 | 可改写为 block 以掩盖缺陷 |
+| 状态                    | 精确含义                                                          | 不表示                      |
+| ----------------------- | ----------------------------------------------------------------- | --------------------------- |
+| `BUILD_ONLY_PASS`       | direct target 在冻结头文件下编译成功                              | 链接、加载、设备调用        |
+| `LINK_PASS`             | 直接链接的目标/可执行体解析所需官方库                             | device runtime 或 API 成功  |
+| `SYMBOL_DISCOVERY_PASS` | 静态/已证明安全的动态发现看到预期 SONAME/导出符号                 | 签名可运行、comm 成功       |
+| `NO_DEVICE_EXPECTED`    | preflight 确认设备/驱动不存在且未尝试实机 API                     | 实现失败或成功              |
+| `HARDWARE_BLOCKED`      | 需要真实 Ascend 设备的步骤因无硬件停止                            | `ENV_BLOCKED` 或代码失败    |
+| `ENV_BLOCKED`           | CANN root、版本、依赖、权限、rank-table/launcher 或官方环境不满足 | hardware pass               |
+| `REAL_DEVICE_PASS`      | 在真实 NPU 上的直接 API、同步、D2H 正确性和证据全部通过           | 其他规模/primitive 自动通过 |
+| `FAIL`                  | 前置条件已满足但构建、契约、调用、数据、清理或回归失败            | 可改写为 block 以掩盖缺陷   |
 
 ## 7. Checkpoints
 
@@ -195,19 +195,290 @@ WSL 中 `command -v npu-smi` 无结果、`/dev` 无 `davinci`/`ascend` 节点、
 - **evidence：** `compile_commands.json`、CMakeCache 摘要、目标哈希、默认 CPU_SIM link audit。
 - **建议 commit / 回滚：** `G2-F-2 add build-only direct HCCL adapter`；revert 该项目提交。
 
-### G2-F-3：链接、动态发现和无设备诊断
+### G2-F-3：正式链接、符号审计与无设备诊断
 
-- **目标：** 验证 direct link line、SONAME/导出符号和严格的 `NO_DEVICE_EXPECTED` diagnose。
-- **修改文件：** direct CMake link 逻辑、`hccl_direct_diagnose`、`plugin/direct_api_backend.py` 的纯诊断边界、单元测试。
-- **非目标：** 不调用 `aclInit`，不 `dlopen` 除非 G2-F-1 已提供无设备安全证明；不创建 NPU 对象。
-- **API 契约：** `libhccl.so` 三原语为 `T`，`libhcomm.so` communicator API 为 `W`，`libacl_rt.so` lifecycle API 为 `T`；动态加载仅可做 discovery，不能变为 fallback。
-- **构建/测试：** 构建 direct target；`readelf -d`、`nm -D`、经子 shell `source set_env.sh; ldd`；运行不触发 runtime 的 diagnose tests。
-- **当前环境：** 静态验证可执行；结果为 `LINK_PASS` + `SYMBOL_DISCOVERY_PASS` + `NO_DEVICE_EXPECTED`。
-- **完成条件：** 依赖全解析且 diagnose 明确无设备；任何试图执行 direct collective 的调用在 native 边界前拒绝。
-- **HARDWARE_BLOCKED：** 不适用到静态步骤；若用户请求 lifecycle harness，报告 `HARDWARE_BLOCKED`。
-- **ENV_BLOCKED：** 未 source 环境导致依赖未解析、SONAME/symbol/version 漂移、无安全契约的 library-load 请求。
-- **evidence：** ELF/linker 报告、环境差异、诊断 JSON；没有 `direct_hccl_api_call=true`。
-- **建议 commit / 回滚：** `G2-F-3 add direct API link and no-device diagnostics`；revert 该项目提交。
+#### 目标
+
+在不执行任何 ACL runtime、device、communicator 或 collective API 的前提下，将 G2-F-2 的 build-only adapter 推进到可审计的正式链接状态，并建立严格的无设备诊断边界。
+
+本 checkpoint 必须证明：
+
+1. 项目生成的 direct linked artifact 确实依赖冻结的官方库；
+2. 链接使用的库全部来自唯一冻结的 CANN 9.1.0 root；
+3. ELF `NEEDED`、官方库 `SONAME`、导出符号和传递依赖与 G2-F-1 manifest 一致；
+4. 当前环境没有真实 Ascend 设备时，诊断稳定返回 `NO_DEVICE_EXPECTED`；
+5. 任何 direct collective 执行请求都在调用 ACL/HCCL runtime 之前被拒绝；
+6. CPU_SIM 和 ASCEND_HCCL_VM 的构建、运行和 evidence 语义保持不变。
+
+成功状态只能是：
+
+- `LINK_PASS`
+- `SYMBOL_DISCOVERY_PASS`
+- `NO_DEVICE_EXPECTED`
+
+这些状态不表示已经加载 runtime、创建 communicator 或执行集合通信。
+
+#### 前置条件
+
+开始前必须确认：
+
+- G2-F-1、G2-F-2 和 evidence 清理提交已进入 `main`；
+- 工作区 clean；
+- CANN root 为 `/home/workspace/Ascend/cann-9.1.0`；
+- CANN/HCCL 版本为 9.1.0；
+- HCOMM 为 `competition/campus-2026@c8a3dc68a37315aa1e908a971fa706abe612f6ee`；
+- HCCL 为 `competition/campus-2026@2c87cc1937bab23b8574ef24017c03572d3340e2`；
+- HCOMM/HCCL tracked worktree clean；
+- G2-F-1 manifest 和最终 F1/F2 evidence 的 SHA256 校验仍通过。
+
+任一冻结条件漂移时返回 `ENV_BLOCKED`，不得静默使用其他安装、其他版本或系统同名库。
+
+#### 修改范围
+
+预计修改或新增：
+
+- `hcccl/CMakeLists.txt`
+- `hcccl/direct/` 下的链接边界、诊断工具和必要接口
+- `plugin/direct_api_backend.py`
+- direct link、symbol、diagnose 相关测试
+- G2-F-3 readiness evidence
+- 必要的项目文档和状态说明
+
+不得修改：
+
+- HCOMM/HCCL/CANN 官方文件；
+- CPU_SIM 的公开 ABI 和加载路径；
+- G2-E HCCL-VM runner、Checker 和 evidence 语义；
+- 已存在的 G2-D/G2-E/G2-F-1/F2 evidence。
+
+#### 正式链接契约
+
+production direct 路径必须直接链接：
+
+- `libhccl.so`
+- `libhcomm.so`
+- `libacl_rt.so`
+
+链接必须满足：
+
+1. `HCCL_CANN_ROOT` 是唯一 SDK root；
+2. 必须使用绝对 canonical path 或受 `NO_DEFAULT_PATH` 限制的精确搜索；
+3. 不得从系统默认目录或其他 CANN 安装解析同名库；
+4. 必须验证实际 canonical realpath；
+5. 必须记录三个库的 SHA256；
+6. 必须记录三个库的 `SONAME`；
+7. 必须生成至少一个可由 `readelf -d` 和 `ldd` 审计的 linked ELF artifact；
+8. 必须保存完整或可复现的 link line；
+9. 必须验证 G2-F-1 manifest 要求的三原语、communicator 和 ACL runtime 导出符号；
+10. 不得把静态 archive 的生成误写成 `LINK_PASS`。
+
+如果实现保留 G2-F-2 的静态 compile-only target，应额外建立独立 linked artifact；不得删除 build-only 验证能力。
+
+`HCCL_ENABLE_ASCEND_HCCL_DIRECT` 必须继续默认 `OFF`。默认 CPU_SIM configure/build 不得要求 CANN root，也不得产生 ACL/HCCL 依赖。
+
+#### 动态加载边界
+
+实际 `dlopen` 不是本 checkpoint 的强制完成条件。
+
+只有 G2-F-1 合约或该 CANN 版本的官方材料明确证明“仅加载共享库不会初始化 runtime、访问设备或改变系统状态”时，才允许执行动态加载诊断。
+
+缺少该安全证明时：
+
+- 不执行 `dlopen`；
+- 输出 `DYNAMIC_LOAD_NOT_EXECUTED`；
+- 使用 `readelf`、`nm`、`ldd` 和 manifest 完成静态发现；
+- 不因此将 G2-F-3 标记为失败；
+- 不允许以试运行方式判断其安全性。
+
+即使执行了安全的动态发现，也不得把它作为 production fallback，更不得把 library load 写成 direct API 调用成功。
+
+#### 无设备诊断契约
+
+新增的 diagnose 必须是纯 preflight，不调用任何 ACL/HCCL runtime 函数。
+
+允许检查：
+
+- CANN root 和版本；
+- manifest 一致性；
+- 头文件和库文件存在性；
+- canonical realpath；
+- SHA256；
+- `SONAME`；
+- ELF `NEEDED`；
+- 导出符号；
+- `ldd` 传递依赖；
+- `npu-smi` 是否存在；
+- `/dev` 下 Ascend/Davinci device nodes；
+- `/proc`、`/sys/module` 中的只读驱动指示；
+- 当前平台和环境变量。
+
+当前环境确认无设备时，结构化结果必须包含：
+
+```text
+backend=ASCEND_HCCL_DIRECT
+status=NO_DEVICE_EXPECTED
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+runtime_initialized=false
+device_opened=false
+communicator_created=false
+collective_executed=false
+```
+
+无设备不是 `FAIL`，也不是 `LINK_PASS` 本身；链接结果和硬件 preflight 必须分别记录。
+
+#### 执行防线
+
+本 checkpoint 必须保证所有 collective 或 lifecycle 请求在 native runtime 边界之前被拒绝。
+
+禁止实际调用：
+
+- `aclInit`
+- `aclFinalize`
+- `aclrtSetDevice`
+- `aclrtCreateContext`
+- `aclrtCreateStream`
+- `aclrtMalloc`
+- `aclrtMemcpy`
+- `HcclGetRootInfo`
+- `HcclCommInitRootInfo`
+- `HcclCommInitClusterInfo`
+- `HcclCommDestroy`
+- `HcclAllReduce`
+- `HcclAllGather`
+- `HcclReduceScatter`
+
+允许在 manifest、函数类型、静态签名检查、symbol inventory 和测试期望中出现这些名称，但不得存在可执行调用路径。
+
+不得运行：
+
+- `hccl_test`
+- HCCL-VM
+- MPI launcher
+
+来生成 direct evidence。
+
+direct backend 不得导入或调用 `plugin.hccl_vm_runner`。
+
+#### 测试要求
+
+目标测试必须覆盖：
+
+1. feature flag 默认 `OFF`；
+2. direct linked artifact 仅使用冻结 CANN root；
+3. 缺少 CANN root 时配置明确失败；
+4. CANN 版本、库、SONAME、符号或哈希漂移时明确失败；
+5. linked ELF 的 `NEEDED` 包含预期官方库；
+6. `ldd` 在仅对子 shell 生效的 CANN 环境中完整解析；
+7. manifest 中的要求符号均存在；
+8. no-device diagnose 返回 `NO_DEVICE_EXPECTED`；
+9. diagnose 不调用 runtime；
+10. direct collective 请求在 runtime 之前拒绝；
+11. Windows 导入相关 Python 模块时不要求本地存在 CANN/WSL；
+12. 默认 CPU_SIM configure/build/CTest 不包含 CANN 依赖；
+13. G2-E registry、dry-run、parser 和 evidence 回归不变；
+14. G2-F-1/F2 evidence SHA256 仍通过；
+15. HCOMM/HCCL tracked worktree 仍 clean。
+
+不得删除、弱化测试或增加无理由 skip 来获得通过。
+
+#### Evidence
+
+只保留一份权威的最终 evidence：
+
+```text
+experiments/direct_api/evidence/g2_f_3_<timestamp>/
+```
+
+至少包含：
+
+- `README.md`
+- `manifest.json`
+- `result.json`
+- `build_link.json`
+- `symbol_inventory.json`
+- `dependency_audit.json`
+- `no_device_diagnose.json`
+- `regression.json`
+- `SHA256SUMS`
+
+Evidence 必须记录：
+
+- adapter source commit；
+- linked artifact SHA256；
+- CMake 配置和编译器；
+- link line；
+- CANN root 和版本；
+- 官方库 canonical realpath、SHA256 和 SONAME；
+- `readelf -d` 的 `NEEDED`；
+- `ldd` 解析结果；
+- required/missing symbol 集合；
+- 是否执行过 `dlopen` 及其安全依据；
+- device/driver/npu-smi preflight；
+- `direct_hccl_api_call=false`；
+- `real_ascend_npu_validated=false`；
+- `runtime_api_calls=[]`；
+- CPU_SIM 和 G2-E 回归结果；
+- HCOMM/HCCL branch、commit 和 clean 状态。
+
+不得提交多个未说明用途的中间 evidence。失败调试输出保留在临时构建目录，或明确标记为 superseded 后再决定是否入库。
+
+#### 完成条件
+
+只有以下条件全部满足时，G2-F-3 才可标记 `COMPLETED`：
+
+- direct linked artifact 构建成功；
+- 实际链接到冻结的三个官方库；
+- link line、NEEDED、SONAME、SHA256 和路径全部可审计；
+- 传递依赖完整解析；
+- required symbols 全部存在；
+- no-device diagnose 返回 `NO_DEVICE_EXPECTED`；
+- collective 请求在 runtime 前拒绝；
+- 未调用任何 ACL/HCCL runtime API；
+- CPU_SIM 和 G2-E 无回归；
+- evidence SHA256 全部通过；
+- HCOMM/HCCL tracked worktree clean；
+- 工作区 clean；
+- 未 push、未 merge。
+
+最终状态：
+
+```text
+G2-F-3: COMPLETED
+G2-F Readiness: PARTIAL
+G2-F Real-device Acceptance: HARDWARE_BLOCKED
+G2-F Overall: PARTIAL
+```
+
+#### 阻塞与失败分类
+
+`ENV_BLOCKED`：
+
+- CANN root、版本、头文件或库缺失；
+- 官方库路径或 SHA256 漂移；
+- SONAME、导出符号或依赖与 manifest 不符；
+- HCOMM/HCCL commit 或 clean 状态不符；
+- 编译器、CMake、权限或 evidence 路径不满足。
+
+`HARDWARE_BLOCKED`：
+
+- 仅适用于用户要求进入 lifecycle 或真实设备调用，而当前无设备；
+- 不影响本 checkpoint 的静态链接、符号和 diagnose 完成。
+
+`FAIL`：
+
+- 前置环境满足但 CMake、链接、审计、诊断、guard、测试或 evidence 实现错误；
+- 不得将代码缺陷改写为 `HARDWARE_BLOCKED`。
+
+#### 建议 commit 与回滚
+
+建议 commit：
+
+```text
+G2-F-3 add direct API link and no-device diagnostics
+```
+
+回滚使用该项目提交的 `git revert`，不得重写历史或删除既有 evidence。
 
 ### G2-F-4：lifecycle harness 边界
 
@@ -294,4 +565,3 @@ git -c safe.directory=/home/workspace/hccl -C /home/workspace/hccl ...
 ## 10. 启动判断
 
 当前适合立即启动 **G2-F Readiness**，因为官方头文件、库、SONAME、符号和依赖解析均已定位且 CPU_SIM/G2-E 边界清晰。当前不适合启动或宣称完成 **G2-F Real-device Acceptance**：它处于 `HARDWARE_BLOCKED`，直到满足第 9 节的真实设备与多-rank 条件。
-

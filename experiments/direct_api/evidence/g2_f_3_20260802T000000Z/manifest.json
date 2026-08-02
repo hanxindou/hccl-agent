@@ -1,0 +1,281 @@
+{
+  "api_contract": {
+    "collective_buffer_locality": {
+      "evidence": "The public hccl.h declarations describe data addresses but do not state host/device locality. aclrtMalloc is documented as device memory.",
+      "g2_f_action": "Do not pass host pointers to a collective; verify locality from an official example or real-device contract before G2-F-4.",
+      "status": "UNRESOLVED"
+    },
+    "dtype_mapping": {
+      "BFP16": "HCCL_DATA_TYPE_BFP16=11",
+      "FP16": "HCCL_DATA_TYPE_FP16=3",
+      "FP32": "HCCL_DATA_TYPE_FP32=4",
+      "FP64": "HCCL_DATA_TYPE_FP64=10"
+    },
+    "functions": [
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclInit",
+        "safety": "NOT_CALLABLE_IN_G2_F_1_OR_G2_F_2",
+        "signature": "aclError aclInit(const char *configPath)"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclFinalize",
+        "safety": "NOT_CALLABLE_IN_G2_F_1_OR_G2_F_2",
+        "signature": "aclError aclFinalize()"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclrtSetDevice",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "aclError aclrtSetDevice(int32_t deviceId)"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclrtCreateContext",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "aclError aclrtCreateContext(aclrtContext *context, int32_t deviceId)"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclrtDestroyContext",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "aclError aclrtDestroyContext(aclrtContext context)"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclrtCreateStream",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "aclError aclrtCreateStream(aclrtStream *stream)"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclrtDestroyStream",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "aclError aclrtDestroyStream(aclrtStream stream)"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclrtSynchronizeStream",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "aclError aclrtSynchronizeStream(aclrtStream stream)"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclrtMalloc",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "aclError aclrtMalloc(void **devPtr, size_t size, aclrtMemMallocPolicy policy)"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclrtFree",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "aclError aclrtFree(void *devPtr)"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclrtMemcpy",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "aclError aclrtMemcpy(void *dst, size_t destMax, const void *src, size_t count, aclrtMemcpyKind kind)"
+      },
+      {
+        "header": "acl/acl_rt.h",
+        "library": "acl_rt",
+        "name": "aclrtMemcpyAsync",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "aclError aclrtMemcpyAsync(void *dst, size_t destMax, const void *src, size_t count, aclrtMemcpyKind kind, aclrtStream stream)"
+      },
+      {
+        "header": "hccl/hccl_comm.h",
+        "library": "hcomm",
+        "name": "HcclCommInitClusterInfo",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "HcclResult HcclCommInitClusterInfo(const char *clusterInfo, uint32_t rank, HcclComm *comm)"
+      },
+      {
+        "header": "hccl/hccl_comm.h",
+        "library": "hcomm",
+        "name": "HcclGetRootInfo",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "HcclResult HcclGetRootInfo(HcclRootInfo *rootInfo)"
+      },
+      {
+        "header": "hccl/hccl_comm.h",
+        "library": "hcomm",
+        "name": "HcclCommInitRootInfo",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "HcclResult HcclCommInitRootInfo(uint32_t nRanks, const HcclRootInfo *rootInfo, uint32_t rank, HcclComm *comm)"
+      },
+      {
+        "header": "hccl/hccl_comm.h",
+        "library": "hcomm",
+        "name": "HcclCommDestroy",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "HcclResult HcclCommDestroy(HcclComm comm)"
+      },
+      {
+        "count_semantics": "output elements per rank",
+        "header": "hccl/hccl.h",
+        "library": "hccl",
+        "name": "HcclAllReduce",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "HcclResult HcclAllReduce(void *sendBuf, void *recvBuf, uint64_t count, HcclDataType dataType, HcclReduceOp op, HcclComm comm, aclrtStream stream)"
+      },
+      {
+        "count_semantics": "input elements per rank",
+        "header": "hccl/hccl.h",
+        "library": "hccl",
+        "name": "HcclAllGather",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "HcclResult HcclAllGather(void *sendBuf, void *recvBuf, uint64_t sendCount, HcclDataType dataType, HcclComm comm, aclrtStream stream)"
+      },
+      {
+        "count_semantics": "output elements per rank",
+        "header": "hccl/hccl.h",
+        "library": "hccl",
+        "name": "HcclReduceScatter",
+        "safety": "REAL_DEVICE_ONLY",
+        "signature": "HcclResult HcclReduceScatter(void *sendBuf, void *recvBuf, uint64_t recvCount, HcclDataType dataType, HcclReduceOp op, HcclComm comm, aclrtStream stream)"
+      }
+    ],
+    "reduce_op_mapping": {
+      "MAX": "HCCL_REDUCE_MAX=2",
+      "MIN": "HCCL_REDUCE_MIN=3",
+      "PROD": "HCCL_REDUCE_PROD=1",
+      "SUM": "HCCL_REDUCE_SUM=0"
+    }
+  },
+  "cann": {
+    "platform_dir": "x86_64-linux",
+    "root": "/home/workspace/Ascend/cann-9.1.0",
+    "set_env": "set_env.sh",
+    "version": "9.1.0"
+  },
+  "contract_id": "cann-hccl-9.1.0-x86_64-linux",
+  "headers": [
+    {
+      "path": "{cann_root}/x86_64-linux/include/hccl/hccl.h",
+      "role": "collective declarations",
+      "sha256": "4bcdbf905fbf330bae14ce0bed9e38bb6d7f4c7b920e7e673124445e52f06046"
+    },
+    {
+      "path": "{cann_root}/x86_64-linux/include/hccl/hccl_comm.h",
+      "role": "communicator declarations",
+      "sha256": "79d5b731270266a43ec8c639f59a0daf5e938a6c4e4716cb9378b6475c9a9d7f"
+    },
+    {
+      "path": "{cann_root}/x86_64-linux/include/hccl/hccl_types.h",
+      "role": "HCCL result, datatype, operation, and handle types",
+      "sha256": "a6e47f94f578f4b176c32c6f44e95295b2e27814554b325902c241eded60a03c"
+    },
+    {
+      "path": "{cann_root}/x86_64-linux/include/acl/acl_rt.h",
+      "role": "ACL runtime, device, context, stream, memory, and copy declarations",
+      "sha256": "0f836ba6cfac7356ec824821ab6b08508f1e28d86bcc74e332b962d7eff1cace"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "hccl",
+      "needed": [
+        "libhcomm.so",
+        "libhccl_compat.so",
+        "libacl_rt.so",
+        "libc_sec.so",
+        "libunified_dlog.so",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "path": "{cann_root}/x86_64-linux/lib64/libhccl.so",
+      "sha256": "5dcce36878d093d7e9561e4526e5bfcdabb4d32cff19c13e2793590e66789c78",
+      "soname": "libhccl.so",
+      "symbols": [
+        "HcclAllReduce",
+        "HcclAllGather",
+        "HcclReduceScatter"
+      ]
+    },
+    {
+      "name": "hcomm",
+      "needed": [
+        "libhccl_alg.so",
+        "libhccl_plf.so",
+        "libhccl_v2.so",
+        "libacl_rt.so",
+        "libc_sec.so",
+        "libstdc++.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "path": "{cann_root}/x86_64-linux/lib64/libhcomm.so",
+      "sha256": "f7c88b0f17cb4528b84e93e02b2db8e2b572644d09d9ff02685875177ba5d214",
+      "soname": "libhcomm.so",
+      "symbols": [
+        "HcclCommInitClusterInfo",
+        "HcclGetRootInfo",
+        "HcclCommInitRootInfo",
+        "HcclCommDestroy",
+        "HcclGetErrorString"
+      ]
+    },
+    {
+      "name": "acl_rt",
+      "needed": [
+        "libascend_dump.so",
+        "libstdc++.so.6",
+        "libruntime.so",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "path": "{cann_root}/x86_64-linux/lib64/libacl_rt.so",
+      "sha256": "46b5c18ba6794ffc834770d5e4399fec872528f813c12fcb8e8fbab72cc3c862",
+      "soname": "libacl_rt.so",
+      "symbols": [
+        "aclInit",
+        "aclFinalize",
+        "aclrtSetDevice",
+        "aclrtResetDevice",
+        "aclrtCreateContext",
+        "aclrtDestroyContext",
+        "aclrtCreateStream",
+        "aclrtDestroyStream",
+        "aclrtSynchronizeStream",
+        "aclrtMalloc",
+        "aclrtFree",
+        "aclrtMemcpy",
+        "aclrtMemcpyAsync"
+      ]
+    }
+  ],
+  "official_repositories": {
+    "hccl": {
+      "branch": "competition/campus-2026",
+      "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "path": "/home/workspace/hccl",
+      "tracked_worktree": "clean"
+    },
+    "hcomm": {
+      "branch": "competition/campus-2026",
+      "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "path": "/home/workspace/hcomm",
+      "tracked_worktree": "clean"
+    }
+  },
+  "schema_version": "g2-f-direct-api-manifest-v1",
+  "status": "SYMBOL_DISCOVERY_PASS"
+}

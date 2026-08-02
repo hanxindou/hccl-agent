@@ -7,7 +7,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 option(HCCL_ENABLE_ASCEND_HCCL_DIRECT
-    "Build the isolated C++17 direct-HCCL adapter in compile-only mode"
+    "Build isolated direct-HCCL readiness targets (compile-only adapter and link audit)"
     OFF)
 set(HCCL_CANN_ROOT "" CACHE PATH
     "CANN/Ascend SDK root for the direct HCCL adapter")
@@ -104,7 +104,7 @@ if(HCCL_ENABLE_ASCEND_HCCL_DIRECT)
     if(NOT HCCL_CANN_ROOT)
         message(FATAL_ERROR
             "HCCL_ENABLE_ASCEND_HCCL_DIRECT=ON requires HCCL_CANN_ROOT. "
-            "This G2-F-2 target only compiles against official headers; it does not link or load CANN libraries."
+            "The isolated build-only adapter and non-executed link audit require a frozen official SDK root."
         )
     endif()
 
@@ -119,6 +119,25 @@ if(HCCL_ENABLE_ASCEND_HCCL_DIRECT)
             "HCCL_ENABLE_ASCEND_HCCL_DIRECT=ON requires ${HCCL_CANN_ROOT}/include/hccl/hccl.h."
         )
     endif()
+
+    get_filename_component(HCCL_DIRECT_CANN_REAL_ROOT "${HCCL_CANN_ROOT}" REALPATH)
+    set(HCCL_DIRECT_CANN_LIBRARY_DIR
+        "${HCCL_DIRECT_CANN_REAL_ROOT}/x86_64-linux/lib64")
+    foreach(_direct_library hccl hcomm acl_rt)
+        find_file(HCCL_DIRECT_${_direct_library}_LIBRARY
+            NAMES "lib${_direct_library}.so"
+            PATHS "${HCCL_DIRECT_CANN_LIBRARY_DIR}"
+            NO_DEFAULT_PATH
+        )
+        if(NOT HCCL_DIRECT_${_direct_library}_LIBRARY)
+            message(FATAL_ERROR
+                "G2-F direct link audit requires ${HCCL_DIRECT_CANN_LIBRARY_DIR}/lib${_direct_library}.so. "
+                "Only the canonical HCCL_CANN_ROOT is searched."
+            )
+        endif()
+        get_filename_component(HCCL_DIRECT_${_direct_library}_LIBRARY
+            "${HCCL_DIRECT_${_direct_library}_LIBRARY}" REALPATH)
+    endforeach()
 
     enable_language(CXX)
     set(CMAKE_CXX_STANDARD 17)
@@ -143,7 +162,27 @@ if(HCCL_ENABLE_ASCEND_HCCL_DIRECT)
     )
     add_dependencies(hccl_direct_adapter_abi_compile hccl_direct_adapter)
 
-    message(STATUS "G2-F direct adapter: compile-only target enabled; no official CANN library is linked.")
+    # This executable is an ELF inspection artifact only.  Its source takes
+    # function addresses to retain dynamic-link references but never calls an
+    # ACL/HCCL function.  It is not run by CMake or CTest.
+    add_executable(hccl_direct_link_audit
+        direct/src/hccl_direct_link_audit.cpp
+    )
+    target_include_directories(hccl_direct_link_audit PRIVATE ${HCCL_DIRECT_CANN_INCLUDE_DIR})
+    target_compile_features(hccl_direct_link_audit PRIVATE cxx_std_17)
+    target_link_libraries(hccl_direct_link_audit PRIVATE
+        "${HCCL_DIRECT_hccl_LIBRARY}"
+        "${HCCL_DIRECT_hcomm_LIBRARY}"
+        "${HCCL_DIRECT_acl_rt_LIBRARY}"
+    )
+    # Some official transitive DSOs refer to CANN's device support library.
+    # rpath-link is a link-time search aid only; it neither embeds a runtime
+    # search path nor runs/loads an official library.
+    set_property(TARGET hccl_direct_link_audit APPEND_STRING PROPERTY LINK_FLAGS
+        " -Wl,--no-as-needed -Wl,--allow-shlib-undefined -Wl,-rpath-link,${HCCL_DIRECT_CANN_REAL_ROOT}/x86_64-linux/devlib")
+
+    message(STATUS "G2-F direct adapter: compile-only target and non-executed official-library link audit enabled.")
+    message(STATUS "G2-F direct link root: ${HCCL_DIRECT_CANN_REAL_ROOT}")
 endif()
 
 # ---- Tests --------------------------------------------------------------

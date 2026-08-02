@@ -1,0 +1,76 @@
+{
+  "artifact": {
+    "canonical_realpath": "/tmp/hccl-g2f3-link/hccl_direct_link_audit",
+    "sha256": "3b092ee3c620f1ffae82a68c369643dcb5688214ea2175b300d98d4abd3f2c7f"
+  },
+  "cann_root": "/home/workspace/Ascend/cann-9.1.0",
+  "cann_version": "9.1.0",
+  "cmake_configure": "cmake -S hcccl -B /tmp/hccl-g2f3-link -DHCCL_BACKEND=CPU_SIM -DHCCL_ENABLE_ASCEND_HCCL_DIRECT=ON -DHCCL_CANN_ROOT=/home/workspace/Ascend/cann-9.1.0",
+  "compiler": "/usr/bin/c++ (GNU 11.4.0)",
+  "dynamic_load": {
+    "safety_basis": "No official contract proves dlopen side-effect-free.",
+    "status": "DYNAMIC_LOAD_NOT_EXECUTED"
+  },
+  "link_line": "/usr/bin/c++  -Wl,--no-as-needed -Wl,--allow-shlib-undefined -Wl,-rpath-link,/home/workspace/Ascend/cann-9.1.0/x86_64-linux/devlib CMakeFiles/hccl_direct_link_audit.dir/direct/src/hccl_direct_link_audit.cpp.o -o hccl_direct_link_audit  -Wl,-rpath,/home/workspace/Ascend/cann-9.1.0/x86_64-linux/lib64 /home/workspace/Ascend/cann-9.1.0/x86_64-linux/lib64/libhccl.so /home/workspace/Ascend/cann-9.1.0/x86_64-linux/lib64/libhcomm.so /home/workspace/Ascend/cann-9.1.0/x86_64-linux/lib64/libacl_rt.so",
+  "official_libraries": [
+    {
+      "canonical_realpath": "/home/workspace/Ascend/cann-9.1.0/x86_64-linux/lib64/libhccl.so",
+      "name": "hccl",
+      "observed_needed": [
+        "libhcomm.so",
+        "libhccl_compat.so",
+        "libacl_rt.so",
+        "libc_sec.so",
+        "libunified_dlog.so",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "sha256": "5dcce36878d093d7e9561e4526e5bfcdabb4d32cff19c13e2793590e66789c78",
+      "soname": "libhccl.so"
+    },
+    {
+      "canonical_realpath": "/home/workspace/Ascend/cann-9.1.0/x86_64-linux/lib64/libhcomm.so",
+      "name": "hcomm",
+      "observed_needed": [
+        "libhccl_alg.so",
+        "libhccl_plf.so",
+        "libhccl_v2.so",
+        "libacl_rt.so",
+        "libc_sec.so",
+        "libstdc++.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "sha256": "f7c88b0f17cb4528b84e93e02b2db8e2b572644d09d9ff02685875177ba5d214",
+      "soname": "libhcomm.so"
+    },
+    {
+      "canonical_realpath": "/home/workspace/Ascend/cann-9.1.0/x86_64-linux/lib64/libacl_rt.so",
+      "name": "acl_rt",
+      "observed_needed": [
+        "libascend_dump.so",
+        "libstdc++.so.6",
+        "libruntime.so",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "sha256": "46b5c18ba6794ffc834770d5e4399fec872528f813c12fcb8e8fbab72cc3c862",
+      "soname": "libacl_rt.so"
+    }
+  ],
+  "readelf_needed": [
+    "libhccl.so",
+    "libhcomm.so",
+    "libacl_rt.so",
+    "libstdc++.so.6",
+    "libm.so.6",
+    "libgcc_s.so.1",
+    "libc.so.6"
+  ],
+  "runtime_api_calls": [],
+  "status": "LINK_PASS"
+}
