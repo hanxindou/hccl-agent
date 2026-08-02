@@ -1,0 +1,12 @@
+{
+  "checkpoint": "G2-F-3",
+  "direct_hccl_api_call": false,
+  "g2_f_readiness": "PARTIAL",
+  "overall": "PARTIAL",
+  "real_ascend_npu_validated": false,
+  "real_device_acceptance": "HARDWARE_BLOCKED",
+  "runtime_api_calls": [],
+  "schema_version": "g2-f-readiness-v1",
+  "source_commit_before_checkpoint": "39263788e2c9df9e5e4cb9998ad6630416e171c1",
+  "status": "COMPLETED"
+}

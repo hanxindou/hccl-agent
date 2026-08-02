@@ -1,0 +1,16 @@
+{
+  "backend": "ASCEND_HCCL_DIRECT",
+  "collective_executed": false,
+  "communicator_created": false,
+  "device_opened": false,
+  "direct_hccl_api_call": false,
+  "probe": {
+    "device_nodes": [],
+    "driver_indicators": [],
+    "npu_smi_found": false
+  },
+  "real_ascend_npu_validated": false,
+  "runtime_api_calls": [],
+  "runtime_initialized": false,
+  "status": "NO_DEVICE_EXPECTED"
+}

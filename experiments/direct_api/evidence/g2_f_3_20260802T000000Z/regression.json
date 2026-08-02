@@ -1,0 +1,17 @@
+{
+  "cpu_sim": {
+    "build_dir": "/tmp/hccl-g2f3-cpu",
+    "cann_dependencies": [],
+    "ctest": "11/11 PASS",
+    "feature_flag": "OFF"
+  },
+  "f1_f2_sha256": "PASS",
+  "g2_e": {
+    "coverage": "registry, dry-run, parser, and evidence regression are included in the Python suite",
+    "status": "PASS"
+  },
+  "missing_cann_root_configure": "EXPECTED_FAILURE",
+  "python_suite": "546 PASS, 1 skipped; HCCL_PLUGIN_PATH set only to the temporary CPU_SIM library",
+  "runtime_scope": "No CPU_SIM regression command invoked HCCL-VM, MPI, hccl_test, the direct linked ELF, or an ACL/HCCL runtime API.",
+  "runtime_api_calls": []
+}
