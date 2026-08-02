@@ -1,0 +1,23 @@
+{
+  "cleanup_order": [
+    "recv_buffer",
+    "send_buffer",
+    "communicator",
+    "stream",
+    "context",
+    "device",
+    "runtime_lease"
+  ],
+  "lease_model": "process-scoped reference-counted logical model only",
+  "owners": [
+    "runtime_lease",
+    "device",
+    "context",
+    "stream",
+    "communicator",
+    "send_buffer",
+    "recv_buffer"
+  ],
+  "runtime_api_calls": [],
+  "status": "PASS"
+}

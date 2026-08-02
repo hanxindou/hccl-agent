@@ -1,0 +1,26 @@
+{
+  "acquisition_points": [
+    "runtime_lease",
+    "device_bind",
+    "context_create",
+    "stream_create",
+    "comm_create",
+    "send_buffer",
+    "recv_buffer",
+    "collective_submit",
+    "synchronize"
+  ],
+  "cleanup_errors_recorded_separately": true,
+  "cleanup_points": [
+    "recv_buffer",
+    "send_buffer",
+    "comm",
+    "stream",
+    "context",
+    "device",
+    "runtime_lease"
+  ],
+  "first_business_error_preserved": true,
+  "runtime_api_calls": [],
+  "status": "PASS"
+}

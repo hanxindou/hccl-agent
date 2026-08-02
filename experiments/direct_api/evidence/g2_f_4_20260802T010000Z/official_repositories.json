@@ -1,0 +1,12 @@
+{
+  "hccl": {
+    "branch": "competition/campus-2026",
+    "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+    "status_short": ""
+  },
+  "hcomm": {
+    "branch": "competition/campus-2026",
+    "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+    "status_short": ""
+  }
+}

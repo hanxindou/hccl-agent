@@ -480,19 +480,611 @@ G2-F-3 add direct API link and no-device diagnostics
 
 回滚使用该项目提交的 `git revert`，不得重写历史或删除既有 evidence。
 
-### G2-F-4：lifecycle harness 边界
+### G2-F-4：受保护的 lifecycle 状态机与资源所有权 harness
 
-- **目标：** 以状态机、RAII 和失败注入测试实现 communicator/stream/buffer 生命周期 harness；当前仅运行已证明安全的 preflight 边界。
-- **修改文件：** direct adapter session/state machine、C ABI、错误映射、无 mock 单元测试、opt-in harness 文档。
-- **非目标：** 无 NPU 时不执行 `aclInit`、device/context/stream/comm/allocation/collective；不使用 hccl_test。
-- **API 契约：** 固定第 2.3 节顺序、反向清理、单 runtime lease、rank table/root info 互斥选择和输出 buffer 容量公式。
-- **构建/测试：** build-only + 生命周期状态机单测；实机命令只作为 `HCCL_DIRECT_REAL_DEVICE=1` opt-in 模板。
-- **当前环境：** 状态机测试可执行；实际 lifecycle 为 `HARDWARE_BLOCKED`。
-- **完成条件：** 错误分支不泄漏已拥有的资源；测试证明无设备不会越过 guard。
-- **HARDWARE_BLOCKED：** 无 device node/driver/NPU 或未获实机授权。
-- **ENV_BLOCKED：** rank table、launcher、CANN 环境、权限、版本或库依赖错误。
-- **evidence：** state-transition log；无设备只有 `NO_DEVICE_EXPECTED`，不得生成 device-pass evidence。
-- **建议 commit / 回滚：** `G2-F-4 add guarded direct API lifecycle harness`；revert 该项目提交。
+#### 目标
+
+在当前没有真实 Ascend NPU 的环境中，完成 `ASCEND_HCCL_DIRECT` 生命周期控制面的工程就绪验证。
+
+本 checkpoint 不执行真实 ACL/HCCL 生命周期，而是通过：
+
+- 显式状态机；
+- C++17 RAII 所有权模型；
+- 独立 C ABI；
+- 参数和容量契约；
+- 失败注入；
+- 反向清理验证；
+- 无设备 guard；
+- opt-in 实机入口模板；
+
+证明未来真实设备路径具有明确、可审计、不会越权执行的生命周期框架。
+
+本 checkpoint 验证的是：
+
+```text
+lifecycle control-plane readiness
+```
+
+不是：
+
+```text
+real-device lifecycle execution
+```
+
+#### 执行前状态假设与额度控制
+
+进入本 checkpoint 前，用户已经人工确认：
+
+- G2-F-3 已通过 PR 合并进入 `main`；
+- 本地 `main` 与 `origin/main` 已同步；
+- 工作区 clean；
+- G2-F-1/F2/F3 已完成并有有效 evidence。
+
+因此，执行 G2-F-4 时不得重新进行完整 Git 历史审计、PR 审计、所有旧 commit 祖先检查或全量旧 evidence 复核。
+
+开始时只允许进行一次轻量确认：
+
+```text
+git branch --show-current
+git status --short
+```
+
+只需确认：
+
+- 当前分支为 `main`；
+- 除本次尚未提交的 G2-F-4 计划细化外无其他修改。
+
+除非实际命令出现矛盾、缺失文件或版本漂移，不得重复扫描历史提交或重新审计 G2-F-1/F2/F3。
+
+HCOMM/HCCL branch、commit 和 tracked worktree clean 只需在最终审计时检查一次。
+
+#### 当前环境边界
+
+当前环境没有：
+
+- `npu-smi`；
+- Ascend/Davinci device node；
+- 可用 Ascend driver；
+- 可分配真实 NPU；
+- 获批准的 real-device launcher；
+- 可执行的多 rank direct API 环境。
+
+因此：
+
+```text
+real lifecycle execution = HARDWARE_BLOCKED
+```
+
+这不是代码失败，也不影响本 checkpoint 的状态机、所有权、guard 和失败清理测试。
+
+#### 修改范围
+
+预计修改或新增：
+
+- `hcccl/direct/include/`
+- `hcccl/direct/src/`
+- direct adapter 的状态机、session 和错误模型
+- 必要的独立 C ABI
+- lifecycle、guard、容量和失败注入测试
+- opt-in real-device harness 使用说明
+- G2-F-4 readiness evidence
+- 必要的契约和项目状态文档
+
+允许按实际架构调整文件位置，但必须保持：
+
+- CPU_SIM ABI 不变；
+- `hccl_plugin` 行为不变；
+- `ASCEND_HCCL_VM` 行为不变；
+- G2-E evidence 语义不变；
+- `ASCEND_HCCL_DIRECT` 独立隔离；
+- `HCCL_ENABLE_ASCEND_HCCL_DIRECT` 默认 `OFF`。
+
+不得修改：
+
+- CANN 安装；
+- HCOMM/HCCL 官方源码；
+- G2-D/G2-E/G2-F-1/F2/F3 已有 evidence；
+- CPU_SIM 的公开符号和加载路径。
+
+#### 生命周期状态机
+
+必须建立显式、可查询、不可跳步的 session 状态机。
+
+建议状态至少包括：
+
+```text
+CREATED
+CONFIGURED
+PREFLIGHT_CHECKED
+NO_DEVICE_EXPECTED
+RUNTIME_READY
+DEVICE_READY
+CONTEXT_READY
+STREAM_READY
+COMM_READY
+BUFFERS_READY
+COLLECTIVE_SUBMITTED
+SYNCHRONIZED
+COMPLETED
+CLEANING
+DESTROYED
+FAILED
+```
+
+当前无设备环境中，实际允许执行的路径只能到：
+
+```text
+CREATED
+  -> CONFIGURED
+  -> PREFLIGHT_CHECKED
+  -> NO_DEVICE_EXPECTED
+  -> DESTROYED
+```
+
+以下状态只能通过纯状态机和所有权测试验证，不得实际进入官方 runtime：
+
+```text
+RUNTIME_READY
+DEVICE_READY
+CONTEXT_READY
+STREAM_READY
+COMM_READY
+BUFFERS_READY
+COLLECTIVE_SUBMITTED
+SYNCHRONIZED
+COMPLETED
+```
+
+必须拒绝：
+
+- 跳过前置状态；
+- 重复初始化；
+- 在错误状态提交 collective；
+- 未同步时释放资源；
+- destroy 后继续使用 session；
+- rank、device 或线程归属不一致；
+- 同一 session 同时选择 rank-table 和 root-info；
+- 未完成 preflight 时尝试进入 runtime。
+
+无效转换必须返回稳定的项目状态码，并保留当前合法状态。
+
+#### 资源所有权模型
+
+未来 `DirectSession` 必须明确拥有或引用：
+
+- process-scoped runtime lease；
+- device id；
+- 可选显式 context；
+- stream；
+- `HcclComm`；
+- send device buffer；
+- receive device buffer；
+- rank 配置；
+- primitive、dtype、op 和 count 契约。
+
+当前 checkpoint 不实际取得这些官方资源，但必须冻结其所有权规则。
+
+要求：
+
+1. 每个资源只有一个明确 owner；
+2. 未成功取得的资源不得进入清理队列；
+3. 已取得资源按反向顺序释放；
+4. 不允许 double free、double destroy 或 use-after-destroy；
+5. host input/output 的所有权仍属于调用者；
+6. device buffer 未来只允许由 adapter 管理；
+7. C++ 异常不得穿过 C ABI；
+8. session 不得跨 device 或跨未授权线程使用；
+9. 首个业务错误必须保留；
+10. cleanup 错误单独记录，不得覆盖首个业务错误。
+
+未来真实清理顺序固定为：
+
+```text
+synchronize stream
+  -> release device buffers
+  -> destroy communicator
+  -> destroy stream
+  -> destroy explicit context（若由本 session 创建）
+  -> reset device
+  -> release runtime lease
+  -> finalize runtime（仅由最后一个合法 lease owner 执行）
+```
+
+本 checkpoint 只验证该顺序的逻辑，不执行对应官方 API。
+
+#### Runtime lease 契约
+
+必须建立 process-scoped runtime lease 模型：
+
+- 同一进程内不得由多个 session 独立重复初始化和 finalize runtime；
+- 首个未来 session 取得 runtime lease；
+- 后续 session 增加引用或被策略拒绝；
+- 只有最后一个合法 owner 可以释放最终 lease；
+- session 失败不得错误释放其他 session 的 runtime ownership；
+- runtime 已 finalize 后不得被旧 session 重用。
+
+当前无设备环境只测试 lease 状态机，不调用 `aclInit` 或 `aclFinalize`。
+
+#### Rank 初始化契约
+
+未来 communicator 初始化支持两种互斥配置：
+
+1. rank-table：
+   - 外部 launcher；
+   - rank-table 文件；
+   - `rank_id`；
+   - `rank_size`；
+   - 未来调用 `HcclCommInitClusterInfo`。
+
+2. root-info：
+   - root rank；
+   - root-info 安全分发；
+   - `rank_id`；
+   - `rank_size`；
+   - 未来调用 `HcclGetRootInfo` 和 `HcclCommInitRootInfo`。
+
+本项目首个真实设备路径仍优先：
+
+```text
+external launcher + rank-table + HcclCommInitClusterInfo
+```
+
+G2-F-4 必须验证：
+
+- 两种模式不能同时设置；
+- rank id 必须小于 rank size；
+- rank size 必须大于 1；
+- rank-table 路径不能为空；
+- 不读取或执行未经批准的 launcher；
+- 当前无设备时只验证配置，不初始化 communicator。
+
+#### 三原语容量契约
+
+必须以溢出安全的整数运算冻结三原语容量公式。
+
+AllReduce：
+
+```text
+input_elements_per_rank  = count
+output_elements_per_rank = count
+input_bytes_per_rank     = count * dtype_size
+output_bytes_per_rank    = count * dtype_size
+```
+
+AllGather：
+
+```text
+input_elements_per_rank  = send_count
+output_elements_per_rank = send_count * rank_size
+input_bytes_per_rank     = send_count * dtype_size
+output_bytes_per_rank    = send_count * rank_size * dtype_size
+```
+
+ReduceScatter：
+
+```text
+input_elements_per_rank  = recv_count * rank_size
+output_elements_per_rank = recv_count
+input_bytes_per_rank     = recv_count * rank_size * dtype_size
+output_bytes_per_rank    = recv_count * dtype_size
+```
+
+必须拒绝：
+
+- 乘法溢出；
+- 超过 `size_t` 或 adapter 上限；
+- 无效 dtype；
+- AllGather 指定 reduce op；
+- AllReduce/ReduceScatter 缺少合法 reduce op；
+- rank size 与 buffer 容量不一致；
+- null pointer 与非零容量组合；
+- 未确认 buffer locality 时传入 host pointer 执行 direct collective。
+
+当前 checkpoint 只计算和验证容量，不分配 device memory。
+
+#### 失败注入模型
+
+失败注入只用于验证项目自身的状态机和所有权逻辑，不得模拟或伪造官方 ACL/HCCL 的真实行为。
+
+允许注入的抽象失败点包括：
+
+- runtime lease acquisition；
+- device binding；
+- context creation；
+- stream creation；
+- communicator creation；
+- send buffer acquisition；
+- receive buffer acquisition；
+- collective submission；
+- synchronization；
+- cleanup 的每一个阶段。
+
+对每个失败点必须验证：
+
+1. session 进入预期失败状态；
+2. 只清理此前已经取得所有权的资源；
+3. 清理顺序严格反向；
+4. 未取得的资源不会被释放；
+5. 首个业务错误不会被 cleanup 错误覆盖；
+6. cleanup 错误仍完整记录；
+7. session 最终不能再次执行 collective；
+8. 不发生逻辑资源泄漏；
+9. 不产生真实 ACL/HCCL 调用。
+
+这些测试属于 deterministic state-machine tests，不得将其描述为真实驱动故障测试。
+
+#### 无设备 guard
+
+G2-F-4 必须继承 G2-F-3 的纯 preflight diagnose。
+
+当前环境中，任何 lifecycle 或 collective 执行请求都必须在 native runtime 边界之前返回：
+
+```text
+NO_DEVICE_EXPECTED
+```
+
+或在用户明确请求真实执行但硬件不存在时返回：
+
+```text
+HARDWARE_BLOCKED
+```
+
+结果必须明确包含：
+
+```text
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+runtime_initialized=false
+device_opened=false
+context_created=false
+stream_created=false
+communicator_created=false
+device_buffer_allocated=false
+collective_executed=false
+runtime_api_calls=[]
+```
+
+单独设置环境变量不能绕过 guard。
+
+`HCCL_DIRECT_REAL_DEVICE=1` 只能作为未来 G2-F-5 的 opt-in 模板条件之一，本 checkpoint 不实现真实执行路径。
+
+#### C ABI 要求
+
+在 G2-F-2 独立 ABI 基础上，按实际需要增加最小接口，用于：
+
+- session 创建；
+- session 配置；
+- preflight；
+- 当前状态查询；
+- primitive 容量计算；
+- guard 结果查询；
+- 错误信息查询；
+- session 销毁。
+
+不得：
+
+- 暴露 C++ 类型；
+- 让异常穿过 C ABI；
+- 复用 CPU_SIM 的同名符号伪装 direct backend；
+- 让 Python 直接加载或调用官方 ACL/HCCL；
+- 在 C ABI 内隐藏真实执行行为；
+- 在没有 real-device evidence 时设置 `direct_hccl_api_call=true`。
+
+Python 只能调用项目自己的 direct adapter ABI。
+
+#### 禁止调用
+
+G2-F-4 中禁止实际调用：
+
+- `aclInit`
+- `aclFinalize`
+- `aclrtSetDevice`
+- `aclrtResetDevice`
+- `aclrtCreateContext`
+- `aclrtDestroyContext`
+- `aclrtCreateStream`
+- `aclrtSynchronizeStream`
+- `aclrtDestroyStream`
+- `aclrtMalloc`
+- `aclrtFree`
+- `aclrtMemcpy`
+- `aclrtMemcpyAsync`
+- `HcclGetRootInfo`
+- `HcclCommInitRootInfo`
+- `HcclCommInitClusterInfo`
+- `HcclCommDestroy`
+- `HcclAllReduce`
+- `HcclAllGather`
+- `HcclReduceScatter`
+
+允许这些名称出现在：
+
+- manifest；
+- 函数类型；
+- 静态签名断言；
+- 状态机动作名称；
+- 测试期望；
+- symbol inventory；
+- opt-in 文档模板。
+
+但不得存在当前环境可到达的执行路径。
+
+不得使用：
+
+- `hccl_test`
+- HCCL-VM
+- MPI launcher
+- CPU_SIM collective
+
+来伪造 direct lifecycle evidence。
+
+#### 构建与测试
+
+至少覆盖：
+
+1. direct adapter build/link 回归；
+2. feature flag 默认 `OFF`；
+3. CPU_SIM 默认构建不依赖 CANN；
+4. session 合法状态转换；
+5. 每一种非法状态转换；
+6. runtime lease 引用和释放；
+7. rank-table/root-info 互斥配置；
+8. rank id/rank size 参数校验；
+9. 三原语容量公式；
+10. dtype size 映射；
+11. 整数溢出和超大容量；
+12. 每个资源获取阶段的失败注入；
+13. 每个 cleanup 阶段的失败注入；
+14. 反向清理顺序；
+15. 首个业务错误保留；
+16. cleanup 错误附加记录；
+17. double destroy 行为；
+18. destroy 后使用拒绝；
+19. thread/device ownership guard；
+20. 无设备 preflight；
+21. lifecycle/collective 请求在 runtime 前拒绝；
+22. `runtime_api_calls=[]`；
+23. C ABI 编译和异常边界；
+24. Windows 导入安全；
+25. Python 全量回归；
+26. CPU_SIM CTest；
+27. G2-E registry、dry-run、parser 和 evidence 回归；
+28. G2-F-1/F2/F3 evidence SHA256 回归；
+29. 最终 HCOMM/HCCL tracked worktree clean。
+
+不得：
+
+- 删除或弱化测试；
+- 新增无理由 skip；
+- 用 mock runtime 成功替代 guard；
+- 把状态机 PASS 描述成真实设备 PASS。
+
+#### Evidence
+
+只保留一份权威最终 evidence：
+
+```text
+experiments/direct_api/evidence/g2_f_4_<timestamp>/
+```
+
+至少包含：
+
+- `README.md`
+- `manifest.json`
+- `result.json`
+- `state_machine.json`
+- `ownership_audit.json`
+- `failure_injection.json`
+- `capacity_contract.json`
+- `guard_audit.json`
+- `regression.json`
+- `SHA256SUMS`
+
+Evidence 必须记录：
+
+```text
+checkpoint=G2-F-4
+checkpoint_status=COMPLETED
+lifecycle_harness_readiness=COMPLETED
+preflight_status=NO_DEVICE_EXPECTED
+hardware_lifecycle_status=HARDWARE_BLOCKED
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+runtime_initialized=false
+device_opened=false
+context_created=false
+stream_created=false
+communicator_created=false
+device_buffer_allocated=false
+collective_executed=false
+runtime_api_calls=[]
+```
+
+还必须记录：
+
+- adapter source revision；
+- state transition coverage；
+- invalid transition coverage；
+- failure injection 点；
+- cleanup 顺序；
+- ownership audit；
+- 三原语容量测试；
+- C ABI 测试；
+- CPU_SIM/G2-E/F1-F3 回归；
+- HCOMM/HCCL branch、commit 和 clean 状态；
+- evidence 文件 SHA256。
+
+不得生成 device-pass、performance 或真实 collective evidence。
+
+#### 完成条件
+
+只有以下条件全部满足时，G2-F-4 才能标记 `COMPLETED`：
+
+- lifecycle 状态机实现并测试通过；
+- 所有非法转换均被拒绝；
+- runtime lease 模型通过；
+- rank 配置契约通过；
+- 三原语容量和溢出测试通过；
+- 每个资源阶段的失败注入通过；
+- 反向清理顺序通过；
+- 首个业务错误和 cleanup 错误均被保留；
+- C ABI 编译和异常边界通过；
+- no-device guard 稳定返回 `NO_DEVICE_EXPECTED`；
+- 所有执行请求均在 runtime 前拒绝；
+- 未调用任何 ACL/HCCL runtime API；
+- `runtime_api_calls=[]`；
+- CPU_SIM、G2-E 和 G2-F-1/F2/F3 无回归；
+- evidence SHA256 全部通过；
+- HCOMM/HCCL tracked worktree clean；
+- 工作区 clean；
+- 未 push、未 merge；
+- 未开始 G2-F-5。
+
+最终状态必须为：
+
+```text
+G2-F-4: COMPLETED
+Lifecycle Harness Readiness: COMPLETED
+G2-F Readiness: PARTIAL
+G2-F Real-device Acceptance: HARDWARE_BLOCKED
+G2-F Overall: PARTIAL
+```
+
+`G2-F Readiness` 在 G2-F-7 完成 Agent 接入和最终审计前保持 `PARTIAL`。
+
+#### 阻塞和失败分类
+
+`HARDWARE_BLOCKED`：
+
+- 请求进入真实 runtime/device/communicator/collective；
+- 当前没有真实 NPU、driver、device node 或实机授权。
+
+这不影响 G2-F-4 的状态机完成。
+
+`ENV_BLOCKED`：
+
+- G2-F-3 链接基础、CANN manifest、编译器或必要构建环境失效；
+- 必要文件或依赖缺失；
+- evidence 无法生成；
+- HCOMM/HCCL 冻结状态漂移。
+
+`FAIL`：
+
+- 状态机、所有权、清理、容量、guard、ABI、测试或 evidence 本身存在缺陷；
+- 前置环境满足但实现无法通过；
+- 不得将代码错误改写为 `HARDWARE_BLOCKED`。
+
+#### 建议 commit 与回滚
+
+建议 commit：
+
+```text
+G2-F-4 add guarded direct API lifecycle harness
+```
+
+完成该 commit 后必须停止，不得开始 G2-F-5。
+
+回滚使用该项目提交的 `git revert`，不得重写历史、删除旧 evidence 或修改官方仓库。
 
 ### G2-F-5：真实设备三原语数据正确性
 

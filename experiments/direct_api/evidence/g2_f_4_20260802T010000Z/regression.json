@@ -1,0 +1,18 @@
+{
+  "host_only_lifecycle_test": {
+    "exit_code": 0,
+    "path": "/tmp/hccl-g2f4-direct/test_hccl_direct_lifecycle"
+  },
+  "c_abi_compile": "PASS",
+  "direct_adapter_build_link": "PASS",
+  "cpu_sim": {
+    "cann_dependencies": [],
+    "ctest": "11/11 PASS",
+    "feature_flag": "OFF"
+  },
+  "python_suite": "549 PASS, 1 skipped; HCCL_PLUGIN_PATH set only to the temporary CPU_SIM library",
+  "g2_e": "registry, dry-run, parser, and evidence regression included in Python suite: PASS",
+  "f1_f2_f3_sha256": "PASS",
+  "scope": "CPU_SIM and Python outputs are separate regressions, not direct lifecycle or real-device evidence.",
+  "runtime_api_calls": []
+}

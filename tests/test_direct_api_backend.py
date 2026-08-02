@@ -33,7 +33,8 @@ class TestDirectApiBackend(unittest.TestCase):
         self.assertEqual(result["backend"], "ASCEND_HCCL_DIRECT")
         self.assertEqual(result["status"], "NO_DEVICE_EXPECTED")
         for field in ("direct_hccl_api_call", "real_ascend_npu_validated", "runtime_initialized",
-                      "device_opened", "communicator_created", "collective_executed"):
+                      "device_opened", "context_created", "stream_created", "communicator_created",
+                      "device_buffer_allocated", "collective_executed"):
             self.assertFalse(result[field])
         self.assertEqual(result["runtime_api_calls"], [])
 
