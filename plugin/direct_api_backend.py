@@ -1,9 +1,9 @@
-"""Pure G2-F-3 preflight and guard for the future direct HCCL backend.
+"""Pure G2-F-4 preflight and guard for the future direct HCCL backend.
 
 This module intentionally imports neither ctypes nor CANN bindings.  It never
 loads an official DSO and rejects every lifecycle or collective request before
-the native runtime boundary.  Actual runtime work belongs no earlier than
-G2-F-4 and must be separately opt-in on real hardware.
+the native runtime boundary. Actual runtime work belongs no earlier than
+G2-F-5 and must be separately opt-in on real hardware.
 """
 
 from __future__ import annotations
@@ -43,7 +43,10 @@ def diagnose_no_device(probe: Mapping[str, Any]) -> dict[str, Any]:
         "real_ascend_npu_validated": False,
         "runtime_initialized": False,
         "device_opened": False,
+        "context_created": False,
+        "stream_created": False,
         "communicator_created": False,
+        "device_buffer_allocated": False,
         "collective_executed": False,
         "runtime_api_calls": list(RUNTIME_API_CALLS),
         "probe": {

@@ -162,6 +162,15 @@ if(HCCL_ENABLE_ASCEND_HCCL_DIRECT)
     )
     add_dependencies(hccl_direct_adapter_abi_compile hccl_direct_adapter)
 
+    add_executable(test_hccl_direct_lifecycle
+        direct/tests/direct_lifecycle_harness_test.cpp
+    )
+    target_include_directories(test_hccl_direct_lifecycle
+        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/direct/include
+    )
+    target_link_libraries(test_hccl_direct_lifecycle PRIVATE hccl_direct_adapter)
+    add_test(NAME test_hccl_direct_lifecycle COMMAND test_hccl_direct_lifecycle)
+
     # This executable is an ELF inspection artifact only.  Its source takes
     # function addresses to retain dynamic-link references but never calls an
     # ACL/HCCL function.  It is not run by CMake or CTest.

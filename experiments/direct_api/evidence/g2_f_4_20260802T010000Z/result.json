@@ -1,0 +1,20 @@
+{
+  "checkpoint": "G2-F-4",
+  "checkpoint_status": "COMPLETED",
+  "collective_executed": false,
+  "communicator_created": false,
+  "context_created": false,
+  "device_buffer_allocated": false,
+  "device_opened": false,
+  "direct_hccl_api_call": false,
+  "g2_f_readiness": "PARTIAL",
+  "hardware_lifecycle_status": "HARDWARE_BLOCKED",
+  "lifecycle_harness_readiness": "COMPLETED",
+  "overall": "PARTIAL",
+  "preflight_status": "NO_DEVICE_EXPECTED",
+  "real_ascend_npu_validated": false,
+  "runtime_api_calls": [],
+  "runtime_initialized": false,
+  "source_commit_before_checkpoint": "b331d236c1e15f57e16f18099f64282892b7bd6a",
+  "stream_created": false
+}

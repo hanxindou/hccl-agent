@@ -1,0 +1,7 @@
+{
+  "backend": "ASCEND_HCCL_DIRECT",
+  "execution_mode": "host_only_deterministic_state_machine",
+  "official_runtime_calls_permitted": false,
+  "real_device_opt_in": "G2-F-5 only",
+  "schema_version": "g2-f-lifecycle-readiness-v1"
+}

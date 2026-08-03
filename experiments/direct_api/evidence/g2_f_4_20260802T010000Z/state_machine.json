@@ -1,0 +1,30 @@
+{
+  "allowed_no_device_path": [
+    "CREATED",
+    "CONFIGURED",
+    "PREFLIGHT_CHECKED",
+    "NO_DEVICE_EXPECTED",
+    "DESTROYED"
+  ],
+  "invalid_transition_coverage": [
+    "duplicate configure",
+    "model before preflight",
+    "double destroy",
+    "use after destroy",
+    "owner-thread mismatch",
+    "device mismatch"
+  ],
+  "model_only_states": [
+    "RUNTIME_READY",
+    "DEVICE_READY",
+    "CONTEXT_READY",
+    "STREAM_READY",
+    "COMM_READY",
+    "BUFFERS_READY",
+    "COLLECTIVE_SUBMITTED",
+    "SYNCHRONIZED",
+    "COMPLETED"
+  ],
+  "runtime_api_calls": [],
+  "status": "PASS"
+}

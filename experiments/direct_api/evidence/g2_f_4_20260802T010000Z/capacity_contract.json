@@ -1,0 +1,13 @@
+{
+  "allgather": "send_count * rank_size output",
+  "allreduce": "count * dtype_size for input and output",
+  "dtypes": {
+    "BF16": 2,
+    "FP16": 2,
+    "FP32": 4,
+    "FP64": 8
+  },
+  "overflow_safe": true,
+  "reducescatter": "recv_count * rank_size input",
+  "status": "PASS"
+}
