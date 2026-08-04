@@ -1,0 +1,37 @@
+{
+  "allgather": {
+    "matches_host_reference": true,
+    "status": "success"
+  },
+  "allreduce": {
+    "MAX": {
+      "matches_host_reference": true,
+      "status": "success"
+    },
+    "MIN": {
+      "matches_host_reference": true,
+      "status": "success"
+    },
+    "SUM": {
+      "matches_host_reference": true,
+      "status": "success"
+    }
+  },
+  "backend": "CPU_SIM",
+  "dtype": "FP32",
+  "rank_size": 4,
+  "reducescatter": {
+    "MAX": {
+      "matches_host_reference": true,
+      "status": "success"
+    },
+    "MIN": {
+      "matches_host_reference": true,
+      "status": "success"
+    },
+    "SUM": {
+      "matches_host_reference": true,
+      "status": "success"
+    }
+  }
+}

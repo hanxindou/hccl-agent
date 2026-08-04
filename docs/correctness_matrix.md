@@ -66,6 +66,14 @@
 | 固定 seed 随机 correctness | `tests/test_randomized_collective_correctness.py` | seeds 20260730/424242/13371337；60 个确定性抽样 cases；AllReduce/AllGather/ReduceScatter；rank 1/2/4/8/16；count 1/2/3/7/17/32/64；FP32/FP16/BF16；SUM/PROD/MAX/MIN；不是完整笛卡尔积穷举 |
 | GitHub Actions Linux CPU_SIM | `pull_request` / `linux-cpu-sim` | `LINUX_CI_VERIFIED`, `CI_REMOTE_VERIFIED`; Python 3.10.20; CMake 3.31.6; GCC 11.4.0; Backend CPU_SIM; plugin `/tmp/hccl-agent-linux-review/libhccl_plugin.so`; CTest 11/11 passed; targeted Python 66 tests OK; full Python 461 tests OK; `LINUX_CPU_SIM_VALIDATION_OK` observed |
 
+## G2-F-5 Simulator Acceptance
+
+`SIMULATOR_ACCEPTANCE` 是独立于 `CPU_SIM`、`ASCEND_HCCL_VM` 和
+`ASCEND_HCCL_DIRECT` 的数据语义轨道。它使用独立 Python host reference
+比较 AllReduce、AllGather 和 ReduceScatter 的完整 rank 输出；CPU_SIM 只在
+兼容的 FP32 小型子集上作交叉验证。该轨道不调用官方 runtime，不能证明
+真实 Ascend NPU、直接 API、性能或硬件混合精度行为。
+
 ## 未验证边界
 
 - 本地 Docker Linux `.so` 验证仍为 `ENV_BLOCKED`，原因是 `auth.docker.io` token timeout；远端 GitHub Actions Linux CPU_SIM 已验证。

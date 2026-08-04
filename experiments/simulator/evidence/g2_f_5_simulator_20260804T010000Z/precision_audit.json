@@ -1,0 +1,42 @@
+{
+  "bf16": {
+    "inputs": [
+      0.0,
+      -0.0,
+      9.183549615799121e-41,
+      -9.183549615799121e-41,
+      3.38953139e+38,
+      -3.38953139e+38
+    ],
+    "outputs": [
+      0.0,
+      -0.0,
+      9.183549615799121e-41,
+      -9.183549615799121e-41,
+      3.3895313892515355e+38,
+      -3.3895313892515355e+38
+    ],
+    "pass": true,
+    "rounding": "round-to-nearest-even via FP32 upper 16 bits"
+  },
+  "random_stress_dataset": "dtype-aware software rounding observed",
+  "stress_tolerances": {
+    "BF16": {
+      "absolute": 0.01,
+      "relative": 0.01
+    },
+    "FP16": {
+      "absolute": 0.001,
+      "relative": 0.001
+    },
+    "FP32": {
+      "absolute": 1e-06,
+      "relative": 1e-06
+    },
+    "INT32": {
+      "absolute": 0.0,
+      "relative": 0.0
+    }
+  },
+  "strict_exact_dataset": "zero error and explicit 1e-6 check"
+}

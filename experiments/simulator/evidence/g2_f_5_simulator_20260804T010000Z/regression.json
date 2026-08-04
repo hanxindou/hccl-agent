@@ -1,0 +1,19 @@
+{
+  "cpu_sim_ctest": {
+    "status": "PASS",
+    "tests": "11/11"
+  },
+  "cpu_sim_cross_backend": "PASS",
+  "deterministic_replay": "PASS",
+  "direct_build_link_guard": {
+    "abi_compile": "PASS",
+    "direct_adapter_build": "PASS",
+    "host_only_lifecycle_ctest": "PASS (1/1)",
+    "link_audit": "PASS (readelf only; executable not run)"
+  },
+  "g2_e_registry_parser_evidence": "PASS (25 focused tests)",
+  "note": "CPU_SIM is an isolated semantic cross-check and is not direct or real-device evidence.",
+  "python_full_regression": "PASS (556 tests, 1 existing skip)",
+  "runtime_api_calls": [],
+  "simulator_cases": "PASS"
+}

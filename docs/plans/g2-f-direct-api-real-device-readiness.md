@@ -1086,19 +1086,607 @@ G2-F-4 add guarded direct API lifecycle harness
 
 回滚使用该项目提交的 `git revert`，不得重写历史、删除旧 evidence 或修改官方仓库。
 
-### G2-F-5：真实设备三原语数据正确性
+### G2-F-5：模拟器三原语数据正确性验收（真实设备验收保持 HARDWARE_BLOCKED）
 
-- **目标：** 每个 primitive 在真实 NPU、多 rank、ACL device buffer 上经直接 API 得到正确 D2H 结果。
-- **修改文件：** real-device launcher/harness、direct backend 适配、correctness tests/evidence writer；CPU_SIM 与 HCCL-VM 文件只增加隔离回归，不改其语义。
-- **非目标：** 不以性能结论、故障恢复或多节点规模宣告完成。
-- **API 契约：** AllReduce `count`、AllGather `sendCount`、ReduceScatter `recvCount`；dtype/op、输入/输出字节与 rank-size 显式记录；device pointer 是强制前置条件。
-- **构建/测试：** 先 build/link/symbol；由批准 launcher 启动每 rank 进程执行 `ASCEND_HCCL_DIRECT`；普通 CI 不运行。
-- **当前环境：** `HARDWARE_BLOCKED`。
-- **完成条件：** 三种 primitive 各有同步、D2H、独立 host reference、误差阈值、API trace 和清理通过的 `REAL_DEVICE_PASS`。
-- **HARDWARE_BLOCKED：** 缺真实受支持 Ascend NPU、驱动/设备节点或至少 2 ranks 所需设备/进程环境。
-- **ENV_BLOCKED：** rank table/root info、launcher、CANN env、权限、版本或网络配置不满足。
-- **evidence：** `g2-f-direct-device-v1` per primitive；必须满足第 5 节所有 direct proof 字段。
-- **建议 commit / 回滚：** `G2-F-5 validate direct collectives on real Ascend device`；revert 代码提交，保留 evidence。
+#### 目标
+
+在当前没有真实 Ascend NPU 的条件下，建立可追溯、可复现、具备独立正确性基准的模拟器三原语验收流程，验证：
+
+- AllReduce；
+- AllGather；
+- ReduceScatter；
+
+在不同 rank 数、数据类型、归约操作、消息规模和模拟拓扑下的数据语义与结果正确性。
+
+本 checkpoint 属于：
+
+```text
+SIMULATOR CORRECTNESS ACCEPTANCE
+```
+
+不是：
+
+```text
+REAL-DEVICE DIRECT API ACCEPTANCE
+```
+
+不得将 CPU_SIM、分析 simulator、已有 HCCL-VM 或 host reference 的结果描述为真实 NPU direct API 执行结果。
+
+真实设备 direct API 验收继续保持：
+
+```text
+G2-F Real-device Acceptance: HARDWARE_BLOCKED
+```
+
+#### 执行前状态与额度控制
+
+进入本 checkpoint 前，用户已经人工确认：
+
+- G2-F-4 已通过 PR 合并进入 `main`；
+- 本地 `main` 与 `origin/main` 已同步；
+- 工作区除尚未提交的 G2-F-5 计划细化外无其他修改；
+- G2-F-1 至 G2-F-4 已完成。
+
+执行开始时只允许进行一次轻量确认：
+
+```text
+git branch --show-current
+git status --short
+```
+
+只需确认：
+
+- 当前分支为 `main`；
+- 除 G2-F-5 计划细化外没有其他未提交修改。
+
+除非实际发现文件缺失、版本矛盾或构建失败，不得重复进行完整 Git 历史审计、旧 PR 审计或全部旧 checkpoint 人工复核。
+
+#### 验证轨道隔离
+
+项目必须明确区分以下轨道：
+
+```text
+CPU_SIM
+ASCEND_HCCL_VM
+ASCEND_HCCL_DIRECT
+SIMULATOR_ACCEPTANCE
+```
+
+本 checkpoint 使用：
+
+```text
+SIMULATOR_ACCEPTANCE
+```
+
+并可调用项目已有 CPU_SIM 或分析 simulator 作为执行引擎和交叉验证对象。
+
+不得：
+
+- 将 CPU_SIM 重命名或伪装为 `ASCEND_HCCL_DIRECT`；
+- 通过 direct adapter C ABI 声称执行了真实 collective；
+- 修改 G2-E 的 HCCL-VM evidence；
+- 用已有 HCCL-VM 结果生成 direct API evidence；
+- 设置 `direct_hccl_api_call=true`；
+- 设置 `real_ascend_npu_validated=true`；
+- 生成 `REAL_DEVICE_PASS`。
+
+#### 修改范围
+
+允许按项目现有架构新增或修改：
+
+- simulator correctness harness；
+- 三原语输入生成和 host reference；
+- dtype 编解码和误差统计；
+- rank/topology/message-size 测试矩阵；
+- 大消息分块或流式验证；
+- simulator backend 适配；
+- correctness evidence writer；
+- Python contract tests；
+- 必要的 CPU_SIM 隔离回归；
+- 使用说明和结果报告；
+- G2-F-5 simulator evidence。
+
+不得改变：
+
+- CPU_SIM 已有公开 ABI 和默认语义；
+- G2-E subprocess、parser、checker 和 evidence 语义；
+- direct adapter lifecycle 状态机的安全边界；
+- `HCCL_ENABLE_ASCEND_HCCL_DIRECT` 默认 `OFF`；
+- HCOMM、HCCL 和 CANN 官方文件；
+- G2-D、G2-E、G2-F-1 至 G2-F-4 的既有 evidence。
+
+#### 三原语数据语义
+
+AllReduce：
+
+```text
+每个 rank 输入 count 个元素
+所有 rank 对相同位置执行指定 reduce op
+每个 rank 输出 count 个相同归约结果
+```
+
+AllGather：
+
+```text
+每个 rank 输入 send_count 个元素
+每个 rank 输出 rank_size * send_count 个元素
+输出按 rank 顺序拼接
+AllGather 不接受 reduce op
+```
+
+ReduceScatter：
+
+```text
+每个 rank 输入 rank_size * recv_count 个元素
+先对所有 rank 的完整输入执行逐元素归约
+再按 rank 顺序切分
+每个 rank 输出 recv_count 个元素
+```
+
+必须显式记录：
+
+- primitive；
+- rank size；
+- rank id；
+- count、send_count 或 recv_count；
+- dtype；
+- reduce op；
+- 每 rank 输入元素数；
+- 每 rank 输出元素数；
+- 输入字节数；
+- 输出字节数；
+- rank 拼接或切分顺序；
+- topology；
+- message size；
+- random seed。
+
+#### 独立 Host Reference
+
+必须实现与被测算法逻辑隔离的独立 host reference。
+
+Host reference 不得：
+
+- 调用被测算法；
+- 复用被测算法的通信步骤；
+- 复用被测算法的 rank 调度；
+- 仅检查 shape 或 checksum 而不检查实际数值；
+- 只比较总和而忽略元素顺序。
+
+每个 primitive 必须比较：
+
+- 每个 rank 的完整输出；
+- 元素数量；
+- dtype；
+- rank 顺序；
+- 最大绝对误差；
+- 最大相对误差；
+- NaN/Inf；
+- output hash。
+
+整数数据要求逐元素完全一致。
+
+浮点数据必须同时提供：
+
+1. **精确可表示验收数据集**
+   - 输入和值选择为目标 dtype 可精确表示；
+   - 用于验证赛题要求的严格数值一致性；
+   - 要求零误差或明确记录是否满足 `1e-6`。
+
+2. **随机压力数据集**
+   - 用于观察 FP16、BF16、FP32 累积误差；
+   - 记录 dtype-aware absolute/relative tolerance；
+   - 不得将放宽后的压力阈值冒充赛题严格精度结论。
+
+#### 数据类型与归约操作
+
+至少覆盖：
+
+```text
+FP32
+FP16
+BF16
+INT32
+```
+
+AllReduce 和 ReduceScatter 至少覆盖：
+
+```text
+SUM
+MAX
+MIN
+```
+
+AllGather 不允许 reduce op。
+
+如果当前底层模拟器缺少 BF16 原生存储，允许实现项目内明确、可测试的 BF16 编码、舍入和解码逻辑，但必须：
+
+- 记录舍入方式；
+- 测试边界值；
+- 测试正负数；
+- 测试零、subnormal、最大有限值；
+- 不依赖真实 NPU 行为；
+- 不宣称与 Ascend 硬件内部累加路径完全一致。
+
+#### Rank 与规模矩阵
+
+至少覆盖代表性 rank 数：
+
+```text
+2
+4
+8
+16
+64
+```
+
+其中：
+
+- 8 ranks 对应单机多卡模拟场景；
+- 64 ranks 对应多机多卡模拟场景；
+- 不要求默认 CI 为所有 dtype、op、size、topology 做全笛卡尔积；
+- 应采用明确、可审计的代表性矩阵或 pairwise coverage；
+- 每一种 primitive、dtype、reduce op 和关键 rank 数必须至少被有效覆盖一次。
+
+必须额外覆盖：
+
+- rank size 非法；
+- rank id 越界；
+- 空输入；
+- 单元素输入；
+- 非整齐分块；
+- count 乘法溢出；
+- buffer 大小不一致；
+- rank 顺序错误；
+- 重复或缺失 rank 输入。
+
+#### 消息规模
+
+至少覆盖：
+
+```text
+1 element
+1 KB
+64 KB
+1 MB
+16 MB
+logical >= 1 GB
+```
+
+`logical >= 1 GB` 场景不得要求在普通 CI 中为每个 rank 实际分配完整 1 GB 内存。
+
+允许使用：
+
+- chunked execution；
+- streaming reference；
+- incremental hash；
+- 分块逐元素或逐窗口验证；
+- 可配置 opt-in 大内存模式。
+
+Evidence 必须分别记录：
+
+```text
+logical_message_bytes
+materialized_message_bytes
+chunk_bytes
+chunk_count
+full_or_sampled_validation
+```
+
+不得将逻辑大消息测试描述为真实 NPU 的 1 GB 性能测量。
+
+#### 拓扑与场景
+
+正确性测试至少覆盖项目中已有的代表性模拟拓扑：
+
+- Full Mesh；
+- Ring；
+- hierarchical / Fat-Tree；
+- heterogeneous / asymmetric-link scenario。
+
+正确性结果原则上不应因拓扑变化而改变；拓扑只允许影响：
+
+- 调度顺序；
+- 路径；
+- 分块策略；
+- 模拟时延或带宽；
+- 故障路由。
+
+如果同一输入在不同拓扑得到不同数值结果，应标记为 `FAIL`，不得解释为性能差异。
+
+#### 确定性与可复现性
+
+每个用例必须记录：
+
+- 固定 random seed；
+- 输入生成规则；
+- simulator 配置；
+- topology 配置；
+- dtype/op；
+- rank count；
+- message bytes；
+- host reference revision；
+- 项目 commit；
+- output hash。
+
+同一 commit、配置和 seed 重复执行必须得到相同：
+
+- 测试状态；
+- output hash；
+- 错误统计；
+- evidence schema。
+
+不得使用未记录的随机源。
+
+#### 跨后端交叉验证
+
+在语义兼容的测试子集上，应比较：
+
+```text
+SIMULATOR_ACCEPTANCE
+CPU_SIM
+independent host reference
+```
+
+已有 G2-E HCCL-VM 结果可以作为受支持子集的历史交叉验证依据，但只能：
+
+- 读取既有 summary/evidence；
+- 验证 registry、parser 和 evidence 未回归；
+- 对比相同 primitive 的语义字段。
+
+不得：
+
+- 重写 G2-E evidence；
+- 将 HCCL-VM 结果并入 direct evidence；
+- 声称 HCCL-VM 等同真实 NPU direct API；
+- 使用 `hccl_test` 生成本 checkpoint 的主要正确性证据。
+
+#### 模拟参数与数据支撑说明
+
+Evidence 必须明确区分：
+
+1. 数据正确性参数：
+   - 输入数据；
+   - dtype；
+   - op；
+   - rank；
+   - host reference；
+   - 误差阈值。
+
+2. 性能模型参数：
+   - 带宽；
+   - 延迟；
+   - 拥塞；
+   - 拓扑链路；
+   - 协议开销。
+
+本 checkpoint 只验收数据正确性，不验收真实性能。
+
+若性能参数未经过真实 Ascend 集群校准，必须记录：
+
+```text
+real_device_calibration_status=UNAVAILABLE_NO_REAL_DEVICE
+performance_claim=false
+measured_on_real_npu=false
+```
+
+不得用模拟器内部公式的输出证明：
+
+- 实际 HCCS/RoCE/PCIe 带宽；
+- 真实 p50/p95 延迟；
+- 实际线性加速比；
+- 真实 NPU 利用率；
+- 真实通信计算重叠率。
+
+#### Direct API 安全边界
+
+本 checkpoint 不执行任何真实 ACL/HCCL API。
+
+不得调用：
+
+- `aclInit`
+- `aclFinalize`
+- device/context/stream API
+- device memory allocation/copy API
+- communicator init/destroy API
+- `HcclAllReduce`
+- `HcclAllGather`
+- `HcclReduceScatter`
+- `dlopen` 或 Python `ctypes.CDLL` 加载官方 runtime
+- MPI real-device launcher
+- `hccl_test`
+
+结果必须保持：
+
+```text
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+runtime_initialized=false
+device_opened=false
+context_created=false
+stream_created=false
+communicator_created=false
+device_buffer_allocated=false
+collective_executed=false
+runtime_api_calls=[]
+```
+
+G2-F-4 的 lifecycle harness 只做隔离回归，不用于执行本 checkpoint 的模拟 collective。
+
+#### 构建与测试
+
+至少覆盖：
+
+1. 三原语独立 host reference；
+2. 三原语基本正确性；
+3. FP32、FP16、BF16、INT32；
+4. SUM、MAX、MIN；
+5. 2/4/8/16/64 ranks 的代表性覆盖；
+6. small、medium 和 logical large message；
+7. Full Mesh、Ring、hierarchical、heterogeneous 场景；
+8. rank 顺序和切分；
+9. buffer 容量；
+10. overflow；
+11. NaN/Inf 检查；
+12. deterministic seed；
+13. output hash；
+14. 不同拓扑结果一致性；
+15. CPU_SIM 交叉验证；
+16. Windows 导入安全；
+17. Python 全量回归；
+18. CPU_SIM CTest；
+19. G2-F-4 host-only lifecycle CTest；
+20. G2-E registry/parser/evidence regression；
+21. direct build/link/guard regression；
+22. 最终 HCOMM/HCCL tracked worktree clean。
+
+不得：
+
+- 删除或弱化已有测试；
+- 新增无理由 skip；
+- 将错误结果标记为近似通过；
+- 以 simulator performance score 替代数据正确性；
+- 将测试矩阵缺失归类为硬件阻塞。
+
+#### Evidence
+
+只保留一份权威最终 evidence：
+
+```text
+experiments/simulator/evidence/g2_f_5_simulator_<timestamp>/
+```
+
+至少包含：
+
+- `README.md`
+- `manifest.json`
+- `result.json`
+- `test_matrix.json`
+- `allreduce_correctness.json`
+- `allgather_correctness.json`
+- `reducescatter_correctness.json`
+- `precision_audit.json`
+- `large_message_audit.json`
+- `cross_backend_audit.json`
+- `simulation_assumptions.json`
+- `regression.json`
+- `SHA256SUMS`
+
+Evidence 必须记录：
+
+```text
+checkpoint=G2-F-5
+validation_track=SIMULATOR_ACCEPTANCE
+checkpoint_status=COMPLETED
+simulator_correctness_status=SIMULATOR_CORRECTNESS_PASS
+real_device_acceptance=HARDWARE_BLOCKED
+real_device_calibration_status=UNAVAILABLE_NO_REAL_DEVICE
+performance_claim=false
+measured_on_real_npu=false
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+collective_executed_on_real_device=false
+runtime_api_calls=[]
+```
+
+还必须记录：
+
+- 三原语结果；
+- rank 和消息规模矩阵；
+- dtype/op 覆盖；
+- host reference；
+- error metrics；
+- output hashes；
+- random seeds；
+- simulator 配置；
+- topology 配置；
+- logical large-message 策略；
+- CPU_SIM 交叉验证；
+- 已知模拟局限；
+- 未经实机校准的参数；
+- 测试和回归结果；
+- 项目 revision；
+- evidence SHA256。
+
+不得在此目录生成：
+
+```text
+REAL_DEVICE_PASS
+direct_hccl_api_call=true
+real_ascend_npu_validated=true
+```
+
+#### 完成条件
+
+只有以下条件全部满足时，本 checkpoint 才可标记 `COMPLETED`：
+
+- AllReduce 模拟正确性通过；
+- AllGather 模拟正确性通过；
+- ReduceScatter 模拟正确性通过；
+- 每个 primitive 均与独立 host reference 比较；
+- FP32、FP16、BF16、INT32 均有有效覆盖；
+- SUM、MAX、MIN 均有有效覆盖；
+- 8-rank 和 64-rank 模拟场景通过；
+- small、medium 和 logical large-message 场景通过；
+- 不同拓扑不会改变正确性；
+- deterministic replay 通过；
+- output hash 和 error metrics 完整；
+- CPU_SIM 交叉验证通过；
+- 无真实 ACL/HCCL runtime 调用；
+- direct 相关真实性字段全部为 false；
+- ordinary regression 无回归；
+- evidence SHA256 全部通过；
+- HCOMM/HCCL tracked worktree clean；
+- 工作区 clean；
+- 未 push、未 merge；
+- 未开始 G2-F-6。
+
+最终状态必须为：
+
+```text
+G2-F-5 Simulator Correctness: COMPLETED
+Simulator Correctness Acceptance: COMPLETED
+Competition Simulator Track: PARTIAL
+G2-F Readiness: PARTIAL
+G2-F Real-device Acceptance: HARDWARE_BLOCKED
+G2-F Overall: PARTIAL
+```
+
+`Competition Simulator Track` 在 G2-F-6 的模拟性能、规模和可靠性评估以及 G2-F-7 最终集成完成前保持 `PARTIAL`。
+
+#### 阻塞与失败分类
+
+`HARDWARE_BLOCKED`：
+
+- 仅用于真实 NPU direct API 验收；
+- 不影响当前模拟器正确性 checkpoint 完成。
+
+`ENV_BLOCKED`：
+
+- 项目构建环境、Python/CMake 依赖、必要配置或已有 simulator 无法正常运行；
+- 必须保留原始错误和恢复命令。
+
+`FAIL`：
+
+- 三原语结果错误；
+- host reference 不独立；
+- dtype/op/rank/message 覆盖不满足；
+- 不同拓扑产生不一致结果；
+- evidence 不完整；
+- 测试或代码缺陷。
+
+不得将模拟器实现错误、测试缺失或错误结果标记为 `HARDWARE_BLOCKED`。
+
+#### 建议 commit 与回滚
+
+建议 commit：
+
+```text
+G2-F-5 add simulator collective correctness acceptance
+```
+
+完成该 commit 后必须停止，不得开始 G2-F-6。
+
+回滚使用该项目提交的 `git revert`，不得重写历史、删除已有 evidence 或修改官方仓库。
 
 ### G2-F-6：真实设备拓扑、性能、规模与可靠性
 

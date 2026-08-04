@@ -1,0 +1,15 @@
+{
+  "execution_engine": "project-local pure Python simulator acceptance",
+  "known_limitations": [
+    "FP16/BF16 software rounding only",
+    "logical >=1GB uses sampled streaming windows",
+    "no Ascend hardware accumulation or transport behavior is modeled"
+  ],
+  "performance_claim": false,
+  "real_device_calibration_status": "UNAVAILABLE_NO_REAL_DEVICE",
+  "topology_affects": [
+    "metadata",
+    "future scheduling/performance only"
+  ],
+  "topology_does_not_affect": "collective values"
+}
