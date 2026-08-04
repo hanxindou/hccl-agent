@@ -1,0 +1,30 @@
+{
+  "backend": "SIMULATOR_ACCEPTANCE",
+  "dtype_bytes": {
+    "BF16": 2,
+    "FP16": 2,
+    "FP32": 4,
+    "INT32": 4
+  },
+  "host_reference": "independent canonical traversal v1",
+  "project_commit": "811577c27ea9250d30904e3b855eacb59fc4e54c",
+  "schema_version": "g2-f-simulator-correctness-v1",
+  "stress_tolerances": {
+    "BF16": {
+      "absolute": 0.01,
+      "relative": 0.01
+    },
+    "FP16": {
+      "absolute": 0.001,
+      "relative": 0.001
+    },
+    "FP32": {
+      "absolute": 1e-06,
+      "relative": 1e-06
+    },
+    "INT32": {
+      "absolute": 0.0,
+      "relative": 0.0
+    }
+  }
+}
