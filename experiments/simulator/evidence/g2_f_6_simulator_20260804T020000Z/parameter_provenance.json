@@ -1,0 +1,128 @@
+[
+  {
+    "applies_to": "HCCS",
+    "formula_use": "effective link bandwidth or one-way link latency",
+    "last_updated": "2026-08-04",
+    "name": "HCCS.bandwidth_gbps",
+    "real_device_calibrated": false,
+    "source_category": "PROJECT_CONFIG",
+    "source_description": "hardware/profile.py HardwareProfile.tier_medium relative simulator tier",
+    "uncertainty_range": "\u00b110% sensitivity sweep",
+    "unit": "Gbps",
+    "value": 100.0
+  },
+  {
+    "applies_to": "HCCS",
+    "formula_use": "effective link bandwidth or one-way link latency",
+    "last_updated": "2026-08-04",
+    "name": "HCCS.latency_ms",
+    "real_device_calibrated": false,
+    "source_category": "PROJECT_CONFIG",
+    "source_description": "hardware/profile.py HardwareProfile.tier_medium relative simulator tier",
+    "uncertainty_range": "\u00b110% sensitivity sweep",
+    "unit": "ms",
+    "value": 0.002
+  },
+  {
+    "applies_to": "RoCE",
+    "formula_use": "effective link bandwidth or one-way link latency",
+    "last_updated": "2026-08-04",
+    "name": "RoCE.bandwidth_gbps",
+    "real_device_calibrated": false,
+    "source_category": "PROJECT_CONFIG",
+    "source_description": "hardware/profile.py HardwareProfile.tier_medium relative simulator tier",
+    "uncertainty_range": "\u00b110% sensitivity sweep",
+    "unit": "Gbps",
+    "value": 50.0
+  },
+  {
+    "applies_to": "RoCE",
+    "formula_use": "effective link bandwidth or one-way link latency",
+    "last_updated": "2026-08-04",
+    "name": "RoCE.latency_ms",
+    "real_device_calibrated": false,
+    "source_category": "PROJECT_CONFIG",
+    "source_description": "hardware/profile.py HardwareProfile.tier_medium relative simulator tier",
+    "uncertainty_range": "\u00b110% sensitivity sweep",
+    "unit": "ms",
+    "value": 0.005
+  },
+  {
+    "applies_to": "PCIe",
+    "formula_use": "effective link bandwidth or one-way link latency",
+    "last_updated": "2026-08-04",
+    "name": "PCIe.bandwidth_gbps",
+    "real_device_calibrated": false,
+    "source_category": "PROJECT_CONFIG",
+    "source_description": "hardware/profile.py HardwareProfile.tier_medium relative simulator tier",
+    "uncertainty_range": "\u00b110% sensitivity sweep",
+    "unit": "Gbps",
+    "value": 32.0
+  },
+  {
+    "applies_to": "PCIe",
+    "formula_use": "effective link bandwidth or one-way link latency",
+    "last_updated": "2026-08-04",
+    "name": "PCIe.latency_ms",
+    "real_device_calibrated": false,
+    "source_category": "PROJECT_CONFIG",
+    "source_description": "hardware/profile.py HardwareProfile.tier_medium relative simulator tier",
+    "uncertainty_range": "\u00b110% sensitivity sweep",
+    "unit": "ms",
+    "value": 0.01
+  },
+  {
+    "applies_to": "all collectives",
+    "formula_use": "collective_time startup term",
+    "last_updated": "2026-08-04",
+    "name": "startup_overhead",
+    "real_device_calibrated": false,
+    "source_category": "DERIVED_ANALYTICAL",
+    "source_description": "CostModelEngine.STARTUP_COST_MS",
+    "uncertainty_range": "\u00b110% sensitivity sweep",
+    "unit": "ms",
+    "value": 0.003
+  },
+  {
+    "applies_to": "algorithm variants",
+    "formula_use": "effective_bandwidth = bottleneck * efficiency / contention",
+    "last_updated": "2026-08-04",
+    "name": "algorithm_efficiency",
+    "real_device_calibrated": false,
+    "source_category": "EXPLICIT_ASSUMPTION",
+    "source_description": "project simulator relative efficiency assumptions",
+    "uncertainty_range": "0.85-0.95 algorithm-specific",
+    "unit": "ratio",
+    "value": {
+      "Butterfly": 0.85,
+      "Fat-Tree": 0.95,
+      "Mesh": 0.88,
+      "NHR": 0.93,
+      "Ring AllReduce": 0.9
+    }
+  },
+  {
+    "applies_to": "all collectives",
+    "formula_use": "chunk scheduling and protocol overhead",
+    "last_updated": "2026-08-04",
+    "name": "chunk_bytes",
+    "real_device_calibrated": false,
+    "source_category": "EXPLICIT_ASSUMPTION",
+    "source_description": "bounded analytical chunk scheduling quantum",
+    "uncertainty_range": "1MB-8MB sensitivity sweep",
+    "unit": "bytes",
+    "value": 4194304
+  },
+  {
+    "applies_to": "fault scenarios",
+    "formula_use": "retry/recovery cost",
+    "last_updated": "2026-08-04",
+    "name": "retry_probability",
+    "real_device_calibrated": false,
+    "source_category": "EXPLICIT_ASSUMPTION",
+    "source_description": "deterministic simulator fault policy",
+    "uncertainty_range": "0.0001-0.001 sensitivity sweep",
+    "unit": "probability",
+    "value": 0.0002
+  }
+]

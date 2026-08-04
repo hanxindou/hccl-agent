@@ -1,0 +1,11 @@
+{
+  "model_revision": "g2-f-6-analytical-event-v1",
+  "project_commit": "16c9f5a90ea26d2864b97103aeba2f48b53a0c8e",
+  "raw_file_manifest": [
+    "raw_runs.jsonl",
+    "fault_injection_trace.jsonl"
+  ],
+  "schema_version": "g2-f-6-simulator-v1",
+  "simulator_revision": "g2-f-6-simulator-acceptance-v1",
+  "validation_track": "SIMULATOR_ACCEPTANCE"
+}

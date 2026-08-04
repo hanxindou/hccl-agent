@@ -1,0 +1,12 @@
+{
+  "collective_time_formula": "startup + serialization + link_latency + hop + contention + queueing + protocol + reduction + chunk_schedule + synchronization + retry_or_recovery",
+  "formula_revision": "g2-f-6-analytical-event-v1",
+  "hardware_profile": "HardwareProfile.tier_medium relative simulator profile",
+  "real_device_calibration_status": "UNAVAILABLE_NO_REAL_DEVICE",
+  "units": {
+    "bandwidth": "Gbps/GB/s",
+    "bytes": "bytes",
+    "time": "us",
+    "utilization": "percent"
+  }
+}

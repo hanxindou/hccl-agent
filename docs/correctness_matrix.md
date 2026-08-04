@@ -74,6 +74,14 @@
 兼容的 FP32 小型子集上作交叉验证。该轨道不调用官方 runtime，不能证明
 真实 Ascend NPU、直接 API、性能或硬件混合精度行为。
 
+## G2-F-6 Simulator Performance and Reliability Acceptance
+
+G2-F-6 在同一 `SIMULATOR_ACCEPTANCE` 轨道上补充拓扑、性能、规模与可靠性
+模型：HCCS、RoCE 和 PCIe 相对 profile，四种模拟拓扑，三原语、五种算法、
+8–1024 ranks、logical 1GB、故障恢复、逻辑 72 小时和通信 workload trace。
+所有时间、带宽、利用率、重传、切换和 profiling 均为可复现的 CPU-side
+模拟输出；不构成真实 Ascend、HCCL、训练、msprof 或 direct API 性能结论。
+
 ## 未验证边界
 
 - 本地 Docker Linux `.so` 验证仍为 `ENV_BLOCKED`，原因是 `auth.docker.io` token timeout；远端 GitHub Actions Linux CPU_SIM 已验证。

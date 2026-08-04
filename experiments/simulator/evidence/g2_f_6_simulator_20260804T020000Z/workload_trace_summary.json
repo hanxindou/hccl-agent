@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "workloads": [
+    {
+      "data_parallel_allreduce": true,
+      "gradient_bucket_bytes": 26214400,
+      "layer_count": 24,
+      "micro_batch_count": 4,
+      "operations": [
+        {
+          "correctness_gate_passed": true,
+          "primitive": "AllReduce",
+          "repetitions": 96,
+          "simulated_collective_time_us": 25807.803374282
+        },
+        {
+          "correctness_gate_passed": true,
+          "primitive": "AllGather",
+          "repetitions": 96,
+          "simulated_collective_time_us": 14429.724236922
+        },
+        {
+          "correctness_gate_passed": true,
+          "primitive": "ReduceScatter",
+          "repetitions": 96,
+          "simulated_collective_time_us": 15901.180649823
+        }
+      ],
+      "overlap_ratio_assumption": 0.0,
+      "real_model_executed": false,
+      "real_training_executed": false,
+      "simulated_workload_throughput": null,
+      "tensor_parallel_allgather": true,
+      "tensor_parallel_reducescatter": true,
+      "workload_name": "BERT_LIKE",
+      "workload_type": "COMMUNICATION_TRACE"
+    },
+    {
+      "data_parallel_allreduce": true,
+      "gradient_bucket_bytes": 67108864,
+      "layer_count": 32,
+      "micro_batch_count": 2,
+      "operations": [
+        {
+          "correctness_gate_passed": true,
+          "primitive": "AllReduce",
+          "repetitions": 64,
+          "simulated_collective_time_us": 65910.312470483
+        },
+        {
+          "correctness_gate_passed": true,
+          "primitive": "AllGather",
+          "repetitions": 64,
+          "simulated_collective_time_us": 36839.199626681
+        },
+        {
+          "correctness_gate_passed": true,
+          "primitive": "ReduceScatter",
+          "repetitions": 64,
+          "simulated_collective_time_us": 40455.512852331
+        }
+      ],
+      "overlap_ratio_assumption": 0.0,
+      "real_model_executed": false,
+      "real_training_executed": false,
+      "simulated_workload_throughput": null,
+      "tensor_parallel_allgather": true,
+      "tensor_parallel_reducescatter": true,
+      "workload_name": "LLAMA_LIKE",
+      "workload_type": "COMMUNICATION_TRACE"
+    }
+  ]
+}

@@ -1688,19 +1688,1194 @@ G2-F-5 add simulator collective correctness acceptance
 
 回滚使用该项目提交的 `git revert`，不得重写历史、删除已有 evidence 或修改官方仓库。
 
-### G2-F-6：真实设备拓扑、性能、规模与可靠性
+### G2-F-6：模拟器拓扑、性能、规模与可靠性评估（真实设备验收保持 HARDWARE_BLOCKED）
 
-- **目标：** 在 G2-F-5 的正确性基线上收集拓扑、延迟/带宽、多设备/多节点规模和可控故障恢复证据。
-- **修改文件：** opt-in benchmark/topology/reliability harness、evidence/report schema、阈值策略；不替换任何 G2-E evidence。
-- **非目标：** 不把分析 simulator 分数写成测量结果；不通过伪设备或 hccl_test 补数据。
-- **API 契约：** 仅复用 G2-F-5 已验 direct API；每项拓扑/故障 API 的可用性另行从实际头/符号冻结。
-- **构建/测试：** opt-in real-device commands，默认 CI 只做 schema/parser 测试。
-- **当前环境：** `HARDWARE_BLOCKED`。
-- **完成条件：** 每个规模点具备硬件拓扑、直接调用 trace、重复统计、性能单位、故障/恢复行为和 cleanup 证据；不满足即局部 `FAIL` 或 block。
-- **HARDWARE_BLOCKED：** 无足够 NPU/跨节点网络或无批准的故障演练窗口。
-- **ENV_BLOCKED：** 集群调度、rank-table/network、权限、profiling 工具或一致性环境不满足。
-- **evidence：** schema 扩展记录 device topology、message bytes、warm-up、iteration、p50/p95、带宽算法、恢复 trace；不得覆盖 G2-F-5 原始 evidence。
-- **建议 commit / 回滚：** `G2-F-6 add direct device scale and reliability evidence`；revert 项目代码，保留 evidence。
+#### 目标
+
+在 G2-F-5 三原语模拟正确性验收基础上，建立可追溯、可复现、参数来源明确的模拟器评估体系，覆盖：
+
+- HCCS、RoCE、PCIe 链路模型；
+- Full Mesh、Ring、分层 Fat-Tree 和异构非对称拓扑；
+- AllReduce、AllGather、ReduceScatter；
+- 小、中、大及 logical ≥1 GB 消息；
+- 8 至 1024 ranks 规模；
+- Ring、NHR、Mesh、Butterfly、分层算法的对比；
+- 模拟延迟、算法带宽、链路利用率和拥塞；
+- 动态拓扑、链路故障、节点退出、超时、重传和路由恢复；
+- 重复实验、p50/p95 和确定性复现；
+- 面向 BERT/LLaMA 类工作负载的通信 trace 场景。
+
+本 checkpoint 属于：
+
+```text
+SIMULATOR TOPOLOGY / PERFORMANCE / SCALE / RELIABILITY ACCEPTANCE
+```
+
+不是：
+
+```text
+REAL-DEVICE PERFORMANCE ACCEPTANCE
+```
+
+所有结果必须明确标记为模拟结果，不得将模拟时间、模拟带宽、模拟扩展效率或模拟故障恢复时间描述为真实 Ascend NPU 实测数据。
+
+真实设备 direct API 的拓扑、性能、规模和可靠性验收继续保持：
+
+```text
+G2-F Real-device Acceptance: HARDWARE_BLOCKED
+```
+
+#### 执行前状态与额度控制
+
+进入本 checkpoint 前，用户已经人工确认：
+
+- G2-F-5 已通过 PR 合并进入 `main`；
+- 本地 `main` 与 `origin/main` 已同步；
+- 工作区除尚未提交的 G2-F-6 计划细化外无其他修改；
+- G2-F-1 至 G2-F-5 已完成。
+
+执行开始时只允许进行一次轻量确认：
+
+```text
+git branch --show-current
+git status --short
+```
+
+只需确认：
+
+- 当前分支为 `main`；
+- 除 G2-F-6 计划细化外没有其他未提交修改。
+
+除非实际发现文件缺失、版本矛盾、构建失败或 evidence 漂移，不得重新执行完整 Git 历史审计、旧 PR 审计或全部旧 checkpoint 人工复核。
+
+HCOMM/HCCL 的冻结 branch、commit 和 tracked worktree clean 只需在最终审计时检查一次。
+
+#### 验证轨道隔离
+
+项目必须继续严格区分：
+
+```text
+CPU_SIM
+ASCEND_HCCL_VM
+ASCEND_HCCL_DIRECT
+SIMULATOR_ACCEPTANCE
+```
+
+本 checkpoint 使用：
+
+```text
+SIMULATOR_ACCEPTANCE
+```
+
+允许复用：
+
+- G2-F-5 已通过正确性验收的 simulator harness；
+- 项目现有 topology graph；
+- cost/performance model；
+- benchmark runner；
+- fault-injection 和 reliability 模块；
+- CPU_SIM 作为受限语义交叉验证；
+- G2-E 既有 evidence 作为隔离回归对象。
+
+不得：
+
+- 将模拟器重命名或伪装为 `ASCEND_HCCL_DIRECT`；
+- 将 CPU_SIM 或 HCCL-VM 的数据视为真实硬件性能；
+- 重新生成或改写 G2-E evidence；
+- 使用 `hccl_test` 生成本 checkpoint 的主要 evidence；
+- 设置 `direct_hccl_api_call=true`；
+- 设置 `real_ascend_npu_validated=true`；
+- 生成 `REAL_DEVICE_PASS`。
+
+#### G2-F-5 正确性门禁
+
+所有性能、规模和可靠性实验都必须建立在正确性通过的前提上。
+
+每个实验点必须：
+
+1. 使用 G2-F-5 已验收的三原语数据语义；
+2. 在性能采样前完成输出正确性检查，或引用同配置的有效正确性结果；
+3. 故障恢复后再次完成独立 host reference 检查；
+4. 一旦出现错误结果、NaN、Inf、rank 顺序错误或 hash 不一致，立即将该实验点标记为 `FAIL`；
+5. 不得为错误结果继续生成有效性能结论。
+
+必须满足：
+
+```text
+correctness_gate_passed=true
+```
+
+性能结果才可进入最终统计。
+
+#### 修改范围
+
+允许按项目现有架构新增或修改：
+
+- simulator topology profile；
+- link、route、contention 和 congestion model；
+- collective performance model；
+- scale benchmark harness；
+- reliability/fault-injection harness；
+- workload communication trace；
+- benchmark matrix 和 threshold policy；
+- raw run log 和 evidence writer；
+- schema、parser 和 contract tests；
+- 模拟器配置说明；
+- 性能、规模和可靠性报告；
+- G2-F-6 simulator evidence。
+
+预计涉及但不限于：
+
+- `simulator/`
+- `simulator/topology/`
+- `simulator/cost_model/`
+- `experiments/`
+- `agent/benchmark_skill.py`
+- `agent/benchmark_suite_skill.py`
+- simulator tests
+- project documentation
+
+允许根据当前项目结构调整具体路径。
+
+不得改变：
+
+- G2-F-5 三原语正确性语义；
+- CPU_SIM 的公开 ABI 和默认行为；
+- G2-E subprocess、checker、parser 和 evidence 语义；
+- G2-F-4 lifecycle guard；
+- `HCCL_ENABLE_ASCEND_HCCL_DIRECT` 默认 `OFF`；
+- HCOMM、HCCL、CANN 官方文件；
+- G2-D、G2-E、G2-F-1 至 G2-F-5 的既有 evidence。
+
+#### 模拟参数来源与可信度分级
+
+每个性能参数必须具有明确来源和单位。
+
+参数来源至少分为：
+
+```text
+OFFICIAL_DOCUMENTED
+PROJECT_CONFIG
+DERIVED_ANALYTICAL
+HCCL_VM_REFERENCE_ONLY
+PUBLIC_REFERENCE
+EXPLICIT_ASSUMPTION
+UNAVAILABLE
+```
+
+每个参数至少记录：
+
+- 参数名称；
+- 数值；
+- 单位；
+- 适用设备或链路；
+- 来源类别；
+- 来源描述；
+- 是否经过真实设备校准；
+- 不确定性或取值范围；
+- 最后更新时间；
+- 使用该参数的公式或模型。
+
+参数不得只记录数值而缺少来源。
+
+当前没有真实 NPU，因此必须记录：
+
+```text
+real_device_calibration_status=UNAVAILABLE_NO_REAL_DEVICE
+measured_on_real_npu=false
+```
+
+HCCL-VM 数据只能标记为：
+
+```text
+HCCL_VM_REFERENCE_ONLY
+```
+
+不得用于证明真实 HCCS、RoCE、PCIe、HBM 或 NPU runtime 性能。
+
+对于缺少可靠来源的参数，必须：
+
+- 显式标记为 `EXPLICIT_ASSUMPTION`；
+- 给出合理范围；
+- 进行敏感性分析；
+- 不得以单一假设值形成确定性的硬件性能结论。
+
+#### 链路模型
+
+至少支持以下链路类别：
+
+```text
+HCCS
+RoCE
+PCIe
+```
+
+每条有向链路至少记录：
+
+- source；
+- destination；
+- link type；
+- nominal bandwidth；
+- effective bandwidth；
+- one-way latency；
+- bidirectional/full-duplex 属性；
+- oversubscription ratio；
+- current utilization；
+- queue depth 或等价拥塞状态；
+- error rate 或 fault probability；
+- NUMA/domain 信息；
+- enabled/disabled 状态。
+
+链路模型必须支持：
+
+- 非对称带宽；
+- 非对称时延；
+- 不同链路类型混合；
+- 链路共享；
+- 路径竞争；
+- oversubscription；
+- 链路降速；
+- 临时故障；
+- 永久故障。
+
+不得默认所有链路：
+
+- 带宽相同；
+- 延迟相同；
+- 永远无拥塞；
+- 永远无故障；
+- 始终全双工。
+
+#### 拓扑模型
+
+至少覆盖：
+
+1. Full Mesh：
+   - 单机多卡；
+   - HCCS 主导；
+   - 可配置 PCIe fallback。
+
+2. Ring：
+   - 均匀环；
+   - 非均匀链路；
+   - NHR 非均匀环。
+
+3. Hierarchical / Fat-Tree：
+   - 节点内高速链路；
+   - 节点间 RoCE；
+   - 多级交换或 oversubscription。
+
+4. Heterogeneous / asymmetric：
+   - 不同代际设备 profile；
+   - 不同链路带宽；
+   - 非对称路径；
+   - 不同节点能力；
+   - bottleneck link。
+
+至少记录：
+
+- node count；
+- devices per node；
+- rank placement；
+- adjacency；
+- route；
+- hop count；
+- bottleneck link；
+- aggregate bisection capacity；
+- oversubscription；
+- topology source。
+
+当前环境的 topology source 必须为：
+
+```text
+SIMULATOR_CONFIG
+```
+
+不得描述为：
+
+```text
+REAL_HARDWARE_AUTO_DETECTED
+```
+
+如果项目实现 topology probe 接口，本 checkpoint 只验证它能读取和校验模拟配置，不得声称完成真实 NPU 拓扑探测。
+
+#### 硬件属性模拟边界
+
+允许模拟器配置：
+
+- HBM capacity/bandwidth profile；
+- UB capacity profile；
+- DMA 或 copy overhead；
+- device generation；
+- NUMA placement；
+- link capability；
+- chunk size limit；
+- concurrency limit。
+
+这些字段必须标记为模拟 profile。
+
+不得声称：
+
+- 实际探测到 HBM 分区；
+- 实际读取到 UB 容量；
+- 实际测得 DMA 性能；
+- 实际验证随路归约；
+- 实际验证零 CPU 介入；
+- 实际验证计算通信重叠；
+- 实际验证真实设备利用率。
+
+#### 性能模型
+
+模型必须拆分并记录主要开销，至少包括：
+
+```text
+startup_overhead
+serialization_time
+link_latency
+hop_cost
+contention_delay
+queueing_delay
+protocol_overhead
+reduction_cost
+chunk_scheduling_cost
+synchronization_cost
+retry_cost
+recovery_cost
+```
+
+每个 collective 的模拟完成时间应由可审计的阶段或事件组成。
+
+建议使用以下通用结构：
+
+```text
+link_transfer_time
+  = message_bytes / effective_link_bandwidth
+
+path_transfer_time
+  = sum(link_latency + link_transfer_time + contention_delay)
+
+collective_time
+  = critical_path_time
+  + protocol_overhead
+  + reduction_cost
+  + synchronization_cost
+  + retry_or_recovery_cost
+```
+
+允许根据现有模型采用更精确公式，但必须：
+
+- 在文档中写明；
+- 在 evidence 中记录公式版本；
+- 对单位进行校验；
+- 对零值、极端值和溢出进行测试；
+- 不得将不透明的单一 score 作为唯一性能输出。
+
+#### 性能指标
+
+每个实验点至少记录：
+
+- simulated latency；
+- p50；
+- p95；
+- minimum；
+- maximum；
+- mean；
+- standard deviation；
+- logical payload bytes；
+- transmitted bytes；
+- retry bytes；
+- effective payload bandwidth；
+- modeled link utilization；
+- bottleneck link；
+- hop count；
+- chunk count；
+- warm-up count；
+- measured simulation iterations；
+- wall-clock simulator execution time。
+
+性能单位必须明确，例如：
+
+```text
+us
+ms
+GB/s
+Gbps
+bytes
+percent
+```
+
+不得只记录无单位的：
+
+```text
+latency
+bandwidth
+score
+```
+
+如果输出 algorithmic bandwidth 或 bus bandwidth，必须：
+
+- 明确指标名称；
+- 写明公式；
+- 写明 primitive 相关系数；
+- 通过独立测试验证；
+- 不得混用不同定义。
+
+必须区分：
+
+```text
+simulated_collective_time
+simulator_wall_clock_time
+```
+
+前者是模型输出，后者是运行模拟器本身消耗的真实 CPU 时间，两者不得混淆。
+
+#### 消息规模
+
+至少覆盖：
+
+```text
+1 B 或最小合法元素
+1 KB
+64 KB
+1 MB
+16 MB
+128 MB
+1 GB logical
+```
+
+其中必须包含赛题关注的：
+
+```text
+small message <= 64 KB
+large message >= 1 GB
+```
+
+logical 1 GB 场景允许使用：
+
+- analytical event model；
+- chunked simulation；
+- streaming state；
+- bounded-memory trace；
+- incremental statistics。
+
+必须记录：
+
+```text
+logical_message_bytes
+materialized_message_bytes
+chunk_bytes
+chunk_count
+```
+
+不得将 logical 1 GB 描述为：
+
+- 实际分配了 1 GB device memory；
+- 真实执行了 1 GB HCCL collective；
+- 实测了真实 NPU 1 GB 性能。
+
+#### 算法对比
+
+至少比较项目中可用的代表性算法：
+
+```text
+Ring
+NHR
+Mesh
+Butterfly
+Hierarchical / Fat-Tree
+```
+
+算法不存在或不适用于某 primitive 时，必须显式标记：
+
+```text
+NOT_APPLICABLE
+```
+
+不得用隐式跳过隐藏覆盖缺失。
+
+所有算法比较必须使用相同：
+
+- primitive；
+- dtype；
+- op；
+- rank size；
+- message bytes；
+- topology；
+- hardware profile；
+- seed；
+- fault profile；
+- warm-up 和 iteration 设置。
+
+必须防止：
+
+- 为某一算法单独使用更优参数；
+- 只保留最佳结果；
+- 丢弃失败或异常结果；
+- 用不同输入规模比较算法；
+- 将 analytical score 与模拟 latency 混在同一排名中。
+
+最终排名必须同时展示：
+
+- 正确性状态；
+- 模拟延迟；
+- 模拟带宽；
+- 资源/链路利用率；
+- 适用场景；
+- 主要瓶颈；
+- 参数来源可信度。
+
+#### 规模评估
+
+至少覆盖：
+
+```text
+8
+16
+32
+64
+128
+256
+512
+1024 ranks
+```
+
+普通 CI 可以运行轻量代表子集，例如：
+
+```text
+8
+64
+1024
+```
+
+完整矩阵可作为本地 checkpoint suite 执行。
+
+每个规模点必须记录：
+
+- node count；
+- ranks per node；
+- total ranks；
+- topology；
+- route count；
+- algorithm step count；
+- logical message bytes；
+- simulated collective time；
+- effective payload bandwidth；
+- link utilization；
+- bottleneck；
+- memory footprint estimate；
+- simulation wall-clock time。
+
+复杂度声明必须同时给出：
+
+1. 理论通信步骤或消息复杂度；
+2. 模拟观测趋势；
+3. 与声明的 `O(N)` 或 `O(N log N)` 是否一致；
+4. 拟合方法或趋势判断依据；
+5. 异常点和瓶颈解释。
+
+不得仅根据算法名称直接宣称复杂度通过。
+
+#### 扩展效率边界
+
+如果报告“加速比”或“线性扩展效率”，必须先定义完整 workload model。
+
+必须明确：
+
+- 基准 rank 数；
+- 固定问题规模还是按 rank 扩展的问题规模；
+- compute time；
+- communication time；
+- overlap 假设；
+- throughput 定义；
+- speedup 公式；
+- efficiency 公式。
+
+在只有 communication simulator、没有计算 workload model 时，只允许报告：
+
+- communication latency scaling；
+- effective bandwidth scaling；
+- step count scaling；
+- link utilization scaling。
+
+不得直接宣称：
+
+```text
+训练加速比 >= 90%
+```
+
+只有在明确的模拟 workload model 下，才允许报告：
+
+```text
+simulated_parallel_efficiency
+```
+
+并必须附带：
+
+```text
+simulation_only=true
+real_training_validated=false
+```
+
+#### 工作负载通信 Trace
+
+允许建立代表性 BERT/LLaMA 类通信场景，但只能使用通信 trace，不得声称完成真实模型训练。
+
+至少支持配置：
+
+- gradient bucket sizes；
+- data-parallel AllReduce；
+- tensor-parallel AllGather；
+- tensor-parallel ReduceScatter；
+- micro-batch count；
+- layer count；
+- overlap ratio assumption；
+- repeated collective sequence。
+
+必须记录：
+
+```text
+workload_type=COMMUNICATION_TRACE
+real_model_executed=false
+real_training_executed=false
+```
+
+不得输出未经实机或真实训练验证的：
+
+- 实际 tokens/s；
+- 实际 samples/s；
+- 实际训练时间；
+- 实际 NPU utilization；
+- 实际模型收敛速度。
+
+如需输出模拟吞吐，必须命名为：
+
+```text
+simulated_workload_throughput
+```
+
+并记录完整假设。
+
+#### 重复实验与统计
+
+每个正式性能点建议至少包含：
+
+```text
+warm_up_iterations >= 5
+measured_iterations >= 30
+```
+
+对于计算成本较高的 512/1024-rank 或 logical 1 GB 场景，可降低次数，但必须：
+
+- 记录实际次数；
+- 说明原因；
+- 不得与高采样点混合而不披露。
+
+必须保存或可重建：
+
+- per-iteration simulated latency；
+- random seed；
+- traffic seed；
+- fault seed；
+- p50/p95 计算方式；
+- outlier policy。
+
+默认不得删除 outlier。
+
+如果实施异常值过滤，必须同时保留：
+
+- 原始统计；
+- 过滤规则；
+- 过滤后统计；
+- 被过滤样本及原因。
+
+#### 确定性与敏感性分析
+
+相同 commit、配置和 seed 必须得到相同：
+
+- route；
+- algorithm selection；
+- event trace；
+- simulated latency；
+- fault outcome；
+- output hash；
+- evidence summary。
+
+对于未经实机校准的关键参数，至少进行范围或敏感性分析，例如：
+
+- bandwidth ±10%；
+- latency ±10%；
+- oversubscription 变化；
+- retry probability 变化；
+- reduction cost 变化；
+- chunk size 变化。
+
+必须记录：
+
+- 参数变化；
+- 结果变化；
+- 排名是否稳定；
+- bottleneck 是否改变；
+- 结论对假设的敏感程度。
+
+如果算法排名对某个假设高度敏感，必须明确披露，不得只报告单点最优结果。
+
+#### 拥塞与竞争模型
+
+至少支持：
+
+- 多流共享链路；
+- oversubscribed uplink；
+- queueing；
+- route collision；
+- incast；
+- asymmetric traffic；
+- background traffic；
+- bandwidth throttling。
+
+必须验证：
+
+- 链路负载增加不会无故降低模拟延迟；
+- 带宽下降不会无故提高有效吞吐；
+- 增加 hop 或拥塞一般不会产生反常收益；
+- 不存在负延迟、负带宽或利用率超过模型允许上限；
+- 所有单位转换一致。
+
+如存在算法优化导致更高负载但更低总完成时间，必须由调度或并行机制解释，并在 trace 中可见。
+
+#### 可靠性与故障注入
+
+故障注入属于模拟器事件模型，不是官方 ACL/HCCL runtime mock，也不是实机故障证据。
+
+至少覆盖：
+
+1. 单链路瞬时故障；
+2. 单链路永久故障；
+3. 链路带宽降级；
+4. 链路时延突增；
+5. 丢包或错误率升高；
+6. 节点或 rank 退出；
+7. 拥塞和队列积压；
+8. timeout；
+9. retry；
+10. 备用路径切换；
+11. 动态拓扑节点减少；
+12. 动态拓扑节点恢复。
+
+每个故障场景必须记录：
+
+- fault type；
+- injection time；
+- affected rank/link/node；
+- pre-fault route；
+- detection simulated time；
+- recovery action；
+- post-fault route；
+- retry count；
+- retransmitted bytes；
+- recovery simulated time；
+- collective completion status；
+- correctness recheck；
+- cleanup/final state。
+
+可靠性通过必须满足：
+
+- 故障被检测；
+- 状态转换合法；
+- 不产生错误但被标记成功的输出；
+- 恢复后正确性重新通过；
+- 无可用替代路径时返回明确失败；
+- 不进入无限 retry；
+- 不出现负时间或事件顺序倒置；
+- 同 seed 可复现。
+
+#### 100 ms 切换目标
+
+赛题中的故障切换目标可以在模拟器中建立对应阈值，但只能表示：
+
+```text
+simulated_failover_time_ms
+```
+
+如果模拟恢复时间不超过 100 ms，可标记：
+
+```text
+simulated_failover_target_met=true
+```
+
+同时必须记录：
+
+```text
+real_device_failover_validated=false
+```
+
+不得将模拟结果描述为真实集群已经实现 100 ms 内切换。
+
+阈值失败必须如实标记，不得通过调整日志时间或忽略 detection cost 规避。
+
+#### 重传率与数据校验
+
+若模拟器包含 CRC、checksum、retry 或 parity 模型，必须记录：
+
+- checksum algorithm；
+- injected corruption count；
+- detected corruption count；
+- false negative/positive；
+- retry count；
+- retransmitted bytes；
+- retry rate；
+- final correctness。
+
+如报告：
+
+```text
+retry_rate <= 0.1%
+```
+
+必须明确这是：
+
+```text
+simulated_retry_rate
+```
+
+并给出故障概率、消息数量和统计样本。
+
+不得描述为真实 RoCE 或 HCCL 重传率。
+
+#### 72 小时可靠性边界
+
+允许实施逻辑时间加速的 72 小时模拟。
+
+必须区分：
+
+```text
+simulated_duration_seconds
+wall_clock_duration_seconds
+```
+
+若模拟覆盖逻辑 72 小时，可记录：
+
+```text
+logical_72h_simulation=true
+```
+
+同时必须记录：
+
+```text
+real_72h_hardware_stress=false
+```
+
+逻辑 72 小时模拟必须：
+
+- 使用事件驱动或有界状态；
+- 记录故障事件数量；
+- 记录 retry 和 recovery；
+- 定期执行 correctness spot-check；
+- 保存最终状态和统计摘要；
+- 不要求实际连续运行 72 小时。
+
+不得将其描述为真实 NPU 72 小时压测。
+
+#### 模拟 Profiling
+
+允许生成 simulator profiler trace，至少记录：
+
+- event timeline；
+- collective phase；
+- route；
+- link utilization；
+- queue occupancy；
+- chunk schedule；
+- retry/recovery；
+- critical path；
+- bottleneck。
+
+必须记录：
+
+```text
+profiling_source=SIMULATOR_TRACE
+msprof_executed=false
+```
+
+不得生成或伪造 `msprof` 输出。
+
+模拟 profiler 的时间轴必须使用统一单位，并能追溯到原始实验配置。
+
+#### Direct API 安全边界
+
+本 checkpoint 不执行任何真实 ACL/HCCL API。
+
+不得调用：
+
+- `aclInit`
+- `aclFinalize`
+- device/context/stream API
+- device memory allocation/copy API
+- communicator init/destroy API
+- `HcclAllReduce`
+- `HcclAllGather`
+- `HcclReduceScatter`
+- `dlopen`
+- Python `ctypes.CDLL` 加载官方 runtime
+- MPI real-device launcher
+- `hccl_test`
+
+结果必须保持：
+
+```text
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+runtime_initialized=false
+device_opened=false
+context_created=false
+stream_created=false
+communicator_created=false
+device_buffer_allocated=false
+collective_executed_on_real_device=false
+runtime_api_calls=[]
+```
+
+G2-F-3/F4 direct adapter 仅做 build、link、guard 和隔离回归，不参与本 checkpoint 的 simulated collective 执行。
+
+#### 构建与测试
+
+至少覆盖：
+
+1. topology schema 校验；
+2. HCCS/RoCE/PCIe profile；
+3. directed/asymmetric links；
+4. Full Mesh、Ring、hierarchical、heterogeneous topology；
+5. route 和 bottleneck 计算；
+6. bandwidth、latency 和单位换算；
+7. contention 和 oversubscription；
+8. 三原语性能事件模型；
+9. Ring、NHR、Mesh、Butterfly、hierarchical 对比；
+10. small、medium、logical 1 GB；
+11. 8/16/32/64/128/256/512/1024 ranks；
+12. p50/p95 和统计计算；
+13. deterministic replay；
+14. sensitivity analysis；
+15. single-link fault；
+16. bandwidth degradation；
+17. timeout/retry；
+18. route failover；
+19. node/rank removal；
+20. recovery correctness gate；
+21. simulated 100 ms failover threshold；
+22. logical 72h simulation；
+23. retry rate 统计；
+24. simulator profiling trace；
+25. communication workload trace；
+26. G2-F-5 correctness regression；
+27. CPU_SIM CTest；
+28. direct lifecycle host-only CTest；
+29. direct build/link/guard regression；
+30. G2-E registry/parser/evidence regression；
+31. Windows import safety；
+32. Python 全量回归；
+33. G2-F-1 至 G2-F-5 evidence SHA256 回归；
+34. 最终 HCOMM/HCCL tracked worktree clean。
+
+普通 CI 可以只运行：
+
+- schema/parser；
+- 小型 topology；
+- 8/64/1024-rank 代表性点；
+- 精简 fault suite；
+- deterministic replay；
+- evidence contract tests。
+
+完整 benchmark matrix 必须在本 checkpoint 本地执行并写入最终 evidence。
+
+不得：
+
+- 删除或弱化已有测试；
+- 新增无理由 skip；
+- 只保留最佳性能结果；
+- 丢弃失败场景；
+- 将正确性失败视为性能测试通过；
+- 将缺失实验点错误归类为硬件阻塞；
+- 以无单位 score 替代延迟、带宽和可靠性指标。
+
+#### Evidence
+
+只保留一份权威最终 evidence：
+
+```text
+experiments/simulator/evidence/g2_f_6_simulator_<timestamp>/
+```
+
+至少包含：
+
+- `README.md`
+- `manifest.json`
+- `result.json`
+- `model_parameters.json`
+- `parameter_provenance.json`
+- `topology_inventory.json`
+- `experiment_matrix.json`
+- `raw_runs.jsonl`
+- `latency_bandwidth_summary.json`
+- `algorithm_comparison.json`
+- `scale_summary.json`
+- `sensitivity_analysis.json`
+- `reliability_summary.json`
+- `fault_injection_trace.jsonl`
+- `logical_72h_summary.json`
+- `workload_trace_summary.json`
+- `profiling_summary.json`
+- `simulation_assumptions.json`
+- `cross_backend_audit.json`
+- `regression.json`
+- `SHA256SUMS`
+
+如果原始运行数据过大，允许将其拆分为多个 JSONL 文件，但必须：
+
+- 记录文件清单；
+- 保存 SHA256；
+- 保证 summary 可追溯到 raw records；
+- 不得只保存汇总而删除所有原始记录。
+
+Evidence 必须记录：
+
+```text
+checkpoint=G2-F-6
+validation_track=SIMULATOR_ACCEPTANCE
+checkpoint_status=COMPLETED
+simulator_topology_status=SIMULATOR_TOPOLOGY_PASS
+simulator_performance_status=SIMULATOR_PERFORMANCE_PASS
+simulator_scale_status=SIMULATOR_SCALE_PASS
+simulator_reliability_status=SIMULATOR_RELIABILITY_PASS
+real_device_acceptance=HARDWARE_BLOCKED
+real_device_calibration_status=UNAVAILABLE_NO_REAL_DEVICE
+performance_claim_type=SIMULATED_ONLY
+measured_on_real_npu=false
+profiling_source=SIMULATOR_TRACE
+msprof_executed=false
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+collective_executed_on_real_device=false
+runtime_api_calls=[]
+```
+
+还必须记录：
+
+- 项目 commit；
+- simulator/model revision；
+- topology profiles；
+- 参数来源和单位；
+- 全部实验矩阵；
+- warm-up 和 iteration；
+- per-run 或可追溯 raw records；
+- p50/p95；
+- bandwidth 公式；
+- bottleneck；
+- scale points；
+- complexity audit；
+- fault/recovery trace；
+- correctness gate；
+- logical 72h 标记；
+- workload trace 假设；
+- sensitivity results；
+- 已知局限；
+- 未实机校准字段；
+- 测试和回归；
+- HCOMM/HCCL branch、commit 和 clean 状态；
+- evidence SHA256。
+
+不得在此 evidence 中出现：
+
+```text
+REAL_DEVICE_PASS
+performance_claim_type=REAL_MEASURED
+measured_on_real_npu=true
+direct_hccl_api_call=true
+real_ascend_npu_validated=true
+msprof_executed=true
+```
+
+#### 完成条件
+
+只有以下条件全部满足时，本 checkpoint 才能标记 `COMPLETED`：
+
+- G2-F-5 正确性门禁通过；
+- HCCS、RoCE、PCIe 链路 profile 完整；
+- Full Mesh、Ring、hierarchical、heterogeneous topology 通过；
+- 三原语均有模拟性能结果；
+- Ring、NHR、Mesh、Butterfly、hierarchical 算法完成适用场景对比；
+- small、medium、logical ≥1 GB 场景通过；
+- 8 至 1024 ranks 规模矩阵通过；
+- 所有性能数据有单位和参数来源；
+- p50/p95 和原始迭代数据可追溯；
+- complexity 和 scale 分析完整；
+- 未经实机校准参数完成敏感性分析；
+- 单链路、降速、拥塞、timeout、retry、failover 和节点变化场景通过；
+- 故障恢复后正确性重新通过；
+- simulated 100 ms failover 结果如实记录；
+- logical 72h 模拟完成并明确非真实硬件压测；
+- workload communication trace 完成并明确非真实模型训练；
+- simulator profiling trace 完整；
+- 无真实 ACL/HCCL runtime 调用；
+- direct 真实性字段全部为 false；
+- ordinary regression 无回归；
+- G2-F-1 至 G2-F-5 evidence SHA256 通过；
+- 最终 evidence SHA256 全部通过；
+- HCOMM/HCCL tracked worktree clean；
+- 工作区 clean；
+- 未 push、未 merge；
+- 未开始 G2-F-7。
+
+最终状态必须为：
+
+```text
+G2-F-6 Simulator Topology: COMPLETED
+G2-F-6 Simulator Performance: COMPLETED
+G2-F-6 Simulator Scale: COMPLETED
+G2-F-6 Simulator Reliability: COMPLETED
+Simulator Performance/Scale/Reliability Acceptance: COMPLETED
+Competition Simulator Track: PARTIAL
+G2-F Readiness: PARTIAL
+G2-F Real-device Acceptance: HARDWARE_BLOCKED
+G2-F Overall: PARTIAL
+```
+
+`Competition Simulator Track` 和 `G2-F Readiness` 在 G2-F-7 完成 Agent 接入、三后端隔离回归和最终审计前保持 `PARTIAL`。
+
+#### 阻塞与失败分类
+
+`HARDWARE_BLOCKED`：
+
+- 仅用于真实 NPU、真实 HCCS/RoCE/PCIe、真实 `msprof`、真实多卡/多节点、真实故障演练和真实模型训练验收；
+- 不影响当前模拟器 checkpoint 完成。
+
+`ENV_BLOCKED`：
+
+- 项目 simulator、Python/CMake 环境、必要配置或 benchmark 依赖无法运行；
+- 必须保留原始错误、退出码、关键日志和恢复命令。
+
+`FAIL`：
+
+- topology、routing、performance model、统计、规模、可靠性、正确性门禁、测试或 evidence 存在缺陷；
+- 参数无来源或单位；
+- 不同实验不可复现；
+- 性能结果与模型基本单调性矛盾且无法解释；
+- 故障恢复后结果错误；
+- raw data 与 summary 不一致；
+- 将模拟结果冒充实测结果；
+- 前置环境满足但实现不能通过。
+
+不得将模拟器实现错误、参数缺失、测试缺失、错误结果或 evidence 缺陷标记为 `HARDWARE_BLOCKED`。
+
+#### 建议 commit 与回滚
+
+建议 commit：
+
+```text
+G2-F-6 add simulator topology performance and reliability acceptance
+```
+
+完成该 commit 后必须停止，不得开始 G2-F-7。
+
+回滚使用该项目提交的 `git revert`，不得重写历史、删除已有 evidence 或修改官方仓库。
 
 ### G2-F-7：Agent 接入、全量回归和最终审计
 
