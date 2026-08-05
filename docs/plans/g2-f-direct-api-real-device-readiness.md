@@ -2877,19 +2877,994 @@ G2-F-6 add simulator topology performance and reliability acceptance
 
 回滚使用该项目提交的 `git revert`，不得重写历史、删除已有 evidence 或修改官方仓库。
 
-### G2-F-7：Agent 接入、全量回归和最终审计
+### G2-F-7：Agent 接入、三后端隔离回归与最终审计
 
-- **目标：** 在明确 opt-in 下将 Agent 选择到 `ASCEND_HCCL_DIRECT`，完成三后端隔离回归与最终可审计报告。
-- **修改文件：** `main.py`、backend selection/报告模块、direct backend tests、文档；不得把 CPU_SIM 默认值或 HCCL-VM 行为改成 direct。
-- **非目标：** 不扩大三原语以外范围，不重跑/重写 G2-E 作为 direct evidence。
-- **API 契约：** Python 只调用独立 adapter C ABI；`direct_hccl_api_call=true` 只能由 native real-device result 设置，非 direct backend 固定 false。
-- **构建/测试：** 普通 CI：Python 全量、CPU_SIM CTest、G2-E dry-run/parser/evidence regression、direct build/link/symbol tests；opt-in CI：G2-F-5/6 实机 suite。
-- **当前环境：** 普通回归可执行；direct acceptance `HARDWARE_BLOCKED`。
-- **完成条件：** CPU_SIM 默认和 G2-E subprocess 合约均无回归；direct 仅在真实 evidence 完整时可用；报告按 backend 隔离汇总。
-- **HARDWARE_BLOCKED：** 实机 suite 无设备/环境。
-- **ENV_BLOCKED：** ordinary CI 依赖、CANN manifest、官方环境或 evidence 完整性不足。
-- **evidence：** 三后端分别出具 summaries；最终审计只有 G2-F Readiness 与 Real-device Acceptance 都满足时才将全 G2-F 标记完成。
-- **建议 commit / 回滚：** `G2-F-7 integrate audited direct backend`；revert 项目提交，保留 evidence。
+#### 目标
+
+在 G2-F-1 至 G2-F-6 已完成的基础上，将现有执行路径、direct readiness 和 simulator acceptance 接入 Agent 的统一选择、执行、解释和报告体系，并完成最终可审计交付。
+
+本 checkpoint 必须完成：
+
+- `CPU_SIM` 默认后端接入与回归；
+- `ASCEND_HCCL_VM` 官方 subprocess 后端隔离回归；
+- `ASCEND_HCCL_DIRECT` 显式 opt-in readiness 接入；
+- `SIMULATOR_ACCEPTANCE` 正确性、性能、规模和可靠性结果汇总；
+- Agent backend selection；
+- backend capability 与 blocked reason 解释；
+- 三后端结果和 evidence 严格隔离；
+- 统一状态聚合；
+- 最终 evidence inventory；
+- 最终限制说明；
+- 全量自动化回归；
+- G2-F 最终审计报告。
+
+本 checkpoint 验证的是：
+
+```text
+AGENT INTEGRATION / BACKEND ISOLATION / FINAL AUDIT
+```
+
+不是：
+
+```text
+REAL-DEVICE DIRECT API ACCEPTANCE
+```
+
+当前没有真实 Ascend NPU，因此最终必须保持：
+
+```text
+G2-F Real-device Acceptance: HARDWARE_BLOCKED
+```
+
+但在 G2-F-7 完成后，可以将以下两条轨道标记为完成：
+
+```text
+G2-F Readiness: COMPLETED
+Competition Simulator Track: COMPLETED
+```
+
+由于 Real-device Acceptance 未完成：
+
+```text
+G2-F Overall: PARTIAL
+```
+
+#### 执行前状态与额度控制
+
+进入本 checkpoint 前，用户已经人工确认：
+
+- G2-F-6 已通过 PR 合并进入 `main`；
+- 本地 `main` 与 `origin/main` 已同步；
+- G2-F-1 至 G2-F-6 已完成；
+- 工作区除尚未提交的 G2-F-7 计划细化外无其他修改；
+- `AGENTS.md` 已进入 `main`。
+
+执行开始时只允许进行一次轻量确认：
+
+```text
+git branch --show-current
+git status --short
+```
+
+只需确认：
+
+- 当前分支为 `main`；
+- 除 G2-F-7 计划细化外没有其他未提交修改。
+
+除非实际发现文件缺失、版本矛盾、测试失败或 evidence 漂移，不得重复执行完整 Git 历史审计、旧 PR 审计或逐 checkpoint 的人工复核。
+
+G2-E、G2-F-1 至 G2-F-6 的 SHA256 回归可由自动化 inventory 一次性完成，不得反复手工扫描同一 evidence。
+
+HCOMM/HCCL branch、commit 和 tracked worktree clean 只在最终审计阶段检查一次。
+
+#### 最终架构边界
+
+项目最终必须明确区分三种执行后端：
+
+```text
+CPU_SIM
+ASCEND_HCCL_VM
+ASCEND_HCCL_DIRECT
+```
+
+同时将：
+
+```text
+SIMULATOR_ACCEPTANCE
+```
+
+定义为独立验证轨道，而不是第四个执行后端。
+
+四者关系为：
+
+| 名称                   | 类型     | 当前能力                                          | 当前不能证明                       |
+| ---------------------- | -------- | ------------------------------------------------- | ---------------------------------- |
+| `CPU_SIM`              | 执行后端 | 项目自有 CPU collective、数据语义和回归           | 官方 HCCL ABI、NPU 性能            |
+| `ASCEND_HCCL_VM`       | 执行后端 | 官方 HCCL-VM subprocess 和 checker 合约           | 本进程 direct API、真实 NPU        |
+| `ASCEND_HCCL_DIRECT`   | 执行后端 | build/link/symbol、preflight、lifecycle readiness | 当前不能执行真实 device collective |
+| `SIMULATOR_ACCEPTANCE` | 验证轨道 | 正确性、拓扑、性能、规模和可靠性模拟验收          | 真实硬件测量                       |
+
+不得：
+
+- 将 `SIMULATOR_ACCEPTANCE` 注册为 direct backend；
+- 将 CPU_SIM 重命名为 direct；
+- 将 HCCL-VM 描述为 in-process direct API；
+- 将 simulator performance 描述为 real-device measurement；
+- 根据相似 primitive 名称合并不同轨道的 evidence；
+- 让一个 backend 静默调用另一个 backend；
+- 在后端失败时自动降级而不披露。
+
+#### 修改范围
+
+允许按项目现有架构新增或修改：
+
+- `main.py`
+- Agent 主流程与 backend selection
+- backend registry 或 capability registry
+- direct backend Python 控制面
+- execution engine
+- report generator
+- result/status schema
+- evidence inventory 和 final audit writer
+- backend isolation tests
+- CLI 和 JSON 输出测试
+- Agent capability 文档
+- backend 使用说明
+- G2-F 最终审计报告
+- G2-F-7 最终 evidence
+
+预计可能涉及：
+
+- `agent/hccl_agent.py`
+- `agent/report_generator.py`
+- `plugin/execution_engine.py`
+- `plugin/direct_api_backend.py`
+- `plugin/hccl_vm_backend.py`
+- `plugin/hccl_bridge.py`
+- `tests/`
+- `docs/`
+- `experiments/`
+
+允许根据实际项目结构调整文件路径，但不得无必要重写 G2-F-1 至 G2-F-6 已成熟模块。
+
+不得修改：
+
+- HCOMM、HCCL、CANN 官方文件；
+- CPU_SIM 公开 C ABI；
+- G2-E runner、checker 和原始 evidence；
+- G2-F-1 至 G2-F-6 的原始 evidence；
+- direct adapter 已冻结的 C ABI、安全 guard 和生命周期契约；
+- `HCCL_ENABLE_ASCEND_HCCL_DIRECT` 默认 `OFF`。
+
+#### Backend Registry
+
+必须建立或完善单一、可审计的 backend registry。
+
+每个 backend 至少声明：
+
+- backend name；
+- backend type；
+- execution mode；
+- default or opt-in；
+- supported primitives；
+- supported dtype；
+- supported reduce op；
+- required environment；
+- hardware requirement；
+- current availability；
+- readiness status；
+- evidence source；
+- prohibited claims；
+- fallback policy。
+
+Registry 不得在多个模块中维护互相漂移的 backend 定义。
+
+至少注册：
+
+```text
+CPU_SIM
+ASCEND_HCCL_VM
+ASCEND_HCCL_DIRECT
+```
+
+`SIMULATOR_ACCEPTANCE` 应登记在 validation-track registry 或等价结构中，不得冒充执行 backend。
+
+#### Backend 选择策略
+
+必须固定以下选择规则。
+
+##### 默认选择
+
+用户未明确指定 backend 时：
+
+```text
+selected_backend=CPU_SIM
+```
+
+不得因为：
+
+- CANN root 存在；
+- direct adapter 可构建；
+- direct library 可链接；
+- HCCL-VM 可运行；
+- G2-F readiness 已完成；
+
+而自动将默认 backend 改为 direct 或 HCCL-VM。
+
+##### 显式 CPU_SIM
+
+当用户选择：
+
+```text
+CPU_SIM
+```
+
+只能调用 CPU_SIM 路径。
+
+不得：
+
+- 加载 direct adapter；
+- 检查或要求 CANN root；
+- 启动 HCCL-VM；
+- 启动 `hccl_test`；
+- 产生 direct 或 real-device evidence。
+
+##### 显式 ASCEND_HCCL_VM
+
+当用户选择：
+
+```text
+ASCEND_HCCL_VM
+```
+
+必须保持既有：
+
+```text
+execution_mode=subprocess_hccl_test
+```
+
+并遵守 G2-E 固定 registry、checker 和 evidence 合约。
+
+不得：
+
+- 调用 CPU_SIM 替代失败用例；
+- 加载 direct adapter；
+- 将结果写入 direct evidence；
+- 设置 `direct_hccl_api_call=true`；
+- 设置 `real_ascend_npu_validated=true`；
+- 重写 G2-E 原始 evidence。
+
+普通 G2-F-7 回归只运行 G2-E dry-run、registry、parser、checker fixture 和既有 evidence 验证；不得无必要重跑官方 HCCL-VM suite。
+
+##### 显式 ASCEND_HCCL_DIRECT
+
+当用户选择：
+
+```text
+ASCEND_HCCL_DIRECT
+```
+
+必须是显式 opt-in。
+
+当前无设备环境中只允许：
+
+- capability 查询；
+- manifest 查询；
+- build/link/symbol 状态查询；
+- no-device preflight；
+- lifecycle readiness 查询；
+- capacity contract；
+- blocked reason；
+- evidence inventory；
+- dry-run 或 diagnose。
+
+当前实际执行请求必须在 ACL/HCCL runtime 边界前返回：
+
+```text
+NO_DEVICE_EXPECTED
+```
+
+或：
+
+```text
+HARDWARE_BLOCKED
+```
+
+不得：
+
+- 静默降级到 CPU_SIM；
+- 静默改用 HCCL-VM；
+- 因 feature flag、环境变量或 CANN root 存在而绕过 guard；
+- 设置 `direct_hccl_api_call=true`；
+- 设置 `real_ascend_npu_validated=true`；
+- 生成 `REAL_DEVICE_PASS`。
+
+未来只有 native adapter 在真实设备上生成满足第 5 节全部证明字段的结果时，Agent 才允许报告 direct API 成功。
+
+#### 禁止静默 fallback
+
+所有后端必须使用：
+
+```text
+fallback_policy=NONE
+```
+
+或语义等价的明确配置。
+
+当显式选择的 backend 不可执行时，必须返回：
+
+- 请求的 backend；
+- availability；
+- status；
+- blocked reason；
+- missing requirement；
+- recommended next action。
+
+不得自动运行其他 backend 并把其结果作为原请求结果返回。
+
+如果 Agent 提供“建议改用 CPU_SIM”或“建议运行 simulator acceptance”，只能作为建议，必须由用户重新明确选择。
+
+#### Agent 能力接入
+
+Agent 必须能够：
+
+1. 列出 backend 和 validation track；
+2. 解释每条路径可以证明什么；
+3. 解释每条路径不能证明什么；
+4. 根据显式请求选择 backend；
+5. 保持默认 CPU_SIM；
+6. 在 direct 无设备时返回结构化阻塞；
+7. 运行或汇总 simulator acceptance；
+8. 引用已有 evidence；
+9. 生成 backend 隔离报告；
+10. 生成最终 G2-F 状态；
+11. 明确模拟器局限；
+12. 明确真实设备缺失；
+13. 不混淆实测与模拟指标；
+14. 不将 readiness 解释为真实执行；
+15. 为未来 real-device acceptance 保留恢复入口。
+
+Agent 的解释结果至少应包含：
+
+```text
+selected_backend
+selection_reason
+execution_mode
+validation_track
+availability
+status
+capabilities
+limitations
+blocked_reason
+evidence_refs
+direct_hccl_api_call
+real_ascend_npu_validated
+performance_claim_type
+```
+
+字段名称可按现有 schema 调整，但语义必须等价且可测试。
+
+#### Execution Mode 与真实性字段
+
+不同路径必须保持独立 execution mode。
+
+##### CPU_SIM
+
+使用项目现有 CPU execution mode，结果必须满足：
+
+```text
+selected_backend=CPU_SIM
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+```
+
+性能字段若存在，必须标记为 CPU simulation 或 project simulation，不得标记为 real-device measurement。
+
+##### ASCEND_HCCL_VM
+
+必须保持：
+
+```text
+selected_backend=ASCEND_HCCL_VM
+execution_mode=subprocess_hccl_test
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+```
+
+##### ASCEND_HCCL_DIRECT readiness
+
+在当前环境中必须使用类似：
+
+```text
+execution_mode=direct_preflight
+```
+
+或现有等价命名。
+
+不得在未执行真实 API 时使用：
+
+```text
+execution_mode=in_process_direct_api
+```
+
+当前必须满足：
+
+```text
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+runtime_initialized=false
+device_opened=false
+context_created=false
+stream_created=false
+communicator_created=false
+device_buffer_allocated=false
+collective_executed_on_real_device=false
+runtime_api_calls=[]
+```
+
+##### SIMULATOR_ACCEPTANCE
+
+必须满足：
+
+```text
+validation_track=SIMULATOR_ACCEPTANCE
+performance_claim_type=SIMULATED_ONLY
+measured_on_real_npu=false
+real_device_calibration_status=UNAVAILABLE_NO_REAL_DEVICE
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+```
+
+#### Direct Adapter Python 边界
+
+Python 只能通过项目自己的 direct adapter C ABI 与 direct readiness 交互。
+
+不得：
+
+- 从 Python 直接绑定 `libhccl.so`；
+- 从 Python 直接绑定 `libhcomm.so`；
+- 从 Python 直接绑定 `libacl_rt.so`；
+- 使用 `ctypes.CDLL` 直接加载官方 runtime；
+- 在 Python 中复制正式 lifecycle；
+- 通过 Python 伪造 native API trace；
+- 让 C++ 异常穿过 C ABI；
+- 复用 CPU_SIM C ABI 冒充 direct adapter。
+
+当前 G2-F-7 不新增真实 runtime 调用路径，只接入已完成的 readiness、diagnose、guard 和 lifecycle control-plane。
+
+#### SIMULATOR_ACCEPTANCE 接入
+
+Agent 必须能够汇总 G2-F-5 和 G2-F-6 的既有最终 evidence。
+
+至少展示：
+
+- 三原语正确性；
+- dtype/op/rank/message 覆盖；
+- independent host reference；
+- 误差和 output hash；
+- topology inventory；
+- algorithm comparison；
+- p50/p95；
+- scale points；
+- parameter provenance；
+- sensitivity analysis；
+- fault/recovery；
+- logical 72h；
+- workload communication trace；
+- simulator profiling；
+- known limitations。
+
+不得重新执行完整 G2-F-5/F6 benchmark 来生成 G2-F-7 汇总，除非现有 evidence 无效或测试明确要求轻量 replay。
+
+正常情况下，G2-F-7 只应：
+
+- 验证 evidence SHA256；
+- 解析 schema；
+- 交叉检查 summary；
+- 建立引用；
+- 生成统一汇总。
+
+不得复制、重写或覆盖 G2-F-5/F6 原始 evidence。
+
+#### 三后端隔离不变量
+
+必须通过自动化测试证明：
+
+1. 默认路径只进入 CPU_SIM；
+2. CPU_SIM 不导入 HCCL-VM runner；
+3. CPU_SIM 不导入 direct backend；
+4. HCCL-VM 不调用 CPU_SIM collective；
+5. HCCL-VM 不加载 direct adapter；
+6. direct backend 不导入 `plugin.hccl_vm_runner`；
+7. direct backend 不调用 CPU_SIM collective；
+8. simulator acceptance 不改变 backend 默认值；
+9. 一个 backend 的环境变量不会隐式切换另一个 backend；
+10. 一个 backend 的 failure 不会触发静默 fallback；
+11. evidence 路径按 backend/track 隔离；
+12. report 不混合不同轨道的指标；
+13. HCCL-VM 保持 subprocess 语义；
+14. direct readiness 保持 no-runtime guard；
+15. 所有当前路径的 `direct_hccl_api_call=false`；
+16. 所有当前路径的 `real_ascend_npu_validated=false`；
+17. 只有未来 native real-device evidence 可以改变 direct 真实性字段。
+
+#### 报告隔离
+
+最终 Agent 报告必须分别包含：
+
+```text
+CPU_SIM Summary
+ASCEND_HCCL_VM Summary
+ASCEND_HCCL_DIRECT Readiness Summary
+SIMULATOR_ACCEPTANCE Summary
+Final Status Summary
+Known Limitations
+Real-device Resume Conditions
+```
+
+不得把不同 backend 或 validation track 的数值放入同一性能排名，除非明确标注：
+
+- 数据来源；
+- execution mode；
+- measurement type；
+- 单位；
+- 是否可直接比较。
+
+以下数据不得直接相互比较并得出硬件性能结论：
+
+- CPU_SIM wall-clock；
+- HCCL-VM result；
+- simulator modeled latency；
+- future real NPU latency。
+
+报告必须使用明确标签：
+
+```text
+CPU_EXECUTED
+HCCL_VM_EXECUTED
+SIMULATED_ONLY
+DIRECT_READINESS_ONLY
+REAL_DEVICE_NOT_EXECUTED
+```
+
+或语义等价的项目状态。
+
+#### 状态聚合规则
+
+最终状态不得由单个布尔值或某个 checkpoint 的 `COMPLETED` 直接推导。
+
+##### G2-F Readiness
+
+只有以下内容全部通过时：
+
+- G2-F-1 ABI contract；
+- G2-F-2 build-only adapter；
+- G2-F-3 link/symbol/no-device diagnose；
+- G2-F-4 lifecycle harness；
+- G2-F-7 Agent integration；
+- direct guard regression；
+- final evidence audit；
+
+才能设置：
+
+```text
+G2-F Readiness: COMPLETED
+```
+
+##### Competition Simulator Track
+
+只有以下内容全部通过时：
+
+- G2-F-5 simulator correctness；
+- G2-F-6 simulator topology/performance/scale/reliability；
+- G2-F-7 Agent/report integration；
+- simulator evidence inventory；
+- final limitations audit；
+
+才能设置：
+
+```text
+Competition Simulator Track: COMPLETED
+```
+
+##### G2-F Real-device Acceptance
+
+只有满足第 5 节全部 direct proof，并且三原语均具有真实设备：
+
+```text
+REAL_DEVICE_PASS
+```
+
+时，才能设置：
+
+```text
+G2-F Real-device Acceptance: COMPLETED
+```
+
+当前环境必须保持：
+
+```text
+G2-F Real-device Acceptance: HARDWARE_BLOCKED
+```
+
+##### G2-F Overall
+
+只有以下两项均为 `COMPLETED`：
+
+```text
+G2-F Readiness
+G2-F Real-device Acceptance
+```
+
+才允许设置：
+
+```text
+G2-F Overall: COMPLETED
+```
+
+当前即使 Competition Simulator Track 已完成，仍必须设置：
+
+```text
+G2-F Overall: PARTIAL
+```
+
+模拟器赛道完成不得被误解为真实设备 direct acceptance 完成。
+
+#### Real-device 恢复条件
+
+最终报告必须保留明确恢复入口。
+
+未来重新进入 Real-device Acceptance 前，至少需要：
+
+- 受支持的真实 Ascend NPU；
+- 可用 driver 和 device node；
+- 与 frozen manifest 兼容的 CANN；
+- 获批准的 launcher；
+- rank-table 或 root-info 分发；
+- 至少 2 ranks；
+- device/context/stream 权限；
+- device memory；
+- 真实 communicator；
+- 实机执行授权；
+- 每 rank API trace；
+- D2H 和 independent host reference；
+- 清理 trace；
+- topology 和 profiling；
+- 专用 real-device evidence 目录。
+
+当前 G2-F-7 只报告这些恢复条件，不执行任何真实设备步骤。
+
+#### 文档与交付更新
+
+至少更新或生成：
+
+- backend 使用说明；
+- direct API readiness 说明；
+- simulator acceptance 说明；
+- Agent capability 清单；
+- Agent backend selection 说明；
+- final audit report；
+- known limitations；
+- real-device resume guide；
+- evidence inventory；
+- 必要的项目 README 或开发者文档。
+
+文档必须明确：
+
+- 当前可运行路径；
+- 默认 backend；
+- 显式 opt-in 行为；
+- simulator 配置和验证入口；
+- direct readiness 能力；
+- real-device blocked 原因；
+- 不同结果的真实性级别；
+- 如何复现普通 CI；
+- 如何验证 evidence SHA256；
+- 未来如何接入真实设备。
+
+不得写入未经证据支持的：
+
+- 真实 NPU 性能；
+- 实际 8→1024 卡扩展；
+- 真实 100 ms failover；
+- 真实 72 小时压测；
+- 真实 BERT/LLaMA 训练吞吐；
+- `msprof` 结果；
+- direct collective 成功。
+
+#### 构建与测试
+
+至少覆盖：
+
+1. backend registry 完整性；
+2. 默认 backend 为 CPU_SIM；
+3. 显式 CPU_SIM 选择；
+4. 显式 ASCEND_HCCL_VM 选择；
+5. 显式 ASCEND_HCCL_DIRECT 选择；
+6. unknown backend 拒绝；
+7. backend capability 查询；
+8. backend selection reason；
+9. no silent fallback；
+10. CPU_SIM 不依赖 CANN；
+11. CPU_SIM 不导入 HCCL-VM/direct；
+12. HCCL-VM 保持 subprocess 合约；
+13. HCCL-VM 不导入 direct；
+14. direct 不导入 HCCL-VM runner；
+15. direct 不调用 CPU_SIM；
+16. direct feature flag 默认 `OFF`；
+17. direct build-only；
+18. direct link/NEEDED/symbol audit；
+19. direct no-device diagnose；
+20. direct lifecycle host-only CTest；
+21. direct execution request 在 runtime 前拒绝；
+22. `runtime_api_calls=[]`；
+23. G2-E registry/dry-run/parser/checker fixture；
+24. G2-E evidence SHA256；
+25. G2-F-1 至 G2-F-4 evidence SHA256；
+26. G2-F-5 correctness evidence SHA256 和 schema；
+27. G2-F-6 performance/reliability evidence SHA256 和 schema；
+28. simulator acceptance summary；
+29. final evidence inventory；
+30. status aggregation；
+31. false claim prevention；
+32. report backend isolation；
+33. Windows import safety；
+34. Linux/WSL import safety；
+35. Python 全量回归；
+36. CPU_SIM CTest；
+37. direct lifecycle CTest；
+38. documentation links；
+39. final audit schema；
+40. 最终 HCOMM/HCCL tracked worktree clean。
+
+普通 CI 不执行：
+
+- 真实 ACL/HCCL runtime；
+- device/context/stream；
+- communicator；
+- device memory；
+- direct collective；
+- `hccl_test` 实际 suite；
+- MPI；
+- `msprof`；
+- real-device benchmark；
+- real-device fault injection。
+
+不得：
+
+- 删除或弱化已有测试；
+- 增加无理由 skip；
+- 用 mock real-device success 获得通过；
+- 重跑并改写旧 evidence；
+- 将 blocked 测试伪装成 pass；
+- 将 simulator completion 推导为 real-device completion。
+
+#### 最终 Evidence Inventory
+
+必须建立只读 evidence inventory，至少引用：
+
+- G2-E suite evidence；
+- G2-F-1 ABI evidence；
+- G2-F-2 build-only evidence；
+- G2-F-3 link/diagnose evidence；
+- G2-F-4 lifecycle evidence；
+- G2-F-5 simulator correctness evidence；
+- G2-F-6 simulator performance/reliability evidence；
+- G2-F-7 final audit evidence。
+
+每个 inventory 条目至少包含：
+
+- checkpoint；
+- validation track；
+- backend；
+- schema version；
+- status；
+- evidence path；
+- `SHA256SUMS` digest；
+- verification result；
+- execution mode；
+- direct API claim；
+- real-device claim；
+- performance claim type；
+- known limitations。
+
+Inventory 只引用旧 evidence，不修改旧目录或重新计算其原始结果。
+
+如果旧 evidence：
+
+- 缺失；
+- SHA256 失败；
+- schema 无法解析；
+- backend 分类矛盾；
+- 含错误真实性字段；
+
+则 G2-F-7 必须返回 `FAIL` 或 `ENV_BLOCKED`，不得忽略。
+
+#### G2-F-7 Evidence
+
+只保留一份权威最终 evidence：
+
+```text
+experiments/final_audit/evidence/g2_f_7_<timestamp>/
+```
+
+至少包含：
+
+- `README.md`
+- `manifest.json`
+- `result.json`
+- `backend_registry.json`
+- `backend_capabilities.json`
+- `backend_isolation_audit.json`
+- `agent_integration.json`
+- `cpu_sim_summary.json`
+- `hccl_vm_summary.json`
+- `direct_readiness_summary.json`
+- `simulator_acceptance_summary.json`
+- `status_aggregation.json`
+- `evidence_inventory.json`
+- `claim_boundary_audit.json`
+- `known_limitations.json`
+- `real_device_resume.json`
+- `regression.json`
+- `SHA256SUMS`
+
+Evidence 必须记录：
+
+```text
+checkpoint=G2-F-7
+checkpoint_status=COMPLETED
+agent_backend_integration=COMPLETED
+three_backend_isolation=COMPLETED
+final_audit_status=COMPLETED
+g2_f_readiness=COMPLETED
+competition_simulator_track=COMPLETED
+g2_f_real_device_acceptance=HARDWARE_BLOCKED
+g2_f_overall=PARTIAL
+default_backend=CPU_SIM
+real_device_calibration_status=UNAVAILABLE_NO_REAL_DEVICE
+performance_claim_type=SIMULATED_ONLY
+measured_on_real_npu=false
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+collective_executed_on_real_device=false
+runtime_api_calls=[]
+```
+
+还必须记录：
+
+- project revision；
+- backend registry；
+- backend capability matrix；
+- selection policy；
+- fallback policy；
+- Agent integration tests；
+- backend isolation tests；
+- report isolation；
+- evidence inventory；
+- SHA256 verification；
+- simulator completion；
+- direct readiness completion；
+- real-device blocked reason；
+- unsupported claims；
+- ordinary regression；
+- HCOMM/HCCL branch、commit 和 clean 状态；
+- evidence SHA256。
+
+不得在当前 evidence 中出现：
+
+```text
+REAL_DEVICE_PASS
+g2_f_real_device_acceptance=COMPLETED
+g2_f_overall=COMPLETED
+direct_hccl_api_call=true
+real_ascend_npu_validated=true
+measured_on_real_npu=true
+performance_claim_type=REAL_MEASURED
+msprof_executed=true
+```
+
+#### 完成条件
+
+只有以下条件全部满足时，G2-F-7 才能标记 `COMPLETED`：
+
+- backend registry 完整；
+- 默认 backend 保持 CPU_SIM；
+- 三后端均可被明确选择或查询；
+- `SIMULATOR_ACCEPTANCE` 保持独立 validation track；
+- 不存在静默 fallback；
+- CPU_SIM、HCCL-VM、direct 相互隔离；
+- HCCL-VM 保持 G2-E subprocess 合约；
+- direct 只接入 readiness、diagnose 和 guard；
+- direct 执行请求在 runtime 前被拒绝；
+- Agent 能解释 backend 能力、限制和选择原因；
+- Agent 能汇总 G2-F-5/F6 simulator evidence；
+- report 按 backend 和 validation track 隔离；
+- 状态聚合规则通过测试；
+- G2-F Readiness 正确聚合为 `COMPLETED`；
+- Competition Simulator Track 正确聚合为 `COMPLETED`；
+- Real-device Acceptance 保持 `HARDWARE_BLOCKED`；
+- G2-F Overall 保持 `PARTIAL`；
+- 所有真实性字段符合当前证据；
+- G2-E、G2-F-1 至 G2-F-6 evidence SHA256 全部通过；
+- ordinary regression 无回归；
+- final evidence inventory 完整；
+- final audit evidence SHA256 全部通过；
+- 文档和恢复指南完整；
+- HCOMM/HCCL tracked worktree clean；
+- 工作区 clean；
+- 未 push、未 merge；
+- 未执行任何真实设备 API。
+
+最终状态必须为：
+
+```text
+G2-F-7: COMPLETED
+Agent Backend Integration: COMPLETED
+Three-backend Isolation: COMPLETED
+Final Audit: COMPLETED
+G2-F Readiness: COMPLETED
+Competition Simulator Track: COMPLETED
+G2-F Real-device Acceptance: HARDWARE_BLOCKED
+G2-F Overall: PARTIAL
+```
+
+这表示：
+
+- 当前无设备环境可以完成的 direct readiness 已完成；
+- 赛题允许的 simulator validation track 已完成；
+- Agent 工程、三后端隔离和最终审计已完成；
+- 真实设备 direct API 验收仍等待硬件；
+- 不得将整个 G2-F 宣称为完全完成。
+
+#### 阻塞与失败分类
+
+`HARDWARE_BLOCKED`：
+
+- 仅用于真实 NPU runtime、communicator、device buffer、direct collective、真实 topology/performance/reliability 和 real-device acceptance；
+- 不影响 G2-F-7 Agent integration、Readiness 或 Competition Simulator Track 完成。
+
+`ENV_BLOCKED`：
+
+- ordinary CI、Python、CMake、CANN manifest、direct link audit 或必要依赖无法运行；
+- 既有 evidence 文件缺失或无法读取；
+- HCOMM/HCCL 冻结环境不可访问；
+- 必须记录原始错误、退出码、关键日志和恢复命令。
+
+`FAIL`：
+
+- backend registry、selection、isolation、report、status aggregation、evidence inventory、测试或文档存在缺陷；
+- 默认 backend 被改变；
+- 发生静默 fallback；
+- direct guard 被绕过；
+- 不同 backend 的 evidence 或指标被混合；
+- 真实性字段与证据不一致；
+- 旧 evidence SHA256 失败；
+- 将 simulator 结果冒充实机；
+- 将代码或审计缺陷错误归类为 `HARDWARE_BLOCKED`。
+
+不得通过弱化测试、删除失败记录或修改旧 evidence 将 `FAIL` 改写为完成。
+
+#### 建议 commit 与回滚
+
+建议 commit：
+
+```text
+G2-F-7 integrate agent backends and final simulator audit
+```
+
+完成该 commit 后必须停止。
+
+不得：
+
+- 自动进入真实设备验收；
+- 创建新的 G2-F-8；
+- push；
+- merge；
+- 重写历史；
+- 删除旧 evidence。
+
+回滚使用该项目提交的 `git revert`，不得修改 HCOMM、HCCL、CANN 或删除既有 evidence。
 
 ## 8. CI、回归与官方目录保护
 

@@ -82,6 +82,15 @@ G2-F-6 在同一 `SIMULATOR_ACCEPTANCE` 轨道上补充拓扑、性能、规模�
 所有时间、带宽、利用率、重传、切换和 profiling 均为可复现的 CPU-side
 模拟输出；不构成真实 Ascend、HCCL、训练、msprof 或 direct API 性能结论。
 
+## G2-F-7 Agent Integration and Final Audit
+
+`CPU_SIM`、`ASCEND_HCCL_VM` 与 `ASCEND_HCCL_DIRECT` 由单一 registry 声明，
+默认永远是 `CPU_SIM`，所有 backend 的 fallback policy 都是 `NONE`。
+`SIMULATOR_ACCEPTANCE` 仅汇总 G2-F-5/F6 的 checksum-verified evidence，
+不是执行 backend。最终审计可将 G2-F Readiness 与 Competition Simulator
+Track 标记为 `COMPLETED`，但真实设备验收仍为 `HARDWARE_BLOCKED`，整体状态
+为 `PARTIAL`。
+
 ## 未验证边界
 
 - 本地 Docker Linux `.so` 验证仍为 `ENV_BLOCKED`，原因是 `auth.docker.io` token timeout；远端 GitHub Actions Linux CPU_SIM 已验证。

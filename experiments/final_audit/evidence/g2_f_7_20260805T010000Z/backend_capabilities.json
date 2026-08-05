@@ -1,0 +1,95 @@
+{
+  "ASCEND_HCCL_DIRECT": {
+    "availability": "NO_DEVICE_EXPECTED",
+    "blocked_reason": "No authorized real Ascend NPU/device runtime is available; request was stopped before ACL/HCCL runtime.",
+    "capabilities": [
+      "AllReduce",
+      "AllGather",
+      "ReduceScatter"
+    ],
+    "collective_executed_on_real_device": false,
+    "communicator_created": false,
+    "context_created": false,
+    "device_buffer_allocated": false,
+    "device_opened": false,
+    "direct_hccl_api_call": false,
+    "evidence_refs": [
+      "G2-F-1",
+      "G2-F-2",
+      "G2-F-3",
+      "G2-F-4"
+    ],
+    "execution_mode": "direct_preflight",
+    "fallback_policy": "NONE",
+    "limitations": [
+      "current in-process direct API execution",
+      "real Ascend NPU validation",
+      "silent CPU_SIM or HCCL-VM fallback"
+    ],
+    "performance_claim_type": "NOT_A_REAL_DEVICE_MEASUREMENT",
+    "real_ascend_npu_validated": false,
+    "recommended_next_action": "Use direct readiness diagnose/evidence now, or provide an approved real-device environment later.",
+    "runtime_api_calls": [],
+    "runtime_initialized": false,
+    "selected_backend": "ASCEND_HCCL_DIRECT",
+    "selection_reason": "explicit backend request",
+    "status": "NO_DEVICE_EXPECTED",
+    "stream_created": false,
+    "validation_track": null
+  },
+  "ASCEND_HCCL_VM": {
+    "availability": "DRY_RUN_AND_EVIDENCE_ONLY",
+    "blocked_reason": null,
+    "capabilities": [
+      "AllReduce",
+      "AllGather",
+      "ReduceScatter"
+    ],
+    "direct_hccl_api_call": false,
+    "evidence_refs": [
+      "experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z"
+    ],
+    "execution_mode": "subprocess_hccl_test",
+    "fallback_policy": "NONE",
+    "limitations": [
+      "in-process direct API",
+      "real Ascend NPU validation",
+      "CPU_SIM fallback"
+    ],
+    "performance_claim_type": "NOT_A_REAL_DEVICE_MEASUREMENT",
+    "real_ascend_npu_validated": false,
+    "recommended_next_action": "Use the HCCL-VM dry-run/registry/checker fixture workflow.",
+    "selected_backend": "ASCEND_HCCL_VM",
+    "selection_reason": "explicit backend request",
+    "status": "AVAILABLE_FOR_DRY_RUN",
+    "validation_track": null
+  },
+  "CPU_SIM": {
+    "availability": "AVAILABLE",
+    "blocked_reason": null,
+    "capabilities": [
+      "AllReduce",
+      "AllGather",
+      "ReduceScatter"
+    ],
+    "direct_hccl_api_call": false,
+    "evidence_refs": [
+      "CPU_SIM CTest",
+      "Python CPU_SIM regression"
+    ],
+    "execution_mode": "cpu_sim_in_process",
+    "fallback_policy": "NONE",
+    "limitations": [
+      "official HCCL ABI",
+      "real Ascend NPU performance",
+      "direct HCCL API call"
+    ],
+    "performance_claim_type": "CPU_SIMULATION",
+    "real_ascend_npu_validated": false,
+    "recommended_next_action": "Run the project CPU_SIM path.",
+    "selected_backend": "CPU_SIM",
+    "selection_reason": "explicit backend request",
+    "status": "AVAILABLE",
+    "validation_track": null
+  }
+}

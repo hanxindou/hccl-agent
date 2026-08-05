@@ -1,0 +1,8 @@
+{
+  "limitations": [
+    "No real Ascend NPU, driver/device node, communicator, memory, collective, MPI, hccl_test suite, or msprof was executed.",
+    "Direct readiness is not direct collective execution.",
+    "Simulator correctness/performance/reliability values are not hardware measurements."
+  ],
+  "real_device_calibration_status": "UNAVAILABLE_NO_REAL_DEVICE"
+}

@@ -1,0 +1,26 @@
+{
+  "availability": "COMPLETED_FROM_G2_F_5_AND_G2_F_6_EVIDENCE",
+  "blocked_reason": "Real-device measurement remains unavailable.",
+  "capabilities": [
+    "G2-F-5 simulator correctness",
+    "G2-F-6 simulator topology/performance/reliability"
+  ],
+  "direct_hccl_api_call": false,
+  "evidence_refs": [
+    "G2-F-5 simulator correctness",
+    "G2-F-6 simulator topology/performance/reliability"
+  ],
+  "execution_mode": "evidence_summary_only",
+  "label": "SIMULATED_ONLY",
+  "limitations": [
+    "real-device measurement",
+    "direct HCCL API call",
+    "real NPU calibration"
+  ],
+  "measured_on_real_npu": false,
+  "performance_claim_type": "SIMULATED_ONLY",
+  "real_ascend_npu_validated": false,
+  "selection_reason": "independent validation track; never an execution backend",
+  "status": "SIMULATED_ONLY",
+  "validation_track": "SIMULATOR_ACCEPTANCE"
+}

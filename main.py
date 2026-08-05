@@ -4,19 +4,15 @@ import shlex
 import sys
 
 from agent.hccl_agent import HCCLAgent
+from agent.backend_control import BackendControlPlane
 from plugin.hccl_vm_backend import (
     Backend,
     load_hccl_vm_config,
 )
+# Compatibility seam for existing dry-run callers: importing the environment
+# definition performs no probe.  The runner remains lazy-imported only for an
+# explicit ASCEND_HCCL_VM execution request.
 from plugin.hccl_vm_env import HcclVmEnvironment
-from plugin.hccl_vm_evidence import (
-    archive_g2_e_suite_evidence,
-    archive_official_evidence,
-)
-from plugin.hccl_vm_runner import (
-    HcclVmRunner,
-    OfficialCollectiveRequest,
-)
 
 
 def _add_backend_options(parser, *, default_backend=None):
@@ -81,6 +77,11 @@ def parse_args(argv=None):
     )
 
     subparsers = parser.add_subparsers(dest="command")
+
+    subparsers.add_parser(
+        "backends",
+        help="List the audited execution backends and simulator validation track.",
+    )
 
     diagnose_parser = subparsers.add_parser(
         "diagnose",
@@ -148,10 +149,23 @@ def main():
     args = parse_args()
     config = _config_from_args(args)
 
+    if args.command == "backends":
+        print(json.dumps(BackendControlPlane().list_backends(), indent=2, ensure_ascii=False))
+        return
+
     if args.command != "run":
+        if config.backend == Backend.ASCEND_HCCL_DIRECT.value:
+            print(json.dumps(BackendControlPlane().select(config.backend, request_kind="execute"), indent=2, ensure_ascii=False))
+            return
+        if config.backend == Backend.CPU_SIM.value:
+            print(json.dumps(BackendControlPlane().select(config.backend), indent=2, ensure_ascii=False))
+            return
         _run_official_command(args, config)
         return
 
+    if config.backend == Backend.ASCEND_HCCL_DIRECT.value:
+        print(json.dumps(BackendControlPlane().select(config.backend, request_kind="execute"), indent=2, ensure_ascii=False))
+        return
     if config.backend != Backend.CPU_SIM.value:
         raise SystemExit(
             "ASCEND_HCCL_VM is an external validation backend; "
@@ -170,6 +184,7 @@ def _run_official_command(args, config):
         return
 
     if args.command == "dry-run":
+        from plugin.hccl_vm_runner import HcclVmRunner
         try:
             request = _official_request_from_args(args)
             report = HcclVmRunner(config).dry_run(request)
@@ -179,6 +194,8 @@ def _run_official_command(args, config):
         return
 
     if args.command == "verify-official":
+        from plugin.hccl_vm_evidence import archive_official_evidence
+        from plugin.hccl_vm_runner import HcclVmRunner
         if args.suite == "g2-e":
             _run_g2_e_suite(args, config)
             return
@@ -216,6 +233,7 @@ def _run_official_command(args, config):
 
 
 def _official_request_from_args(args):
+    from plugin.hccl_vm_runner import OfficialCollectiveRequest
     return OfficialCollectiveRequest(
         primitive=args.primitive,
         rank_count=args.nodes,
@@ -226,6 +244,7 @@ def _official_request_from_args(args):
 
 
 def _g2_e_suite_requests():
+    from plugin.hccl_vm_runner import OfficialCollectiveRequest
     return [
         OfficialCollectiveRequest(
             primitive="AllReduce",
@@ -252,6 +271,8 @@ def _g2_e_suite_requests():
 
 
 def _run_g2_e_suite(args, config):
+    from plugin.hccl_vm_evidence import archive_g2_e_suite_evidence, archive_official_evidence
+    from plugin.hccl_vm_runner import HcclVmRunner
     runner = HcclVmRunner(config)
     entries = []
     for request in _g2_e_suite_requests():

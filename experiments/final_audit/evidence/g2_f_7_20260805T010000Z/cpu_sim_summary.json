@@ -1,0 +1,10 @@
+{
+  "evidence": "CPU_SIM regression",
+  "execution_mode": "cpu_sim_in_process",
+  "label": "CPU_EXECUTED",
+  "not_comparable_with": [
+    "real-device performance",
+    "simulator modeled latency"
+  ],
+  "selected_backend": "CPU_SIM"
+}

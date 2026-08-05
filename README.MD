@@ -28,6 +28,36 @@ docs/competition_readiness_report.md
 docs/v1_validation_report.md
 ```
 
+## G2-F 后端与验收轨道
+
+执行后端始终只有 `CPU_SIM`、`ASCEND_HCCL_VM` 与
+`ASCEND_HCCL_DIRECT`；默认选择为 `CPU_SIM`，显式选择不可执行的后端会
+返回结构化 blocked/next-action 信息，绝不静默降级。`SIMULATOR_ACCEPTANCE`
+是独立验证轨道，不是第四个执行后端。
+
+```bash
+# 查看可用后端、能力与禁止的真实性声明
+python3 main.py backends
+
+# 显式 direct readiness 查询：当前仅返回 NO_DEVICE_EXPECTED，
+# 不会加载官方 runtime 或调用 collective。
+python3 main.py --backend ASCEND_HCCL_DIRECT --nodes 2 --message-size 1
+```
+
+G2-F-5/G2-F-6 simulator evidence 只可证明模拟正确性、模型化的拓扑/性能/
+规模/可靠性；G2-F-1 至 G2-F-4 只可证明 direct readiness。它们均不构成
+真实 Ascend NPU 或 direct collective 成功证据。验证某一 evidence 目录：
+
+```bash
+cd experiments/simulator/evidence/g2_f_6_simulator_20260804T020000Z
+sha256sum -c SHA256SUMS
+```
+
+恢复 real-device acceptance 需要：获支持的 NPU 与 driver/device node、冻结
+兼容 CANN、获批多-rank launcher/rank-table 或 root-info、至少两个 ranks、
+device/context/stream/memory 权限、communicator、每 rank API/cleanup trace、
+D2H independent host reference，以及专用实机 evidence。当前这些条件未满足。
+
 ## 目录结构
 
 ```

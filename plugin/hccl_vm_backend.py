@@ -10,10 +10,14 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Mapping
 
+from plugin.backend_registry import EXECUTION_BACKENDS
+
 
 class Backend(str, Enum):
-    CPU_SIM = "CPU_SIM"
-    ASCEND_HCCL_VM = "ASCEND_HCCL_VM"
+    """Compatibility enum derived from the canonical G2-F-7 registry."""
+    CPU_SIM = EXECUTION_BACKENDS[0]
+    ASCEND_HCCL_VM = EXECUTION_BACKENDS[1]
+    ASCEND_HCCL_DIRECT = EXECUTION_BACKENDS[2]
 
 
 DEFAULT_CONFIG_PATH = (
