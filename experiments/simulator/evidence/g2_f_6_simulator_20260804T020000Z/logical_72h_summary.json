@@ -1,0 +1,109 @@
+{
+  "correctness_spot_checks": 12,
+  "event_driven": true,
+  "events": [
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 0
+    },
+    {
+      "event": "transient_link_recovery",
+      "recovery_simulated_time_us": 65.0,
+      "retry_count": 1,
+      "simulated_hour": 0.25
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 6
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 12
+    },
+    {
+      "event": "transient_link_recovery",
+      "recovery_simulated_time_us": 65.0,
+      "retry_count": 1,
+      "simulated_hour": 12.25
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 18
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 24
+    },
+    {
+      "event": "transient_link_recovery",
+      "recovery_simulated_time_us": 65.0,
+      "retry_count": 1,
+      "simulated_hour": 24.25
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 30
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 36
+    },
+    {
+      "event": "transient_link_recovery",
+      "recovery_simulated_time_us": 65.0,
+      "retry_count": 1,
+      "simulated_hour": 36.25
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 42
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 48
+    },
+    {
+      "event": "transient_link_recovery",
+      "recovery_simulated_time_us": 65.0,
+      "retry_count": 1,
+      "simulated_hour": 48.25
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 54
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 60
+    },
+    {
+      "event": "transient_link_recovery",
+      "recovery_simulated_time_us": 65.0,
+      "retry_count": 1,
+      "simulated_hour": 60.25
+    },
+    {
+      "correctness_gate_passed": true,
+      "event": "correctness_spot_check",
+      "simulated_hour": 66
+    }
+  ],
+  "fault_event_count": 6,
+  "final_state": "HEALTHY",
+  "logical_72h_simulation": true,
+  "real_72h_hardware_stress": false,
+  "retry_count": 6,
+  "simulated_duration_seconds": 259200,
+  "wall_clock_duration_seconds": 0.0
+}

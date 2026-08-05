@@ -1,0 +1,11 @@
+{
+  "known_limitations": [
+    "Relative project profile values are not hardware measurements.",
+    "Logical 1GB uses analytical message accounting and bounded 4MB materialization.",
+    "Fault, retry, failover, and 72h duration are deterministic event-model outcomes.",
+    "No actual training, device transport, HCCL protocol, or msprof behavior is modeled."
+  ],
+  "performance_parameters": "See parameter_provenance.json; all uncalibrated parameters have explicit sensitivity coverage.",
+  "real_device_calibration_status": "UNAVAILABLE_NO_REAL_DEVICE",
+  "simulation_only": true
+}

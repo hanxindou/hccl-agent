@@ -1,0 +1,197 @@
+[
+  {
+    "common_configuration": {
+      "dtype": "FP32",
+      "logical_payload_bytes": 16777216,
+      "measured_iterations": 30,
+      "rank_size": 64,
+      "reduce_op": "SUM",
+      "seed": 20260804,
+      "topology": "FAT_TREE",
+      "warm_up_iterations": 5
+    },
+    "primitive": "AllReduce",
+    "ranking": [
+      {
+        "algorithm": "Fat-Tree",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 1.012705616,
+        "link_utilization_percent": 40.254237288,
+        "p50_latency_us": 16566.400734208,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 1
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 0.92317615,
+        "link_utilization_percent": 38.13559322,
+        "p50_latency_us": 18173.007441664,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 2
+      },
+      {
+        "algorithm": "Butterfly",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 0.906699117,
+        "link_utilization_percent": 36.016949153,
+        "p50_latency_us": 18503.257291174,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 3
+      },
+      {
+        "algorithm": "NHR",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 0.825545056,
+        "link_utilization_percent": 34.266764923,
+        "p50_latency_us": 20322.194337435,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 4
+      },
+      {
+        "algorithm": "Mesh",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 0.001099517,
+        "link_utilization_percent": 4.356090607,
+        "p50_latency_us": 15258408.660392195,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 5
+      }
+    ]
+  },
+  {
+    "common_configuration": {
+      "dtype": "FP32",
+      "logical_payload_bytes": 16777216,
+      "measured_iterations": 30,
+      "rank_size": 64,
+      "reduce_op": null,
+      "seed": 20260804,
+      "topology": "FAT_TREE",
+      "warm_up_iterations": 5
+    },
+    "primitive": "AllGather",
+    "ranking": [
+      {
+        "algorithm": "Fat-Tree",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 2.02202784,
+        "link_utilization_percent": 40.254237288,
+        "p50_latency_us": 8297.060367104,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 1
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 1.843540277,
+        "link_utilization_percent": 38.13559322,
+        "p50_latency_us": 9100.363720832,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 2
+      },
+      {
+        "algorithm": "Butterfly",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 1.81068562,
+        "link_utilization_percent": 36.016949153,
+        "p50_latency_us": 9265.488645587,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 3
+      },
+      {
+        "algorithm": "NHR",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 1.638131128,
+        "link_utilization_percent": 34.266764923,
+        "p50_latency_us": 10241.479918718,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 4
+      },
+      {
+        "algorithm": "Mesh",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 0.070301706,
+        "link_utilization_percent": 4.356090607,
+        "p50_latency_us": 238641.251217378,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 5
+      }
+    ]
+  },
+  {
+    "common_configuration": {
+      "dtype": "FP32",
+      "logical_payload_bytes": 16777216,
+      "measured_iterations": 30,
+      "rank_size": 64,
+      "reduce_op": "SUM",
+      "seed": 20260804,
+      "topology": "FAT_TREE",
+      "warm_up_iterations": 5
+    },
+    "primitive": "ReduceScatter",
+    "ranking": [
+      {
+        "algorithm": "Fat-Tree",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 2.021715947,
+        "link_utilization_percent": 40.254237288,
+        "p50_latency_us": 8298.340367104,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 1
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 1.843281012,
+        "link_utilization_percent": 38.13559322,
+        "p50_latency_us": 9101.643720832,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 2
+      },
+      {
+        "algorithm": "Butterfly",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 1.810435514,
+        "link_utilization_percent": 36.016949153,
+        "p50_latency_us": 9266.768645587,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 3
+      },
+      {
+        "algorithm": "NHR",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 1.637926417,
+        "link_utilization_percent": 34.266764923,
+        "p50_latency_us": 10242.759918718,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 4
+      },
+      {
+        "algorithm": "Mesh",
+        "bottleneck": "RoCE:uplink",
+        "correctness_gate_passed": true,
+        "effective_payload_bandwidth_gb_s": 0.070301329,
+        "link_utilization_percent": 4.356090607,
+        "p50_latency_us": 238642.531217378,
+        "parameter_confidence": "EXPLICIT_ASSUMPTION / PROJECT_CONFIG",
+        "rank": 5
+      }
+    ]
+  }
+]

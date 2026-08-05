@@ -1,0 +1,11 @@
+{
+  "all_recovery_correctness_gates_passed": true,
+  "expected_no_path_failures": 1,
+  "real_device_failover_validated": false,
+  "recovered_scenarios": 11,
+  "retry_rate_scope": "simulated fault scenarios only; not real RoCE/HCCL retransmission",
+  "scenario_count": 12,
+  "simulated_failover_target_met_count": 11,
+  "simulated_retry_rate": 0.00025,
+  "status": "PASS"
+}

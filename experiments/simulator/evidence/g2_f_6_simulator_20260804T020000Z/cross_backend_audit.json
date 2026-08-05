@@ -1,0 +1,6 @@
+{
+  "cpu_sim_role": "restricted regression/cross-check only; not performance evidence",
+  "direct_hccl_api_call": false,
+  "g2_f_5_correctness_gate": "PASS",
+  "hccl_vm_role": "historical parser/evidence regression only; not direct or real-device evidence"
+}

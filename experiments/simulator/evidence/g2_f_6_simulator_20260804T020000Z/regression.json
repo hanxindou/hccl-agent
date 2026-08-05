@@ -1,0 +1,20 @@
+{
+  "correctness_gate_passed": true,
+  "cpu_sim_ctest": {
+    "status": "PASS",
+    "tests": "11/11"
+  },
+  "deterministic_replay": "PASS",
+  "direct_build_link_guard": {
+    "abi_compile": "PASS",
+    "direct_adapter_build": "PASS",
+    "host_only_lifecycle_ctest": "PASS (1/1)",
+    "link_audit": "PASS (readelf only; executable not run)"
+  },
+  "g2_e_registry_parser_evidence": "PASS (25 focused tests)",
+  "note": "Additional Python/CMake/G2-F evidence regression outcomes are appended by the authorized checkpoint runner after execution.",
+  "python_full_regression": "PASS (565 tests, 1 existing skip)",
+  "runtime_api_calls": [],
+  "simulator_matrix": "PASS",
+  "topology_monotonicity_contract": "PASS"
+}

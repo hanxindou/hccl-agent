@@ -1,0 +1,266 @@
+{
+  "baseline": "AllReduce/Fat-Tree/64 ranks/128MB",
+  "results": [
+    {
+      "baseline_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "baseline_latency_us": 131719.865612965,
+      "bottleneck_changed": false,
+      "latency_change_percent": 11.10107426,
+      "overrides": {
+        "bandwidth_scale": 0.9
+      },
+      "parameter_change": "bandwidth_minus_10_percent",
+      "ranking_stable": true,
+      "sensitivity": "assumption-sensitive; not hardware calibrated",
+      "variant_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "variant_latency_us": 146342.185710406
+    },
+    {
+      "baseline_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "baseline_latency_us": 131719.865612965,
+      "bottleneck_changed": false,
+      "latency_change_percent": -9.082697122,
+      "overrides": {
+        "bandwidth_scale": 1.1
+      },
+      "parameter_change": "bandwidth_plus_10_percent",
+      "ranking_stable": true,
+      "sensitivity": "assumption-sensitive; not hardware calibrated",
+      "variant_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "variant_latency_us": 119756.149169605
+    },
+    {
+      "baseline_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "baseline_latency_us": 131719.865612965,
+      "bottleneck_changed": false,
+      "latency_change_percent": -0.007376428,
+      "overrides": {
+        "latency_scale": 0.9
+      },
+      "parameter_change": "latency_minus_10_percent",
+      "ranking_stable": true,
+      "sensitivity": "assumption-sensitive; not hardware calibrated",
+      "variant_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "variant_latency_us": 131710.149392165
+    },
+    {
+      "baseline_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "baseline_latency_us": 131719.865612965,
+      "bottleneck_changed": false,
+      "latency_change_percent": 0.007376428,
+      "overrides": {
+        "latency_scale": 1.1
+      },
+      "parameter_change": "latency_plus_10_percent",
+      "ranking_stable": true,
+      "sensitivity": "assumption-sensitive; not hardware calibrated",
+      "variant_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "variant_latency_us": 131729.581833765
+    },
+    {
+      "baseline_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "baseline_latency_us": 131719.865612965,
+      "bottleneck_changed": false,
+      "latency_change_percent": -31.763590692,
+      "overrides": {
+        "oversubscription_scale": 0.75
+      },
+      "parameter_change": "oversubscription_low",
+      "ranking_stable": true,
+      "sensitivity": "assumption-sensitive; not hardware calibrated",
+      "variant_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "variant_latency_us": 89880.906639609
+    },
+    {
+      "baseline_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "baseline_latency_us": 131719.865612965,
+      "bottleneck_changed": false,
+      "latency_change_percent": 36.285021058,
+      "overrides": {
+        "oversubscription_scale": 1.25
+      },
+      "parameter_change": "oversubscription_high",
+      "ranking_stable": true,
+      "sensitivity": "assumption-sensitive; not hardware calibrated",
+      "variant_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "variant_latency_us": 179514.446587731
+    },
+    {
+      "baseline_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "baseline_latency_us": 131719.865612965,
+      "bottleneck_changed": false,
+      "latency_change_percent": 0.0,
+      "overrides": {
+        "retry_probability": 0.001
+      },
+      "parameter_change": "retry_probability_high",
+      "ranking_stable": true,
+      "sensitivity": "assumption-sensitive; not hardware calibrated",
+      "variant_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "variant_latency_us": 131719.865612965
+    },
+    {
+      "baseline_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "baseline_latency_us": 131719.865612965,
+      "bottleneck_changed": false,
+      "latency_change_percent": 0.001941964,
+      "overrides": {
+        "reduction_cost_scale": 1.25
+      },
+      "parameter_change": "reduction_cost_high",
+      "ranking_stable": true,
+      "sensitivity": "assumption-sensitive; not hardware calibrated",
+      "variant_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "variant_latency_us": 131722.423564965
+    },
+    {
+      "baseline_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "baseline_latency_us": 131719.865612965,
+      "bottleneck_changed": false,
+      "latency_change_percent": 0.01820591,
+      "overrides": {
+        "chunk_bytes": 1048576
+      },
+      "parameter_change": "chunk_1MB",
+      "ranking_stable": true,
+      "sensitivity": "assumption-sensitive; not hardware calibrated",
+      "variant_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "variant_latency_us": 131743.846412965
+    },
+    {
+      "baseline_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "baseline_latency_us": 131719.865612965,
+      "bottleneck_changed": false,
+      "latency_change_percent": -0.003034318,
+      "overrides": {
+        "chunk_bytes": 8388608
+      },
+      "parameter_change": "chunk_8MB",
+      "ranking_stable": true,
+      "sensitivity": "assumption-sensitive; not hardware calibrated",
+      "variant_algorithm_ranking": [
+        "Fat-Tree",
+        "Ring AllReduce",
+        "Butterfly",
+        "NHR",
+        "Mesh"
+      ],
+      "variant_latency_us": 131715.868812965
+    }
+  ],
+  "status": "PASS"
+}
