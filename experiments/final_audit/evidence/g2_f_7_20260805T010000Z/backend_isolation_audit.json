@@ -1,0 +1,51 @@
+{
+  "all_current_direct_hccl_api_calls_false": true,
+  "all_current_real_ascend_claims_false": true,
+  "cpu_sim_loads_direct": false,
+  "cpu_sim_loads_vm_runner": false,
+  "direct_calls_cpu_sim_collective": false,
+  "direct_execution_guard": {
+    "availability": "NO_DEVICE_EXPECTED",
+    "blocked_reason": "No authorized real Ascend NPU/device runtime is available; request was stopped before ACL/HCCL runtime.",
+    "capabilities": [
+      "AllReduce",
+      "AllGather",
+      "ReduceScatter"
+    ],
+    "collective_executed_on_real_device": false,
+    "communicator_created": false,
+    "context_created": false,
+    "device_buffer_allocated": false,
+    "device_opened": false,
+    "direct_hccl_api_call": false,
+    "evidence_refs": [
+      "G2-F-1",
+      "G2-F-2",
+      "G2-F-3",
+      "G2-F-4"
+    ],
+    "execution_mode": "direct_preflight",
+    "fallback_policy": "NONE",
+    "guard_detail": "all_reduce is guarded in G2-F-3 before the ACL/HCCL runtime boundary",
+    "limitations": [
+      "current in-process direct API execution",
+      "real Ascend NPU validation",
+      "silent CPU_SIM or HCCL-VM fallback"
+    ],
+    "performance_claim_type": "NOT_A_REAL_DEVICE_MEASUREMENT",
+    "real_ascend_npu_validated": false,
+    "recommended_next_action": "Use direct readiness diagnose/evidence now, or provide an approved real-device environment later.",
+    "runtime_api_calls": [],
+    "runtime_initialized": false,
+    "selected_backend": "ASCEND_HCCL_DIRECT",
+    "selection_reason": "explicit backend request",
+    "status": "NO_DEVICE_EXPECTED",
+    "stream_created": false,
+    "validation_track": null
+  },
+  "direct_loads_hccl_vm_runner": false,
+  "fallback_policy": "NONE",
+  "hccl_vm_calls_cpu_sim_collective": false,
+  "hccl_vm_loads_direct": false,
+  "simulator_acceptance_is_execution_backend": false
+}

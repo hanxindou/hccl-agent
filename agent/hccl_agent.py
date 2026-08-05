@@ -21,6 +21,7 @@ from agent.replanning_skill import ReplanningSkill
 from agent.planning_skill import PlanningSkill
 from agent.explanation_skill import ExplanationSkill
 from agent.code_generation_skill import CodeGenerationSkill
+from agent.backend_control import BackendControlPlane
 from skills.hardware_reasoning_skill import HardwareReasoningSkill
 from agent.optimization_proposal_skill import OptimizationProposalSkill
 from skills.experience_learning_skill import ExperienceLearningSkill
@@ -71,6 +72,19 @@ class HCCLAgent:
         self.case_retrieval = CaseRetrievalSkill(self.knowledge_base)
         self.knowledge_extraction = KnowledgeExtractionSkill()
         self.knowledge_report_skill = KnowledgeReportSkill()
+        self.backend_control = BackendControlPlane()
+
+    def list_backends(self):
+        """Return the canonical backend/validation-track registry."""
+        return self.backend_control.list_backends()
+
+    def select_backend(self, backend=None, *, request_kind="query"):
+        """Select explicitly; unsupported execution is structured, never fallback."""
+        return self.backend_control.select(backend, request_kind=request_kind)
+
+    def simulator_acceptance_status(self):
+        """Describe the evidence-backed simulator validation track."""
+        return self.backend_control.simulator_acceptance()
 
     def run(
         self,

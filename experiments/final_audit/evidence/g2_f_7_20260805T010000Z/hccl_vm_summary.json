@@ -1,0 +1,10 @@
+{
+  "evidence": "G2-E suite summary",
+  "execution_mode": "subprocess_hccl_test",
+  "label": "HCCL_VM_EXECUTED",
+  "not_comparable_with": [
+    "in-process direct API",
+    "CPU_SIM fallback"
+  ],
+  "selected_backend": "ASCEND_HCCL_VM"
+}

@@ -1,0 +1,138 @@
+{
+  "default_backend": "CPU_SIM",
+  "execution_backends": [
+    {
+      "backend_type": "execution_backend",
+      "current_availability": "AVAILABLE",
+      "default_or_opt_in": "default",
+      "evidence_refs": [
+        "CPU_SIM CTest",
+        "Python CPU_SIM regression"
+      ],
+      "execution_mode": "cpu_sim_in_process",
+      "fallback_policy": "NONE",
+      "hardware_requirement": "none",
+      "name": "CPU_SIM",
+      "prohibited_claims": [
+        "official HCCL ABI",
+        "real Ascend NPU performance",
+        "direct HCCL API call"
+      ],
+      "readiness_status": "CPU_EXECUTED",
+      "required_environment": [
+        "project CPU_SIM plugin"
+      ],
+      "supported_dtypes": [
+        "FP32",
+        "FP16",
+        "BF16",
+        "INT32"
+      ],
+      "supported_primitives": [
+        "AllReduce",
+        "AllGather",
+        "ReduceScatter"
+      ],
+      "supported_reduce_ops": [
+        "SUM",
+        "PROD",
+        "MAX",
+        "MIN"
+      ]
+    },
+    {
+      "backend_type": "execution_backend",
+      "current_availability": "DRY_RUN_AND_EVIDENCE_ONLY",
+      "default_or_opt_in": "explicit_opt_in",
+      "evidence_refs": [
+        "experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z"
+      ],
+      "execution_mode": "subprocess_hccl_test",
+      "fallback_policy": "NONE",
+      "hardware_requirement": "HCCL-VM simulator environment",
+      "name": "ASCEND_HCCL_VM",
+      "prohibited_claims": [
+        "in-process direct API",
+        "real Ascend NPU validation",
+        "CPU_SIM fallback"
+      ],
+      "readiness_status": "HCCL_VM_EXECUTED",
+      "required_environment": [
+        "frozen G2-E HCCL-VM configuration",
+        "WSL official toolchain"
+      ],
+      "supported_dtypes": [
+        "INT32"
+      ],
+      "supported_primitives": [
+        "AllReduce",
+        "AllGather",
+        "ReduceScatter"
+      ],
+      "supported_reduce_ops": [
+        "SUM"
+      ]
+    },
+    {
+      "backend_type": "execution_backend",
+      "current_availability": "NO_DEVICE_EXPECTED",
+      "default_or_opt_in": "explicit_opt_in",
+      "evidence_refs": [
+        "G2-F-1",
+        "G2-F-2",
+        "G2-F-3",
+        "G2-F-4"
+      ],
+      "execution_mode": "direct_preflight",
+      "fallback_policy": "NONE",
+      "hardware_requirement": "real Ascend NPU for collective execution",
+      "name": "ASCEND_HCCL_DIRECT",
+      "prohibited_claims": [
+        "current in-process direct API execution",
+        "real Ascend NPU validation",
+        "silent CPU_SIM or HCCL-VM fallback"
+      ],
+      "readiness_status": "DIRECT_READINESS_ONLY",
+      "required_environment": [
+        "frozen CANN manifest",
+        "direct adapter build/link evidence",
+        "real-device opt-in for execution"
+      ],
+      "supported_dtypes": [
+        "FP32",
+        "FP16",
+        "BF16",
+        "INT32"
+      ],
+      "supported_primitives": [
+        "AllReduce",
+        "AllGather",
+        "ReduceScatter"
+      ],
+      "supported_reduce_ops": [
+        "SUM",
+        "MAX",
+        "MIN"
+      ]
+    }
+  ],
+  "fallback_policy": "NONE",
+  "validation_tracks": [
+    {
+      "current_availability": "COMPLETED_FROM_G2_F_5_AND_G2_F_6_EVIDENCE",
+      "evidence_refs": [
+        "G2-F-5 simulator correctness",
+        "G2-F-6 simulator topology/performance/reliability"
+      ],
+      "execution_mode": "evidence_summary_only",
+      "name": "SIMULATOR_ACCEPTANCE",
+      "prohibited_claims": [
+        "real-device measurement",
+        "direct HCCL API call",
+        "real NPU calibration"
+      ],
+      "readiness_status": "SIMULATED_ONLY",
+      "type": "validation_track"
+    }
+  ]
+}

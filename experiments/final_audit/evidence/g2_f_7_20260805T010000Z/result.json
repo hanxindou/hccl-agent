@@ -1,0 +1,20 @@
+{
+  "agent_backend_integration": "COMPLETED",
+  "checkpoint": "G2-F-7",
+  "checkpoint_status": "COMPLETED",
+  "collective_executed_on_real_device": false,
+  "competition_simulator_track": "COMPLETED",
+  "default_backend": "CPU_SIM",
+  "direct_hccl_api_call": false,
+  "final_audit_status": "COMPLETED",
+  "g2_f_overall": "PARTIAL",
+  "g2_f_readiness": "COMPLETED",
+  "g2_f_real_device_acceptance": "HARDWARE_BLOCKED",
+  "measured_on_real_npu": false,
+  "performance_claim_type": "SIMULATED_ONLY",
+  "real_ascend_npu_validated": false,
+  "real_device_calibration_status": "UNAVAILABLE_NO_REAL_DEVICE",
+  "runtime_api_calls": [],
+  "source_commit_before_checkpoint": "bb6ceaa4713c8233842983b9ec9f87e3396ca81b",
+  "three_backend_isolation": "COMPLETED"
+}

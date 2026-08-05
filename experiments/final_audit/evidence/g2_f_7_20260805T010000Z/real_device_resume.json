@@ -1,0 +1,13 @@
+{
+  "current_action": "Do not cross the runtime boundary until a separately approved real-device acceptance run.",
+  "required_conditions": [
+    "supported Ascend NPU and driver/device node",
+    "frozen compatible CANN",
+    "approved launcher and rank-table or root-info",
+    "at least two ranks",
+    "device/context/stream and device-memory permission",
+    "real communicator and per-rank API trace",
+    "D2H independent host reference, cleanup trace, topology/profiling, and dedicated real-device evidence"
+  ],
+  "status": "HARDWARE_BLOCKED"
+}

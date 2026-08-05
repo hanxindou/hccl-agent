@@ -1,0 +1,14 @@
+{
+  "collective_executed_on_real_device": false,
+  "direct_hccl_api_call": false,
+  "measured_on_real_npu": false,
+  "performance_claim_type": "SIMULATED_ONLY",
+  "prohibited_claims": [
+    "REAL_DEVICE_PASS",
+    "direct collective success",
+    "real NPU performance",
+    "msprof executed"
+  ],
+  "real_ascend_npu_validated": false,
+  "runtime_api_calls": []
+}

@@ -1,0 +1,85 @@
+G2-F Final Backend Isolation Report
+===================================
+
+CPU_SIM Summary
+---------------
+label: CPU_EXECUTED
+selected_backend: CPU_SIM
+execution_mode: cpu_sim_in_process
+evidence: CPU_SIM regression
+not_comparable_with: ['real-device performance', 'simulator modeled latency']
+
+ASCEND_HCCL_VM Summary
+----------------------
+label: HCCL_VM_EXECUTED
+selected_backend: ASCEND_HCCL_VM
+execution_mode: subprocess_hccl_test
+evidence: G2-E suite summary
+not_comparable_with: ['in-process direct API', 'CPU_SIM fallback']
+
+ASCEND_HCCL_DIRECT Readiness Summary
+------------------------------------
+label: DIRECT_READINESS_ONLY
+selected_backend: ASCEND_HCCL_DIRECT
+selection_reason: explicit backend request
+execution_mode: direct_preflight
+validation_track: None
+availability: NO_DEVICE_EXPECTED
+status: NO_DEVICE_EXPECTED
+capabilities: ['AllReduce', 'AllGather', 'ReduceScatter']
+limitations: ['current in-process direct API execution', 'real Ascend NPU validation', 'silent CPU_SIM or HCCL-VM fallback']
+blocked_reason: No authorized real Ascend NPU/device runtime is available; request was stopped before ACL/HCCL runtime.
+evidence_refs: ['G2-F-1', 'G2-F-2', 'G2-F-3', 'G2-F-4']
+fallback_policy: NONE
+direct_hccl_api_call: False
+real_ascend_npu_validated: False
+performance_claim_type: NOT_A_REAL_DEVICE_MEASUREMENT
+guard_detail: all_reduce is guarded in G2-F-3 before the ACL/HCCL runtime boundary
+recommended_next_action: Use direct readiness diagnose/evidence now, or provide an approved real-device environment later.
+runtime_api_calls: []
+runtime_initialized: False
+device_opened: False
+context_created: False
+stream_created: False
+communicator_created: False
+device_buffer_allocated: False
+collective_executed_on_real_device: False
+
+SIMULATOR_ACCEPTANCE Summary
+----------------------------
+label: SIMULATED_ONLY
+validation_track: SIMULATOR_ACCEPTANCE
+selection_reason: independent validation track; never an execution backend
+execution_mode: evidence_summary_only
+availability: COMPLETED_FROM_G2_F_5_AND_G2_F_6_EVIDENCE
+status: SIMULATED_ONLY
+capabilities: ['G2-F-5 simulator correctness', 'G2-F-6 simulator topology/performance/reliability']
+limitations: ['real-device measurement', 'direct HCCL API call', 'real NPU calibration']
+blocked_reason: Real-device measurement remains unavailable.
+evidence_refs: ['G2-F-5 simulator correctness', 'G2-F-6 simulator topology/performance/reliability']
+direct_hccl_api_call: False
+real_ascend_npu_validated: False
+performance_claim_type: SIMULATED_ONLY
+measured_on_real_npu: False
+
+Final Status Summary
+--------------------
+G2-F-7: COMPLETED
+agent_backend_integration: COMPLETED
+three_backend_isolation: COMPLETED
+final_audit: COMPLETED
+g2_f_readiness: COMPLETED
+competition_simulator_track: COMPLETED
+g2_f_real_device_acceptance: HARDWARE_BLOCKED
+g2_f_overall: PARTIAL
+
+Known Limitations
+-----------------
+real_device_calibration_status: UNAVAILABLE_NO_REAL_DEVICE
+limitations: ['No real Ascend NPU, driver/device node, communicator, memory, collective, MPI, hccl_test suite, or msprof was executed.', 'Direct readiness is not direct collective execution.', 'Simulator correctness/performance/reliability values are not hardware measurements.']
+
+Real-device Resume Conditions
+-----------------------------
+status: HARDWARE_BLOCKED
+required_conditions: ['supported Ascend NPU and driver/device node', 'frozen compatible CANN', 'approved launcher and rank-table or root-info', 'at least two ranks', 'device/context/stream and device-memory permission', 'real communicator and per-rank API trace', 'D2H independent host reference, cleanup trace, topology/profiling, and dedicated real-device evidence']
+current_action: Do not cross the runtime boundary until a separately approved real-device acceptance run.

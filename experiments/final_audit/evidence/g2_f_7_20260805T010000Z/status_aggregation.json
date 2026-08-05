@@ -1,0 +1,10 @@
+{
+  "G2-F-7": "COMPLETED",
+  "agent_backend_integration": "COMPLETED",
+  "competition_simulator_track": "COMPLETED",
+  "final_audit": "COMPLETED",
+  "g2_f_overall": "PARTIAL",
+  "g2_f_readiness": "COMPLETED",
+  "g2_f_real_device_acceptance": "HARDWARE_BLOCKED",
+  "three_backend_isolation": "COMPLETED"
+}

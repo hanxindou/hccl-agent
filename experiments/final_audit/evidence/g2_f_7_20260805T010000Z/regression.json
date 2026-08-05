@@ -1,0 +1,24 @@
+{
+  "agent_backend_integration": "PASS",
+  "backend_isolation": "PASS",
+  "cpu_sim_ctest": {
+    "result": "PASS",
+    "tests": "11/11"
+  },
+  "direct_adapter_build_and_guard": {
+    "configure_build": "PASS",
+    "host_lifecycle_ctest": "PASS (1/1)",
+    "link_audit": "PASS (readelf inspection only)"
+  },
+  "g2_e_and_g2_f_focused_regression": {
+    "result": "PASS",
+    "tests": "41"
+  },
+  "inventory_sha256": "PASS",
+  "python_full_regression": {
+    "result": "PASS",
+    "tests": "574",
+    "skipped": "1"
+  },
+  "runtime_api_calls": []
+}

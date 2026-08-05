@@ -5,6 +5,25 @@ historical statistics into a text report."""
 class ReportGenerator:
 
     @staticmethod
+    def generate_backend_isolation_report(audit):
+        """Render G2-F-7 summaries without co-ranking isolated tracks."""
+        sections = [
+            ("CPU_SIM Summary", audit["cpu_sim_summary"]),
+            ("ASCEND_HCCL_VM Summary", audit["hccl_vm_summary"]),
+            ("ASCEND_HCCL_DIRECT Readiness Summary", audit["direct_readiness_summary"]),
+            ("SIMULATOR_ACCEPTANCE Summary", audit["simulator_acceptance_summary"]),
+            ("Final Status Summary", audit["status_aggregation"]),
+            ("Known Limitations", audit["known_limitations"]),
+            ("Real-device Resume Conditions", audit["real_device_resume"]),
+        ]
+        lines = ["G2-F Final Backend Isolation Report", "==================================="]
+        for title, payload in sections:
+            lines.extend(["", title, "-" * len(title)])
+            for key, value in payload.items():
+                lines.append(f"{key}: {value}")
+        return "\n".join(lines) + "\n"
+
+    @staticmethod
     def generate_official_validation_report(
             result, evidence_directory=None):
         """Format an auditable report for the external HCCL-VM backend."""
