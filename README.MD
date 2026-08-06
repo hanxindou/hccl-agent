@@ -10,6 +10,30 @@
 
 **V1 Linux 交付与 correctness hardening 已完成到本地可提交状态** — 当前系统是 **Python Agent + 数学/可靠性模拟器 + Windows CPU_SIM C 插件原型 + Linux CPU_SIM 验证工具/CI 配置 + CANN/Ascend 适配准备层**。
 
+G3-B 已规范化两条不可混同的原生交付轨道：
+
+- `libhccl_plugin.so` 是项目自有 `CPU_SIM_REFERENCE_PLUGIN`，在 host memory
+  上执行三原语；它不是官方 HCCL loader plugin。
+- `libhccl_direct_adapter.a` 是
+  `STATIC BUILD/LIFECYCLE READINESS ARTIFACT`，只提供官方签名静态冻结、
+  非执行 link audit 与 host lifecycle；它不执行真实 collective。
+
+默认 backend 仍为 `CPU_SIM`，fallback 仍为 `NONE`。无 NPU/CANN 的评委路径：
+
+```bash
+python -m tools.submission_cli check
+python -m tools.submission_cli quick
+python -m tools.submission_cli full
+python -m tools.submission_cli stage --clean-output --include-selected-evidence --exclude-controlled-docs --exclude-official-assets
+python -m tools.submission_cli verify --stage dist/submission-staging
+```
+
+`SIMULATOR_ACCEPTANCE` 是独立验证轨道，不是第四个 backend。当前未执行真实
+ACL/HCCL runtime、NPU communicator 或 collective；正式技术报告、Agent/Prompt
+trace、图表、视频、许可证审查和最终 archive 分别留给 G3-C 至 G3-G 或
+`USER_ACTION_REQUIRED`。复现、ABI、staging、依赖与真实性边界见
+`docs/submission/`。
+
 已验证和未验证边界：
 
 - Python Agent 主流程可进行规则候选选择、模拟评分、Prompt 记录和实验日志记录。

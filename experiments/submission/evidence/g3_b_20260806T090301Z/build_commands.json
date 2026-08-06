@@ -1,0 +1,140 @@
+{
+  "build_a": [
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake -S <repo>/hcccl -B <build>/build-a -DCMAKE_BUILD_TYPE=Release -DHCCL_BACKEND=CPU_SIM -DHCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF -DCMAKE_INSTALL_PREFIX=<install>/build-a '-DCMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG -ffile-prefix-map=<repo>=/src -fdebug-prefix-map=<repo>=/src'"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake --build <build>/build-a --config Release --parallel 2"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && SOURCE_DATE_EPOCH=1786003772 ctest --test-dir <build>/build-a --output-on-failure"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake --install <build>/build-a --prefix <install>/build-a"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "build_b": [
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake -S <repo>/hcccl -B <build>/build-b -DCMAKE_BUILD_TYPE=Release -DHCCL_BACKEND=CPU_SIM -DHCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF -DCMAKE_INSTALL_PREFIX=<install>/build-b '-DCMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG -ffile-prefix-map=<repo>=/src -fdebug-prefix-map=<repo>=/src'"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake --build <build>/build-b --config Release --parallel 2"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && SOURCE_DATE_EPOCH=1786003772 ctest --test-dir <build>/build-b --output-on-failure"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake --install <build>/build-b --prefix <install>/build-b"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "direct": [
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && cmake -S <repo>/hcccl -B <build>/direct-readiness -DCMAKE_BUILD_TYPE=Release -DHCCL_BACKEND=CPU_SIM -DHCCL_ENABLE_ASCEND_HCCL_DIRECT=ON -DHCCL_CANN_ROOT=<cann-root>"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && cmake --build <build>/direct-readiness --config Release --parallel 2"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "wsl.exe",
+        "--distribution",
+        "Ubuntu-22.04",
+        "--exec",
+        "bash",
+        "-lc",
+        "cd <repo> && ctest --test-dir <build>/direct-readiness -R test_hccl_direct_lifecycle --output-on-failure"
+      ],
+      "exit_code": 0
+    }
+  ]
+}

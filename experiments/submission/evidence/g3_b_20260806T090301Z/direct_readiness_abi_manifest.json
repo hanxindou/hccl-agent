@@ -1,0 +1,125 @@
+{
+  "abi_namespace": "hccl_agent.direct_control_plane",
+  "abi_version": "1",
+  "artifact_name": "libhccl_direct_adapter.a",
+  "artifact_role": "STATIC_BUILD_LIFECYCLE_READINESS_ARTIFACT",
+  "build_mode": "HCCL_ENABLE_ASCEND_HCCL_DIRECT=ON;explicit canonical HCCL_CANN_ROOT",
+  "build_target": "hccl_direct_adapter",
+  "cpu_simulated": false,
+  "dependencies": [],
+  "direct_hccl_api_call": false,
+  "direct_readiness": true,
+  "exported_symbols_prefix": "hccl_direct_",
+  "forbidden_symbols": [
+    "hcclAllGather",
+    "hcclAllReduce",
+    "hcclReduceScatter",
+    "hcclPluginGetVersion"
+  ],
+  "language": "C++17 with project-local C ABI",
+  "observed_readiness": {
+    "archive": "<build>/direct-readiness/libhccl_direct_adapter.a",
+    "archive_sha256": "2c08a77fb95c7eb132bb0946b718f98c04049ac651d00b32a5a9b4181d957f72",
+    "artifact_type": "STATIC BUILD/LIFECYCLE READINESS ARTIFACT",
+    "commands": [
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && cmake -S <repo>/hcccl -B <build>/direct-readiness -DCMAKE_BUILD_TYPE=Release -DHCCL_BACKEND=CPU_SIM -DHCCL_ENABLE_ASCEND_HCCL_DIRECT=ON -DHCCL_CANN_ROOT=<cann-root>"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && cmake --build <build>/direct-readiness --config Release --parallel 2"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && ctest --test-dir <build>/direct-readiness -R test_hccl_direct_lifecycle --output-on-failure"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "cpu_sim_symbol_leakage": [],
+    "direct_hccl_api_call": false,
+    "direct_symbols": [
+      "hccl_direct_calculate_capacity",
+      "hccl_direct_runtime_lease_count",
+      "hccl_direct_session_cleanup_action",
+      "hccl_direct_session_cleanup_count",
+      "hccl_direct_session_cleanup_error_count",
+      "hccl_direct_session_configure",
+      "hccl_direct_session_create",
+      "hccl_direct_session_destroy",
+      "hccl_direct_session_first_error",
+      "hccl_direct_session_model_acquire_lease",
+      "hccl_direct_session_model_cleanup",
+      "hccl_direct_session_preflight",
+      "hccl_direct_session_request_execution",
+      "hccl_direct_session_run_model",
+      "hccl_direct_session_state",
+      "hccl_direct_session_state_string",
+      "hccl_direct_session_verify_owner",
+      "hccl_direct_status_string"
+    ],
+    "lifecycle_ctest": {
+      "failed": 0,
+      "passed": 1
+    },
+    "link_audit_elf": "INSPECTED_NOT_EXECUTED",
+    "no_device_status": "NO_DEVICE_EXPECTED",
+    "observed_needed": [
+      "libacl_rt.so",
+      "libc.so.6",
+      "libgcc_s.so.1",
+      "libhccl.so",
+      "libhcomm.so",
+      "libm.so.6",
+      "libstdc++.so.6"
+    ],
+    "official_library_references": [
+      "libacl_rt.so",
+      "libhccl.so",
+      "libhcomm.so"
+    ],
+    "official_runtime_execution": false,
+    "runtime_api_calls": [],
+    "status": "PASS"
+  },
+  "official_abi_status": "OFFICIAL_COMPATIBLE_WRAPPER_STATICALLY_VERIFIED",
+  "official_library_references": [
+    "libhccl.so",
+    "libhcomm.so",
+    "libacl_rt.so"
+  ],
+  "official_runtime_execution": false,
+  "public_headers": [
+    "hcccl/direct/include/hccl_direct_adapter.h"
+  ],
+  "real_device_validated": false,
+  "runtime_api_calls": [],
+  "runtime_mode": "BUILD_LINK_AND_HOST_LIFECYCLE_READINESS_ONLY",
+  "source_paths": [
+    "hcccl/direct/src/hccl_direct_adapter.cpp",
+    "hcccl/direct/src/hccl_direct_link_audit.cpp"
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "build": {
+    "build_dir": "<build>/quick",
+    "cmake_options": [
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DHCCL_BACKEND=CPU_SIM",
+      "-DHCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF",
+      "-DCMAKE_INSTALL_PREFIX=<install>/quick",
+      "-DCMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG -ffile-prefix-map=<repo>=/src -fdebug-prefix-map=<repo>=/src"
+    ],
+    "commands": [
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake -S <repo>/hcccl -B <build>/quick -DCMAKE_BUILD_TYPE=Release -DHCCL_BACKEND=CPU_SIM -DHCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF -DCMAKE_INSTALL_PREFIX=<install>/quick '-DCMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG -ffile-prefix-map=<repo>=/src -fdebug-prefix-map=<repo>=/src'"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake --build <build>/quick --config Release --parallel 2"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 ctest --test-dir <build>/quick --output-on-failure"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake --install <build>/quick --prefix <install>/quick"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "ctest": {
+      "failed": 0,
+      "passed": 11,
+      "status": "PASS"
+    },
+    "headers_sha256": {
+      "hccl_algorithms.h": "6277fb130926e0938d50c261a711262257270a3ff0b7e763abe909c90ae07e39",
+      "hccl_comm.h": "e681530900dd1ec46b5b625947ff8c7a84535c31324b17b12db62008112a3848"
+    },
+    "install_dir": "<install>/quick",
+    "name": "quick",
+    "native_audit": {
+      "artifact": "<install>/lib/libhccl_plugin.so",
+      "artifact_role": "CPU_SIM_REFERENCE_PLUGIN",
+      "exported_symbols": [
+        "butterfly_allgather",
+        "butterfly_allreduce",
+        "fattree_allreduce",
+        "hcclAllGather",
+        "hcclAllReduce",
+        "hcclBroadcast",
+        "hcclCommDestroy",
+        "hcclCommInit",
+        "hcclFreeTopology",
+        "hcclGetTopology",
+        "hcclPluginGetAlgorithms",
+        "hcclPluginGetVersion",
+        "hcclReduceScatter",
+        "hcclSetRank",
+        "mesh_allreduce",
+        "mesh_reducescatter",
+        "nhr_allreduce",
+        "ring_allgather",
+        "ring_allreduce"
+      ],
+      "file": "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=06557cba281d4f246960915f2e3526e08cf48089, not stripped",
+      "forbidden_symbols": [],
+      "ldd": [
+        "linux-vdso.so.1 (0x0000722675959000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000722675600000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x000072267595b000)"
+      ],
+      "missing_symbols": [],
+      "needed": [
+        "libc.so.6"
+      ],
+      "official_dependencies": [],
+      "sha256": "c8122c1cbc5e336e45b68bcb308a992a5caa04d905a228f6e1be7e1e169b52cd",
+      "soname": "libhccl_plugin.so",
+      "status": "PASS",
+      "unexpected_symbols": []
+    },
+    "source_commit": "a7b7fa993f71a56719adc73191bc24c9247fa27f",
+    "source_date_epoch": "1786003772",
+    "status": "PASS"
+  },
+  "command": "python -m tools.submission_cli quick",
+  "environment": {
+    "default_backend": "CPU_SIM",
+    "fallback_policy": "NONE",
+    "missing_paths": [],
+    "missing_tools": [],
+    "official_asset_default": "EXCLUDE",
+    "optional": {
+      "cann_9_1_0": "AVAILABLE"
+    },
+    "platform": "Windows-10-10.0.22631-SP0",
+    "python": "3.11.7",
+    "real_device_only": {
+      "npu": "NOT_PROBED",
+      "runtime_execution": "DISABLED"
+    },
+    "repository_root": "<repo>",
+    "required": {
+      "paths": "PASS",
+      "tools": {
+        "cc": "cc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+        "cmake": "cmake version 3.22.1",
+        "ctest": "ctest version 3.22.1",
+        "file": "file-5.41",
+        "ldd": "ldd (Ubuntu GLIBC 2.35-0ubuntu3.13) 2.35",
+        "nm": "GNU nm (GNU Binutils for Ubuntu) 2.38",
+        "readelf": "GNU readelf (GNU Binutils for Ubuntu) 2.38"
+      }
+    },
+    "schema_version": "g3-b-check-v1",
+    "status": "PASS",
+    "user_action_required": [
+      "UA-B-001",
+      "UA-B-002",
+      "UA-B-003",
+      "UA-B-004"
+    ]
+  },
+  "expensive_simulator_evidence_regenerated": false,
+  "old_evidence": [
+    {
+      "files_checked": 13,
+      "path": "experiments/simulator/evidence/g2_f_5_simulator_20260804T010000Z",
+      "sha256sums_sha256": "b8c5d9388b30fc9095df4cc3bb87ae8f2228db739936d97f1909a87034cb124d",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 21,
+      "path": "experiments/simulator/evidence/g2_f_6_simulator_20260804T020000Z",
+      "sha256sums_sha256": "c8f75ad2b945fc3caebbe62e9423ff2e21826995de5cfc03c0703b2e90e47385",
+      "status": "PASS"
+    }
+  ],
+  "python_regression": {
+    "exit_code": 0,
+    "failed": 0,
+    "modules": [
+      "tests.test_simulator_collective_correctness",
+      "tests.test_failover_engine",
+      "tests.test_backend_selection",
+      "tests.test_plugin_bridge"
+    ],
+    "passed": 42,
+    "status": "PASS"
+  },
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-b-quick-v1",
+  "simulator_replay": {
+    "algorithm_comparison": [
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_collective_time_us": 1877.765799732
+      },
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_collective_time_us": 1129.220945851
+      }
+    ],
+    "configuration": {
+      "algorithm": "Ring AllReduce",
+      "cluster": null,
+      "hardware_profile": "tier_medium",
+      "message_size": 1048576,
+      "primitive": "AllReduce",
+      "rank_size": 16,
+      "seed": 20260806,
+      "topology": {
+        "path": "configs/submission/heterogeneous_asymmetric.json",
+        "payload": {
+          "asymmetric_links": true,
+          "hardware_profile": "tier_medium",
+          "name": "heterogeneous_asymmetric",
+          "rank_size": 16,
+          "schema_version": "submission-simulator-config-v1",
+          "seed": 20260806,
+          "topology": "HETEROGENEOUS",
+          "topology_source": "SIMULATOR_CONFIG"
+        },
+        "sha256": "3c76588cbc1ba730e97f6c3070b4d7476c92de2fa0c4979f819dc10305d99f94"
+      }
+    },
+    "correctness_cases": [
+      {
+        "dtype": "FP32",
+        "output_hash": "92e659dfe0b30debf797a61e49d3977f9b1a6fe781dcb40d9e5742cd5aa9fc50",
+        "primitive": "AllReduce",
+        "status": "PASS"
+      },
+      {
+        "dtype": "BF16",
+        "output_hash": "2c31fc7ed865b250445a87152f6228e7e37ceb5a8988dbd4f5cb97f505846ddc",
+        "primitive": "AllGather",
+        "status": "PASS"
+      },
+      {
+        "dtype": "FP16",
+        "output_hash": "38d7c9fdd0c62a39016b7440b9230338e480f796ce399ab902aad73d02cbf5d4",
+        "primitive": "ReduceScatter",
+        "status": "PASS"
+      }
+    ],
+    "fault_recovery": {
+      "simulated_failover_time_ms": 0.055,
+      "status": "RECOVERED"
+    },
+    "no_alternate_path": {
+      "status": "EXPECTED_NO_PATH_FAILURE"
+    },
+    "real_device_measured": false,
+    "representative_8_rank_or_injected": {
+      "correctness_gate": {
+        "correctness_gate_passed": true,
+        "full_or_sampled_validation": "full",
+        "max_abs_error": 0.0,
+        "max_rel_error": 0.0,
+        "output_hash": "a01ac533b56ed6aaa8e9a02f8758b140499b89655eecc216624a80b16d62f5bc"
+      },
+      "rank_size": 16,
+      "simulated_collective_time_us": 3325.870058622
+    },
+    "status": "PASS",
+    "topology_source": "SIMULATOR_CONFIG",
+    "validation_track": "SIMULATOR_ACCEPTANCE"
+  },
+  "status": "PASS"
+}

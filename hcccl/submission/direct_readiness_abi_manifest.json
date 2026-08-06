@@ -1,0 +1,23 @@
+{
+  "abi_namespace": "hccl_agent.direct_control_plane",
+  "abi_version": "1",
+  "artifact_name": "libhccl_direct_adapter.a",
+  "artifact_role": "STATIC_BUILD_LIFECYCLE_READINESS_ARTIFACT",
+  "build_mode": "HCCL_ENABLE_ASCEND_HCCL_DIRECT=ON;explicit canonical HCCL_CANN_ROOT",
+  "build_target": "hccl_direct_adapter",
+  "cpu_simulated": false,
+  "dependencies": [],
+  "direct_hccl_api_call": false,
+  "direct_readiness": true,
+  "exported_symbols_prefix": "hccl_direct_",
+  "forbidden_symbols": ["hcclAllGather", "hcclAllReduce", "hcclReduceScatter", "hcclPluginGetVersion"],
+  "language": "C++17 with project-local C ABI",
+  "official_abi_status": "OFFICIAL_COMPATIBLE_WRAPPER_STATICALLY_VERIFIED",
+  "official_library_references": ["libhccl.so", "libhcomm.so", "libacl_rt.so"],
+  "official_runtime_execution": false,
+  "public_headers": ["hcccl/direct/include/hccl_direct_adapter.h"],
+  "real_device_validated": false,
+  "runtime_api_calls": [],
+  "runtime_mode": "BUILD_LINK_AND_HOST_LIFECYCLE_READINESS_ONLY",
+  "source_paths": ["hcccl/direct/src/hccl_direct_adapter.cpp", "hcccl/direct/src/hccl_direct_link_audit.cpp"]
+}

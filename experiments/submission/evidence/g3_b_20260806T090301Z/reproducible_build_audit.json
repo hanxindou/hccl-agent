@@ -1,0 +1,12 @@
+{
+  "binary_sha256_equal": true,
+  "ctest_equal": true,
+  "difference_reason": null,
+  "file_type_equal": true,
+  "first_artifact_reused": false,
+  "headers_equal": true,
+  "needed_equal": true,
+  "soname_equal": true,
+  "status": "BIT_FOR_BIT_REPRODUCIBLE",
+  "symbols_equal": true
+}

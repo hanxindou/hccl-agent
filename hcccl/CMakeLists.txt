@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(hccl_plugin LANGUAGES C VERSION 0.1.0)
 
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
 # ---- Build configuration ------------------------------------------------
 
 set(CMAKE_C_STANDARD 11)
@@ -50,6 +53,11 @@ set(HEADERS
 # ---- Shared library target (CPU-simulated, no CANN SDK required) --------
 
 add_library(hccl_plugin SHARED ${SOURCES})
+add_library(hccl::plugin ALIAS hccl_plugin)
+
+set_target_properties(hccl_plugin PROPERTIES
+    EXPORT_NAME plugin
+)
 
 target_include_directories(hccl_plugin
     PUBLIC
@@ -60,6 +68,11 @@ target_include_directories(hccl_plugin
 if(HCCL_BACKEND STREQUAL "CPU_SIM")
     target_compile_definitions(hccl_plugin PRIVATE HCCL_BACKEND_CPU_SIM=1)
 else()
+    message(WARNING
+        "HCCL_BACKEND=ASCEND_CANN is STUB_UNVERIFIED/readiness-only. "
+        "It is excluded from submission quick/full paths and is not evidence "
+        "of real-device collective execution."
+    )
     set(HCCL_CANN_ROOT "" CACHE PATH "CANN/Ascend SDK root for ASCEND_CANN backend")
     set(_HCCL_CANN_HINTS
         "${HCCL_CANN_ROOT}"
@@ -98,6 +111,13 @@ else()
     target_link_libraries(hccl_plugin PRIVATE ${HCCL_CANN_LIBRARY})
 endif()
 
+if(UNIX AND NOT APPLE)
+    target_link_options(hccl_plugin PRIVATE
+        "LINKER:--version-script=${CMAKE_CURRENT_SOURCE_DIR}/cmake/hccl_plugin.exports.map"
+        "LINKER:--build-id=sha1"
+    )
+endif()
+
 # ---- G2-F direct adapter (compile-only; no official libraries linked) ---
 
 if(HCCL_ENABLE_ASCEND_HCCL_DIRECT)
@@ -108,19 +128,41 @@ if(HCCL_ENABLE_ASCEND_HCCL_DIRECT)
         )
     endif()
 
+    if(NOT IS_ABSOLUTE "${HCCL_CANN_ROOT}")
+        message(FATAL_ERROR "HCCL_CANN_ROOT must be an explicit absolute canonical path.")
+    endif()
+    get_filename_component(HCCL_DIRECT_CANN_REAL_ROOT "${HCCL_CANN_ROOT}" REALPATH)
+    if(NOT HCCL_DIRECT_CANN_REAL_ROOT STREQUAL HCCL_CANN_ROOT)
+        message(FATAL_ERROR
+            "HCCL_CANN_ROOT must already be canonical. "
+            "Provided='${HCCL_CANN_ROOT}', canonical='${HCCL_DIRECT_CANN_REAL_ROOT}'."
+        )
+    endif()
+
     find_path(HCCL_DIRECT_CANN_INCLUDE_DIR
         NAMES hccl/hccl.h
-        PATHS "${HCCL_CANN_ROOT}"
-        PATH_SUFFIXES include
+        PATHS "${HCCL_DIRECT_CANN_REAL_ROOT}"
+        PATH_SUFFIXES x86_64-linux/include
         NO_DEFAULT_PATH
     )
     if(NOT HCCL_DIRECT_CANN_INCLUDE_DIR)
         message(FATAL_ERROR
-            "HCCL_ENABLE_ASCEND_HCCL_DIRECT=ON requires ${HCCL_CANN_ROOT}/include/hccl/hccl.h."
+            "HCCL_ENABLE_ASCEND_HCCL_DIRECT=ON requires "
+            "${HCCL_DIRECT_CANN_REAL_ROOT}/x86_64-linux/include/hccl/hccl.h."
         )
     endif()
 
-    get_filename_component(HCCL_DIRECT_CANN_REAL_ROOT "${HCCL_CANN_ROOT}" REALPATH)
+    set(HCCL_DIRECT_VERSION_HEADER
+        "${HCCL_DIRECT_CANN_REAL_ROOT}/x86_64-linux/include/version/hccl_version.h")
+    if(NOT EXISTS "${HCCL_DIRECT_VERSION_HEADER}")
+        message(FATAL_ERROR "Frozen HCCL version header is missing: ${HCCL_DIRECT_VERSION_HEADER}")
+    endif()
+    file(STRINGS "${HCCL_DIRECT_VERSION_HEADER}" HCCL_DIRECT_VERSION_LINE
+        REGEX "HCCL_VERSION_STR")
+    if(NOT HCCL_DIRECT_VERSION_LINE MATCHES "9\\.1\\.0")
+        message(FATAL_ERROR
+            "Direct readiness requires frozen CANN/HCCL 9.1.0; observed '${HCCL_DIRECT_VERSION_LINE}'.")
+    endif()
     set(HCCL_DIRECT_CANN_LIBRARY_DIR
         "${HCCL_DIRECT_CANN_REAL_ROOT}/x86_64-linux/lib64")
     foreach(_direct_library hccl hcomm acl_rt)
@@ -153,6 +195,10 @@ if(HCCL_ENABLE_ASCEND_HCCL_DIRECT)
     )
     target_compile_definitions(hccl_direct_adapter PRIVATE HCCL_DIRECT_BUILD_ONLY=1)
     target_compile_features(hccl_direct_adapter PUBLIC cxx_std_17)
+    set_target_properties(hccl_direct_adapter PROPERTIES
+        POSITION_INDEPENDENT_CODE ON
+        EXPORT_NAME direct_adapter
+    )
 
     add_library(hccl_direct_adapter_abi_compile OBJECT
         direct/tests/direct_adapter_abi_compile.c
@@ -344,12 +390,64 @@ set_tests_properties(test_dtype_emulation PROPERTIES
 # ---- Install rules ------------------------------------------------------
 
 install(TARGETS hccl_plugin
-    LIBRARY DESTINATION lib
+    EXPORT hccl_pluginTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(FILES ${HEADERS}
-    DESTINATION include/hccl_plugin
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
+
+install(FILES
+    README.md
+    submission/native_plugin_abi_manifest.json
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/hccl-plugin
+)
+
+install(EXPORT hccl_pluginTargets
+    FILE hccl_pluginTargets.cmake
+    NAMESPACE hccl::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/hccl_plugin
+)
+
+configure_package_config_file(
+    cmake/hccl_pluginConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/hccl_pluginConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/hccl_plugin
+)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/hccl_pluginConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/hccl_pluginConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/hccl_pluginConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/hccl_plugin
+)
+
+install(FILES
+    direct/include/hccl_direct_adapter.h
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/hccl-direct-readiness
+)
+install(FILES
+    direct/src/hccl_direct_adapter.cpp
+    direct/src/hccl_direct_link_audit.cpp
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/hccl-direct-readiness/src
+)
+install(FILES
+    direct/README.md
+    submission/direct_readiness_abi_manifest.json
+    direct/manifest/cann_hccl_9.1.0.json
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/hccl-direct-readiness
+)
+if(HCCL_ENABLE_ASCEND_HCCL_DIRECT)
+    install(TARGETS hccl_direct_adapter
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/hccl-direct-readiness
+    )
+endif()
 
 # ---- Build instructions -------------------------------------------------
 

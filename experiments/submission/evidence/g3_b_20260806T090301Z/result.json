@@ -1,0 +1,31 @@
+{
+  "c_cpp_plugin_compliance": "PARTIALLY_SATISFIED",
+  "checkpoint": "G3-B",
+  "checkpoint_status": "COMPLETED",
+  "controlled_competition_doc_included": false,
+  "cpu_sim_submission_plugin": "COMPLETED",
+  "direct_hccl_api_call": false,
+  "direct_readiness_package": "COMPLETED",
+  "final_release_created": false,
+  "g3_delivery_readiness": "PARTIAL",
+  "measured_on_real_npu": false,
+  "native_delivery_normalization": "COMPLETED",
+  "official_binaries_included": false,
+  "official_source_included": false,
+  "old_evidence_modified": false,
+  "public_release_created": false,
+  "real_ascend_npu_validated": false,
+  "real_device_acceptance": "HARDWARE_BLOCKED",
+  "real_device_api_executed": false,
+  "reproducible_build_status": "BIT_FOR_BIT_REPRODUCIBLE",
+  "runtime_api_calls": [],
+  "submission_cli": "COMPLETED",
+  "submission_release_readiness": "PARTIAL",
+  "submission_staging": "COMPLETED",
+  "user_action_required": [
+    "UA-B-001",
+    "UA-B-002",
+    "UA-B-003",
+    "UA-B-004"
+  ]
+}

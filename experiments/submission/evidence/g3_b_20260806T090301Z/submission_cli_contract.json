@@ -1,0 +1,18 @@
+{
+  "commands": [
+    "check",
+    "build",
+    "quick",
+    "full",
+    "stage",
+    "verify",
+    "describe",
+    "clean-generated",
+    "evidence"
+  ],
+  "default_backend": "CPU_SIM",
+  "fallback_policy": "NONE",
+  "status": "PASS",
+  "windows_import_safety": "PASS",
+  "wsl_linux_execution_safety": "PASS"
+}

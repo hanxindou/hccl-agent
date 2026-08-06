@@ -1,0 +1,119 @@
+{
+  "baseline_commit": "a7b7fa993f71a56719adc73191bc24c9247fa27f",
+  "build_comparison": {
+    "binary_sha256_equal": true,
+    "ctest_equal": true,
+    "difference_reason": null,
+    "file_type_equal": true,
+    "first_artifact_reused": false,
+    "headers_equal": true,
+    "needed_equal": true,
+    "soname_equal": true,
+    "status": "BIT_FOR_BIT_REPRODUCIBLE",
+    "symbols_equal": true
+  },
+  "checkpoint": "G3-B",
+  "cmake_options": [
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DHCCL_BACKEND=CPU_SIM",
+    "-DHCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF",
+    "-DCMAKE_INSTALL_PREFIX=<install>/build-a",
+    "-DCMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG -ffile-prefix-map=<repo>=/src -fdebug-prefix-map=<repo>=/src"
+  ],
+  "cpu_sim_so_sha256": "c8122c1cbc5e336e45b68bcb308a992a5caa04d905a228f6e1be7e1e169b52cd",
+  "cpu_sim_so_soname": "libhccl_plugin.so",
+  "dependencies": [
+    "libc.so.6"
+  ],
+  "direct_artifact_type": "STATIC BUILD/LIFECYCLE READINESS ARTIFACT",
+  "direct_no_device_status": "NO_DEVICE_EXPECTED",
+  "direct_official_library_references": [
+    "libacl_rt.so",
+    "libhccl.so",
+    "libhcomm.so"
+  ],
+  "evidence_sha256": "See EVIDENCE_SHA256 for SHA256(SHA256SUMS)",
+  "exclusion_count": 5,
+  "exported_symbols": [
+    "butterfly_allgather",
+    "butterfly_allreduce",
+    "fattree_allreduce",
+    "hcclAllGather",
+    "hcclAllReduce",
+    "hcclBroadcast",
+    "hcclCommDestroy",
+    "hcclCommInit",
+    "hcclFreeTopology",
+    "hcclGetTopology",
+    "hcclPluginGetAlgorithms",
+    "hcclPluginGetVersion",
+    "hcclReduceScatter",
+    "hcclSetRank",
+    "mesh_allreduce",
+    "mesh_reducescatter",
+    "nhr_allreduce",
+    "ring_allgather",
+    "ring_allreduce"
+  ],
+  "full_command": "python -m tools.submission_cli full",
+  "full_exit_status": 0,
+  "generated_artifacts": [
+    "docs/submission/reproduction_guide.md",
+    "docs/submission/native_plugin_abi_decision.md",
+    "dist/submission-staging"
+  ],
+  "inclusion_count": 228,
+  "known_limitations": [
+    "official plugin ABI unverified",
+    "license and redistribution unresolved",
+    "real-device API not executed",
+    "final archive not created"
+  ],
+  "official_repositories": {
+    "hccl": {
+      "branch": "competition/campus-2026",
+      "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "path": "<official-repository>",
+      "tracked_worktree_clean": true
+    },
+    "hcomm": {
+      "branch": "competition/campus-2026",
+      "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "path": "<official-repository>",
+      "tracked_worktree_clean": true
+    }
+  },
+  "project_commit": "a7b7fa993f71a56719adc73191bc24c9247fa27f",
+  "public_header_sha256": {
+    "hccl_algorithms.h": "6277fb130926e0938d50c261a711262257270a3ff0b7e763abe909c90ae07e39",
+    "hccl_comm.h": "e681530900dd1ec46b5b625947ff8c7a84535c31324b17b12db62008112a3848"
+  },
+  "quick_command": "python -m tools.submission_cli quick",
+  "quick_exit_status": 0,
+  "schema_version": "g3-b-evidence-v1",
+  "selected_evidence": {
+    "g2_e": "INCLUDE_SUMMARY_ONLY",
+    "g2_f_1": "REFERENCE_ONLY",
+    "g2_f_2": "INCLUDE_SUMMARY_ONLY",
+    "g2_f_3": "INCLUDE_SUMMARY_ONLY",
+    "g2_f_4": "INCLUDE_SUMMARY_ONLY",
+    "g2_f_5": "INCLUDE_FULL",
+    "g2_f_6": "INCLUDE_FULL",
+    "g2_f_7": "INCLUDE_SUMMARY_ONLY",
+    "g3_a": "INCLUDE_FULL"
+  },
+  "source_documents": [
+    "docs/plans/g3-competition-delivery-readiness.md",
+    "G3-A controlled requirement summaries"
+  ],
+  "staging_file_count": 232,
+  "staging_root": "dist/submission-staging",
+  "staging_total_size_bytes": 4583652,
+  "user_action_required": [
+    "UA-B-001",
+    "UA-B-002",
+    "UA-B-003",
+    "UA-B-004"
+  ],
+  "worktree_revision": "G3-B checkpoint files pending the authorized local commit"
+}

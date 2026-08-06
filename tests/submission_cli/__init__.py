@@ -1,0 +1,1 @@
+"""Submission CLI contract tests."""

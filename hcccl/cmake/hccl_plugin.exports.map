@@ -1,0 +1,24 @@
+HCCL_PLUGIN_0.1 {
+    global:
+        hcclSetRank;
+        hcclCommInit;
+        hcclCommDestroy;
+        hcclGetTopology;
+        hcclFreeTopology;
+        hcclAllReduce;
+        hcclAllGather;
+        hcclReduceScatter;
+        hcclBroadcast;
+        hcclPluginGetVersion;
+        hcclPluginGetAlgorithms;
+        ring_allreduce;
+        ring_allgather;
+        butterfly_allreduce;
+        butterfly_allgather;
+        mesh_allreduce;
+        mesh_reducescatter;
+        nhr_allreduce;
+        fattree_allreduce;
+    local:
+        *;
+};
