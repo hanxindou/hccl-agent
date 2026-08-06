@@ -1,0 +1,514 @@
+{
+  "assignments": [
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "NO_ACTION",
+      "recommended_action": "维持边界，规则变化时重新评估",
+      "requirement_id": "REQ-PRIM-004",
+      "risk_id": "RISK-PRIM-004",
+      "risk_level": "INFO"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "NO_ACTION",
+      "recommended_action": "维持边界，规则变化时重新评估",
+      "requirement_id": "REQ-PRIM-005",
+      "risk_id": "RISK-PRIM-005",
+      "risk_level": "INFO"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "形成可注入拓扑接口和静态兼容说明；实机探测留待设备阶段",
+      "requirement_id": "REQ-TOPO-002",
+      "risk_id": "RISK-TOPO-002",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "在技术报告中给出状态机与限制；实机留待未来",
+      "requirement_id": "REQ-TOPO-005",
+      "risk_id": "RISK-TOPO-005",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 明确静态配置边界，G3-B 补交付说明",
+      "requirement_id": "REQ-TOPO-006",
+      "risk_id": "RISK-TOPO-006",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "REAL_DEVICE",
+      "owner_checkpoint": "REAL_DEVICE_FUTURE",
+      "recommended_action": "在获授权设备环境执行冻结的 direct acceptance",
+      "requirement_id": "REQ-TOPO-007",
+      "risk_id": "RISK-TOPO-007",
+      "risk_level": "MEDIUM"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-E",
+      "recommended_action": "G3-E 仅展示已实现差异；G3-C 逐算法说明实现深度",
+      "requirement_id": "REQ-INNOV-001",
+      "risk_id": "RISK-INNOV-001",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 报告模型；REAL_DEVICE_FUTURE 验收",
+      "requirement_id": "REQ-INNOV-003",
+      "risk_id": "RISK-INNOV-003",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-E",
+      "recommended_action": "G3-E 不作实现主张；若参赛策略需要，另设后续功能 checkpoint",
+      "requirement_id": "REQ-INNOV-004",
+      "risk_id": "RISK-INNOV-004",
+      "risk_level": "MEDIUM"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "G3-D",
+      "recommended_action": "G3-D 建立可复现的新 trace；用户提供可合法使用的历史原始记录",
+      "requirement_id": "REQ-INNOV-006",
+      "risk_id": "RISK-INNOV-006",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 确定官方插件 ABI、兼容包装层和提交入口",
+      "requirement_id": "REQ-CO-001",
+      "risk_id": "RISK-CO-001",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 写入 direct readiness appendix；设备阶段验收",
+      "requirement_id": "REQ-CO-002",
+      "risk_id": "RISK-CO-002",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "REAL_DEVICE",
+      "owner_checkpoint": "REAL_DEVICE_FUTURE",
+      "recommended_action": "保留 readiness 边界，设备阶段执行",
+      "requirement_id": "REQ-CO-003",
+      "risk_id": "RISK-CO-003",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C/G3-E 明确未实现；真实实现需独立后续 checkpoint",
+      "requirement_id": "REQ-CO-004",
+      "risk_id": "RISK-CO-004",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "REAL_DEVICE",
+      "owner_checkpoint": "REAL_DEVICE_FUTURE",
+      "recommended_action": "有设备且授权后执行冻结 acceptance",
+      "requirement_id": "REQ-CO-006",
+      "risk_id": "RISK-CO-006",
+      "risk_level": "MEDIUM"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 说明模拟范围；设备实现需后续 checkpoint",
+      "requirement_id": "REQ-REL-003",
+      "risk_id": "RISK-REL-003",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "REAL_DEVICE",
+      "owner_checkpoint": "REAL_DEVICE_FUTURE",
+      "recommended_action": "有设备且授权后执行",
+      "requirement_id": "REQ-REL-007",
+      "risk_id": "RISK-REL-007",
+      "risk_level": "MEDIUM"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 形成逐算法复杂度与实现映射",
+      "requirement_id": "REQ-SCALE-002",
+      "risk_id": "RISK-SCALE-002",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C/G3-E 明确未验证；不得从通信 latency 推导训练加速比",
+      "requirement_id": "REQ-SCALE-003",
+      "risk_id": "RISK-SCALE-003",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "REAL_DEVICE",
+      "owner_checkpoint": "REAL_DEVICE_FUTURE",
+      "recommended_action": "设备资源可用后执行",
+      "requirement_id": "REQ-SCALE-004",
+      "risk_id": "RISK-SCALE-004",
+      "risk_level": "MEDIUM"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 明确数据集与容差；用户/赛事规则确认阈值解释",
+      "requirement_id": "REQ-CORR-005",
+      "risk_id": "RISK-CORR-005",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 冻结最终插件 ABI 与构建产物",
+      "requirement_id": "REQ-CPP-001",
+      "risk_id": "RISK-CPP-001",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 定义并验证最终 .so、导出 ABI 和无设备构建说明",
+      "requirement_id": "REQ-CPP-002",
+      "risk_id": "RISK-CPP-002",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 输出正式 ABI 清单并校验",
+      "requirement_id": "REQ-CPP-004",
+      "risk_id": "RISK-CPP-004",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 默认排除官方 DSO；用户完成 redistribution review",
+      "requirement_id": "REQ-CPP-005",
+      "risk_id": "RISK-CPP-005",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 增加兼容说明与唯一插件入口",
+      "requirement_id": "REQ-CPP-006",
+      "risk_id": "RISK-CPP-006",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 提供环境锁定和 quick/full reproduce",
+      "requirement_id": "REQ-AGENT-001",
+      "risk_id": "RISK-AGENT-001",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-D",
+      "recommended_action": "G3-D 重建版本化 Skills 清单",
+      "requirement_id": "REQ-AGENT-002",
+      "risk_id": "RISK-AGENT-002",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-D",
+      "recommended_action": "G3-D 增加版本、schema、最小可公开调用样例",
+      "requirement_id": "REQ-AGENT-004",
+      "risk_id": "RISK-AGENT-004",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "G3-D",
+      "recommended_action": "G3-D 生成新的脱敏权威 trace；用户提供/确认历史记录使用边界",
+      "requirement_id": "REQ-AGENT-005",
+      "risk_id": "RISK-AGENT-005",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "G3-D",
+      "recommended_action": "G3-D 只创建未来可验证 trace，不伪造历史；用户披露可用历史材料与人工工作",
+      "requirement_id": "REQ-AGENT-006",
+      "risk_id": "RISK-AGENT-006",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-D",
+      "recommended_action": "G3-D 建立受控、可重放、脱敏的完整流程",
+      "requirement_id": "REQ-AGENT-007",
+      "risk_id": "RISK-AGENT-007",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 提供无隐藏状态的 simulator quick/full reproduce",
+      "requirement_id": "REQ-SIM-001",
+      "risk_id": "RISK-SIM-001",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 建复现入口；G3-C 更新 simulator manual",
+      "requirement_id": "REQ-SIM-006",
+      "risk_id": "RISK-SIM-006",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 将模拟场景打包并标注；真实设备留待未来",
+      "requirement_id": "REQ-TEST-002",
+      "risk_id": "RISK-TEST-002",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 提供统一入口与 quick/full 模式",
+      "requirement_id": "REQ-TEST-003",
+      "risk_id": "RISK-TEST-003",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B/G3-G 分别验证构建和 release candidate",
+      "requirement_id": "REQ-TEST-004",
+      "risk_id": "RISK-TEST-004",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 更新复现说明并验证",
+      "requirement_id": "REQ-DOC-001",
+      "risk_id": "RISK-DOC-001",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 以当前审计为基线重建正式报告",
+      "requirement_id": "REQ-DOC-002",
+      "risk_id": "RISK-DOC-002",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 生成正式 simulator reports",
+      "requirement_id": "REQ-DOC-003",
+      "risk_id": "RISK-DOC-003",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 更新正式 simulator manual",
+      "requirement_id": "REQ-DOC-004",
+      "risk_id": "RISK-DOC-004",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-D",
+      "recommended_action": "G3-D 完成专项交付",
+      "requirement_id": "REQ-DOC-005",
+      "risk_id": "RISK-DOC-005",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 构建 staging package 和 manifest，不在 G3-A 打包",
+      "requirement_id": "REQ-PACKAGE-001",
+      "risk_id": "RISK-PACKAGE-001",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-D",
+      "recommended_action": "G3-D 产出后由 G3-B/G3-G 纳入包",
+      "requirement_id": "REQ-PACKAGE-002",
+      "risk_id": "RISK-PACKAGE-002",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 生成 staging manifest 与复现入口",
+      "requirement_id": "REQ-PACKAGE-003",
+      "risk_id": "RISK-PACKAGE-003",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "G3-B",
+      "recommended_action": "G3-B 建 manifest；G3-G 执行 release audit；用户确认许可证",
+      "requirement_id": "REQ-PACKAGE-004",
+      "risk_id": "RISK-PACKAGE-004",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "G3-G",
+      "recommended_action": "G3-B 验证 staging；G3-G 验证 release candidate；用户确认平台约束",
+      "requirement_id": "REQ-PACKAGE-005",
+      "risk_id": "RISK-PACKAGE-005",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 生成 SIMULATOR PERFORMANCE REPORT；G3-E 生成图表",
+      "requirement_id": "REQ-REPORT-001",
+      "risk_id": "RISK-REPORT-001",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C 更新正式 reliability report",
+      "requirement_id": "REQ-REPORT-002",
+      "risk_id": "RISK-REPORT-002",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-C",
+      "recommended_action": "G3-C/E 使用受限措辞；实机指标留待未来",
+      "requirement_id": "REQ-REPORT-003",
+      "risk_id": "RISK-REPORT-003",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-F",
+      "recommended_action": "G3-F 制作视频，不得标记 HARDWARE_BLOCKED",
+      "requirement_id": "REQ-DEMO-001",
+      "risk_id": "RISK-DEMO-001",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-F",
+      "recommended_action": "G3-F 完成演示资产",
+      "requirement_id": "REQ-DEMO-002",
+      "risk_id": "RISK-DEMO-002",
+      "risk_level": "MEDIUM"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-F",
+      "recommended_action": "G3-F 使用 G3-A claim matrix 制作；G3-G 复核",
+      "requirement_id": "REQ-DEMO-003",
+      "risk_id": "RISK-DEMO-003",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "USER_ACTION",
+      "recommended_action": "用户选择许可证并确认版权；G3-G 纳入 release",
+      "requirement_id": "REQ-COMP-001",
+      "risk_id": "RISK-COMP-001",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "G3-G",
+      "recommended_action": "G3-G 建 SBOM/依赖清单；G3-D 补生成 provenance",
+      "requirement_id": "REQ-COMP-002",
+      "risk_id": "RISK-COMP-002",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "USER_ACTION",
+      "recommended_action": "保持默认排除；用户完成 REDISTRIBUTION_REVIEW_REQUIRED",
+      "requirement_id": "REQ-COMP-003",
+      "risk_id": "RISK-COMP-003",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "USER_ACTION",
+      "recommended_action": "G3-B/G3-G 默认排除；用户完成 CONFIDENTIALITY_REVIEW_REQUIRED",
+      "requirement_id": "REQ-COMP-004",
+      "risk_id": "RISK-COMP-004",
+      "risk_level": "BLOCKER"
+    },
+    {
+      "dependency": "NONE",
+      "owner_checkpoint": "G3-G",
+      "recommended_action": "G3-G 执行 secrets/privacy scan；仅纳入脱敏日志",
+      "requirement_id": "REQ-COMP-005",
+      "risk_id": "RISK-COMP-005",
+      "risk_level": "HIGH"
+    },
+    {
+      "dependency": "USER_ACTION",
+      "owner_checkpoint": "USER_ACTION",
+      "recommended_action": "用户提供团队/平台/公开策略与人工干预披露",
+      "requirement_id": "REQ-COMP-006",
+      "risk_id": "RISK-COMP-006",
+      "risk_level": "HIGH"
+    }
+  ],
+  "schema_version": "g3-a-roadmap-v1",
+  "user_actions": [
+    {
+      "action": "Confirm whether the controlled competition DOCX may be included in the submission; public release remains excluded by default.",
+      "id": "UA-001",
+      "reason": "CONFIDENTIALITY_REVIEW_REQUIRED"
+    },
+    {
+      "action": "Choose the project license and confirm team/copyright ownership.",
+      "id": "UA-002",
+      "reason": "LICENSE_REVIEW_REQUIRED"
+    },
+    {
+      "action": "Confirm that official CANN/HCOMM/HCCL source and binaries remain excluded, or provide redistribution authorization.",
+      "id": "UA-003",
+      "reason": "REDISTRIBUTION_REVIEW_REQUIRED"
+    },
+    {
+      "action": "Provide any lawful original Prompt/Agent run records and disclose human intervention; missing history must not be reconstructed.",
+      "id": "UA-004",
+      "reason": "HISTORICAL_RECORD_UNAVAILABLE"
+    },
+    {
+      "action": "Confirm registration-platform archive format, size limits, required team fields, and final submission inventory.",
+      "id": "UA-005",
+      "reason": "SUBMISSION_PLATFORM_CONFIRMATION"
+    },
+    {
+      "action": "Decide whether a public release will be made and which evidence/third-party assets may be public.",
+      "id": "UA-006",
+      "reason": "PUBLIC_RELEASE_DECISION"
+    },
+    {
+      "action": "Confirm the competition interpretation of the <=1e-6 threshold for FP16/BF16 final quantized outputs.",
+      "id": "UA-007",
+      "reason": "ACCEPTANCE_INTERPRETATION_REQUIRED"
+    }
+  ]
+}

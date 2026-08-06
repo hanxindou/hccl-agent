@@ -1,0 +1,74 @@
+{
+  "focused_tests": {
+    "command": "python -m unittest discover -s tests/submission_audit -p test_g3_a_audit.py -v",
+    "failed": 0,
+    "passed": 20,
+    "status": "PASS"
+  },
+  "markdown_json_consistency": "PASS",
+  "native_plugin_static_audit": {
+    "cpu_sim_ctest_passed": 11,
+    "status": "PASS"
+  },
+  "old_evidence_sha256": {
+    "details": [
+      {
+        "entry_count": 3,
+        "path": "experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z",
+        "sha256sums_sha256": "42e12f11293419ee2866709068a249452529dedec1c34117c827608a48f804d4",
+        "verified": true
+      },
+      {
+        "entry_count": 4,
+        "path": "experiments/direct_api/evidence/g2_f_1_20260730T203000Z",
+        "sha256sums_sha256": "08a63a712a9bd34518b86b5c9e905bf6728cf1c067c501fffbc3cb33a65719cc",
+        "verified": true
+      },
+      {
+        "entry_count": 4,
+        "path": "experiments/direct_api/evidence/g2_f_2_20260730T210000Z",
+        "sha256sums_sha256": "f01054cdf440d7d904bf246a245df704a87f0465dc26161b7862cd4f28bdf361",
+        "verified": true
+      },
+      {
+        "entry_count": 8,
+        "path": "experiments/direct_api/evidence/g2_f_3_20260802T000000Z",
+        "sha256sums_sha256": "e4c37a4f579d3a2bb3a3e6a2762c652628d537c7050d11478d8ee5a2e95c7052",
+        "verified": true
+      },
+      {
+        "entry_count": 10,
+        "path": "experiments/direct_api/evidence/g2_f_4_20260802T010000Z",
+        "sha256sums_sha256": "345ddf6dcfaf41827864807c23659d49179fcf4e80c70d90d01d2237d6b3697d",
+        "verified": true
+      },
+      {
+        "entry_count": 13,
+        "path": "experiments/simulator/evidence/g2_f_5_simulator_20260804T010000Z",
+        "sha256sums_sha256": "b8c5d9388b30fc9095df4cc3bb87ae8f2228db739936d97f1909a87034cb124d",
+        "verified": true
+      },
+      {
+        "entry_count": 21,
+        "path": "experiments/simulator/evidence/g2_f_6_simulator_20260804T020000Z",
+        "sha256sums_sha256": "c8f75ad2b945fc3caebbe62e9423ff2e21826995de5cfc03c0703b2e90e47385",
+        "verified": true
+      },
+      {
+        "entry_count": 19,
+        "path": "experiments/final_audit/evidence/g2_f_7_20260805T010000Z",
+        "sha256sums_sha256": "7e904f7e2944e0b90fc5dde27065e8353a283aa9f623d9d7a6342d716cd2927f",
+        "verified": true
+      }
+    ],
+    "status": "PASS",
+    "verified_directories": 8
+  },
+  "schema_version": "g3-a-regression-v1",
+  "truthfulness_guards": {
+    "forbidden_real_device_pass_label_absent": true,
+    "direct_hccl_api_call": false,
+    "measured_on_real_npu": false,
+    "real_device_api_executed": false
+  }
+}

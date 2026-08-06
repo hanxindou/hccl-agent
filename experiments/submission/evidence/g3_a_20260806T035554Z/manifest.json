@@ -1,0 +1,65 @@
+{
+  "audit_type": "COMPETITION_DELIVERY_GAP_AUDIT",
+  "baseline_commit": "38a06e0af6fc53f5d4a0b87670c3964cfe3ca719",
+  "checkpoint": "G3-A",
+  "counts": {
+    "blocker_count": 15,
+    "claim_count": 14,
+    "deliverable_count": 33,
+    "evidence_level_counts": {
+      "E0_NONE": 16,
+      "E1_DOCUMENTED": 9,
+      "E2_STATIC_VERIFIED": 13,
+      "E3_HOST_EXECUTED": 18,
+      "E5_SIMULATOR_VALIDATED": 30
+    },
+    "high_count": 36,
+    "missing_artifact_count": 8,
+    "owner_checkpoint_distribution": {
+      "G3-B": 17,
+      "G3-C": 15,
+      "G3-D": 8,
+      "G3-E": 2,
+      "G3-F": 3,
+      "G3-G": 3,
+      "NO_ACTION": 2,
+      "REAL_DEVICE_FUTURE": 5,
+      "USER_ACTION": 4
+    },
+    "requirement_count": 86,
+    "risk_count": 59,
+    "risk_counts": {
+      "BLOCKER": 15,
+      "HIGH": 36,
+      "INFO": 2,
+      "MEDIUM": 6
+    },
+    "status_counts": {
+      "HARDWARE_BLOCKED": 4,
+      "MISSING": 14,
+      "NOT_APPLICABLE": 2,
+      "PARTIALLY_SATISFIED": 36,
+      "SATISFIED": 27,
+      "UNVERIFIED": 3
+    }
+  },
+  "generated_artifacts": [
+    "docs/submission/competition_requirement_matrix.md",
+    "docs/submission/deliverable_inventory.md",
+    "docs/submission/claim_boundary_matrix.md",
+    "docs/submission/g3_a_gap_report.md",
+    "docs/submission/g3_priority_roadmap.md",
+    "docs/submission/requirement_matrix.json",
+    "docs/submission/deliverable_inventory.json",
+    "docs/submission/claim_boundary_matrix.json",
+    "docs/submission/risk_register.json",
+    "docs/submission/source_inventory.json",
+    "docs/submission/roadmap_assignment.json"
+  ],
+  "project_commit": "38a06e0af6fc53f5d4a0b87670c3964cfe3ca719",
+  "schema_version": "g3-a-evidence-v1",
+  "source_confidentiality": "INTERNAL_REFERENCE",
+  "source_documents": [
+    "docs/2026年中国研究生人工智能大赛--华为赛题.docx"
+  ]
+}

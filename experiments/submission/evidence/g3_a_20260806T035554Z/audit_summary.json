@@ -1,0 +1,280 @@
+{
+  "audit_type": "COMPETITION_DELIVERY_GAP_AUDIT",
+  "baseline_commit": "38a06e0af6fc53f5d4a0b87670c3964cfe3ca719",
+  "checkpoint": "G3-A",
+  "checkpoint_status": "COMPLETED",
+  "counts": {
+    "blocker_count": 15,
+    "claim_count": 14,
+    "deliverable_count": 33,
+    "evidence_level_counts": {
+      "E0_NONE": 16,
+      "E1_DOCUMENTED": 9,
+      "E2_STATIC_VERIFIED": 13,
+      "E3_HOST_EXECUTED": 18,
+      "E5_SIMULATOR_VALIDATED": 30
+    },
+    "high_count": 36,
+    "missing_artifact_count": 8,
+    "owner_checkpoint_distribution": {
+      "G3-B": 17,
+      "G3-C": 15,
+      "G3-D": 8,
+      "G3-E": 2,
+      "G3-F": 3,
+      "G3-G": 3,
+      "NO_ACTION": 2,
+      "REAL_DEVICE_FUTURE": 5,
+      "USER_ACTION": 4
+    },
+    "requirement_count": 86,
+    "risk_count": 59,
+    "risk_counts": {
+      "BLOCKER": 15,
+      "HIGH": 36,
+      "INFO": 2,
+      "MEDIUM": 6
+    },
+    "status_counts": {
+      "HARDWARE_BLOCKED": 4,
+      "MISSING": 14,
+      "NOT_APPLICABLE": 2,
+      "PARTIALLY_SATISFIED": 36,
+      "SATISFIED": 27,
+      "UNVERIFIED": 3
+    }
+  },
+  "evidence_sha256": "See EVIDENCE_SHA256 for SHA256(SHA256SUMS)",
+  "excluded_paths": [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "official HCOMM/HCCL/CANN contents",
+    "full Git history",
+    "G2-F-5/G2-F-6 rerun",
+    "real-device runtime paths"
+  ],
+  "focused_tests": {
+    "command": "python -m unittest discover -s tests/submission_audit -p test_g3_a_audit.py -v",
+    "failed": 0,
+    "passed": 20,
+    "status": "PASS"
+  },
+  "g2_f_baseline_status": "FROZEN",
+  "g3_delivery_readiness": "PARTIAL",
+  "generated_documents": [
+    "docs/submission/competition_requirement_matrix.md",
+    "docs/submission/deliverable_inventory.md",
+    "docs/submission/claim_boundary_matrix.md",
+    "docs/submission/g3_a_gap_report.md",
+    "docs/submission/g3_priority_roadmap.md",
+    "docs/submission/requirement_matrix.json",
+    "docs/submission/deliverable_inventory.json",
+    "docs/submission/claim_boundary_matrix.json",
+    "docs/submission/risk_register.json",
+    "docs/submission/source_inventory.json",
+    "docs/submission/roadmap_assignment.json"
+  ],
+  "known_limitations": [
+    "The competition DOCX has no usable rendered-page-break metadata; source sections are authoritative and source_page records this limitation.",
+    "LibreOffice/soffice was unavailable, so the DOCX was structurally inspected rather than visually rendered.",
+    "No G2-F-5/G2-F-6 large experiment, HCCL-VM suite, MPI, msprof, ACL/HCCL runtime, communicator, device buffer, collective, or real device step was executed.",
+    "The final G3-A commit cannot be self-referential inside its own evidence; project_commit is the audited main baseline and the enclosing Git commit is reported after commit."
+  ],
+  "native_static_audit": "native_plugin_audit.json",
+  "official_repositories": {
+    "hccl": {
+      "branch": "competition/campus-2026",
+      "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "tracked_worktree_clean": true
+    },
+    "hcomm": {
+      "branch": "competition/campus-2026",
+      "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "tracked_worktree_clean": true
+    }
+  },
+  "old_evidence_modified": false,
+  "old_evidence_validation": [
+    {
+      "entry_count": 3,
+      "path": "experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z",
+      "sha256sums_sha256": "42e12f11293419ee2866709068a249452529dedec1c34117c827608a48f804d4",
+      "verified": true
+    },
+    {
+      "entry_count": 4,
+      "path": "experiments/direct_api/evidence/g2_f_1_20260730T203000Z",
+      "sha256sums_sha256": "08a63a712a9bd34518b86b5c9e905bf6728cf1c067c501fffbc3cb33a65719cc",
+      "verified": true
+    },
+    {
+      "entry_count": 4,
+      "path": "experiments/direct_api/evidence/g2_f_2_20260730T210000Z",
+      "sha256sums_sha256": "f01054cdf440d7d904bf246a245df704a87f0465dc26161b7862cd4f28bdf361",
+      "verified": true
+    },
+    {
+      "entry_count": 8,
+      "path": "experiments/direct_api/evidence/g2_f_3_20260802T000000Z",
+      "sha256sums_sha256": "e4c37a4f579d3a2bb3a3e6a2762c652628d537c7050d11478d8ee5a2e95c7052",
+      "verified": true
+    },
+    {
+      "entry_count": 10,
+      "path": "experiments/direct_api/evidence/g2_f_4_20260802T010000Z",
+      "sha256sums_sha256": "345ddf6dcfaf41827864807c23659d49179fcf4e80c70d90d01d2237d6b3697d",
+      "verified": true
+    },
+    {
+      "entry_count": 13,
+      "path": "experiments/simulator/evidence/g2_f_5_simulator_20260804T010000Z",
+      "sha256sums_sha256": "b8c5d9388b30fc9095df4cc3bb87ae8f2228db739936d97f1909a87034cb124d",
+      "verified": true
+    },
+    {
+      "entry_count": 21,
+      "path": "experiments/simulator/evidence/g2_f_6_simulator_20260804T020000Z",
+      "sha256sums_sha256": "c8f75ad2b945fc3caebbe62e9423ff2e21826995de5cfc03c0703b2e90e47385",
+      "verified": true
+    },
+    {
+      "entry_count": 19,
+      "path": "experiments/final_audit/evidence/g2_f_7_20260805T010000Z",
+      "sha256sums_sha256": "7e904f7e2944e0b90fc5dde27065e8353a283aa9f623d9d7a6342d716cd2927f",
+      "verified": true
+    }
+  ],
+  "project_commit": "38a06e0af6fc53f5d4a0b87670c3964cfe3ca719",
+  "project_commit_semantics": "audited main baseline before the enclosing G3-A audit commit",
+  "real_device_acceptance": "HARDWARE_BLOCKED",
+  "scanned_paths": [
+    "hcccl",
+    "agent",
+    "skills",
+    "prompts",
+    "simulator",
+    "config",
+    "tests",
+    "tools",
+    "scripts",
+    "docs",
+    "experiments/final_audit/evidence",
+    "experiments/direct_api/evidence",
+    "experiments/simulator/evidence",
+    "experiments/hccl_vm/evidence"
+  ],
+  "schema_version": "g3-a-audit-summary-v1",
+  "source_confidentiality": {
+    "docs/2026年中国研究生人工智能大赛--华为赛题.docx": "INTERNAL_REFERENCE"
+  },
+  "source_documents": [
+    "docs/2026年中国研究生人工智能大赛--华为赛题.docx"
+  ],
+  "specialized_conclusions": {
+    "agent_reproducibility": {
+      "commit_mapping": "MISSING",
+      "generation_trace": "MISSING",
+      "historical_records": "HISTORICAL_RECORD_UNAVAILABLE",
+      "independent_entry": "main.py exists; clean-environment reproduction is not verified",
+      "next_action": "G3-D must create a truthful new end-to-end trace and disclose unavailable history/human intervention",
+      "prompt": "one five-section template exists without explicit version/schema",
+      "run_logs": "local ignored records exist but are not tracked authority",
+      "skills": "source and tests present",
+      "status": "PARTIALLY_SATISFIED"
+    },
+    "cpp_plugin_compliance": {
+      "agent_generation_trace": "HISTORICAL_RECORD_UNAVAILABLE",
+      "cmake": "hcccl/CMakeLists.txt",
+      "core_logic": [
+        "hcccl/src/hccl_comm.c",
+        "hcccl/src/hccl_algorithms.c"
+      ],
+      "direct_artifact": "libhccl_direct_adapter.a is STATIC_COMPILE_ONLY; hccl_direct_link_audit is an ELF inspection executable and must not be distributed as the plugin",
+      "final_so": "libhccl_plugin.so is the reproducible current shared object, but it is CPU_SIM and not an official direct HCCL plugin",
+      "headers": [
+        "hcccl/include/hccl_comm.h",
+        "hcccl/include/hccl_algorithms.h",
+        "hcccl/direct/include/hccl_direct_adapter.h"
+      ],
+      "next_action": "G3-B must define the official plugin ABI/wrapper, final .so, export list, dependency policy, and evaluator build path",
+      "simulator_direct_distinction": "CPU_SIM shared library, direct compile/link/lifecycle readiness, and simulator validation are separate tracks",
+      "status": "PARTIALLY_SATISFIED"
+    },
+    "package_readiness": {
+      "AGENT_READY": "PARTIALLY_SATISFIED",
+      "BUILD_READY": "PARTIALLY_SATISFIED",
+      "DEMO_READY": "MISSING",
+      "DOCUMENT_READY": "PARTIALLY_SATISFIED",
+      "RELEASE_READY": "MISSING",
+      "SIMULATOR_READY": "PARTIALLY_SATISFIED",
+      "SOURCE_READY": "PARTIALLY_SATISFIED",
+      "TEST_READY": "PARTIALLY_SATISFIED"
+    },
+    "performance": {
+      "PERFORMANCE_TARGET_ACHIEVEMENT": "PARTIALLY_SATISFIED",
+      "REAL_DEVICE_PERFORMANCE": "HARDWARE_BLOCKED",
+      "SIMULATOR_EVIDENCE_COMPLETENESS": "SATISFIED",
+      "basis": "G2-F-6 covers latency/bandwidth/p50/p95/comparison/scale/sensitivity/bottleneck/profiling/reliability; 90% training speedup, real BERT/LLaMA throughput, msprof, and NPU utilization are not established"
+    },
+    "simulator_deliverability": {
+      "config": "present with parameter provenance and sensitivity evidence",
+      "correctness": "SATISFIED on SIMULATOR_ACCEPTANCE",
+      "deterministic_replay": "validated in frozen evidence",
+      "limitations": "no real-device calibration; old simulator guide is stale",
+      "logs": "frozen raw and summary evidence with SHA256 exists",
+      "next_action": "G3-B adds quick/full reproduce; G3-C updates the simulator manual",
+      "package_readiness": "PARTIAL",
+      "performance": "SATISFIED as SIMULATED_ONLY evidence",
+      "reliability": "SATISFIED as SIMULATED_ONLY evidence",
+      "status": "PARTIALLY_SATISFIED",
+      "workflow": "G2-F-5/G2-F-6 runners exist but are not unified as a submission entry"
+    }
+  },
+  "truthfulness": {
+    "direct_hccl_api_call": false,
+    "measured_on_real_npu": false,
+    "old_evidence_modified": false,
+    "real_ascend_npu_validated": false,
+    "real_device_api_executed": false,
+    "real_device_performance": "HARDWARE_BLOCKED"
+  },
+  "user_actions": [
+    {
+      "action": "Confirm whether the controlled competition DOCX may be included in the submission; public release remains excluded by default.",
+      "id": "UA-001",
+      "reason": "CONFIDENTIALITY_REVIEW_REQUIRED"
+    },
+    {
+      "action": "Choose the project license and confirm team/copyright ownership.",
+      "id": "UA-002",
+      "reason": "LICENSE_REVIEW_REQUIRED"
+    },
+    {
+      "action": "Confirm that official CANN/HCOMM/HCCL source and binaries remain excluded, or provide redistribution authorization.",
+      "id": "UA-003",
+      "reason": "REDISTRIBUTION_REVIEW_REQUIRED"
+    },
+    {
+      "action": "Provide any lawful original Prompt/Agent run records and disclose human intervention; missing history must not be reconstructed.",
+      "id": "UA-004",
+      "reason": "HISTORICAL_RECORD_UNAVAILABLE"
+    },
+    {
+      "action": "Confirm registration-platform archive format, size limits, required team fields, and final submission inventory.",
+      "id": "UA-005",
+      "reason": "SUBMISSION_PLATFORM_CONFIRMATION"
+    },
+    {
+      "action": "Decide whether a public release will be made and which evidence/third-party assets may be public.",
+      "id": "UA-006",
+      "reason": "PUBLIC_RELEASE_DECISION"
+    },
+    {
+      "action": "Confirm the competition interpretation of the <=1e-6 threshold for FP16/BF16 final quantized outputs.",
+      "id": "UA-007",
+      "reason": "ACCEPTANCE_INTERPRETATION_REQUIRED"
+    }
+  ]
+}

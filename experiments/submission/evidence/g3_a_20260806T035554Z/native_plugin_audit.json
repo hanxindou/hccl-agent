@@ -1,0 +1,61 @@
+{
+  "audit_scope": "CPU_SIM build/CTest/ELF metadata plus read-only HCOMM/HCCL Git state",
+  "cpu_sim": {
+    "artifact": "/tmp/hccl-g3a-native-audit/libhccl_plugin.so",
+    "ctest_failed": 0,
+    "ctest_passed": 11,
+    "exported_symbols": [
+      "butterfly_allgather",
+      "butterfly_allreduce",
+      "fattree_allreduce",
+      "hcclAllGather",
+      "hcclAllReduce",
+      "hcclBroadcast",
+      "hcclCommDestroy",
+      "hcclCommInit",
+      "hcclFreeTopology",
+      "hcclGetTopology",
+      "hcclPluginGetAlgorithms",
+      "hcclPluginGetVersion",
+      "hcclReduceScatter",
+      "hcclSetRank",
+      "mesh_allreduce",
+      "mesh_reducescatter",
+      "nhr_allreduce",
+      "ring_allgather",
+      "ring_allreduce"
+    ],
+    "forbidden_official_dependencies": [],
+    "missing_required_exports": [],
+    "needed_libraries": [
+      "libc.so.6"
+    ],
+    "role": "CPU_SIM_NOT_OFFICIAL_HCCL_DIRECT_PLUGIN",
+    "sha256": "6700e6c595d1bfbb89525d8afaa3510177c378962bf1006f71d8fe811b55f8e3"
+  },
+  "direct_adapter": {
+    "artifact_from_frozen_evidence": "/tmp/hccl-g2f-build/libhccl_direct_adapter.a",
+    "final_plugin_so": false,
+    "role": "STATIC_COMPILE_LINK_LIFECYCLE_READINESS_ONLY",
+    "sha256_from_frozen_evidence": "5eebfb97d9a26ffb10c73f58e10c2654a4823dd89afb8b4f2727606309f14c72"
+  },
+  "direct_hccl_api_call": false,
+  "measured_on_real_npu": false,
+  "official_repositories": {
+    "hccl": {
+      "branch": "competition/campus-2026",
+      "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "tracked_worktree_clean": true
+    },
+    "hcomm": {
+      "branch": "competition/campus-2026",
+      "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "tracked_worktree_clean": true
+    }
+  },
+  "real_ascend_npu_validated": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-a-native-static-audit-v1",
+  "status": "PASS"
+}

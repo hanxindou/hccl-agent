@@ -1,0 +1,92 @@
+{
+  "excluded_paths": [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "official HCOMM/HCCL/CANN contents",
+    "full Git history",
+    "G2-F-5/G2-F-6 rerun",
+    "real-device runtime paths"
+  ],
+  "ignored_local_deliverables": [
+    {
+      "path": "logs/runs.jsonl",
+      "submission_status": "NOT_TRACKED_NOT_AUTHORITY"
+    },
+    {
+      "path": "logs/prompt_calls.jsonl",
+      "submission_status": "NOT_TRACKED_NOT_AUTHORITY"
+    },
+    {
+      "path": "logs/experience.jsonl",
+      "submission_status": "NOT_TRACKED_NOT_AUTHORITY"
+    },
+    {
+      "path": "logs/knowledge_base.jsonl",
+      "submission_status": "NOT_TRACKED_NOT_AUTHORITY"
+    },
+    {
+      "path": "logs/summary.json",
+      "submission_status": "NOT_TRACKED_NOT_AUTHORITY"
+    }
+  ],
+  "official_or_third_party_boundaries": [
+    "/home/workspace/hcomm",
+    "/home/workspace/hccl",
+    "/home/workspace/Ascend/cann-9.1.0"
+  ],
+  "priority_evidence": [
+    "experiments/final_audit/evidence/g2_f_7_20260805T010000Z",
+    "experiments/simulator/evidence/g2_f_5_simulator_20260804T010000Z",
+    "experiments/simulator/evidence/g2_f_6_simulator_20260804T020000Z",
+    "experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z",
+    "experiments/direct_api/evidence/g2_f_1_20260730T203000Z",
+    "experiments/direct_api/evidence/g2_f_2_20260730T210000Z",
+    "experiments/direct_api/evidence/g2_f_3_20260802T000000Z",
+    "experiments/direct_api/evidence/g2_f_4_20260802T010000Z"
+  ],
+  "project_owned_boundaries": [
+    "hcccl",
+    "agent",
+    "skills",
+    "simulator",
+    "plugin",
+    "tests"
+  ],
+  "scanned_paths": [
+    "hcccl",
+    "agent",
+    "skills",
+    "prompts",
+    "simulator",
+    "config",
+    "tests",
+    "tools",
+    "scripts",
+    "docs",
+    "experiments/final_audit/evidence",
+    "experiments/direct_api/evidence",
+    "experiments/simulator/evidence",
+    "experiments/hccl_vm/evidence"
+  ],
+  "schema_version": "g3-a-source-inventory-v1",
+  "source_documents": [
+    {
+      "category": "INTERNAL_REFERENCE",
+      "confidentiality": "INTERNAL_REFERENCE",
+      "extraction": "OOXML document-order text; no complete source text retained",
+      "page_reference_policy": "1 (OOXML logical stream; rendered page metadata unavailable)",
+      "path": "docs/2026年中国研究生人工智能大赛--华为赛题.docx",
+      "render_status": "UNAVAILABLE_SOFT_OFFICE_NOT_INSTALLED",
+      "sha256": "d972df8730271795e779510c02077037bf6f812f30181875823586fc8f0dd31f"
+    }
+  ],
+  "tracked_file_count": 500,
+  "untracked_log_record_counts": {
+    "logs/experience.jsonl": 355,
+    "logs/knowledge_base.jsonl": 355,
+    "logs/prompt_calls.jsonl": 355,
+    "logs/runs.jsonl": 355
+  }
+}
