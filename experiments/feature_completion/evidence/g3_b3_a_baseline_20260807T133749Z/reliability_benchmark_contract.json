@@ -1,0 +1,22 @@
+{
+  "schema_version": "g3-b3-reliability-benchmark-v1",
+  "frozen": true,
+  "seed": 20260807,
+  "clock": "DETERMINISTIC_LOGICAL_TICKS",
+  "wall_clock_sleep_allowed": false,
+  "faults": "TEST_ONLY_HOST_SIMULATED",
+  "scenarios": [
+    {"scenario_id":"B3-R01","event":"CLEAN_TRANSFER","fault_attempts":[],"expected":"COMPLETE_WITHOUT_RETRY"},
+    {"scenario_id":"B3-R02","event":"SINGLE_CORRUPTION","fault_attempts":[0],"expected":"RETRY_AND_COMPLETE"},
+    {"scenario_id":"B3-R03","event":"REPEATED_CORRUPTION","fault_attempts":[0,1,2,3],"expected":"RETRY_EXHAUSTED"},
+    {"scenario_id":"B3-R04","event":"RETRY_EXHAUSTION","fault_attempts":[0,1,2,3],"expected":"TERMINAL_RETRY_EXHAUSTED"},
+    {"scenario_id":"B3-R05","event":"LOGICAL_TIMEOUT","completion_tick":6,"deadline_tick":5,"expected":"RETRYABLE_LOGICAL_TIMEOUT"},
+    {"scenario_id":"B3-R06","event":"INVALID_INPUT","fault_attempts":[],"expected":"NON_RETRYABLE"},
+    {"scenario_id":"B3-R07","event":"NO_ALTERNATE_PATH","fault_attempts":[],"expected":"TERMINAL_WITHOUT_BLIND_RETRY"},
+    {"scenario_id":"B3-R08","event":"CREDIT_EXHAUSTION","credit_window":2,"produced_chunks":3,"expected":"PRODUCER_BLOCKED"},
+    {"scenario_id":"B3-R09","event":"BACKPRESSURE_RECOVERY","credit_window":2,"consumer_release_tick":3,"expected":"EVENTUALLY_DRAINS"},
+    {"scenario_id":"B3-R10","event":"DUPLICATE_SEQUENCE","sequence":[0,1,1,2],"expected":"SEQUENCE_REJECTED"},
+    {"scenario_id":"B3-R11","event":"MISSING_CHUNK","sequence":[0,2],"expected":"SEQUENCE_REJECTED"},
+    {"scenario_id":"B3-R12","event":"REORDERED_CHUNK","sequence":[0,2,1],"expected":"SEQUENCE_REJECTED"}
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "benchmark_sha256": "db6519370256f3c73ca96177e599f3dabc7dcbc1c0319b5ef2b0cc53236b2bfe",
+  "final_evidence": {
+    "files_checked": 25,
+    "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+    "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+    "valid": true
+  },
+  "freeze_status": "FROZEN",
+  "g3_b2_final_commit": "cc632a145b33a82c40244f9158ca0876d65ec5a0",
+  "g3_b2_final_source_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+  "historical_performance": {
+    "losses": 0,
+    "ties": 0,
+    "truth_label": "SIMULATED_ONLY",
+    "weighted_simulated_improvement_percent": 45.59283008,
+    "wins": 18
+  },
+  "old_evidence_modified": false,
+  "parameter_sha256": "df4dd8fd39db45c923c14ada30c1531c666e49d384be806267aeaa228285ebdf",
+  "schema_version": "g3-b3-g3-b2-integrity-v1",
+  "valid": true
+}

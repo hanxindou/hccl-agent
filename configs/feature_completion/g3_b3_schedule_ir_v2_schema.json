@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "g3-b3-schedule-ir-v2",
+  "title": "G3-B3 Collective Schedule IR v2",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "schedule_id",
+    "primitive",
+    "algorithm",
+    "rank_size",
+    "message_size_bytes",
+    "dtype",
+    "reduce_op",
+    "topology_hash",
+    "hardware_profile_hash",
+    "chunk_size_bytes",
+    "chunk_count",
+    "phases",
+    "dependencies",
+    "memory_plan",
+    "failure_policy",
+    "estimated_metrics",
+    "payload_transform",
+    "integrity_policy",
+    "transport_policy",
+    "flow_control_policy",
+    "schedule_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "g3-b3-schedule-ir-v2"},
+    "schedule_id": {"type": "string", "minLength": 1},
+    "primitive": {"enum": ["AllReduce", "AllGather", "ReduceScatter"]},
+    "algorithm": {"type": "string", "minLength": 1},
+    "rank_size": {"type": "integer", "minimum": 2, "maximum": 1024},
+    "message_size_bytes": {"type": "integer", "minimum": 1},
+    "dtype": {"enum": ["FP32", "FP16", "BF16"]},
+    "reduce_op": {"type": ["string", "null"]},
+    "topology_hash": {"type": "string", "minLength": 1},
+    "hardware_profile_hash": {"type": "string", "minLength": 1},
+    "chunk_size_bytes": {"type": "integer", "minimum": 1},
+    "chunk_count": {"type": "integer", "minimum": 1},
+    "phases": {"type": "array", "minItems": 1},
+    "dependencies": {"type": "array"},
+    "memory_plan": {"type": "object"},
+    "failure_policy": {"type": "object"},
+    "estimated_metrics": {"type": "object"},
+    "payload_transform": {"$ref": "#/$defs/payload_transform"},
+    "integrity_policy": {"$ref": "#/$defs/integrity_policy"},
+    "transport_policy": {"$ref": "#/$defs/transport_policy"},
+    "flow_control_policy": {"$ref": "#/$defs/flow_control_policy"},
+    "schedule_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "payload_transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "codec", "logical_bytes", "wire_bytes", "value_bytes", "index_bytes", "metadata_bytes", "compression_ratio", "sparsity_ratio", "eligibility", "fallback_reason"],
+      "properties": {
+        "mode": {"enum": ["DENSE", "SPARSE_INDEX_VALUE"]},
+        "codec": {"enum": ["NONE", "SPARSE_INDEX_VALUE"]},
+        "logical_bytes": {"type": "integer", "minimum": 0},
+        "wire_bytes": {"type": "integer", "minimum": 0},
+        "value_bytes": {"type": "integer", "minimum": 0},
+        "index_bytes": {"type": "integer", "minimum": 0},
+        "metadata_bytes": {"type": "integer", "minimum": 0},
+        "compression_ratio": {"type": "number", "exclusiveMinimum": 0},
+        "sparsity_ratio": {"type": "number", "minimum": 0, "maximum": 1},
+        "eligibility": {"type": "boolean"},
+        "fallback_reason": {"type": ["string", "null"]}
+      }
+    },
+    "integrity_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checksum_type", "sequence_enabled", "chunk_id_enabled", "attempt_tracking", "verify_before_accept"],
+      "properties": {
+        "checksum_type": {"enum": ["NONE", "CRC32", "CRC32_PLUS_PARITY"]},
+        "sequence_enabled": {"type": "boolean"},
+        "chunk_id_enabled": {"type": "boolean"},
+        "attempt_tracking": {"type": "boolean"},
+        "verify_before_accept": {"type": "boolean"}
+      }
+    },
+    "transport_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["timeout_enabled", "logical_timeout_ticks", "max_retries", "retry_backoff_policy", "retryable_error_classes", "terminal_error_classes"],
+      "properties": {
+        "timeout_enabled": {"type": "boolean"},
+        "logical_timeout_ticks": {"type": "integer", "minimum": 0},
+        "max_retries": {"type": "integer", "minimum": 0},
+        "retry_backoff_policy": {"enum": ["NONE", "FIXED_LOGICAL_TICKS", "EXPONENTIAL_LOGICAL_TICKS"]},
+        "retryable_error_classes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "terminal_error_classes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "flow_control_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "credit_window", "max_inflight_chunks", "high_watermark", "low_watermark"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "credit_window": {"type": "integer", "minimum": 1},
+        "max_inflight_chunks": {"type": "integer", "minimum": 1},
+        "high_watermark": {"type": "integer", "minimum": 0},
+        "low_watermark": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": "g3-b3-v1-v2-compatibility-audit-v1",
+  "v1_schedule_hash": "1ba9a03b93b883db5da888de2b2837e6687d12ca0f84a8ebfa5c60e220378c57",
+  "v1_schema_version": "g3-b2-schedule-ir-v1",
+  "v1_unchanged": true,
+  "v1_validation": [
+    {
+      "invariant": "schema_version",
+      "passed": true
+    },
+    {
+      "invariant": "primitive_supported",
+      "passed": true
+    },
+    {
+      "invariant": "algorithm_supported",
+      "passed": true
+    },
+    {
+      "invariant": "rank_size",
+      "passed": true
+    },
+    {
+      "invariant": "message_size",
+      "passed": true
+    },
+    {
+      "invariant": "chunk_count",
+      "passed": true
+    },
+    {
+      "invariant": "chunk_coverage",
+      "passed": true
+    },
+    {
+      "invariant": "phase_ids_unique",
+      "passed": true
+    },
+    {
+      "invariant": "transfer_ids_unique",
+      "passed": true
+    },
+    {
+      "invariant": "dependencies_acyclic",
+      "passed": true
+    },
+    {
+      "invariant": "transfer_rank_and_bytes",
+      "passed": true
+    },
+    {
+      "invariant": "phase_transfer_cardinality",
+      "passed": true
+    },
+    {
+      "invariant": "bounded_memory",
+      "passed": true
+    },
+    {
+      "invariant": "schedule_hash",
+      "passed": true
+    }
+  ],
+  "v2_dense_compatibility": true,
+  "v2_schedule_hash": "9768426a0705d832f38e43b73b3a1da454e764bfad661154e85894f0d048139f",
+  "v2_schema_version": "g3-b3-schedule-ir-v2",
+  "v2_validation": [
+    {
+      "invariant": "v2_required_fields",
+      "passed": true
+    },
+    {
+      "invariant": "payload_accounting",
+      "passed": true
+    },
+    {
+      "invariant": "integrity_policy",
+      "passed": true
+    },
+    {
+      "invariant": "transport_policy",
+      "passed": true
+    },
+    {
+      "invariant": "flow_control_policy",
+      "passed": true
+    },
+    {
+      "invariant": "canonical_hash",
+      "passed": true
+    }
+  ]
+}

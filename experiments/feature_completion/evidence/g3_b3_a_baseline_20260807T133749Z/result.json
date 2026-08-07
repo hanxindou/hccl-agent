@@ -1,0 +1,21 @@
+{
+  "agent_proposal_v2": "COMPLETED",
+  "algorithm_implementation_changed": false,
+  "baseline_frozen": true,
+  "checkpoint": "G3-B3-A",
+  "checkpoint_status": "COMPLETED",
+  "claim_contract": "FROZEN",
+  "direct_hccl_api_call": false,
+  "old_evidence_modified": false,
+  "public_abi_changed": false,
+  "real_ascend_npu_validated": false,
+  "real_device_api_executed": false,
+  "reliability_benchmark": "FROZEN",
+  "runtime_api_calls": [],
+  "schedule_ir_v1_historical_compatibility": "PASS",
+  "schedule_ir_v2": "COMPLETED",
+  "schema_version": "g3-b3-a-result-v1",
+  "sparse_benchmark": "FROZEN",
+  "sparse_implemented": false,
+  "sparse_profiles": "FROZEN"
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "g3-b3-claim-contract-v1",
+  "checkpoint": "G3-B3",
+  "frozen": true,
+  "allowed_truth_labels": [
+    "HOST_EXECUTED",
+    "CPU_EXECUTED",
+    "SIMULATED_ONLY",
+    "LOSSLESS_SPARSE_HOST_EXECUTED",
+    "HOST_INTEGRITY_VALIDATED",
+    "HOST_RETRY_VALIDATED",
+    "SIMULATED_BACKPRESSURE",
+    "DIRECT_READINESS_ONLY",
+    "DIRECT_COMPILE_LINK_ONLY",
+    "REAL_DEVICE_NOT_EXECUTED"
+  ],
+  "equivalence_prohibitions": [
+    {"left":"sparse_host_execution","right":"real_sparse_network","equivalent":false},
+    {"left":"wire_bytes_model","right":"physical_wire_measurement","equivalent":false},
+    {"left":"host_crc","right":"hardware_crc","equivalent":false},
+    {"left":"host_retry","right":"HCCL_OR_NIC_retry","equivalent":false},
+    {"left":"backpressure_model","right":"NIC_backpressure","equivalent":false},
+    {"left":"compile_link_direct","right":"runtime_direct","equivalent":false},
+    {"left":"official_API_call_expression","right":"runtime_API_execution","equivalent":false}
+  ],
+  "forbidden_claims": [
+    "REAL_DEVICE_PASS",
+    "REAL_DEVICE_MEASURED",
+    "DIRECT_RUNTIME_EXECUTED",
+    "DIRECT_HCCL_API_EXECUTED",
+    "REAL_SPARSE_SPEEDUP",
+    "REAL_WIRE_COMPRESSION",
+    "REAL_NPU_BANDWIDTH",
+    "MSPROF_EXECUTED",
+    "ZERO_CPU_INTERVENTION_VERIFIED",
+    "UB_HBM_REUSE_VERIFIED",
+    "REAL_FAILOVER_VERIFIED"
+  ],
+  "required_false_flags": {
+    "direct_hccl_api_call": false,
+    "real_device_api_executed": false,
+    "real_ascend_npu_validated": false,
+    "measured_on_real_npu": false,
+    "msprof_executed": false
+  },
+  "required_empty_fields": {"runtime_api_calls": []}
+}
