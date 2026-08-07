@@ -20,9 +20,9 @@ def model_pipeline(schedule: dict[str, Any], mode: str, *, modeled_compute_slot_
     if mode=="NO_OVERLAP":
         fill=0.0; steady=total_communication+modeled_compute_slot_us*chunks; drain=0.0; overlap=0.0
     else:
-        fill=communication_slot+modeled_compute_slot_us
+        fill=communication_slot
         steady=max(communication_slot,modeled_compute_slot_us)*max(0,chunks-1)
-        drain=min(communication_slot,modeled_compute_slot_us)
+        drain=modeled_compute_slot_us
         serial=total_communication+modeled_compute_slot_us*chunks
         overlap=max(0.0,min(1.0,1.0-(fill+steady+drain)/serial)) if serial else 0.0
     critical=fill+steady+drain

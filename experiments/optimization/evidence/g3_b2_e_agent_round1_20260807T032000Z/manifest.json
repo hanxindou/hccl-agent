@@ -1,0 +1,28 @@
+{
+  "adjustment_rounds": 1,
+  "benchmark_contract_sha256": "db6519370256f3c73ca96177e599f3dabc7dcbc1c0319b5ef2b0cc53236b2bfe",
+  "evaluation_sha256": "1fd972c19b18e4051de297904a12fdaead833dcf6b090ab97e2d403d5fd473ed",
+  "initial_evidence_sha256": "d1bdf1f45a18a9559d1b5e298713ca83e6212ca1af50c4cbdd343884d8bd088d",
+  "parameter_freeze_sha256": "df4dd8fd39db45c923c14ada30c1531c666e49d384be806267aeaa228285ebdf",
+  "prompt_registry_sha256": "73262c233c1c5c9aa86d897dff168677a88c6557825bb8aafee83678d48dd412",
+  "proposal_sha256": "ae54ebf5d81db4f91a7332974f8883753579f18d25929585be5c94a58d05a6a5",
+  "reflection_sha256": "999fffa4d0a87f19e19837c34a659f41f6eb7d511201e427e30ad724b569e601",
+  "schema_version": "g3-b2-e-evidence-v1",
+  "seed": 20260804,
+  "stages": [
+    "A0",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "A7"
+  ],
+  "truth_labels": [
+    "AGENT_GENERATED_PROPOSAL",
+    "AGENT_SELECTED_SCHEDULE",
+    "SIMULATED_ONLY",
+    "REAL_DEVICE_NOT_EXECUTED"
+  ]
+}

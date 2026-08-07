@@ -1,0 +1,39 @@
+{
+  "correctness_hard_gate": true,
+  "losses": 13,
+  "multi_objective": {
+    "multi_objective": {
+      "congestion_penalty": "minimize",
+      "correctness_gate": true,
+      "effective_bandwidth": "maximize",
+      "p50_latency": "minimize",
+      "p95_latency": "minimize",
+      "peak_memory": "bounded",
+      "reliability_penalty": "minimize"
+    },
+    "selected": true
+  },
+  "performance_gates": {
+    "all_correctness": true,
+    "default_performance_gate_met": false,
+    "improvement_source": "schedule/selection/routing/chunking/hierarchy/congestion handling; A7 pipeline is reported separately and does not adjust primary collective p50",
+    "logical_1024_gate": false,
+    "logical_1024_max_regression_percent": 4.83580233,
+    "memory_gate": true,
+    "no_path_semantics": "VERIFIED_IN_G3_B2_D",
+    "p95_gate": true,
+    "priority_gate": false,
+    "priority_scenarios_at_least_10_percent": 0,
+    "regression_gate": false,
+    "regressions_over_5_percent": 6,
+    "weighted_geomean_at_least_8_percent": false,
+    "weighted_geomean_improvement_percent": -2.023530007
+  },
+  "run_id": "g3-b2-e-authoritative-optimization",
+  "selected": {
+    "algorithm": "Butterfly",
+    "schedule_hash": "a0d6674340c6f1cf5ea050c9cbea9c8f25739b04f298faa8713fc7e59442f59f"
+  },
+  "ties": 1,
+  "wins": 4
+}

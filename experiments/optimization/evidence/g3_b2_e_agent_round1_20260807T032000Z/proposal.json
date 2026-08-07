@@ -1,0 +1,23 @@
+{
+  "algorithm": "Butterfly",
+  "chunk_size": 1048576,
+  "expected_benefit": "minimum explicit multi-objective analytical score",
+  "expected_risk": "simulator model is not hardware calibrated",
+  "pipeline_depth": 4,
+  "proposal_hash": "a2d1382a327e1b7348354adcfedc8c3ef3c4de5c8cabbc7f39100887255489c7",
+  "proposal_id": "proposal-864b659a09c89582",
+  "required_tests": [
+    "schedule invariants",
+    "semantic correctness",
+    "frozen benchmark",
+    "bounded memory",
+    "reliability/no-path"
+  ],
+  "routing_policy": "Butterfly",
+  "schedule_parameters": {
+    "phase_count": 4,
+    "rank_size": 16,
+    "schedule_hash": "864b659a09c89582b08d30ea22a7f358b7a88640245b405c02cfba8be3d1fddc"
+  },
+  "unsupported_conditions": []
+}

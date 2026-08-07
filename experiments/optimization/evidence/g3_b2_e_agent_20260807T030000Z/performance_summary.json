@@ -1,0 +1,16 @@
+{
+  "all_correctness": true,
+  "default_performance_gate_met": false,
+  "improvement_source": "schedule/selection/routing/chunking/hierarchy/congestion handling; A7 pipeline is reported separately and does not adjust primary collective p50",
+  "logical_1024_gate": false,
+  "logical_1024_max_regression_percent": 4.83580233,
+  "memory_gate": true,
+  "no_path_semantics": "VERIFIED_IN_G3_B2_D",
+  "p95_gate": true,
+  "priority_gate": false,
+  "priority_scenarios_at_least_10_percent": 0,
+  "regression_gate": false,
+  "regressions_over_5_percent": 6,
+  "weighted_geomean_at_least_8_percent": false,
+  "weighted_geomean_improvement_percent": -2.023530007
+}

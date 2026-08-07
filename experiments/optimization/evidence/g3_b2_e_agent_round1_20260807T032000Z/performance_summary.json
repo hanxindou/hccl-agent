@@ -1,0 +1,16 @@
+{
+  "all_correctness": true,
+  "default_performance_gate_met": true,
+  "improvement_source": "schedule/benchmark selection/routing/chunking/hierarchy/congestion handling and explicitly simulator-only A7 exposed critical-path overlap; frozen model constants unchanged",
+  "logical_1024_gate": true,
+  "logical_1024_max_regression_percent": -46.763069129,
+  "memory_gate": true,
+  "no_path_semantics": "VERIFIED_IN_G3_B2_D",
+  "p95_gate": true,
+  "priority_gate": true,
+  "priority_scenarios_at_least_10_percent": 9,
+  "regression_gate": true,
+  "regressions_over_5_percent": 0,
+  "weighted_geomean_at_least_8_percent": true,
+  "weighted_geomean_improvement_percent": 45.59283008
+}

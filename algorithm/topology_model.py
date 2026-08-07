@@ -8,6 +8,11 @@ import json
 from typing import Any
 
 
+_ADJACENCY_CACHE: dict[str, dict[int, list[dict[str, Any]]]] = {}
+_DIRECT_CACHE: dict[tuple[str, int, int], dict[str, Any] | None] = {}
+_ROUTE_CACHE: dict[tuple[str, int, int], dict[str, Any] | None] = {}
+
+
 def topology_hash(topology: dict[str, Any]) -> str:
     return hashlib.sha256(json.dumps(topology, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
@@ -71,23 +76,35 @@ def groups(topology: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def link(topology: dict[str, Any], source: int, destination: int) -> dict[str, Any] | None:
-    return next((row for row in topology["links"] if row["source_rank"] == source and row["destination_rank"] == destination and row["healthy"]), None)
+    key=(topology["topology_hash"],source,destination)
+    if key not in _DIRECT_CACHE:
+        _DIRECT_CACHE[key]=next((row for row in topology["links"] if row["source_rank"] == source and row["destination_rank"] == destination and row["healthy"]),None)
+    return _DIRECT_CACHE[key]
 
 
 def route_link(topology: dict[str, Any], source: int, destination: int) -> dict[str, Any] | None:
+    cache_key=(topology["topology_hash"],source,destination)
+    if cache_key in _ROUTE_CACHE:return _ROUTE_CACHE[cache_key]
     direct = link(topology, source, destination)
     if direct is not None:
-        return {**direct, "route": [source, destination]}
+        result={**direct,"route":[source,destination]};_ROUTE_CACHE[cache_key]=result;return result
+    adjacency=_ADJACENCY_CACHE.get(topology["topology_hash"])
+    if adjacency is None:
+        adjacency={}
+        for row in topology["links"]:
+            if row["healthy"]:adjacency.setdefault(row["source_rank"],[]).append(row)
+        for rows in adjacency.values():rows.sort(key=lambda row:row["destination_rank"])
+        _ADJACENCY_CACHE[topology["topology_hash"]]=adjacency
     queue = [(0.0, source, [source], float("inf"), 0.0, 1.0, 0.0, [])]
     best = {source: 0.0}
     while queue:
         cost, current, path, bandwidth, latency, oversubscription, reliability, types = heapq.heappop(queue)
         if current == destination:
-            return {"source_rank":source,"destination_rank":destination,"link_type":"+".join(types),"effective_bandwidth_gbps":bandwidth,"latency_ms":latency,"oversubscription":oversubscription,"reliability_penalty":reliability,"utilization":0.0,"parent_edge":"multihop","healthy":True,"route":path}
+            result={"source_rank":source,"destination_rank":destination,"link_type":"+".join(types),"effective_bandwidth_gbps":bandwidth,"latency_ms":latency,"oversubscription":oversubscription,"reliability_penalty":reliability,"utilization":0.0,"parent_edge":"multihop","healthy":True,"route":path};_ROUTE_CACHE[cache_key]=result;return result
         if cost > best.get(current, float("inf")):
             continue
-        for row in topology["links"]:
-            if row["source_rank"] != current or not row["healthy"] or row["destination_rank"] in path:
+        for row in adjacency.get(current,[]):
+            if row["destination_rank"] in path:
                 continue
             edge_cost = row["latency_ms"] + 1.0 / row["effective_bandwidth_gbps"]
             next_cost = cost + edge_cost
@@ -95,4 +112,4 @@ def route_link(topology: dict[str, Any], source: int, destination: int) -> dict[
             if next_cost < best.get(neighbor, float("inf")):
                 best[neighbor] = next_cost
                 heapq.heappush(queue,(next_cost,neighbor,path+[neighbor],min(bandwidth,row["effective_bandwidth_gbps"]),latency+row["latency_ms"],max(oversubscription,row["oversubscription"]),reliability+row["reliability_penalty"],types+[row["link_type"]]))
-    return None
+    _ROUTE_CACHE[cache_key]=None;return None
