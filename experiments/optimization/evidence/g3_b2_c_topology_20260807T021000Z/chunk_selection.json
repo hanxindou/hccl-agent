@@ -1,0 +1,170 @@
+[
+  {
+    "decision": {
+      "candidate_scores": [
+        {
+          "chunk_size": 65536,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 12786.1522432
+        },
+        {
+          "chunk_size": 262144,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 11252.3542528
+        },
+        {
+          "chunk_size": 1048576,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 10877.1622912
+        },
+        {
+          "chunk_size": 4194304,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 10816.3944448
+        },
+        {
+          "chunk_size": 16777216,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 10933.3230592
+        }
+      ],
+      "chunk_count": 32,
+      "chunk_size": 4194304,
+      "pipeline_depth": 4,
+      "policy_version": "g3-b2-chunk-policy-v1",
+      "selection_reason": "minimum frozen analytical candidate score"
+    },
+    "topology": "full_mesh_8"
+  },
+  {
+    "decision": {
+      "candidate_scores": [
+        {
+          "chunk_size": 65536,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 29668.3044864
+        },
+        {
+          "chunk_size": 262144,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 23528.7085056
+        },
+        {
+          "chunk_size": 1048576,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 22010.3245824
+        },
+        {
+          "chunk_size": 4194304,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 21697.2888896
+        },
+        {
+          "chunk_size": 16777216,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 21882.7711184
+        }
+      ],
+      "chunk_count": 32,
+      "chunk_size": 4194304,
+      "pipeline_depth": 4,
+      "policy_version": "g3-b2-chunk-policy-v1",
+      "selection_reason": "minimum frozen analytical candidate score"
+    },
+    "topology": "fat_tree_64"
+  },
+  {
+    "decision": {
+      "candidate_scores": [
+        {
+          "chunk_size": 65536,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 44308.72576
+        },
+        {
+          "chunk_size": 262144,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 36251.60704
+        },
+        {
+          "chunk_size": 1048576,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 34263.13216
+        },
+        {
+          "chunk_size": 4194304,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 33869.23264
+        },
+        {
+          "chunk_size": 16777216,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 34184.13456
+        }
+      ],
+      "chunk_count": 32,
+      "chunk_size": 4194304,
+      "pipeline_depth": 4,
+      "policy_version": "g3-b2-chunk-policy-v1",
+      "selection_reason": "minimum frozen analytical candidate score"
+    },
+    "topology": "asymmetric_16"
+  },
+  {
+    "decision": {
+      "candidate_scores": [
+        {
+          "chunk_size": 65536,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 64968.6089728
+        },
+        {
+          "chunk_size": 262144,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 48465.4170112
+        },
+        {
+          "chunk_size": 1048576,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 44372.6491648
+        },
+        {
+          "chunk_size": 4194304,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 43482.0777792
+        },
+        {
+          "chunk_size": 16777216,
+          "eligible": true,
+          "reason": "FINITE_FROZEN_CANDIDATE",
+          "score": 43787.4172368
+        }
+      ],
+      "chunk_count": 32,
+      "chunk_size": 4194304,
+      "pipeline_depth": 4,
+      "policy_version": "g3-b2-chunk-policy-v1",
+      "selection_reason": "minimum frozen analytical candidate score"
+    },
+    "topology": "asymmetric_64"
+  }
+]

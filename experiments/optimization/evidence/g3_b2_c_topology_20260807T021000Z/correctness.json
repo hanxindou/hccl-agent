@@ -1,0 +1,58 @@
+[
+  {
+    "algorithm": "Ring",
+    "correctness_passed": true,
+    "output_hash": "671738a982a57551b7cbb56fa76500313c60e85de4253d1e51af0b779ac5aec2",
+    "primitive": "AllReduce",
+    "schedule_hash": "5388097e06530c71d396ea0a948e87abcadeaf928261c4e6d9ab49977adae9e5",
+    "topology": "ring_16"
+  },
+  {
+    "algorithm": "Butterfly",
+    "correctness_passed": true,
+    "output_hash": "d97aaaf94ed6a0996aadff03981e87e43e367625ab83425bb240837abb2314c9",
+    "primitive": "AllReduce",
+    "schedule_hash": "d4b000bb2ec367409d610a9de50b4d9fda71700d30a788246d305958707f8fba",
+    "topology": "full_mesh_8"
+  },
+  {
+    "algorithm": "Butterfly",
+    "correctness_passed": true,
+    "output_hash": "605937ea9f955b71ed96a158e5d6a076601b044df7e2f141b6ccbae517ba3f6b",
+    "primitive": "AllGather",
+    "schedule_hash": "70cda06ab0dd9372c01701b51ff2ce32adb56ea1e7453be19248ca121c2e7337",
+    "topology": "full_mesh_8"
+  },
+  {
+    "algorithm": "Mesh",
+    "correctness_passed": true,
+    "output_hash": "d97aaaf94ed6a0996aadff03981e87e43e367625ab83425bb240837abb2314c9",
+    "primitive": "AllReduce",
+    "schedule_hash": "c767ee8dd369399e4e3f406139d29f84250de709729baa68f178b1f85f4f7559",
+    "topology": "full_mesh_8"
+  },
+  {
+    "algorithm": "Mesh",
+    "correctness_passed": true,
+    "output_hash": "c6c66e519f90fd957e83b0923250922a1ab708d6f5d60d509f01c83b352cd439",
+    "primitive": "ReduceScatter",
+    "schedule_hash": "0ad990cc6391faa82fe1c460908fbe7f40d1da57014d48c0db70b828cb1a5968",
+    "topology": "fat_tree_64"
+  },
+  {
+    "algorithm": "NHR",
+    "correctness_passed": true,
+    "output_hash": "671738a982a57551b7cbb56fa76500313c60e85de4253d1e51af0b779ac5aec2",
+    "primitive": "AllReduce",
+    "schedule_hash": "0a2a374a64778edf4dcf06b491bc2d4a1be4a7a10adf414a36f62a219e2c0dd2",
+    "topology": "asymmetric_16"
+  },
+  {
+    "algorithm": "Hierarchical",
+    "correctness_passed": true,
+    "output_hash": "f5864d50fa87213d69ad0b8fc60db51173c95565214ff383b13d61b9d9a2a250",
+    "primitive": "AllReduce",
+    "schedule_hash": "68ab81d2eac26c1cc75f0ce7ece680cc6575fdcdff184e03f598f8418e7c707f",
+    "topology": "fat_tree_64"
+  }
+]

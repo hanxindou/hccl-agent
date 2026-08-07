@@ -9,7 +9,12 @@ from typing import Any
 
 SCHEMA_VERSION = "g3-b2-schedule-ir-v1"
 PRIMITIVES = {"AllReduce", "AllGather", "ReduceScatter"}
-PHASE_TYPES = {"REDUCE_SCATTER", "ALL_GATHER"}
+ALGORITHMS = {"Ring", "Butterfly", "Mesh", "NHR", "Hierarchical"}
+PHASE_TYPES = {
+    "REDUCE_SCATTER", "ALL_GATHER", "BUTTERFLY_EXCHANGE",
+    "MESH_TRANSFER", "INTRA_GROUP_REDUCE", "INTER_GROUP_ALLREDUCE",
+    "INTRA_GROUP_DISTRIBUTE",
+}
 
 
 def canonical_schedule_json(schedule: dict[str, Any], *, include_hash: bool = True) -> str:
@@ -51,16 +56,16 @@ def invariant_results(schedule: dict[str, Any]) -> list[dict[str, Any]]:
     results = [
         ("schema_version", schedule.get("schema_version") == SCHEMA_VERSION),
         ("primitive_supported", schedule.get("primitive") in PRIMITIVES),
-        ("ring_algorithm", schedule.get("algorithm") == "Ring"),
-        ("rank_size", isinstance(rank_size, int) and 2 <= rank_size <= 64),
+        ("algorithm_supported", schedule.get("algorithm") in ALGORITHMS),
+        ("rank_size", isinstance(rank_size, int) and 2 <= rank_size <= 1024),
         ("message_size", isinstance(message_size, int) and message_size > 0),
-        ("chunk_count", schedule.get("chunk_count") == rank_size and len(ordered_chunks) == rank_size),
+        ("chunk_count", isinstance(schedule.get("chunk_count"), int) and schedule["chunk_count"] > 0 and len(ordered_chunks) == schedule["chunk_count"]),
         ("chunk_coverage", contiguous and covered == message_size),
         ("phase_ids_unique", len(phase_ids) == len(set(phase_ids)) and all(phase_ids)),
         ("transfer_ids_unique", len(transfer_ids) == len(set(transfer_ids)) and all(transfer_ids)),
         ("dependencies_acyclic", dependencies_valid),
         ("transfer_rank_and_bytes", all(isinstance(t.get("source_rank"), int) and isinstance(t.get("destination_rank"), int) and 0 <= t["source_rank"] < rank_size and 0 <= t["destination_rank"] < rank_size and t["source_rank"] != t["destination_rank"] and isinstance(t.get("length_bytes"), int) and t["length_bytes"] >= 0 for t in transfers)),
-        ("phase_transfer_cardinality", all(len(phase.get("transfers", [])) == rank_size and phase.get("phase_type") in PHASE_TYPES for phase in phases)),
+        ("phase_transfer_cardinality", all(len(phase.get("transfers", [])) > 0 and phase.get("phase_type") in PHASE_TYPES for phase in phases)),
         ("bounded_memory", schedule.get("memory_plan", {}).get("bounded") is True and schedule.get("memory_plan", {}).get("peak_materialized_bytes", message_size + 1) <= 2 * schedule.get("chunk_size_bytes", 0)),
         ("schedule_hash", schedule.get("schedule_hash") == schedule_hash(schedule)),
     ]

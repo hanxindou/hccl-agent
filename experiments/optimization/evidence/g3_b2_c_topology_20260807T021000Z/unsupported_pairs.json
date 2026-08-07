@@ -1,0 +1,32 @@
+[
+  {
+    "algorithm": "Butterfly",
+    "primitive": "ReduceScatter",
+    "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+  },
+  {
+    "algorithm": "Mesh",
+    "primitive": "AllGather",
+    "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+  },
+  {
+    "algorithm": "NHR",
+    "primitive": "AllGather",
+    "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+  },
+  {
+    "algorithm": "NHR",
+    "primitive": "ReduceScatter",
+    "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+  },
+  {
+    "algorithm": "Hierarchical",
+    "primitive": "AllGather",
+    "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+  },
+  {
+    "algorithm": "Hierarchical",
+    "primitive": "ReduceScatter",
+    "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "group_count": 1,
+    "link_count": 56,
+    "name": "full_mesh_8",
+    "node_count": 1,
+    "rank_size": 8,
+    "topology_hash": "afa8bd12f7930483891ce7df73a351f5cffb9e58513983790595b36ffd83b72d",
+    "variant": "full_mesh"
+  },
+  {
+    "group_count": 1,
+    "link_count": 16,
+    "name": "ring_8",
+    "node_count": 1,
+    "rank_size": 8,
+    "topology_hash": "9756416598c5526ecba6784eecf990bb59c6b7fa0ea6894777b5b00b7c6335a3",
+    "variant": "ring"
+  },
+  {
+    "group_count": 2,
+    "link_count": 32,
+    "name": "ring_16",
+    "node_count": 2,
+    "rank_size": 16,
+    "topology_hash": "07fea259f66047b305796ab7a1cfcadd8ba42acc93b21a3f64826083c068ca79",
+    "variant": "ring"
+  },
+  {
+    "group_count": 8,
+    "link_count": 504,
+    "name": "fat_tree_64",
+    "node_count": 8,
+    "rank_size": 64,
+    "topology_hash": "875c804b1b8a4306f69be7873994eecbf995a279056b9658e7097298082126be",
+    "variant": "fat_tree"
+  },
+  {
+    "group_count": 2,
+    "link_count": 114,
+    "name": "asymmetric_16",
+    "node_count": 2,
+    "rank_size": 16,
+    "topology_hash": "2c081141143a7cbfe1d78c9cc3b48ee1a5f4c30927c72b00e9be9ca9e4d11607",
+    "variant": "asymmetric"
+  },
+  {
+    "group_count": 8,
+    "link_count": 504,
+    "name": "asymmetric_64",
+    "node_count": 8,
+    "rank_size": 64,
+    "topology_hash": "b1ba82bb68cffa499df2075a04ff727d9919f2d055b414c2130f90572fc626e2",
+    "variant": "asymmetric"
+  }
+]
