@@ -1,0 +1,12 @@
+{
+  "artifact_executed": false,
+  "cmake_default_off": true,
+  "not_registered_with_ctest": true,
+  "requires_direct_readiness_option": false,
+  "runtime_api_calls": [],
+  "runtime_guard_precedes_first_official_call": true,
+  "schema_version": "g3-b3-direct-execution-guard-audit-v1",
+  "shared_library_has_no_main": true,
+  "status": "PASS",
+  "submission_cli_references": []
+}

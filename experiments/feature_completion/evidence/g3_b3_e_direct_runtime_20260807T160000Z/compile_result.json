@@ -1,0 +1,35 @@
+{
+  "artifact_executed": false,
+  "build": {
+    "command": [
+      "cmake",
+      "--build",
+      "<build>/direct-runtime-source",
+      "--target",
+      "hccl_direct_runtime_source",
+      "--parallel",
+      "2"
+    ],
+    "exit_code": 0,
+    "output": "Consolidate compiler generated dependencies of target hccl_direct_runtime_source\n[100%] Built target hccl_direct_runtime_source\n"
+  },
+  "configure": {
+    "command": [
+      "cmake",
+      "-S",
+      "<repo>/hcccl",
+      "-B",
+      "<build>/direct-runtime-source",
+      "-DHCCL_BACKEND=CPU_SIM",
+      "-DHCCL_ENABLE_ASCEND_HCCL_DIRECT=ON",
+      "-DHCCL_ENABLE_ASCEND_HCCL_RUNTIME_SOURCE=ON",
+      "-DHCCL_CANN_ROOT=<cann>"
+    ],
+    "exit_code": 0,
+    "output": "-- G3-B3-E direct runtime source: compile/link-only target enabled; execution remains forbidden.\n-- G2-F direct adapter: compile-only target and non-executed official-library link audit enabled.\n-- G2-F direct link root: <cann>\n-- \n-- HCCL Plugin backend: CPU_SIM\n-- CPU_SIM build configured. No CANN SDK required.\n-- \n-- Build & test:\n--   cd hcccl && mkdir -p build && cd build\n--   cmake .. -DHCCL_BACKEND=CPU_SIM && make\n--   ctest --output-on-failure\n--   ldd libhccl_plugin.so   # verify: no CANN deps\n-- \n-- Configuring done\n-- Generating done\n-- Build files have been written to: <build>/direct-runtime-source\n"
+  },
+  "schema_version": "g3-b3-direct-compile-result-v1",
+  "source_compiled": true,
+  "status": "PASS",
+  "target": "hccl_direct_runtime_source"
+}

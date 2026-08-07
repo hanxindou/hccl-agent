@@ -1,0 +1,13 @@
+{
+  "artifact_role": "DIRECT_COMPILE_LINK_ONLY_RUNTIME_SOURCE",
+  "cmake_default": "OFF",
+  "cmake_option": "HCCL_ENABLE_ASCEND_HCCL_RUNTIME_SOURCE",
+  "existing_direct_adapter_role_changed": false,
+  "installed_runtime_binary": false,
+  "official_header_version": "CANN/HCCL 9.1.0",
+  "runtime_api_calls": [],
+  "runtime_execution": false,
+  "schema_version": "g3-b3-direct-runtime-source-manifest-v1",
+  "source": "hcccl/direct/src/hccl_direct_runtime_source.cpp",
+  "target": "hccl_direct_runtime_source"
+}

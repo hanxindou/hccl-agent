@@ -1,0 +1,9 @@
+{
+  "artifact": "<build>/direct-runtime-source/libhccl_direct_runtime_source.so",
+  "artifact_executed": false,
+  "official_needed_present": true,
+  "official_undefined_symbols_present": true,
+  "schema_version": "g3-b3-direct-link-result-v1",
+  "shared_object_created": true,
+  "status": "PASS"
+}
