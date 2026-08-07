@@ -1,0 +1,20 @@
+{
+  "ablation_stage_count": 8,
+  "agent_chain_complete": true,
+  "authoritative": true,
+  "benchmark_changed": false,
+  "checkpoint": "G3-B2-E",
+  "checkpoint_status": "COMPLETED",
+  "correctness_hard_gate": true,
+  "frozen_parameters_changed": false,
+  "initial_evidence": "experiments/optimization/evidence/g3_b2_e_agent_20260807T030000Z",
+  "losses": 0,
+  "measured_on_real_npu": false,
+  "optimization_adjustment_rounds": 1,
+  "performance_scenario_count": 18,
+  "performance_target_status": "SATISFIED",
+  "real_device_api_executed": false,
+  "ties": 0,
+  "truth_label": "SIMULATED_ONLY",
+  "wins": 18
+}

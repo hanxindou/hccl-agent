@@ -134,6 +134,13 @@ class SubmissionCliContractTests(unittest.TestCase):
         self.assertEqual(first["status"], "PASS")
         self.assertEqual(first["no_alternate_path"]["status"], "EXPECTED_NO_PATH_FAILURE")
 
+    def test_g3_b2_quick_checks_are_lightweight_and_explicit(self):
+        result = core._g3_b2_quick_checks()
+        self.assertEqual(result["status"], "PASS")
+        self.assertFalse(result["full_benchmark_executed"])
+        self.assertEqual(result["agent_selector_output"]["fallback"], "NONE")
+        self.assertTrue(result["topology_aware_comparison"]["different"])
+
 
 if __name__ == "__main__":
     unittest.main()

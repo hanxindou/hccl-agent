@@ -1,0 +1,11 @@
+{
+  "schema_version": "g3-b2-agent-trace-v1",
+  "checkpoint": "G3-B2-A",
+  "status": "AUTHORITATIVE_CHAIN_COMPLETED",
+  "authoritative_run_id": "g3-b2-e-authoritative-optimization-round1",
+  "initial_failed_run_id": "g3-b2-e-authoritative-optimization",
+  "truth_labels": ["CPU_EXECUTED", "SIMULATED_ONLY", "AGENT_GENERATED_PROPOSAL", "AGENT_SELECTED_SCHEDULE", "DIRECT_READINESS_ONLY", "REAL_DEVICE_NOT_EXECUTED"],
+  "actor_boundaries": {"development_agent":"Codex","runtime_agent":"hccl-agent","human":"user"},
+  "required_record_fields": ["run_id","timestamp","development_agent","runtime_agent","prompt_id","prompt_version","input_schema_version","output_schema_version","baseline_commit","input_hash","proposal_hash","human_decision","changed_files","tests","benchmark_result","reflection","selected","result_commit"],
+  "record_directories": ["runs","proposals","evaluations","reflections"]
+}

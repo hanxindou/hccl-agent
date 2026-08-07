@@ -1,0 +1,36 @@
+{
+  "schema_version": "g3-b2-benchmark-v1",
+  "frozen": true,
+  "seed": 20260804,
+  "statistics": {
+    "percentiles": [50, 95],
+    "percentile_method": "nearest-rank",
+    "outlier_policy": "none; retain every deterministic sample"
+  },
+  "performance_scenarios": [
+    {"scenario_id":"P01","primitive":"AllReduce","baseline_algorithm":"Ring AllReduce","topology":"FULL_MESH","topology_variant":"full_mesh_8","ranks":8,"message_size_bytes":1024,"dtype":"FP32","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.0},
+    {"scenario_id":"P02","primitive":"AllGather","baseline_algorithm":"Ring AllReduce","topology":"FULL_MESH","topology_variant":"full_mesh_8","ranks":8,"message_size_bytes":65536,"dtype":"FP16","reduce_op":null,"seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.0},
+    {"scenario_id":"P03","primitive":"ReduceScatter","baseline_algorithm":"Ring AllReduce","topology":"FULL_MESH","topology_variant":"full_mesh_8","ranks":8,"message_size_bytes":65536,"dtype":"BF16","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.0},
+    {"scenario_id":"P04","primitive":"AllReduce","baseline_algorithm":"Ring AllReduce","topology":"RING","topology_variant":"ring_8","ranks":8,"message_size_bytes":1048576,"dtype":"FP32","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.0},
+    {"scenario_id":"P05","primitive":"AllGather","baseline_algorithm":"Ring AllReduce","topology":"RING","topology_variant":"ring_8","ranks":8,"message_size_bytes":16777216,"dtype":"FP16","reduce_op":null,"seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.0},
+    {"scenario_id":"P06","primitive":"ReduceScatter","baseline_algorithm":"Ring AllReduce","topology":"RING","topology_variant":"ring_8","ranks":8,"message_size_bytes":134217728,"dtype":"BF16","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.0},
+    {"scenario_id":"P07","primitive":"AllReduce","baseline_algorithm":"Ring AllReduce","topology":"RING","topology_variant":"ring_16","ranks":16,"message_size_bytes":16777216,"dtype":"FP32","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.0},
+    {"scenario_id":"P08","primitive":"AllGather","baseline_algorithm":"Ring AllReduce","topology":"RING","topology_variant":"ring_16","ranks":16,"message_size_bytes":1048576,"dtype":"BF16","reduce_op":null,"seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.0},
+    {"scenario_id":"P09","primitive":"ReduceScatter","baseline_algorithm":"Ring AllReduce","topology":"RING","topology_variant":"ring_16","ranks":16,"message_size_bytes":65536,"dtype":"FP16","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.0},
+    {"scenario_id":"P10","primitive":"AllReduce","baseline_algorithm":"Ring AllReduce","topology":"FAT_TREE","topology_variant":"fat_tree_64","ranks":64,"message_size_bytes":134217728,"dtype":"FP32","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.5},
+    {"scenario_id":"P11","primitive":"AllGather","baseline_algorithm":"Ring AllReduce","topology":"FAT_TREE","topology_variant":"fat_tree_64","ranks":64,"message_size_bytes":16777216,"dtype":"BF16","reduce_op":null,"seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.5},
+    {"scenario_id":"P12","primitive":"ReduceScatter","baseline_algorithm":"Ring AllReduce","topology":"FAT_TREE","topology_variant":"fat_tree_64","ranks":64,"message_size_bytes":1048576,"dtype":"FP16","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.5},
+    {"scenario_id":"P13","primitive":"AllReduce","baseline_algorithm":"Ring AllReduce","topology":"HETEROGENEOUS","topology_variant":"asymmetric_16","ranks":16,"message_size_bytes":134217728,"dtype":"FP32","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.5},
+    {"scenario_id":"P14","primitive":"AllGather","baseline_algorithm":"Ring AllReduce","topology":"HETEROGENEOUS","topology_variant":"asymmetric_16","ranks":16,"message_size_bytes":16777216,"dtype":"BF16","reduce_op":null,"seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.5},
+    {"scenario_id":"P15","primitive":"ReduceScatter","baseline_algorithm":"Ring AllReduce","topology":"HETEROGENEOUS","topology_variant":"asymmetric_16","ranks":16,"message_size_bytes":1048576,"dtype":"FP16","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":1.5},
+    {"scenario_id":"P16","primitive":"AllReduce","baseline_algorithm":"Ring AllReduce","topology":"HETEROGENEOUS","topology_variant":"asymmetric_64","ranks":64,"message_size_bytes":134217728,"dtype":"FP32","reduce_op":"SUM","seed":20260804,"iterations":30,"warmup":5,"metric_set":"standard","weight":2.0},
+    {"scenario_id":"P17","primitive":"AllReduce","baseline_algorithm":"Ring AllReduce","topology":"FAT_TREE","topology_variant":"logical_1024","ranks":1024,"message_size_bytes":1073741824,"dtype":"FP32","reduce_op":"SUM","seed":20260804,"iterations":10,"warmup":5,"metric_set":"large_scale","weight":2.0},
+    {"scenario_id":"P18","primitive":"AllGather","baseline_algorithm":"Ring AllReduce","topology":"FAT_TREE","topology_variant":"logical_1024","ranks":1024,"message_size_bytes":1073741824,"dtype":"BF16","reduce_op":null,"seed":20260804,"iterations":10,"warmup":5,"metric_set":"large_scale","weight":2.0}
+  ],
+  "reliability_scenarios": [
+    {"scenario_id":"R01","event":"LINK_DEGRADED","topology":"HETEROGENEOUS","ranks":16,"seed":20260804,"expected":"REPLAN_AND_COMPLETE"},
+    {"scenario_id":"R02","event":"LINK_DOWN","topology":"FAT_TREE","ranks":64,"seed":20260804,"expected":"REPLAN_AND_COMPLETE"},
+    {"scenario_id":"R03","event":"LINK_RECOVERED","topology":"RING","ranks":16,"seed":20260804,"expected":"REPLAN_AND_COMPLETE"},
+    {"scenario_id":"R04","event":"NO_PATH","topology":"RING","ranks":8,"seed":20260804,"expected":"EXPECTED_NO_PATH_FAILURE"}
+  ]
+}

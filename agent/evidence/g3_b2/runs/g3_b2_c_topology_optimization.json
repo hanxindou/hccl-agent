@@ -1,0 +1,20 @@
+{
+  "run_id": "g3-b2-c-topology-optimization",
+  "timestamp": "2026-08-07T02:10:00Z",
+  "development_agent": "Codex",
+  "runtime_agent": "hccl-agent-not-invoked-phase-c",
+  "prompt_id": "g3-b2-topology-optimization",
+  "prompt_version": "1.0.0",
+  "input_schema_version": "g3-b2-topology-v1",
+  "output_schema_version": "g3-b2-schedule-ir-v1",
+  "baseline_commit": "045e801",
+  "input_hash": "resolved-by-g3-b2-c-manifest",
+  "proposal_hash": "resolved-by-g3-b2-c-schedule-inventory",
+  "human_decision": "AUTHORIZED_G3_B2_SEQUENCE",
+  "changed_files": ["algorithm/topology_model.py", "algorithm/topology_schedules.py", "algorithm/chunk_policy.py", "algorithm/schedule_selector.py"],
+  "tests": ["topology optimization focused assertions 8/8", "semantic correctness hard gate for every supported pair"],
+  "benchmark_result": "STRUCTURAL_AND_CORRECTNESS_ONLY_PHASE_C",
+  "reflection": "Physical-edge conflicts are serialized; unsupported pairs remain explicit and fallback is NONE.",
+  "selected": true,
+  "result_commit": "RESOLVED_BY_COMMIT_MAPPING"
+}

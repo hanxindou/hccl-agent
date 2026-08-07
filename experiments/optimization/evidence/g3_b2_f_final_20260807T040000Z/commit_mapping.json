@@ -1,0 +1,50 @@
+{
+  "entries": [
+    {
+      "commit_message": "G3-B2-A freeze optimization baseline and agent trace contract",
+      "phase": "G3-B2-A",
+      "result_commit": "12f5b97",
+      "trace_run_ids": []
+    },
+    {
+      "commit_message": "G3-B2-B add collective schedule IR and ring primitive schedules",
+      "phase": "G3-B2-B",
+      "result_commit": "045e801",
+      "trace_run_ids": [
+        "g3-b2-b-schedule-ir"
+      ]
+    },
+    {
+      "commit_message": "G3-B2-C add topology-aware hierarchical collective optimization",
+      "phase": "G3-B2-C",
+      "result_commit": "486974f",
+      "trace_run_ids": [
+        "g3-b2-c-topology-optimization"
+      ]
+    },
+    {
+      "commit_message": "G3-B2-D add dynamic schedule replanning and bounded pipeline model",
+      "phase": "G3-B2-D",
+      "result_commit": "44dad2e",
+      "trace_run_ids": [
+        "g3-b2-d-replan-memory-pipeline"
+      ]
+    },
+    {
+      "commit_message": "G3-B2-E complete agent optimization loop and ablation audit",
+      "phase": "G3-B2-E",
+      "result_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+      "trace_run_ids": [
+        "g3-b2-e-authoritative-optimization",
+        "g3-b2-e-authoritative-optimization-round1"
+      ]
+    },
+    {
+      "commit_message": "G3-B2-F freeze optimized algorithm baseline and final evidence",
+      "phase": "G3-B2-F",
+      "result_commit": "SELF_COMMIT_REPORTED_IN_FINAL_HANDOFF",
+      "trace_run_ids": []
+    }
+  ],
+  "schema_version": "g3-b2-commit-mapping-v1"
+}

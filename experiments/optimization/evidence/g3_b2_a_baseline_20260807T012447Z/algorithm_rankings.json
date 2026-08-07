@@ -1,0 +1,470 @@
+[
+  {
+    "candidates": [
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 9.565505034
+      },
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 15.862906647
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 15.882499659
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 18.12788636
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 32.471542903
+      }
+    ],
+    "scenario_id": "P01",
+    "selected_algorithm": "Mesh"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 14.800818215
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 15.427794594
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 20.083304504
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 23.396582394
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 23.865721933
+      }
+    ],
+    "scenario_id": "P02",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 14.805813215
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 15.432789594
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 20.088299504
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 23.401577394
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 23.870716933
+      }
+    ],
+    "scenario_id": "P03",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 198.301782893
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 218.365026998
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 219.546877792
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 224.37547661
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 1558.746018344
+      }
+    ],
+    "scenario_id": "P04",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 1386.509368146
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 1470.603537876
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 1546.969912063
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 1547.015320987
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 3098.030573631
+      }
+    ],
+    "scenario_id": "P05",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 10953.836322168
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 11568.49183601
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 12178.222306225
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 12237.883944893
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 24655.866487657
+      }
+    ],
+    "scenario_id": "P06",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 6160.739678184
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 6609.680294972
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 6871.830247382
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 7026.131654295
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 189676.090546618
+      }
+    ],
+    "scenario_id": "P07",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 282.749718443
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 304.971298731
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 336.080730747
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 349.817166468
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 835.469411272
+      }
+    ],
+    "scenario_id": "P08",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 105.676503528
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 107.065352296
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 133.827073297
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 141.214892517
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 162.906272779
+      }
+    ],
+    "scenario_id": "P09",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 131719.865612965
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 139722.452077685
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 147202.322186726
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 161321.076010524
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 121967997.90751524
+      }
+    ],
+    "scenario_id": "P10",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 8290.42271881
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 9093.083429855
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 9258.07625467
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 10233.286734783
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 238450.338216404
+      }
+    ],
+    "scenario_id": "P11",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 578.764140926
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 639.242486917
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 790.707079049
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 953.036567866
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 15120.050950745
+      }
+    ],
+    "scenario_id": "P12",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 332947.610124177
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 351825.750291075
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 372093.681488433
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 385791.497577318
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 12569129.70466941
+      }
+    ],
+    "scenario_id": "P13",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 20913.740804261
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 22265.341282942
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 23360.370264527
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 24309.536443207
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 98333.538084004
+      }
+    ],
+    "scenario_id": "P14",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 1416.491890766
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 1569.406232033
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 1684.949118809
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 1717.321616825
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 6274.952453844
+      }
+    ],
+    "scenario_id": "P15",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 374038.224690439
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 396867.849415019
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 418006.400205079
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 460832.584371191
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 380868099.5432148
+      }
+    ],
+    "scenario_id": "P16",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 1211971.434291366
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 1291945.433906664
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 1354518.796417879
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 1666023.82088154
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 3158988250144.1606
+      }
+    ],
+    "scenario_id": "P17",
+    "selected_algorithm": "Fat-Tree"
+  },
+  {
+    "candidates": [
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_time_us": 606000.754137683
+      },
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_time_us": 645987.753945332
+      },
+      {
+        "algorithm": "Butterfly",
+        "simulated_time_us": 677274.43520094
+      },
+      {
+        "algorithm": "NHR",
+        "simulated_time_us": 833906.01533402
+      },
+      {
+        "algorithm": "Mesh",
+        "simulated_time_us": 3084987468.053213
+      }
+    ],
+    "scenario_id": "P18",
+    "selected_algorithm": "Fat-Tree"
+  }
+]

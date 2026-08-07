@@ -1,0 +1,101 @@
+{
+  "$id": "g3-b2-schedule-ir-v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "algorithm": {
+      "type": "string"
+    },
+    "chunk_count": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "chunk_size_bytes": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "dependencies": {
+      "type": "array"
+    },
+    "dtype": {
+      "enum": [
+        "FP32",
+        "FP16",
+        "BF16"
+      ]
+    },
+    "estimated_metrics": {
+      "type": "object"
+    },
+    "failure_policy": {
+      "type": "object"
+    },
+    "hardware_profile_hash": {
+      "type": "string"
+    },
+    "memory_plan": {
+      "type": "object"
+    },
+    "message_size_bytes": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "phases": {
+      "minItems": 1,
+      "type": "array"
+    },
+    "primitive": {
+      "enum": [
+        "AllReduce",
+        "AllGather",
+        "ReduceScatter"
+      ]
+    },
+    "rank_size": {
+      "maximum": 64,
+      "minimum": 2,
+      "type": "integer"
+    },
+    "reduce_op": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "schedule_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schedule_id": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "g3-b2-schedule-ir-v1"
+    },
+    "topology_hash": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "schedule_id",
+    "primitive",
+    "algorithm",
+    "rank_size",
+    "message_size_bytes",
+    "dtype",
+    "reduce_op",
+    "topology_hash",
+    "hardware_profile_hash",
+    "chunk_size_bytes",
+    "chunk_count",
+    "phases",
+    "dependencies",
+    "memory_plan",
+    "failure_policy",
+    "estimated_metrics",
+    "schedule_hash"
+  ],
+  "title": "G3-B2 Collective Schedule IR",
+  "type": "object"
+}

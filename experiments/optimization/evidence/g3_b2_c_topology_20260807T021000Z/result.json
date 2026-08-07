@@ -1,0 +1,20 @@
+{
+  "checkpoint": "G3-B2-C",
+  "checkpoint_status": "COMPLETED",
+  "chunk_candidates": [
+    65536,
+    262144,
+    1048576,
+    4194304,
+    16777216
+  ],
+  "correctness_passed": true,
+  "main_innovation": "Topology-Aware Hierarchical Non-Uniform Collective Scheduling",
+  "measured_on_real_npu": false,
+  "public_abi_changed": false,
+  "real_device_api_executed": false,
+  "sample_schedule_count": 7,
+  "selector_fallback": "NONE",
+  "truth_label": "SIMULATED_ONLY",
+  "unsupported_pair_count": 6
+}

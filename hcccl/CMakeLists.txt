@@ -43,6 +43,7 @@ endif()
 set(SOURCES
     src/hccl_comm.c
     src/hccl_algorithms.c
+    src/schedule_ir.c
 )
 
 set(HEADERS
@@ -383,6 +384,19 @@ target_include_directories(test_dtype_emulation
 target_link_libraries(test_dtype_emulation PRIVATE hccl_plugin)
 
 add_test(NAME test_dtype_emulation COMMAND test_dtype_emulation)
+
+add_executable(test_schedule_ir
+    tests/test_schedule_ir.c
+    src/schedule_ir.c
+)
+target_include_directories(test_schedule_ir PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+add_test(NAME test_schedule_ir COMMAND test_schedule_ir)
+
+add_executable(schedule_ir_dump
+    tests/schedule_ir_dump.c
+    src/schedule_ir.c
+)
+target_include_directories(schedule_ir_dump PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set_tests_properties(test_dtype_emulation PROPERTIES
     WORKING_DIRECTORY $<TARGET_FILE_DIR:test_dtype_emulation>
 )

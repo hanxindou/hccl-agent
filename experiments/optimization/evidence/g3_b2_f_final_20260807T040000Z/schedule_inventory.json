@@ -1,0 +1,835 @@
+{
+  "ring": [
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 2048,
+      "phase_count": 2,
+      "primitive": "AllReduce",
+      "rank_size": 2,
+      "schedule_hash": "f48e7f11656e01357ad57f729a827b7bd569c9e63d437250b09587ff8b46be55"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 2051,
+      "phase_count": 2,
+      "primitive": "AllReduce",
+      "rank_size": 2,
+      "schedule_hash": "85ce31db462a886696be1e68745fe262db8729c020721c9b1dc31007689222f7"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 4096,
+      "phase_count": 6,
+      "primitive": "AllReduce",
+      "rank_size": 4,
+      "schedule_hash": "d1fdd35877e2813897716f8e432628cdbd7a758d10b699c4afd737ed29f4fc18"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 4099,
+      "phase_count": 6,
+      "primitive": "AllReduce",
+      "rank_size": 4,
+      "schedule_hash": "4f392f440c382e9a1d9176cc1a1b38f49db1b35b72b2985d479e9208666e9d4a"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 8192,
+      "phase_count": 14,
+      "primitive": "AllReduce",
+      "rank_size": 8,
+      "schedule_hash": "028027ba97faaad819fc450f4d2eb23f2501cccc8ea2abeb2e0cae6c9dee9efb"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 8195,
+      "phase_count": 14,
+      "primitive": "AllReduce",
+      "rank_size": 8,
+      "schedule_hash": "a2b2c9df3d5d34a8a985f5b59c683ca4ce46b181e7c5a741194b504438d260b2"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 16384,
+      "phase_count": 30,
+      "primitive": "AllReduce",
+      "rank_size": 16,
+      "schedule_hash": "1ab6cbd01b93c3428db6ecd064abe2b0795acc538f4602a219b61be5540af024"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 16387,
+      "phase_count": 30,
+      "primitive": "AllReduce",
+      "rank_size": 16,
+      "schedule_hash": "acc3b7de24ad173a34b30a29de17e7f839f5d6caeb486968e4f45b32a034852f"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 65536,
+      "phase_count": 126,
+      "primitive": "AllReduce",
+      "rank_size": 64,
+      "schedule_hash": "d148cc7d0c63306220f0a54f174ea385b3d825e4ec6d594a25418ba5b5a4de42"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 65539,
+      "phase_count": 126,
+      "primitive": "AllReduce",
+      "rank_size": 64,
+      "schedule_hash": "c859b545f93a1c6c08ec3f3e90079e4762e6843a0ab0091b9d93f17d14b540f1"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 2048,
+      "phase_count": 1,
+      "primitive": "AllGather",
+      "rank_size": 2,
+      "schedule_hash": "b62c02f265ff813489817fe3d3ecd50d2e7f8c2626a50f3163e43d527d95f9fb"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 2051,
+      "phase_count": 1,
+      "primitive": "AllGather",
+      "rank_size": 2,
+      "schedule_hash": "ad6bf8044ffa61de49386d77fc70fab985633fb705a6b567d16e1a02f3de64fa"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 4096,
+      "phase_count": 3,
+      "primitive": "AllGather",
+      "rank_size": 4,
+      "schedule_hash": "a55cf1021cbdd424696dacfa1eacb9ce05655fab7236f79363cda22ca833d21e"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 4099,
+      "phase_count": 3,
+      "primitive": "AllGather",
+      "rank_size": 4,
+      "schedule_hash": "0380109273b1de911b6c6e662ed3abfd3b40dbe2a946ffc5f7b10d23dc06a312"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 8192,
+      "phase_count": 7,
+      "primitive": "AllGather",
+      "rank_size": 8,
+      "schedule_hash": "8338ae49010bc921704cc9fa349dc0e297b4f809e00dfecbafa9fcf43de398a4"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 8195,
+      "phase_count": 7,
+      "primitive": "AllGather",
+      "rank_size": 8,
+      "schedule_hash": "282aa0d8a34d6b207bf5c869d7bae8d241f56f738524779ad25ab04cad0eb064"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 16384,
+      "phase_count": 15,
+      "primitive": "AllGather",
+      "rank_size": 16,
+      "schedule_hash": "f5b4519010d8c35e7e9ee52901a068f3d11150ae45d96a187acd5bf1077559cc"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 16387,
+      "phase_count": 15,
+      "primitive": "AllGather",
+      "rank_size": 16,
+      "schedule_hash": "ead3fcf20bcaf29020ee172a37d3b787995254ac0e228daecdf2c27681086964"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 65536,
+      "phase_count": 63,
+      "primitive": "AllGather",
+      "rank_size": 64,
+      "schedule_hash": "237a1f108afa16c5506c7b7685529a020cfd4c3deb8a2187e3e2d521a769ddcf"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 65539,
+      "phase_count": 63,
+      "primitive": "AllGather",
+      "rank_size": 64,
+      "schedule_hash": "55af9fd12994cd14d2616c0d511498bb7048451c291d5ee4c33e0294b27f588f"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 2048,
+      "phase_count": 1,
+      "primitive": "ReduceScatter",
+      "rank_size": 2,
+      "schedule_hash": "2656d0c79bd0856d4600f6e12534ab34eb0dfa714574dd02a9a7d090587334c2"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 2051,
+      "phase_count": 1,
+      "primitive": "ReduceScatter",
+      "rank_size": 2,
+      "schedule_hash": "a53f6495ef3da1a32d24d1e2c0fcd77b618a52e4853c174411637aef25da6c03"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 4096,
+      "phase_count": 3,
+      "primitive": "ReduceScatter",
+      "rank_size": 4,
+      "schedule_hash": "9e64a5625456c9129a90fdceecdec5d9e058d679e73ed7dbcc01c8525b581878"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 4099,
+      "phase_count": 3,
+      "primitive": "ReduceScatter",
+      "rank_size": 4,
+      "schedule_hash": "ca170156ada99550115fbd0d31241b75b42ef9c3673a5b170e5e044dcafc20b7"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 8192,
+      "phase_count": 7,
+      "primitive": "ReduceScatter",
+      "rank_size": 8,
+      "schedule_hash": "6678b670b31babe53f8553aba1d8c6217d8ca1271bd53485d754b1860df056b1"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 8195,
+      "phase_count": 7,
+      "primitive": "ReduceScatter",
+      "rank_size": 8,
+      "schedule_hash": "83cce588a1fcc7e40452c2876aa77685d5fe79270f7e0a3dd2a3b06696033fb4"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 16384,
+      "phase_count": 15,
+      "primitive": "ReduceScatter",
+      "rank_size": 16,
+      "schedule_hash": "d385351d8166827cc1f4873df56355e0ccbb74caf5dc6d7e079ea6b338ab9c57"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 16387,
+      "phase_count": 15,
+      "primitive": "ReduceScatter",
+      "rank_size": 16,
+      "schedule_hash": "e0d971399a64b20f1b95361d52d3e12ece10f1eaeaac5520414cf11389ddac18"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "divisible",
+      "message_size_bytes": 65536,
+      "phase_count": 63,
+      "primitive": "ReduceScatter",
+      "rank_size": 64,
+      "schedule_hash": "05e11875d9fee7f1a6b84de254cde5c976db4e89ef4f56777b4202a85b0b78c2"
+    },
+    {
+      "algorithm": "Ring",
+      "boundary": "non_divisible",
+      "message_size_bytes": 65539,
+      "phase_count": 63,
+      "primitive": "ReduceScatter",
+      "rank_size": 64,
+      "schedule_hash": "4c4dbb82e8cca6956155517650314612128e5caee9fe47fb8a0788c2688ed633"
+    }
+  ],
+  "topology_aware": [
+    {
+      "algorithm": "Ring",
+      "chunk_selection": null,
+      "optimization_metadata": null,
+      "phase_count": 30,
+      "primitive": "AllReduce",
+      "schedule_hash": "5388097e06530c71d396ea0a948e87abcadeaf928261c4e6d9ab49977adae9e5",
+      "topology": "ring_16"
+    },
+    {
+      "algorithm": "Butterfly",
+      "chunk_selection": {
+        "candidate_scores": [
+          {
+            "chunk_size": 65536,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 406.64227136
+          },
+          {
+            "chunk_size": 262144,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 360.682868141
+          },
+          {
+            "chunk_size": 1048576,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 352.81480768
+          },
+          {
+            "chunk_size": 4194304,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 365.7826792
+          },
+          {
+            "chunk_size": 16777216,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 388.8957984
+          }
+        ],
+        "chunk_count": 5,
+        "chunk_size": 1048576,
+        "pipeline_depth": 4,
+        "policy_version": "g3-b2-chunk-policy-v1",
+        "selection_reason": "minimum frozen analytical candidate score"
+      },
+      "optimization_metadata": {
+        "deterministic_peer_order": true,
+        "partner_rule": "rank XOR (1 << step)",
+        "power_of_two_required": true
+      },
+      "phase_count": 3,
+      "primitive": "AllReduce",
+      "schedule_hash": "d4b000bb2ec367409d610a9de50b4d9fda71700d30a788246d305958707f8fba",
+      "topology": "full_mesh_8"
+    },
+    {
+      "algorithm": "Butterfly",
+      "chunk_selection": {
+        "candidate_scores": [
+          {
+            "chunk_size": 65536,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 406.64227136
+          },
+          {
+            "chunk_size": 262144,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 360.682868141
+          },
+          {
+            "chunk_size": 1048576,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 352.81480768
+          },
+          {
+            "chunk_size": 4194304,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 365.7826792
+          },
+          {
+            "chunk_size": 16777216,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 388.8957984
+          }
+        ],
+        "chunk_count": 5,
+        "chunk_size": 1048576,
+        "pipeline_depth": 4,
+        "policy_version": "g3-b2-chunk-policy-v1",
+        "selection_reason": "minimum frozen analytical candidate score"
+      },
+      "optimization_metadata": {
+        "deterministic_peer_order": true,
+        "partner_rule": "rank XOR (1 << step)",
+        "power_of_two_required": true
+      },
+      "phase_count": 3,
+      "primitive": "AllGather",
+      "schedule_hash": "70cda06ab0dd9372c01701b51ff2ce32adb56ea1e7453be19248ca121c2e7337",
+      "topology": "full_mesh_8"
+    },
+    {
+      "algorithm": "Mesh",
+      "chunk_selection": {
+        "candidate_scores": [
+          {
+            "chunk_size": 65536,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 406.64227136
+          },
+          {
+            "chunk_size": 262144,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 360.682868141
+          },
+          {
+            "chunk_size": 1048576,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 352.81480768
+          },
+          {
+            "chunk_size": 4194304,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 365.7826792
+          },
+          {
+            "chunk_size": 16777216,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 388.8957984
+          }
+        ],
+        "chunk_count": 5,
+        "chunk_size": 1048576,
+        "pipeline_depth": 4,
+        "policy_version": "g3-b2-chunk-policy-v1",
+        "selection_reason": "minimum frozen analytical candidate score"
+      },
+      "optimization_metadata": {
+        "detected_conflicts_serialized": 0,
+        "fanout_limit": 4,
+        "shared_link_conflict_check": true,
+        "topology_constraint": "direct full-mesh links"
+      },
+      "phase_count": 2,
+      "primitive": "AllReduce",
+      "schedule_hash": "c767ee8dd369399e4e3f406139d29f84250de709729baa68f178b1f85f4f7559",
+      "topology": "full_mesh_8"
+    },
+    {
+      "algorithm": "Mesh",
+      "chunk_selection": {
+        "candidate_scores": [
+          {
+            "chunk_size": 65536,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 958.80016772
+          },
+          {
+            "chunk_size": 262144,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 771.131361282
+          },
+          {
+            "chunk_size": 1048576,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 721.20774036
+          },
+          {
+            "chunk_size": 4194304,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 748.5966084
+          },
+          {
+            "chunk_size": 16777216,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 795.3072218
+          }
+        ],
+        "chunk_count": 5,
+        "chunk_size": 1048576,
+        "pipeline_depth": 4,
+        "policy_version": "g3-b2-chunk-policy-v1",
+        "selection_reason": "minimum frozen analytical candidate score"
+      },
+      "optimization_metadata": {
+        "detected_conflicts_serialized": 121848,
+        "fanout_limit": 2,
+        "shared_link_conflict_check": true,
+        "topology_constraint": "physical-edge-disjoint bounded fanout"
+      },
+      "phase_count": 81,
+      "primitive": "ReduceScatter",
+      "schedule_hash": "0ad990cc6391faa82fe1c460908fbe7f40d1da57014d48c0db70b828cb1a5968",
+      "topology": "fat_tree_64"
+    },
+    {
+      "algorithm": "NHR",
+      "chunk_selection": {
+        "candidate_scores": [
+          {
+            "chunk_size": 65536,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 1427.147723
+          },
+          {
+            "chunk_size": 262144,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 1181.524587941
+          },
+          {
+            "chunk_size": 1048576,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 1119.499399
+          },
+          {
+            "chunk_size": 4194304,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 1162.6021225
+          },
+          {
+            "chunk_size": 16777216,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 1235.689995
+          }
+        ],
+        "chunk_count": 5,
+        "chunk_size": 1048576,
+        "pipeline_depth": 4,
+        "policy_version": "g3-b2-chunk-policy-v1",
+        "selection_reason": "minimum frozen analytical candidate score"
+      },
+      "optimization_metadata": {
+        "non_uniform_ring_order": [
+          0,
+          1,
+          2,
+          4,
+          3,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          14,
+          13,
+          15
+        ],
+        "segment_costs": [
+          {
+            "destination_rank": 1,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 0
+          },
+          {
+            "destination_rank": 2,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 1
+          },
+          {
+            "destination_rank": 4,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 2
+          },
+          {
+            "destination_rank": 3,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 4
+          },
+          {
+            "destination_rank": 5,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 3
+          },
+          {
+            "destination_rank": 6,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 5
+          },
+          {
+            "destination_rank": 7,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 6
+          },
+          {
+            "destination_rank": 8,
+            "estimated_cost": 263.68021152,
+            "link_type": "HCCS+RoCE",
+            "source_rank": 7
+          },
+          {
+            "destination_rank": 9,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 8
+          },
+          {
+            "destination_rank": 10,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 9
+          },
+          {
+            "destination_rank": 11,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 10
+          },
+          {
+            "destination_rank": 12,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 11
+          },
+          {
+            "destination_rank": 14,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 12
+          },
+          {
+            "destination_rank": 13,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 14
+          },
+          {
+            "destination_rank": 15,
+            "estimated_cost": 90.180384,
+            "link_type": "HCCS",
+            "source_rank": 13
+          },
+          {
+            "destination_rank": 0,
+            "estimated_cost": 263.68021152,
+            "link_type": "HCCS+RoCE",
+            "source_rank": 15
+          }
+        ],
+        "topology_assumption": "asymmetric",
+        "weight_formula": "latency_cost + transfer_bytes/effective_bandwidth + congestion_penalty + reliability_penalty"
+      },
+      "phase_count": 30,
+      "primitive": "AllReduce",
+      "schedule_hash": "0a2a374a64778edf4dcf06b491bc2d4a1be4a7a10adf414a36f62a219e2c0dd2",
+      "topology": "asymmetric_16"
+    },
+    {
+      "algorithm": "Hierarchical",
+      "chunk_selection": {
+        "candidate_scores": [
+          {
+            "chunk_size": 65536,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 958.80016772
+          },
+          {
+            "chunk_size": 262144,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 771.131361282
+          },
+          {
+            "chunk_size": 1048576,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 721.20774036
+          },
+          {
+            "chunk_size": 4194304,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 748.5966084
+          },
+          {
+            "chunk_size": 16777216,
+            "eligible": true,
+            "reason": "FINITE_FROZEN_CANDIDATE",
+            "score": 795.3072218
+          }
+        ],
+        "chunk_count": 5,
+        "chunk_size": 1048576,
+        "pipeline_depth": 4,
+        "policy_version": "g3-b2-chunk-policy-v1",
+        "selection_reason": "minimum frozen analytical candidate score"
+      },
+      "optimization_metadata": {
+        "fallback_condition": "NONE; structured failure",
+        "group_source": "explicit node metadata",
+        "groups": [
+          {
+            "group_id": "group-0",
+            "leader": 0,
+            "ranks": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          {
+            "group_id": "group-1",
+            "leader": 8,
+            "ranks": [
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ]
+          },
+          {
+            "group_id": "group-2",
+            "leader": 16,
+            "ranks": [
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23
+            ]
+          },
+          {
+            "group_id": "group-3",
+            "leader": 24,
+            "ranks": [
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          {
+            "group_id": "group-4",
+            "leader": 32,
+            "ranks": [
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39
+            ]
+          },
+          {
+            "group_id": "group-5",
+            "leader": 40,
+            "ranks": [
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47
+            ]
+          },
+          {
+            "group_id": "group-6",
+            "leader": 48,
+            "ranks": [
+              48,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55
+            ]
+          },
+          {
+            "group_id": "group-7",
+            "leader": 56,
+            "ranks": [
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63
+            ]
+          }
+        ],
+        "inter_link": "RoCE from topology",
+        "intra_link": "HCCS/PCIe from topology",
+        "leaders": [
+          0,
+          8,
+          16,
+          24,
+          32,
+          40,
+          48,
+          56
+        ],
+        "no_valid_hierarchy_condition": "fewer than two explicit metadata groups",
+        "oversubscription": 2.0
+      },
+      "phase_count": 3,
+      "primitive": "AllReduce",
+      "schedule_hash": "68ab81d2eac26c1cc75f0ce7ece680cc6575fdcdff184e03f598f8418e7c707f",
+      "topology": "fat_tree_64"
+    }
+  ]
+}

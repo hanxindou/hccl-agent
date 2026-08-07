@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "g3-b2-schedule-ir-v1",
+  "title": "G3-B2 Collective Schedule IR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version","schedule_id","primitive","algorithm","rank_size","message_size_bytes","dtype","reduce_op","topology_hash","hardware_profile_hash","chunk_size_bytes","chunk_count","phases","dependencies","memory_plan","failure_policy","estimated_metrics","schedule_hash"],
+  "properties": {
+    "schema_version": {"const": "g3-b2-schedule-ir-v1"},
+    "schedule_id": {"type": "string"},
+    "primitive": {"enum": ["AllReduce","AllGather","ReduceScatter"]},
+    "algorithm": {"type": "string"},
+    "rank_size": {"type": "integer", "minimum": 2, "maximum": 64},
+    "message_size_bytes": {"type": "integer", "minimum": 1},
+    "dtype": {"enum": ["FP32","FP16","BF16"]},
+    "reduce_op": {"type": ["string","null"]},
+    "topology_hash": {"type": "string"},
+    "hardware_profile_hash": {"type": "string"},
+    "chunk_size_bytes": {"type": "integer", "minimum": 1},
+    "chunk_count": {"type": "integer", "minimum": 1},
+    "phases": {"type": "array", "minItems": 1},
+    "dependencies": {"type": "array"},
+    "memory_plan": {"type": "object"},
+    "failure_policy": {"type": "object"},
+    "estimated_metrics": {"type": "object"},
+    "schedule_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

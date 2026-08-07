@@ -1,0 +1,12 @@
+{
+  "all_invariants_passed": true,
+  "c_python_parity_passed": true,
+  "checkpoint": "G3-B2-B",
+  "checkpoint_status": "COMPLETED",
+  "invariant_count_per_schedule": 14,
+  "measured_on_real_npu": false,
+  "public_abi_changed": false,
+  "real_device_api_executed": false,
+  "schedule_count": 30,
+  "truth_label": "CPU_EXECUTED"
+}

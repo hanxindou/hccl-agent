@@ -1,0 +1,36 @@
+{
+  "frozen": true,
+  "prompts": [
+    {
+      "path": "prompts/g3_b2/benchmark_evaluation_v1.md",
+      "prompt_id": "g3-b2-benchmark-evaluation",
+      "sha256": "3c8a75ee59b0da8ca391e8887ed9f69b1c70e0815b7e607c7056ba3965c7406b",
+      "version": "1.0.0"
+    },
+    {
+      "path": "prompts/g3_b2/reflection_v1.md",
+      "prompt_id": "g3-b2-reflection",
+      "sha256": "0791037c5fd33067f8694df254db90e46acf090c59ae5e8a209ed17865f2ecfc",
+      "version": "1.0.0"
+    },
+    {
+      "path": "prompts/g3_b2/replanning_v1.md",
+      "prompt_id": "g3-b2-replanning",
+      "sha256": "3f281b84eadb86d2965f8de7d931e99c3870651ad4319743b24b2dd9cffda293",
+      "version": "1.0.0"
+    },
+    {
+      "path": "prompts/g3_b2/schedule_generation_v1.md",
+      "prompt_id": "g3-b2-schedule-generation",
+      "sha256": "439d4042a89d34f81d2977ec70edfdafda4542af7d731e1706ab22357dd2ea0e",
+      "version": "1.0.0"
+    },
+    {
+      "path": "prompts/g3_b2/topology_optimization_v1.md",
+      "prompt_id": "g3-b2-topology-optimization",
+      "sha256": "4232aee8ba260aef62b612ea12b9a1ade04948efc0abf432f107835f478010c2",
+      "version": "1.0.0"
+    }
+  ],
+  "schema_version": "g3-b2-prompt-registry-v1"
+}

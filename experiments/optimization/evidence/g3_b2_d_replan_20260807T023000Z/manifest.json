@@ -1,0 +1,19 @@
+{
+  "benchmark_contract_sha256": "db6519370256f3c73ca96177e599f3dabc7dcbc1c0319b5ef2b0cc53236b2bfe",
+  "event_types": [
+    "LINK_DEGRADED",
+    "LINK_DOWN",
+    "LINK_RECOVERED",
+    "RANK_REMOVED",
+    "RANK_RECOVERED",
+    "NO_ALTERNATE_PATH"
+  ],
+  "fallback_policy": "NONE",
+  "frozen_parameter_sha256": "df4dd8fd39db45c923c14ada30c1531c666e49d384be806267aeaa228285ebdf",
+  "memory_budget_bytes": 67108864,
+  "schema_version": "g3-b2-d-evidence-v1",
+  "truth_labels": [
+    "SIMULATED_ONLY",
+    "REAL_DEVICE_NOT_EXECUTED"
+  ]
+}

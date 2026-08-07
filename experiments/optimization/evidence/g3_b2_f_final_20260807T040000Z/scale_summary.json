@@ -1,0 +1,82 @@
+{
+  "scenarios": [
+    {
+      "absolute_difference_us": -676650.890233626,
+      "bandwidth": 1.744178792,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 0.830855317,
+        "p50_us": 1292203.8746816,
+        "p95_us": 1293496.078556282
+      },
+      "candidate": {
+        "algorithm": "Hierarchical",
+        "bandwidth": 1.744178792,
+        "p50_us": 615552.984447974,
+        "p95_us": 616168.537432422
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 16777216,
+        "logical_message_bytes": 1073741824,
+        "logical_to_materialized_ratio": 21.333333333,
+        "materialized_bytes": 50331648,
+        "materialized_pipeline_depth": 3,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 67108864,
+        "temporary_buffer_bytes": 16777216,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 615552.984447974,
+      "p95": 616168.537432422,
+      "phase_count": 20.0,
+      "relative_difference_percent": -52.364096989,
+      "scenario_id": "P17",
+      "schedule_hash": "c39275b79bcb67ea67b366d0204836a60b404bde650a46dc31ed852605ed68a2",
+      "topology": "logical_1024",
+      "weight": 2.0
+    },
+    {
+      "absolute_difference_us": -302144.128770609,
+      "bandwidth": 3.121276767,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 1.661671954,
+        "p50_us": 646116.9773408,
+        "p95_us": 646763.094318141
+      },
+      "candidate": {
+        "algorithm": "Butterfly",
+        "bandwidth": 3.121276767,
+        "p50_us": 343972.848570191,
+        "p95_us": 344316.821418761
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 16777216,
+        "logical_message_bytes": 1073741824,
+        "logical_to_materialized_ratio": 21.333333333,
+        "materialized_bytes": 50331648,
+        "materialized_pipeline_depth": 3,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 67108864,
+        "temporary_buffer_bytes": 16777216,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 343972.848570191,
+      "p95": 344316.821418761,
+      "phase_count": 10.0,
+      "relative_difference_percent": -46.763069129,
+      "scenario_id": "P18",
+      "schedule_hash": "143c829bad04f4f43bd6b632ccffef680317f6c8ce876f5431653662225f595c",
+      "topology": "logical_1024",
+      "weight": 2.0
+    }
+  ],
+  "status": "PASS",
+  "truth_label": "SIMULATED_ONLY"
+}

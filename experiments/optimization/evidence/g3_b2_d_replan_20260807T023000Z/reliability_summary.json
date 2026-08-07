@@ -1,0 +1,83 @@
+{
+  "events": [
+    {
+      "correctness": true,
+      "event_id": "g3-b2-d-00",
+      "event_type": "LINK_DEGRADED",
+      "post_replan_checks": {
+        "bounded_memory": true,
+        "invariants_passed": true,
+        "no_duplicate_transfer": true,
+        "no_missing_chunk": true,
+        "rank_ordering_valid": true,
+        "route_validity": true
+      },
+      "status": "REPLANNED"
+    },
+    {
+      "correctness": true,
+      "event_id": "g3-b2-d-01",
+      "event_type": "LINK_DOWN",
+      "post_replan_checks": {
+        "bounded_memory": true,
+        "invariants_passed": true,
+        "no_duplicate_transfer": true,
+        "no_missing_chunk": true,
+        "rank_ordering_valid": true,
+        "route_validity": true
+      },
+      "status": "REPLANNED"
+    },
+    {
+      "correctness": true,
+      "event_id": "g3-b2-d-02",
+      "event_type": "LINK_RECOVERED",
+      "post_replan_checks": {
+        "bounded_memory": true,
+        "invariants_passed": true,
+        "no_duplicate_transfer": true,
+        "no_missing_chunk": true,
+        "rank_ordering_valid": true,
+        "route_validity": true
+      },
+      "status": "REPLANNED"
+    },
+    {
+      "correctness": true,
+      "event_id": "g3-b2-d-03",
+      "event_type": "RANK_REMOVED",
+      "post_replan_checks": {
+        "bounded_memory": true,
+        "invariants_passed": true,
+        "no_duplicate_transfer": true,
+        "no_missing_chunk": true,
+        "rank_ordering_valid": true,
+        "route_validity": true
+      },
+      "status": "REPLANNED"
+    },
+    {
+      "correctness": true,
+      "event_id": "g3-b2-d-04",
+      "event_type": "RANK_RECOVERED",
+      "post_replan_checks": {
+        "bounded_memory": true,
+        "invariants_passed": true,
+        "no_duplicate_transfer": true,
+        "no_missing_chunk": true,
+        "rank_ordering_valid": true,
+        "route_validity": true
+      },
+      "status": "REPLANNED"
+    },
+    {
+      "correctness": false,
+      "event_id": "g3-b2-d-05",
+      "event_type": "NO_ALTERNATE_PATH",
+      "post_replan_checks": null,
+      "status": "EXPECTED_NO_PATH_FAILURE"
+    }
+  ],
+  "fallback": "NONE",
+  "no_path_status": "EXPECTED_NO_PATH_FAILURE"
+}

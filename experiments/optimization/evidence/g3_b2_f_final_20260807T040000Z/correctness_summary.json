@@ -1,0 +1,16 @@
+{
+  "all_scenarios_correct": true,
+  "dtypes": [
+    "FP32",
+    "FP16",
+    "BF16"
+  ],
+  "status": "PASS",
+  "successful_replan_correctness": true,
+  "three_primitives": [
+    "AllReduce",
+    "AllGather",
+    "ReduceScatter"
+  ],
+  "truth_label": "SIMULATED_ONLY"
+}

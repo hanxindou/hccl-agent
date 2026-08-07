@@ -1,0 +1,20 @@
+{
+  "run_id": "g3-b2-b-schedule-ir",
+  "timestamp": "2026-08-07T01:45:00Z",
+  "development_agent": "Codex",
+  "runtime_agent": "hccl-agent-not-invoked-phase-b",
+  "prompt_id": "g3-b2-schedule-generation",
+  "prompt_version": "1.0.0",
+  "input_schema_version": "g3-b2-schedule-request-v1",
+  "output_schema_version": "g3-b2-schedule-ir-v1",
+  "baseline_commit": "12f5b97",
+  "input_hash": "configs/optimization/g3_b2_schedule_ir_schema.json:sha256-in-phase-evidence",
+  "proposal_hash": "resolved-by-schedule-inventory",
+  "human_decision": "AUTHORIZED_G3_B2_SEQUENCE",
+  "changed_files": ["algorithm/", "hcccl/src/schedule_ir.c", "hcccl/src/schedule_ir.h"],
+  "tests": ["CTest 12/12", "C/Python parity 30/30"],
+  "benchmark_result": "NOT_APPLICABLE_PHASE_B",
+  "reflection": "Single-rank compatibility preserved outside the rank-2-plus Schedule IR contract.",
+  "selected": true,
+  "result_commit": "RESOLVED_BY_COMMIT_MAPPING"
+}

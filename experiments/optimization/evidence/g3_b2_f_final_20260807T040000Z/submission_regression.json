@@ -1,0 +1,319 @@
+{
+  "check": {
+    "default_backend": "CPU_SIM",
+    "fallback_policy": "NONE",
+    "missing_paths": [],
+    "missing_tools": [],
+    "official_asset_default": "EXCLUDE",
+    "optional": {
+      "cann_9_1_0": "AVAILABLE"
+    },
+    "platform": "Windows-11-10.0.22631-SP0",
+    "python": "3.12.13",
+    "real_device_only": {
+      "npu": "NOT_PROBED",
+      "runtime_execution": "DISABLED"
+    },
+    "repository_root": "<repo>",
+    "required": {
+      "paths": "PASS",
+      "tools": {
+        "cc": "cc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+        "cmake": "cmake version 3.22.1",
+        "ctest": "ctest version 3.22.1",
+        "file": "file-5.41",
+        "ld": "GNU ld (GNU Binutils for Ubuntu) 2.38",
+        "ldd": "ldd (Ubuntu GLIBC 2.35-0ubuntu3.13) 2.35",
+        "nm": "GNU nm (GNU Binutils for Ubuntu) 2.38",
+        "readelf": "GNU readelf (GNU Binutils for Ubuntu) 2.38"
+      }
+    },
+    "schema_version": "g3-b-check-v1",
+    "status": "PASS",
+    "user_action_required": [
+      "UA-B-001",
+      "UA-B-002",
+      "UA-B-003",
+      "UA-B-004"
+    ]
+  },
+  "ctest_build_a": {
+    "failed": 0,
+    "passed": 12,
+    "status": "PASS"
+  },
+  "ctest_build_b": {
+    "failed": 0,
+    "passed": 12,
+    "status": "PASS"
+  },
+  "first_full_status": "PASS",
+  "focused_tests": [
+    {
+      "output": "4 passed",
+      "path": "tests/optimization/test_g3_b2_baseline.py",
+      "status": "PASS"
+    },
+    {
+      "output": "3 passed",
+      "path": "tests/optimization/test_g3_b2_schedule_ir.py",
+      "status": "PASS"
+    },
+    {
+      "output": "8 passed",
+      "path": "tests/optimization/test_g3_b2_topology_optimization.py",
+      "status": "PASS"
+    },
+    {
+      "output": "4 passed",
+      "path": "tests/optimization/test_g3_b2_replan_memory_pipeline.py",
+      "status": "PASS"
+    },
+    {
+      "output": "3 passed",
+      "path": "tests/optimization/test_g3_b2_agent_ablation.py",
+      "status": "PASS"
+    }
+  ],
+  "full_repository_python_regression": {
+    "command": "python3 -m unittest discover -s tests -p test_*.py -q",
+    "environment": "WSL with HCCL_PLUGIN_PATH set to the clean audited CPU_SIM build-a artifact",
+    "errors": 0,
+    "failed": 0,
+    "passed": 594,
+    "skipped": 1,
+    "status": "PASS"
+  },
+  "official_repositories": {
+    "hccl": {
+      "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "tracked_worktree_clean": true
+    },
+    "hcomm": {
+      "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "tracked_worktree_clean": true
+    }
+  },
+  "old_evidence": [
+    {
+      "files_checked": 3,
+      "path": "experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z",
+      "sha256sums_sha256": "42e12f11293419ee2866709068a249452529dedec1c34117c827608a48f804d4",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 4,
+      "path": "experiments/direct_api/evidence/g2_f_1_20260730T203000Z",
+      "sha256sums_sha256": "08a63a712a9bd34518b86b5c9e905bf6728cf1c067c501fffbc3cb33a65719cc",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 4,
+      "path": "experiments/direct_api/evidence/g2_f_2_20260730T210000Z",
+      "sha256sums_sha256": "f01054cdf440d7d904bf246a245df704a87f0465dc26161b7862cd4f28bdf361",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 8,
+      "path": "experiments/direct_api/evidence/g2_f_3_20260802T000000Z",
+      "sha256sums_sha256": "e4c37a4f579d3a2bb3a3e6a2762c652628d537c7050d11478d8ee5a2e95c7052",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 10,
+      "path": "experiments/direct_api/evidence/g2_f_4_20260802T010000Z",
+      "sha256sums_sha256": "345ddf6dcfaf41827864807c23659d49179fcf4e80c70d90d01d2237d6b3697d",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 13,
+      "path": "experiments/simulator/evidence/g2_f_5_simulator_20260804T010000Z",
+      "sha256sums_sha256": "b8c5d9388b30fc9095df4cc3bb87ae8f2228db739936d97f1909a87034cb124d",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 21,
+      "path": "experiments/simulator/evidence/g2_f_6_simulator_20260804T020000Z",
+      "sha256sums_sha256": "c8f75ad2b945fc3caebbe62e9423ff2e21826995de5cfc03c0703b2e90e47385",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 19,
+      "path": "experiments/final_audit/evidence/g2_f_7_20260805T010000Z",
+      "sha256sums_sha256": "7e904f7e2944e0b90fc5dde27065e8353a283aa9f623d9d7a6342d716cd2927f",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 12,
+      "path": "experiments/submission/evidence/g3_a_20260806T035554Z",
+      "sha256sums_sha256": "4f8fab9ee14e29215f30bc4df45b2a4387dd4e8f8c17c81d41dcb0c81fe3511c",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 11,
+      "path": "experiments/optimization/evidence/g3_b2_a_baseline_20260807T012447Z",
+      "sha256sums_sha256": "5c9ac0949741f4ffa96d6718ca1b0022dbf7080797a6c31beb67e31e8e897c17",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 6,
+      "path": "experiments/optimization/evidence/g3_b2_b_schedule_ir_20260807T014500Z",
+      "sha256sums_sha256": "9690f51768eb257ba407f90ae55c12a43c6a767b751c228b03cab3de56e5309a",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 12,
+      "path": "experiments/optimization/evidence/g3_b2_c_topology_20260807T021000Z",
+      "sha256sums_sha256": "a68f6a0fd250765783135671d0dfe623bdda22bc093cfcec47215e8ac894b83b",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 8,
+      "path": "experiments/optimization/evidence/g3_b2_d_replan_20260807T023000Z",
+      "sha256sums_sha256": "7bb360ae827876ccdc2eaa6babea19c531d0b1a2357f8b5c10516265f447a9a9",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 11,
+      "path": "experiments/optimization/evidence/g3_b2_e_agent_20260807T030000Z",
+      "sha256sums_sha256": "d1bdf1f45a18a9559d1b5e298713ca83e6212ca1af50c4cbdd343884d8bd088d",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 11,
+      "path": "experiments/optimization/evidence/g3_b2_e_agent_round1_20260807T032000Z",
+      "sha256sums_sha256": "b39575c8d401d53f8dee7e5eb222f1ec3567d70982646d41fadc01b7fee9f908",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 23,
+      "path": "experiments/submission/evidence/g3_b_20260806T090301Z",
+      "sha256sums_sha256": "82b63a35992f80c7d7391b231517d3beb552c5f51691f4ee56da7919f3b563d9",
+      "status": "PASS"
+    }
+  ],
+  "python_regression": {
+    "exit_code": 0,
+    "failed": 0,
+    "modules": [
+      "tests.test_simulator_collective_correctness",
+      "tests.test_failover_engine",
+      "tests.test_backend_selection",
+      "tests.test_plugin_bridge",
+      "tests.test_g2_f_6_simulator_acceptance",
+      "tests.test_g2_f_7_backend_final_audit",
+      "tests.test_direct_api_backend",
+      "tests.test_direct_adapter_build_contract",
+      "tests.test_direct_lifecycle_contract",
+      "tests.test_direct_link_contract",
+      "tests.submission_audit.test_g3_a_audit"
+    ],
+    "passed": 93,
+    "status": "PASS"
+  },
+  "quick_status": "PASS",
+  "real_device_api_executed": false,
+  "reproducible_build": {
+    "binary_sha256_equal": true,
+    "ctest_equal": true,
+    "difference_reason": null,
+    "file_type_equal": true,
+    "first_artifact_reused": false,
+    "headers_equal": true,
+    "needed_equal": true,
+    "soname_equal": true,
+    "status": "BIT_FOR_BIT_REPRODUCIBLE",
+    "symbols_equal": true
+  },
+  "runtime_api_calls": [],
+  "staging": {
+    "controlled_competition_doc_included": false,
+    "excluded_count": 5,
+    "file_count": 274,
+    "included_count": 270,
+    "official_assets_included": false,
+    "private_logs_included": false,
+    "selected_evidence": {
+      "g2_e": "INCLUDE_SUMMARY_ONLY",
+      "g2_f_1": "REFERENCE_ONLY",
+      "g2_f_2": "INCLUDE_SUMMARY_ONLY",
+      "g2_f_3": "INCLUDE_SUMMARY_ONLY",
+      "g2_f_4": "INCLUDE_SUMMARY_ONLY",
+      "g2_f_5": "INCLUDE_FULL",
+      "g2_f_6": "INCLUDE_FULL",
+      "g2_f_7": "INCLUDE_SUMMARY_ONLY",
+      "g3_a": "INCLUDE_FULL"
+    },
+    "staging_root": "dist/submission-staging",
+    "status": "PASS",
+    "total_size_bytes": 5099954
+  },
+  "staging_verification": {
+    "absolute_user_paths": [],
+    "claim_boundary_audit": {
+      "findings": [],
+      "status": "PASS",
+      "truth_labels": [
+        "CPU_EXECUTED",
+        "DIRECT_READINESS_ONLY",
+        "SIMULATED_ONLY",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    },
+    "controlled_competition_doc_included": false,
+    "files_verified": 270,
+    "manifest_entries_verified": 270,
+    "native_elf_audit": {
+      "artifact": "<install>/lib/libhccl_plugin.so",
+      "artifact_role": "CPU_SIM_REFERENCE_PLUGIN",
+      "exported_symbols": [
+        "butterfly_allgather",
+        "butterfly_allreduce",
+        "fattree_allreduce",
+        "hcclAllGather",
+        "hcclAllReduce",
+        "hcclBroadcast",
+        "hcclCommDestroy",
+        "hcclCommInit",
+        "hcclFreeTopology",
+        "hcclGetTopology",
+        "hcclPluginGetAlgorithms",
+        "hcclPluginGetVersion",
+        "hcclReduceScatter",
+        "hcclSetRank",
+        "mesh_allreduce",
+        "mesh_reducescatter",
+        "nhr_allreduce",
+        "ring_allgather",
+        "ring_allreduce"
+      ],
+      "file": "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=8375a9efb9d08d89e504a64672df7566a0194163, not stripped",
+      "forbidden_symbols": [],
+      "ldd": [
+        "linux-vdso.so.1 (0x00007f1b7ad1a000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f1b7aa00000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007f1b7ad1c000)"
+      ],
+      "missing_symbols": [],
+      "needed": [
+        "libc.so.6"
+      ],
+      "official_dependencies": [],
+      "sha256": "9be058f1915a267d89e3647d1b560199eef1a64986b4d0701ceaf0f940995c06",
+      "soname": "libhccl_plugin.so",
+      "status": "PASS",
+      "unexpected_symbols": []
+    },
+    "official_binaries_included": false,
+    "official_source_included": false,
+    "preliminary_forbidden_data_scan": {
+      "findings": [],
+      "scan_type": "PRELIMINARY_FORBIDDEN_DATA_SCAN",
+      "status": "PASS"
+    },
+    "schema_version": "g3-b-stage-verification-v1",
+    "status": "PASS",
+    "symlink_escape": false
+  },
+  "status": "PASS"
+}

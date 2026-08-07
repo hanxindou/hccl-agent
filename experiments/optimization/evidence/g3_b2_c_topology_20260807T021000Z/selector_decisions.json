@@ -1,0 +1,216 @@
+[
+  {
+    "candidate_algorithms": [
+      "Ring",
+      "Butterfly",
+      "Mesh",
+      "NHR"
+    ],
+    "candidate_schedule_hashes": [
+      "7971b8ab9a7108c07e0ddf4192ffc6b90306852aca3ea172f5525d6c0db6414b",
+      "5fe8834ec277044e1f63bda03dec1bfd94453e0fabd2cd803a3861655eec95eb",
+      "5d46e5ab1c08a4ee1037b58bd10f6021f9cdf417a13f18f51dc79c38608e4779",
+      "e030e4487eb0f866659e62edf07fd002d641f9a6acf0f60ec87a1effa538115a"
+    ],
+    "candidate_scores": [
+      {
+        "algorithm": "Ring",
+        "score": 14.0
+      },
+      {
+        "algorithm": "Butterfly",
+        "score": 68.91456
+      },
+      {
+        "algorithm": "Mesh",
+        "score": 95.5615232
+      },
+      {
+        "algorithm": "NHR",
+        "score": 337.681344
+      }
+    ],
+    "fallback": "NONE",
+    "primitive": "AllReduce",
+    "rejected_reasons": [
+      {
+        "algorithm": "Hierarchical",
+        "reason_code": "NO_VALID_HIERARCHY"
+      }
+    ],
+    "selected_algorithm": "Ring",
+    "selected_schedule_hash": "7971b8ab9a7108c07e0ddf4192ffc6b90306852aca3ea172f5525d6c0db6414b",
+    "selection_reason": "minimum explicit frozen analytical schedule score after invariant validation",
+    "topology": "full_mesh_8"
+  },
+  {
+    "candidate_algorithms": [
+      "Ring",
+      "Butterfly",
+      "Mesh",
+      "NHR",
+      "Hierarchical"
+    ],
+    "candidate_schedule_hashes": [
+      "62eef0105b557e4657f8c1d10ca28ef496796ad8891c3042d7b71324696fcabe",
+      "402edaa2ac424454f2853f5802fafe6153a1e1c406c76d618a55884399f8a68a",
+      "bedfdfdebb5b8f8702c556bec6f3e680681c7e2c38c1f9ad70b8535cafc92fa3",
+      "6b99b1d340fb6b378889a0d26d83b65be3f736b40a7967db53ba01346db6904f",
+      "bb44600b32716f01cbd83d937664cc258776748cf518ef74aea3d4057c552853"
+    ],
+    "candidate_scores": [
+      {
+        "algorithm": "Ring",
+        "score": 30.0
+      },
+      {
+        "algorithm": "Butterfly",
+        "score": 303.00776288
+      },
+      {
+        "algorithm": "Mesh",
+        "score": 5289.9842688
+      },
+      {
+        "algorithm": "NHR",
+        "score": 2247.6240864
+      },
+      {
+        "algorithm": "Hierarchical",
+        "score": 304.56719488
+      }
+    ],
+    "fallback": "NONE",
+    "primitive": "AllReduce",
+    "rejected_reasons": [],
+    "selected_algorithm": "Ring",
+    "selected_schedule_hash": "62eef0105b557e4657f8c1d10ca28ef496796ad8891c3042d7b71324696fcabe",
+    "selection_reason": "minimum explicit frozen analytical schedule score after invariant validation",
+    "topology": "asymmetric_16"
+  },
+  {
+    "candidate_algorithms": [
+      "Ring",
+      "Butterfly",
+      "Mesh",
+      "NHR",
+      "Hierarchical"
+    ],
+    "candidate_schedule_hashes": [
+      "ce071baa1a419a3b5412912d7eeccb7c755a85c29d9a82a2cf2d79be0029623c",
+      "c63d30156320cc27c86f4a4cadf4defc4a35e9e14cdb146d8b8dbae3ae8b56fb",
+      "b348929222bfeaaeb230808af689bc11ff8df53bfb5b372fa666d4e93b94051a",
+      "a78412b95196afe3fd9f2413d185aa33f8bc34e0e87f8accdff4202a8432c705",
+      "5bb7c99da3d500df3c4e69e2768ce4399d6419ba13438a5eb3ed99faa0482599"
+    ],
+    "candidate_scores": [
+      {
+        "algorithm": "Ring",
+        "score": 126.0
+      },
+      {
+        "algorithm": "Butterfly",
+        "score": 237.026592
+      },
+      {
+        "algorithm": "Mesh",
+        "score": 12559.8229056
+      },
+      {
+        "algorithm": "NHR",
+        "score": 7091.846496
+      },
+      {
+        "algorithm": "Hierarchical",
+        "score": 214.1462752
+      }
+    ],
+    "fallback": "NONE",
+    "primitive": "AllReduce",
+    "rejected_reasons": [],
+    "selected_algorithm": "Ring",
+    "selected_schedule_hash": "ce071baa1a419a3b5412912d7eeccb7c755a85c29d9a82a2cf2d79be0029623c",
+    "selection_reason": "minimum explicit frozen analytical schedule score after invariant validation",
+    "topology": "fat_tree_64"
+  },
+  {
+    "candidate_algorithms": [
+      "Ring",
+      "Butterfly"
+    ],
+    "candidate_schedule_hashes": [
+      "4406b248aa33bf6abce35a3f64d57e80c32c2621f8ec783bed8eab01637cf45c",
+      "a71e9a19b46425b652e9b4de7fc1261cab051ed888db22eb5182c28de0dcf8ca"
+    ],
+    "candidate_scores": [
+      {
+        "algorithm": "Ring",
+        "score": 7.0
+      },
+      {
+        "algorithm": "Butterfly",
+        "score": 68.91456
+      }
+    ],
+    "fallback": "NONE",
+    "primitive": "AllGather",
+    "rejected_reasons": [
+      {
+        "algorithm": "Mesh",
+        "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+      },
+      {
+        "algorithm": "NHR",
+        "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+      },
+      {
+        "algorithm": "Hierarchical",
+        "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+      }
+    ],
+    "selected_algorithm": "Ring",
+    "selected_schedule_hash": "4406b248aa33bf6abce35a3f64d57e80c32c2621f8ec783bed8eab01637cf45c",
+    "selection_reason": "minimum explicit frozen analytical schedule score after invariant validation",
+    "topology": "full_mesh_8"
+  },
+  {
+    "candidate_algorithms": [
+      "Ring",
+      "Mesh"
+    ],
+    "candidate_schedule_hashes": [
+      "dee897dcaf4129399425894d9373ce97cef51a8e71ecba40abe20dfdb5245b0f",
+      "87527ed6aa8def813cbce5ddd131d2f8f1dbe5d58f0969dc262d59592eaf75d0"
+    ],
+    "candidate_scores": [
+      {
+        "algorithm": "Ring",
+        "score": 7.0
+      },
+      {
+        "algorithm": "Mesh",
+        "score": 95.5615232
+      }
+    ],
+    "fallback": "NONE",
+    "primitive": "ReduceScatter",
+    "rejected_reasons": [
+      {
+        "algorithm": "Butterfly",
+        "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+      },
+      {
+        "algorithm": "NHR",
+        "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+      },
+      {
+        "algorithm": "Hierarchical",
+        "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+      }
+    ],
+    "selected_algorithm": "Ring",
+    "selected_schedule_hash": "dee897dcaf4129399425894d9373ce97cef51a8e71ecba40abe20dfdb5245b0f",
+    "selection_reason": "minimum explicit frozen analytical schedule score after invariant validation",
+    "topology": "full_mesh_8"
+  }
+]

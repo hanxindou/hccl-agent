@@ -1,0 +1,37 @@
+{
+  "baseline_commit": "44dad2e",
+  "benchmark_result": {
+    "default_performance_gate_met": true,
+    "weighted_geomean_improvement_percent": 45.59283008
+  },
+  "changed_files": [
+    "agent/g3_b2_optimization_loop.py",
+    "algorithm/ablation_benchmark.py"
+  ],
+  "development_agent": "Codex",
+  "human_decision": "AUTHORIZED_G3_B2_SEQUENCE_NO_ALGORITHM_OVERRIDE",
+  "input_hash": "32b6eedb6e1a241ed1435298d166342cd1d26711b1c06d699b5078bc90e8e7bd",
+  "input_schema_version": "g3-b2-agent-input-v1",
+  "output_schema_version": "g3-b2-evaluation-result-v1",
+  "prompt_id": "g3-b2-benchmark-evaluation",
+  "prompt_version": "1.0.0",
+  "proposal_hash": "fc1cac74e259d37723afdbc3ee917ee1a24a511b0aa0bb770c62bbcbdb349294",
+  "reflection": {
+    "action": "freeze stable correctness-passing selection",
+    "adjustment_rounds_used": 1,
+    "model_boundary": "SIMULATED_ONLY",
+    "observation": "Every win, tie, loss, regression, and simulator-only pipeline contribution remains explicit.",
+    "performance_target_status": "SATISFIED",
+    "run_id": "g3-b2-e-authoritative-optimization-round1"
+  },
+  "result_commit": "RESOLVED_BY_COMMIT_MAPPING",
+  "run_id": "g3-b2-e-authoritative-optimization-round1",
+  "runtime_agent": "hccl-agent:g3_b2_optimization_loop",
+  "selected": true,
+  "tests": [
+    "A0-A7 frozen matrix",
+    "agent correctness hard gate",
+    "wins/ties/losses audit"
+  ],
+  "timestamp": "2026-08-07T03:00:00Z"
+}

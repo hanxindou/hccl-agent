@@ -1,0 +1,253 @@
+[
+  {
+    "baseline_record": {
+      "affected": {
+        "link": "0->1",
+        "rank": null
+      },
+      "cleanup_final_state": "ROUTE_HEALTHY",
+      "collective_completion_status": "RECOVERED",
+      "correctness_recheck": {
+        "correctness_gate_passed": true,
+        "full_or_sampled_validation": "full",
+        "max_abs_error": 0.0,
+        "max_rel_error": 0.0,
+        "output_hash": "600ee08be06767563da9f96e6175148aff3e36e3bee4c27fe22e20099835bd51"
+      },
+      "crc32": {
+        "algorithm": "CRC32",
+        "candidate": 2215475432,
+        "detected_corruption_count": 0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "injected_corruption_count": 0,
+        "reference": 2215475432
+      },
+      "detection_simulated_time_us": 22.0,
+      "event_order_valid": true,
+      "fault_type": "bandwidth_degradation",
+      "injection_simulated_time_us": 2000.0,
+      "post_fault_route": [
+        0,
+        2,
+        4,
+        6,
+        7
+      ],
+      "pre_fault_route": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "real_device_failover_validated": false,
+      "recovery_action": "reroute_and_retry",
+      "recovery_simulated_time_us": 37.0,
+      "retransmitted_bytes": 0,
+      "retry_bounded": true,
+      "retry_count": 0,
+      "scenario_id": "fault-02-bandwidth_degradation",
+      "simulated_failover_target_met": true,
+      "simulated_failover_time_ms": 0.059
+    },
+    "contract": {
+      "event": "LINK_DEGRADED",
+      "expected": "REPLAN_AND_COMPLETE",
+      "ranks": 16,
+      "scenario_id": "R01",
+      "seed": 20260804,
+      "topology": "HETEROGENEOUS"
+    },
+    "truth_label": "SIMULATED_ONLY"
+  },
+  {
+    "baseline_record": {
+      "affected": {
+        "link": "0->1",
+        "rank": null
+      },
+      "cleanup_final_state": "ROUTE_HEALTHY",
+      "collective_completion_status": "RECOVERED",
+      "correctness_recheck": {
+        "correctness_gate_passed": true,
+        "full_or_sampled_validation": "full",
+        "max_abs_error": 0.0,
+        "max_rel_error": 0.0,
+        "output_hash": "600ee08be06767563da9f96e6175148aff3e36e3bee4c27fe22e20099835bd51"
+      },
+      "crc32": {
+        "algorithm": "CRC32",
+        "candidate": 2215475432,
+        "detected_corruption_count": 0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "injected_corruption_count": 0,
+        "reference": 2215475432
+      },
+      "detection_simulated_time_us": 20.0,
+      "event_order_valid": true,
+      "fault_type": "transient_link_failure",
+      "injection_simulated_time_us": 0.0,
+      "post_fault_route": [
+        0,
+        2,
+        4,
+        6,
+        7
+      ],
+      "pre_fault_route": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "real_device_failover_validated": false,
+      "recovery_action": "reroute_and_retry",
+      "recovery_simulated_time_us": 35.0,
+      "retransmitted_bytes": 0,
+      "retry_bounded": true,
+      "retry_count": 0,
+      "scenario_id": "fault-00-transient_link_failure",
+      "simulated_failover_target_met": true,
+      "simulated_failover_time_ms": 0.055
+    },
+    "contract": {
+      "event": "LINK_DOWN",
+      "expected": "REPLAN_AND_COMPLETE",
+      "ranks": 64,
+      "scenario_id": "R02",
+      "seed": 20260804,
+      "topology": "FAT_TREE"
+    },
+    "truth_label": "SIMULATED_ONLY"
+  },
+  {
+    "baseline_record": {
+      "affected": {
+        "link": null,
+        "rank": 0
+      },
+      "cleanup_final_state": "ROUTE_HEALTHY",
+      "collective_completion_status": "RECOVERED",
+      "correctness_recheck": {
+        "correctness_gate_passed": true,
+        "full_or_sampled_validation": "full",
+        "max_abs_error": 0.0,
+        "max_rel_error": 0.0,
+        "output_hash": "600ee08be06767563da9f96e6175148aff3e36e3bee4c27fe22e20099835bd51"
+      },
+      "crc32": {
+        "algorithm": "CRC32",
+        "candidate": 2215475432,
+        "detected_corruption_count": 0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "injected_corruption_count": 0,
+        "reference": 2215475432
+      },
+      "detection_simulated_time_us": 31.0,
+      "event_order_valid": true,
+      "fault_type": "dynamic_node_recovery",
+      "injection_simulated_time_us": 11000.0,
+      "post_fault_route": [
+        0,
+        2,
+        4,
+        6,
+        7
+      ],
+      "pre_fault_route": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "real_device_failover_validated": false,
+      "recovery_action": "reroute_and_retry",
+      "recovery_simulated_time_us": 46.0,
+      "retransmitted_bytes": 0,
+      "retry_bounded": true,
+      "retry_count": 0,
+      "scenario_id": "fault-11-dynamic_node_recovery",
+      "simulated_failover_target_met": true,
+      "simulated_failover_time_ms": 0.077
+    },
+    "contract": {
+      "event": "LINK_RECOVERED",
+      "expected": "REPLAN_AND_COMPLETE",
+      "ranks": 16,
+      "scenario_id": "R03",
+      "seed": 20260804,
+      "topology": "RING"
+    },
+    "truth_label": "SIMULATED_ONLY"
+  },
+  {
+    "baseline_record": {
+      "affected": {
+        "link": "0->1",
+        "rank": null
+      },
+      "cleanup_final_state": "FAILED_NO_PATH",
+      "collective_completion_status": "EXPECTED_NO_PATH_FAILURE",
+      "correctness_recheck": {
+        "correctness_gate_passed": false,
+        "reason": "no alternate path; explicit expected failure"
+      },
+      "crc32": {
+        "algorithm": "CRC32",
+        "candidate": 2215475432,
+        "detected_corruption_count": 0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "injected_corruption_count": 0,
+        "reference": 2215475432
+      },
+      "detection_simulated_time_us": 21.0,
+      "event_order_valid": true,
+      "fault_type": "permanent_link_failure",
+      "injection_simulated_time_us": 1000.0,
+      "post_fault_route": null,
+      "pre_fault_route": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "real_device_failover_validated": false,
+      "recovery_action": "declare_no_alternate_path",
+      "recovery_simulated_time_us": 0.0,
+      "retransmitted_bytes": 0,
+      "retry_bounded": true,
+      "retry_count": 0,
+      "scenario_id": "fault-01-permanent_link_failure",
+      "simulated_failover_target_met": false,
+      "simulated_failover_time_ms": 0.021
+    },
+    "contract": {
+      "event": "NO_PATH",
+      "expected": "EXPECTED_NO_PATH_FAILURE",
+      "ranks": 8,
+      "scenario_id": "R04",
+      "seed": 20260804,
+      "topology": "RING"
+    },
+    "truth_label": "SIMULATED_ONLY"
+  }
+]

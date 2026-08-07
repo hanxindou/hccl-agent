@@ -1,0 +1,20 @@
+{
+  "run_id": "g3-b2-d-replan-memory-pipeline",
+  "timestamp": "2026-08-07T02:30:00Z",
+  "development_agent": "Codex",
+  "runtime_agent": "hccl-agent-not-invoked-phase-d",
+  "prompt_id": "g3-b2-replanning",
+  "prompt_version": "1.0.0",
+  "input_schema_version": "g3-b2-replan-request-v1",
+  "output_schema_version": "g3-b2-replan-result-v1",
+  "baseline_commit": "486974f",
+  "input_hash": "resolved-by-g3-b2-d-manifest",
+  "proposal_hash": "resolved-by-replan-trace",
+  "human_decision": "AUTHORIZED_G3_B2_SEQUENCE",
+  "changed_files": ["algorithm/replanner.py", "algorithm/memory_model.py", "algorithm/pipeline_model.py"],
+  "tests": ["replan/memory/pipeline focused assertions 4/4", "CTest 12/12", "C/Python parity 3/3"],
+  "benchmark_result": "REPLAN_AND_MODEL_VALIDATION_PHASE_D",
+  "reflection": "No-path remains an explicit expected failure; pipeline overlap remains simulator-only.",
+  "selected": true,
+  "result_commit": "RESOLVED_BY_COMMIT_MAPPING"
+}

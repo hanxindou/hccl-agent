@@ -33,6 +33,10 @@ RESULT_ROOT = ROOT / "dist/submission-results"
 BUILD_ROOT = ROOT / "build/submission"
 INSTALL_ROOT = ROOT / "dist/submission-install"
 DEFAULT_CANN_ROOT = "/home/workspace/Ascend/cann-9.1.0"
+G3_B2_A_EVIDENCE = ROOT / "experiments/optimization/evidence/g3_b2_a_baseline_20260807T012447Z"
+G3_B2_C_EVIDENCE = ROOT / "experiments/optimization/evidence/g3_b2_c_topology_20260807T021000Z"
+G3_B2_D_EVIDENCE = ROOT / "experiments/optimization/evidence/g3_b2_d_replan_20260807T023000Z"
+G3_B2_E_EVIDENCE = ROOT / "experiments/optimization/evidence/g3_b2_e_agent_round1_20260807T032000Z"
 
 EVIDENCE_DIRS = {
     "g2_e": ROOT / "experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z",
@@ -330,8 +334,8 @@ def _build_once(name: str) -> dict[str, Any]:
     audit = _parse_native_audit(artifact)
     headers = {name: _sha256(install_dir / "include" / name) for name in ("hccl_comm.h", "hccl_algorithms.h")}
     test_count = _test_count(ctest["stdout"])
-    if test_count != 11:
-        raise SubmissionError(f"expected 11 CPU_SIM CTests, observed {test_count}")
+    if test_count != 12:
+        raise SubmissionError(f"expected 12 CPU_SIM CTests, observed {test_count}")
     return {
         "name": name, "status": "PASS", "build_dir": f"<build>/{name}",
         "install_dir": f"<install>/{name}", "source_commit": _git("rev-parse", "HEAD"),
@@ -484,6 +488,77 @@ def _python_regression(modules: Sequence[str], artifact: Path) -> dict[str, Any]
     return {"status": "PASS", "passed": count, "failed": 0, "modules": list(modules), "exit_code": result["exit_code"]}
 
 
+def _g3_b2_quick_checks() -> dict[str, Any]:
+    from algorithm.ring_schedule import generate_ring_schedule
+    from algorithm.schedule_ir import validate_schedule
+    from algorithm.schedule_selector import select_schedule
+    from algorithm.topology_model import build_topology
+    from algorithm.topology_schedules import generate_schedule
+    representative = generate_ring_schedule("AllReduce", 8, 65539)
+    invariants = validate_schedule(representative)
+    topology = build_topology("asymmetric", 16)
+    selector = select_schedule("AllReduce", topology, 1048579)
+    hierarchical = generate_schedule("Hierarchical", "AllReduce", topology, 1048579)
+    comparison = {
+        "ring_schedule_hash": representative["schedule_hash"],
+        "hierarchical_schedule_hash": hierarchical["schedule_hash"],
+        "different": representative["schedule_hash"] != hierarchical["schedule_hash"],
+    }
+    if not invariants or not selector["selected_schedule_hash"] or selector["fallback"] != "NONE" or not comparison["different"]:
+        raise SubmissionError("G3-B2 quick schedule checks failed")
+    return {
+        "status": "PASS", "schedule_invariant_count": len(invariants),
+        "representative_schedule": {"primitive": "AllReduce", "rank_size": 8, "schedule_hash": representative["schedule_hash"], "phase_count": len(representative["phases"])},
+        "agent_selector_output": {key: value for key, value in selector.items() if key != "selected_schedule"},
+        "topology_aware_comparison": comparison, "full_benchmark_executed": False,
+    }
+
+
+def _g3_b2_full_checks(build_name: str) -> dict[str, Any]:
+    matrix = json.loads((ROOT / "configs/optimization/g3_b2_benchmark_matrix.json").read_text(encoding="utf-8"))
+    if len(matrix["performance_scenarios"]) != 18 or len(matrix["reliability_scenarios"]) != 4:
+        raise SubmissionError("G3-B2 benchmark contract count drift")
+    test_files = [
+        "tests/optimization/test_g3_b2_baseline.py",
+        "tests/optimization/test_g3_b2_schedule_ir.py",
+        "tests/optimization/test_g3_b2_topology_optimization.py",
+        "tests/optimization/test_g3_b2_replan_memory_pipeline.py",
+        "tests/optimization/test_g3_b2_agent_ablation.py",
+    ]
+    focused = []
+    for relative in test_files:
+        run = _run_linux(["python3", _linux_path(ROOT / relative)])
+        focused.append({"path": relative, "status": "PASS", "output": (run["stdout"] + run["stderr"]).strip()})
+    dump = BUILD_ROOT / build_name / "schedule_ir_dump"
+    parity_run = _run_linux([_linux_path(dump), "AllReduce", "8", "65539", "FP32", "SUM"])
+    observed = json.loads(parity_run["stdout"])
+    from algorithm.ring_schedule import generate_ring_schedule
+    from algorithm.memory_model import attach_memory_report
+    from algorithm.topology_model import build_topology
+    from algorithm.topology_schedules import generate_schedule
+    parity = observed == generate_ring_schedule("AllReduce", 8, 65539)
+    memory_schedule = attach_memory_report(generate_schedule("Hierarchical", "AllReduce", build_topology("fat_tree", 64), 1024**3), 64 * 1024 * 1024)
+    final_dirs = sorted((ROOT / "experiments/optimization/evidence").glob("g3_b2_f_final_*"))
+    if len(final_dirs) > 1:
+        raise SubmissionError("multiple G3-B2 final evidence directories")
+    final_validation: dict[str, Any]
+    if final_dirs:
+        integrity = _verify_sha256sums(final_dirs[0])
+        result = json.loads((final_dirs[0] / "result.json").read_text(encoding="utf-8"))
+        if integrity["status"] != "PASS" or result.get("checkpoint") != "G3-B2":
+            raise SubmissionError("G3-B2 final evidence validation failed")
+        final_validation = {"status": "PASS", "path": final_dirs[0].relative_to(ROOT).as_posix(), "integrity": integrity}
+    else:
+        final_validation = {"status": "NOT_YET_FROZEN", "reason": "first full run precedes the single final evidence generation"}
+    if not parity or not memory_schedule["memory_plan"]["within_budget"]:
+        raise SubmissionError("G3-B2 parity or bounded-memory audit failed")
+    return {
+        "status": "PASS", "benchmark_contract": {"performance_scenarios": 18, "reliability_scenarios": 4, "sha256": _sha256(ROOT / "configs/optimization/g3_b2_benchmark_matrix.json")},
+        "focused_tests": focused, "c_python_parity": {"status": "PASS", "schedule_hash": observed["schedule_hash"]},
+        "bounded_memory": memory_schedule["memory_plan"], "final_evidence_validation": final_validation,
+    }
+
+
 def build_command(args: argparse.Namespace) -> dict[str, Any]:
     check_environment()
     if args.direct_readiness:
@@ -504,11 +579,12 @@ def quick_command(args: argparse.Namespace, *, persist: bool = True) -> dict[str
     regression = _python_regression(QUICK_TEST_MODULES, build["artifact_path"])
     replay = _simulator_replay(args)
     evidence = verify_old_evidence(["g2_f_5", "g2_f_6"])
+    g3_b2 = _g3_b2_quick_checks()
     result = {
         "schema_version": "g3-b-quick-v1", "status": "PASS",
         "command": "python -m tools.submission_cli quick", "environment": environment,
         "build": _public_build(build), "python_regression": regression,
-        "simulator_replay": replay, "old_evidence": evidence,
+        "simulator_replay": replay, "old_evidence": evidence, "g3_b2_schedule_checks": g3_b2,
         "expensive_simulator_evidence_regenerated": False,
         "real_device_api_executed": False, "runtime_api_calls": [],
     }
@@ -557,6 +633,8 @@ def full_command(args: argparse.Namespace) -> dict[str, Any]:
     progress("old-evidence")
     quick = quick_command(args, persist=True)
     progress("quick-regression")
+    g3_b2 = _g3_b2_full_checks("build-a")
+    progress("g3-b2-full-checks")
     direct = _direct_build(args.cann_root or DEFAULT_CANN_ROOT)
     progress("direct-readiness")
     stage_args = argparse.Namespace(output=str(DEFAULT_STAGE.relative_to(ROOT)), clean_output=True, include_selected_evidence=True, exclude_controlled_docs=True, exclude_official_assets=True)
@@ -572,6 +650,7 @@ def full_command(args: argparse.Namespace) -> dict[str, Any]:
         "consumer_compile": consumer, "python_regression": regression,
         "simulator_replay": replay, "old_evidence": old_evidence, "quick_regression": {"status": quick["status"]},
         "direct_readiness": direct, "staging": staging, "staging_verification": verification,
+        "g3_b2_full_checks": g3_b2,
         "expensive_simulator_evidence_regenerated": False,
         "real_device_api_executed": False, "direct_hccl_api_call": False,
         "real_ascend_npu_validated": False, "runtime_api_calls": [],
@@ -720,7 +799,7 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
         "docs/submission/deliverable_inventory.json", "docs/submission/risk_register.json",
     ):
         copy(rel)
-    for directory in ("agent", "plugin", "simulator", "skills", "topology", "hardware", "cost_model", "config", "configs/submission", "tools/submission_cli"):
+    for directory in ("agent", "algorithm", "plugin", "simulator", "skills", "topology", "hardware", "cost_model", "config", "configs/submission", "tools/submission_cli"):
         source = ROOT / directory
         _copy_selected_tree(source, stage / directory, {".py", ".json", ".md", ".txt"})
         for path in (stage / directory).rglob("*"):
@@ -758,13 +837,41 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
     copy("hcccl/direct/src/hccl_direct_link_audit.cpp", "native/direct/source/hccl_direct_link_audit.cpp")
     copy("hcccl/submission/direct_readiness_abi_manifest.json", "native/direct/ABI_MANIFEST.json")
 
+    copy("configs/optimization/g3_b2_schedule_ir_schema.json", "algorithm/schedule_schema.json")
+    copy("experiments/optimization/evidence/g3_b2_c_topology_20260807T021000Z/algorithm_support_matrix.json", "algorithm/algorithm_support_matrix.json")
+    from algorithm.ring_schedule import generate_ring_schedule
+    from algorithm.topology_model import build_topology
+    from algorithm.topology_schedules import generate_schedule
+    _write_json(stage / "algorithm/examples/ring_allreduce_8.json", generate_ring_schedule("AllReduce", 8, 65539))
+    _write_json(stage / "algorithm/examples/hierarchical_allreduce_16.json", generate_schedule("Hierarchical", "AllReduce", build_topology("fat_tree", 16), 1048579))
+    source_map["algorithm/examples/ring_allreduce_8.json"] = "<generated-from-frozen-schedule-generator>"
+    source_map["algorithm/examples/hierarchical_allreduce_16.json"] = "<generated-from-frozen-schedule-generator>"
+    _write_text(stage / "algorithm/README.md", "# Collective scheduling\n\nCanonical Schedule IR, supported algorithms, and representative CPU/simulator-only schedules. Fallback is NONE.\n")
+    source_map["algorithm/README.md"] = "<generated-staging-document>"
+    baseline_summary = {"result": json.loads((G3_B2_A_EVIDENCE / "result.json").read_text(encoding="utf-8")), "manifest": json.loads((G3_B2_A_EVIDENCE / "manifest.json").read_text(encoding="utf-8"))}
+    final_summary = {"result": json.loads((G3_B2_E_EVIDENCE / "result.json").read_text(encoding="utf-8")), "performance": json.loads((G3_B2_E_EVIDENCE / "performance_summary.json").read_text(encoding="utf-8"))}
+    _write_json(stage / "optimization/baseline_summary.json", baseline_summary)
+    _write_json(stage / "optimization/final_summary.json", final_summary)
+    copy("experiments/optimization/evidence/g3_b2_e_agent_round1_20260807T032000Z/ablation_summary.json", "optimization/ablation_summary.json")
+    _write_text(stage / "optimization/claim_boundaries.md", "# Optimization claim boundaries\n\nAll latency, bandwidth, scale, replan, and pipeline results are SIMULATED_ONLY. The 45.59% internal result includes modeled exposed-path overlap and is not real NPU or training acceleration.\n")
+    for rel in ("optimization/baseline_summary.json", "optimization/final_summary.json", "optimization/claim_boundaries.md"):
+        source_map[rel] = "<generated-from-frozen-g3-b2-evidence>"
+    for rel in (
+        "docs/submission/g3_b2_final_code_baseline.md",
+        "docs/submission/g3_b2_requirement_delta.json",
+    ):
+        if (ROOT / rel).is_file():
+            copy(rel)
+
     _write_text(stage / "QUICKSTART.md", "# Quick start\n\n```text\npython -m tools.submission_cli check\npython -m tools.submission_cli quick\npython -m tools.submission_cli verify --stage .\n```\n")
     _write_text(stage / "CLAIM_BOUNDARIES.md", "# Claim boundaries\n\nCPU_SIM is host-executed project code. Direct is static/host readiness only. Scale, logical 1 GB, logical 72h, and failover are simulator-model results. No real NPU API was executed.\n")
-    _write_text(stage / "agent/PLACEHOLDER_G3_D.md", "# G3-D placeholder\n\nPrompt, Skills, and generation-trace delivery is not completed in G3-B.\n")
     _write_text(stage / "reports/PLACEHOLDER_G3_C.md", "# G3-C placeholder\n\nFormal technical reports are not completed in G3-B.\n")
     _write_text(stage / "demo/PLACEHOLDER_G3_F.md", "# G3-F placeholder\n\nDemo and video material is not completed in G3-B.\n")
     status = {
         "g3_b": "COMPLETED", "native_delivery_normalization": "COMPLETED",
+        "g3_b2": "COMPLETED", "collective_schedule_ir": "COMPLETED",
+        "topology_aware_hierarchical_optimization": "COMPLETED",
+        "agent_optimization_trace": "COMPLETED", "performance_target_achievement": "PARTIALLY_SATISFIED",
         "cpu_sim_submission_plugin": "COMPLETED", "direct_readiness_package": "COMPLETED",
         "submission_release_readiness": "PARTIAL", "g3_delivery_readiness": "PARTIAL",
         "real_device_acceptance": "HARDWARE_BLOCKED", "default_backend": "CPU_SIM",
@@ -919,7 +1026,7 @@ def describe_command() -> dict[str, Any]:
         "validation_track": "SIMULATOR_ACCEPTANCE is not a fourth backend",
         "native_artifact": "libhccl_plugin.so: CPU_SIM_REFERENCE_PLUGIN",
         "direct_artifact": "libhccl_direct_adapter.a: STATIC BUILD/LIFECYCLE READINESS ARTIFACT",
-        "quick": "clean CPU_SIM build, 11 CTests, representative Python/simulator and G2-F-5/F-6 integrity",
+        "quick": "clean CPU_SIM build, 12 CTests, representative Python/simulator and G2-F-5/F-6 integrity",
         "full": "two clean builds, ABI/ELF/dependency/install/consumer/regression/direct-readiness/staging audits",
         "limitations": ["official plugin ABI unverified", "real device API not executed", "release readiness partial"],
         "real_device_blocked_reason": "no authorized supported NPU runtime acceptance environment",

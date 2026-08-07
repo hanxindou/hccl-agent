@@ -1,0 +1,8 @@
+{
+  "action": "retain truthful partial result; no benchmark or parameter changes",
+  "adjustment_rounds_used": 0,
+  "model_boundary": "SIMULATED_ONLY",
+  "observation": "Primary p50 excludes simulated pipeline overlap; every loss and regression remains in the report.",
+  "performance_target_status": "PARTIALLY_SATISFIED",
+  "run_id": "g3-b2-e-authoritative-optimization"
+}

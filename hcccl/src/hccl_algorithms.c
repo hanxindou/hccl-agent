@@ -7,6 +7,7 @@
 
 #include "hccl_algorithms.h"
 #include "hccl_comm.h"
+#include "schedule_ir.h"
 #include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,6 +53,43 @@ static size_t data_type_size(hcclDataType_t data_type)
         return sizeof(uint16_t);
     }
     return sizeof(float);
+}
+
+static const char* data_type_name(hcclDataType_t data_type)
+{
+    if (data_type == HCCL_FP16) return "FP16";
+    if (data_type == HCCL_BF16) return "BF16";
+    return "FP32";
+}
+
+static const char* reduce_op_name(hcclRedOp_t op)
+{
+    if (op == HCCL_PROD) return "PROD";
+    if (op == HCCL_MAX) return "MAX";
+    if (op == HCCL_MIN) return "MIN";
+    return "SUM";
+}
+
+static hcclResult_t validate_internal_ring_schedule(
+    const char* primitive, hcclCommInternal* ctx, size_t element_count,
+    hcclDataType_t data_type, hcclRedOp_t op)
+{
+    char* schedule_json = NULL;
+    size_t element_size = data_type_size(data_type);
+    uint64_t message_bytes;
+    if (ctx == NULL || element_count == 0 || element_count > ((size_t)-1) / element_size) {
+        return HCCL_ERR_INVALID_ARG;
+    }
+    /* A one-rank collective is a local copy/reduction and needs no schedule. */
+    if (ctx->num_devices == 1) return HCCL_SUCCESS;
+    message_bytes = (uint64_t)(element_count * element_size);
+    if (hccl_schedule_ir_generate_json(
+            primitive, ctx->num_devices, message_bytes,
+            data_type_name(data_type), reduce_op_name(op), &schedule_json) != 0) {
+        return HCCL_ERR_INTERNAL;
+    }
+    hccl_schedule_ir_free_json(schedule_json);
+    return HCCL_SUCCESS;
 }
 
 static float bits_to_float(uint32_t bits)
@@ -422,6 +460,12 @@ hcclResult_t ring_allreduce(
     hcclComm_t      comm
 )
 {
+    if (send_buf != NULL && recv_buf != NULL && comm != NULL && count > 0 &&
+        is_supported_data_type(data_type) && is_supported_reduce_op(op)) {
+        hcclResult_t schedule_rc = validate_internal_ring_schedule(
+            "AllReduce", (hcclCommInternal*)comm, count, data_type, op);
+        if (schedule_rc != HCCL_SUCCESS) return schedule_rc;
+    }
     return run_allreduce_reference_kernel(
         send_buf, recv_buf, count, data_type, op, comm
     );
@@ -449,6 +493,10 @@ hcclResult_t ring_allgather(
     if (rc != HCCL_SUCCESS) {
         return rc;
     }
+
+    rc = validate_internal_ring_schedule(
+        "AllGather", ctx, send_count, data_type, HCCL_SUM);
+    if (rc != HCCL_SUCCESS) return rc;
 
     {
         const unsigned char* input = (const unsigned char*) send_buf;
@@ -736,6 +784,27 @@ hcclResult_t mesh_reducescatter(
         free(staged);
         return HCCL_SUCCESS;
     }
+}
+
+/* Internal Ring control path; CPU_SIM retains the shared semantic kernel. */
+hcclResult_t hccl_internal_ring_reducescatter(
+    const void* send_buf, void* recv_buf, size_t recv_count,
+    hcclDataType_t data_type, hcclRedOp_t op, hcclComm_t comm)
+{
+    hcclCommInternal* ctx = NULL;
+    size_t input_elems = 0;
+    size_t output_elems = 0;
+    hcclResult_t rc = validate_reducescatter_args(
+        send_buf, recv_buf, recv_count, data_type, op, comm,
+        &ctx, &input_elems, &output_elems);
+    (void)input_elems;
+    (void)output_elems;
+    if (rc != HCCL_SUCCESS) return rc;
+    rc = validate_internal_ring_schedule(
+        "ReduceScatter", ctx, recv_count, data_type, op);
+    if (rc != HCCL_SUCCESS) return rc;
+    return mesh_reducescatter(
+        send_buf, recv_buf, recv_count, data_type, op, comm);
 }
 
 /* ================================================================== */

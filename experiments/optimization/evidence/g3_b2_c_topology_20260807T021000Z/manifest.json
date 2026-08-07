@@ -1,0 +1,19 @@
+{
+  "benchmark_contract_sha256": "db6519370256f3c73ca96177e599f3dabc7dcbc1c0319b5ef2b0cc53236b2bfe",
+  "fallback_policy": "NONE",
+  "frozen_parameter_sha256": "df4dd8fd39db45c923c14ada30c1531c666e49d384be806267aeaa228285ebdf",
+  "schema_version": "g3-b2-c-evidence-v1",
+  "support_matrix_sha256": "1edfbbe31d4d2c6f4bda6b3cf4c2529eb86ff814d7d999f0936c30af345587b3",
+  "topology_variants": [
+    "full_mesh_8",
+    "ring_8",
+    "ring_16",
+    "fat_tree_64",
+    "asymmetric_16",
+    "asymmetric_64"
+  ],
+  "truth_labels": [
+    "SIMULATED_ONLY",
+    "REAL_DEVICE_NOT_EXECUTED"
+  ]
+}

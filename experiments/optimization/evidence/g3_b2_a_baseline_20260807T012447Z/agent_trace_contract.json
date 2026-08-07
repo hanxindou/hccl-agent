@@ -1,0 +1,44 @@
+{
+  "actor_boundaries": {
+    "development_agent": "Codex",
+    "human": "user",
+    "runtime_agent": "hccl-agent"
+  },
+  "checkpoint": "G3-B2-A",
+  "record_directories": [
+    "runs",
+    "proposals",
+    "evaluations",
+    "reflections"
+  ],
+  "required_record_fields": [
+    "run_id",
+    "timestamp",
+    "development_agent",
+    "runtime_agent",
+    "prompt_id",
+    "prompt_version",
+    "input_schema_version",
+    "output_schema_version",
+    "baseline_commit",
+    "input_hash",
+    "proposal_hash",
+    "human_decision",
+    "changed_files",
+    "tests",
+    "benchmark_result",
+    "reflection",
+    "selected",
+    "result_commit"
+  ],
+  "schema_version": "g3-b2-agent-trace-v1",
+  "status": "CONTRACT_FROZEN",
+  "truth_labels": [
+    "CPU_EXECUTED",
+    "SIMULATED_ONLY",
+    "AGENT_GENERATED_PROPOSAL",
+    "AGENT_SELECTED_SCHEDULE",
+    "DIRECT_READINESS_ONLY",
+    "REAL_DEVICE_NOT_EXECUTED"
+  ]
+}
