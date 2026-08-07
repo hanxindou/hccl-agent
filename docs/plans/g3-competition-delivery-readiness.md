@@ -2090,3 +2090,1915 @@ git revert
 ```
 
 不得重写历史或删除 G2 evidence。
+
+# 10. G3-B：原生插件交付规范化、可复现构建与提交包 Staging
+
+## 10.1 目标
+
+G3-B 在 G3-A 差距审计基础上，完成以下四项工程交付：
+
+1. 冻结项目最终原生产物的身份、命名、ABI、导出符号和真实性边界；
+2. 建立不依赖隐藏开发状态的可复现构建与安装流程；
+3. 建立 submission-level 的统一环境检查、quick 和 full 复现入口；
+4. 建立可审计但尚未正式发布的提交包 staging、manifest、排除规则和 SHA256。
+
+本 checkpoint 的目标状态是：
+
+```text
+NATIVE DELIVERY NORMALIZATION
+REPRODUCIBLE BUILD
+SUBMISSION REPRODUCTION ENTRY
+SUBMISSION STAGING
+```
+
+本 checkpoint 不是：
+
+```text
+REAL-DEVICE DIRECT API ACCEPTANCE
+FINAL RELEASE
+PUBLIC RELEASE
+FINAL COMPETITION SUBMISSION
+```
+
+G3-B 只能建立提交候选结构和复现基础，不能因为生成了 `.so`、staging 目录或 manifest 就宣称完整参赛作品已经发布。
+
+---
+
+## 10.2 G3-A 审计基线
+
+G3-B 必须以 G3-A 最终审计结果为事实基线。
+
+当前已确认：
+
+```text
+C/C++ Plugin Compliance: PARTIALLY_SATISFIED
+Agent/Prompt Reproducibility: PARTIALLY_SATISFIED
+Simulator Delivery: PARTIALLY_SATISFIED
+Simulator Evidence Completeness: SATISFIED
+Performance Target Achievement: PARTIALLY_SATISFIED
+Real-device Performance: HARDWARE_BLOCKED
+```
+
+G3-B 重点处理以下风险：
+
+```text
+RISK-CO-001
+RISK-CPP-001
+RISK-CPP-002
+RISK-CPP-004
+RISK-CPP-005
+RISK-CPP-006
+RISK-AGENT-001
+RISK-SIM-001
+RISK-SIM-006
+RISK-TEST-002
+RISK-TEST-003
+RISK-TEST-004
+RISK-DOC-001
+RISK-PACKAGE-001
+RISK-PACKAGE-003
+RISK-PACKAGE-004
+```
+
+G3-B 不负责解决以下风险：
+
+```text
+Agent Prompt/Skills/version/provenance      -> G3-D
+正式算法、正确性、性能、可靠性报告          -> G3-C
+算法创新叙事和正式图表                       -> G3-E
+视频、分镜、旁白和字幕                       -> G3-F
+最终许可证、SBOM、隐私、clean archive 审计   -> G3-G / USER_ACTION
+真实 NPU 验收                                -> REAL_DEVICE_FUTURE
+```
+
+---
+
+## 10.3 执行前状态与额度控制
+
+进入本 checkpoint 前，用户已经人工确认：
+
+- G3-A 已通过 PR 合并进入 `main`；
+- 本地 `main` 与 `origin/main` 已同步；
+- G3-A commit 已成为 `main` 的祖先；
+- G3-A 最终 evidence SHA256 有效；
+- 工作区除尚未提交的 G3-B 计划细化外无其他修改；
+- G2-E、G2-F 和 G3-A 旧 evidence 未被修改。
+
+执行开始时只允许进行一次轻量确认：
+
+```text
+git branch --show-current
+git status --short
+```
+
+只需确认：
+
+- 当前分支为 `main`；
+- 除 G3-B 计划细化外没有其他未提交修改。
+
+除非实际出现：
+
+- 文件缺失；
+- CMake target 漂移；
+- G3-A 路径失效；
+- evidence SHA256 失败；
+- 构建结果与审计结论矛盾；
+
+否则不得重复审计完整 Git 历史、旧 PR 或全部旧 checkpoint。
+
+HCOMM/HCCL branch、commit 和 tracked worktree clean 只在最终审计时检查一次。
+
+建议分支：
+
+```text
+codex/g3-b-reproducible-submission
+```
+
+---
+
+## 10.4 G3-B 非目标
+
+G3-B 不负责：
+
+- 执行真实 ACL/HCCL runtime；
+- 初始化真实 device/context/stream；
+- 创建真实 communicator；
+- 分配真实 NPU device memory；
+- 执行真实 HcclAllReduce、HcclAllGather 或 HcclReduceScatter；
+- 执行 `hccl_test`、MPI 或 `msprof`；
+- 将 CPU_SIM ABI 替换成官方 ABI；
+- 将 direct readiness 伪装成实机插件；
+- 将两个不同 ABI 强行合并为一个不可审计接口；
+- 重写三原语核心算法；
+- 重写 simulator performance model；
+- 重跑 G2-F-5/F6 完整实验矩阵；
+- 重写 G2-F 或 G3-A evidence；
+- 编写全部正式技术报告；
+- 建立历史 Agent 生成 trace；
+- 生成最终视频；
+- 选择项目许可证；
+- 决定正式赛题文件是否可公开；
+- 决定官方 CANN/HCOMM/HCCL 二进制的再分发权；
+- 创建最终 release archive；
+- 创建 Git tag；
+- 发布 GitHub Release；
+- 上传报名平台。
+
+发现上述缺口时必须保留给对应 checkpoint 或 `USER_ACTION`。
+
+---
+
+## 10.5 原生产物双轨交付原则
+
+G3-B 必须冻结两个彼此独立的原生交付轨道。
+
+### 10.5.1 CPU_SIM 原生插件
+
+现有：
+
+```text
+libhccl_plugin.so
+```
+
+只能定义为：
+
+```text
+PROJECT-OWNED CPU_SIM C/C++ COLLECTIVE PLUGIN
+```
+
+它可以证明：
+
+- 项目自有 C ABI；
+- C/C++ 三原语实现；
+- Ring、Mesh、Butterfly、NHR、Fat-Tree 等项目算法入口；
+- host memory 上的数据正确性；
+- 无 NPU 环境下可构建；
+- 无 CANN SDK 环境下可运行；
+- CTest 和 Python bridge 回归；
+- 项目插件发现入口；
+- 仅依赖允许的 host system library。
+
+它不能证明：
+
+- 官方 HCCL direct runtime 已执行；
+- 与官方 HCCL plugin loader ABI 完全一致；
+- 真实 NPU collective；
+- 真实 HCCS/RoCE/PCIe 通信；
+- 真实 NPU 性能；
+- 官方 HCOMM topology probe；
+- 零 CPU 介入；
+- 真实 device memory；
+- `REAL_DEVICE_PASS`。
+
+CPU_SIM 产物不得使用以下名称：
+
+```text
+official_hccl_plugin
+real_hccl_plugin
+ascend_runtime_plugin
+npu_validated_plugin
+```
+
+建议最终文件名继续保持：
+
+```text
+libhccl_plugin.so
+```
+
+但在 manifest、README、目录名和报告中必须固定显示：
+
+```text
+artifact_role=CPU_SIM_REFERENCE_PLUGIN
+execution_environment=HOST_CPU
+official_runtime_execution=false
+real_device_validated=false
+```
+
+### 10.5.2 ASCEND_HCCL_DIRECT readiness 交付
+
+现有 direct adapter 只能定义为：
+
+```text
+OFFICIAL-ABI DIRECT READINESS ADAPTER
+```
+
+当前能力包括：
+
+- 官方头文件签名静态冻结；
+- direct C ABI；
+- capacity contract；
+- lifecycle state machine；
+- resource ownership；
+- failure injection；
+- no-device preflight；
+- build/link/symbol audit；
+- host-only lifecycle test。
+
+它不能定义为：
+
+```text
+可执行的真实 NPU collective plugin
+```
+
+G3-B 可以将 direct adapter 规范化为可安装的 source/readiness package，但不得新增当前环境可到达的真实 runtime 调用路径。
+
+允许最终交付：
+
+```text
+direct/include/hccl_direct_adapter.h
+direct/src/hccl_direct_adapter.cpp
+direct ABI manifest
+direct build instructions
+direct lifecycle contract
+direct no-device diagnose
+direct link audit source
+direct readiness evidence references
+```
+
+允许生成项目自己的 shared readiness artifact，例如：
+
+```text
+libhccl_direct_adapter.so
+```
+
+但只有同时满足以下条件时才允许：
+
+1. 它继续只暴露项目自有 direct control-plane C ABI；
+2. 默认不调用任何 ACL/HCCL runtime；
+3. 无设备执行请求仍在 runtime 边界前拒绝；
+4. 其名称、SONAME、README 和 manifest 明确包含 `direct_adapter` 或 `readiness`；
+5. 不导出或冒充 CPU_SIM collective ABI；
+6. 不被描述为官方 collective plugin；
+7. 不设置 `direct_hccl_api_call=true`；
+8. 不设置 `real_ascend_npu_validated=true`。
+
+如果没有必要生成 shared readiness artifact，可以继续保留：
+
+```text
+libhccl_direct_adapter.a
+```
+
+但必须在 staging manifest 中说明其是：
+
+```text
+STATIC BUILD/LIFECYCLE READINESS ARTIFACT
+```
+
+不得为满足“必须有 `.so`”的表面要求，将 static readiness archive 简单改名为 `.so`。
+
+---
+
+## 10.6 最终插件 ABI 决策
+
+G3-B 必须生成：
+
+```text
+docs/submission/native_plugin_abi_decision.md
+```
+
+该文档必须明确回答：
+
+1. 最终可执行 `.so` 是哪个；
+2. 它的角色是什么；
+3. 它的 ABI 是项目本地 ABI还是官方 ABI；
+4. 它导出哪些符号；
+5. 它依赖哪些库；
+6. 它在哪种环境可执行；
+7. 它如何构建；
+8. 它通过哪些测试；
+9. 它不能证明什么；
+10. direct readiness 产物是什么；
+11. 两条轨道为何不能合并；
+12. 评委如何分别验证两条轨道；
+13. 未来真实设备如何恢复 direct acceptance。
+
+必须采用以下决策状态之一：
+
+```text
+CPU_SIM_PLUGIN_SELECTED_FOR_HOST_REPRODUCTION
+OFFICIAL_COMPATIBLE_WRAPPER_STATICALLY_VERIFIED
+OFFICIAL_PLUGIN_ABI_UNVERIFIED
+USER_ACTION_REQUIRED
+```
+
+如果没有可靠的正式接口材料证明当前项目 ABI 就是赛题要求的官方插件 ABI，则必须选择：
+
+```text
+CPU_SIM_PLUGIN_SELECTED_FOR_HOST_REPRODUCTION
+OFFICIAL_PLUGIN_ABI_UNVERIFIED
+```
+
+不得为提高合规状态而推断或虚构官方 loader ABI。
+
+### 10.6.1 ABI manifest
+
+必须生成机器可读：
+
+```text
+native_plugin_abi_manifest.json
+```
+
+至少记录：
+
+```text
+artifact_name
+artifact_role
+language
+source_paths
+public_headers
+abi_namespace
+abi_version
+exported_symbols
+required_symbols
+forbidden_symbols
+soname
+dependencies
+build_target
+build_mode
+runtime_mode
+official_abi_status
+cpu_simulated
+direct_readiness
+real_device_validated
+```
+
+### 10.6.2 导出符号
+
+CPU_SIM `.so` 至少应审计：
+
+- communicator lifecycle；
+- rank selection；
+- topology query/free；
+- AllReduce；
+- AllGather；
+- ReduceScatter；
+- plugin version；
+- plugin algorithm inventory；
+- 计划允许的算法级入口。
+
+不得依赖：
+
+- 编译器偶然导出的内部 static symbol；
+- 未记录的 C++ mangled symbol；
+- 全局默认导出策略作为唯一 ABI 控制；
+- 不稳定的测试辅助符号。
+
+建议使用：
+
+- 明确的 visibility；
+- 导出宏；
+- version script 或平台等价机制；
+- 稳定 allowlist。
+
+现有导出符号数量可作为基线，但 G3-B 不得只验证数量，必须验证精确名称和角色。
+
+### 10.6.3 ABI 隔离
+
+必须证明：
+
+```text
+CPU_SIM ABI != DIRECT CONTROL-PLANE ABI != OFFICIAL HCCL ABI
+```
+
+至少检查：
+
+- CPU*SIM 不导出 `hccl_direct*\*`；
+- direct adapter 不导出 CPU_SIM `hccl*` 兼容符号；
+- Python CPU_SIM bridge 不加载 direct adapter；
+- direct backend 不加载 CPU_SIM `.so` 执行 direct collective；
+- direct source 使用官方 `Hccl*` 类型只用于签名冻结和未来边界；
+- 两类结果写入不同的 manifest 和 evidence 字段。
+
+---
+
+## 10.7 CMake 规范化
+
+G3-B 必须将原生构建整理成明确的三种模式。
+
+### 10.7.1 默认 host 模式
+
+```text
+HCCL_BACKEND=CPU_SIM
+HCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF
+```
+
+要求：
+
+- 不需要 CANN；
+- 不检查 CANN root；
+- 不链接 `libhccl.so`；
+- 不链接 `libhcomm.so`；
+- 不链接 `libacl_rt.so`；
+- 可构建 `libhccl_plugin.so`；
+- 可构建并运行 CPU_SIM CTest；
+- 可执行 install；
+- 安装目录可移植；
+- 不写入源码目录。
+
+### 10.7.2 Direct readiness 模式
+
+```text
+HCCL_ENABLE_ASCEND_HCCL_DIRECT=ON
+HCCL_CANN_ROOT=<explicit canonical root>
+```
+
+要求：
+
+- 只搜索指定 root；
+- 不使用系统默认同名库；
+- 校验 CANN version；
+- 校验 official headers；
+- 校验 library canonical realpath；
+- 校验 official symbols；
+- 构建 direct adapter；
+- 构建非执行 link-audit artifact；
+- 运行 host-only lifecycle test；
+- 不运行 link-audit executable；
+- 不调用 runtime；
+- 不执行 collective。
+
+### 10.7.3 Submission install 模式
+
+必须提供稳定 install 规则，建议支持：
+
+```text
+cmake --install <build-dir> --prefix <stage>/native
+```
+
+至少安装：
+
+```text
+native/lib/libhccl_plugin.so
+native/include/hccl_comm.h
+native/include/hccl_algorithms.h
+native/cmake/
+native/README.md
+native/ABI_MANIFEST.json
+```
+
+direct readiness source可以安装或复制到：
+
+```text
+native/direct/include/
+native/direct/src/
+native/direct/cmake/
+native/direct/README.md
+native/direct/ABI_MANIFEST.json
+```
+
+不得把官方 CANN/HCOMM/HCCL DSO 安装到 staging。
+
+### 10.7.4 CMake target 命名
+
+建议冻结：
+
+```text
+hccl_plugin
+hccl_cpu_sim_tests
+hccl_direct_adapter
+hccl_direct_link_audit
+hccl_direct_lifecycle_tests
+submission_native_install
+```
+
+具体 target 可按现有结构调整，但必须避免：
+
+- `hccl_plugin` 在不同 flag 下静默变成完全不同 ABI；
+- `ASCEND_CANN` 名称暗示已经真实执行；
+- 一个 target 同时承担 CPU_SIM 和 direct readiness；
+- 默认 build 无意链接 CANN；
+- install 规则复制官方 DSO。
+
+### 10.7.5 禁止不透明的 ASCEND_CANN stub
+
+如果现有：
+
+```text
+HCCL_BACKEND=ASCEND_CANN
+```
+
+仍只是 `STUB_UNVERIFIED`，G3-B 必须采取以下方式之一：
+
+1. 保留但明确标记 deprecated/readiness-only；
+2. 重命名为不会暗示真实执行的 build mode；
+3. 从 submission quick path 中排除；
+4. 在配置时输出清晰 warning；
+5. 在文档中说明它不是 real-device backend。
+
+不得让评委通过该 flag 得到“已启用真实 CANN collective”的错误印象。
+
+---
+
+## 10.8 可复现构建
+
+G3-B 必须提供无隐藏状态的构建流程。
+
+### 10.8.1 干净构建目录
+
+所有构建必须发生在：
+
+```text
+build/
+dist/
+tmp/
+```
+
+或用户指定的外部目录。
+
+不得依赖：
+
+- 已存在的 `hcccl/build`；
+- 开发机旧 object；
+- 开发机旧 `.so`；
+- 未记录环境变量；
+- `.venv` 中未冻结包；
+- 用户 home 下的私有文件；
+- IDE task cache。
+
+### 10.8.2 双构建验证
+
+CPU_SIM release artifact 至少执行两次独立干净构建：
+
+```text
+build-a
+build-b
+```
+
+两次必须使用：
+
+- 相同 source commit；
+- 相同 compiler；
+- 相同 CMake version；
+- 相同 build type；
+- 相同 normalized environment；
+- 相同 build options。
+
+至少比较：
+
+```text
+binary SHA256
+SONAME
+ELF NEEDED
+exported symbol set
+file type
+architecture
+installed headers SHA256
+ABI manifest
+CTest result
+```
+
+理想状态：
+
+```text
+BIT_FOR_BIT_REPRODUCIBLE=true
+```
+
+如果二进制 SHA256 不一致，必须分析：
+
+- build-id；
+- embedded path；
+- timestamp；
+- debug section；
+- archive ordering；
+- compiler nondeterminism。
+
+不得只记录“可以再次编译”就宣称 bit-for-bit reproducible。
+
+如果经过合理修复仍不能获得相同 SHA256，可以将状态设置为：
+
+```text
+FUNCTIONALLY_REPRODUCIBLE
+BIT_FOR_BIT_REPRODUCIBLE=false
+```
+
+但必须：
+
+- 记录差异原因；
+- 确认 ABI、ELF、依赖和测试一致；
+- 将其列为 G3-G release 风险；
+- 不伪造相同 hash。
+
+### 10.8.3 Build metadata
+
+必须记录：
+
+```text
+compiler
+compiler_version
+cmake_version
+generator
+build_type
+source_commit
+source_date_epoch
+build_options
+target_architecture
+host_os
+linker
+linker_version
+binary_sha256
+header_sha256
+```
+
+不得记录敏感用户路径到公开 manifest。
+
+路径应规范化为：
+
+```text
+<repo>
+<build>
+<cann-root>
+```
+
+---
+
+## 10.9 依赖政策
+
+### 10.9.1 CPU_SIM 依赖
+
+CPU_SIM `.so` 必须完成：
+
+```text
+readelf -d
+ldd
+nm -D
+file
+```
+
+审计。
+
+目标是只依赖允许的基础系统库。
+
+如果发现新增依赖，必须：
+
+- 记录名称；
+- 记录用途；
+- 记录许可证；
+- 记录 staging 是否需要；
+- 更新依赖 inventory；
+- 不得静默引入。
+
+### 10.9.2 Direct readiness 依赖
+
+direct build/link audit 可以引用本地冻结：
+
+```text
+libhccl.so
+libhcomm.so
+libacl_rt.so
+```
+
+但 staging 默认只能包含：
+
+- 项目 source；
+- 项目 header；
+- 项目 manifest；
+- 构建说明；
+- 官方 DSO 的名称、版本、hash 和用户本地路径占位符；
+- 恢复说明。
+
+不得默认复制：
+
+```text
+libhccl.so
+libhcomm.so
+libacl_rt.so
+libruntime.so
+HCOMM source
+HCCL source
+CANN SDK files
+```
+
+### 10.9.3 再分发状态
+
+在用户完成正式审查前，必须固定：
+
+```text
+official_asset_redistribution=NOT_AUTHORIZED
+official_binaries_included=false
+official_source_included=false
+```
+
+若用户未来提供正式授权，必须由独立 checkpoint 更新，不得在 G3-B 中自行推断授权。
+
+---
+
+## 10.10 统一 submission CLI
+
+G3-B 必须建立单一、可测试的 submission-level CLI。
+
+建议入口：
+
+```text
+python -m tools.submission_cli
+```
+
+或仓库现有结构中的等价入口。
+
+至少支持：
+
+```text
+check
+build
+quick
+full
+stage
+verify
+describe
+clean-generated
+```
+
+### 10.10.1 `check`
+
+只读检查：
+
+- Python version；
+- CMake；
+- compiler；
+- make/ninja；
+- platform；
+- repository root；
+- required source files；
+- configuration files；
+- old evidence paths；
+- optional CANN root；
+- official asset exclusion；
+- writable build/stage directory。
+
+输出必须区分：
+
+```text
+REQUIRED
+OPTIONAL
+REAL_DEVICE_ONLY
+USER_ACTION_REQUIRED
+```
+
+没有 CANN 或 NPU 时，默认 CPU_SIM quick path 不能失败。
+
+### 10.10.2 `build`
+
+默认只构建 CPU_SIM：
+
+```text
+python -m tools.submission_cli build
+```
+
+必须：
+
+- 使用干净或显式 build 目录；
+- 构建 release `.so`；
+- 构建 tests；
+- 执行 install；
+- 生成 build manifest；
+- 不调用 direct runtime。
+
+direct readiness build 必须显式：
+
+```text
+python -m tools.submission_cli build --direct-readiness --cann-root <path>
+```
+
+且只能执行计划允许的静态、链接和 host lifecycle 步骤。
+
+### 10.10.3 `quick`
+
+Quick 模式目标是让评委在较短时间内确认项目基本可用。
+
+至少包含：
+
+1. 环境检查；
+2. CPU_SIM clean build；
+3. CPU_SIM CTest 代表集或全部 11 项；
+4. 三原语各一个确定性用例；
+5. FP32 基本正确性；
+6. 一个 FP16/BF16 代表用例；
+7. 一个 8-rank simulator 场景；
+8. 一个 topology/algorithm comparison 场景；
+9. 一个 fault-recovery 场景；
+10. 一个 no-alternate-path 预期失败场景；
+11. 关键 G2-F-5/F6 evidence SHA256 验证；
+12. 生成简短 result summary。
+
+Quick 模式不得：
+
+- 重跑完整 56 点性能矩阵；
+- 重跑全部 1,580 iteration；
+- 重新生成 logical 72h 权威 evidence；
+- 执行完整 HCCL-VM suite；
+- 执行真实 direct API；
+- 改写旧 evidence。
+
+### 10.10.4 `full`
+
+Full 模式用于 submission staging 验证。
+
+至少包含：
+
+1. 完整环境检查；
+2. CPU_SIM 两次干净构建；
+3. install 验证；
+4. ELF、symbol、dependency 和 ABI audit；
+5. CPU_SIM 全部 CTest；
+6. Python 全量或 submission-relevant 全量回归；
+7. direct build/link readiness audit，如 CANN root 可用；
+8. direct lifecycle host-only CTest；
+9. G2-E/G2-F/G3-A evidence SHA256；
+10. simulator deterministic representative replay；
+11. quick command 回归；
+12. staging manifest；
+13. inclusion/exclusion audit；
+14. staging verify；
+15. final summary。
+
+Full 模式默认不重新生成 G2-F-5/F6 权威 evidence。
+
+可提供单独 opt-in：
+
+```text
+--regenerate-expensive-simulator-evidence
+```
+
+但 G3-B 默认不得执行该选项。
+
+### 10.10.5 `stage`
+
+生成 staging 目录，但不生成正式 release。
+
+建议路径：
+
+```text
+dist/submission-staging/
+```
+
+必须支持：
+
+```text
+--output <path>
+--clean-output
+--include-selected-evidence
+--exclude-controlled-docs
+--exclude-official-assets
+```
+
+`stage` 默认必须：
+
+```text
+exclude_controlled_competition_doc=true
+exclude_official_cann_binaries=true
+exclude_official_hcomm_hccl_source=true
+exclude_private_logs=true
+```
+
+### 10.10.6 `verify`
+
+必须验证：
+
+- manifest schema；
+- 所有 included 文件存在；
+- 所有文件 SHA256；
+- 未包含 excluded path；
+- `.so` ELF 类型；
+- `.so` dependencies；
+- public headers；
+- CMake；
+- quick/full scripts；
+- relative links；
+- evidence references；
+- controlled asset exclusion；
+- no forbidden truth claims；
+- staging root 不含绝对用户路径。
+
+### 10.10.7 `describe`
+
+输出：
+
+- 三后端；
+- simulator validation track；
+- native artifact identity；
+- quick/full 功能；
+- 当前限制；
+- real-device blocked reason；
+- staging inclusion policy。
+
+该命令只读，不执行构建或测试。
+
+### 10.10.8 `clean-generated`
+
+只能删除 CLI 自己创建且位于明确 generated root 下的目录。
+
+必须拒绝：
+
+- 删除源码；
+- 删除旧 evidence；
+- 删除 `.git`；
+- 删除用户未标记为 generated 的目录；
+- 跟随 symlink 删除外部路径；
+- 等价于执行 `git clean -fd`。
+
+---
+
+## 10.11 拓扑和配置注入接口
+
+G3-A 指出异构设备和非对称链路目前属于 simulator configured，缺少统一提交级注入入口。
+
+G3-B 不重写 topology model，但必须使 submission CLI 可以显式接收：
+
+```text
+--cluster-config
+--topology-config
+--hardware-profile
+--seed
+--message-size
+--rank-size
+--primitive
+--algorithm
+```
+
+要求：
+
+- 使用仓库相对或用户显式路径；
+- 校验 schema；
+- 记录配置 SHA256；
+- 不依赖修改源码；
+- quick 使用冻结默认配置；
+- full 可以读取受控配置矩阵；
+- 配置中的拓扑来源必须保持 `SIMULATOR_CONFIG`；
+- 不得标记为真实自动探测。
+
+必须提供至少以下示例配置：
+
+```text
+configs/submission/full_mesh_8.json
+configs/submission/ring_8.json
+configs/submission/fat_tree_64.json
+configs/submission/heterogeneous_asymmetric.json
+configs/submission/logical_1024.json
+configs/submission/fault_recovery.json
+```
+
+具体结构可复用现有配置，不得复制一套语义漂移的新格式。
+
+---
+
+## 10.12 Staging 目录结构
+
+建议 staging 结构：
+
+```text
+submission-staging/
+├── README.md
+├── QUICKSTART.md
+├── MANIFEST.json
+├── SHA256SUMS
+├── STATUS.json
+├── CLAIM_BOUNDARIES.md
+├── EXCLUDED_ASSETS.json
+├── native/
+│   ├── README.md
+│   ├── ABI_MANIFEST.json
+│   ├── lib/
+│   │   └── libhccl_plugin.so
+│   ├── include/
+│   │   ├── hccl_comm.h
+│   │   └── hccl_algorithms.h
+│   ├── source/
+│   ├── cmake/
+│   ├── tests/
+│   └── direct/
+│       ├── README.md
+│       ├── ABI_MANIFEST.json
+│       ├── include/
+│       ├── source/
+│       └── build-readiness/
+├── agent/
+│   ├── README.md
+│   ├── source/
+│   └── PLACEHOLDER_G3_D.md
+├── simulator/
+│   ├── README.md
+│   ├── source/
+│   ├── tools/
+│   └── configs/
+├── tools/
+│   ├── submission_cli/
+│   ├── benchmark/
+│   └── fault_injection/
+├── tests/
+│   ├── native/
+│   └── python/
+├── evidence/
+│   ├── README.md
+│   ├── inventory.json
+│   ├── simulator_correctness/
+│   ├── simulator_performance_reliability/
+│   ├── direct_readiness/
+│   └── final_audit/
+├── reports/
+│   └── PLACEHOLDER_G3_C.md
+├── demo/
+│   └── PLACEHOLDER_G3_F.md
+└── release/
+    ├── BUILD_MANIFEST.json
+    ├── DEPENDENCY_MANIFEST.json
+    └── USER_ACTION_REQUIRED.json
+```
+
+实际目录可根据仓库结构精简，但必须保持：
+
+- native、Agent、simulator、evidence、reports、demo 分区；
+- CPU_SIM 和 direct readiness 分区；
+- source 和 generated binary 可追溯；
+- 未完成 G3-C/D/F 时不得伪造正式材料；
+- placeholder 必须清晰标记为未完成，不得冒充交付物。
+
+---
+
+## 10.13 Inclusion manifest
+
+必须生成：
+
+```text
+submission_inclusion_manifest.json
+```
+
+每个条目至少包含：
+
+```text
+artifact_id
+source_path
+staging_path
+category
+artifact_role
+include
+required
+generated
+source_commit
+sha256
+size_bytes
+license_status
+confidentiality
+redistribution_status
+execution_status
+evidence_level
+claim_label
+owner_checkpoint
+known_limitations
+```
+
+### 10.13.1 默认包含
+
+至少考虑包含：
+
+- project source；
+- CPU_SIM `.so`；
+- public headers；
+- CMake；
+- native tests；
+- Agent source和顶层入口；
+- simulator source；
+- simulator configs；
+- selected tests；
+- benchmark tools；
+- fault injection tools；
+- selected final evidence；
+- G3-A matrices；
+- quick/full CLI；
+- build and staging manifests；
+- claim boundaries；
+- known limitations。
+
+### 10.13.2 默认排除
+
+必须默认排除：
+
+```text
+.git/
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.idea/
+.vscode/ private workspace settings
+node_modules/
+temporary build directories
+crash/core dumps
+private logs
+.env
+API keys
+tokens
+cookies
+SSH keys
+proxy credentials
+absolute-user-path reports
+official CANN binaries
+official HCOMM/HCCL source
+controlled competition DOCX
+superseded intermediate evidence
+unbounded raw logs not selected for submission
+```
+
+### 10.13.3 条件包含
+
+以下资产只能条件包含：
+
+```text
+controlled competition DOCX
+official source excerpts
+official binaries
+historical Agent logs
+Prompt call logs
+team information
+license
+copyright notice
+large raw evidence
+```
+
+在用户未确认前，状态必须为：
+
+```text
+include=false
+decision=USER_ACTION_REQUIRED
+```
+
+---
+
+## 10.14 Evidence 选择与大小控制
+
+G3-B 不得无差别复制全部历史 evidence。
+
+必须建立：
+
+```text
+evidence_selection_policy.json
+```
+
+每项旧 evidence 指定：
+
+```text
+INCLUDE_FULL
+INCLUDE_SUMMARY_ONLY
+REFERENCE_ONLY
+EXCLUDE_SUPERSEDED
+USER_ACTION_REQUIRED
+```
+
+至少保留：
+
+- G2-F-5 correctness 权威 summary；
+- G2-F-6 performance/reliability 权威 summary；
+- G2-F-7 final audit；
+- G3-A final audit；
+- direct build/link/lifecycle readiness 关键 summary；
+- SHA256SUMS；
+- evidence inventory。
+
+大型 raw JSONL 是否完整纳入 staging，必须根据：
+
+- 文件大小；
+- 平台大小限制；
+- 评委复现需求；
+- 是否可由脚本重新生成；
+- 是否含私密路径；
+
+进行决策。
+
+G3-B 可以生成 staging-size report，但最终平台约束由用户确认，G3-G 再完成最终 archive 审计。
+
+---
+
+## 10.15 顶层复现文档
+
+G3-B 至少生成或更新：
+
+```text
+README.md
+docs/submission/reproduction_guide.md
+docs/submission/native_plugin_abi_decision.md
+docs/submission/submission_staging_guide.md
+docs/submission/dependency_and_redistribution_boundary.md
+```
+
+### 10.15.1 README 最低内容
+
+必须明确：
+
+- 项目目标；
+- 三种 backend；
+- simulator validation track；
+- 默认 CPU_SIM；
+- `.so` 的准确身份；
+- direct readiness 的准确身份；
+- 无 NPU 也可完成哪些步骤；
+- quick 命令；
+- full 命令；
+- stage 命令；
+- verify 命令；
+- 真实设备尚未执行；
+- 报告、evidence 和 claim boundary 位置。
+
+### 10.15.2 Quick start
+
+必须控制在少量命令内，例如：
+
+```text
+python -m tools.submission_cli check
+python -m tools.submission_cli quick
+python -m tools.submission_cli stage
+python -m tools.submission_cli verify --stage <path>
+```
+
+具体命令以实际实现为准，但不得要求评委先人工复制 `.so`、修改源码或编辑绝对路径。
+
+### 10.15.3 Direct readiness 文档
+
+必须说明：
+
+- 需要本地合法 CANN 9.1.0；
+- SDK 不随包分发；
+- CANN root 必须显式指定；
+- 只执行 build/link/lifecycle readiness；
+- 不执行真实 runtime；
+- 没有 NPU 时返回 `NO_DEVICE_EXPECTED`；
+- 真实验收仍为 `HARDWARE_BLOCKED`。
+
+---
+
+## 10.16 Preliminary forbidden-data audit
+
+最终 secrets、license 和隐私审计属于 G3-G，但 G3-B staging 必须执行最低限度防线。
+
+至少检查：
+
+- 常见 API key 格式；
+- access token；
+- private key header；
+- `.env`；
+- Cookie；
+- password 字段；
+- Windows 用户目录；
+- WSL home path；
+- `/home/workspace` 是否不必要暴露；
+- ignored private logs；
+- official binary extensions；
+- controlled DOCX；
+- symlink escaping staging root。
+
+该审计只可标记：
+
+```text
+PRELIMINARY_FORBIDDEN_DATA_SCAN
+```
+
+不得替代 G3-G 的最终合规审计。
+
+---
+
+## 10.17 Claim boundary 固化
+
+staging 中必须生成：
+
+```text
+CLAIM_BOUNDARIES.md
+claim_boundaries.json
+```
+
+至少固化以下声明：
+
+### CPU_SIM 插件
+
+允许：
+
+```text
+项目自有 CPU_SIM C/C++ collective plugin 可在 host 环境构建和测试。
+```
+
+禁止：
+
+```text
+已完成官方 HCCL direct plugin 实机验收。
+```
+
+### Direct adapter
+
+允许：
+
+```text
+官方 ABI、build/link、guard 和 lifecycle readiness 已完成静态或 host 验证。
+```
+
+禁止：
+
+```text
+已执行真实 HCCL collective。
+```
+
+### 1024 ranks
+
+允许：
+
+```text
+在指定 simulator model 下完成 logical 1024-rank 预测。
+```
+
+禁止：
+
+```text
+真实支持 1024 卡。
+```
+
+### Logical 1 GB
+
+允许：
+
+```text
+采用有界物化和分析记账验证 logical 1 GB。
+```
+
+禁止：
+
+```text
+真实 NPU 已传输 1 GB collective。
+```
+
+### Logical 72h
+
+允许：
+
+```text
+完成事件驱动 logical 72h simulation。
+```
+
+禁止：
+
+```text
+完成真实 72 小时压测。
+```
+
+### 100 ms failover
+
+允许：
+
+```text
+模拟场景达到模型化 100 ms 阈值。
+```
+
+禁止：
+
+```text
+真实集群 100 ms 内切换。
+```
+
+staging verifier 必须扫描关键 manifest、README 和 summary，防止出现受禁止措辞。
+
+---
+
+## 10.18 测试要求
+
+G3-B 至少新增或运行以下测试。
+
+### 10.18.1 Native build
+
+1. CPU_SIM default configure；
+2. CPU_SIM default build；
+3. CPU_SIM install；
+4. CPU_SIM `.so` file type；
+5. CPU_SIM SONAME；
+6. CPU_SIM exact symbol allowlist；
+7. CPU_SIM forbidden symbol list；
+8. CPU_SIM dependency audit；
+9. CPU_SIM CTest 11/11；
+10. installed headers compile test；
+11. installed package consumer compile test；
+12. two-clean-build comparison；
+13. no CANN dependency in default mode；
+14. source tree unchanged after external build。
+
+### 10.18.2 Direct readiness
+
+15. feature flag default OFF；
+16. explicit CANN root required；
+17. canonical CANN root only；
+18. official header signature assertions；
+19. direct adapter build；
+20. direct link-audit ELF inspection；
+21. link-audit executable not run；
+22. host-only lifecycle CTest；
+23. no-device preflight；
+24. `runtime_api_calls=[]`；
+25. no actual ACL/HCCL call expression in reachable path；
+26. official DSO not copied to staging；
+27. direct ABI and CPU_SIM ABI isolation。
+
+### 10.18.3 Submission CLI
+
+28. `check` success without CANN；
+29. `build` success；
+30. `quick` deterministic success；
+31. `full` success；
+32. `stage` creates expected structure；
+33. `verify` validates SHA256；
+34. `describe` is read-only；
+35. `clean-generated` cannot escape generated root；
+36. invalid path rejection；
+37. symlink escape rejection；
+38. unknown command rejection；
+39. exit code contract；
+40. JSON output schema；
+41. Windows import safety；
+42. WSL/Linux execution safety。
+
+### 10.18.4 Staging
+
+43. inclusion manifest schema；
+44. all included paths exist；
+45. no fabricated path；
+46. no duplicate staging path；
+47. no official binaries；
+48. no official source tree；
+49. controlled DOCX excluded by default；
+50. private logs excluded；
+51. old evidence remains immutable；
+52. selected evidence SHA256 valid；
+53. no absolute user paths；
+54. artifact role labels；
+55. claim boundary scan；
+56. placeholder status correctness；
+57. staging size report；
+58. staging manifest and filesystem consistency。
+
+### 10.18.5 Regression
+
+59. CPU_SIM Python bridge；
+60. top-level Agent CPU_SIM entry；
+61. backend default remains CPU_SIM；
+62. fallback remains NONE；
+63. simulator representative replay；
+64. G2-E/G2-F/G3-A evidence SHA256；
+65. G3-A requirement/deliverable/claim matrix paths；
+66. final HCOMM/HCCL tracked worktree clean。
+
+不得：
+
+- 删除或弱化旧测试；
+- 增加无理由 skip；
+- 用预生成旧 `.so` 代替 clean build；
+- 跳过 symbol/dependency 检查；
+- 执行真实 runtime；
+- 修改旧 evidence；
+- 为获取相同 hash 直接复制第一次构建产物作为第二次构建结果。
+
+---
+
+## 10.19 G3-B Evidence
+
+只保留一份权威最终 evidence：
+
+```text
+experiments/submission/evidence/g3_b_<timestamp>/
+```
+
+至少包含：
+
+```text
+README.md
+manifest.json
+result.json
+native_artifact_inventory.json
+native_plugin_abi_manifest.json
+direct_readiness_abi_manifest.json
+build_environment.json
+build_commands.json
+reproducible_build_audit.json
+elf_dependency_audit.json
+symbol_inventory.json
+install_audit.json
+submission_cli_contract.json
+quick_run_summary.json
+full_run_summary.json
+staging_manifest.json
+staging_tree.json
+staging_size_report.json
+evidence_selection_policy.json
+excluded_assets.json
+forbidden_data_scan.json
+claim_boundary_audit.json
+regression.json
+SHA256SUMS
+```
+
+Evidence 必须记录：
+
+```text
+checkpoint=G3-B
+checkpoint_status=COMPLETED
+native_delivery_normalization=COMPLETED
+cpu_sim_submission_plugin=COMPLETED
+direct_readiness_package=COMPLETED
+reproducible_build_status=<BIT_FOR_BIT_REPRODUCIBLE|FUNCTIONALLY_REPRODUCIBLE>
+submission_cli=COMPLETED
+submission_staging=COMPLETED
+final_release_created=false
+public_release_created=false
+official_binaries_included=false
+official_source_included=false
+controlled_competition_doc_included=false
+old_evidence_modified=false
+real_device_api_executed=false
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+measured_on_real_npu=false
+runtime_api_calls=[]
+```
+
+还必须记录：
+
+- baseline commit；
+- project commit；
+- CPU_SIM `.so` SHA256；
+- CPU_SIM `.so` SONAME；
+- exact exported symbols；
+- exact dependencies；
+- public header SHA256；
+- CMake options；
+- install tree；
+- build-a/build-b comparison；
+- direct artifact type；
+- direct official-library references；
+- direct no-device status；
+- quick/full commands；
+- quick/full exit status；
+- staging root；
+- staging file count；
+- staging total size；
+- inclusion/exclusion counts；
+- selected evidence；
+- USER_ACTION_REQUIRED；
+- known limitations；
+- HCOMM/HCCL branch、commit 和 clean 状态；
+- evidence SHA256。
+
+Evidence 不得包含：
+
+```text
+REAL_DEVICE_PASS
+official_direct_plugin_validated=true
+direct_hccl_api_call=true
+real_ascend_npu_validated=true
+measured_on_real_npu=true
+runtime_initialized=true
+communicator_created=true
+collective_executed_on_real_device=true
+```
+
+---
+
+## 10.20 USER_ACTION_REQUIRED
+
+G3-B 必须保留以下人工决策，不能自行代替用户决定。
+
+### UA-B-001：项目许可证
+
+当前仓库缺少最终许可证或版权确认。
+
+G3-B 可以：
+
+- 生成许可证需求说明；
+- 在 manifest 中标记缺失；
+- 保留 staging placeholder；
+- 阻止将 staging 标记为 release-ready。
+
+G3-B 不得：
+
+- 自行选择 MIT、Apache-2.0 或其他许可证；
+- 代表团队确认版权；
+- 伪造 copyright owner。
+
+### UA-B-002：官方资产再分发
+
+用户必须确认：
+
+- CANN DSO 是否可分发；
+- HCOMM/HCCL source 是否可分发；
+- 官方 headers 是否可随包复制；
+- 是否只能提供安装说明和 hash。
+
+在确认前默认：
+
+```text
+EXCLUDE
+```
+
+### UA-B-003：赛题文件边界
+
+用户必须确认受控赛题 DOCX 是否允许：
+
+- 提交给赛事平台；
+- 放入团队内部包；
+- 放入公开 release。
+
+在确认前默认：
+
+```text
+submission inclusion=USER_ACTION_REQUIRED
+public release inclusion=false
+```
+
+### UA-B-004：平台格式和大小
+
+用户必须确认：
+
+- ZIP、7z 或其他格式；
+- 最大文件大小；
+- 单文件限制；
+- 必须目录结构；
+- 是否要求预编译 `.so`；
+- 是否允许外部下载依赖；
+- 是否要求团队字段。
+
+G3-B 只生成 staging，不创建最终平台 archive。
+
+---
+
+## 10.21 完成条件
+
+只有以下条件全部满足时，G3-B 才可标记 `COMPLETED`：
+
+- G3-A 基线已读取且未修改；
+- CPU_SIM `.so` 身份冻结；
+- direct readiness 产物身份冻结；
+- 两套 ABI 明确隔离；
+- native plugin ABI decision 完成；
+- CPU_SIM `.so` 可从 clean source 重建；
+- `.so` exact symbol audit 通过；
+- `.so` dependency audit 通过；
+- public headers 与实现一致；
+- CMake default CPU_SIM build 不依赖 CANN；
+- CMake install 路径通过；
+- external consumer compile test 通过；
+- direct readiness build/link/lifecycle audit 通过；
+- direct runtime 边界保持关闭；
+- official DSO 未被复制；
+- quick CLI 通过；
+- full CLI 通过；
+- simulator representative replay 通过；
+- topology/config 注入入口可用；
+- staging 目录生成成功；
+- inclusion/exclusion manifest 完整；
+- selected evidence SHA256 通过；
+- controlled DOCX 默认排除；
+- private logs 默认排除；
+- official source/binary 默认排除；
+- preliminary forbidden-data scan 通过；
+- claim boundary audit 通过；
+- G2-E/G2-F/G3-A old evidence 未修改；
+- G3-B evidence SHA256 全部通过；
+- HCOMM/HCCL tracked worktree clean；
+- 工作区 clean；
+- 未 push；
+- 未 merge；
+- 未开始 G3-C；
+- 未创建最终 release archive；
+- 未执行真实设备 API。
+
+最终状态必须为：
+
+```text
+G3-B: COMPLETED
+Native Delivery Normalization: COMPLETED
+CPU_SIM Submission Plugin: COMPLETED
+Direct Readiness Package: COMPLETED
+Reproducible Build: COMPLETED
+Submission CLI: COMPLETED
+Submission Staging: COMPLETED
+C/C++ Plugin Compliance: PARTIALLY_SATISFIED
+Submission Release Readiness: PARTIAL
+G3 Delivery Readiness: PARTIAL
+Real-device Acceptance: HARDWARE_BLOCKED
+```
+
+### 10.21.1 C/C++ 合规状态升级规则
+
+只有以下条件全部满足时，才允许将：
+
+```text
+C/C++ Plugin Compliance
+```
+
+从：
+
+```text
+PARTIALLY_SATISFIED
+```
+
+升级为：
+
+```text
+SATISFIED
+```
+
+条件：
+
+1. 赛题要求的正式插件 ABI 有可引用的权威来源；
+2. 项目最终 `.so` 精确实现该 ABI；
+3. 所有 required entry points 均存在；
+4. C/C++ 承担核心 collective 算法角色；
+5. `.so` 可重复构建；
+6. dependencies 符合赛题政策；
+7. headers、CMake 和 tests 完整；
+8. 不依赖将 CPU_SIM 冒充 real direct plugin；
+9. 真实性措辞通过 claim audit。
+
+如果无法证明官方 ABI，G3-B 仍可以完成，但必须保留：
+
+```text
+C/C++ Plugin Compliance: PARTIALLY_SATISFIED
+```
+
+不得通过修改状态定义强行升级。
+
+### 10.21.2 Release readiness
+
+即使 G3-B 全部通过，以下内容尚未完成：
+
+- 项目许可证；
+- G3-C 正式报告；
+- G3-D Agent/Prompt trace；
+- G3-E 图表和创新叙事；
+- G3-F 演示视频；
+- G3-G 最终 secrets/license/clean extraction/archive audit；
+- 平台格式和大小确认。
+
+因此：
+
+```text
+Submission Release Readiness
+```
+
+必须保持：
+
+```text
+PARTIAL
+```
+
+---
+
+## 10.22 阻塞与失败分类
+
+### ENV_BLOCKED
+
+适用于：
+
+- compiler 缺失；
+- CMake 缺失；
+- Python 环境无法导入；
+- CPU_SIM 无法 clean build；
+- install 目录不可写；
+- CANN root 在 explicit direct readiness 模式下缺失；
+- CANN version 或 official headers 漂移；
+- G3-A/G2 evidence 无法读取；
+- staging 文件系统不支持所需操作。
+
+必须保留：
+
+- 原始命令；
+- exit code；
+- stderr；
+- 恢复建议。
+
+### USER_ACTION_REQUIRED
+
+适用于：
+
+- 项目许可证；
+- 团队版权；
+- 官方资产再分发；
+- 赛题 DOCX inclusion；
+- 平台格式；
+- 平台大小；
+- 公开 release 决策。
+
+这些人工决策不影响 CPU_SIM build、quick/full CLI 和内部 staging 的工程完成，但会阻止：
+
+```text
+Submission Release Readiness: COMPLETED
+```
+
+### HARDWARE_BLOCKED
+
+只适用于：
+
+- 真实 NPU；
+- 真实 device/context/stream；
+- 真实 communicator；
+- 真实 collective；
+- 真实 topology detection；
+- 真实 performance；
+- 真实 failover；
+- 真实 `msprof`；
+- direct real-device acceptance。
+
+硬件缺失不影响 G3-B 完成。
+
+### FAIL
+
+适用于：
+
+- CPU_SIM `.so` 无法从 clean source 构建；
+- install 规则失效；
+- public header 与实现不一致；
+- required symbol 缺失；
+- forbidden symbol 泄漏；
+- 不允许的依赖被引入；
+- CPU_SIM 与 direct ABI 混淆；
+- direct guard 被绕过；
+- official DSO 被复制进 staging；
+- controlled DOCX 被默认打包；
+- staging 含私密日志或 secret；
+- quick/full 入口不稳定；
+- staging manifest 与文件系统不一致；
+- SHA256 失败；
+- 旧 evidence 被修改；
+- 模拟结果被写成实机；
+- 为获得相同 hash 复用第一次构建产物；
+- 前置环境满足但实现不能通过。
+
+不得将代码、构建、打包、manifest 或文档缺陷标记为 `HARDWARE_BLOCKED`。
+
+---
+
+## 10.23 建议 commit 与停止边界
+
+建议分支：
+
+```text
+codex/g3-b-reproducible-submission
+```
+
+建议 commit：
+
+```text
+G3-B normalize native delivery and reproducible submission staging
+```
+
+完成本地 commit 后必须停止。
+
+不得：
+
+- push；
+- merge；
+- 开始 G3-C；
+- 创建最终 ZIP/7z；
+- 创建 release；
+- 创建 tag；
+- 上传平台；
+- 修改 G2/G3-A evidence；
+- 执行真实 ACL/HCCL API；
+- 将 staging 描述为正式提交完成。
+
+回滚使用：
+
+```text
+git revert
+```
+
+不得重写历史、删除旧 evidence 或修改官方仓库。

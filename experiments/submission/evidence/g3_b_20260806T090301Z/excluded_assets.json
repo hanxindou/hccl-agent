@@ -1,0 +1,35 @@
+{
+  "assets": [
+    {
+      "asset": "project license/copyright",
+      "decision": "USER_ACTION_REQUIRED",
+      "id": "UA-B-001",
+      "include": false
+    },
+    {
+      "asset": "official CANN binaries and HCOMM/HCCL source/headers",
+      "decision": "USER_ACTION_REQUIRED",
+      "id": "UA-B-002",
+      "include": false
+    },
+    {
+      "asset": "controlled competition DOCX",
+      "decision": "USER_ACTION_REQUIRED",
+      "id": "UA-B-003",
+      "include": false
+    },
+    {
+      "asset": "final platform archive format and size",
+      "decision": "USER_ACTION_REQUIRED",
+      "id": "UA-B-004",
+      "include": false
+    },
+    {
+      "asset": "private logs, credentials, caches, superseded raw evidence",
+      "decision": "EXCLUDE",
+      "include": false
+    }
+  ],
+  "default_policy": "EXCLUDE",
+  "schema_version": "g3-b-excluded-assets-v1"
+}

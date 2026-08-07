@@ -1,0 +1,19 @@
+{
+  "consumer_compile": {
+    "build_exit_code": 0,
+    "configure_exit_code": 0,
+    "executed": false,
+    "status": "PASS"
+  },
+  "headers": {
+    "hccl_algorithms.h": "6277fb130926e0938d50c261a711262257270a3ff0b7e763abe909c90ae07e39",
+    "hccl_comm.h": "e681530900dd1ec46b5b625947ff8c7a84535c31324b17b12db62008112a3848"
+  },
+  "install_tree": [
+    "lib/libhccl_plugin.so",
+    "include/hccl_comm.h",
+    "include/hccl_algorithms.h",
+    "lib/cmake/hccl_plugin"
+  ],
+  "status": "PASS"
+}

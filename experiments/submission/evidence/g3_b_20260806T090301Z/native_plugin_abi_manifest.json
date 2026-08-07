@@ -1,0 +1,92 @@
+{
+  "abi_namespace": "hccl_agent.cpu_sim",
+  "abi_version": "0.1",
+  "artifact_name": "libhccl_plugin.so",
+  "artifact_role": "CPU_SIM_REFERENCE_PLUGIN",
+  "audit_status": "PASS",
+  "build_mode": "HCCL_BACKEND=CPU_SIM;HCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF",
+  "build_target": "hccl_plugin",
+  "cpu_simulated": true,
+  "dependencies": [
+    "libc.so.6"
+  ],
+  "direct_readiness": false,
+  "exported_symbols": [
+    "butterfly_allgather",
+    "butterfly_allreduce",
+    "fattree_allreduce",
+    "hcclAllGather",
+    "hcclAllReduce",
+    "hcclBroadcast",
+    "hcclCommDestroy",
+    "hcclCommInit",
+    "hcclFreeTopology",
+    "hcclGetTopology",
+    "hcclPluginGetAlgorithms",
+    "hcclPluginGetVersion",
+    "hcclReduceScatter",
+    "hcclSetRank",
+    "mesh_allreduce",
+    "mesh_reducescatter",
+    "nhr_allreduce",
+    "ring_allgather",
+    "ring_allreduce"
+  ],
+  "forbidden_symbols": [
+    "HcclAllGather",
+    "HcclAllReduce",
+    "HcclReduceScatter",
+    "hccl_direct_session_create"
+  ],
+  "language": "C11",
+  "observed_dependencies": [
+    "libc.so.6"
+  ],
+  "observed_exported_symbols": [
+    "butterfly_allgather",
+    "butterfly_allreduce",
+    "fattree_allreduce",
+    "hcclAllGather",
+    "hcclAllReduce",
+    "hcclBroadcast",
+    "hcclCommDestroy",
+    "hcclCommInit",
+    "hcclFreeTopology",
+    "hcclGetTopology",
+    "hcclPluginGetAlgorithms",
+    "hcclPluginGetVersion",
+    "hcclReduceScatter",
+    "hcclSetRank",
+    "mesh_allreduce",
+    "mesh_reducescatter",
+    "nhr_allreduce",
+    "ring_allgather",
+    "ring_allreduce"
+  ],
+  "observed_sha256": "c8122c1cbc5e336e45b68bcb308a992a5caa04d905a228f6e1be7e1e169b52cd",
+  "observed_soname": "libhccl_plugin.so",
+  "official_abi_status": "OFFICIAL_PLUGIN_ABI_UNVERIFIED",
+  "public_headers": [
+    "hcccl/include/hccl_comm.h",
+    "hcccl/include/hccl_algorithms.h"
+  ],
+  "real_device_validated": false,
+  "required_symbols": [
+    "hcclCommInit",
+    "hcclCommDestroy",
+    "hcclSetRank",
+    "hcclGetTopology",
+    "hcclFreeTopology",
+    "hcclAllReduce",
+    "hcclAllGather",
+    "hcclReduceScatter",
+    "hcclPluginGetVersion",
+    "hcclPluginGetAlgorithms"
+  ],
+  "runtime_mode": "HOST_CPU",
+  "soname": "libhccl_plugin.so",
+  "source_paths": [
+    "hcccl/src/hccl_comm.c",
+    "hcccl/src/hccl_algorithms.c"
+  ]
+}

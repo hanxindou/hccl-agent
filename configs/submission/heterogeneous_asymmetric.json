@@ -1,0 +1,10 @@
+{
+  "schema_version": "submission-simulator-config-v1",
+  "name": "heterogeneous_asymmetric",
+  "topology": "HETEROGENEOUS",
+  "topology_source": "SIMULATOR_CONFIG",
+  "rank_size": 16,
+  "hardware_profile": "tier_medium",
+  "asymmetric_links": true,
+  "seed": 20260806
+}

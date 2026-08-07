@@ -1,0 +1,15 @@
+{
+  "large_raw_evidence": "selected only; platform size remains UA-B-004",
+  "policy": {
+    "g2_e": "INCLUDE_SUMMARY_ONLY",
+    "g2_f_1": "REFERENCE_ONLY",
+    "g2_f_2": "INCLUDE_SUMMARY_ONLY",
+    "g2_f_3": "INCLUDE_SUMMARY_ONLY",
+    "g2_f_4": "INCLUDE_SUMMARY_ONLY",
+    "g2_f_5": "INCLUDE_FULL",
+    "g2_f_6": "INCLUDE_FULL",
+    "g2_f_7": "INCLUDE_SUMMARY_ONLY",
+    "g3_a": "INCLUDE_FULL"
+  },
+  "schema_version": "g3-b-evidence-selection-v1"
+}

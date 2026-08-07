@@ -1,0 +1,14 @@
+{
+  "file": "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=06557cba281d4f246960915f2e3526e08cf48089, not stripped",
+  "ldd": [
+    "linux-vdso.so.1 (0x000075317054c000)",
+    "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000753170200000)",
+    "/lib64/ld-linux-x86-64.so.2 (0x000075317054e000)"
+  ],
+  "needed": [
+    "libc.so.6"
+  ],
+  "official_dependencies": [],
+  "soname": "libhccl_plugin.so",
+  "status": "PASS"
+}

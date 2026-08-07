@@ -2,13 +2,9 @@
  * @file    hccl_comm.h
  * @brief   HCCL communication primitives — interface declarations.
  *
- * These declarations mirror the real HCOMM open-source interfaces from
- * Gitee: ascend/cann-hcomm.  They are the contract that every HCCL
- * plugin must fulfill.
- *
- * STATUS: Interface declarations are project-local ABI contracts inspired
- *         by HCOMM/HCCL style APIs. Implementations in src/ are CPU
- *         simulation compatibility code, not real CANN/HCOMM backends.
+ * STATUS: These are project-local CPU_SIM ABI declarations inspired by
+ * HCOMM/HCCL concepts. They are not claimed to be the official HCCL plugin
+ * loader ABI. Implementations in src/ operate on host memory only.
  */
 
 #ifndef HCCL_COMM_H
@@ -25,10 +21,10 @@ extern "C" {
 /*  Types                                                             */
 /* ------------------------------------------------------------------ */
 
-/** Opaque handle for a HCCL communicator. */
+/** Opaque handle for a project CPU_SIM communicator. */
 typedef void* hcclComm_t;
 
-/** NPU device identifier. */
+/** Virtual device identifier used by the host simulation. */
 typedef int32_t hcclDevice_t;
 
 /** Collective operation result code. */
@@ -199,13 +195,12 @@ hcclResult_t hcclBroadcast(
 /* ------------------------------------------------------------------ */
 
 /**
- * Return the plugin version string.
- * Required by the HCCL plugin loader.
+ * Return the project CPU_SIM plugin version string.
  */
 const char* hcclPluginGetVersion(void);
 
 /**
- * Return the list of algorithms this plugin implements.
+ * Return the list of project CPU_SIM algorithms this plugin implements.
  * Format: "algo1,algo2,..." (comma-separated, no spaces).
  */
 const char* hcclPluginGetAlgorithms(void);

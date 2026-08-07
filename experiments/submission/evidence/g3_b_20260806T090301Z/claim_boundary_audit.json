@@ -1,0 +1,10 @@
+{
+  "findings": [],
+  "status": "PASS",
+  "truth_labels": [
+    "CPU_EXECUTED",
+    "DIRECT_READINESS_ONLY",
+    "SIMULATED_ONLY",
+    "REAL_DEVICE_NOT_EXECUTED"
+  ]
+}

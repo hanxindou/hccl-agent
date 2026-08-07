@@ -1,0 +1,628 @@
+{
+  "build_a": {
+    "build_dir": "<build>/build-a",
+    "cmake_options": [
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DHCCL_BACKEND=CPU_SIM",
+      "-DHCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF",
+      "-DCMAKE_INSTALL_PREFIX=<install>/build-a",
+      "-DCMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG -ffile-prefix-map=<repo>=/src -fdebug-prefix-map=<repo>=/src"
+    ],
+    "commands": [
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake -S <repo>/hcccl -B <build>/build-a -DCMAKE_BUILD_TYPE=Release -DHCCL_BACKEND=CPU_SIM -DHCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF -DCMAKE_INSTALL_PREFIX=<install>/build-a '-DCMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG -ffile-prefix-map=<repo>=/src -fdebug-prefix-map=<repo>=/src'"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake --build <build>/build-a --config Release --parallel 2"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 ctest --test-dir <build>/build-a --output-on-failure"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake --install <build>/build-a --prefix <install>/build-a"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "ctest": {
+      "failed": 0,
+      "passed": 11,
+      "status": "PASS"
+    },
+    "headers_sha256": {
+      "hccl_algorithms.h": "6277fb130926e0938d50c261a711262257270a3ff0b7e763abe909c90ae07e39",
+      "hccl_comm.h": "e681530900dd1ec46b5b625947ff8c7a84535c31324b17b12db62008112a3848"
+    },
+    "install_dir": "<install>/build-a",
+    "name": "build-a",
+    "native_audit": {
+      "artifact": "<install>/lib/libhccl_plugin.so",
+      "artifact_role": "CPU_SIM_REFERENCE_PLUGIN",
+      "exported_symbols": [
+        "butterfly_allgather",
+        "butterfly_allreduce",
+        "fattree_allreduce",
+        "hcclAllGather",
+        "hcclAllReduce",
+        "hcclBroadcast",
+        "hcclCommDestroy",
+        "hcclCommInit",
+        "hcclFreeTopology",
+        "hcclGetTopology",
+        "hcclPluginGetAlgorithms",
+        "hcclPluginGetVersion",
+        "hcclReduceScatter",
+        "hcclSetRank",
+        "mesh_allreduce",
+        "mesh_reducescatter",
+        "nhr_allreduce",
+        "ring_allgather",
+        "ring_allreduce"
+      ],
+      "file": "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=06557cba281d4f246960915f2e3526e08cf48089, not stripped",
+      "forbidden_symbols": [],
+      "ldd": [
+        "linux-vdso.so.1 (0x000075317054c000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000753170200000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x000075317054e000)"
+      ],
+      "missing_symbols": [],
+      "needed": [
+        "libc.so.6"
+      ],
+      "official_dependencies": [],
+      "sha256": "c8122c1cbc5e336e45b68bcb308a992a5caa04d905a228f6e1be7e1e169b52cd",
+      "soname": "libhccl_plugin.so",
+      "status": "PASS",
+      "unexpected_symbols": []
+    },
+    "source_commit": "a7b7fa993f71a56719adc73191bc24c9247fa27f",
+    "source_date_epoch": "1786003772",
+    "status": "PASS"
+  },
+  "build_b": {
+    "build_dir": "<build>/build-b",
+    "cmake_options": [
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DHCCL_BACKEND=CPU_SIM",
+      "-DHCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF",
+      "-DCMAKE_INSTALL_PREFIX=<install>/build-b",
+      "-DCMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG -ffile-prefix-map=<repo>=/src -fdebug-prefix-map=<repo>=/src"
+    ],
+    "commands": [
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake -S <repo>/hcccl -B <build>/build-b -DCMAKE_BUILD_TYPE=Release -DHCCL_BACKEND=CPU_SIM -DHCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF -DCMAKE_INSTALL_PREFIX=<install>/build-b '-DCMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG -ffile-prefix-map=<repo>=/src -fdebug-prefix-map=<repo>=/src'"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake --build <build>/build-b --config Release --parallel 2"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 ctest --test-dir <build>/build-b --output-on-failure"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && SOURCE_DATE_EPOCH=1786003772 cmake --install <build>/build-b --prefix <install>/build-b"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "ctest": {
+      "failed": 0,
+      "passed": 11,
+      "status": "PASS"
+    },
+    "headers_sha256": {
+      "hccl_algorithms.h": "6277fb130926e0938d50c261a711262257270a3ff0b7e763abe909c90ae07e39",
+      "hccl_comm.h": "e681530900dd1ec46b5b625947ff8c7a84535c31324b17b12db62008112a3848"
+    },
+    "install_dir": "<install>/build-b",
+    "name": "build-b",
+    "native_audit": {
+      "artifact": "<install>/lib/libhccl_plugin.so",
+      "artifact_role": "CPU_SIM_REFERENCE_PLUGIN",
+      "exported_symbols": [
+        "butterfly_allgather",
+        "butterfly_allreduce",
+        "fattree_allreduce",
+        "hcclAllGather",
+        "hcclAllReduce",
+        "hcclBroadcast",
+        "hcclCommDestroy",
+        "hcclCommInit",
+        "hcclFreeTopology",
+        "hcclGetTopology",
+        "hcclPluginGetAlgorithms",
+        "hcclPluginGetVersion",
+        "hcclReduceScatter",
+        "hcclSetRank",
+        "mesh_allreduce",
+        "mesh_reducescatter",
+        "nhr_allreduce",
+        "ring_allgather",
+        "ring_allreduce"
+      ],
+      "file": "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=06557cba281d4f246960915f2e3526e08cf48089, not stripped",
+      "forbidden_symbols": [],
+      "ldd": [
+        "linux-vdso.so.1 (0x000070b08c3ec000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000070b08c000000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x000070b08c3ee000)"
+      ],
+      "missing_symbols": [],
+      "needed": [
+        "libc.so.6"
+      ],
+      "official_dependencies": [],
+      "sha256": "c8122c1cbc5e336e45b68bcb308a992a5caa04d905a228f6e1be7e1e169b52cd",
+      "soname": "libhccl_plugin.so",
+      "status": "PASS",
+      "unexpected_symbols": []
+    },
+    "source_commit": "a7b7fa993f71a56719adc73191bc24c9247fa27f",
+    "source_date_epoch": "1786003772",
+    "status": "PASS"
+  },
+  "command": "python -m tools.submission_cli full",
+  "consumer_compile": {
+    "build_exit_code": 0,
+    "configure_exit_code": 0,
+    "executed": false,
+    "status": "PASS"
+  },
+  "direct_hccl_api_call": false,
+  "direct_readiness": {
+    "archive": "<build>/direct-readiness/libhccl_direct_adapter.a",
+    "archive_sha256": "2c08a77fb95c7eb132bb0946b718f98c04049ac651d00b32a5a9b4181d957f72",
+    "artifact_type": "STATIC BUILD/LIFECYCLE READINESS ARTIFACT",
+    "commands": [
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && cmake -S <repo>/hcccl -B <build>/direct-readiness -DCMAKE_BUILD_TYPE=Release -DHCCL_BACKEND=CPU_SIM -DHCCL_ENABLE_ASCEND_HCCL_DIRECT=ON -DHCCL_CANN_ROOT=<cann-root>"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && cmake --build <build>/direct-readiness --config Release --parallel 2"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "wsl.exe",
+          "--distribution",
+          "Ubuntu-22.04",
+          "--exec",
+          "bash",
+          "-lc",
+          "cd <repo> && ctest --test-dir <build>/direct-readiness -R test_hccl_direct_lifecycle --output-on-failure"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "cpu_sim_symbol_leakage": [],
+    "direct_hccl_api_call": false,
+    "direct_symbols": [
+      "hccl_direct_calculate_capacity",
+      "hccl_direct_runtime_lease_count",
+      "hccl_direct_session_cleanup_action",
+      "hccl_direct_session_cleanup_count",
+      "hccl_direct_session_cleanup_error_count",
+      "hccl_direct_session_configure",
+      "hccl_direct_session_create",
+      "hccl_direct_session_destroy",
+      "hccl_direct_session_first_error",
+      "hccl_direct_session_model_acquire_lease",
+      "hccl_direct_session_model_cleanup",
+      "hccl_direct_session_preflight",
+      "hccl_direct_session_request_execution",
+      "hccl_direct_session_run_model",
+      "hccl_direct_session_state",
+      "hccl_direct_session_state_string",
+      "hccl_direct_session_verify_owner",
+      "hccl_direct_status_string"
+    ],
+    "lifecycle_ctest": {
+      "failed": 0,
+      "passed": 1
+    },
+    "link_audit_elf": "INSPECTED_NOT_EXECUTED",
+    "no_device_status": "NO_DEVICE_EXPECTED",
+    "observed_needed": [
+      "libacl_rt.so",
+      "libc.so.6",
+      "libgcc_s.so.1",
+      "libhccl.so",
+      "libhcomm.so",
+      "libm.so.6",
+      "libstdc++.so.6"
+    ],
+    "official_library_references": [
+      "libacl_rt.so",
+      "libhccl.so",
+      "libhcomm.so"
+    ],
+    "official_runtime_execution": false,
+    "runtime_api_calls": [],
+    "status": "PASS"
+  },
+  "environment": {
+    "default_backend": "CPU_SIM",
+    "fallback_policy": "NONE",
+    "missing_paths": [],
+    "missing_tools": [],
+    "official_asset_default": "EXCLUDE",
+    "optional": {
+      "cann_9_1_0": "AVAILABLE"
+    },
+    "platform": "Windows-10-10.0.22631-SP0",
+    "python": "3.11.7",
+    "real_device_only": {
+      "npu": "NOT_PROBED",
+      "runtime_execution": "DISABLED"
+    },
+    "repository_root": "<repo>",
+    "required": {
+      "paths": "PASS",
+      "tools": {
+        "cc": "cc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+        "cmake": "cmake version 3.22.1",
+        "ctest": "ctest version 3.22.1",
+        "file": "file-5.41",
+        "ldd": "ldd (Ubuntu GLIBC 2.35-0ubuntu3.13) 2.35",
+        "nm": "GNU nm (GNU Binutils for Ubuntu) 2.38",
+        "readelf": "GNU readelf (GNU Binutils for Ubuntu) 2.38"
+      }
+    },
+    "schema_version": "g3-b-check-v1",
+    "status": "PASS",
+    "user_action_required": [
+      "UA-B-001",
+      "UA-B-002",
+      "UA-B-003",
+      "UA-B-004"
+    ]
+  },
+  "expensive_simulator_evidence_regenerated": false,
+  "old_evidence": [
+    {
+      "files_checked": 3,
+      "path": "experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z",
+      "sha256sums_sha256": "42e12f11293419ee2866709068a249452529dedec1c34117c827608a48f804d4",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 4,
+      "path": "experiments/direct_api/evidence/g2_f_1_20260730T203000Z",
+      "sha256sums_sha256": "08a63a712a9bd34518b86b5c9e905bf6728cf1c067c501fffbc3cb33a65719cc",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 4,
+      "path": "experiments/direct_api/evidence/g2_f_2_20260730T210000Z",
+      "sha256sums_sha256": "f01054cdf440d7d904bf246a245df704a87f0465dc26161b7862cd4f28bdf361",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 8,
+      "path": "experiments/direct_api/evidence/g2_f_3_20260802T000000Z",
+      "sha256sums_sha256": "e4c37a4f579d3a2bb3a3e6a2762c652628d537c7050d11478d8ee5a2e95c7052",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 10,
+      "path": "experiments/direct_api/evidence/g2_f_4_20260802T010000Z",
+      "sha256sums_sha256": "345ddf6dcfaf41827864807c23659d49179fcf4e80c70d90d01d2237d6b3697d",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 13,
+      "path": "experiments/simulator/evidence/g2_f_5_simulator_20260804T010000Z",
+      "sha256sums_sha256": "b8c5d9388b30fc9095df4cc3bb87ae8f2228db739936d97f1909a87034cb124d",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 21,
+      "path": "experiments/simulator/evidence/g2_f_6_simulator_20260804T020000Z",
+      "sha256sums_sha256": "c8f75ad2b945fc3caebbe62e9423ff2e21826995de5cfc03c0703b2e90e47385",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 19,
+      "path": "experiments/final_audit/evidence/g2_f_7_20260805T010000Z",
+      "sha256sums_sha256": "7e904f7e2944e0b90fc5dde27065e8353a283aa9f623d9d7a6342d716cd2927f",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 12,
+      "path": "experiments/submission/evidence/g3_a_20260806T035554Z",
+      "sha256sums_sha256": "4f8fab9ee14e29215f30bc4df45b2a4387dd4e8f8c17c81d41dcb0c81fe3511c",
+      "status": "PASS"
+    }
+  ],
+  "python_regression": {
+    "exit_code": 0,
+    "failed": 0,
+    "modules": [
+      "tests.test_simulator_collective_correctness",
+      "tests.test_failover_engine",
+      "tests.test_backend_selection",
+      "tests.test_plugin_bridge",
+      "tests.test_g2_f_6_simulator_acceptance",
+      "tests.test_g2_f_7_backend_final_audit",
+      "tests.test_direct_api_backend",
+      "tests.test_direct_adapter_build_contract",
+      "tests.test_direct_lifecycle_contract",
+      "tests.test_direct_link_contract",
+      "tests.submission_audit.test_g3_a_audit"
+    ],
+    "passed": 93,
+    "status": "PASS"
+  },
+  "quick_regression": {
+    "status": "PASS"
+  },
+  "real_ascend_npu_validated": false,
+  "real_device_api_executed": false,
+  "reproducible_build": {
+    "binary_sha256_equal": true,
+    "ctest_equal": true,
+    "difference_reason": null,
+    "file_type_equal": true,
+    "first_artifact_reused": false,
+    "headers_equal": true,
+    "needed_equal": true,
+    "soname_equal": true,
+    "status": "BIT_FOR_BIT_REPRODUCIBLE",
+    "symbols_equal": true
+  },
+  "reproducible_build_status": "BIT_FOR_BIT_REPRODUCIBLE",
+  "runtime_api_calls": [],
+  "schema_version": "g3-b-full-v1",
+  "simulator_replay": {
+    "algorithm_comparison": [
+      {
+        "algorithm": "Ring AllReduce",
+        "simulated_collective_time_us": 1877.765799732
+      },
+      {
+        "algorithm": "Fat-Tree",
+        "simulated_collective_time_us": 1129.220945851
+      }
+    ],
+    "configuration": {
+      "algorithm": "Ring AllReduce",
+      "cluster": null,
+      "hardware_profile": "tier_medium",
+      "message_size": 1048576,
+      "primitive": "AllReduce",
+      "rank_size": 16,
+      "seed": 20260806,
+      "topology": {
+        "path": "configs/submission/heterogeneous_asymmetric.json",
+        "payload": {
+          "asymmetric_links": true,
+          "hardware_profile": "tier_medium",
+          "name": "heterogeneous_asymmetric",
+          "rank_size": 16,
+          "schema_version": "submission-simulator-config-v1",
+          "seed": 20260806,
+          "topology": "HETEROGENEOUS",
+          "topology_source": "SIMULATOR_CONFIG"
+        },
+        "sha256": "3c76588cbc1ba730e97f6c3070b4d7476c92de2fa0c4979f819dc10305d99f94"
+      }
+    },
+    "correctness_cases": [
+      {
+        "dtype": "FP32",
+        "output_hash": "92e659dfe0b30debf797a61e49d3977f9b1a6fe781dcb40d9e5742cd5aa9fc50",
+        "primitive": "AllReduce",
+        "status": "PASS"
+      },
+      {
+        "dtype": "BF16",
+        "output_hash": "2c31fc7ed865b250445a87152f6228e7e37ceb5a8988dbd4f5cb97f505846ddc",
+        "primitive": "AllGather",
+        "status": "PASS"
+      },
+      {
+        "dtype": "FP16",
+        "output_hash": "38d7c9fdd0c62a39016b7440b9230338e480f796ce399ab902aad73d02cbf5d4",
+        "primitive": "ReduceScatter",
+        "status": "PASS"
+      }
+    ],
+    "fault_recovery": {
+      "simulated_failover_time_ms": 0.055,
+      "status": "RECOVERED"
+    },
+    "no_alternate_path": {
+      "status": "EXPECTED_NO_PATH_FAILURE"
+    },
+    "real_device_measured": false,
+    "representative_8_rank_or_injected": {
+      "correctness_gate": {
+        "correctness_gate_passed": true,
+        "full_or_sampled_validation": "full",
+        "max_abs_error": 0.0,
+        "max_rel_error": 0.0,
+        "output_hash": "a01ac533b56ed6aaa8e9a02f8758b140499b89655eecc216624a80b16d62f5bc"
+      },
+      "rank_size": 16,
+      "simulated_collective_time_us": 3325.870058622
+    },
+    "status": "PASS",
+    "topology_source": "SIMULATOR_CONFIG",
+    "validation_track": "SIMULATOR_ACCEPTANCE"
+  },
+  "staging": {
+    "controlled_competition_doc_included": false,
+    "excluded_count": 5,
+    "file_count": 232,
+    "included_count": 228,
+    "official_assets_included": false,
+    "private_logs_included": false,
+    "selected_evidence": {
+      "g2_e": "INCLUDE_SUMMARY_ONLY",
+      "g2_f_1": "REFERENCE_ONLY",
+      "g2_f_2": "INCLUDE_SUMMARY_ONLY",
+      "g2_f_3": "INCLUDE_SUMMARY_ONLY",
+      "g2_f_4": "INCLUDE_SUMMARY_ONLY",
+      "g2_f_5": "INCLUDE_FULL",
+      "g2_f_6": "INCLUDE_FULL",
+      "g2_f_7": "INCLUDE_SUMMARY_ONLY",
+      "g3_a": "INCLUDE_FULL"
+    },
+    "staging_root": "dist/submission-staging",
+    "status": "PASS",
+    "total_size_bytes": 4582295
+  },
+  "staging_verification": {
+    "absolute_user_paths": [],
+    "claim_boundary_audit": {
+      "findings": [],
+      "status": "PASS",
+      "truth_labels": [
+        "CPU_EXECUTED",
+        "DIRECT_READINESS_ONLY",
+        "SIMULATED_ONLY",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    },
+    "controlled_competition_doc_included": false,
+    "files_verified": 228,
+    "manifest_entries_verified": 228,
+    "native_elf_audit": {
+      "artifact": "<install>/lib/libhccl_plugin.so",
+      "artifact_role": "CPU_SIM_REFERENCE_PLUGIN",
+      "exported_symbols": [
+        "butterfly_allgather",
+        "butterfly_allreduce",
+        "fattree_allreduce",
+        "hcclAllGather",
+        "hcclAllReduce",
+        "hcclBroadcast",
+        "hcclCommDestroy",
+        "hcclCommInit",
+        "hcclFreeTopology",
+        "hcclGetTopology",
+        "hcclPluginGetAlgorithms",
+        "hcclPluginGetVersion",
+        "hcclReduceScatter",
+        "hcclSetRank",
+        "mesh_allreduce",
+        "mesh_reducescatter",
+        "nhr_allreduce",
+        "ring_allgather",
+        "ring_allreduce"
+      ],
+      "file": "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=06557cba281d4f246960915f2e3526e08cf48089, not stripped",
+      "forbidden_symbols": [],
+      "ldd": [
+        "linux-vdso.so.1 (0x00007bc8c664d000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007bc8c6400000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x00007bc8c664f000)"
+      ],
+      "missing_symbols": [],
+      "needed": [
+        "libc.so.6"
+      ],
+      "official_dependencies": [],
+      "sha256": "c8122c1cbc5e336e45b68bcb308a992a5caa04d905a228f6e1be7e1e169b52cd",
+      "soname": "libhccl_plugin.so",
+      "status": "PASS",
+      "unexpected_symbols": []
+    },
+    "official_binaries_included": false,
+    "official_source_included": false,
+    "preliminary_forbidden_data_scan": {
+      "findings": [],
+      "scan_type": "PRELIMINARY_FORBIDDEN_DATA_SCAN",
+      "status": "PASS"
+    },
+    "schema_version": "g3-b-stage-verification-v1",
+    "status": "PASS",
+    "symlink_escape": false
+  },
+  "status": "PASS"
+}

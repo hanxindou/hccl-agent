@@ -1,0 +1,9 @@
+{
+  "schema_version": "submission-simulator-config-v1",
+  "name": "ring_8",
+  "topology": "RING",
+  "topology_source": "SIMULATOR_CONFIG",
+  "rank_size": 8,
+  "hardware_profile": "tier_medium",
+  "seed": 20260806
+}

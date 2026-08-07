@@ -1,8 +1,8 @@
-# HCCL Plugin - CPU Simulation Baseline
+# CPU_SIM reference collective plugin
 
-This directory contains the C CPU-simulated plugin baseline used by the
-HCCL-Agent project. It is useful for local algorithm and bridge testing,
-but it is not a real CANN/HCOMM/Ascend implementation.
+`libhccl_plugin.so` is the project-owned `CPU_SIM_REFERENCE_PLUGIN`. It is
+useful for deterministic host algorithm and bridge testing, but it is not an
+official HCCL loader plugin and is not a CANN/HCOMM/Ascend runtime artifact.
 
 ## What Is Real
 
@@ -13,20 +13,19 @@ but it is not a real CANN/HCOMM/Ascend implementation.
   AllReduce-style CPU simulations for `count == 1`.
 - `CMakeLists.txt` builds a shared library and six C test programs in
   CPU mode on Windows/MSVC and Linux-like toolchains.
-- CTest registers the six C test executables: `test_topology`,
-  `test_ring`, `test_butterfly`, `test_nhr`, `test_mesh`, and
-  `test_fattree`.
+- CTest registers eleven CPU_SIM test executables covering topology,
+  algorithms, wrappers, collectives, reduce operations, and dtype emulation.
 
-## What Is Stub or Not Yet Implemented
+## Truthfulness boundary
 
 - This build does not link CANN, HCOMM, Ascend drivers, RDMA, or real
   device communication libraries.
-- FP16, BF16, and ReduceOps other than SUM are not implemented.
-- Multi-element collective data paths are not implemented in the current
-  C simulation.
-- `butterfly_allgather` and `mesh_reducescatter` are still stubs.
-- Standard HCCL wrapper closure and Python loader changes are intentionally
-  left for a later batch.
+- No ACL/HCCL runtime API is called, no device memory is used, and no real
+  communicator or collective is created.
+- The project-local CPU_SIM ABI, the direct control-plane ABI, and the
+  unverified official plugin ABI are separate contracts.
+- The direct package under `direct/` is readiness-only and is not loaded by
+  the Python CPU_SIM bridge.
 
 ## Windows CPU Build
 
@@ -51,8 +50,9 @@ When Linux or WSL is available, use an external build directory:
 
 ```bash
 cmake -S hcccl -B /tmp/hccl-agent-hcccl-a1
-cmake --build /tmp/hccl-agent-hcccl-a1
+cmake --build /tmp/hccl-agent-hcccl-a1 --config Release
 ctest --test-dir /tmp/hccl-agent-hcccl-a1 --output-on-failure
+cmake --install /tmp/hccl-agent-hcccl-a1 --prefix /tmp/hccl-agent-install/native
 ```
 
 Do not treat a Windows DLL build as proof that Linux `.so` or Ascend
@@ -60,9 +60,9 @@ deployment has been verified.
 
 ## Ascend/CANN Boundary
 
-Real competition deployment still requires CANN 8.0+ / HCOMM headers and
-libraries, Ascend hardware or an approved simulator, and validation
-against HCCL-compatible baselines. That work is outside Batch A1.
+Direct readiness requires a locally licensed CANN 9.1.0 root explicitly
+passed to CMake. Official SDK files are never installed or staged. Real-device
+acceptance remains `HARDWARE_BLOCKED`.
 
 ## Structure
 

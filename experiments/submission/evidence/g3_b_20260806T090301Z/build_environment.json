@@ -1,0 +1,29 @@
+{
+  "binary_sha256": "c8122c1cbc5e336e45b68bcb308a992a5caa04d905a228f6e1be7e1e169b52cd",
+  "build_options": [
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DHCCL_BACKEND=CPU_SIM",
+    "-DHCCL_ENABLE_ASCEND_HCCL_DIRECT=OFF",
+    "-DCMAKE_INSTALL_PREFIX=<install>/build-a",
+    "-DCMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG -ffile-prefix-map=<repo>=/src -fdebug-prefix-map=<repo>=/src"
+  ],
+  "build_type": "Release",
+  "cmake_version": "cmake version 3.22.1",
+  "compiler": "cc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+  "generator": "Unix Makefiles",
+  "header_sha256": {
+    "hccl_algorithms.h": "6277fb130926e0938d50c261a711262257270a3ff0b7e763abe909c90ae07e39",
+    "hccl_comm.h": "e681530900dd1ec46b5b625947ff8c7a84535c31324b17b12db62008112a3848"
+  },
+  "host_os": "Windows-10-10.0.22631-SP0",
+  "linker": "system linker via CMake",
+  "linker_version": "GNU ld (GNU Binutils for Ubuntu) 2.38",
+  "path_normalization": [
+    "<repo>",
+    "<build>",
+    "<cann-root>"
+  ],
+  "source_commit": "a7b7fa993f71a56719adc73191bc24c9247fa27f",
+  "source_date_epoch": "1786003772",
+  "target_architecture": "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=06557cba281d4f246960915f2e3526e08cf48089, not stripped"
+}

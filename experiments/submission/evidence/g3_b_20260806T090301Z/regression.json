@@ -1,0 +1,99 @@
+{
+  "cpu_sim_ctest": {
+    "failed": 0,
+    "passed": 11,
+    "status": "PASS"
+  },
+  "official_repositories": {
+    "hccl": {
+      "branch": "competition/campus-2026",
+      "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "path": "<official-repository>",
+      "tracked_worktree_clean": true
+    },
+    "hcomm": {
+      "branch": "competition/campus-2026",
+      "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "path": "<official-repository>",
+      "tracked_worktree_clean": true
+    }
+  },
+  "old_evidence": [
+    {
+      "files_checked": 3,
+      "path": "experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z",
+      "sha256sums_sha256": "42e12f11293419ee2866709068a249452529dedec1c34117c827608a48f804d4",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 4,
+      "path": "experiments/direct_api/evidence/g2_f_1_20260730T203000Z",
+      "sha256sums_sha256": "08a63a712a9bd34518b86b5c9e905bf6728cf1c067c501fffbc3cb33a65719cc",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 4,
+      "path": "experiments/direct_api/evidence/g2_f_2_20260730T210000Z",
+      "sha256sums_sha256": "f01054cdf440d7d904bf246a245df704a87f0465dc26161b7862cd4f28bdf361",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 8,
+      "path": "experiments/direct_api/evidence/g2_f_3_20260802T000000Z",
+      "sha256sums_sha256": "e4c37a4f579d3a2bb3a3e6a2762c652628d537c7050d11478d8ee5a2e95c7052",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 10,
+      "path": "experiments/direct_api/evidence/g2_f_4_20260802T010000Z",
+      "sha256sums_sha256": "345ddf6dcfaf41827864807c23659d49179fcf4e80c70d90d01d2237d6b3697d",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 13,
+      "path": "experiments/simulator/evidence/g2_f_5_simulator_20260804T010000Z",
+      "sha256sums_sha256": "b8c5d9388b30fc9095df4cc3bb87ae8f2228db739936d97f1909a87034cb124d",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 21,
+      "path": "experiments/simulator/evidence/g2_f_6_simulator_20260804T020000Z",
+      "sha256sums_sha256": "c8f75ad2b945fc3caebbe62e9423ff2e21826995de5cfc03c0703b2e90e47385",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 19,
+      "path": "experiments/final_audit/evidence/g2_f_7_20260805T010000Z",
+      "sha256sums_sha256": "7e904f7e2944e0b90fc5dde27065e8353a283aa9f623d9d7a6342d716cd2927f",
+      "status": "PASS"
+    },
+    {
+      "files_checked": 12,
+      "path": "experiments/submission/evidence/g3_a_20260806T035554Z",
+      "sha256sums_sha256": "4f8fab9ee14e29215f30bc4df45b2a4387dd4e8f8c17c81d41dcb0c81fe3511c",
+      "status": "PASS"
+    }
+  ],
+  "old_evidence_modified": false,
+  "python": {
+    "exit_code": 0,
+    "failed": 0,
+    "modules": [
+      "tests.test_simulator_collective_correctness",
+      "tests.test_failover_engine",
+      "tests.test_backend_selection",
+      "tests.test_plugin_bridge",
+      "tests.test_g2_f_6_simulator_acceptance",
+      "tests.test_g2_f_7_backend_final_audit",
+      "tests.test_direct_api_backend",
+      "tests.test_direct_adapter_build_contract",
+      "tests.test_direct_lifecycle_contract",
+      "tests.test_direct_link_contract",
+      "tests.submission_audit.test_g3_a_audit"
+    ],
+    "passed": 93,
+    "status": "PASS"
+  },
+  "runtime_api_calls": [],
+  "status": "PASS"
+}
