@@ -1,0 +1,16 @@
+{
+  "agent_trace_contract": "COMPLETED",
+  "baseline_frozen": true,
+  "benchmark_contract": "COMPLETED",
+  "checkpoint": "G3-B2-A",
+  "checkpoint_status": "COMPLETED",
+  "correctness_passed": true,
+  "measured_on_real_npu": false,
+  "old_evidence_modified": false,
+  "parameter_freeze": "COMPLETED",
+  "performance_scenarios_executed": 18,
+  "real_device_api_executed": false,
+  "reliability_scenarios_executed": 4,
+  "runtime_api_calls": [],
+  "truth_label": "SIMULATED_ONLY"
+}

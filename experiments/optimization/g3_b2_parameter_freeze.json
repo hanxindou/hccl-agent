@@ -1,0 +1,251 @@
+{
+  "checkpoint": "G3-B2-A",
+  "frozen": true,
+  "parameters": [
+    {
+      "mutable": false,
+      "name": "HCCS.bandwidth",
+      "sha256": "f9eacf73c2e50e0c046ad6571a431cd66cc5e6aba3e4a7cd468874e0fe417831",
+      "source": "PROJECT_CONFIG",
+      "source_path": "hardware/profile.py",
+      "unit": "Gbps",
+      "value": 100.0
+    },
+    {
+      "mutable": false,
+      "name": "HCCS.latency",
+      "sha256": "f9eacf73c2e50e0c046ad6571a431cd66cc5e6aba3e4a7cd468874e0fe417831",
+      "source": "PROJECT_CONFIG",
+      "source_path": "hardware/profile.py",
+      "unit": "ms",
+      "value": 0.002
+    },
+    {
+      "mutable": false,
+      "name": "RoCE.bandwidth",
+      "sha256": "f9eacf73c2e50e0c046ad6571a431cd66cc5e6aba3e4a7cd468874e0fe417831",
+      "source": "PROJECT_CONFIG",
+      "source_path": "hardware/profile.py",
+      "unit": "Gbps",
+      "value": 50.0
+    },
+    {
+      "mutable": false,
+      "name": "RoCE.latency",
+      "sha256": "f9eacf73c2e50e0c046ad6571a431cd66cc5e6aba3e4a7cd468874e0fe417831",
+      "source": "PROJECT_CONFIG",
+      "source_path": "hardware/profile.py",
+      "unit": "ms",
+      "value": 0.005
+    },
+    {
+      "mutable": false,
+      "name": "PCIe.bandwidth",
+      "sha256": "f9eacf73c2e50e0c046ad6571a431cd66cc5e6aba3e4a7cd468874e0fe417831",
+      "source": "PROJECT_CONFIG",
+      "source_path": "hardware/profile.py",
+      "unit": "Gbps",
+      "value": 32.0
+    },
+    {
+      "mutable": false,
+      "name": "PCIe.latency",
+      "sha256": "f9eacf73c2e50e0c046ad6571a431cd66cc5e6aba3e4a7cd468874e0fe417831",
+      "source": "PROJECT_CONFIG",
+      "source_path": "hardware/profile.py",
+      "unit": "ms",
+      "value": 0.01
+    },
+    {
+      "mutable": false,
+      "name": "heterogeneous.PCIe.bandwidth",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "EXPLICIT_ASSUMPTION",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "Gbps",
+      "value": 24.0
+    },
+    {
+      "mutable": false,
+      "name": "heterogeneous.PCIe.latency",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "EXPLICIT_ASSUMPTION",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "ms",
+      "value": 0.014
+    },
+    {
+      "mutable": false,
+      "name": "heterogeneous.RoCE.bandwidth",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "EXPLICIT_ASSUMPTION",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "Gbps",
+      "value": 25.0
+    },
+    {
+      "mutable": false,
+      "name": "heterogeneous.RoCE.latency",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "EXPLICIT_ASSUMPTION",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "ms",
+      "value": 0.007
+    },
+    {
+      "mutable": false,
+      "name": "link_fault_probability",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "EXPLICIT_ASSUMPTION",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "probability",
+      "value": 0.0002
+    },
+    {
+      "mutable": false,
+      "name": "startup_overhead",
+      "sha256": "cce64133314f5479d9bbb05c94ea69d5dcc632d48efba81d610e72578f4829fe",
+      "source": "DERIVED_ANALYTICAL",
+      "source_path": "cost_model/engine.py",
+      "unit": "ms",
+      "value": 0.003
+    },
+    {
+      "mutable": false,
+      "name": "default_chunk_size",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "EXPLICIT_ASSUMPTION",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "bytes",
+      "value": 4194304
+    },
+    {
+      "mutable": false,
+      "name": "protocol_overhead_per_chunk",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "DERIVED_ANALYTICAL",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "us",
+      "value": 0.2
+    },
+    {
+      "mutable": false,
+      "name": "chunk_scheduling_cost",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "DERIVED_ANALYTICAL",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "us",
+      "value": 0.05
+    },
+    {
+      "mutable": false,
+      "name": "synchronization_cost_per_step",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "DERIVED_ANALYTICAL",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "us",
+      "value": 0.05
+    },
+    {
+      "mutable": false,
+      "name": "reduction_cost_per_mib",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "DERIVED_ANALYTICAL",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "us",
+      "value": 0.08
+    },
+    {
+      "mutable": false,
+      "name": "contention_delay_scale",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "DERIVED_ANALYTICAL",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "ratio",
+      "value": 0.15
+    },
+    {
+      "mutable": false,
+      "name": "queueing_delay_scale",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "DERIVED_ANALYTICAL",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "ratio",
+      "value": 0.05
+    },
+    {
+      "mutable": false,
+      "name": "jitter_step",
+      "sha256": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+      "source": "DERIVED_ANALYTICAL",
+      "source_path": "simulator/g2_f_6_acceptance.py",
+      "unit": "ratio",
+      "value": 0.0002
+    },
+    {
+      "mutable": false,
+      "name": "seed",
+      "sha256": "db6519370256f3c73ca96177e599f3dabc7dcbc1c0319b5ef2b0cc53236b2bfe",
+      "source": "BENCHMARK_CONTRACT",
+      "source_path": "configs/optimization/g3_b2_benchmark_matrix.json",
+      "unit": "integer",
+      "value": 20260804
+    },
+    {
+      "mutable": false,
+      "name": "p50",
+      "sha256": "db6519370256f3c73ca96177e599f3dabc7dcbc1c0319b5ef2b0cc53236b2bfe",
+      "source": "BENCHMARK_CONTRACT",
+      "source_path": "configs/optimization/g3_b2_benchmark_matrix.json",
+      "unit": "quantile",
+      "value": 0.5
+    },
+    {
+      "mutable": false,
+      "name": "p95",
+      "sha256": "db6519370256f3c73ca96177e599f3dabc7dcbc1c0319b5ef2b0cc53236b2bfe",
+      "source": "BENCHMARK_CONTRACT",
+      "source_path": "configs/optimization/g3_b2_benchmark_matrix.json",
+      "unit": "quantile",
+      "value": 0.95
+    },
+    {
+      "mutable": false,
+      "name": "FP32.absolute_tolerance",
+      "sha256": "24c6c504211278a4cefe7d263597708581152687c0991fbd00ffa3384bf8b383",
+      "source": "CORRECTNESS_CONTRACT",
+      "source_path": "simulator/collective_correctness.py",
+      "unit": "absolute_error",
+      "value": 1e-06
+    },
+    {
+      "mutable": false,
+      "name": "FP16.absolute_tolerance",
+      "sha256": "24c6c504211278a4cefe7d263597708581152687c0991fbd00ffa3384bf8b383",
+      "source": "CORRECTNESS_CONTRACT",
+      "source_path": "simulator/collective_correctness.py",
+      "unit": "absolute_error",
+      "value": 0.001
+    },
+    {
+      "mutable": false,
+      "name": "BF16.absolute_tolerance",
+      "sha256": "24c6c504211278a4cefe7d263597708581152687c0991fbd00ffa3384bf8b383",
+      "source": "CORRECTNESS_CONTRACT",
+      "source_path": "simulator/collective_correctness.py",
+      "unit": "absolute_error",
+      "value": 0.01
+    }
+  ],
+  "protected_source_hashes": {
+    "cost_model/engine.py": "cce64133314f5479d9bbb05c94ea69d5dcc632d48efba81d610e72578f4829fe",
+    "hardware/profile.py": "f9eacf73c2e50e0c046ad6571a431cd66cc5e6aba3e4a7cd468874e0fe417831",
+    "simulator/collective_correctness.py": "24c6c504211278a4cefe7d263597708581152687c0991fbd00ffa3384bf8b383",
+    "simulator/g2_f_6_acceptance.py": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+    "skills/algorithm_selector.py": "ebeed5cd5e87184a55a25d65387170e409c7bd0b74786b490f433747bfd8bdee",
+    "skills/topology_graph.py": "2eab304b6bdf63bac5d457fc97a4da4194b56855a5d99103ce849d764e3506d8"
+  },
+  "real_device_calibrated": false,
+  "schema_version": "g3-b2-parameter-freeze-v1",
+  "truth_label": "SIMULATED_ONLY"
+}

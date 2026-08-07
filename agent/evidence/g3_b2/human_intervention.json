@@ -1,0 +1,7 @@
+{
+  "schema_version": "g3-b2-human-intervention-v1",
+  "interventions": [
+    {"phase":"G3-B2-A","actor":"user","decision":"AUTHORIZED","scope":"one branch, six ordered commits, simulator-only optimization; no device API","algorithm_choice":false},
+    {"phase":"G3-B2-A","actor":"Codex","decision":"IMPLEMENT_TRACE_AND_BASELINE_CONTRACT","scope":"contract implementation only","algorithm_choice":false}
+  ]
+}

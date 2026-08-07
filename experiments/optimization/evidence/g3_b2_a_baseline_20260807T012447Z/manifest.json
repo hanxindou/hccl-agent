@@ -1,0 +1,37 @@
+{
+  "baseline_commit": "aba976ae880c488c95280da0fd932befe3529cc8",
+  "benchmark_contract_sha256": "db6519370256f3c73ca96177e599f3dabc7dcbc1c0319b5ef2b0cc53236b2bfe",
+  "checkpoint": "G3-B2-A",
+  "cpu_sim_plugin_sha256": "c8122c1cbc5e336e45b68bcb308a992a5caa04d905a228f6e1be7e1e169b52cd",
+  "cpu_sim_plugin_type": "CPU_SIM_REFERENCE_PLUGIN",
+  "default_backend": "CPU_SIM",
+  "direct_artifact_type": "STATIC BUILD/LIFECYCLE READINESS ARTIFACT",
+  "fallback_policy": "NONE",
+  "formula_revision": "g2-f-6-analytical-event-v1",
+  "old_g3_b_evidence_validation": {
+    "files_checked": 23,
+    "path": "experiments/submission/evidence/g3_b_20260806T090301Z",
+    "sha256sums_sha256": "82b63a35992f80c7d7391b231517d3beb552c5f51691f4ee56da7919f3b563d9",
+    "valid": true
+  },
+  "parameter_freeze_sha256": "df4dd8fd39db45c923c14ada30c1531c666e49d384be806267aeaa228285ebdf",
+  "performance_scenario_count": 18,
+  "prompt_registry_sha256": "89fe3df049c4615f68a4d81a369b995a2b5c3a74ae986cc339c27e7bf75a52a5",
+  "protected_source_hashes": {
+    "cost_model/engine.py": "cce64133314f5479d9bbb05c94ea69d5dcc632d48efba81d610e72578f4829fe",
+    "hardware/profile.py": "f9eacf73c2e50e0c046ad6571a431cd66cc5e6aba3e4a7cd468874e0fe417831",
+    "simulator/collective_correctness.py": "24c6c504211278a4cefe7d263597708581152687c0991fbd00ffa3384bf8b383",
+    "simulator/g2_f_6_acceptance.py": "68173b72b3b4f540fbb497cca808cc8fbfc4520f9b2879d477268d2fc5383c3f",
+    "skills/algorithm_selector.py": "ebeed5cd5e87184a55a25d65387170e409c7bd0b74786b490f433747bfd8bdee",
+    "skills/topology_graph.py": "2eab304b6bdf63bac5d457fc97a4da4194b56855a5d99103ce849d764e3506d8"
+  },
+  "reliability_scenario_count": 4,
+  "schema_version": "g3-b2-a-evidence-v1",
+  "seed": 20260804,
+  "simulator_revision": "g2-f-6-simulator-acceptance-v1",
+  "truth_labels": [
+    "CPU_EXECUTED",
+    "SIMULATED_ONLY",
+    "REAL_DEVICE_NOT_EXECUTED"
+  ]
+}

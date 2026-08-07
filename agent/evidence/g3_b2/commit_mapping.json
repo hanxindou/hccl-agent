@@ -1,0 +1,6 @@
+{
+  "schema_version": "g3-b2-commit-mapping-v1",
+  "entries": [
+    {"phase":"G3-B2-A","commit_message":"G3-B2-A freeze optimization baseline and agent trace contract","result_commit":"PENDING_PHASE_COMMIT","trace_run_ids":[]}
+  ]
+}

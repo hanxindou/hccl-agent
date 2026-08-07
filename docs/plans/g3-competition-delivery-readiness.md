@@ -4002,3 +4002,1811 @@ git revert
 ```
 
 不得重写历史、删除旧 evidence 或修改官方仓库。
+
+# 11. G3-B2：赛前算法强化、模拟性能优化与最终代码冻结
+
+## 11.1 阶段目标
+
+G3-B2 位于 G3-B 和 G3-C 之间。
+
+其目标是将当前项目从：
+
+```text
+具备稳定构建、正确性验证、模拟器 evidence 和提交工程底座
+```
+
+提升为：
+
+```text
+具有明确算法调度语义、拓扑感知优化闭环、可比较性能改进、
+完整 Agent 优化 trace 和最终冻结代码基线的竞赛实现
+```
+
+G3-B2 重点解决以下问题：
+
+1. 多种算法虽然已有名称和入口，但调度阶段、peer、chunk 和路径差异不够明确；
+2. C/C++ collective 实现与 Agent、拓扑模型和 simulator 之间的调度语义尚未完全贯通；
+3. 层次化、异构、非对称链路和动态故障场景仍有进一步优化空间；
+4. 性能 evidence 完整，但算法优化收益和消融实验不够集中；
+5. 缺少一条新的、真实、可重放、可审计的 Agent 算法优化全过程；
+6. 正式报告尚未建立在最终代码冻结版本之上。
+
+G3-B2 不追求在无真实 NPU 条件下“完全满足全部实机指标”，而是要求：
+
+```text
+当前环境中能够实现和验证的核心算法、Agent、模拟器和工程能力
+达到正式参赛前可冻结的最高可信状态
+```
+
+---
+
+## 11.2 阶段位置与后续关系
+
+G3-B2 调整后的阶段顺序为：
+
+```text
+G3-A 赛事差距审计
+→ G3-B 原生交付与可复现构建
+→ G3-B2 算法强化与最终代码冻结
+→ G3-C 正式技术报告
+→ G3-D Agent/Prompt 专项交付
+→ G3-E 图表与创新叙事
+→ G3-F 演示与视频
+→ G3-G 最终发布审计
+```
+
+在 G3-B2-F 最终代码冻结完成前，不应执行正式 G3-C。
+
+G3-C 当前计划仅视为：
+
+```text
+PROVISIONAL REPORT PLAN
+```
+
+G3-B2 完成后，G3-C 必须更新：
+
+- final source commit；
+- final simulator evidence；
+- final algorithm matrix；
+- final benchmark evidence；
+- final claim boundary；
+- final Agent optimization trace；
+- final plugin SHA256。
+
+---
+
+## 11.3 G3-B2 基线状态
+
+G3-B2 必须继承以下状态：
+
+```text
+G3-A: COMPLETED
+G3-B: COMPLETED
+
+Native Delivery Normalization: COMPLETED
+CPU_SIM Submission Plugin: COMPLETED
+Direct Readiness Package: COMPLETED
+Reproducible Build: BIT_FOR_BIT_REPRODUCIBLE
+Submission CLI: COMPLETED
+Submission Staging: COMPLETED
+
+C/C++ Plugin Compliance: PARTIALLY_SATISFIED
+Performance Target Achievement: PARTIALLY_SATISFIED
+G3 Delivery Readiness: PARTIAL
+Real-device Acceptance: HARDWARE_BLOCKED
+```
+
+原生产物基线继续保持：
+
+```text
+libhccl_plugin.so
+  role=CPU_SIM_REFERENCE_PLUGIN
+  ABI=project-local C ABI
+  runtime=HOST_CPU
+  official_plugin_abi=UNVERIFIED
+
+libhccl_direct_adapter.a
+  role=STATIC_BUILD_LIFECYCLE_READINESS_ARTIFACT
+  runtime_api_calls=[]
+```
+
+G3-B2 默认不得修改：
+
+- CPU_SIM 对外 collective ABI；
+- direct control-plane ABI；
+- CPU_SIM 与 direct 的隔离边界；
+- default backend=`CPU_SIM`；
+- fallback policy=`NONE`；
+- 官方资产默认排除规则。
+
+---
+
+## 11.4 总体执行策略
+
+G3-B2 不是一个单次大提交。
+
+必须拆成六个顺序执行、顺序合并的子 checkpoint：
+
+| Checkpoint | 名称                                | 核心输出                                        |
+| ---------- | ----------------------------------- | ----------------------------------------------- |
+| G3-B2-A    | 优化基线与 Agent trace 合约         | 冻结场景、基线结果、Prompt/trace schema         |
+| G3-B2-B    | Collective Schedule IR 与 Ring 调度 | 统一 IR、Ring 三原语、C/Python parity           |
+| G3-B2-C    | 分层异构拓扑感知优化                | NHR、Fat-Tree、权重路由、chunk 选择             |
+| G3-B2-D    | 动态重规划、内存约束与流水重叠      | fault replan、bounded memory、simulated overlap |
+| G3-B2-E    | Agent 优化闭环、消融与性能验收      | Agent proposal→benchmark→reflection→selection   |
+| G3-B2-F    | 全量回归、最终代码与 evidence 冻结  | final baseline、submission integration、freeze  |
+
+每个子 checkpoint 必须采用：
+
+```text
+独立分支
+→ 独立本地 commit
+→ 人工检查
+→ push
+→ PR
+→ merge
+→ 同步 main
+→ 下一个子 checkpoint
+```
+
+不得使用一个 `/goal` 一次完成 G3-B2-A 至 G3-B2-F。
+
+---
+
+## 11.5 G3-B2 非目标
+
+G3-B2 不负责：
+
+- 新增 Broadcast 或 AlltoAll 作为参赛核心原语；
+- 实现 FP8、INT4、稀疏梯度或量化压缩；
+- 修改官方 HCOMM、HCCL 或 CANN；
+- 推断未知的官方 plugin-loader ABI；
+- 将 direct adapter 改写成未经验证的真实插件；
+- 调用 ACL/HCCL runtime；
+- 初始化真实 device/context/stream；
+- 创建真实 communicator；
+- 执行真实 collective；
+- 运行 MPI、`hccl_test` 或 `msprof`；
+- 声称真实 8→1024 卡线性加速；
+- 声称真实训练加速比达到 90%；
+- 声称真实 BERT/LLaMA 吞吐；
+- 声称真实 100 ms failover；
+- 声称真实 72 小时长稳；
+- 声称真实零 CPU 介入；
+- 声称真实 UB/HBM 复用；
+- 通过修改硬件常量制造性能提升；
+- 为展示效果删除较差结果；
+- 重写已经稳定的正确性 reference；
+- 修改 G2、G3-A 或 G3-B 历史 evidence；
+- 编写正式 G3-C 报告；
+- 制作视频或最终 release。
+
+稀疏通信、压缩和超低精度只保留为：
+
+```text
+FUTURE_OPTIONAL_DIRECTION
+```
+
+不得在 G3-B2 中无边界扩展。
+
+---
+
+## 11.6 真实性边界
+
+G3-B2 允许的结果标签：
+
+```text
+CPU_EXECUTED
+SIMULATED_ONLY
+AGENT_GENERATED_PROPOSAL
+AGENT_SELECTED_SCHEDULE
+DIRECT_READINESS_ONLY
+REAL_DEVICE_NOT_EXECUTED
+```
+
+禁止生成：
+
+```text
+REAL_DEVICE_MEASURED
+REAL_DEVICE_PASS
+NPU_UTILIZATION_MEASURED
+HCCS_BANDWIDTH_MEASURED
+ROCE_BANDWIDTH_MEASURED
+MSPROF_EXECUTED
+REAL_TRAINING_SPEEDUP
+ZERO_CPU_INTERVENTION_VERIFIED
+UB_REUSE_VERIFIED
+```
+
+通信流水和内存优化只能称为：
+
+```text
+SIMULATED_PIPELINE_MODEL
+BOUNDED_MEMORY_SCHEDULE
+```
+
+动态拓扑只能称为：
+
+```text
+SIMULATED_DYNAMIC_TOPOLOGY_REPLAN
+```
+
+---
+
+# 11.7 G3-B2-A：优化基线、场景冻结与 Agent Trace 合约
+
+## 11.7.1 目标
+
+在任何算法、cost model 或 selector 修改前，建立不可变优化基线。
+
+必须生成：
+
+```text
+experiments/optimization/evidence/g3_b2_a_baseline_<timestamp>/
+```
+
+该 evidence 后续不得修改。
+
+## 11.7.2 Baseline commit
+
+记录：
+
+```text
+baseline_commit=<G3_B_MERGED_MAIN_COMMIT>
+baseline_plugin_sha256
+baseline_parameter_set_sha256
+baseline_config_sha256
+baseline_selector_version
+baseline_simulator_version
+baseline_seed
+```
+
+基线必须来自合并后的 G3-B `main`，不得使用开发分支上的临时状态。
+
+## 11.7.3 参数冻结
+
+以下参数在 G3-B2 期间默认冻结：
+
+- HCCS/RoCE/PCIe bandwidth；
+- latency；
+- BER；
+- congestion coefficients；
+- topology factors；
+- retry coefficients；
+- simulator timing formulas；
+- dtype conversion rules；
+- correctness tolerance；
+- benchmark seed；
+- baseline scenario definitions；
+- p50/p95 aggregation方式。
+
+生成：
+
+```text
+experiments/optimization/g3_b2_parameter_freeze.json
+```
+
+至少包含每个参数的：
+
+```text
+name
+value
+unit
+source
+source_path
+sha256
+mutable=false
+```
+
+不得通过改变参数改善优化结果。
+
+若发现参数存在真实 bug：
+
+1. 停止当前优化；
+2. 记录 bug；
+3. 单独修复；
+4. 重新生成 baseline；
+5. 旧 baseline 标记 `INVALIDATED_BY_BUGFIX`；
+6. 不得把旧、新 baseline 混合比较。
+
+## 11.7.4 基准场景合同
+
+G3-B2-A 必须建立固定 benchmark contract：
+
+```text
+configs/optimization/g3_b2_benchmark_matrix.json
+```
+
+至少覆盖以下场景类别：
+
+| 类别          | 最低覆盖                                  |
+| ------------- | ----------------------------------------- |
+| 小消息        | ≤64 KB                                    |
+| 中消息        | 1–16 MB                                   |
+| 大消息        | 128 MB                                    |
+| Logical large | logical ≥1 GB                             |
+| 单机拓扑      | Full Mesh 8 ranks                         |
+| 环形拓扑      | Ring 8/16 ranks                           |
+| 分层拓扑      | Fat-Tree 64 ranks                         |
+| 异构拓扑      | asymmetric 16/64 ranks                    |
+| 规模          | 8/16/64/1024 ranks                        |
+| 原语          | AllReduce、AllGather、ReduceScatter       |
+| 故障          | degradation、link down、no alternate path |
+| dtype         | FP32、FP16、BF16                          |
+
+基准矩阵应控制在可重复执行的规模，建议：
+
+```text
+12–20 个性能场景
+3–6 个可靠性场景
+```
+
+每个场景必须记录：
+
+```text
+scenario_id
+primitive
+algorithm_baseline
+topology
+rank_size
+message_size
+dtype
+reduce_op
+seed
+iteration_count
+warmup_count
+metric_set
+weight
+```
+
+不得在看到优化结果后删除不利场景。
+
+## 11.7.5 Baseline 输出
+
+至少记录：
+
+- correctness；
+- p50 latency；
+- p95 latency；
+- effective bandwidth；
+- phase count；
+- modeled transferred bytes；
+- critical path；
+- link utilization；
+- congestion events；
+- peak materialized bytes；
+- fault recovery status；
+- selector decision；
+- algorithm ranking；
+- output hash。
+
+## 11.7.6 Agent trace 合约
+
+G3-B2-A 必须先建立新的权威 trace 结构：
+
+```text
+agent/evidence/g3_b2/
+├── README.md
+├── trace_manifest.json
+├── prompt_registry.json
+├── human_intervention.json
+├── runs/
+├── proposals/
+├── evaluations/
+├── reflections/
+└── commit_mapping.json
+```
+
+每次 Agent 优化至少记录：
+
+```text
+run_id
+timestamp
+development_agent
+runtime_agent
+prompt_id
+prompt_version
+input_schema_version
+output_schema_version
+baseline_commit
+input_config_sha256
+proposal_sha256
+human_decision
+changed_files
+tests
+benchmark_result
+reflection
+selected
+result_commit
+```
+
+必须明确区分：
+
+```text
+development_agent=Codex
+runtime_agent=hccl-agent
+human_reviewer=user
+```
+
+不得把 Codex、项目 Agent 和人工工作混为同一个主体。
+
+## 11.7.7 Prompt 注册
+
+新增版本化 Prompt，例如：
+
+```text
+prompts/g3_b2/
+├── schedule_generation_v1.md
+├── topology_optimization_v1.md
+├── benchmark_evaluation_v1.md
+├── reflection_v1.md
+└── replanning_v1.md
+```
+
+每个 Prompt 必须包含：
+
+- ID；
+- version；
+- purpose；
+- input schema；
+- output schema；
+- guard；
+- prohibited claims；
+- validation requirements。
+
+G3-B2-A 不修改算法。
+
+## 11.7.8 分支与 commit
+
+建议分支：
+
+```text
+codex/g3-b2-a-baseline-trace
+```
+
+建议 commit：
+
+```text
+G3-B2-A freeze optimization baseline and agent trace contract
+```
+
+---
+
+# 11.8 G3-B2-B：Collective Schedule IR 与 Ring 三原语调度
+
+## 11.8.1 目标
+
+建立统一、确定性、可序列化的 collective schedule 中间表示：
+
+```text
+Collective Schedule IR
+```
+
+将当前算法表达从：
+
+```text
+algorithm name + direct host result calculation
+```
+
+提升为：
+
+```text
+algorithm
+→ phases
+→ transfers
+→ chunks
+→ reduce actions
+→ barriers
+→ paths
+→ output ownership
+```
+
+## 11.8.2 Schedule IR schema
+
+至少包含：
+
+```text
+schema_version
+schedule_id
+primitive
+algorithm
+rank_size
+message_size_bytes
+dtype
+reduce_op
+topology_hash
+hardware_profile_hash
+chunk_size_bytes
+chunk_count
+phases
+dependencies
+memory_plan
+failure_policy
+estimated_metrics
+schedule_hash
+```
+
+每个 phase 至少包含：
+
+```text
+phase_id
+phase_type
+transfers
+reductions
+barrier
+depends_on
+```
+
+每个 transfer 至少包含：
+
+```text
+src_rank
+dst_rank
+chunk_id
+element_offset
+element_count
+route
+link_type
+operation
+```
+
+Schedule 必须使用 canonical JSON 序列化并生成稳定 SHA256。
+
+## 11.8.3 Schedule invariants
+
+必须验证：
+
+1. rank 范围合法；
+2. chunk 范围合法；
+3. phase dependency 无环；
+4. 每个必要 chunk 都被覆盖；
+5. 不存在非法重复 writer；
+6. reduce 参与 rank 完整；
+7. AllGather 输出 rank ordering 正确；
+8. ReduceScatter ownership 正确；
+9. AllReduce 每个 rank 获得完整结果；
+10. barrier 和 phase 顺序确定；
+11. 相同输入生成相同 schedule hash；
+12. 不支持的组合明确返回结构化错误。
+
+## 11.8.4 Ring schedule
+
+必须至少实现：
+
+```text
+Ring AllReduce
+Ring AllGather
+Ring ReduceScatter
+```
+
+Ring AllReduce 必须表现为明确的：
+
+```text
+ReduceScatter stages
++
+AllGather stages
+```
+
+不能只调用统一 reduction reference 后返回结果。
+
+必须记录并验证：
+
+- phase count；
+- chunk owner；
+- left/right peer；
+- per-phase transfer；
+- final coverage；
+- rank rotation；
+- N=2、4、8、16、64；
+- 非整除 message/chunk 边界。
+
+## 11.8.5 C/C++ 调度实现
+
+建议新增或复用等价结构：
+
+```text
+hcccl/src/hccl_schedule.c
+hcccl/src/hccl_schedule_ring.c
+hcccl/include/internal/hccl_schedule_internal.h
+hcccl/tests/test_schedule_ring.c
+```
+
+要求：
+
+- 现有 public collective ABI 默认不变；
+- schedule 为内部实现；
+- 不增加未经批准的 public exported symbol；
+- 现有 19-symbol allowlist 默认保持；
+- C collective 函数必须通过对应 schedule 路径执行 host 模拟语义；
+- reference kernel 只用于结果校验，不再是所有算法唯一调度实现。
+
+## 11.8.6 Python Schedule IR
+
+建议新增或复用等价模块：
+
+```text
+schedule/
+├── schema.py
+├── ir.py
+├── validators.py
+├── canonical.py
+└── generators/
+    └── ring.py
+```
+
+不得复制形成不一致的第二套语义。
+
+## 11.8.7 C/Python parity
+
+必须提供 test-only schedule dump 或等价方式，比较：
+
+- primitive；
+- phase count；
+- peer；
+- chunk ownership；
+- transferred bytes；
+- schedule hash 或规范化内容。
+
+若 C 与 Python 不能生成完全相同的 JSON，至少必须通过结构 parity 和 invariant parity。
+
+test-only 工具不得成为新增 public plugin ABI。
+
+## 11.8.8 分支与 commit
+
+建议分支：
+
+```text
+codex/g3-b2-b-collective-schedule-ir
+```
+
+建议 commit：
+
+```text
+G3-B2-B add collective schedule IR and ring primitive schedules
+```
+
+---
+
+# 11.9 G3-B2-C：分层、异构与拓扑感知算法优化
+
+## 11.9.1 主创新方向
+
+G3-B2 的主创新方向冻结为：
+
+```text
+拓扑感知的分层非均匀集合通信调度
+```
+
+英文工作名称可使用：
+
+```text
+Topology-Aware Hierarchical Non-Uniform Collective Scheduling
+```
+
+不得同时再建立多个互不相关的“主创新”。
+
+## 11.9.2 支持算法矩阵
+
+最低支持范围：
+
+| Algorithm             | AllReduce | AllGather   | ReduceScatter        |
+| --------------------- | --------- | ----------- | -------------------- |
+| Ring                  | REQUIRED  | REQUIRED    | REQUIRED             |
+| Butterfly             | REQUIRED  | REQUIRED    | OPTIONAL/UNSUPPORTED |
+| Mesh                  | REQUIRED  | OPTIONAL    | REQUIRED             |
+| NHR                   | REQUIRED  | UNSUPPORTED | UNSUPPORTED          |
+| Fat-Tree/Hierarchical | REQUIRED  | OPTIONAL    | OPTIONAL             |
+
+未实现的组合必须返回：
+
+```text
+UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR
+```
+
+不得静默 fallback。
+
+## 11.9.3 Butterfly
+
+必须形成明确 recursive-doubling schedule：
+
+- `log2(N)` phase；
+- partner calculation；
+- power-of-two 条件；
+- 非 power-of-two 时明确拒绝或使用有记录的独立策略；
+- AllReduce 与 AllGather transfer/reduction 差异；
+- deterministic peer order。
+
+不得把 Butterfly 仅实现为不同名称的 Ring。
+
+## 11.9.4 NHR
+
+NHR 至少必须：
+
+- 读取链路权重；
+- 对非对称链路进行 rank ordering；
+- 避免将主要流量集中到最慢链路；
+- 输出 non-uniform ring order；
+- 输出每段估计代价；
+- 对比普通 Ring；
+- 记录拓扑假设；
+- 在对称拓扑下退化为可解释的普通环或等价顺序。
+
+链路权重建议由以下项组成：
+
+```text
+latency_cost
++ transfer_bytes / effective_bandwidth
++ congestion_penalty
++ reliability_penalty
+```
+
+权重公式和常量必须来自冻结模型，不得为单一场景人工调参。
+
+## 11.9.5 Fat-Tree/Hierarchical
+
+至少实现清晰的分层 AllReduce：
+
+```text
+intra-group reduce/reduce-scatter
+→ inter-group leader collective
+→ intra-group distribute/allgather
+```
+
+必须明确：
+
+- group 划分来源；
+- leader 选择；
+- intra/inter link；
+- phase dependency；
+- cross-node traffic；
+- group size；
+- oversubscription；
+- fallback condition；
+- no valid hierarchy condition。
+
+不得通过 rank ID 整除关系无依据推断真实节点；必须读取 topology/node metadata。
+
+## 11.9.6 Mesh
+
+Mesh 调度必须：
+
+- 显式表达 peer transfer；
+- 检测共享链路冲突；
+- 控制并行 fan-out；
+- 支持分块；
+- 避免所有 rank 在同一 phase 无约束全发；
+- 在 Full Mesh 和非 Full Mesh 上使用不同约束。
+
+## 11.9.7 Chunk 自适应
+
+Chunk 候选必须来自有限、版本化集合，例如：
+
+```text
+64 KB
+256 KB
+1 MB
+4 MB
+16 MB
+```
+
+实际集合应结合现有 memory budget 冻结。
+
+选择输入：
+
+- message size；
+- rank size；
+- topology depth；
+- link bandwidth；
+- link latency；
+- concurrency；
+- memory limit。
+
+选择输出：
+
+```text
+chunk_size
+chunk_count
+pipeline_depth
+selection_reason
+candidate_scores
+```
+
+不得使用无界搜索或针对最终 benchmark 单独硬编码。
+
+## 11.9.8 拥塞模型
+
+Schedule cost 至少考虑：
+
+- 同一链路并发传输；
+- oversubscribed parent edge；
+- cross-group traffic；
+- concurrent transfer count；
+- queue delay；
+- critical path。
+
+必须保留：
+
+```text
+base_link_time
+congestion_penalty
+final_link_time
+```
+
+以便后续报告消融。
+
+## 11.9.9 Selector 集成
+
+Agent/selector 必须基于显式候选 schedule，而不是只返回算法名称。
+
+输出至少包含：
+
+```text
+selected_algorithm
+selected_schedule_hash
+selection_reason
+candidate_algorithms
+candidate_schedule_hashes
+candidate_scores
+rejected_reasons
+```
+
+fallback 必须继续为：
+
+```text
+NONE
+```
+
+## 11.9.10 分支与 commit
+
+建议分支：
+
+```text
+codex/g3-b2-c-topology-aware-hierarchical
+```
+
+建议 commit：
+
+```text
+G3-B2-C add topology-aware hierarchical collective optimization
+```
+
+---
+
+# 11.10 G3-B2-D：动态重规划、有界内存与模拟流水重叠
+
+## 11.10.1 动态重规划
+
+当 topology event 发生时，系统必须：
+
+1. 标记受影响链路或 rank；
+2. 使旧 schedule 失效；
+3. 保存旧 schedule hash；
+4. 重新生成候选 schedule；
+5. 验证新 schedule invariants；
+6. 重新执行 correctness gate；
+7. 输出新 schedule hash；
+8. 记录 replan latency；
+9. 无路径时返回明确失败。
+
+事件至少覆盖：
+
+```text
+LINK_DEGRADED
+LINK_DOWN
+LINK_RECOVERED
+RANK_REMOVED
+RANK_RECOVERED
+NO_ALTERNATE_PATH
+```
+
+`RANK_RECOVERED` 可以只在 simulator/control-plane 中支持，不得声称真实训练不中断。
+
+## 11.10.2 Replan trace
+
+至少记录：
+
+```text
+event_id
+event_type
+old_topology_hash
+new_topology_hash
+old_schedule_hash
+new_schedule_hash
+affected_links
+candidate_count
+selected_algorithm
+replan_reason
+simulated_replan_time_ms
+correctness_after_replan
+final_status
+```
+
+## 11.10.3 有界内存
+
+每个 schedule 必须输出：
+
+```text
+logical_message_bytes
+materialized_bytes
+chunk_buffer_bytes
+temporary_buffer_bytes
+peak_materialized_bytes
+memory_budget_bytes
+within_budget
+```
+
+对于 logical ≥1 GB：
+
+- 不得实际无界物化；
+- 必须继续使用 bounded materialization；
+- schedule chunk 必须满足 memory budget；
+- 报告 logical 与 physical materialization 的差异。
+
+## 11.10.4 Pipeline 模型
+
+增加两个明确模式：
+
+```text
+NO_OVERLAP
+SIMULATED_PIPELINED_OVERLAP
+```
+
+流水模型至少包含：
+
+```text
+pipeline_depth
+fill_time
+steady_state_time
+drain_time
+communication_slots
+modeled_compute_slots
+overlap_ratio
+critical_path
+```
+
+该模型只能用于 simulator。
+
+不得增加以下声明：
+
+```text
+真实 Ascend stream overlap
+真实计算核并行
+真实 UB/HBM reuse
+真实零 CPU 介入
+```
+
+## 11.10.5 可靠性约束
+
+动态重规划后必须重新进行：
+
+- output correctness；
+- output hash；
+- rank ordering；
+- no duplicate transfer；
+- no missing chunk；
+- route validity；
+- bounded memory。
+
+若无替代路径，应返回：
+
+```text
+EXPECTED_NO_PATH_FAILURE
+```
+
+不得用 fallback 到未记录算法掩盖失败。
+
+## 11.10.6 分支与 commit
+
+建议分支：
+
+```text
+codex/g3-b2-d-replan-memory-pipeline
+```
+
+建议 commit：
+
+```text
+G3-B2-D add dynamic schedule replanning and bounded pipeline model
+```
+
+---
+
+# 11.11 G3-B2-E：Agent 优化闭环、消融实验与性能验收
+
+## 11.11.1 目标
+
+建立一条新的、权威的、可重放的 Agent 优化流程：
+
+```text
+输入 topology/workload
+→ Agent 分析
+→ 候选 schedule 生成
+→ correctness gate
+→ benchmark
+→ evaluation
+→ reflection
+→ replanning
+→ final selection
+→ commit mapping
+```
+
+该流程不得补写或伪造历史记录。
+
+## 11.11.2 Agent 输入
+
+至少包含：
+
+```text
+primitive
+message_size
+rank_size
+dtype
+reduce_op
+topology
+hardware_profile
+memory_budget
+reliability_state
+optimization_objective
+baseline_schedule
+```
+
+## 11.11.3 Agent 输出
+
+必须是结构化 proposal：
+
+```text
+proposal_id
+algorithm
+schedule_parameters
+chunk_size
+pipeline_depth
+routing_policy
+expected_benefit
+expected_risk
+unsupported_conditions
+required_tests
+```
+
+不得只输出自然语言推荐。
+
+## 11.11.4 优化目标
+
+使用多目标评分，至少包含：
+
+```text
+p50 latency
+p95 latency
+effective bandwidth
+peak memory
+congestion penalty
+reliability penalty
+correctness gate
+```
+
+正确性必须是硬门槛：
+
+```text
+correctness_gate=false
+→ candidate rejected
+```
+
+不得通过性能分数覆盖正确性失败。
+
+## 11.11.5 消融实验
+
+至少比较：
+
+```text
+A0: 固定 Ring baseline
+A1: G3-B 原 selector
+A2: Schedule IR only
+A3: + topology weighting
+A4: + adaptive chunking
+A5: + congestion-aware scheduling
+A6: + dynamic replan
+A7: + simulated pipeline overlap
+```
+
+每个阶段必须使用相同：
+
+- parameter hash；
+- benchmark matrix；
+- seed；
+- iteration；
+- warmup；
+- correctness规则。
+
+## 11.11.6 结果报告
+
+必须完整报告：
+
+```text
+wins
+ties
+losses
+```
+
+不得只显示获胜场景。
+
+每个场景至少记录：
+
+```text
+baseline
+candidate
+absolute_difference
+relative_difference
+p50
+p95
+bandwidth
+memory
+phase_count
+schedule_hash
+correctness
+```
+
+## 11.11.7 默认性能验收门槛
+
+在不修改冻结性能参数的前提下，默认要求：
+
+1. 全部 correctness gate 通过；
+2. 目标场景加权模拟时间几何均值改善不少于 8%；
+3. 分层/异构重点场景中至少 4 个改善不少于 10%；
+4. 不超过 2 个场景回退超过 5%；
+5. 任一关键正确性或可靠性场景不得回退；
+6. logical 1024-rank 代表场景不得回退超过 3%；
+7. peak materialized memory 不得突破预算；
+8. no-path 语义保持正确；
+9. p50 改善不能以严重恶化 p95 为代价；
+10. 改善必须来自 schedule/selection/chunk/replan，而非模型常量变化。
+
+这些门槛是 G3-B2 内部工程验收门槛，不等价于赛题的真实 90% 训练加速目标。
+
+## 11.11.8 未达到门槛时
+
+不得反复调整 benchmark 或参数。
+
+应：
+
+- 保留完整结果；
+- 识别失败原因；
+- 最多进行两轮有依据的算法修正；
+- 仍未达到时将对应项标记 `PARTIAL`；
+- 选择无正确性回退且综合最稳定的实现；
+- 不伪造优化成功。
+
+## 11.11.9 Agent trace 输出
+
+必须冻结：
+
+```text
+agent/evidence/g3_b2/runs/
+agent/evidence/g3_b2/proposals/
+agent/evidence/g3_b2/evaluations/
+agent/evidence/g3_b2/reflections/
+agent/evidence/g3_b2/commit_mapping.json
+```
+
+至少包含一条完整成功或真实失败的优化链。
+
+## 11.11.10 分支与 commit
+
+建议分支：
+
+```text
+codex/g3-b2-e-agent-optimization-audit
+```
+
+建议 commit：
+
+```text
+G3-B2-E complete agent optimization loop and ablation audit
+```
+
+---
+
+# 11.12 G3-B2-F：全量回归、最终代码冻结与 Submission 集成
+
+## 11.12.1 目标
+
+完成 G3-B2 最终审计，选择唯一 final algorithm baseline，并冻结供 G3-C 使用的代码和 evidence。
+
+## 11.12.2 最终冻结内容
+
+必须生成：
+
+```text
+docs/submission/g3_b2_final_code_baseline.md
+experiments/optimization/g3_b2_final_baseline.json
+```
+
+至少记录：
+
+```text
+final_source_commit
+final_algorithm_version
+final_schedule_schema_version
+final_selector_version
+final_simulator_version
+final_parameter_set_sha256
+final_benchmark_matrix_sha256
+final_plugin_sha256
+final_public_abi_version
+final_exported_symbols
+final_evidence_path
+```
+
+## 11.12.3 ABI 规则
+
+默认要求：
+
+```text
+CPU_SIM public ABI unchanged
+19-symbol export allowlist unchanged
+```
+
+如果确需修改 public ABI：
+
+1. 必须提前停止；
+2. 单独提交 ABI change proposal；
+3. 获得用户批准；
+4. 提升 ABI version；
+5. 更新 G3-B manifest；
+6. 重跑双构建；
+7. 更新 consumer tests；
+8. 更新 claim boundary。
+
+不得在 G3-B2-F 隐式修改 ABI。
+
+## 11.12.4 全量回归
+
+至少运行：
+
+- G3-B submission `check`；
+- `quick`；
+- `full`；
+- CPU_SIM 双 clean build；
+- CTest；
+- Python全量或 submission-relevant 全量；
+- installed header consumer；
+- installed CMake consumer；
+- ABI/symbol/dependency audit；
+- schedule invariant suite；
+- C/Python parity；
+- three primitives；
+- FP32/FP16/BF16；
+- fault replan；
+- bounded memory；
+- benchmark contract；
+- ablation；
+- staging；
+- staging verify；
+- previous evidence SHA256。
+
+不得重写旧 evidence。
+
+## 11.12.5 Final benchmark evidence
+
+只保留一份权威 final evidence：
+
+```text
+experiments/optimization/evidence/g3_b2_f_final_<timestamp>/
+```
+
+至少包含：
+
+```text
+README.md
+manifest.json
+result.json
+baseline_reference.json
+parameter_freeze.json
+benchmark_contract.json
+algorithm_support_matrix.json
+schedule_schema.json
+schedule_inventory.json
+schedule_invariant_audit.json
+c_python_parity_audit.json
+correctness_summary.json
+performance_summary.json
+scale_summary.json
+memory_summary.json
+pipeline_summary.json
+reliability_summary.json
+replan_trace.jsonl
+ablation_summary.json
+wins_ties_losses.json
+agent_trace_inventory.json
+human_intervention.json
+commit_mapping.json
+submission_regression.json
+claim_boundary_audit.json
+SHA256SUMS
+```
+
+## 11.12.6 Submission CLI 集成
+
+G3-B2-F 必须更新 G3-B submission workflow，使：
+
+```text
+python -m tools.submission_cli quick
+```
+
+至少增加轻量：
+
+- schedule invariant；
+- representative schedule trace；
+- Agent selector output；
+- topology-aware comparison。
+
+`full` 增加：
+
+- final benchmark contract；
+- C/Python parity；
+- bounded-memory audit；
+- G3-B2 final evidence validation。
+
+不得让 quick 变成长时间完整 benchmark。
+
+## 11.12.7 Staging 集成
+
+staging 至少新增：
+
+```text
+algorithm/
+├── schedule_schema.json
+├── algorithm_support_matrix.json
+├── examples/
+└── README.md
+
+agent/evidence/g3_b2/
+optimization/
+├── baseline_summary.json
+├── final_summary.json
+├── ablation_summary.json
+└── claim_boundaries.md
+```
+
+不得包含：
+
+- 临时优化目录；
+- 未选中的大量中间 build；
+- 私密 Codex原始缓存；
+- 未脱敏日志；
+- 官方二进制；
+- 受控赛题文件。
+
+## 11.12.8 分支与 commit
+
+建议分支：
+
+```text
+codex/g3-b2-f-final-code-freeze
+```
+
+建议 commit：
+
+```text
+G3-B2-F freeze optimized algorithm baseline and final evidence
+```
+
+---
+
+# 11.13 建议代码结构
+
+具体路径应优先复用现有模块，避免重复体系。
+
+若仓库没有适合结构，可参考：
+
+```text
+schedule/
+├── schema.py
+├── ir.py
+├── canonical.py
+├── validators.py
+├── cost.py
+├── executor.py
+└── generators/
+    ├── ring.py
+    ├── butterfly.py
+    ├── mesh.py
+    ├── nhr.py
+    └── hierarchical.py
+
+hcccl/
+├── include/internal/
+│   └── hccl_schedule_internal.h
+├── src/
+│   ├── hccl_schedule.c
+│   ├── hccl_schedule_ring.c
+│   ├── hccl_schedule_butterfly.c
+│   ├── hccl_schedule_mesh.c
+│   ├── hccl_schedule_nhr.c
+│   └── hccl_schedule_hierarchical.c
+├── tools/
+│   └── hccl_schedule_dump.c
+└── tests/
+    ├── test_schedule_ring.c
+    ├── test_schedule_butterfly.c
+    ├── test_schedule_hierarchical.c
+    └── test_schedule_invariants.c
+
+skills/
+└── schedule_optimization_skill.py
+
+tools/
+└── optimization_cli/
+```
+
+不得为了符合建议结构大规模移动现有稳定代码。
+
+---
+
+# 11.14 测试要求
+
+## 11.14.1 Schedule schema
+
+1. schema version；
+2. canonical serialization；
+3. stable schedule hash；
+4. invalid rank rejection；
+5. invalid chunk rejection；
+6. cyclic dependency rejection；
+7. missing chunk detection；
+8. duplicate writer detection；
+9. output ownership；
+10. deterministic replay。
+
+## 11.14.2 Ring
+
+11. AllReduce phase count；
+12. AllGather phase count；
+13. ReduceScatter phase count；
+14. rank rotation；
+15. chunk ownership；
+16. non-divisible count；
+17. rank 2/4/8/16/64；
+18. three dtype representative cases。
+
+## 11.14.3 Other algorithms
+
+19. Butterfly partner；
+20. Butterfly power-of-two boundary；
+21. Mesh conflict control；
+22. NHR weighted order；
+23. NHR symmetric fallback；
+24. Fat-Tree group partition；
+25. leader selection；
+26. inter/intra phases；
+27. unsupported pair rejection。
+
+## 11.14.4 Topology and cost
+
+28. asymmetric link weighting；
+29. congestion penalty；
+30. oversubscription；
+31. critical path；
+32. chunk candidate search；
+33. memory-budget rejection；
+34. parameter hash unchanged。
+
+## 11.14.5 Dynamic replan
+
+35. degradation replan；
+36. link-down replan；
+37. recovery replan；
+38. rank removal；
+39. no alternate path；
+40. schedule hash change；
+41. correctness after replan；
+42. bounded memory after replan。
+
+## 11.14.6 Agent
+
+43. Prompt version；
+44. input schema；
+45. proposal schema；
+46. correctness hard gate；
+47. evaluation；
+48. reflection；
+49. replanning；
+50. commit mapping；
+51. human intervention disclosure；
+52. trace sanitization。
+
+## 11.14.7 Performance and regression
+
+53. benchmark contract immutable；
+54. baseline source commit；
+55. p50/p95 separation；
+56. wins/ties/losses completeness；
+57. ablation completeness；
+58. no hidden parameter changes；
+59. CPU_SIM CTest；
+60. Python regression；
+61. native ABI unchanged；
+62. bit-for-bit rebuild；
+63. G3-B quick/full；
+64. staging verify；
+65. old evidence SHA256；
+66. HCOMM/HCCL tracked clean。
+
+不得通过新增无理由 skip 通过测试。
+
+---
+
+# 11.15 文档输出
+
+G3-B2 至少新增：
+
+```text
+docs/optimization/g3_b2_baseline.md
+docs/optimization/collective_schedule_ir.md
+docs/optimization/algorithm_support_matrix.md
+docs/optimization/topology_aware_hierarchical_design.md
+docs/optimization/chunk_and_pipeline_design.md
+docs/optimization/dynamic_replanning_design.md
+docs/optimization/g3_b2_ablation_report.md
+docs/optimization/g3_b2_final_code_baseline.md
+docs/optimization/g3_b2_known_limitations.md
+```
+
+这些是工程和优化文档，不是 G3-C 最终正式报告。
+
+---
+
+# 11.16 Requirement 增量评估
+
+不得修改 G3-A 历史 requirement matrix。
+
+G3-B2-F 必须生成：
+
+```text
+docs/submission/g3_b2_requirement_delta.json
+```
+
+可能改善的要求包括：
+
+```text
+REQ-INNOV-001
+REQ-INNOV-002
+REQ-INNOV-005
+REQ-SCALE-002
+REQ-TOPO-005
+REQ-REL-003
+REQ-AGENT-005
+REQ-AGENT-006
+REQ-AGENT-007
+```
+
+状态只能根据实际 evidence 建议更新。
+
+以下要求仍不能因模拟优化自动变为满足：
+
+```text
+真实硬件探测
+真实零 CPU 介入
+真实 UB/HBM 复用
+真实训练 90% 加速
+真实 msprof
+真实故障切换
+真实 72h
+官方 loader ABI
+```
+
+---
+
+# 11.17 G3-B2 最终 Evidence
+
+G3-B2-F final evidence 必须记录：
+
+```text
+checkpoint=G3-B2
+checkpoint_status=COMPLETED|PARTIAL
+
+schedule_ir=COMPLETED
+ring_three_primitive_schedule=COMPLETED
+topology_aware_optimization=COMPLETED
+hierarchical_schedule=COMPLETED
+dynamic_replanning=COMPLETED
+bounded_memory_schedule=COMPLETED
+simulated_pipeline_model=COMPLETED
+agent_optimization_trace=COMPLETED
+final_code_freeze=COMPLETED
+
+performance_target_achievement=PARTIALLY_SATISFIED
+c_cpp_plugin_compliance=PARTIALLY_SATISFIED
+real_device_acceptance=HARDWARE_BLOCKED
+g3_delivery_readiness=PARTIAL
+
+real_device_api_executed=false
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+measured_on_real_npu=false
+msprof_executed=false
+real_model_executed=false
+runtime_api_calls=[]
+old_evidence_modified=false
+parameter_set_modified=false
+```
+
+如果参数发生获批 bugfix，则：
+
+```text
+parameter_set_modified=true
+baseline_regenerated=true
+old_baseline_invalidated=true
+```
+
+---
+
+# 11.18 完成条件
+
+只有以下条件全部满足时，G3-B2 才可标记 `COMPLETED`：
+
+- 优化 baseline 已冻结；
+- benchmark contract 已冻结；
+- parameter set 未被隐式修改；
+- Agent trace schema 已建立；
+- Prompt 已版本化；
+- Schedule IR 已完成；
+- canonical schedule hash 可用；
+- schedule invariants 全部通过；
+- Ring 三原语具有明确不同调度；
+- 至少 Butterfly、NHR、Fat-Tree 中两个具有独立调度；
+- C/Python schedule parity 通过；
+- Agent selector 输出 schedule 而非仅算法名称；
+- 非对称拓扑权重生效；
+- chunk 自适应生效；
+- 拥塞代价可追溯；
+- dynamic replan 生效；
+- no-path 语义保持；
+- bounded-memory audit 通过；
+- simulated pipeline 明确标记；
+- correctness 无回退；
+- 完整 wins/ties/losses 已输出；
+- 消融实验完整；
+- 默认性能验收门槛达到，或真实记录为 `PARTIAL`；
+- 至少一条完整 Agent 优化 trace 可重放；
+- 人工干预已披露；
+- commit mapping 完整；
+- CPU_SIM public ABI 未意外变化；
+- G3-B quick/full 通过；
+- 双构建可复现；
+- staging verify 通过；
+- 所有旧 evidence 未修改；
+- G3-B2 final evidence SHA256 通过；
+- HCOMM/HCCL tracked clean；
+- 工作区 clean；
+- 未执行真实设备 API；
+- 未开始正式 G3-C；
+- 未创建 release。
+
+最终状态应为：
+
+```text
+G3-B2: COMPLETED
+Optimization Baseline: COMPLETED
+Collective Schedule IR: COMPLETED
+Ring Three-Primitive Scheduling: COMPLETED
+Topology-Aware Hierarchical Optimization: COMPLETED
+Dynamic Schedule Replanning: COMPLETED
+Bounded-Memory Scheduling: COMPLETED
+Simulated Pipeline Model: COMPLETED
+Agent Optimization Trace: COMPLETED
+Ablation and Benchmark Audit: COMPLETED
+Final Code Baseline: FROZEN
+
+Performance Target Achievement: PARTIALLY_SATISFIED
+C/C++ Plugin Compliance: PARTIALLY_SATISFIED
+Submission Release Readiness: PARTIAL
+G3 Delivery Readiness: PARTIAL
+Real-device Acceptance: HARDWARE_BLOCKED
+```
+
+---
+
+# 11.19 阻塞与失败分类
+
+## ENV_BLOCKED
+
+适用于：
+
+- baseline 无法运行；
+- C/C++ build 失败；
+- schedule parity 工具不可运行；
+- benchmark evidence 不可读取；
+- submission CLI 失效；
+- Python/CMake 环境损坏。
+
+## USER_ACTION_REQUIRED
+
+适用于：
+
+- 是否批准 public ABI 变化；
+- 是否允许改变冻结 parameter set；
+- 是否接受未达到默认性能门槛的 final candidate；
+- 是否扩展 G3-B2 时间；
+- 是否增加稀疏/压缩可选功能。
+
+## HARDWARE_BLOCKED
+
+只适用于：
+
+- 真实 NPU；
+- 真实 HCCS/RoCE/PCIe；
+- 真实 communicator；
+- 真实 collective；
+- 真实训练；
+- 真实 msprof；
+- 真实 failover；
+- 真实 72h；
+- 真实 direct acceptance。
+
+## FAIL
+
+适用于：
+
+- baseline 在优化后被覆盖；
+- benchmark 场景被事后删除；
+- 参数被隐式修改；
+- schedule 不能保证正确性；
+- 不同算法仍使用同一伪调度；
+- C/Python 语义漂移；
+- 性能数据选择性报告；
+- p50/p95 混淆；
+- no-path 被隐式 fallback；
+- Agent trace 被事后伪造；
+- 人工介入未披露；
+- ABI 意外变化；
+- staging 或 evidence SHA256 失败；
+- 模拟结果被写成实机；
+- 旧 evidence 被修改。
+
+不得将算法、测试或性能失败错误标记为 `HARDWARE_BLOCKED`。
+
+---
+
+# 11.20 停止边界与代码冻结
+
+G3-B2-F commit 合并进入 `main` 后，项目进入：
+
+```text
+FINAL ALGORITHM CODE FREEZE
+```
+
+此后除以下情况外不得修改：
+
+- 阻塞性 correctness bug；
+- 构建失败；
+- 安全或隐私问题；
+- 报告发现的数据追溯错误；
+- 平台明确要求的兼容修复。
+
+默认冻结：
+
+- algorithm schedule；
+- topology semantics；
+- cost model；
+- parameter set；
+- selector；
+- chunk policy；
+- pipeline model；
+- benchmark matrix；
+- correctness threshold；
+- performance evidence；
+- plugin ABI。
+
+任何冻结后修改必须：
+
+1. 单独 issue/记录；
+2. 说明影响；
+3. 重跑受影响 evidence；
+4. 更新 G3-C ledger；
+5. 更新 claim boundary；
+6. 不得静默修改。
+
+G3-B2-F 完成并合并后，下一阶段才是：
+
+```text
+G3-C：证据驱动的正式技术报告体系
+```
