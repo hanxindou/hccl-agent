@@ -1,0 +1,13 @@
+{
+  "HCCL_OR_NIC_retry": false,
+  "claim_contract_sha256": "4e678eddcadb81852562c99fa20fe5df1af47a2bf213f95275b782cc4170fd14",
+  "hardware_crc": false,
+  "host_crc": true,
+  "host_retry": true,
+  "logical_timeout": true,
+  "passed": true,
+  "real_device_api_executed": false,
+  "real_network_timeout": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-b3-c-claim-boundary-v1"
+}

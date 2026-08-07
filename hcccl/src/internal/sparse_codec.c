@@ -1,4 +1,5 @@
 #include "sparse_codec.h"
+#include "integrity_transport.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -267,17 +268,47 @@ int hccl_sparse_prepared_init(
     const void* input, size_t element_count, size_t element_size,
     size_t memory_limit_bytes, hcclSparsePreparedInput* prepared)
 {
+    hcclResult_t integrity_rc;
+    hcclIntegrityResult integrity_result;
+    unsigned char metadata[HCCL_SPARSE_METADATA_BYTES];
     if (prepared == NULL) return -1;
     memset(prepared, 0, sizeof(*prepared));
     prepared->dense_input = input;
-    if (hccl_sparse_encode(input, element_count, element_size, &prepared->payload) != 0) return -1;
+    if (hccl_sparse_encode(input, element_count, element_size, &prepared->payload) != 0) return HCCL_ERR_INTERNAL;
     if (hccl_sparse_decide(&prepared->payload, memory_limit_bytes, &prepared->decision) != 0) {
         hccl_sparse_payload_destroy(&prepared->payload);
-        return -1;
+        return HCCL_ERR_INTERNAL;
     }
     prepared->sparse_selected = prepared->decision.eligible;
+    if (prepared->sparse_selected) {
+        memset(metadata, 0, sizeof(metadata));
+        memcpy(metadata, &prepared->payload.logical_element_count, sizeof(size_t));
+        memcpy(metadata + sizeof(size_t), &prepared->payload.nonzero_count, sizeof(size_t));
+        memcpy(metadata + 2 * sizeof(size_t), &prepared->payload.index_width, sizeof(size_t));
+        integrity_rc = hccl_integrity_verify_chunked(
+            metadata, sizeof(metadata), sizeof(metadata), 1, &integrity_result);
+        if (integrity_rc == HCCL_SUCCESS) {
+            integrity_rc = hccl_integrity_verify_chunked(
+                prepared->payload.indices, prepared->payload.index_bytes,
+                1024U * 1024U, 2, &integrity_result);
+        }
+        if (integrity_rc == HCCL_SUCCESS) {
+            integrity_rc = hccl_integrity_verify_chunked(
+                prepared->payload.values, prepared->payload.value_bytes,
+                1024U * 1024U, 3, &integrity_result);
+        }
+    } else {
+        integrity_rc = hccl_integrity_verify_chunked(
+            input, prepared->payload.logical_bytes,
+            1024U * 1024U, 1, &integrity_result);
+    }
+    if (integrity_rc != HCCL_SUCCESS) {
+        hccl_sparse_payload_destroy(&prepared->payload);
+        memset(prepared, 0, sizeof(*prepared));
+        return integrity_rc;
+    }
     record_decision(&prepared->payload, &prepared->decision);
-    return 0;
+    return HCCL_SUCCESS;
 }
 
 

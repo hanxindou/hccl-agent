@@ -45,6 +45,7 @@ set(SOURCES
     src/hccl_algorithms.c
     src/schedule_ir.c
     src/internal/sparse_codec.c
+    src/internal/integrity_transport.c
 )
 
 set(HEADERS
@@ -413,8 +414,31 @@ add_test(NAME test_sparse_collective COMMAND test_sparse_collective)
 add_executable(sparse_codec_dump
     tests/sparse_codec_dump.c
     src/internal/sparse_codec.c
+    src/internal/integrity_transport.c
 )
-target_include_directories(sparse_codec_dump PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(sparse_codec_dump PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+add_executable(test_integrity_retry
+    tests/test_integrity_retry.c
+    ${SOURCES}
+)
+target_include_directories(test_integrity_retry PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+add_test(NAME test_integrity_retry COMMAND test_integrity_retry)
+
+add_executable(integrity_crc_dump
+    tests/integrity_crc_dump.c
+    src/internal/integrity_transport.c
+)
+target_include_directories(integrity_crc_dump PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 set_tests_properties(test_dtype_emulation PROPERTIES
     WORKING_DIRECTORY $<TARGET_FILE_DIR:test_dtype_emulation>
 )

@@ -1,0 +1,99 @@
+{
+  "clock": "DETERMINISTIC_LOGICAL_TICKS",
+  "passed": true,
+  "recovered": {
+    "attempt_count": 2,
+    "classification": "NONE",
+    "completion_tick": 3,
+    "corruption_detected": false,
+    "deadline_tick": 10,
+    "failure_reason": "NONE",
+    "metadata": {
+      "attempt": 1,
+      "chunk_id": 2,
+      "crc32": 3369664153,
+      "payload_length": 17,
+      "sequence_id": 2,
+      "transfer_id": 7
+    },
+    "recovered": true,
+    "result_code": "HCCL_SUCCESS",
+    "retransmitted_bytes": 17,
+    "sequence_valid": true,
+    "start_tick": 2,
+    "timed_out": true,
+    "trace": [
+      {
+        "attempt": 0,
+        "classification": "RETRYABLE",
+        "completion_tick": 9,
+        "crc32": 3369664153,
+        "deadline_tick": 8,
+        "failure_reason": "LOGICAL_TIMEOUT",
+        "start_tick": 0
+      },
+      {
+        "attempt": 1,
+        "classification": "NONE",
+        "completion_tick": 3,
+        "crc32": 3369664153,
+        "deadline_tick": 10,
+        "failure_reason": "NONE",
+        "start_tick": 2
+      }
+    ]
+  },
+  "schema_version": "g3-b3-timeout-cases-v1",
+  "terminal": {
+    "attempt_count": 3,
+    "classification": "TERMINAL",
+    "completion_tick": 13,
+    "corruption_detected": false,
+    "deadline_tick": 12,
+    "failure_reason": "RETRY_EXHAUSTED",
+    "metadata": {
+      "attempt": 2,
+      "chunk_id": 2,
+      "crc32": 3369664153,
+      "payload_length": 17,
+      "sequence_id": 2,
+      "transfer_id": 7
+    },
+    "recovered": false,
+    "result_code": "HCCL_ERR_TIMEOUT",
+    "retransmitted_bytes": 34,
+    "sequence_valid": true,
+    "start_tick": 4,
+    "timed_out": true,
+    "trace": [
+      {
+        "attempt": 0,
+        "classification": "RETRYABLE",
+        "completion_tick": 9,
+        "crc32": 3369664153,
+        "deadline_tick": 8,
+        "failure_reason": "LOGICAL_TIMEOUT",
+        "start_tick": 0
+      },
+      {
+        "attempt": 1,
+        "classification": "RETRYABLE",
+        "completion_tick": 11,
+        "crc32": 3369664153,
+        "deadline_tick": 10,
+        "failure_reason": "LOGICAL_TIMEOUT",
+        "start_tick": 2
+      },
+      {
+        "attempt": 2,
+        "classification": "RETRYABLE",
+        "completion_tick": 13,
+        "crc32": 3369664153,
+        "deadline_tick": 12,
+        "failure_reason": "LOGICAL_TIMEOUT",
+        "start_tick": 4
+      }
+    ]
+  },
+  "wall_clock_sleep": false
+}

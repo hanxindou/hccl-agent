@@ -419,10 +419,11 @@ static hcclResult_t run_allreduce_reference_kernel(
         return rc;
     }
 
-    if (hccl_sparse_prepared_init(
+    {
+        int sparse_rc = hccl_sparse_prepared_init(
             send_buf, count, data_type_size(data_type),
-            64U * 1024U * 1024U, &prepared_send) != 0) {
-        return HCCL_ERR_INTERNAL;
+            64U * 1024U * 1024U, &prepared_send);
+        if (sparse_rc != HCCL_SUCCESS) return (hcclResult_t)sparse_rc;
     }
 
     for (size_t elem = 0; elem < count; elem++) {
@@ -520,10 +521,11 @@ hcclResult_t ring_allgather(
         size_t C = send_count;
         size_t elem_size = data_type_size(data_type);
 
-        if (hccl_sparse_prepared_init(
+        {
+            int sparse_rc = hccl_sparse_prepared_init(
                 send_buf, input_elems, elem_size,
-                64U * 1024U * 1024U, &prepared_send) != 0) {
-            return HCCL_ERR_INTERNAL;
+                64U * 1024U * 1024U, &prepared_send);
+            if (sparse_rc != HCCL_SUCCESS) return (hcclResult_t)sparse_rc;
         }
         staged = (unsigned char*) calloc(output_elems, elem_size);
         if (staged == NULL) {
@@ -797,11 +799,14 @@ hcclResult_t mesh_reducescatter(
         if (staged == NULL) {
             return HCCL_ERR_INTERNAL;
         }
-        if (hccl_sparse_prepared_init(
+        {
+            int sparse_rc = hccl_sparse_prepared_init(
                 send_buf, input_elems, data_type_size(data_type),
-                64U * 1024U * 1024U, &prepared_send) != 0) {
-            free(staged);
-            return HCCL_ERR_INTERNAL;
+                64U * 1024U * 1024U, &prepared_send);
+            if (sparse_rc != HCCL_SUCCESS) {
+                free(staged);
+                return (hcclResult_t)sparse_rc;
+            }
         }
 
         /*
