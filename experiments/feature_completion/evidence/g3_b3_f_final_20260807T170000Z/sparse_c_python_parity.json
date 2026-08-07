@@ -1,0 +1,55 @@
+{
+  "c_record": {
+    "compression_ratio": 0.390243902439,
+    "index_bytes": 6,
+    "index_width": 2,
+    "indices": [
+      1,
+      3,
+      5
+    ],
+    "logical_bytes": 32,
+    "logical_element_count": 8,
+    "metadata_bytes": 64,
+    "nonzero_count": 3,
+    "reconstruction_hash64": "3e359954509d5828",
+    "value_bytes": 12,
+    "values_hex": "0000803f000000c000006040",
+    "wire_bytes": 82
+  },
+  "comparisons": {
+    "compression_ratio": true,
+    "index_bytes": true,
+    "index_width": true,
+    "indices": true,
+    "logical_bytes": true,
+    "logical_element_count": true,
+    "metadata_bytes": true,
+    "nonzero_count": true,
+    "reconstruction_hash64": true,
+    "value_bytes": true,
+    "values_hex": true,
+    "wire_bytes": true
+  },
+  "passed": true,
+  "python_record": {
+    "compression_ratio": 0.390243902439,
+    "index_bytes": 6,
+    "index_width": 2,
+    "indices": [
+      1,
+      3,
+      5
+    ],
+    "logical_bytes": 32,
+    "logical_element_count": 8,
+    "metadata_bytes": 64,
+    "nonzero_count": 3,
+    "reconstruction_hash64": "3e359954509d5828",
+    "value_bytes": 12,
+    "values_hex": "0000803f000000c000006040",
+    "wire_bytes": 82
+  },
+  "schema_version": "g3-b3-sparse-c-python-parity-v1",
+  "truth_label": "HOST_EXECUTED"
+}

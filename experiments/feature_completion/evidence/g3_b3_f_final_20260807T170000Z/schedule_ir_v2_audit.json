@@ -1,0 +1,302 @@
+{
+  "$defs": {
+    "flow_control_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "credit_window": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "high_watermark": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "low_watermark": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "max_inflight_chunks": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "enabled",
+        "credit_window",
+        "max_inflight_chunks",
+        "high_watermark",
+        "low_watermark"
+      ],
+      "type": "object"
+    },
+    "integrity_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "attempt_tracking": {
+          "type": "boolean"
+        },
+        "checksum_type": {
+          "enum": [
+            "NONE",
+            "CRC32",
+            "CRC32_PLUS_PARITY"
+          ]
+        },
+        "chunk_id_enabled": {
+          "type": "boolean"
+        },
+        "sequence_enabled": {
+          "type": "boolean"
+        },
+        "verify_before_accept": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "checksum_type",
+        "sequence_enabled",
+        "chunk_id_enabled",
+        "attempt_tracking",
+        "verify_before_accept"
+      ],
+      "type": "object"
+    },
+    "payload_transform": {
+      "additionalProperties": false,
+      "properties": {
+        "codec": {
+          "enum": [
+            "NONE",
+            "SPARSE_INDEX_VALUE"
+          ]
+        },
+        "compression_ratio": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "eligibility": {
+          "type": "boolean"
+        },
+        "fallback_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "index_bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "logical_bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "metadata_bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "mode": {
+          "enum": [
+            "DENSE",
+            "SPARSE_INDEX_VALUE"
+          ]
+        },
+        "sparsity_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "value_bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "wire_bytes": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "mode",
+        "codec",
+        "logical_bytes",
+        "wire_bytes",
+        "value_bytes",
+        "index_bytes",
+        "metadata_bytes",
+        "compression_ratio",
+        "sparsity_ratio",
+        "eligibility",
+        "fallback_reason"
+      ],
+      "type": "object"
+    },
+    "transport_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "logical_timeout_ticks": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "max_retries": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "retry_backoff_policy": {
+          "enum": [
+            "NONE",
+            "FIXED_LOGICAL_TICKS",
+            "EXPONENTIAL_LOGICAL_TICKS"
+          ]
+        },
+        "retryable_error_classes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "terminal_error_classes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "timeout_enabled": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "timeout_enabled",
+        "logical_timeout_ticks",
+        "max_retries",
+        "retry_backoff_policy",
+        "retryable_error_classes",
+        "terminal_error_classes"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "g3-b3-schedule-ir-v2",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "algorithm": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "chunk_count": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "chunk_size_bytes": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "dependencies": {
+      "type": "array"
+    },
+    "dtype": {
+      "enum": [
+        "FP32",
+        "FP16",
+        "BF16"
+      ]
+    },
+    "estimated_metrics": {
+      "type": "object"
+    },
+    "failure_policy": {
+      "type": "object"
+    },
+    "flow_control_policy": {
+      "$ref": "#/$defs/flow_control_policy"
+    },
+    "hardware_profile_hash": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "integrity_policy": {
+      "$ref": "#/$defs/integrity_policy"
+    },
+    "memory_plan": {
+      "type": "object"
+    },
+    "message_size_bytes": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "payload_transform": {
+      "$ref": "#/$defs/payload_transform"
+    },
+    "phases": {
+      "minItems": 1,
+      "type": "array"
+    },
+    "primitive": {
+      "enum": [
+        "AllReduce",
+        "AllGather",
+        "ReduceScatter"
+      ]
+    },
+    "rank_size": {
+      "maximum": 1024,
+      "minimum": 2,
+      "type": "integer"
+    },
+    "reduce_op": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "schedule_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schedule_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "g3-b3-schedule-ir-v2"
+    },
+    "topology_hash": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "transport_policy": {
+      "$ref": "#/$defs/transport_policy"
+    }
+  },
+  "required": [
+    "schema_version",
+    "schedule_id",
+    "primitive",
+    "algorithm",
+    "rank_size",
+    "message_size_bytes",
+    "dtype",
+    "reduce_op",
+    "topology_hash",
+    "hardware_profile_hash",
+    "chunk_size_bytes",
+    "chunk_count",
+    "phases",
+    "dependencies",
+    "memory_plan",
+    "failure_policy",
+    "estimated_metrics",
+    "payload_transform",
+    "integrity_policy",
+    "transport_policy",
+    "flow_control_policy",
+    "schedule_hash"
+  ],
+  "title": "G3-B3 Collective Schedule IR v2",
+  "type": "object"
+}

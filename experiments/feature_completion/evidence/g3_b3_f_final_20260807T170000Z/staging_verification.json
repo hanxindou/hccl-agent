@@ -1,0 +1,67 @@
+{
+  "absolute_user_paths": [],
+  "claim_boundary_audit": {
+    "findings": [],
+    "status": "PASS",
+    "truth_labels": [
+      "CPU_EXECUTED",
+      "DIRECT_READINESS_ONLY",
+      "SIMULATED_ONLY",
+      "REAL_DEVICE_NOT_EXECUTED"
+    ]
+  },
+  "controlled_competition_doc_included": false,
+  "files_verified": 378,
+  "manifest_entries_verified": 383,
+  "native_elf_audit": {
+    "artifact": "<install>/lib/libhccl_plugin.so",
+    "artifact_role": "CPU_SIM_REFERENCE_PLUGIN",
+    "exported_symbols": [
+      "butterfly_allgather",
+      "butterfly_allreduce",
+      "fattree_allreduce",
+      "hcclAllGather",
+      "hcclAllReduce",
+      "hcclBroadcast",
+      "hcclCommDestroy",
+      "hcclCommInit",
+      "hcclFreeTopology",
+      "hcclGetTopology",
+      "hcclPluginGetAlgorithms",
+      "hcclPluginGetVersion",
+      "hcclReduceScatter",
+      "hcclSetRank",
+      "mesh_allreduce",
+      "mesh_reducescatter",
+      "nhr_allreduce",
+      "ring_allgather",
+      "ring_allreduce"
+    ],
+    "file": "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=13ab2a88b2b45cafa1422d796e469a12e123c5d2, not stripped",
+    "forbidden_symbols": [],
+    "ldd": [
+      "linux-vdso.so.1 (0x000072d499974000)",
+      "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000072d499600000)",
+      "/lib64/ld-linux-x86-64.so.2 (0x000072d499976000)"
+    ],
+    "missing_symbols": [],
+    "needed": [
+      "libc.so.6"
+    ],
+    "official_dependencies": [],
+    "sha256": "af91e76ac5dbb693ba7263330300acdbe89b5f2b1077a31fe1b48ba2e3631309",
+    "soname": "libhccl_plugin.so",
+    "status": "PASS",
+    "unexpected_symbols": []
+  },
+  "official_binaries_included": false,
+  "official_source_included": false,
+  "preliminary_forbidden_data_scan": {
+    "findings": [],
+    "scan_type": "PRELIMINARY_FORBIDDEN_DATA_SCAN",
+    "status": "PASS"
+  },
+  "schema_version": "g3-b-stage-verification-v1",
+  "status": "PASS",
+  "symlink_escape": false
+}

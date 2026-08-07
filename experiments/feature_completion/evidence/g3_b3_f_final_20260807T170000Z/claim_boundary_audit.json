@@ -1,0 +1,9 @@
+{
+  "cpu_sim": "HOST_EXECUTED",
+  "direct_runtime_source": "DIRECT_READINESS_ONLY",
+  "real_device": "HARDWARE_BLOCKED",
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "simulator_performance": "SIMULATED_ONLY",
+  "status": "PASS"
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "g3-b3-final-baseline-v1",
+  "checkpoint": "G3-B3",
+  "status": "COMPLETED",
+  "frozen_contracts": {
+    "default_backend": "CPU_SIM",
+    "fallback_policy": "NONE",
+    "plugin_role": "CPU_SIM_REFERENCE_PLUGIN",
+    "public_abi_changed": false,
+    "soname": "libhccl_plugin.so",
+    "exported_symbol_count": 19,
+    "schedule_ir": "g3-b3-schedule-ir-v2",
+    "agent_proposal": "g3-b3-agent-proposal-v2"
+  },
+  "feature_status": {
+    "lossless_sparse": "HOST_EXECUTED",
+    "crc_timeout_retry": "HOST_EXECUTED",
+    "flow_control_backpressure": "SIMULATOR_ONLY",
+    "direct_runtime_source": "DIRECT_READINESS_ONLY",
+    "int8_quantization": "DEFERRED_BY_PRECISION_GATE",
+    "pairwise": "SKIPPED_BY_VALUE_GATE"
+  },
+  "g3_b2_preserved": {
+    "performance_scenarios": 18,
+    "correctness_failures": 0,
+    "invalid_runs": 0,
+    "best_simulated_improvement_percent": 45.59283008
+  },
+  "truth_boundary": {
+    "real_device_api_executed": false,
+    "runtime_api_calls": [],
+    "real_ascend_npu_validated": false,
+    "real_device_performance_measured": false,
+    "real_device_acceptance": "HARDWARE_BLOCKED"
+  }
+}

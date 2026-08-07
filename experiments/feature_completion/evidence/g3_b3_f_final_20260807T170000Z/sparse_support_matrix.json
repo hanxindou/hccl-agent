@@ -1,0 +1,22 @@
+{
+  "dense_fallback": true,
+  "dtypes": [
+    "FP32",
+    "FP16",
+    "BF16"
+  ],
+  "lossless": true,
+  "mode": "HOST_EXECUTED_CPU_SIM",
+  "primitives": [
+    "AllReduce",
+    "AllGather",
+    "ReduceScatter"
+  ],
+  "public_abi_changed": false,
+  "reduce_ops": [
+    "SUM",
+    "MAX",
+    "MIN"
+  ],
+  "status": "PASS"
+}

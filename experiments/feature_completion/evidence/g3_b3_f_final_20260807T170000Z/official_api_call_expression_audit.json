@@ -1,0 +1,210 @@
+{
+  "calls": [
+    {
+      "api": "aclInit",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 134,
+          "source": "aclError acl_error = aclInit(nullptr);"
+        }
+      ]
+    },
+    {
+      "api": "aclrtSetDevice",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 138,
+          "source": "acl_error = aclrtSetDevice(request->device_id);"
+        }
+      ]
+    },
+    {
+      "api": "aclrtCreateContext",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 142,
+          "source": "acl_error = aclrtCreateContext(&context, request->device_id);"
+        }
+      ]
+    },
+    {
+      "api": "aclrtCreateStream",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 146,
+          "source": "acl_error = aclrtCreateStream(&stream);"
+        }
+      ]
+    },
+    {
+      "api": "aclrtMalloc",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 150,
+          "source": "acl_error = aclrtMalloc(&device_send, request->send_bytes,"
+        },
+        {
+          "line": 152,
+          "source": "if (!record_acl(result, \"aclrtMalloc(send)\", acl_error)) break;"
+        },
+        {
+          "line": 155,
+          "source": "acl_error = aclrtMalloc(&device_recv, request->recv_bytes,"
+        },
+        {
+          "line": 157,
+          "source": "if (!record_acl(result, \"aclrtMalloc(recv)\", acl_error)) break;"
+        }
+      ]
+    },
+    {
+      "api": "aclrtMemcpy",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 160,
+          "source": "acl_error = aclrtMemcpy(device_send, request->send_bytes,"
+        },
+        {
+          "line": 163,
+          "source": "if (!record_acl(result, \"aclrtMemcpy(host_to_device)\", acl_error)) break;"
+        },
+        {
+          "line": 199,
+          "source": "acl_error = aclrtMemcpy(request->host_recv, request->recv_bytes,"
+        },
+        {
+          "line": 202,
+          "source": "if (!record_acl(result, \"aclrtMemcpy(device_to_host)\", acl_error)) break;"
+        }
+      ]
+    },
+    {
+      "api": "HcclCommInitClusterInfo",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 165,
+          "source": "HcclResult hccl_error = HcclCommInitClusterInfo("
+        }
+      ]
+    },
+    {
+      "api": "HcclAllReduce",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 172,
+          "source": "hccl_error = HcclAllReduce("
+        }
+      ]
+    },
+    {
+      "api": "HcclAllGather",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 178,
+          "source": "hccl_error = HcclAllGather("
+        }
+      ]
+    },
+    {
+      "api": "HcclReduceScatter",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 184,
+          "source": "hccl_error = HcclReduceScatter("
+        }
+      ]
+    },
+    {
+      "api": "aclrtSynchronizeStream",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 196,
+          "source": "acl_error = aclrtSynchronizeStream(stream);"
+        }
+      ]
+    },
+    {
+      "api": "HcclCommDestroy",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 208,
+          "source": "record_hccl(result, \"HcclCommDestroy\", HcclCommDestroy(comm), true);"
+        }
+      ]
+    },
+    {
+      "api": "aclrtFree",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 212,
+          "source": "record_acl(result, \"aclrtFree(recv)\", aclrtFree(device_recv), true);"
+        },
+        {
+          "line": 216,
+          "source": "record_acl(result, \"aclrtFree(send)\", aclrtFree(device_send), true);"
+        }
+      ]
+    },
+    {
+      "api": "aclrtDestroyStream",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 220,
+          "source": "record_acl(result, \"aclrtDestroyStream\", aclrtDestroyStream(stream), true);"
+        }
+      ]
+    },
+    {
+      "api": "aclrtDestroyContext",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 224,
+          "source": "record_acl(result, \"aclrtDestroyContext\", aclrtDestroyContext(context), true);"
+        }
+      ]
+    },
+    {
+      "api": "aclrtResetDevice",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 228,
+          "source": "record_acl(result, \"aclrtResetDevice\", aclrtResetDevice(request->device_id), true);"
+        }
+      ]
+    },
+    {
+      "api": "aclFinalize",
+      "classification": "ACTUAL_CALL_EXPRESSION",
+      "matches": [
+        {
+          "line": 232,
+          "source": "record_acl(result, \"aclFinalize\", aclFinalize(), true);"
+        }
+      ]
+    }
+  ],
+  "declaration_only_accepted": false,
+  "required_classification": "ACTUAL_CALL_EXPRESSION",
+  "runtime_api_calls": [],
+  "runtime_execution": false,
+  "schema_version": "g3-b3-official-call-expression-audit-v1",
+  "static_assert_only_accepted": false,
+  "status": "PASS",
+  "symbol_address_only_accepted": false
+}

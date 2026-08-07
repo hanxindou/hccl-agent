@@ -1,0 +1,72 @@
+{
+  "proposal": {
+    "chunk_size": 16384,
+    "correctness_plan": [
+      "v1 dense semantic compatibility",
+      "reference validation"
+    ],
+    "credit_window": 1,
+    "data_profile": "S00",
+    "decode_cost": 0.0,
+    "dense_fallback_condition": "SPARSE_NOT_IMPLEMENTED_IN_G3_B3_A",
+    "encode_cost": 0.0,
+    "estimated_compression_ratio": 1.0,
+    "estimated_wire_bytes": 65536,
+    "expected_benefit": "none in the contract-only baseline",
+    "expected_risk": "sparse and reliability execution are intentionally not implemented in G3-B3-A",
+    "fallback_conditions": [
+      "LOW_SPARSITY",
+      "METADATA_OVERHEAD",
+      "UNSUPPORTED_DTYPE",
+      "UNSUPPORTED_PRIMITIVE",
+      "MEMORY_LIMIT",
+      "CODEC_ERROR",
+      "CORRECTNESS_GATE"
+    ],
+    "flow_control_policy": {
+      "enabled": false,
+      "reason": "contract phase"
+    },
+    "integrity_policy": {
+      "checksum_type": "NONE",
+      "reason": "contract phase"
+    },
+    "logical_bytes": 65536,
+    "metadata_overhead": 0,
+    "payload_mode": "DENSE",
+    "pipeline_depth": 1,
+    "proposal_hash": "a3d6eef01b260b7d38c6610bcb5c3ebe4803d83f6828021c212126eaac67561e",
+    "proposal_id": "g3-b3-a-dense-contract-example",
+    "retry_policy": {
+      "max_retries": 0,
+      "reason": "contract phase"
+    },
+    "schedule_algorithm": "Ring",
+    "schema_version": "g3-b3-agent-proposal-v2",
+    "sparse_codec": "NONE",
+    "sparsity_ratio": 0.0,
+    "validation_plan": [
+      "IR v2 schema",
+      "canonical hash",
+      "dense fallback audit"
+    ]
+  },
+  "validation": [
+    {
+      "invariant": "proposal_required_fields",
+      "passed": true
+    },
+    {
+      "invariant": "proposal_payload_mode",
+      "passed": true
+    },
+    {
+      "invariant": "proposal_execution_bounds",
+      "passed": true
+    },
+    {
+      "invariant": "proposal_canonical_hash",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "ctest": {
+    "failed": 0,
+    "passed": 14,
+    "status": "PASS"
+  },
+  "full": "PASS",
+  "g3_b3": {
+    "evidence_integrity": {
+      "g3_b3_a": {
+        "files_checked": 14,
+        "path": "experiments/feature_completion/evidence/g3_b3_a_baseline_20260807T133749Z",
+        "sha256sums_sha256": "05b7a3b9a70ad70bb7f25604cd5a1bc7c3272007878e4b717560e18e4b151399",
+        "status": "PASS"
+      },
+      "g3_b3_b": {
+        "files_checked": 12,
+        "path": "experiments/feature_completion/evidence/g3_b3_b_sparse_20260807T135447Z",
+        "sha256sums_sha256": "1fb06f4d668802697f30b44718627e155db282b1fc59f00dffc1d1f02cb5540a",
+        "status": "PASS"
+      },
+      "g3_b3_c": {
+        "files_checked": 14,
+        "path": "experiments/feature_completion/evidence/g3_b3_c_integrity_20260807T141931Z",
+        "sha256sums_sha256": "d139812e13b98b2bab09b67bbe17036eba96bf2ba5e60a464decbaba38773f55",
+        "status": "PASS"
+      },
+      "g3_b3_d": {
+        "files_checked": 14,
+        "path": "experiments/feature_completion/evidence/g3_b3_d_agent_flow_20260807T150515Z",
+        "sha256sums_sha256": "c6e7216623ff155ad597bded16196ac79b0079889196fc1f636e79b65dd1f628",
+        "status": "PASS"
+      },
+      "g3_b3_e": {
+        "files_checked": 13,
+        "path": "experiments/feature_completion/evidence/g3_b3_e_direct_runtime_20260807T160000Z",
+        "sha256sums_sha256": "13c1b66433e8dcb710c323af7a5ffd16a70d7c6544e240841f02f00b8126bafe",
+        "status": "PASS"
+      }
+    },
+    "final_evidence_validation": {
+      "files_checked": 35,
+      "path": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+      "status": "PASS"
+    },
+    "focused_tests": [
+      "tests/feature_completion/test_g3_b3_contracts.py",
+      "tests/feature_completion/test_g3_b3_sparse.py",
+      "tests/feature_completion/test_g3_b3_reliability.py",
+      "tests/feature_completion/test_g3_b3_agent_flow.py",
+      "tests/feature_completion/test_g3_b3_final_audit.py",
+      "tests/test_direct_runtime_source_contract.py",
+      "tests/submission_cli/test_submission_cli.py"
+    ],
+    "pytest_output": "........................................................................ [ 40%]\n........................................................................ [ 81%]\n................................                                         [100%]\n176 passed in 2.04s",
+    "real_device_api_executed": false,
+    "runtime_api_calls": [],
+    "status": "PASS"
+  },
+  "python": {
+    "exit_code": 0,
+    "failed": 0,
+    "modules": [
+      "tests.test_simulator_collective_correctness",
+      "tests.test_failover_engine",
+      "tests.test_backend_selection",
+      "tests.test_plugin_bridge",
+      "tests.test_g2_f_6_simulator_acceptance",
+      "tests.test_g2_f_7_backend_final_audit",
+      "tests.test_direct_api_backend",
+      "tests.test_direct_adapter_build_contract",
+      "tests.test_direct_lifecycle_contract",
+      "tests.test_direct_link_contract",
+      "tests.submission_audit.test_g3_a_audit"
+    ],
+    "passed": 93,
+    "status": "PASS"
+  },
+  "quick": "PASS",
+  "status": "PASS"
+}

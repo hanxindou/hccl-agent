@@ -1,0 +1,114 @@
+{
+  "compile": {
+    "artifact_executed": false,
+    "build": {
+      "command": [
+        "cmake",
+        "--build",
+        "<build>/direct-runtime-source",
+        "--target",
+        "hccl_direct_runtime_source",
+        "--parallel",
+        "2"
+      ],
+      "exit_code": 0,
+      "output": "Consolidate compiler generated dependencies of target hccl_direct_runtime_source\n[100%] Built target hccl_direct_runtime_source\n"
+    },
+    "configure": {
+      "command": [
+        "cmake",
+        "-S",
+        "<repo>/hcccl",
+        "-B",
+        "<build>/direct-runtime-source",
+        "-DHCCL_BACKEND=CPU_SIM",
+        "-DHCCL_ENABLE_ASCEND_HCCL_DIRECT=ON",
+        "-DHCCL_ENABLE_ASCEND_HCCL_RUNTIME_SOURCE=ON",
+        "-DHCCL_CANN_ROOT=<cann>"
+      ],
+      "exit_code": 0,
+      "output": "-- G3-B3-E direct runtime source: compile/link-only target enabled; execution remains forbidden.\n-- G2-F direct adapter: compile-only target and non-executed official-library link audit enabled.\n-- G2-F direct link root: <cann>\n-- \n-- HCCL Plugin backend: CPU_SIM\n-- CPU_SIM build configured. No CANN SDK required.\n-- \n-- Build & test:\n--   cd hcccl && mkdir -p build && cd build\n--   cmake .. -DHCCL_BACKEND=CPU_SIM && make\n--   ctest --output-on-failure\n--   ldd libhccl_plugin.so   # verify: no CANN deps\n-- \n-- Configuring done\n-- Generating done\n-- Build files have been written to: <build>/direct-runtime-source\n"
+    },
+    "schema_version": "g3-b3-direct-compile-result-v1",
+    "source_compiled": true,
+    "status": "PASS",
+    "target": "hccl_direct_runtime_source"
+  },
+  "elf_needed": {
+    "artifact": "<build>/direct-runtime-source/libhccl_direct_runtime_source.so",
+    "artifact_executed": false,
+    "file": "<build>/direct-runtime-source/libhccl_direct_runtime_source.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=a49809eb2080b5cae217b83a2a9ea03440c3fd4d, not stripped",
+    "ldd": [
+      "\tlinux-vdso.so.1 (0x00007740e6582000)",
+      "\tlibhccl.so => <cann>/x86_64-linux/lib64/libhccl.so (0x00007740e5800000)",
+      "\tlibhcomm.so => <cann>/x86_64-linux/lib64/libhcomm.so (0x00007740e4200000)",
+      "\tlibacl_rt.so => <cann>/x86_64-linux/lib64/libacl_rt.so (0x00007740e6555000)",
+      "\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007740e3e00000)",
+      "\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007740e5719000)",
+      "\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007740e652a000)",
+      "\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007740e3a00000)",
+      "\tlibhccl_compat.so => <cann>/x86_64-linux/lib64/libhccl_compat.so (0x00007740e5702000)",
+      "\tlibc_sec.so => <cann>/x86_64-linux/lib64/libc_sec.so (0x00007740e56ee000)",
+      "\tlibunified_dlog.so => <cann>/x86_64-linux/lib64/libunified_dlog.so (0x00007740e56d5000)",
+      "\t/lib64/ld-linux-x86-64.so.2 (0x00007740e6584000)",
+      "\tlibhccl_alg.so => <cann>/x86_64-linux/lib64/libhccl_alg.so (0x00007740e2800000)",
+      "\tlibhccl_plf.so => <cann>/x86_64-linux/lib64/libhccl_plf.so (0x00007740e2200000)",
+      "\tlibhccl_v2.so => <cann>/x86_64-linux/lib64/libhccl_v2.so (0x00007740e0000000)",
+      "\tlibascend_dump.so => <cann>/x86_64-linux/lib64/libascend_dump.so (0x00007740e405f000)",
+      "\tlibruntime.so => <cann>/x86_64-linux/lib64/libruntime.so (0x00007740dfe21000)",
+      "\tlibmmpa.so => <cann>/x86_64-linux/lib64/libmmpa.so (0x00007740e56c5000)",
+      "\tlibdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007740e6521000)",
+      "\tlibrt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007740e56c0000)",
+      "\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007740e56bb000)",
+      "\tliberror_manager.so => <cann>/x86_64-linux/lib64/liberror_manager.so (0x00007740e5668000)",
+      "\tlibhccl_legacy.so => <cann>/x86_64-linux/lib64/libhccl_legacy.so (0x00007740dfa00000)",
+      "\tlibccl_dpu.so => <cann>/x86_64-linux/lib64/libccl_dpu.so (0x00007740e403b000)",
+      "\tlibtsdclient.so => <cann>/x86_64-linux/lib64/libtsdclient.so (0x00007740df400000)",
+      "\tlibra.so => <cann>/x86_64-linux/lib64/libra.so (0x00007740e3dbe000)",
+      "\tlibtopoaddrinfo.so => <cann>/x86_64-linux/lib64/libtopoaddrinfo.so (0x00007740e3dad000)",
+      "\tlibascend_hal.so => <cann>/x86_64-linux/devlib/x86_64/libascend_hal.so (0x00007740e402e000)",
+      "\tlibascend_protobuf.so.3.13.0.0 => <cann>/x86_64-linux/lib64/libascend_protobuf.so.3.13.0.0 (0x00007740dee00000)",
+      "\tlibruntime_common.so => <cann>/x86_64-linux/lib64/libruntime_common.so (0x00007740e3d68000)",
+      "\tlibprofapi.so => <cann>/x86_64-linux/lib64/libprofapi.so (0x00007740e3d38000)",
+      "\tlibplatform.so => <cann>/x86_64-linux/lib64/libplatform.so (0x00007740e3cd7000)",
+      "\tlibmetadef.so => <cann>/x86_64-linux/lib64/libmetadef.so (0x00007740e26fc000)",
+      "\tlibra_hdc.so => <cann>/x86_64-linux/lib64/libra_hdc.so (0x00007740e3c86000)",
+      "\tlibra_peer.so => <cann>/x86_64-linux/lib64/libra_peer.so (0x00007740e3c61000)",
+      "\tlibascend_watchdog.so => <cann>/x86_64-linux/lib64/libascend_watchdog.so (0x00007740e3c5b000)",
+      "\tlibascend_trace.so => <cann>/x86_64-linux/lib64/libascend_trace.so (0x00007740de200000)",
+      "\tlibascendalog.so => <cann>/x86_64-linux/lib64/libascendalog.so (0x00007740e3c41000)",
+      "\tlibrs.so => <cann>/x86_64-linux/lib64/librs.so (0x00007740dde00000)",
+      "\tlibtls_adp.so => <cann>/x86_64-linux/lib64/libtls_adp.so (0x00007740dd800000)",
+      "\tlibascend_kms.so => <cann>/x86_64-linux/lib64/libascend_kms.so (0x00007740dd400000)"
+    ],
+    "needed": [
+      "libhccl.so",
+      "libhcomm.so",
+      "libacl_rt.so",
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ],
+    "required_official_needed": [
+      "libacl_rt.so",
+      "libhccl.so",
+      "libhcomm.so"
+    ],
+    "schema_version": "g3-b3-direct-elf-needed-v1",
+    "soname": "libhccl_direct_runtime_source.so",
+    "status": "PASS"
+  },
+  "execution": "NOT_EXECUTED",
+  "link": {
+    "artifact": "<build>/direct-runtime-source/libhccl_direct_runtime_source.so",
+    "artifact_executed": false,
+    "official_needed_present": true,
+    "official_undefined_symbols_present": true,
+    "schema_version": "g3-b3-direct-link-result-v1",
+    "shared_object_created": true,
+    "status": "PASS"
+  },
+  "runtime_api_calls": [],
+  "status": "PASS"
+}

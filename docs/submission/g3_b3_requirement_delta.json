@@ -1,0 +1,14 @@
+{
+  "schema_version": "g3-b3-requirement-delta-v1",
+  "baseline": "G3-A matrix plus frozen G3-B2 final baseline",
+  "requirements": [
+    {"id": "G3-B3-R1", "capability": "lossless sparsity-aware collective transport", "status": "HOST_EXECUTED", "evidence": "G3-B3-B"},
+    {"id": "G3-B3-R2", "capability": "CRC32, corruption detection, logical timeout, bounded retry", "status": "HOST_EXECUTED", "evidence": "G3-B3-C"},
+    {"id": "G3-B3-R3", "capability": "Schedule IR v2, selector, cost model, Agent and bounded backpressure integration", "status": "SIMULATOR_ONLY", "evidence": "G3-B3-D"},
+    {"id": "G3-B3-R4", "capability": "official ACL/HCCL actual call-expression source path", "status": "DIRECT_READINESS_ONLY", "evidence": "G3-B3-E"},
+    {"id": "G3-B3-R5", "capability": "real-device correctness and performance acceptance", "status": "HARDWARE_BLOCKED", "evidence": null}
+  ],
+  "g3_a_matrix_modified": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": []
+}

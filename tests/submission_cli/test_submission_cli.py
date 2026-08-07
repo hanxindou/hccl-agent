@@ -141,6 +141,16 @@ class SubmissionCliContractTests(unittest.TestCase):
         self.assertEqual(result["agent_selector_output"]["fallback"], "NONE")
         self.assertTrue(result["topology_aware_comparison"]["different"])
 
+    def test_g3_b3_quick_checks_are_lightweight_and_explicit(self):
+        result = core._g3_b3_quick_checks()
+        self.assertEqual(result["status"], "PASS")
+        self.assertEqual(result["schedule_ir_version"], "g3-b3-schedule-ir-v2")
+        self.assertEqual(result["sparse_mode"], "SPARSE_INDEX_VALUE")
+        self.assertEqual(result["dense_fallback_mode"], "DENSE")
+        self.assertEqual(result["crc32_known_vector"], "cbf43926")
+        self.assertEqual(result["bounded_retry"]["attempt_count"], 2)
+        self.assertFalse(result["large_benchmark_executed"])
+
 
 if __name__ == "__main__":
     unittest.main()

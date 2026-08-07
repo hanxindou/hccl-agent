@@ -1,0 +1,55 @@
+{
+  "c_python_parity": {
+    "c_record": {
+      "empty_crc32": "00000000",
+      "known_vector": "123456789",
+      "known_vector_crc32": "cbf43926",
+      "non_aligned_crc32": "ad5809f9",
+      "non_aligned_hex": "00010203040506"
+    },
+    "comparisons": {
+      "empty_crc32": true,
+      "known_vector": true,
+      "known_vector_crc32": true,
+      "non_aligned_crc32": true,
+      "non_aligned_hex": true
+    },
+    "passed": true,
+    "python_record": {
+      "empty_crc32": "00000000",
+      "known_vector": "123456789",
+      "known_vector_crc32": "cbf43926",
+      "non_aligned_crc32": "ad5809f9",
+      "non_aligned_hex": "00010203040506"
+    },
+    "schema_version": "g3-b3-crc-c-python-parity-v1",
+    "truth_label": "HOST_EXECUTED"
+  },
+  "known_vectors": {
+    "passed": true,
+    "schema_version": "g3-b3-crc-known-vectors-v1",
+    "vectors": [
+      {
+        "crc32": "00000000",
+        "hex": "",
+        "name": "empty"
+      },
+      {
+        "crc32": "cbf43926",
+        "name": "check",
+        "text": "123456789"
+      },
+      {
+        "crc32": "e8b7be43",
+        "hex": "61",
+        "name": "one-byte-a"
+      },
+      {
+        "crc32": "ad5809f9",
+        "hex": "00010203040506",
+        "name": "non-aligned"
+      }
+    ]
+  },
+  "status": "PASS"
+}

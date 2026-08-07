@@ -52,9 +52,14 @@ def test_cmake_target_is_default_off_isolated_and_not_a_test():
     assert "hccl_direct_runtime_source" not in source_block
 
 
-def test_submission_cli_cannot_execute_direct_runtime_source():
-    for path in (ROOT / "tools/submission_cli").rglob("*.py"):
-        assert "hccl_direct_runtime_source" not in path.read_text(encoding="utf-8")
+def test_submission_cli_only_builds_and_statically_inspects_direct_runtime_source():
+    source = (ROOT / "tools/submission_cli/core.py").read_text(encoding="utf-8")
+    assert "libhccl_direct_runtime_source.so" in source
+    assert "INSPECTED_NOT_LOADED_OR_EXECUTED" in source
+    assert "reachable_runtime_execution\": False" in source
+    assert "ctypes.CDLL" not in source
+    assert "dlopen(" not in source
+    assert not re.search(r'_run_linux\(\[\s*(?:_linux_path\()?runtime_source', source)
 
 
 def test_g3_b3_e_authority_evidence_is_complete_and_hash_valid():
