@@ -1,0 +1,35 @@
+{
+  "baseline_commit": "8402fb5",
+  "checkpoint": "G3-B3-B",
+  "checkpoint_status": "COMPLETED",
+  "direct_hccl_api_call": false,
+  "generated_artifacts": [
+    "sparse_codec_manifest.json",
+    "sparse_correctness.json",
+    "sparse_c_python_parity.json",
+    "sparse_benchmark.json",
+    "sparse_break_even.json",
+    "dense_fallback_audit.json",
+    "bounded_sparse_memory.json",
+    "claim_boundary_audit.json"
+  ],
+  "known_limitations": [
+    "no ACL/HCCL runtime or real device was executed"
+  ],
+  "old_evidence_modified": false,
+  "project_commit": "8402fb5106a6064b2e9117625d2f4099bf6e4ae9",
+  "real_ascend_npu_validated": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-b3-b-evidence-manifest-v1",
+  "source_documents": [
+    "docs/plans/g3-competition-delivery-readiness.md"
+  ],
+  "tests": [
+    "tests/feature_completion/test_g3_b3_sparse.py",
+    "hcccl/tests/test_sparse_collective.c"
+  ],
+  "warnings": [
+    "wire-byte values are modeled/host payload accounting, not physical network measurements"
+  ]
+}

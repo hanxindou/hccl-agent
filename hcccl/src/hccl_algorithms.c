@@ -8,6 +8,7 @@
 #include "hccl_algorithms.h"
 #include "hccl_comm.h"
 #include "schedule_ir.h"
+#include "internal/sparse_codec.h"
 #include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -384,6 +385,8 @@ static hcclResult_t run_allreduce_reference_kernel(
 )
 {
     hcclCommInternal* ctx;
+    hcclSparsePreparedInput prepared_send;
+    unsigned char element_bytes[sizeof(float)];
     int32_t N;
     int32_t rank;
     hcclResult_t rc;
@@ -416,9 +419,20 @@ static hcclResult_t run_allreduce_reference_kernel(
         return rc;
     }
 
+    if (hccl_sparse_prepared_init(
+            send_buf, count, data_type_size(data_type),
+            64U * 1024U * 1024U, &prepared_send) != 0) {
+        return HCCL_ERR_INTERNAL;
+    }
+
     for (size_t elem = 0; elem < count; elem++) {
+        if (hccl_sparse_prepared_copy_element(
+                &prepared_send, elem, element_bytes) != 0) {
+            hccl_sparse_prepared_destroy(&prepared_send);
+            return HCCL_ERR_INTERNAL;
+        }
         ctx->rank_values[(size_t)rank * count + elem] =
-            load_value(send_buf, elem, data_type);
+            load_value(element_bytes, 0, data_type);
     }
 
     for (size_t elem = 0; elem < count; elem++) {
@@ -444,6 +458,7 @@ static hcclResult_t run_allreduce_reference_kernel(
         );
     }
 
+    hccl_sparse_prepared_destroy(&prepared_send);
     return HCCL_SUCCESS;
 }
 
@@ -499,15 +514,20 @@ hcclResult_t ring_allgather(
     if (rc != HCCL_SUCCESS) return rc;
 
     {
-        const unsigned char* input = (const unsigned char*) send_buf;
+        hcclSparsePreparedInput prepared_send;
         unsigned char* staged = NULL;
         int32_t N = ctx->num_devices;
         size_t C = send_count;
         size_t elem_size = data_type_size(data_type);
 
-        (void)input_elems;
+        if (hccl_sparse_prepared_init(
+                send_buf, input_elems, elem_size,
+                64U * 1024U * 1024U, &prepared_send) != 0) {
+            return HCCL_ERR_INTERNAL;
+        }
         staged = (unsigned char*) calloc(output_elems, elem_size);
         if (staged == NULL) {
+            hccl_sparse_prepared_destroy(&prepared_send);
             return HCCL_ERR_INTERNAL;
         }
 
@@ -518,26 +538,49 @@ hcclResult_t ring_allgather(
          * by source rank as required by the C1 CPU_SIM contract.
          */
         for (int32_t dst = 0; dst < N; dst++) {
-            memcpy(
-                &staged[((size_t)dst * (size_t)N + (size_t)dst) * C * elem_size],
-                &input[(size_t)dst * C * elem_size],
-                C * elem_size
-            );
+            if (!prepared_send.sparse_selected) {
+                memcpy(
+                    &staged[((size_t)dst * (size_t)N + (size_t)dst) * C * elem_size],
+                    (const unsigned char*)prepared_send.dense_input + (size_t)dst * C * elem_size,
+                    C * elem_size);
+            } else {
+                for (size_t elem = 0; elem < C; elem++) {
+                    if (hccl_sparse_prepared_copy_element(
+                            &prepared_send, (size_t)dst * C + elem,
+                            &staged[(((size_t)dst * (size_t)N + (size_t)dst) * C + elem) * elem_size]) != 0) {
+                        hccl_sparse_prepared_destroy(&prepared_send);
+                        free(staged);
+                        return HCCL_ERR_INTERNAL;
+                    }
+                }
+            }
         }
 
         for (int32_t step = 1; step < N; step++) {
             for (int32_t dst = 0; dst < N; dst++) {
                 int32_t src = (dst - step + N) % N;
-                memcpy(
-                    &staged[((size_t)dst * (size_t)N + (size_t)src) * C * elem_size],
-                    &input[(size_t)src * C * elem_size],
-                    C * elem_size
-                );
+                if (!prepared_send.sparse_selected) {
+                    memcpy(
+                        &staged[((size_t)dst * (size_t)N + (size_t)src) * C * elem_size],
+                        (const unsigned char*)prepared_send.dense_input + (size_t)src * C * elem_size,
+                        C * elem_size);
+                } else {
+                    for (size_t elem = 0; elem < C; elem++) {
+                        if (hccl_sparse_prepared_copy_element(
+                                &prepared_send, (size_t)src * C + elem,
+                                &staged[(((size_t)dst * (size_t)N + (size_t)src) * C + elem) * elem_size]) != 0) {
+                            hccl_sparse_prepared_destroy(&prepared_send);
+                            free(staged);
+                            return HCCL_ERR_INTERNAL;
+                        }
+                    }
+                }
             }
         }
 
         memcpy(recv_buf, staged, output_elems * elem_size);
         free(staged);
+        hccl_sparse_prepared_destroy(&prepared_send);
         return HCCL_SUCCESS;
     }
 }
@@ -746,11 +789,18 @@ hcclResult_t mesh_reducescatter(
 
     {
         float* staged = (float*) calloc(output_elems, sizeof(float));
+        hcclSparsePreparedInput prepared_send;
+        unsigned char element_bytes[sizeof(float)];
         int32_t N = ctx->num_devices;
         size_t C = recv_count;
 
-        (void)input_elems;
         if (staged == NULL) {
+            return HCCL_ERR_INTERNAL;
+        }
+        if (hccl_sparse_prepared_init(
+                send_buf, input_elems, data_type_size(data_type),
+                64U * 1024U * 1024U, &prepared_send) != 0) {
+            free(staged);
             return HCCL_ERR_INTERNAL;
         }
 
@@ -768,10 +818,16 @@ hcclResult_t mesh_reducescatter(
                     size_t in_idx =
                         ((size_t)src * (size_t)N + (size_t)dst) * C + elem;
                     size_t out_idx = (size_t)dst * C + elem;
+                    if (hccl_sparse_prepared_copy_element(
+                            &prepared_send, in_idx, element_bytes) != 0) {
+                        hccl_sparse_prepared_destroy(&prepared_send);
+                        free(staged);
+                        return HCCL_ERR_INTERNAL;
+                    }
                     staged[out_idx] =
                         apply_reduce_op(
                             staged[out_idx],
-                            load_value(send_buf, in_idx, data_type),
+                            load_value(element_bytes, 0, data_type),
                             op
                         );
                 }
@@ -782,6 +838,7 @@ hcclResult_t mesh_reducescatter(
             store_value(recv_buf, out_idx, data_type, staged[out_idx]);
         }
         free(staged);
+        hccl_sparse_prepared_destroy(&prepared_send);
         return HCCL_SUCCESS;
     }
 }

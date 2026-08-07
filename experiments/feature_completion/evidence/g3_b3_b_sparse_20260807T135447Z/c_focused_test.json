@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "stdout": "  PASS sparse encode\n  PASS stable ordered index count\n  PASS sparse eligible by total modeled cost\n  PASS lossless reconstruction\n  PASS wire accounting\n  PASS dense encode\n  PASS dense fallback low sparsity\n  PASS invalid-index fixture encode\n  PASS duplicate index rejected\n  PASS uint16 index boundary\n  PASS uint32 index boundary\n  PASS empty sparse payload encode\n  PASS empty sparse payload decode\n  PASS FP16/BF16-width sparse encode\n  PASS FP16/BF16-width lossless decode\n  PASS sparse AllReduce correctness\n  PASS sparse AllReduce transform selected\n  PASS sparse AllGather correctness\n  PASS sparse AllGather transform selected\n  PASS sparse ReduceScatter correctness\n  PASS sparse ReduceScatter transform selected\nsparse collective tests: 21 run, 0 failed\n",
+  "truth_label": "CPU_EXECUTED"
+}

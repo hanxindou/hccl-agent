@@ -1,0 +1,84 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "fallback_reason": "LOW_SPARSITY",
+      "scenario_id": "S01",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.0,
+      "unfavorable_case_retained": true
+    },
+    {
+      "fallback_reason": "LOW_SPARSITY",
+      "scenario_id": "S02",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.25,
+      "unfavorable_case_retained": true
+    },
+    {
+      "fallback_reason": "METADATA_OVERHEAD",
+      "scenario_id": "S03",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.5,
+      "unfavorable_case_retained": true
+    },
+    {
+      "fallback_reason": "LOW_SPARSITY",
+      "scenario_id": "S06",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.0,
+      "unfavorable_case_retained": true
+    },
+    {
+      "fallback_reason": "LOW_SPARSITY",
+      "scenario_id": "S07",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.25,
+      "unfavorable_case_retained": true
+    },
+    {
+      "fallback_reason": "METADATA_OVERHEAD",
+      "scenario_id": "S08",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.5,
+      "unfavorable_case_retained": true
+    },
+    {
+      "fallback_reason": "LOW_SPARSITY",
+      "scenario_id": "S11",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.0,
+      "unfavorable_case_retained": true
+    },
+    {
+      "fallback_reason": "LOW_SPARSITY",
+      "scenario_id": "S12",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.25,
+      "unfavorable_case_retained": true
+    },
+    {
+      "fallback_reason": "METADATA_OVERHEAD",
+      "scenario_id": "S13",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.5,
+      "unfavorable_case_retained": true
+    },
+    {
+      "fallback_reason": "LOW_SPARSITY",
+      "scenario_id": "S16",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.0,
+      "unfavorable_case_retained": true
+    },
+    {
+      "fallback_reason": "METADATA_OVERHEAD",
+      "scenario_id": "S17",
+      "selected_mode": "DENSE",
+      "sparsity_ratio": 0.5,
+      "unfavorable_case_retained": true
+    }
+  ],
+  "schema_version": "g3-b3-dense-fallback-audit-v1",
+  "silent_fallback": false
+}

@@ -44,6 +44,7 @@ set(SOURCES
     src/hccl_comm.c
     src/hccl_algorithms.c
     src/schedule_ir.c
+    src/internal/sparse_codec.c
 )
 
 set(HEADERS
@@ -65,6 +66,7 @@ target_include_directories(hccl_plugin
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
+target_include_directories(hccl_plugin PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if(HCCL_BACKEND STREQUAL "CPU_SIM")
     target_compile_definitions(hccl_plugin PRIVATE HCCL_BACKEND_CPU_SIM=1)
@@ -397,6 +399,22 @@ add_executable(schedule_ir_dump
     src/schedule_ir.c
 )
 target_include_directories(schedule_ir_dump PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+add_executable(test_sparse_collective
+    tests/test_sparse_collective.c
+    ${SOURCES}
+)
+target_include_directories(test_sparse_collective PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+add_test(NAME test_sparse_collective COMMAND test_sparse_collective)
+
+add_executable(sparse_codec_dump
+    tests/sparse_codec_dump.c
+    src/internal/sparse_codec.c
+)
+target_include_directories(sparse_codec_dump PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set_tests_properties(test_dtype_emulation PROPERTIES
     WORKING_DIRECTORY $<TARGET_FILE_DIR:test_dtype_emulation>
 )
