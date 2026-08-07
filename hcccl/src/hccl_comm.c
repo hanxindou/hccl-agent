@@ -18,6 +18,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Internal-only Ring Schedule IR execution path; hidden by the ELF map. */
+hcclResult_t hccl_internal_ring_reducescatter(
+    const void*, void*, size_t, hcclDataType_t, hcclRedOp_t, hcclComm_t);
+
 /* ================================================================== */
 /*  Internal communicator struct  (hidden behind void*)                */
 /* ================================================================== */
@@ -243,12 +247,12 @@ hcclResult_t hcclReduceScatter(
 )
 {
     /*
-     * C2 maps the standard ReduceScatter wrapper to the CPU Mesh
-     * implementation using the project-local CPU_SIM [N][N][C] ->
-     * [N][C] flat buffer contract.
+     * G3-B2 maps the standard ReduceScatter wrapper to the internal Ring
+     * Schedule IR path. CPU_SIM uses the shared semantic reference kernel
+     * after the schedule is generated and validated.
      */
-    return mesh_reducescatter(send_buf, recv_buf, recv_count,
-                              data_type, op, comm);
+    return hccl_internal_ring_reducescatter(
+        send_buf, recv_buf, recv_count, data_type, op, comm);
 }
 
 hcclResult_t hcclBroadcast(

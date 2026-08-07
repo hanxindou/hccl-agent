@@ -1,0 +1,24 @@
+{
+  "boundaries": [
+    "divisible",
+    "non_divisible"
+  ],
+  "fallback_policy": "NONE",
+  "primitive_count": 3,
+  "rank_sizes": [
+    2,
+    4,
+    8,
+    16,
+    64
+  ],
+  "schedule_dump_path": "build/g3_b2_b/schedule_ir_dump",
+  "schedule_schema_path": "configs/optimization/g3_b2_schedule_ir_schema.json",
+  "schedule_schema_sha256": "14cbb6908232840a273d95bf1d4a7b92fb3783ef484f3e9c35a2073674079a31",
+  "schema_version": "g3-b2-b-evidence-v1",
+  "truth_labels": [
+    "CPU_EXECUTED",
+    "SIMULATED_ONLY",
+    "REAL_DEVICE_NOT_EXECUTED"
+  ]
+}
