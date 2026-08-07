@@ -1,0 +1,17 @@
+{
+  "bounded_memory": true,
+  "checkpoint": "G3-B2-D",
+  "checkpoint_status": "COMPLETED",
+  "correctness_after_successful_replan": true,
+  "event_count": 6,
+  "expected_no_path_failures": 1,
+  "measured_on_real_npu": false,
+  "pipeline_modes": [
+    "NO_OVERLAP",
+    "SIMULATED_PIPELINED_OVERLAP"
+  ],
+  "pipeline_truth": "SIMULATED_ONLY",
+  "public_abi_changed": false,
+  "real_device_api_executed": false,
+  "successful_replans": 5
+}

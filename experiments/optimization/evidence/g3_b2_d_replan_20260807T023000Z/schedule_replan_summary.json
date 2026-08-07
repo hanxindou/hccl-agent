@@ -1,0 +1,132 @@
+[
+  {
+    "event_id": "g3-b2-d-00",
+    "event_type": "LINK_DEGRADED",
+    "final_status": "REPLANNED",
+    "memory_plan": {
+      "bounded": true,
+      "bounded_materialization": true,
+      "buffer_count": 2,
+      "chunk_buffer_bytes": 262145,
+      "logical_message_bytes": 4194307,
+      "logical_to_materialized_ratio": 7.999975205,
+      "materialization_mode": "CHUNK_STREAMING",
+      "materialized_bytes": 524290,
+      "materialized_pipeline_depth": 2,
+      "memory_budget_bytes": 67108864,
+      "peak_materialized_bytes": 786435,
+      "temporary_buffer_bytes": 262145,
+      "within_budget": true
+    },
+    "new_rank_size": 16,
+    "new_schedule_hash": "6b78cf9b181a4c0bc3450b1f455f9984c31d3b903f85ec25abea33d37a430821",
+    "old_rank_size": 16,
+    "old_schedule_hash": "6a49e39298e158479aa0075128bcdd04a15a95f6f352a3eea0b587831dedecdc"
+  },
+  {
+    "event_id": "g3-b2-d-01",
+    "event_type": "LINK_DOWN",
+    "final_status": "REPLANNED",
+    "memory_plan": {
+      "bounded": true,
+      "bounded_materialization": true,
+      "buffer_count": 2,
+      "chunk_buffer_bytes": 524289,
+      "logical_message_bytes": 4194307,
+      "logical_to_materialized_ratio": 3.999995232,
+      "materialization_mode": "CHUNK_STREAMING",
+      "materialized_bytes": 1048578,
+      "materialized_pipeline_depth": 2,
+      "memory_budget_bytes": 67108864,
+      "peak_materialized_bytes": 1572867,
+      "temporary_buffer_bytes": 524289,
+      "within_budget": true
+    },
+    "new_rank_size": 8,
+    "new_schedule_hash": "59ac1ed54723ded9f9c16027b5f69f633e0b05cf764d15be61f0c62764314420",
+    "old_rank_size": 8,
+    "old_schedule_hash": "9b99ab8fa34770decd544e11f2d523fae1e4ced5dcef9fa5cbd0bf2a8509b8fb"
+  },
+  {
+    "event_id": "g3-b2-d-02",
+    "event_type": "LINK_RECOVERED",
+    "final_status": "REPLANNED",
+    "memory_plan": {
+      "bounded": true,
+      "bounded_materialization": true,
+      "buffer_count": 2,
+      "chunk_buffer_bytes": 524289,
+      "logical_message_bytes": 4194307,
+      "logical_to_materialized_ratio": 3.999995232,
+      "materialization_mode": "CHUNK_STREAMING",
+      "materialized_bytes": 1048578,
+      "materialized_pipeline_depth": 2,
+      "memory_budget_bytes": 67108864,
+      "peak_materialized_bytes": 1572867,
+      "temporary_buffer_bytes": 524289,
+      "within_budget": true
+    },
+    "new_rank_size": 8,
+    "new_schedule_hash": "738df81ad7aecfa9b59bc9030fcbc647ec0a5123473cf5aff3ac79fc35828a1f",
+    "old_rank_size": 8,
+    "old_schedule_hash": "9b99ab8fa34770decd544e11f2d523fae1e4ced5dcef9fa5cbd0bf2a8509b8fb"
+  },
+  {
+    "event_id": "g3-b2-d-03",
+    "event_type": "RANK_REMOVED",
+    "final_status": "REPLANNED",
+    "memory_plan": {
+      "bounded": true,
+      "bounded_materialization": true,
+      "buffer_count": 2,
+      "chunk_buffer_bytes": 279621,
+      "logical_message_bytes": 4194307,
+      "logical_to_materialized_ratio": 7.499985695,
+      "materialization_mode": "CHUNK_STREAMING",
+      "materialized_bytes": 559242,
+      "materialized_pipeline_depth": 2,
+      "memory_budget_bytes": 67108864,
+      "peak_materialized_bytes": 838863,
+      "temporary_buffer_bytes": 279621,
+      "within_budget": true
+    },
+    "new_rank_size": 15,
+    "new_schedule_hash": "5254527d159b7af326f8d6ae1c76cf4c0ada0f38a49c23ad2fbe55fb0a645b51",
+    "old_rank_size": 16,
+    "old_schedule_hash": "6a49e39298e158479aa0075128bcdd04a15a95f6f352a3eea0b587831dedecdc"
+  },
+  {
+    "event_id": "g3-b2-d-04",
+    "event_type": "RANK_RECOVERED",
+    "final_status": "REPLANNED",
+    "memory_plan": {
+      "bounded": true,
+      "bounded_materialization": true,
+      "buffer_count": 2,
+      "chunk_buffer_bytes": 262145,
+      "logical_message_bytes": 4194307,
+      "logical_to_materialized_ratio": 7.999975205,
+      "materialization_mode": "CHUNK_STREAMING",
+      "materialized_bytes": 524290,
+      "materialized_pipeline_depth": 2,
+      "memory_budget_bytes": 67108864,
+      "peak_materialized_bytes": 786435,
+      "temporary_buffer_bytes": 262145,
+      "within_budget": true
+    },
+    "new_rank_size": 16,
+    "new_schedule_hash": "9468130428f2eb6cd87ad6febfd850184100073411a9308826b16dcaabcc4334",
+    "old_rank_size": 15,
+    "old_schedule_hash": "df761d6410c61e3edd6b40b5ce3095920abca220f08f40eb4d1a3b946d19a3b2"
+  },
+  {
+    "event_id": "g3-b2-d-05",
+    "event_type": "NO_ALTERNATE_PATH",
+    "final_status": "EXPECTED_NO_PATH_FAILURE",
+    "memory_plan": null,
+    "new_rank_size": 8,
+    "new_schedule_hash": null,
+    "old_rank_size": 8,
+    "old_schedule_hash": "7433deb2d64833eef25bfb07f49da13b55851d1132359461e070d12b2dcd33ec"
+  }
+]

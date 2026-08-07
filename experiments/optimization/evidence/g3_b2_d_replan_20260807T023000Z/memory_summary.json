@@ -1,0 +1,34 @@
+[
+  {
+    "bounded": true,
+    "bounded_materialization": true,
+    "buffer_count": 2,
+    "chunk_buffer_bytes": 16777216,
+    "logical_message_bytes": 1073741824,
+    "logical_to_materialized_ratio": 21.333333333,
+    "materialization_mode": "CHUNK_STREAMING",
+    "materialized_bytes": 50331648,
+    "materialized_pipeline_depth": 3,
+    "memory_budget_bytes": 67108864,
+    "peak_materialized_bytes": 67108864,
+    "schedule_hash": "51ebd37bd425be5c0b21aa0f44fa506dcc2242a0955d167594ee5fe21258244d",
+    "temporary_buffer_bytes": 16777216,
+    "within_budget": true
+  },
+  {
+    "bounded": true,
+    "bounded_materialization": true,
+    "buffer_count": 2,
+    "chunk_buffer_bytes": 16777216,
+    "logical_message_bytes": 2147483648,
+    "logical_to_materialized_ratio": 42.666666667,
+    "materialization_mode": "CHUNK_STREAMING",
+    "materialized_bytes": 50331648,
+    "materialized_pipeline_depth": 3,
+    "memory_budget_bytes": 67108864,
+    "peak_materialized_bytes": 67108864,
+    "schedule_hash": "a9aa457f2768c4b4c15991d05b6d1552b2427cfde6b7ae78b8d1d434f93c5657",
+    "temporary_buffer_bytes": 16777216,
+    "within_budget": true
+  }
+]

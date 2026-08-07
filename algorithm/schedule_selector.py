@@ -5,6 +5,11 @@ from __future__ import annotations
 from typing import Any
 
 from .topology_schedules import SUPPORT_MATRIX, generate_schedule
+from .topology_model import route_link
+
+
+def _routes_valid(schedule: dict[str, Any], topology: dict[str, Any]) -> bool:
+    return all(route_link(topology, transfer["source_rank"], transfer["destination_rank"]) is not None for phase in schedule["phases"] for transfer in phase["transfers"])
 
 
 def select_schedule(primitive: str, topology: dict[str, Any], message_size_bytes: int, dtype: str="FP32", reduce_op: str|None="SUM", memory_limit_bytes: int=64*1024*1024) -> dict[str, Any]:
@@ -15,6 +20,8 @@ def select_schedule(primitive: str, topology: dict[str, Any], message_size_bytes
             continue
         try:
             schedule=generate_schedule(algorithm,primitive,topology,message_size_bytes,dtype,reduce_op,memory_limit_bytes)
+            if not _routes_valid(schedule, topology):
+                raise ValueError("NO_PATH")
             score=sum(row["final_link_time"] for row in schedule["estimated_metrics"]["phase_costs"]) if "phase_costs" in schedule["estimated_metrics"] else float(schedule["estimated_metrics"]["critical_path_steps"])
             candidates.append({"algorithm":algorithm,"schedule":schedule,"score":round(score,9)})
         except ValueError as error:

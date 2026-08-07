@@ -3,6 +3,7 @@
   "entries": [
     {"phase":"G3-B2-A","commit_message":"G3-B2-A freeze optimization baseline and agent trace contract","result_commit":"12f5b97","trace_run_ids":[]},
     {"phase":"G3-B2-B","commit_message":"G3-B2-B add collective schedule IR and ring primitive schedules","result_commit":"045e801","trace_run_ids":["g3-b2-b-schedule-ir"]},
-    {"phase":"G3-B2-C","commit_message":"G3-B2-C add topology-aware hierarchical collective optimization","result_commit":"RESOLVED_BY_LATER_MAPPING","trace_run_ids":["g3-b2-c-topology-optimization"]}
+    {"phase":"G3-B2-C","commit_message":"G3-B2-C add topology-aware hierarchical collective optimization","result_commit":"486974f","trace_run_ids":["g3-b2-c-topology-optimization"]},
+    {"phase":"G3-B2-D","commit_message":"G3-B2-D add dynamic schedule replanning and bounded pipeline model","result_commit":"RESOLVED_BY_LATER_MAPPING","trace_run_ids":["g3-b2-d-replan-memory-pipeline"]}
   ]
 }

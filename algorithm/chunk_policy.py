@@ -32,4 +32,4 @@ def select_chunk(message_size: int, rank_size: int, topology_depth: int, bandwid
         raise ValueError("no chunk candidate fits memory limit")
     selected = min(eligible, key=lambda row: (row["score"], row["chunk_size"]))
     actual = min(selected["chunk_size"], message_size)
-    return {"policy_version":CHUNK_POLICY_VERSION,"chunk_size":actual,"chunk_count":math.ceil(message_size/actual),"pipeline_depth":min(4,max(1,math.ceil(message_size/actual))),"selection_reason":"minimum frozen analytical candidate score","candidate_scores":scores}
+    return {"policy_version":CHUNK_POLICY_VERSION,"chunk_size":actual,"chunk_count":math.ceil(message_size/actual),"pipeline_depth":min(4,max(1,math.ceil(message_size/actual))),"memory_limit_bytes":memory_limit_bytes,"selection_reason":"minimum frozen analytical candidate score","candidate_scores":scores}

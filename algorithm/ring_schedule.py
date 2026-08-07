@@ -90,7 +90,7 @@ def generate_ring_schedule(
         "estimated_metrics": {"critical_path_steps": len(phases), "modeled_transfer_bytes": sum(t["length_bytes"] for p in phases for t in p["transfers"]), "phase_count": len(phases)},
         "failure_policy": {"fallback_policy": "NONE", "max_retries": 3, "on_no_path": "EXPECTED_NO_PATH_FAILURE", "retry_policy": "BOUNDED"},
         "hardware_profile_hash": hardware_profile_hash,
-        "memory_plan": {"bounded": True, "buffer_count": 2, "logical_message_bytes": message_size_bytes, "materialization_mode": "CHUNK_STREAMING", "peak_materialized_bytes": max(chunk["length_bytes"] for chunk in chunks) * 2},
+        "memory_plan": {"bounded": True, "buffer_count": 2, "logical_message_bytes": message_size_bytes, "materialization_mode": "CHUNK_STREAMING", "materialized_bytes": min(message_size_bytes, max(chunk["length_bytes"] for chunk in chunks) * 2), "chunk_buffer_bytes": max(chunk["length_bytes"] for chunk in chunks), "temporary_buffer_bytes": max(chunk["length_bytes"] for chunk in chunks), "peak_materialized_bytes": min(message_size_bytes, max(chunk["length_bytes"] for chunk in chunks) * 2), "memory_budget_bytes": 64 * 1024 * 1024, "within_budget": max(chunk["length_bytes"] for chunk in chunks) * 2 <= 64 * 1024 * 1024},
         "message_size_bytes": message_size_bytes,
         "phases": phases,
         "primitive": primitive,

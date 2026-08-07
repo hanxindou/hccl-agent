@@ -56,7 +56,7 @@ def _finalize(algorithm: str, primitive: str, topology: dict[str, Any], message:
         "dependencies":[{"from":phases[index-1]["phase_id"],"to":phases[index]["phase_id"]} for index in range(1,len(phases))],
         "dtype":dtype,"estimated_metrics":{"critical_path_steps":len(phases),"modeled_transfer_bytes":total_bytes,"phase_count":len(phases),"phase_costs":[phase["cost"] for phase in phases]},
         "failure_policy":{"fallback_policy":"NONE","max_retries":3,"on_no_path":"EXPECTED_NO_PATH_FAILURE","retry_policy":"BOUNDED"},
-        "hardware_profile_hash":"g3-b2-frozen-hardware-v1","memory_plan":{"bounded":True,"buffer_count":2,"logical_message_bytes":message,"materialization_mode":"CHUNK_STREAMING","peak_materialized_bytes":min(message,chunk["chunk_size"]*2)},
+        "hardware_profile_hash":"g3-b2-frozen-hardware-v1","memory_plan":{"bounded":True,"buffer_count":2,"logical_message_bytes":message,"materialization_mode":"CHUNK_STREAMING","materialized_bytes":min(message,chunk["chunk_size"]*2),"chunk_buffer_bytes":chunk["chunk_size"],"temporary_buffer_bytes":chunk["chunk_size"],"peak_materialized_bytes":min(message,chunk["chunk_size"]*2),"memory_budget_bytes":chunk["memory_limit_bytes"],"within_budget":chunk["chunk_size"]*2<=chunk["memory_limit_bytes"]},
         "message_size_bytes":message,"phases":phases,"primitive":primitive,"rank_size":topology["rank_size"],"reduce_op":None if primitive=="AllGather" else reduce_op,
         "schedule_id":f"{algorithm.lower()}-{primitive.lower()}-r{topology['rank_size']}-m{message}","schema_version":SCHEMA_VERSION,"topology_hash":topology["topology_hash"],
         "optimization_metadata":metadata,"chunk_selection":chunk,

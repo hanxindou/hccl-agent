@@ -178,7 +178,7 @@ static int serialize_schedule(
     }
     if (sb_addf(builder, "],\"dtype\":\"%s\",\"estimated_metrics\":{\"critical_path_steps\":%d,\"modeled_transfer_bytes\":%llu,\"phase_count\":%d},", dtype, phase_count, (unsigned long long)(message * (uint64_t)phase_count), phase_count) != 0) return -1;
     if (sb_addf(builder, "\"failure_policy\":{\"fallback_policy\":\"NONE\",\"max_retries\":3,\"on_no_path\":\"EXPECTED_NO_PATH_FAILURE\",\"retry_policy\":\"BOUNDED\"},") != 0) return -1;
-    if (sb_addf(builder, "\"hardware_profile_hash\":\"g3-b2-frozen-hardware-v1\",\"memory_plan\":{\"bounded\":true,\"buffer_count\":2,\"logical_message_bytes\":%llu,\"materialization_mode\":\"CHUNK_STREAMING\",\"peak_materialized_bytes\":%llu},", (unsigned long long)message, (unsigned long long)(chunk_size * 2U)) != 0) return -1;
+    if (sb_addf(builder, "\"hardware_profile_hash\":\"g3-b2-frozen-hardware-v1\",\"memory_plan\":{\"bounded\":true,\"buffer_count\":2,\"chunk_buffer_bytes\":%llu,\"logical_message_bytes\":%llu,\"materialization_mode\":\"CHUNK_STREAMING\",\"materialized_bytes\":%llu,\"memory_budget_bytes\":67108864,\"peak_materialized_bytes\":%llu,\"temporary_buffer_bytes\":%llu,\"within_budget\":true},", (unsigned long long)chunk_size, (unsigned long long)message, (unsigned long long)(message < chunk_size * 2U ? message : chunk_size * 2U), (unsigned long long)(message < chunk_size * 2U ? message : chunk_size * 2U), (unsigned long long)chunk_size) != 0) return -1;
     if (sb_addf(builder, "\"message_size_bytes\":%llu,\"phases\":[", (unsigned long long)message) != 0) return -1;
     for (phase = 0; phase < phase_count; ++phase) {
         int is_rs = has_rs && phase < ranks - 1;

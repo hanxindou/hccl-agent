@@ -66,7 +66,7 @@ def invariant_results(schedule: dict[str, Any]) -> list[dict[str, Any]]:
         ("dependencies_acyclic", dependencies_valid),
         ("transfer_rank_and_bytes", all(isinstance(t.get("source_rank"), int) and isinstance(t.get("destination_rank"), int) and 0 <= t["source_rank"] < rank_size and 0 <= t["destination_rank"] < rank_size and t["source_rank"] != t["destination_rank"] and isinstance(t.get("length_bytes"), int) and t["length_bytes"] >= 0 for t in transfers)),
         ("phase_transfer_cardinality", all(len(phase.get("transfers", [])) > 0 and phase.get("phase_type") in PHASE_TYPES for phase in phases)),
-        ("bounded_memory", schedule.get("memory_plan", {}).get("bounded") is True and schedule.get("memory_plan", {}).get("peak_materialized_bytes", message_size + 1) <= 2 * schedule.get("chunk_size_bytes", 0)),
+        ("bounded_memory", schedule.get("memory_plan", {}).get("bounded") is True and schedule.get("memory_plan", {}).get("within_budget", True) is True and schedule.get("memory_plan", {}).get("peak_materialized_bytes", message_size + 1) <= schedule.get("memory_plan", {}).get("memory_budget_bytes", 2 * schedule.get("chunk_size_bytes", 0))),
         ("schedule_hash", schedule.get("schedule_hash") == schedule_hash(schedule)),
     ]
     return [{"invariant": name, "passed": passed} for name, passed in results]
