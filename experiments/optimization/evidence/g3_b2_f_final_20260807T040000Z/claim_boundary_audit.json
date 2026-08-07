@@ -1,0 +1,13 @@
+{
+  "competition_performance_target_achievement": "PARTIALLY_SATISFIED",
+  "device_claims_made": false,
+  "internal_engineering_gate_met": true,
+  "real_device_api_executed": false,
+  "real_npu_performance": "NOT_MEASURED",
+  "real_training_acceleration": "NOT_MEASURED",
+  "runtime_api_calls": [],
+  "simulated_pipeline_included": true,
+  "status": "PASS",
+  "truth_label": "SIMULATED_ONLY",
+  "weighted_simulated_improvement_percent": 45.59283008
+}

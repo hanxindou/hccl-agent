@@ -1,0 +1,47 @@
+{
+  "interventions": [
+    {
+      "actor": "user",
+      "algorithm_choice": false,
+      "decision": "AUTHORIZED",
+      "phase": "G3-B2-A",
+      "scope": "one branch, six ordered commits, simulator-only optimization; no device API"
+    },
+    {
+      "actor": "Codex",
+      "algorithm_choice": false,
+      "decision": "IMPLEMENT_TRACE_AND_BASELINE_CONTRACT",
+      "phase": "G3-B2-A",
+      "scope": "contract implementation only"
+    },
+    {
+      "actor": "hccl-agent",
+      "algorithm_choice": true,
+      "decision": "SELECT_BY_CORRECTNESS_THEN_FROZEN_BENCHMARK",
+      "phase": "G3-B2-E",
+      "scope": "explicit schedule candidates"
+    },
+    {
+      "actor": "Codex",
+      "algorithm_choice": false,
+      "decision": "ONE_EVIDENCE_BASED_FLOW_CORRECTION",
+      "phase": "G3-B2-E",
+      "scope": "fix shard/chunk interpretation, benchmark-before-selection, and activate already-defined simulator-only pipeline exposed path"
+    },
+    {
+      "actor": "user",
+      "algorithm_choice": false,
+      "decision": "NO_SCENARIO_LEVEL_INTERVENTION",
+      "phase": "G3-B2-E",
+      "scope": "existing G3-B2 authorization only"
+    },
+    {
+      "actor": "user",
+      "algorithm_choice": false,
+      "decision": "AUTHORIZED_LOCAL_STAGING_COMMITS_AND_WSL_FOCUSED_TESTS",
+      "phase": "G3-B2-F",
+      "scope": "G3-B2 goal only; no push, merge, release, device API, or G3-C"
+    }
+  ],
+  "schema_version": "g3-b2-human-intervention-v1"
+}

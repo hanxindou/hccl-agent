@@ -5,6 +5,7 @@
     {"phase":"G3-B2-A","actor":"Codex","decision":"IMPLEMENT_TRACE_AND_BASELINE_CONTRACT","scope":"contract implementation only","algorithm_choice":false},
     {"phase":"G3-B2-E","actor":"hccl-agent","decision":"SELECT_BY_CORRECTNESS_THEN_FROZEN_BENCHMARK","scope":"explicit schedule candidates","algorithm_choice":true},
     {"phase":"G3-B2-E","actor":"Codex","decision":"ONE_EVIDENCE_BASED_FLOW_CORRECTION","scope":"fix shard/chunk interpretation, benchmark-before-selection, and activate already-defined simulator-only pipeline exposed path","algorithm_choice":false},
-    {"phase":"G3-B2-E","actor":"user","decision":"NO_SCENARIO_LEVEL_INTERVENTION","scope":"existing G3-B2 authorization only","algorithm_choice":false}
+    {"phase":"G3-B2-E","actor":"user","decision":"NO_SCENARIO_LEVEL_INTERVENTION","scope":"existing G3-B2 authorization only","algorithm_choice":false},
+    {"phase":"G3-B2-F","actor":"user","decision":"AUTHORIZED_LOCAL_STAGING_COMMITS_AND_WSL_FOCUSED_TESTS","scope":"G3-B2 goal only; no push, merge, release, device API, or G3-C","algorithm_choice":false}
   ]
 }

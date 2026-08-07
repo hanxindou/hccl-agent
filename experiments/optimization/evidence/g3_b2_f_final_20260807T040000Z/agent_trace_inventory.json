@@ -1,0 +1,86 @@
+{
+  "files": [
+    {
+      "path": "agent/evidence/g3_b2/commit_mapping.json",
+      "sha256": "fc61efc011106fa88d68ac2e3d6b0ac8c8b53c8c56a16848406d15b8c97365b0"
+    },
+    {
+      "path": "agent/evidence/g3_b2/evaluations/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "agent/evidence/g3_b2/evaluations/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "1fd972c19b18e4051de297904a12fdaead833dcf6b090ab97e2d403d5fd473ed"
+    },
+    {
+      "path": "agent/evidence/g3_b2/evaluations/g3-b2-e-authoritative-optimization.json",
+      "sha256": "e7de621a7d03ba13496df15416d81a6aa3b1898eda4aede2f40d8ee5a08cee8c"
+    },
+    {
+      "path": "agent/evidence/g3_b2/human_intervention.json",
+      "sha256": "89331dac7763247a700a40d0f1f5cd58f9bd9d050d44a198d7b45564dfd6df58"
+    },
+    {
+      "path": "agent/evidence/g3_b2/prompt_registry.json",
+      "sha256": "73262c233c1c5c9aa86d897dff168677a88c6557825bb8aafee83678d48dd412"
+    },
+    {
+      "path": "agent/evidence/g3_b2/proposals/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "agent/evidence/g3_b2/proposals/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "ae54ebf5d81db4f91a7332974f8883753579f18d25929585be5c94a58d05a6a5"
+    },
+    {
+      "path": "agent/evidence/g3_b2/proposals/g3-b2-e-authoritative-optimization.json",
+      "sha256": "ae54ebf5d81db4f91a7332974f8883753579f18d25929585be5c94a58d05a6a5"
+    },
+    {
+      "path": "agent/evidence/g3_b2/README.md",
+      "sha256": "a4dbd36a0e25d5b6552657fa3bd21992ecdc5dd6c42a679659a63bf9da52b58f"
+    },
+    {
+      "path": "agent/evidence/g3_b2/reflections/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "agent/evidence/g3_b2/reflections/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "999fffa4d0a87f19e19837c34a659f41f6eb7d511201e427e30ad724b569e601"
+    },
+    {
+      "path": "agent/evidence/g3_b2/reflections/g3-b2-e-authoritative-optimization.json",
+      "sha256": "bd7b84197d584d9a7653e6ead557c4b6171aea4e487042d4c7a72a7c2818201d"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "298caa8ad917a589fed6b00ac923a82fb78951b8c56fc0961ef38cc809560e0a"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3-b2-e-authoritative-optimization.json",
+      "sha256": "635abb39fee5917e3862934e81e07df91e0b317dcce52921597aa7b2d1aa0c8f"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3_b2_b_schedule_ir.json",
+      "sha256": "e0316deebf15f4060e68a7eecdbb4c211b08a4abc95dfaeb6b5ec90aeead4b0d"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3_b2_c_topology_optimization.json",
+      "sha256": "17d6e8924e3fe1ea3ca6ed6ef31583e6835f57a70d2d67997c54839cf50fabf1"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3_b2_d_replan_memory_pipeline.json",
+      "sha256": "58c2d5c7bcbf8d52e0954cd779995ed7e34253fcfcf7f759b85c2c82f771a9a6"
+    },
+    {
+      "path": "agent/evidence/g3_b2/trace_manifest.json",
+      "sha256": "2faaddb9a8e549b814aaaf28ab13e3491e394ec27de58cde393654dca0cf5204"
+    }
+  ],
+  "replayable_authoritative_run": "g3-b2-e-authoritative-optimization-round1",
+  "schema_version": "g3-b2-agent-trace-inventory-v1"
+}

@@ -1,0 +1,27 @@
+{
+  "Butterfly": {
+    "AllGather": "SUPPORTED",
+    "AllReduce": "SUPPORTED",
+    "ReduceScatter": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+  },
+  "Hierarchical": {
+    "AllGather": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR",
+    "AllReduce": "SUPPORTED",
+    "ReduceScatter": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+  },
+  "Mesh": {
+    "AllGather": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR",
+    "AllReduce": "SUPPORTED",
+    "ReduceScatter": "SUPPORTED"
+  },
+  "NHR": {
+    "AllGather": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR",
+    "AllReduce": "SUPPORTED",
+    "ReduceScatter": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+  },
+  "Ring": {
+    "AllGather": "SUPPORTED",
+    "AllReduce": "SUPPORTED",
+    "ReduceScatter": "SUPPORTED"
+  }
+}

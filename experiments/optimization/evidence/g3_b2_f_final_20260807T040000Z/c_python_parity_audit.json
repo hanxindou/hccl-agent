@@ -1,0 +1,242 @@
+[
+  {
+    "c_schedule_hash": "f48e7f11656e01357ad57f729a827b7bd569c9e63d437250b09587ff8b46be55",
+    "canonical_equal": true,
+    "message_size_bytes": 2048,
+    "primitive": "AllReduce",
+    "python_schedule_hash": "f48e7f11656e01357ad57f729a827b7bd569c9e63d437250b09587ff8b46be55",
+    "rank_size": 2
+  },
+  {
+    "c_schedule_hash": "85ce31db462a886696be1e68745fe262db8729c020721c9b1dc31007689222f7",
+    "canonical_equal": true,
+    "message_size_bytes": 2051,
+    "primitive": "AllReduce",
+    "python_schedule_hash": "85ce31db462a886696be1e68745fe262db8729c020721c9b1dc31007689222f7",
+    "rank_size": 2
+  },
+  {
+    "c_schedule_hash": "d1fdd35877e2813897716f8e432628cdbd7a758d10b699c4afd737ed29f4fc18",
+    "canonical_equal": true,
+    "message_size_bytes": 4096,
+    "primitive": "AllReduce",
+    "python_schedule_hash": "d1fdd35877e2813897716f8e432628cdbd7a758d10b699c4afd737ed29f4fc18",
+    "rank_size": 4
+  },
+  {
+    "c_schedule_hash": "4f392f440c382e9a1d9176cc1a1b38f49db1b35b72b2985d479e9208666e9d4a",
+    "canonical_equal": true,
+    "message_size_bytes": 4099,
+    "primitive": "AllReduce",
+    "python_schedule_hash": "4f392f440c382e9a1d9176cc1a1b38f49db1b35b72b2985d479e9208666e9d4a",
+    "rank_size": 4
+  },
+  {
+    "c_schedule_hash": "028027ba97faaad819fc450f4d2eb23f2501cccc8ea2abeb2e0cae6c9dee9efb",
+    "canonical_equal": true,
+    "message_size_bytes": 8192,
+    "primitive": "AllReduce",
+    "python_schedule_hash": "028027ba97faaad819fc450f4d2eb23f2501cccc8ea2abeb2e0cae6c9dee9efb",
+    "rank_size": 8
+  },
+  {
+    "c_schedule_hash": "a2b2c9df3d5d34a8a985f5b59c683ca4ce46b181e7c5a741194b504438d260b2",
+    "canonical_equal": true,
+    "message_size_bytes": 8195,
+    "primitive": "AllReduce",
+    "python_schedule_hash": "a2b2c9df3d5d34a8a985f5b59c683ca4ce46b181e7c5a741194b504438d260b2",
+    "rank_size": 8
+  },
+  {
+    "c_schedule_hash": "1ab6cbd01b93c3428db6ecd064abe2b0795acc538f4602a219b61be5540af024",
+    "canonical_equal": true,
+    "message_size_bytes": 16384,
+    "primitive": "AllReduce",
+    "python_schedule_hash": "1ab6cbd01b93c3428db6ecd064abe2b0795acc538f4602a219b61be5540af024",
+    "rank_size": 16
+  },
+  {
+    "c_schedule_hash": "acc3b7de24ad173a34b30a29de17e7f839f5d6caeb486968e4f45b32a034852f",
+    "canonical_equal": true,
+    "message_size_bytes": 16387,
+    "primitive": "AllReduce",
+    "python_schedule_hash": "acc3b7de24ad173a34b30a29de17e7f839f5d6caeb486968e4f45b32a034852f",
+    "rank_size": 16
+  },
+  {
+    "c_schedule_hash": "d148cc7d0c63306220f0a54f174ea385b3d825e4ec6d594a25418ba5b5a4de42",
+    "canonical_equal": true,
+    "message_size_bytes": 65536,
+    "primitive": "AllReduce",
+    "python_schedule_hash": "d148cc7d0c63306220f0a54f174ea385b3d825e4ec6d594a25418ba5b5a4de42",
+    "rank_size": 64
+  },
+  {
+    "c_schedule_hash": "c859b545f93a1c6c08ec3f3e90079e4762e6843a0ab0091b9d93f17d14b540f1",
+    "canonical_equal": true,
+    "message_size_bytes": 65539,
+    "primitive": "AllReduce",
+    "python_schedule_hash": "c859b545f93a1c6c08ec3f3e90079e4762e6843a0ab0091b9d93f17d14b540f1",
+    "rank_size": 64
+  },
+  {
+    "c_schedule_hash": "b62c02f265ff813489817fe3d3ecd50d2e7f8c2626a50f3163e43d527d95f9fb",
+    "canonical_equal": true,
+    "message_size_bytes": 2048,
+    "primitive": "AllGather",
+    "python_schedule_hash": "b62c02f265ff813489817fe3d3ecd50d2e7f8c2626a50f3163e43d527d95f9fb",
+    "rank_size": 2
+  },
+  {
+    "c_schedule_hash": "ad6bf8044ffa61de49386d77fc70fab985633fb705a6b567d16e1a02f3de64fa",
+    "canonical_equal": true,
+    "message_size_bytes": 2051,
+    "primitive": "AllGather",
+    "python_schedule_hash": "ad6bf8044ffa61de49386d77fc70fab985633fb705a6b567d16e1a02f3de64fa",
+    "rank_size": 2
+  },
+  {
+    "c_schedule_hash": "a55cf1021cbdd424696dacfa1eacb9ce05655fab7236f79363cda22ca833d21e",
+    "canonical_equal": true,
+    "message_size_bytes": 4096,
+    "primitive": "AllGather",
+    "python_schedule_hash": "a55cf1021cbdd424696dacfa1eacb9ce05655fab7236f79363cda22ca833d21e",
+    "rank_size": 4
+  },
+  {
+    "c_schedule_hash": "0380109273b1de911b6c6e662ed3abfd3b40dbe2a946ffc5f7b10d23dc06a312",
+    "canonical_equal": true,
+    "message_size_bytes": 4099,
+    "primitive": "AllGather",
+    "python_schedule_hash": "0380109273b1de911b6c6e662ed3abfd3b40dbe2a946ffc5f7b10d23dc06a312",
+    "rank_size": 4
+  },
+  {
+    "c_schedule_hash": "8338ae49010bc921704cc9fa349dc0e297b4f809e00dfecbafa9fcf43de398a4",
+    "canonical_equal": true,
+    "message_size_bytes": 8192,
+    "primitive": "AllGather",
+    "python_schedule_hash": "8338ae49010bc921704cc9fa349dc0e297b4f809e00dfecbafa9fcf43de398a4",
+    "rank_size": 8
+  },
+  {
+    "c_schedule_hash": "282aa0d8a34d6b207bf5c869d7bae8d241f56f738524779ad25ab04cad0eb064",
+    "canonical_equal": true,
+    "message_size_bytes": 8195,
+    "primitive": "AllGather",
+    "python_schedule_hash": "282aa0d8a34d6b207bf5c869d7bae8d241f56f738524779ad25ab04cad0eb064",
+    "rank_size": 8
+  },
+  {
+    "c_schedule_hash": "f5b4519010d8c35e7e9ee52901a068f3d11150ae45d96a187acd5bf1077559cc",
+    "canonical_equal": true,
+    "message_size_bytes": 16384,
+    "primitive": "AllGather",
+    "python_schedule_hash": "f5b4519010d8c35e7e9ee52901a068f3d11150ae45d96a187acd5bf1077559cc",
+    "rank_size": 16
+  },
+  {
+    "c_schedule_hash": "ead3fcf20bcaf29020ee172a37d3b787995254ac0e228daecdf2c27681086964",
+    "canonical_equal": true,
+    "message_size_bytes": 16387,
+    "primitive": "AllGather",
+    "python_schedule_hash": "ead3fcf20bcaf29020ee172a37d3b787995254ac0e228daecdf2c27681086964",
+    "rank_size": 16
+  },
+  {
+    "c_schedule_hash": "237a1f108afa16c5506c7b7685529a020cfd4c3deb8a2187e3e2d521a769ddcf",
+    "canonical_equal": true,
+    "message_size_bytes": 65536,
+    "primitive": "AllGather",
+    "python_schedule_hash": "237a1f108afa16c5506c7b7685529a020cfd4c3deb8a2187e3e2d521a769ddcf",
+    "rank_size": 64
+  },
+  {
+    "c_schedule_hash": "55af9fd12994cd14d2616c0d511498bb7048451c291d5ee4c33e0294b27f588f",
+    "canonical_equal": true,
+    "message_size_bytes": 65539,
+    "primitive": "AllGather",
+    "python_schedule_hash": "55af9fd12994cd14d2616c0d511498bb7048451c291d5ee4c33e0294b27f588f",
+    "rank_size": 64
+  },
+  {
+    "c_schedule_hash": "2656d0c79bd0856d4600f6e12534ab34eb0dfa714574dd02a9a7d090587334c2",
+    "canonical_equal": true,
+    "message_size_bytes": 2048,
+    "primitive": "ReduceScatter",
+    "python_schedule_hash": "2656d0c79bd0856d4600f6e12534ab34eb0dfa714574dd02a9a7d090587334c2",
+    "rank_size": 2
+  },
+  {
+    "c_schedule_hash": "a53f6495ef3da1a32d24d1e2c0fcd77b618a52e4853c174411637aef25da6c03",
+    "canonical_equal": true,
+    "message_size_bytes": 2051,
+    "primitive": "ReduceScatter",
+    "python_schedule_hash": "a53f6495ef3da1a32d24d1e2c0fcd77b618a52e4853c174411637aef25da6c03",
+    "rank_size": 2
+  },
+  {
+    "c_schedule_hash": "9e64a5625456c9129a90fdceecdec5d9e058d679e73ed7dbcc01c8525b581878",
+    "canonical_equal": true,
+    "message_size_bytes": 4096,
+    "primitive": "ReduceScatter",
+    "python_schedule_hash": "9e64a5625456c9129a90fdceecdec5d9e058d679e73ed7dbcc01c8525b581878",
+    "rank_size": 4
+  },
+  {
+    "c_schedule_hash": "ca170156ada99550115fbd0d31241b75b42ef9c3673a5b170e5e044dcafc20b7",
+    "canonical_equal": true,
+    "message_size_bytes": 4099,
+    "primitive": "ReduceScatter",
+    "python_schedule_hash": "ca170156ada99550115fbd0d31241b75b42ef9c3673a5b170e5e044dcafc20b7",
+    "rank_size": 4
+  },
+  {
+    "c_schedule_hash": "6678b670b31babe53f8553aba1d8c6217d8ca1271bd53485d754b1860df056b1",
+    "canonical_equal": true,
+    "message_size_bytes": 8192,
+    "primitive": "ReduceScatter",
+    "python_schedule_hash": "6678b670b31babe53f8553aba1d8c6217d8ca1271bd53485d754b1860df056b1",
+    "rank_size": 8
+  },
+  {
+    "c_schedule_hash": "83cce588a1fcc7e40452c2876aa77685d5fe79270f7e0a3dd2a3b06696033fb4",
+    "canonical_equal": true,
+    "message_size_bytes": 8195,
+    "primitive": "ReduceScatter",
+    "python_schedule_hash": "83cce588a1fcc7e40452c2876aa77685d5fe79270f7e0a3dd2a3b06696033fb4",
+    "rank_size": 8
+  },
+  {
+    "c_schedule_hash": "d385351d8166827cc1f4873df56355e0ccbb74caf5dc6d7e079ea6b338ab9c57",
+    "canonical_equal": true,
+    "message_size_bytes": 16384,
+    "primitive": "ReduceScatter",
+    "python_schedule_hash": "d385351d8166827cc1f4873df56355e0ccbb74caf5dc6d7e079ea6b338ab9c57",
+    "rank_size": 16
+  },
+  {
+    "c_schedule_hash": "e0d971399a64b20f1b95361d52d3e12ece10f1eaeaac5520414cf11389ddac18",
+    "canonical_equal": true,
+    "message_size_bytes": 16387,
+    "primitive": "ReduceScatter",
+    "python_schedule_hash": "e0d971399a64b20f1b95361d52d3e12ece10f1eaeaac5520414cf11389ddac18",
+    "rank_size": 16
+  },
+  {
+    "c_schedule_hash": "05e11875d9fee7f1a6b84de254cde5c976db4e89ef4f56777b4202a85b0b78c2",
+    "canonical_equal": true,
+    "message_size_bytes": 65536,
+    "primitive": "ReduceScatter",
+    "python_schedule_hash": "05e11875d9fee7f1a6b84de254cde5c976db4e89ef4f56777b4202a85b0b78c2",
+    "rank_size": 64
+  },
+  {
+    "c_schedule_hash": "4c4dbb82e8cca6956155517650314612128e5caee9fe47fb8a0788c2688ed633",
+    "canonical_equal": true,
+    "message_size_bytes": 65539,
+    "primitive": "ReduceScatter",
+    "python_schedule_hash": "4c4dbb82e8cca6956155517650314612128e5caee9fe47fb8a0788c2688ed633",
+    "rank_size": 64
+  }
+]

@@ -1,0 +1,691 @@
+{
+  "losses": 0,
+  "scenarios": [
+    {
+      "absolute_difference_us": -22.928966836,
+      "bandwidth": 0.10694784,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 0.03150482,
+        "p50_us": 32.50404695,
+        "p95_us": 32.536550997
+      },
+      "candidate": {
+        "algorithm": "Mesh",
+        "bandwidth": 0.10694784,
+        "p50_us": 9.575080114,
+        "p95_us": 9.584655194
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 1024,
+        "logical_message_bytes": 1024,
+        "logical_to_materialized_ratio": 1.0,
+        "materialized_bytes": 1024,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 2048,
+        "temporary_buffer_bytes": 1024,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 9.575080114,
+      "p95": 9.584655194,
+      "phase_count": 2.05,
+      "relative_difference_percent": -70.541883204,
+      "scenario_id": "P01",
+      "schedule_hash": "c626e492f46ad46c089aa590869c41e7ee9e4290c0c1e1d96c9c9f72c24dee13",
+      "topology": "full_mesh_8",
+      "weight": 1.0
+    },
+    {
+      "absolute_difference_us": -7.976764564,
+      "bandwidth": 4.243811131,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 2.798385051,
+        "p50_us": 23.420002396,
+        "p95_us": 23.443422399
+      },
+      "candidate": {
+        "algorithm": "Butterfly",
+        "bandwidth": 4.243811131,
+        "p50_us": 15.443237832,
+        "p95_us": 15.458681069
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 65536,
+        "logical_message_bytes": 65536,
+        "logical_to_materialized_ratio": 1.0,
+        "materialized_bytes": 65536,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 131072,
+        "temporary_buffer_bytes": 65536,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 15.443237832,
+      "p95": 15.458681069,
+      "phase_count": 3.0,
+      "relative_difference_percent": -34.059623176,
+      "scenario_id": "P02",
+      "schedule_hash": "fdef060ec2df64b07bf505aceb5268145bd3b5c2eae3f165569c2203bdb8adba",
+      "topology": "full_mesh_8",
+      "weight": 1.0
+    },
+    {
+      "absolute_difference_us": -3.316594485,
+      "bandwidth": 3.259242845,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 2.797787744,
+        "p50_us": 23.425002396,
+        "p95_us": 23.448427399
+      },
+      "candidate": {
+        "algorithm": "Mesh",
+        "bandwidth": 3.259242845,
+        "p50_us": 20.108407911,
+        "p95_us": 20.128516319
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 65536,
+        "logical_message_bytes": 65536,
+        "logical_to_materialized_ratio": 1.0,
+        "materialized_bytes": 65536,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 131072,
+        "temporary_buffer_bytes": 65536,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 20.108407911,
+      "p95": 20.128516319,
+      "phase_count": 2.05,
+      "relative_difference_percent": -14.15835281,
+      "scenario_id": "P03",
+      "schedule_hash": "f5c615836c8778a8e6ec1d17d166fbce9d1152ff05a1d9ef10225b78a8718373",
+      "topology": "full_mesh_8",
+      "weight": 1.0
+    },
+    {
+      "absolute_difference_us": -87.516570055,
+      "bandwidth": 7.649431937,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 4.66879161,
+        "p50_us": 224.600076686,
+        "p95_us": 224.824676763
+      },
+      "candidate": {
+        "algorithm": "Butterfly",
+        "bandwidth": 7.649431937,
+        "p50_us": 137.083506631,
+        "p95_us": 137.220590138
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 262144,
+        "logical_message_bytes": 1048576,
+        "logical_to_materialized_ratio": 1.0,
+        "materialized_bytes": 1048576,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 1310720,
+        "temporary_buffer_bytes": 262144,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 137.083506631,
+      "p95": 137.220590138,
+      "phase_count": 6.0,
+      "relative_difference_percent": -38.965512099,
+      "scenario_id": "P04",
+      "schedule_hash": "ed34b2b9b7420fe5a49e2d08e2de25b86d6f1aafe702f4ffe84dcf8fb6d65778",
+      "topology": "ring_8",
+      "weight": 1.0
+    },
+    {
+      "absolute_difference_us": -688.441693823,
+      "bandwidth": 21.410220816,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 11.397359691,
+        "p50_us": 1472.07561349,
+        "p95_us": 1473.547689103
+      },
+      "candidate": {
+        "algorithm": "Ring",
+        "bandwidth": 21.410220816,
+        "p50_us": 783.633919667,
+        "p95_us": 784.417553586
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 1048576,
+        "logical_message_bytes": 16777216,
+        "logical_to_materialized_ratio": 4.0,
+        "materialized_bytes": 4194304,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 5242880,
+        "temporary_buffer_bytes": 1048576,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 783.633919667,
+      "p95": 784.417553586,
+      "phase_count": 7.0,
+      "relative_difference_percent": -46.766734502,
+      "scenario_id": "P05",
+      "schedule_hash": "70d6c805fd951bc2b982f3f99d242cf2830da34cbc140c1b7e4c24c20c01b049",
+      "topology": "ring_8",
+      "weight": 1.0
+    },
+    {
+      "absolute_difference_us": -5609.097330398,
+      "bandwidth": 22.479111296,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 11.590791762,
+        "p50_us": 11580.071907918,
+        "p95_us": 11591.651979826
+      },
+      "candidate": {
+        "algorithm": "Ring",
+        "bandwidth": 22.479111296,
+        "p50_us": 5970.97457752,
+        "p95_us": 5976.945552098
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 4194304,
+        "logical_message_bytes": 134217728,
+        "logical_to_materialized_ratio": 8.0,
+        "materialized_bytes": 16777216,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 20971520,
+        "temporary_buffer_bytes": 4194304,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 5970.97457752,
+      "p95": 5976.945552098,
+      "phase_count": 7.0,
+      "relative_difference_percent": -48.4375,
+      "scenario_id": "P06",
+      "schedule_hash": "b0acdae7f8ef8bb82fc54dd32d437e9de369d07eefd34a344438c47c5b3337af",
+      "topology": "ring_8",
+      "weight": 1.0
+    },
+    {
+      "absolute_difference_us": -3094.8360304,
+      "bandwidth": 4.778506993,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 2.539734742,
+        "p50_us": 6605.716864853,
+        "p95_us": 6612.322581718
+      },
+      "candidate": {
+        "algorithm": "Ring",
+        "bandwidth": 4.778506993,
+        "p50_us": 3510.880834453,
+        "p95_us": 3514.391715288
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 1048576,
+        "logical_message_bytes": 16777216,
+        "logical_to_materialized_ratio": 4.0,
+        "materialized_bytes": 4194304,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 5242880,
+        "temporary_buffer_bytes": 1048576,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 3510.880834453,
+      "p95": 3514.391715288,
+      "phase_count": 30.0,
+      "relative_difference_percent": -46.850873171,
+      "scenario_id": "P07",
+      "schedule_hash": "84ceb48b391a4d6c0f3ee7a1f3e428bcdbff458b551bdab2f8c7f81868c42fc4",
+      "topology": "ring_16",
+      "weight": 1.0
+    },
+    {
+      "absolute_difference_us": -158.64588598,
+      "bandwidth": 5.490886648,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 2.999215785,
+        "p50_us": 349.607402027,
+        "p95_us": 349.957009429
+      },
+      "candidate": {
+        "algorithm": "Butterfly",
+        "bandwidth": 5.490886648,
+        "p50_us": 190.961516047,
+        "p95_us": 191.152477563
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 262144,
+        "logical_message_bytes": 1048576,
+        "logical_to_materialized_ratio": 1.0,
+        "materialized_bytes": 1048576,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 1310720,
+        "temporary_buffer_bytes": 262144,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 190.961516047,
+      "p95": 191.152477563,
+      "phase_count": 4.0,
+      "relative_difference_percent": -45.378297216,
+      "scenario_id": "P08",
+      "schedule_hash": "1669150740f81ce7616eacfc75b3fa505ec231892369993712ca37a91e7e034c",
+      "topology": "ring_16",
+      "weight": 1.0
+    },
+    {
+      "absolute_difference_us": -21.678373239,
+      "bandwidth": 0.464353099,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 0.402523315,
+        "p50_us": 162.808587627,
+        "p95_us": 162.971396214
+      },
+      "candidate": {
+        "algorithm": "Mesh",
+        "bandwidth": 0.464353099,
+        "p50_us": 141.130214388,
+        "p95_us": 141.271344603
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 65536,
+        "logical_message_bytes": 65536,
+        "logical_to_materialized_ratio": 1.0,
+        "materialized_bytes": 65536,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 131072,
+        "temporary_buffer_bytes": 65536,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 141.130214388,
+      "p95": 141.271344603,
+      "phase_count": 3.25,
+      "relative_difference_percent": -13.315251704,
+      "scenario_id": "P09",
+      "schedule_hash": "30f92c76965a2d6fbc9a74ba06b5a02327318b5797b079564112f91a3c78e1a0",
+      "topology": "ring_16",
+      "weight": 1.0
+    },
+    {
+      "absolute_difference_us": -71861.885879704,
+      "bandwidth": 1.974551101,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 0.959814759,
+        "p50_us": 139834.319533312,
+        "p95_us": 139974.153852845
+      },
+      "candidate": {
+        "algorithm": "Hierarchical",
+        "bandwidth": 1.974551101,
+        "p50_us": 67972.433653608,
+        "p95_us": 68040.406087262
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 4194304,
+        "logical_message_bytes": 134217728,
+        "logical_to_materialized_ratio": 8.0,
+        "materialized_bytes": 16777216,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 20971520,
+        "temporary_buffer_bytes": 4194304,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 67972.433653608,
+      "p95": 68040.406087262,
+      "phase_count": 12.0,
+      "relative_difference_percent": -51.390735922,
+      "scenario_id": "P10",
+      "schedule_hash": "28600ce2c6456d2621f419d77cd9daa62558970f746407177e9f98086e5a7523",
+      "topology": "fat_tree_64",
+      "weight": 1.5
+    },
+    {
+      "absolute_difference_us": -4264.20174414,
+      "bandwidth": 3.469048502,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 1.843539553,
+        "p50_us": 9100.363720832,
+        "p95_us": 9109.464084553
+      },
+      "candidate": {
+        "algorithm": "Ring",
+        "bandwidth": 3.469048502,
+        "p50_us": 4836.161976692,
+        "p95_us": 4840.998138669
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 1048576,
+        "logical_message_bytes": 16777216,
+        "logical_to_materialized_ratio": 4.0,
+        "materialized_bytes": 4194304,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 5242880,
+        "temporary_buffer_bytes": 1048576,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 4836.161976692,
+      "p95": 4840.998138669,
+      "phase_count": 63.0,
+      "relative_difference_percent": -46.857486964,
+      "scenario_id": "P11",
+      "schedule_hash": "e362a4fc41c48975af9d92a023938ae935c41aa84b6bfeb7fda6beb8934c7339",
+      "topology": "fat_tree_64",
+      "weight": 1.5
+    },
+    {
+      "absolute_difference_us": -357.206102832,
+      "bandwidth": 1.757570306,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 1.099345209,
+        "p50_us": 953.799607552,
+        "p95_us": 954.75340716
+      },
+      "candidate": {
+        "algorithm": "Ring",
+        "bandwidth": 1.757570306,
+        "p50_us": 596.59350472,
+        "p95_us": 597.190098225
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 262144,
+        "logical_message_bytes": 1048576,
+        "logical_to_materialized_ratio": 1.0,
+        "materialized_bytes": 1048576,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 1310720,
+        "temporary_buffer_bytes": 262144,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 596.59350472,
+      "p95": 597.190098225,
+      "phase_count": 63.0,
+      "relative_difference_percent": -37.450854457,
+      "scenario_id": "P12",
+      "schedule_hash": "bec43d1876845d48ff52f594f6bcf5f59963c2c79d1794a1574b5380b7ab11b6",
+      "topology": "fat_tree_64",
+      "weight": 1.5
+    },
+    {
+      "absolute_difference_us": -180041.613852485,
+      "bandwidth": 0.782256054,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 0.381707926,
+        "p50_us": 351614.781422222,
+        "p95_us": 351966.396203644
+      },
+      "candidate": {
+        "algorithm": "Hierarchical",
+        "bandwidth": 0.782256054,
+        "p50_us": 171573.167569737,
+        "p95_us": 171744.740737307
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 4194304,
+        "logical_message_bytes": 134217728,
+        "logical_to_materialized_ratio": 8.0,
+        "materialized_bytes": 16777216,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 20971520,
+        "temporary_buffer_bytes": 4194304,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 171573.167569737,
+      "p95": 171744.740737307,
+      "phase_count": 8.0,
+      "relative_difference_percent": -51.204222167,
+      "scenario_id": "P13",
+      "schedule_hash": "ad3d1aa20a6b31403e37356037a080cd8d02ca830807c77b2ba07e73d62b870e",
+      "topology": "asymmetric_16",
+      "weight": 1.5
+    },
+    {
+      "absolute_difference_us": -10429.026604167,
+      "bandwidth": 1.418998599,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 0.753944638,
+        "p50_us": 22251.990088889,
+        "p95_us": 22274.242078978
+      },
+      "candidate": {
+        "algorithm": "Ring",
+        "bandwidth": 1.418998599,
+        "p50_us": 11822.963484722,
+        "p95_us": 11834.786448207
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 1048576,
+        "logical_message_bytes": 16777216,
+        "logical_to_materialized_ratio": 4.0,
+        "materialized_bytes": 4194304,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 5242880,
+        "temporary_buffer_bytes": 1048576,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 11822.963484722,
+      "p95": 11834.786448207,
+      "phase_count": 15.0,
+      "relative_difference_percent": -46.867837719,
+      "scenario_id": "P14",
+      "schedule_hash": "55e36b9207df7105731a5af4777e0fae92f0118717af5b2bab068aac87f24912",
+      "topology": "asymmetric_16",
+      "weight": 1.5
+    },
+    {
+      "absolute_difference_us": -631.008283334,
+      "bandwidth": 0.99583787,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 0.622675875,
+        "p50_us": 1683.938755556,
+        "p95_us": 1685.622694311
+      },
+      "candidate": {
+        "algorithm": "Ring",
+        "bandwidth": 0.99583787,
+        "p50_us": 1052.930472222,
+        "p95_us": 1053.983402694
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 262144,
+        "logical_message_bytes": 1048576,
+        "logical_to_materialized_ratio": 1.0,
+        "materialized_bytes": 1048576,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 1310720,
+        "temporary_buffer_bytes": 262144,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 1052.930472222,
+      "p95": 1053.983402694,
+      "phase_count": 15.0,
+      "relative_difference_percent": -37.472163477,
+      "scenario_id": "P15",
+      "schedule_hash": "68e339cce06a7a953cae54e7c2f3ab2369581cbdd91f7544f59fbbb8309737dd",
+      "topology": "asymmetric_16",
+      "weight": 1.5
+    },
+    {
+      "absolute_difference_us": -204167.723988201,
+      "bandwidth": 0.695350337,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 0.337915182,
+        "p50_us": 397185.597893333,
+        "p95_us": 397582.783491226
+      },
+      "candidate": {
+        "algorithm": "Hierarchical",
+        "bandwidth": 0.695350337,
+        "p50_us": 193017.873905132,
+        "p95_us": 193210.891779037
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 4194304,
+        "logical_message_bytes": 134217728,
+        "logical_to_materialized_ratio": 8.0,
+        "materialized_bytes": 16777216,
+        "materialized_pipeline_depth": 4,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 20971520,
+        "temporary_buffer_bytes": 4194304,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 193017.873905132,
+      "p95": 193210.891779037,
+      "phase_count": 12.0,
+      "relative_difference_percent": -51.403607047,
+      "scenario_id": "P16",
+      "schedule_hash": "35a71ffdb3788babf48e651724c56ace453d2caa0fb721ed4dd845486757b988",
+      "topology": "asymmetric_64",
+      "weight": 2.0
+    },
+    {
+      "absolute_difference_us": -676650.890233626,
+      "bandwidth": 1.744178792,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 0.830855317,
+        "p50_us": 1292203.8746816,
+        "p95_us": 1293496.078556282
+      },
+      "candidate": {
+        "algorithm": "Hierarchical",
+        "bandwidth": 1.744178792,
+        "p50_us": 615552.984447974,
+        "p95_us": 616168.537432422
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 16777216,
+        "logical_message_bytes": 1073741824,
+        "logical_to_materialized_ratio": 21.333333333,
+        "materialized_bytes": 50331648,
+        "materialized_pipeline_depth": 3,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 67108864,
+        "temporary_buffer_bytes": 16777216,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 615552.984447974,
+      "p95": 616168.537432422,
+      "phase_count": 20.0,
+      "relative_difference_percent": -52.364096989,
+      "scenario_id": "P17",
+      "schedule_hash": "c39275b79bcb67ea67b366d0204836a60b404bde650a46dc31ed852605ed68a2",
+      "topology": "logical_1024",
+      "weight": 2.0
+    },
+    {
+      "absolute_difference_us": -302144.128770609,
+      "bandwidth": 3.121276767,
+      "baseline": {
+        "algorithm": "Ring",
+        "bandwidth": 1.661671954,
+        "p50_us": 646116.9773408,
+        "p95_us": 646763.094318141
+      },
+      "candidate": {
+        "algorithm": "Butterfly",
+        "bandwidth": 3.121276767,
+        "p50_us": 343972.848570191,
+        "p95_us": 344316.821418761
+      },
+      "correctness": true,
+      "memory": {
+        "bounded_materialization": true,
+        "chunk_buffer_bytes": 16777216,
+        "logical_message_bytes": 1073741824,
+        "logical_to_materialized_ratio": 21.333333333,
+        "materialized_bytes": 50331648,
+        "materialized_pipeline_depth": 3,
+        "memory_budget_bytes": 67108864,
+        "peak_materialized_bytes": 67108864,
+        "temporary_buffer_bytes": 16777216,
+        "within_budget": true
+      },
+      "outcome": "WIN",
+      "p50": 343972.848570191,
+      "p95": 344316.821418761,
+      "phase_count": 10.0,
+      "relative_difference_percent": -46.763069129,
+      "scenario_id": "P18",
+      "schedule_hash": "143c829bad04f4f43bd6b632ccffef680317f6c8ce876f5431653662225f595c",
+      "topology": "logical_1024",
+      "weight": 2.0
+    }
+  ],
+  "ties": 0,
+  "wins": 18
+}

@@ -1,0 +1,63 @@
+{
+  "base_matrix_modified": false,
+  "base_requirement_matrix": "docs/submission/requirement_matrix.json",
+  "deltas": [
+    {
+      "evidence": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "requirement_id": "REQ-INNOV-001",
+      "suggested_status": "PARTIALLY_SATISFIED"
+    },
+    {
+      "evidence": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "requirement_id": "REQ-INNOV-002",
+      "suggested_status": "PARTIALLY_SATISFIED"
+    },
+    {
+      "evidence": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "requirement_id": "REQ-INNOV-005",
+      "suggested_status": "PARTIALLY_SATISFIED"
+    },
+    {
+      "evidence": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "requirement_id": "REQ-SCALE-002",
+      "suggested_status": "PARTIALLY_SATISFIED"
+    },
+    {
+      "evidence": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "requirement_id": "REQ-TOPO-005",
+      "suggested_status": "PARTIALLY_SATISFIED"
+    },
+    {
+      "evidence": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "requirement_id": "REQ-REL-003",
+      "suggested_status": "PARTIALLY_SATISFIED"
+    },
+    {
+      "evidence": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "requirement_id": "REQ-AGENT-005",
+      "suggested_status": "PARTIALLY_SATISFIED"
+    },
+    {
+      "evidence": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "requirement_id": "REQ-AGENT-006",
+      "suggested_status": "PARTIALLY_SATISFIED"
+    },
+    {
+      "evidence": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "requirement_id": "REQ-AGENT-007",
+      "suggested_status": "PARTIALLY_SATISFIED"
+    }
+  ],
+  "not_promoted": [
+    "real hardware discovery",
+    "real zero-CPU intervention",
+    "real UB/HBM reuse",
+    "real training 90% acceleration",
+    "real msprof",
+    "real failover",
+    "real 72h",
+    "official loader ABI"
+  ],
+  "schema_version": "g3-b2-requirement-delta-v1",
+  "truth_boundary": "SIMULATED_ONLY; proposed deltas do not establish real NPU, training, profiler, failover, loader ABI, or 72h acceptance"
+}
