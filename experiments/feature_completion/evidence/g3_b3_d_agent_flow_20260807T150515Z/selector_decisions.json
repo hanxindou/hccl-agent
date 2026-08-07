@@ -1,0 +1,1378 @@
+{
+  "all_correctness_hard_gates_passed": true,
+  "dense_count": 13,
+  "fallback": "NONE",
+  "rows": [
+    {
+      "algorithm": "Ring",
+      "candidate_count": 4,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Butterfly",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Mesh",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "NHR",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "NO_VALID_HIERARCHY"
+        }
+      ],
+      "scenario_id": "S01",
+      "schedule_hash": "136f3aaf38d45c0e3b0e3ab1a2f63a97e8bb7399d27730d553123d31e86d685d",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.0,
+        "base_schedule_score_us": 37.17504,
+        "communication_cost_us": 37.375764082,
+        "crc_bytes": 448,
+        "crc_cost_us": 46.0544,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 0.02624,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 922,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 3584,
+        "logical_bytes": 917504,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 917504,
+        "retransmitted_bytes": 922,
+        "retry_penalty_us": 0.0922,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 83.548604082,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 917504,
+        "wire_bytes": 921536
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 2,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Butterfly",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Mesh",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S02",
+      "schedule_hash": "8e4cf778b2b616b078d077625afe6f14b2229ee5db25e63df69b9adb47eac754",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.2,
+        "base_schedule_score_us": 18.58752,
+        "communication_cost_us": 18.687882041,
+        "crc_bytes": 224,
+        "crc_cost_us": 23.0272,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 0.02624,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 461,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 1792,
+        "logical_bytes": 458752,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 458752,
+        "retransmitted_bytes": 461,
+        "retry_penalty_us": 0.0461,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 41.987422041,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 458752,
+        "wire_bytes": 460768
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 2,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "METADATA_OVERHEAD"
+        },
+        {
+          "algorithm": "Butterfly",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Mesh",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "METADATA_OVERHEAD"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S03",
+      "schedule_hash": "d9d1bea78cce829aaa969fcea0ac9d1eb266a0a047f73b1a5a5a61fe8dbab28c",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.3,
+        "base_schedule_score_us": 18.58752,
+        "communication_cost_us": 18.687882041,
+        "crc_bytes": 224,
+        "crc_cost_us": 23.0272,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 0.02624,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 461,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 1792,
+        "logical_bytes": 458752,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 458752,
+        "retransmitted_bytes": 461,
+        "retry_penalty_us": 0.0461,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 42.087422041,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 458752,
+        "wire_bytes": 460768
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 8,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "SPARSE_INDEX_VALUE",
+      "rejected": [
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "NO_VALID_HIERARCHY"
+        }
+      ],
+      "scenario_id": "S04",
+      "schedule_hash": "3002d17e7a23dd50811f0130f612316132373cddbac2598b7f327b09b8c2d3be",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.1,
+        "base_schedule_score_us": 37.17504,
+        "communication_cost_us": 14.408820615,
+        "crc_bytes": 448,
+        "crc_cost_us": 17.7408,
+        "credit_window": 4,
+        "decode_cost_us": 0.00656,
+        "detect_cost_us": 0.02624,
+        "encode_cost_us": 0.00656,
+        "expected_retry_bytes": 355,
+        "index_bytes": 114688,
+        "integrity_metadata_bytes": 3584,
+        "logical_bytes": 917504,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 7168,
+        "payload_bytes": 229376,
+        "retransmitted_bytes": 355,
+        "retry_penalty_us": 0.0355,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "SPARSE_INDEX_VALUE",
+        "total_cost_us": 32.324480615,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 229376,
+        "wire_bytes": 355264
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 4,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "SPARSE_INDEX_VALUE",
+      "rejected": [
+        {
+          "algorithm": "Mesh",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S05",
+      "schedule_hash": "6b7af4683e2325e9fefb9b42421a3dc7d7da92f959b7fc7ded7f1f29fab09e3a",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.0,
+        "base_schedule_score_us": 18.58752,
+        "communication_cost_us": 3.947425049,
+        "crc_bytes": 224,
+        "crc_cost_us": 4.8552,
+        "credit_window": 4,
+        "decode_cost_us": 0.00264,
+        "detect_cost_us": 0.02624,
+        "encode_cost_us": 0.00264,
+        "expected_retry_bytes": 97,
+        "index_bytes": 45864,
+        "integrity_metadata_bytes": 1792,
+        "logical_bytes": 458752,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 3584,
+        "payload_bytes": 45864,
+        "retransmitted_bytes": 97,
+        "retry_penalty_us": 0.0097,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "SPARSE_INDEX_VALUE",
+        "total_cost_us": 8.843845049,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 45864,
+        "wire_bytes": 97328
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 2,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Butterfly",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Mesh",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S06",
+      "schedule_hash": "51ada732fed33d0820b926f005e4a4ef0d451ea4b4e71fc22f6b21a4d8900bb3",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.2,
+        "base_schedule_score_us": 232.2864,
+        "communication_cost_us": 232.646408594,
+        "crc_bytes": 960,
+        "crc_cost_us": 786.816,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 0.41944,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 15737,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 7680,
+        "logical_bytes": 15728640,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 15728640,
+        "retransmitted_bytes": 15737,
+        "retry_penalty_us": 1.5737,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 1021.655548594,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 15728640,
+        "wire_bytes": 15737280
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 4,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Butterfly",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Mesh",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "NHR",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "NO_PATH"
+        }
+      ],
+      "scenario_id": "S07",
+      "schedule_hash": "a38158f72a9574a9f0ebb9357c7aa08aed8de601f44e73556740b5c5b18fb0e8",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.7,
+        "base_schedule_score_us": 464.5728,
+        "communication_cost_us": 465.292831956,
+        "crc_bytes": 1920,
+        "crc_cost_us": 1573.632,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 0.41944,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 31475,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 15360,
+        "logical_bytes": 31457280,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 31457280,
+        "retransmitted_bytes": 31475,
+        "retry_penalty_us": 3.1475,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 2043.191771956,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 31457280,
+        "wire_bytes": 31474560
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 2,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "METADATA_OVERHEAD"
+        },
+        {
+          "algorithm": "Butterfly",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "METADATA_OVERHEAD"
+        },
+        {
+          "algorithm": "Mesh",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S08",
+      "schedule_hash": "a2335e7b18cfd7131c2d523a750857c664922b09db44c5071b7be3b3e487add9",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.1,
+        "base_schedule_score_us": 232.2864,
+        "communication_cost_us": 232.646408594,
+        "crc_bytes": 960,
+        "crc_cost_us": 786.816,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 0.41944,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 15737,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 7680,
+        "logical_bytes": 15728640,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 15728640,
+        "retransmitted_bytes": 15737,
+        "retry_penalty_us": 1.5737,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 1021.555548594,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 15728640,
+        "wire_bytes": 15737280
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 4,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "SPARSE_INDEX_VALUE",
+      "rejected": [
+        {
+          "algorithm": "Butterfly",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S09",
+      "schedule_hash": "e5eba18577aac429d34af3f0a95ab7477a1479cca8ae40d75e67c8973b115e22",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.0,
+        "base_schedule_score_us": 232.2864,
+        "communication_cost_us": 116.614133833,
+        "crc_bytes": 960,
+        "crc_cost_us": 394.368,
+        "credit_window": 4,
+        "decode_cost_us": 0.10488,
+        "detect_cost_us": 0.41944,
+        "encode_cost_us": 0.10488,
+        "expected_retry_bytes": 7888,
+        "index_bytes": 3932160,
+        "integrity_metadata_bytes": 7680,
+        "logical_bytes": 15728640,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 15360,
+        "payload_bytes": 3932160,
+        "retransmitted_bytes": 7888,
+        "retry_penalty_us": 0.7888,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "SPARSE_INDEX_VALUE",
+        "total_cost_us": 512.400133833,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 3932160,
+        "wire_bytes": 7888320
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 8,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "SPARSE_INDEX_VALUE",
+      "rejected": [
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "NO_PATH"
+        }
+      ],
+      "scenario_id": "S10",
+      "schedule_hash": "d8a652bc0f9a42b695e33aa7165c37ea19923c9c1345ca267e00cb539cd489f7",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.2,
+        "base_schedule_score_us": 464.5728,
+        "communication_cost_us": 140.218673195,
+        "crc_bytes": 1920,
+        "crc_cost_us": 474.156,
+        "credit_window": 4,
+        "decode_cost_us": 0.04196,
+        "detect_cost_us": 0.41944,
+        "encode_cost_us": 0.04196,
+        "expected_retry_bytes": 9485,
+        "index_bytes": 6291360,
+        "integrity_metadata_bytes": 15360,
+        "logical_bytes": 31457280,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 30720,
+        "payload_bytes": 3145680,
+        "retransmitted_bytes": 9485,
+        "retry_penalty_us": 0.9485,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "SPARSE_INDEX_VALUE",
+        "total_cost_us": 616.026533195,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 3145680,
+        "wire_bytes": 9485040
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 2,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Butterfly",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Mesh",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S11",
+      "schedule_hash": "6f2fcf8b27a3d6ace55994a56f4b23309dcf4d16996b85d86a244fc6ca108da2",
+      "selected_cost": {
+        "backpressure_penalty_us": 3.1,
+        "base_schedule_score_us": 3083.41152,
+        "communication_cost_us": 3086.918797796,
+        "crc_bytes": 16128,
+        "crc_cost_us": 52854.6816,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 6.71092,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 1057110,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 129024,
+        "logical_bytes": 1056964608,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 1056964608,
+        "retransmitted_bytes": 1057110,
+        "retry_penalty_us": 105.711,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 56057.122317796,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 1056964608,
+        "wire_bytes": 1057109760
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 2,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "Butterfly",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Mesh",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "LOW_SPARSITY"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S12",
+      "schedule_hash": "a4be394edaaedf99dc9519dbdad6511ad0bac523e7c65600e25f967b1f805931",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.1,
+        "base_schedule_score_us": 3083.41152,
+        "communication_cost_us": 3086.918797796,
+        "crc_bytes": 16128,
+        "crc_cost_us": 52854.6816,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 6.71092,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 1057110,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 129024,
+        "logical_bytes": 1056964608,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 1056964608,
+        "retransmitted_bytes": 1057110,
+        "retry_penalty_us": 105.711,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 56054.122317796,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 1056964608,
+        "wire_bytes": 1057109760
+      }
+    },
+    {
+      "algorithm": "Hierarchical",
+      "candidate_count": 5,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "METADATA_OVERHEAD"
+        },
+        {
+          "algorithm": "Butterfly",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "METADATA_OVERHEAD"
+        },
+        {
+          "algorithm": "Mesh",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "METADATA_OVERHEAD"
+        },
+        {
+          "algorithm": "NHR",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "METADATA_OVERHEAD"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "METADATA_OVERHEAD"
+        }
+      ],
+      "scenario_id": "S13",
+      "schedule_hash": "be433d002909b0a2b068dd9a655f974cd10380c64a4fafed1c5e9e99b29ef0c3",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.0,
+        "base_schedule_score_us": 796.7351008,
+        "communication_cost_us": 797.559216968,
+        "crc_bytes": 7680,
+        "crc_cost_us": 100666.368,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 6.71092,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 2013335,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 61440,
+        "logical_bytes": 2013265920,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 2013265920,
+        "retransmitted_bytes": 2013335,
+        "retry_penalty_us": 201.3335,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 101671.971636968,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 2013265920,
+        "wire_bytes": 2013335040
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 4,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "SPARSE_INDEX_VALUE",
+      "rejected": [
+        {
+          "algorithm": "Mesh",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S14",
+      "schedule_hash": "b161a6ae553b32536d493ac8902d49fc082f7a94000d7b2ad2233439ce795d43",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.2,
+        "base_schedule_score_us": 3083.41152,
+        "communication_cost_us": 1544.424871585,
+        "crc_bytes": 16128,
+        "crc_cost_us": 26443.4688,
+        "credit_window": 4,
+        "decode_cost_us": 1.67776,
+        "detect_cost_us": 6.71092,
+        "encode_cost_us": 1.67776,
+        "expected_retry_bytes": 528886,
+        "index_bytes": 264241152,
+        "integrity_metadata_bytes": 129024,
+        "logical_bytes": 1056964608,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 258048,
+        "payload_bytes": 264241152,
+        "retransmitted_bytes": 528886,
+        "retry_penalty_us": 52.8886,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "SPARSE_INDEX_VALUE",
+        "total_cost_us": 28051.048711585,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 264241152,
+        "wire_bytes": 528885504
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 4,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "SPARSE_INDEX_VALUE",
+      "rejected": [
+        {
+          "algorithm": "Butterfly",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S15",
+      "schedule_hash": "8273dd6401d5e060a1a913ef24c7b5865bc86963248dc314b1cd7ac81ef0c4e5",
+      "selected_cost": {
+        "backpressure_penalty_us": 3.1,
+        "base_schedule_score_us": 3083.41152,
+        "communication_cost_us": 927.124999963,
+        "crc_bytes": 16128,
+        "crc_cost_us": 15873.8076,
+        "credit_window": 4,
+        "decode_cost_us": 0.67112,
+        "detect_cost_us": 6.71092,
+        "encode_cost_us": 0.67112,
+        "expected_retry_bytes": 317492,
+        "index_bytes": 211392720,
+        "integrity_metadata_bytes": 129024,
+        "logical_bytes": 1056964608,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 258048,
+        "payload_bytes": 105696360,
+        "retransmitted_bytes": 317492,
+        "retry_penalty_us": 31.7492,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "SPARSE_INDEX_VALUE",
+        "total_cost_us": 16843.834959963,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 105696360,
+        "wire_bytes": 317492280
+      }
+    },
+    {
+      "algorithm": "Hierarchical",
+      "candidate_count": 5,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "Butterfly",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "Mesh",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "NHR",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        }
+      ],
+      "scenario_id": "S16",
+      "schedule_hash": "ade0061a56f1d9f128782504e1a583f6b81a6ec5e9b4d602c6007c6ccc0c225e",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.1,
+        "base_schedule_score_us": 4268.26311808,
+        "communication_cost_us": 4272.568052205,
+        "crc_bytes": 3840,
+        "crc_cost_us": 201328.128,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 53.68712,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 4026566,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 30720,
+        "logical_bytes": 4026531840,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 4026531840,
+        "retransmitted_bytes": 4026566,
+        "retry_penalty_us": 402.6566,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 206057.139772205,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 4026531840,
+        "wire_bytes": 4026566400
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 2,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "Butterfly",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "Mesh",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S17",
+      "schedule_hash": "e1c49caa1ee77f5eaefcf710b892cc86442da86ab25af8bc07612436683f9ea0",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.0,
+        "base_schedule_score_us": 31607.28,
+        "communication_cost_us": 31639.023066282,
+        "crc_bytes": 960,
+        "crc_cost_us": 100663.68,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 53.68712,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 2013275,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 7680,
+        "logical_bytes": 2013265920,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 2013265920,
+        "retransmitted_bytes": 2013275,
+        "retry_penalty_us": 201.3275,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 132557.717686282,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 2013265920,
+        "wire_bytes": 2013274560
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 4,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "SPARSE_INDEX_VALUE",
+      "rejected": [
+        {
+          "algorithm": "Butterfly",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S18",
+      "schedule_hash": "75a1b92c9276fee5b94bfd29a325942f20e37ef37e11324b78e25bfbae350979",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.2,
+        "base_schedule_score_us": 31607.28,
+        "communication_cost_us": 9492.042787262,
+        "crc_bytes": 960,
+        "crc_cost_us": 30200.139,
+        "credit_window": 4,
+        "decode_cost_us": 5.36872,
+        "detect_cost_us": 53.68712,
+        "encode_cost_us": 5.36872,
+        "expected_retry_bytes": 604004,
+        "index_bytes": 402653160,
+        "integrity_metadata_bytes": 7680,
+        "logical_bytes": 2013265920,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 15360,
+        "payload_bytes": 201326580,
+        "retransmitted_bytes": 604004,
+        "retry_penalty_us": 60.4004,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "SPARSE_INDEX_VALUE",
+        "total_cost_us": 39817.206747262,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 201326580,
+        "wire_bytes": 604003740
+      }
+    },
+    {
+      "algorithm": "Hierarchical",
+      "candidate_count": 5,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "Butterfly",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "Mesh",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "NHR",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        }
+      ],
+      "scenario_id": "S19",
+      "schedule_hash": "61d91f924df34becf0e5da5889d6225d13fe50b0d39502b830be3bc816801a85",
+      "selected_cost": {
+        "backpressure_penalty_us": 3.1,
+        "base_schedule_score_us": 12448.5116128,
+        "communication_cost_us": 12460.986862698,
+        "crc_bytes": 30720,
+        "crc_cost_us": 6442463.232,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 429.49676,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 128849295,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 245760,
+        "logical_bytes": 128849018880,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 128849018880,
+        "retransmitted_bytes": 128849295,
+        "retry_penalty_us": 12884.9295,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 6468241.745122697,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 128849018880,
+        "wire_bytes": 128849295360
+      }
+    },
+    {
+      "algorithm": "Ring",
+      "candidate_count": 2,
+      "correctness": {
+        "bounded_inflight": true,
+        "codec_correctness": true,
+        "crc_integrity": true,
+        "credits_conserved": true,
+        "eventually_drains": true,
+        "fairness": true,
+        "memory_budget_respected": true,
+        "no_deadlock": true,
+        "no_negative_credit": true,
+        "reconstruction_correctness": true,
+        "retry_invariants": true
+      },
+      "fallback": "NONE",
+      "payload_mode": "DENSE",
+      "rejected": [
+        {
+          "algorithm": "Ring",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "Butterfly",
+          "payload_mode": "SPARSE_INDEX_VALUE",
+          "reason_code": "MEMORY_LIMIT"
+        },
+        {
+          "algorithm": "Mesh",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "NHR",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        },
+        {
+          "algorithm": "Hierarchical",
+          "reason_code": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+        }
+      ],
+      "scenario_id": "S20",
+      "schedule_hash": "11423b98c4eb026c6ce417d3bacc7d6cfbc0eb5a49704c5815442c0ab1f125d1",
+      "selected_cost": {
+        "backpressure_penalty_us": 0.1,
+        "base_schedule_score_us": 169555.33728,
+        "communication_cost_us": 169725.256807229,
+        "crc_bytes": 16128,
+        "crc_cost_us": 3382293.1968,
+        "credit_window": 4,
+        "decode_cost_us": 0.0,
+        "detect_cost_us": 429.49676,
+        "encode_cost_us": 0.0,
+        "expected_retry_bytes": 67645880,
+        "index_bytes": 0,
+        "integrity_metadata_bytes": 129024,
+        "logical_bytes": 67645734912,
+        "max_inflight_chunks": 4,
+        "metadata_bytes": 0,
+        "payload_bytes": 67645734912,
+        "retransmitted_bytes": 67645880,
+        "retry_penalty_us": 6764.588,
+        "retry_probability": 0.001,
+        "schema_version": "g3-b3-wire-aware-cost-v1",
+        "selected_mode": "DENSE",
+        "total_cost_us": 3559212.638367229,
+        "truth_label": "HOST_SIMULATOR_MODEL",
+        "value_bytes": 67645734912,
+        "wire_bytes": 67645880064
+      }
+    }
+  ],
+  "scenario_count": 20,
+  "schema_version": "g3-b3-selector-decisions-v1",
+  "sparse_count": 7,
+  "truth_label": "HOST_SIMULATOR_MODEL"
+}

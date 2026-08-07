@@ -1,0 +1,150 @@
+{
+  "cases": [
+    {
+      "available_credit": 4,
+      "blocked_producer_events": 0,
+      "bounded_inflight": true,
+      "case": "normal_load",
+      "chunk_bytes": 1048576,
+      "config": {
+        "credit_window": 4,
+        "high_watermark": 3,
+        "low_watermark": 1,
+        "max_inflight_chunks": 4,
+        "memory_budget_bytes": 67108864,
+        "producer_rate": 2
+      },
+      "consumer_capacity_pattern": [
+        2
+      ],
+      "credit_return_events": 32,
+      "credits_conserved": true,
+      "eventually_drains": true,
+      "fairness": true,
+      "max_inflight_observed": 2,
+      "memory_budget_respected": true,
+      "no_deadlock": true,
+      "no_negative_credit": true,
+      "peak_materialized_bytes": 2097152,
+      "schema_version": "g3-b3-credit-flow-control-v1",
+      "ticks": 17,
+      "total_chunks": 32,
+      "truth_label": "SIMULATED_BACKPRESSURE"
+    },
+    {
+      "available_credit": 4,
+      "blocked_producer_events": 2,
+      "bounded_inflight": true,
+      "case": "temporary_congestion",
+      "chunk_bytes": 1048576,
+      "config": {
+        "credit_window": 4,
+        "high_watermark": 3,
+        "low_watermark": 1,
+        "max_inflight_chunks": 4,
+        "memory_budget_bytes": 67108864,
+        "producer_rate": 2
+      },
+      "consumer_capacity_pattern": [
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "credit_return_events": 32,
+      "credits_conserved": true,
+      "eventually_drains": true,
+      "fairness": true,
+      "max_inflight_observed": 3,
+      "memory_budget_respected": true,
+      "no_deadlock": true,
+      "no_negative_credit": true,
+      "peak_materialized_bytes": 3145728,
+      "schema_version": "g3-b3-credit-flow-control-v1",
+      "ticks": 20,
+      "total_chunks": 32,
+      "truth_label": "SIMULATED_BACKPRESSURE"
+    },
+    {
+      "available_credit": 4,
+      "blocked_producer_events": 15,
+      "bounded_inflight": true,
+      "case": "sustained_congestion",
+      "chunk_bytes": 1048576,
+      "config": {
+        "credit_window": 4,
+        "high_watermark": 3,
+        "low_watermark": 1,
+        "max_inflight_chunks": 4,
+        "memory_budget_bytes": 67108864,
+        "producer_rate": 2
+      },
+      "consumer_capacity_pattern": [
+        0,
+        0,
+        1
+      ],
+      "credit_return_events": 32,
+      "credits_conserved": true,
+      "eventually_drains": true,
+      "fairness": true,
+      "max_inflight_observed": 3,
+      "memory_budget_respected": true,
+      "no_deadlock": true,
+      "no_negative_credit": true,
+      "peak_materialized_bytes": 3145728,
+      "schema_version": "g3-b3-credit-flow-control-v1",
+      "ticks": 34,
+      "total_chunks": 32,
+      "truth_label": "SIMULATED_BACKPRESSURE"
+    },
+    {
+      "available_credit": 4,
+      "blocked_producer_events": 1,
+      "bounded_inflight": true,
+      "case": "recovery",
+      "chunk_bytes": 1048576,
+      "config": {
+        "credit_window": 4,
+        "high_watermark": 3,
+        "low_watermark": 1,
+        "max_inflight_chunks": 4,
+        "memory_budget_bytes": 67108864,
+        "producer_rate": 2
+      },
+      "consumer_capacity_pattern": [
+        0,
+        0,
+        0,
+        4
+      ],
+      "credit_return_events": 32,
+      "credits_conserved": true,
+      "eventually_drains": true,
+      "fairness": true,
+      "max_inflight_observed": 3,
+      "memory_budget_respected": true,
+      "no_deadlock": true,
+      "no_negative_credit": true,
+      "peak_materialized_bytes": 3145728,
+      "schema_version": "g3-b3-credit-flow-control-v1",
+      "ticks": 19,
+      "total_chunks": 32,
+      "truth_label": "SIMULATED_BACKPRESSURE"
+    }
+  ],
+  "invariants": [
+    "credits_conserved",
+    "no_negative_credit",
+    "bounded_inflight",
+    "memory_budget_respected",
+    "eventually_drains",
+    "no_deadlock",
+    "fairness"
+  ],
+  "passed": true,
+  "real_backpressure": false,
+  "schema_version": "g3-b3-flow-control-audit-v1",
+  "truth_label": "SIMULATED_BACKPRESSURE"
+}

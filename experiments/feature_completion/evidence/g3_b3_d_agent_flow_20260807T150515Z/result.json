@@ -1,0 +1,17 @@
+{
+  "agent_sparse_integrity_proposal": "COMPLETED",
+  "backpressure_model": "COMPLETED",
+  "checkpoint": "G3-B3-D",
+  "checkpoint_status": "COMPLETED",
+  "credit_flow_control": "COMPLETED",
+  "feature_ablation": "COMPLETED",
+  "int8": "DEFERRED_BY_PRECISION_GATE",
+  "pairwise": "SKIPPED_BY_VALUE_GATE",
+  "physical_wire_measurement": false,
+  "real_backpressure": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-b3-d-result-v1",
+  "sparse_aware_selector": "COMPLETED",
+  "wire_aware_cost_model": "COMPLETED"
+}
