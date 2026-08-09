@@ -38,7 +38,7 @@ python3 -m unittest \
   tests.test_execution_engine \
   -q
 
-python3 -m unittest discover tests -q
+python3 -m pytest tests -q
 
 echo "LINUX_CPU_SIM_VALIDATION_OK"
 echo "HCCL_PLUGIN_PATH=$HCCL_PLUGIN_PATH"
