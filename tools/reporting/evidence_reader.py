@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -82,9 +83,32 @@ def git(*args: str) -> str:
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.strip()
 
 
+def resolve_reporting_base_ref(github_base_ref: str | None = None) -> str:
+    """Resolve an existing comparison base without creating or fetching refs."""
+    base_name = (github_base_ref if github_base_ref is not None
+                 else os.environ.get("GITHUB_BASE_REF", "")).strip()
+    candidates: list[str] = []
+    if base_name:
+        candidates.extend((f"refs/remotes/origin/{base_name}", f"origin/{base_name}"))
+    candidates.extend(("refs/heads/main", "main", "refs/remotes/origin/main", "origin/main"))
+    candidates = list(dict.fromkeys(candidates))
+    for candidate in candidates:
+        try:
+            git("rev-parse", "--verify", f"{candidate}^{{commit}}")
+        except (subprocess.CalledProcessError, OSError):
+            continue
+        return candidate
+    environment_value = base_name or "<unset>"
+    raise RuntimeError(
+        "reporting base ref cannot be resolved; "
+        f"attempted candidates={candidates}; GITHUB_BASE_REF={environment_value!r}; "
+        "ensure CI checkout provides complete Git history"
+    )
+
+
 def source_commit() -> str:
     """Return the merged-main baseline, not a later G3-C reporting commit."""
-    return git("merge-base", "HEAD", "main")
+    return git("merge-base", "HEAD", resolve_reporting_base_ref())
 
 
 def evidence_inventory() -> dict[str, Any]:

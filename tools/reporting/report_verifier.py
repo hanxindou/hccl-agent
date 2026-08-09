@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import json
 import re
-import subprocess
 from pathlib import Path
 from typing import Any
 
 from .evidence_reader import (
     CHART_ROOT, CLAIM_LEDGER, DATA_LEDGER, G3_B2_ROOT, G3_B3_ROOT, REPORT_INDEX,
     REPORT_ROOT, REQUIREMENT_DELTA, ROOT, STALE_AUDIT, read_json, relative,
-    resolve_pointer, sha256, source_commit, verify_sha256sums, write_json,
+    resolve_pointer, resolve_reporting_base_ref, sha256, source_commit,
+    verify_sha256sums, write_json, git,
 )
 from .ledger_builder import _display, _unit
 from .schemas import (
@@ -213,9 +213,8 @@ def verify_chart_data(ledger: dict[str, Any]) -> dict[str, Any]:
             "single_numeric_source": "docs/submission/report_data_ledger.json"}
 
 
-def _git_diff_from_main() -> list[str]:
-    output = subprocess.run(["git", "diff", "--name-only", "main"], cwd=ROOT, check=True, text=True,
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
+def _git_diff_from_base() -> list[str]:
+    output = git("diff", "--name-only", resolve_reporting_base_ref())
     return [line.strip().replace("\\", "/") for line in output.splitlines() if line.strip()]
 
 
@@ -226,7 +225,7 @@ def verify_all(*, persist: bool = True) -> dict[str, Any]:
     claim_result = verify_claims(claims, {row["metric_id"] for row in ledger["metrics"]})
     report_result = verify_reports(ledger)
     chart_result = verify_chart_data(ledger)
-    changed = _git_diff_from_main()
+    changed = _git_diff_from_base()
     frozen_prefixes = (relative(G3_B2_ROOT) + "/", relative(G3_B3_ROOT) + "/")
     frozen_changes = [path for path in changed if path.startswith(frozen_prefixes)]
     if frozen_changes:
