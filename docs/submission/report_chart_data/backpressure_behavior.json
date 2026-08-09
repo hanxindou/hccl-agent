@@ -1,0 +1,178 @@
+{
+  "chart_id": "backpressure_behavior",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b3.flow.normal_load.blocked_producer_events",
+    "g3b3.flow.normal_load.credit_return_events",
+    "g3b3.flow.normal_load.max_inflight_observed",
+    "g3b3.flow.normal_load.no_deadlock",
+    "g3b3.flow.normal_load.peak_materialized_bytes",
+    "g3b3.flow.normal_load.ticks",
+    "g3b3.flow.recovery.blocked_producer_events",
+    "g3b3.flow.recovery.credit_return_events",
+    "g3b3.flow.recovery.max_inflight_observed",
+    "g3b3.flow.recovery.no_deadlock",
+    "g3b3.flow.recovery.peak_materialized_bytes",
+    "g3b3.flow.recovery.ticks",
+    "g3b3.flow.sustained_congestion.blocked_producer_events",
+    "g3b3.flow.sustained_congestion.credit_return_events",
+    "g3b3.flow.sustained_congestion.max_inflight_observed",
+    "g3b3.flow.sustained_congestion.no_deadlock",
+    "g3b3.flow.sustained_congestion.peak_materialized_bytes",
+    "g3b3.flow.sustained_congestion.ticks",
+    "g3b3.flow.temporary_congestion.blocked_producer_events",
+    "g3b3.flow.temporary_congestion.credit_return_events",
+    "g3b3.flow.temporary_congestion.max_inflight_observed",
+    "g3b3.flow.temporary_congestion.no_deadlock",
+    "g3b3.flow.temporary_congestion.peak_materialized_bytes",
+    "g3b3.flow.temporary_congestion.ticks"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "0",
+      "metric_id": "g3b3.flow.normal_load.blocked_producer_events",
+      "unit": "count",
+      "value": 0
+    },
+    {
+      "display_value": "32",
+      "metric_id": "g3b3.flow.normal_load.credit_return_events",
+      "unit": "count",
+      "value": 32
+    },
+    {
+      "display_value": "2",
+      "metric_id": "g3b3.flow.normal_load.max_inflight_observed",
+      "unit": "count",
+      "value": 2
+    },
+    {
+      "display_value": "true",
+      "metric_id": "g3b3.flow.normal_load.no_deadlock",
+      "unit": "boolean",
+      "value": true
+    },
+    {
+      "display_value": "2097152",
+      "metric_id": "g3b3.flow.normal_load.peak_materialized_bytes",
+      "unit": "byte",
+      "value": 2097152
+    },
+    {
+      "display_value": "17",
+      "metric_id": "g3b3.flow.normal_load.ticks",
+      "unit": "count",
+      "value": 17
+    },
+    {
+      "display_value": "1",
+      "metric_id": "g3b3.flow.recovery.blocked_producer_events",
+      "unit": "count",
+      "value": 1
+    },
+    {
+      "display_value": "32",
+      "metric_id": "g3b3.flow.recovery.credit_return_events",
+      "unit": "count",
+      "value": 32
+    },
+    {
+      "display_value": "3",
+      "metric_id": "g3b3.flow.recovery.max_inflight_observed",
+      "unit": "count",
+      "value": 3
+    },
+    {
+      "display_value": "true",
+      "metric_id": "g3b3.flow.recovery.no_deadlock",
+      "unit": "boolean",
+      "value": true
+    },
+    {
+      "display_value": "3145728",
+      "metric_id": "g3b3.flow.recovery.peak_materialized_bytes",
+      "unit": "byte",
+      "value": 3145728
+    },
+    {
+      "display_value": "19",
+      "metric_id": "g3b3.flow.recovery.ticks",
+      "unit": "count",
+      "value": 19
+    },
+    {
+      "display_value": "15",
+      "metric_id": "g3b3.flow.sustained_congestion.blocked_producer_events",
+      "unit": "count",
+      "value": 15
+    },
+    {
+      "display_value": "32",
+      "metric_id": "g3b3.flow.sustained_congestion.credit_return_events",
+      "unit": "count",
+      "value": 32
+    },
+    {
+      "display_value": "3",
+      "metric_id": "g3b3.flow.sustained_congestion.max_inflight_observed",
+      "unit": "count",
+      "value": 3
+    },
+    {
+      "display_value": "true",
+      "metric_id": "g3b3.flow.sustained_congestion.no_deadlock",
+      "unit": "boolean",
+      "value": true
+    },
+    {
+      "display_value": "3145728",
+      "metric_id": "g3b3.flow.sustained_congestion.peak_materialized_bytes",
+      "unit": "byte",
+      "value": 3145728
+    },
+    {
+      "display_value": "34",
+      "metric_id": "g3b3.flow.sustained_congestion.ticks",
+      "unit": "count",
+      "value": 34
+    },
+    {
+      "display_value": "2",
+      "metric_id": "g3b3.flow.temporary_congestion.blocked_producer_events",
+      "unit": "count",
+      "value": 2
+    },
+    {
+      "display_value": "32",
+      "metric_id": "g3b3.flow.temporary_congestion.credit_return_events",
+      "unit": "count",
+      "value": 32
+    },
+    {
+      "display_value": "3",
+      "metric_id": "g3b3.flow.temporary_congestion.max_inflight_observed",
+      "unit": "count",
+      "value": 3
+    },
+    {
+      "display_value": "true",
+      "metric_id": "g3b3.flow.temporary_congestion.no_deadlock",
+      "unit": "boolean",
+      "value": true
+    },
+    {
+      "display_value": "3145728",
+      "metric_id": "g3b3.flow.temporary_congestion.peak_materialized_bytes",
+      "unit": "byte",
+      "value": 3145728
+    },
+    {
+      "display_value": "20",
+      "metric_id": "g3b3.flow.temporary_congestion.ticks",
+      "unit": "count",
+      "value": 20
+    }
+  ],
+  "truth_label": "SIMULATED_BACKPRESSURE"
+}

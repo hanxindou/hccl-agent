@@ -1,0 +1,41 @@
+{
+  "items": [
+    {
+      "id": "UA-B-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "project license/copyright"
+    },
+    {
+      "id": "UA-B-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "official asset redistribution"
+    },
+    {
+      "id": "UA-B-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "controlled competition material"
+    },
+    {
+      "id": "UA-B-004",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "platform archive and size requirements"
+    },
+    {
+      "id": "UA-C-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "FP32/FP16/BF16 precision interpretation for <=1e-6"
+    },
+    {
+      "default": "Chinese body with English technical terminology",
+      "id": "UA-C-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final report language"
+    },
+    {
+      "id": "UA-C-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final submission template, page, cover, font, anonymity, and PDF rules"
+    }
+  ],
+  "status": "USER_ACTION_REQUIRED"
+}

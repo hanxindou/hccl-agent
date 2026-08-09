@@ -1,0 +1,4042 @@
+{
+  "chart_id": "g3_b2_ablation",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b2.ablation.a0.p01.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p01.p50_us",
+    "g3b2.ablation.a0.p01.p95_us",
+    "g3b2.ablation.a0.p01.phase_count",
+    "g3b2.ablation.a0.p02.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p02.p50_us",
+    "g3b2.ablation.a0.p02.p95_us",
+    "g3b2.ablation.a0.p02.phase_count",
+    "g3b2.ablation.a0.p03.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p03.p50_us",
+    "g3b2.ablation.a0.p03.p95_us",
+    "g3b2.ablation.a0.p03.phase_count",
+    "g3b2.ablation.a0.p04.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p04.p50_us",
+    "g3b2.ablation.a0.p04.p95_us",
+    "g3b2.ablation.a0.p04.phase_count",
+    "g3b2.ablation.a0.p05.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p05.p50_us",
+    "g3b2.ablation.a0.p05.p95_us",
+    "g3b2.ablation.a0.p05.phase_count",
+    "g3b2.ablation.a0.p06.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p06.p50_us",
+    "g3b2.ablation.a0.p06.p95_us",
+    "g3b2.ablation.a0.p06.phase_count",
+    "g3b2.ablation.a0.p07.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p07.p50_us",
+    "g3b2.ablation.a0.p07.p95_us",
+    "g3b2.ablation.a0.p07.phase_count",
+    "g3b2.ablation.a0.p08.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p08.p50_us",
+    "g3b2.ablation.a0.p08.p95_us",
+    "g3b2.ablation.a0.p08.phase_count",
+    "g3b2.ablation.a0.p09.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p09.p50_us",
+    "g3b2.ablation.a0.p09.p95_us",
+    "g3b2.ablation.a0.p09.phase_count",
+    "g3b2.ablation.a0.p10.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p10.p50_us",
+    "g3b2.ablation.a0.p10.p95_us",
+    "g3b2.ablation.a0.p10.phase_count",
+    "g3b2.ablation.a0.p11.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p11.p50_us",
+    "g3b2.ablation.a0.p11.p95_us",
+    "g3b2.ablation.a0.p11.phase_count",
+    "g3b2.ablation.a0.p12.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p12.p50_us",
+    "g3b2.ablation.a0.p12.p95_us",
+    "g3b2.ablation.a0.p12.phase_count",
+    "g3b2.ablation.a0.p13.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p13.p50_us",
+    "g3b2.ablation.a0.p13.p95_us",
+    "g3b2.ablation.a0.p13.phase_count",
+    "g3b2.ablation.a0.p14.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p14.p50_us",
+    "g3b2.ablation.a0.p14.p95_us",
+    "g3b2.ablation.a0.p14.phase_count",
+    "g3b2.ablation.a0.p15.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p15.p50_us",
+    "g3b2.ablation.a0.p15.p95_us",
+    "g3b2.ablation.a0.p15.phase_count",
+    "g3b2.ablation.a0.p16.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p16.p50_us",
+    "g3b2.ablation.a0.p16.p95_us",
+    "g3b2.ablation.a0.p16.phase_count",
+    "g3b2.ablation.a0.p17.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p17.p50_us",
+    "g3b2.ablation.a0.p17.p95_us",
+    "g3b2.ablation.a0.p17.phase_count",
+    "g3b2.ablation.a0.p18.effective_bandwidth_gb_s",
+    "g3b2.ablation.a0.p18.p50_us",
+    "g3b2.ablation.a0.p18.p95_us",
+    "g3b2.ablation.a0.p18.phase_count",
+    "g3b2.ablation.a1.p01.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p01.p50_us",
+    "g3b2.ablation.a1.p01.p95_us",
+    "g3b2.ablation.a1.p01.phase_count",
+    "g3b2.ablation.a1.p02.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p02.p50_us",
+    "g3b2.ablation.a1.p02.p95_us",
+    "g3b2.ablation.a1.p02.phase_count",
+    "g3b2.ablation.a1.p03.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p03.p50_us",
+    "g3b2.ablation.a1.p03.p95_us",
+    "g3b2.ablation.a1.p03.phase_count",
+    "g3b2.ablation.a1.p04.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p04.p50_us",
+    "g3b2.ablation.a1.p04.p95_us",
+    "g3b2.ablation.a1.p04.phase_count",
+    "g3b2.ablation.a1.p05.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p05.p50_us",
+    "g3b2.ablation.a1.p05.p95_us",
+    "g3b2.ablation.a1.p05.phase_count",
+    "g3b2.ablation.a1.p06.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p06.p50_us",
+    "g3b2.ablation.a1.p06.p95_us",
+    "g3b2.ablation.a1.p06.phase_count",
+    "g3b2.ablation.a1.p07.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p07.p50_us",
+    "g3b2.ablation.a1.p07.p95_us",
+    "g3b2.ablation.a1.p07.phase_count",
+    "g3b2.ablation.a1.p08.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p08.p50_us",
+    "g3b2.ablation.a1.p08.p95_us",
+    "g3b2.ablation.a1.p08.phase_count",
+    "g3b2.ablation.a1.p09.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p09.p50_us",
+    "g3b2.ablation.a1.p09.p95_us",
+    "g3b2.ablation.a1.p09.phase_count",
+    "g3b2.ablation.a1.p10.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p10.p50_us",
+    "g3b2.ablation.a1.p10.p95_us",
+    "g3b2.ablation.a1.p10.phase_count",
+    "g3b2.ablation.a1.p11.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p11.p50_us",
+    "g3b2.ablation.a1.p11.p95_us",
+    "g3b2.ablation.a1.p11.phase_count",
+    "g3b2.ablation.a1.p12.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p12.p50_us",
+    "g3b2.ablation.a1.p12.p95_us",
+    "g3b2.ablation.a1.p12.phase_count",
+    "g3b2.ablation.a1.p13.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p13.p50_us",
+    "g3b2.ablation.a1.p13.p95_us",
+    "g3b2.ablation.a1.p13.phase_count",
+    "g3b2.ablation.a1.p14.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p14.p50_us",
+    "g3b2.ablation.a1.p14.p95_us",
+    "g3b2.ablation.a1.p14.phase_count",
+    "g3b2.ablation.a1.p15.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p15.p50_us",
+    "g3b2.ablation.a1.p15.p95_us",
+    "g3b2.ablation.a1.p15.phase_count",
+    "g3b2.ablation.a1.p16.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p16.p50_us",
+    "g3b2.ablation.a1.p16.p95_us",
+    "g3b2.ablation.a1.p16.phase_count",
+    "g3b2.ablation.a1.p17.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p17.p50_us",
+    "g3b2.ablation.a1.p17.p95_us",
+    "g3b2.ablation.a1.p17.phase_count",
+    "g3b2.ablation.a1.p18.effective_bandwidth_gb_s",
+    "g3b2.ablation.a1.p18.p50_us",
+    "g3b2.ablation.a1.p18.p95_us",
+    "g3b2.ablation.a1.p18.phase_count",
+    "g3b2.ablation.a2.p01.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p01.p50_us",
+    "g3b2.ablation.a2.p01.p95_us",
+    "g3b2.ablation.a2.p01.phase_count",
+    "g3b2.ablation.a2.p02.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p02.p50_us",
+    "g3b2.ablation.a2.p02.p95_us",
+    "g3b2.ablation.a2.p02.phase_count",
+    "g3b2.ablation.a2.p03.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p03.p50_us",
+    "g3b2.ablation.a2.p03.p95_us",
+    "g3b2.ablation.a2.p03.phase_count",
+    "g3b2.ablation.a2.p04.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p04.p50_us",
+    "g3b2.ablation.a2.p04.p95_us",
+    "g3b2.ablation.a2.p04.phase_count",
+    "g3b2.ablation.a2.p05.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p05.p50_us",
+    "g3b2.ablation.a2.p05.p95_us",
+    "g3b2.ablation.a2.p05.phase_count",
+    "g3b2.ablation.a2.p06.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p06.p50_us",
+    "g3b2.ablation.a2.p06.p95_us",
+    "g3b2.ablation.a2.p06.phase_count",
+    "g3b2.ablation.a2.p07.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p07.p50_us",
+    "g3b2.ablation.a2.p07.p95_us",
+    "g3b2.ablation.a2.p07.phase_count",
+    "g3b2.ablation.a2.p08.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p08.p50_us",
+    "g3b2.ablation.a2.p08.p95_us",
+    "g3b2.ablation.a2.p08.phase_count",
+    "g3b2.ablation.a2.p09.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p09.p50_us",
+    "g3b2.ablation.a2.p09.p95_us",
+    "g3b2.ablation.a2.p09.phase_count",
+    "g3b2.ablation.a2.p10.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p10.p50_us",
+    "g3b2.ablation.a2.p10.p95_us",
+    "g3b2.ablation.a2.p10.phase_count",
+    "g3b2.ablation.a2.p11.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p11.p50_us",
+    "g3b2.ablation.a2.p11.p95_us",
+    "g3b2.ablation.a2.p11.phase_count",
+    "g3b2.ablation.a2.p12.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p12.p50_us",
+    "g3b2.ablation.a2.p12.p95_us",
+    "g3b2.ablation.a2.p12.phase_count",
+    "g3b2.ablation.a2.p13.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p13.p50_us",
+    "g3b2.ablation.a2.p13.p95_us",
+    "g3b2.ablation.a2.p13.phase_count",
+    "g3b2.ablation.a2.p14.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p14.p50_us",
+    "g3b2.ablation.a2.p14.p95_us",
+    "g3b2.ablation.a2.p14.phase_count",
+    "g3b2.ablation.a2.p15.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p15.p50_us",
+    "g3b2.ablation.a2.p15.p95_us",
+    "g3b2.ablation.a2.p15.phase_count",
+    "g3b2.ablation.a2.p16.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p16.p50_us",
+    "g3b2.ablation.a2.p16.p95_us",
+    "g3b2.ablation.a2.p16.phase_count",
+    "g3b2.ablation.a2.p17.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p17.p50_us",
+    "g3b2.ablation.a2.p17.p95_us",
+    "g3b2.ablation.a2.p17.phase_count",
+    "g3b2.ablation.a2.p18.effective_bandwidth_gb_s",
+    "g3b2.ablation.a2.p18.p50_us",
+    "g3b2.ablation.a2.p18.p95_us",
+    "g3b2.ablation.a2.p18.phase_count",
+    "g3b2.ablation.a3.p01.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p01.p50_us",
+    "g3b2.ablation.a3.p01.p95_us",
+    "g3b2.ablation.a3.p01.phase_count",
+    "g3b2.ablation.a3.p02.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p02.p50_us",
+    "g3b2.ablation.a3.p02.p95_us",
+    "g3b2.ablation.a3.p02.phase_count",
+    "g3b2.ablation.a3.p03.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p03.p50_us",
+    "g3b2.ablation.a3.p03.p95_us",
+    "g3b2.ablation.a3.p03.phase_count",
+    "g3b2.ablation.a3.p04.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p04.p50_us",
+    "g3b2.ablation.a3.p04.p95_us",
+    "g3b2.ablation.a3.p04.phase_count",
+    "g3b2.ablation.a3.p05.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p05.p50_us",
+    "g3b2.ablation.a3.p05.p95_us",
+    "g3b2.ablation.a3.p05.phase_count",
+    "g3b2.ablation.a3.p06.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p06.p50_us",
+    "g3b2.ablation.a3.p06.p95_us",
+    "g3b2.ablation.a3.p06.phase_count",
+    "g3b2.ablation.a3.p07.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p07.p50_us",
+    "g3b2.ablation.a3.p07.p95_us",
+    "g3b2.ablation.a3.p07.phase_count",
+    "g3b2.ablation.a3.p08.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p08.p50_us",
+    "g3b2.ablation.a3.p08.p95_us",
+    "g3b2.ablation.a3.p08.phase_count",
+    "g3b2.ablation.a3.p09.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p09.p50_us",
+    "g3b2.ablation.a3.p09.p95_us",
+    "g3b2.ablation.a3.p09.phase_count",
+    "g3b2.ablation.a3.p10.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p10.p50_us",
+    "g3b2.ablation.a3.p10.p95_us",
+    "g3b2.ablation.a3.p10.phase_count",
+    "g3b2.ablation.a3.p11.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p11.p50_us",
+    "g3b2.ablation.a3.p11.p95_us",
+    "g3b2.ablation.a3.p11.phase_count",
+    "g3b2.ablation.a3.p12.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p12.p50_us",
+    "g3b2.ablation.a3.p12.p95_us",
+    "g3b2.ablation.a3.p12.phase_count",
+    "g3b2.ablation.a3.p13.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p13.p50_us",
+    "g3b2.ablation.a3.p13.p95_us",
+    "g3b2.ablation.a3.p13.phase_count",
+    "g3b2.ablation.a3.p14.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p14.p50_us",
+    "g3b2.ablation.a3.p14.p95_us",
+    "g3b2.ablation.a3.p14.phase_count",
+    "g3b2.ablation.a3.p15.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p15.p50_us",
+    "g3b2.ablation.a3.p15.p95_us",
+    "g3b2.ablation.a3.p15.phase_count",
+    "g3b2.ablation.a3.p16.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p16.p50_us",
+    "g3b2.ablation.a3.p16.p95_us",
+    "g3b2.ablation.a3.p16.phase_count",
+    "g3b2.ablation.a3.p17.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p17.p50_us",
+    "g3b2.ablation.a3.p17.p95_us",
+    "g3b2.ablation.a3.p17.phase_count",
+    "g3b2.ablation.a3.p18.effective_bandwidth_gb_s",
+    "g3b2.ablation.a3.p18.p50_us",
+    "g3b2.ablation.a3.p18.p95_us",
+    "g3b2.ablation.a3.p18.phase_count",
+    "g3b2.ablation.a4.p01.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p01.p50_us",
+    "g3b2.ablation.a4.p01.p95_us",
+    "g3b2.ablation.a4.p01.phase_count",
+    "g3b2.ablation.a4.p02.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p02.p50_us",
+    "g3b2.ablation.a4.p02.p95_us",
+    "g3b2.ablation.a4.p02.phase_count",
+    "g3b2.ablation.a4.p03.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p03.p50_us",
+    "g3b2.ablation.a4.p03.p95_us",
+    "g3b2.ablation.a4.p03.phase_count",
+    "g3b2.ablation.a4.p04.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p04.p50_us",
+    "g3b2.ablation.a4.p04.p95_us",
+    "g3b2.ablation.a4.p04.phase_count",
+    "g3b2.ablation.a4.p05.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p05.p50_us",
+    "g3b2.ablation.a4.p05.p95_us",
+    "g3b2.ablation.a4.p05.phase_count",
+    "g3b2.ablation.a4.p06.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p06.p50_us",
+    "g3b2.ablation.a4.p06.p95_us",
+    "g3b2.ablation.a4.p06.phase_count",
+    "g3b2.ablation.a4.p07.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p07.p50_us",
+    "g3b2.ablation.a4.p07.p95_us",
+    "g3b2.ablation.a4.p07.phase_count",
+    "g3b2.ablation.a4.p08.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p08.p50_us",
+    "g3b2.ablation.a4.p08.p95_us",
+    "g3b2.ablation.a4.p08.phase_count",
+    "g3b2.ablation.a4.p09.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p09.p50_us",
+    "g3b2.ablation.a4.p09.p95_us",
+    "g3b2.ablation.a4.p09.phase_count",
+    "g3b2.ablation.a4.p10.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p10.p50_us",
+    "g3b2.ablation.a4.p10.p95_us",
+    "g3b2.ablation.a4.p10.phase_count",
+    "g3b2.ablation.a4.p11.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p11.p50_us",
+    "g3b2.ablation.a4.p11.p95_us",
+    "g3b2.ablation.a4.p11.phase_count",
+    "g3b2.ablation.a4.p12.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p12.p50_us",
+    "g3b2.ablation.a4.p12.p95_us",
+    "g3b2.ablation.a4.p12.phase_count",
+    "g3b2.ablation.a4.p13.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p13.p50_us",
+    "g3b2.ablation.a4.p13.p95_us",
+    "g3b2.ablation.a4.p13.phase_count",
+    "g3b2.ablation.a4.p14.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p14.p50_us",
+    "g3b2.ablation.a4.p14.p95_us",
+    "g3b2.ablation.a4.p14.phase_count",
+    "g3b2.ablation.a4.p15.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p15.p50_us",
+    "g3b2.ablation.a4.p15.p95_us",
+    "g3b2.ablation.a4.p15.phase_count",
+    "g3b2.ablation.a4.p16.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p16.p50_us",
+    "g3b2.ablation.a4.p16.p95_us",
+    "g3b2.ablation.a4.p16.phase_count",
+    "g3b2.ablation.a4.p17.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p17.p50_us",
+    "g3b2.ablation.a4.p17.p95_us",
+    "g3b2.ablation.a4.p17.phase_count",
+    "g3b2.ablation.a4.p18.effective_bandwidth_gb_s",
+    "g3b2.ablation.a4.p18.p50_us",
+    "g3b2.ablation.a4.p18.p95_us",
+    "g3b2.ablation.a4.p18.phase_count",
+    "g3b2.ablation.a5.p01.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p01.p50_us",
+    "g3b2.ablation.a5.p01.p95_us",
+    "g3b2.ablation.a5.p01.phase_count",
+    "g3b2.ablation.a5.p02.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p02.p50_us",
+    "g3b2.ablation.a5.p02.p95_us",
+    "g3b2.ablation.a5.p02.phase_count",
+    "g3b2.ablation.a5.p03.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p03.p50_us",
+    "g3b2.ablation.a5.p03.p95_us",
+    "g3b2.ablation.a5.p03.phase_count",
+    "g3b2.ablation.a5.p04.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p04.p50_us",
+    "g3b2.ablation.a5.p04.p95_us",
+    "g3b2.ablation.a5.p04.phase_count",
+    "g3b2.ablation.a5.p05.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p05.p50_us",
+    "g3b2.ablation.a5.p05.p95_us",
+    "g3b2.ablation.a5.p05.phase_count",
+    "g3b2.ablation.a5.p06.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p06.p50_us",
+    "g3b2.ablation.a5.p06.p95_us",
+    "g3b2.ablation.a5.p06.phase_count",
+    "g3b2.ablation.a5.p07.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p07.p50_us",
+    "g3b2.ablation.a5.p07.p95_us",
+    "g3b2.ablation.a5.p07.phase_count",
+    "g3b2.ablation.a5.p08.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p08.p50_us",
+    "g3b2.ablation.a5.p08.p95_us",
+    "g3b2.ablation.a5.p08.phase_count",
+    "g3b2.ablation.a5.p09.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p09.p50_us",
+    "g3b2.ablation.a5.p09.p95_us",
+    "g3b2.ablation.a5.p09.phase_count",
+    "g3b2.ablation.a5.p10.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p10.p50_us",
+    "g3b2.ablation.a5.p10.p95_us",
+    "g3b2.ablation.a5.p10.phase_count",
+    "g3b2.ablation.a5.p11.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p11.p50_us",
+    "g3b2.ablation.a5.p11.p95_us",
+    "g3b2.ablation.a5.p11.phase_count",
+    "g3b2.ablation.a5.p12.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p12.p50_us",
+    "g3b2.ablation.a5.p12.p95_us",
+    "g3b2.ablation.a5.p12.phase_count",
+    "g3b2.ablation.a5.p13.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p13.p50_us",
+    "g3b2.ablation.a5.p13.p95_us",
+    "g3b2.ablation.a5.p13.phase_count",
+    "g3b2.ablation.a5.p14.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p14.p50_us",
+    "g3b2.ablation.a5.p14.p95_us",
+    "g3b2.ablation.a5.p14.phase_count",
+    "g3b2.ablation.a5.p15.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p15.p50_us",
+    "g3b2.ablation.a5.p15.p95_us",
+    "g3b2.ablation.a5.p15.phase_count",
+    "g3b2.ablation.a5.p16.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p16.p50_us",
+    "g3b2.ablation.a5.p16.p95_us",
+    "g3b2.ablation.a5.p16.phase_count",
+    "g3b2.ablation.a5.p17.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p17.p50_us",
+    "g3b2.ablation.a5.p17.p95_us",
+    "g3b2.ablation.a5.p17.phase_count",
+    "g3b2.ablation.a5.p18.effective_bandwidth_gb_s",
+    "g3b2.ablation.a5.p18.p50_us",
+    "g3b2.ablation.a5.p18.p95_us",
+    "g3b2.ablation.a5.p18.phase_count",
+    "g3b2.ablation.a6.p01.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p01.p50_us",
+    "g3b2.ablation.a6.p01.p95_us",
+    "g3b2.ablation.a6.p01.phase_count",
+    "g3b2.ablation.a6.p02.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p02.p50_us",
+    "g3b2.ablation.a6.p02.p95_us",
+    "g3b2.ablation.a6.p02.phase_count",
+    "g3b2.ablation.a6.p03.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p03.p50_us",
+    "g3b2.ablation.a6.p03.p95_us",
+    "g3b2.ablation.a6.p03.phase_count",
+    "g3b2.ablation.a6.p04.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p04.p50_us",
+    "g3b2.ablation.a6.p04.p95_us",
+    "g3b2.ablation.a6.p04.phase_count",
+    "g3b2.ablation.a6.p05.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p05.p50_us",
+    "g3b2.ablation.a6.p05.p95_us",
+    "g3b2.ablation.a6.p05.phase_count",
+    "g3b2.ablation.a6.p06.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p06.p50_us",
+    "g3b2.ablation.a6.p06.p95_us",
+    "g3b2.ablation.a6.p06.phase_count",
+    "g3b2.ablation.a6.p07.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p07.p50_us",
+    "g3b2.ablation.a6.p07.p95_us",
+    "g3b2.ablation.a6.p07.phase_count",
+    "g3b2.ablation.a6.p08.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p08.p50_us",
+    "g3b2.ablation.a6.p08.p95_us",
+    "g3b2.ablation.a6.p08.phase_count",
+    "g3b2.ablation.a6.p09.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p09.p50_us",
+    "g3b2.ablation.a6.p09.p95_us",
+    "g3b2.ablation.a6.p09.phase_count",
+    "g3b2.ablation.a6.p10.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p10.p50_us",
+    "g3b2.ablation.a6.p10.p95_us",
+    "g3b2.ablation.a6.p10.phase_count",
+    "g3b2.ablation.a6.p11.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p11.p50_us",
+    "g3b2.ablation.a6.p11.p95_us",
+    "g3b2.ablation.a6.p11.phase_count",
+    "g3b2.ablation.a6.p12.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p12.p50_us",
+    "g3b2.ablation.a6.p12.p95_us",
+    "g3b2.ablation.a6.p12.phase_count",
+    "g3b2.ablation.a6.p13.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p13.p50_us",
+    "g3b2.ablation.a6.p13.p95_us",
+    "g3b2.ablation.a6.p13.phase_count",
+    "g3b2.ablation.a6.p14.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p14.p50_us",
+    "g3b2.ablation.a6.p14.p95_us",
+    "g3b2.ablation.a6.p14.phase_count",
+    "g3b2.ablation.a6.p15.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p15.p50_us",
+    "g3b2.ablation.a6.p15.p95_us",
+    "g3b2.ablation.a6.p15.phase_count",
+    "g3b2.ablation.a6.p16.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p16.p50_us",
+    "g3b2.ablation.a6.p16.p95_us",
+    "g3b2.ablation.a6.p16.phase_count",
+    "g3b2.ablation.a6.p17.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p17.p50_us",
+    "g3b2.ablation.a6.p17.p95_us",
+    "g3b2.ablation.a6.p17.phase_count",
+    "g3b2.ablation.a6.p18.effective_bandwidth_gb_s",
+    "g3b2.ablation.a6.p18.p50_us",
+    "g3b2.ablation.a6.p18.p95_us",
+    "g3b2.ablation.a6.p18.phase_count",
+    "g3b2.ablation.a7.p01.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p01.p50_us",
+    "g3b2.ablation.a7.p01.p95_us",
+    "g3b2.ablation.a7.p01.phase_count",
+    "g3b2.ablation.a7.p02.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p02.p50_us",
+    "g3b2.ablation.a7.p02.p95_us",
+    "g3b2.ablation.a7.p02.phase_count",
+    "g3b2.ablation.a7.p03.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p03.p50_us",
+    "g3b2.ablation.a7.p03.p95_us",
+    "g3b2.ablation.a7.p03.phase_count",
+    "g3b2.ablation.a7.p04.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p04.p50_us",
+    "g3b2.ablation.a7.p04.p95_us",
+    "g3b2.ablation.a7.p04.phase_count",
+    "g3b2.ablation.a7.p05.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p05.p50_us",
+    "g3b2.ablation.a7.p05.p95_us",
+    "g3b2.ablation.a7.p05.phase_count",
+    "g3b2.ablation.a7.p06.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p06.p50_us",
+    "g3b2.ablation.a7.p06.p95_us",
+    "g3b2.ablation.a7.p06.phase_count",
+    "g3b2.ablation.a7.p07.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p07.p50_us",
+    "g3b2.ablation.a7.p07.p95_us",
+    "g3b2.ablation.a7.p07.phase_count",
+    "g3b2.ablation.a7.p08.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p08.p50_us",
+    "g3b2.ablation.a7.p08.p95_us",
+    "g3b2.ablation.a7.p08.phase_count",
+    "g3b2.ablation.a7.p09.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p09.p50_us",
+    "g3b2.ablation.a7.p09.p95_us",
+    "g3b2.ablation.a7.p09.phase_count",
+    "g3b2.ablation.a7.p10.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p10.p50_us",
+    "g3b2.ablation.a7.p10.p95_us",
+    "g3b2.ablation.a7.p10.phase_count",
+    "g3b2.ablation.a7.p11.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p11.p50_us",
+    "g3b2.ablation.a7.p11.p95_us",
+    "g3b2.ablation.a7.p11.phase_count",
+    "g3b2.ablation.a7.p12.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p12.p50_us",
+    "g3b2.ablation.a7.p12.p95_us",
+    "g3b2.ablation.a7.p12.phase_count",
+    "g3b2.ablation.a7.p13.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p13.p50_us",
+    "g3b2.ablation.a7.p13.p95_us",
+    "g3b2.ablation.a7.p13.phase_count",
+    "g3b2.ablation.a7.p14.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p14.p50_us",
+    "g3b2.ablation.a7.p14.p95_us",
+    "g3b2.ablation.a7.p14.phase_count",
+    "g3b2.ablation.a7.p15.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p15.p50_us",
+    "g3b2.ablation.a7.p15.p95_us",
+    "g3b2.ablation.a7.p15.phase_count",
+    "g3b2.ablation.a7.p16.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p16.p50_us",
+    "g3b2.ablation.a7.p16.p95_us",
+    "g3b2.ablation.a7.p16.phase_count",
+    "g3b2.ablation.a7.p17.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p17.p50_us",
+    "g3b2.ablation.a7.p17.p95_us",
+    "g3b2.ablation.a7.p17.phase_count",
+    "g3b2.ablation.a7.p18.effective_bandwidth_gb_s",
+    "g3b2.ablation.a7.p18.p50_us",
+    "g3b2.ablation.a7.p18.p95_us",
+    "g3b2.ablation.a7.p18.phase_count"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "0.032",
+      "metric_id": "g3b2.ablation.a0.p01.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.03150482
+    },
+    {
+      "display_value": "32.504",
+      "metric_id": "g3b2.ablation.a0.p01.p50_us",
+      "unit": "us",
+      "value": 32.50404695
+    },
+    {
+      "display_value": "32.537",
+      "metric_id": "g3b2.ablation.a0.p01.p95_us",
+      "unit": "us",
+      "value": 32.536550997
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a0.p01.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "2.798",
+      "metric_id": "g3b2.ablation.a0.p02.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.798385051
+    },
+    {
+      "display_value": "23.420",
+      "metric_id": "g3b2.ablation.a0.p02.p50_us",
+      "unit": "us",
+      "value": 23.420002396
+    },
+    {
+      "display_value": "23.443",
+      "metric_id": "g3b2.ablation.a0.p02.p95_us",
+      "unit": "us",
+      "value": 23.443422399
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a0.p02.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "2.798",
+      "metric_id": "g3b2.ablation.a0.p03.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.797787744
+    },
+    {
+      "display_value": "23.425",
+      "metric_id": "g3b2.ablation.a0.p03.p50_us",
+      "unit": "us",
+      "value": 23.425002396
+    },
+    {
+      "display_value": "23.448",
+      "metric_id": "g3b2.ablation.a0.p03.p95_us",
+      "unit": "us",
+      "value": 23.448427399
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a0.p03.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "4.669",
+      "metric_id": "g3b2.ablation.a0.p04.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.66879161
+    },
+    {
+      "display_value": "224.600",
+      "metric_id": "g3b2.ablation.a0.p04.p50_us",
+      "unit": "us",
+      "value": 224.600076686
+    },
+    {
+      "display_value": "224.825",
+      "metric_id": "g3b2.ablation.a0.p04.p95_us",
+      "unit": "us",
+      "value": 224.824676763
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a0.p04.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "11.397",
+      "metric_id": "g3b2.ablation.a0.p05.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.397359691
+    },
+    {
+      "display_value": "1472.076",
+      "metric_id": "g3b2.ablation.a0.p05.p50_us",
+      "unit": "us",
+      "value": 1472.07561349
+    },
+    {
+      "display_value": "1473.548",
+      "metric_id": "g3b2.ablation.a0.p05.p95_us",
+      "unit": "us",
+      "value": 1473.547689103
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a0.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "11.591",
+      "metric_id": "g3b2.ablation.a0.p06.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.590791762
+    },
+    {
+      "display_value": "11580.072",
+      "metric_id": "g3b2.ablation.a0.p06.p50_us",
+      "unit": "us",
+      "value": 11580.071907918
+    },
+    {
+      "display_value": "11591.652",
+      "metric_id": "g3b2.ablation.a0.p06.p95_us",
+      "unit": "us",
+      "value": 11591.651979826
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a0.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "2.540",
+      "metric_id": "g3b2.ablation.a0.p07.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.539734742
+    },
+    {
+      "display_value": "6605.717",
+      "metric_id": "g3b2.ablation.a0.p07.p50_us",
+      "unit": "us",
+      "value": 6605.716864853
+    },
+    {
+      "display_value": "6612.323",
+      "metric_id": "g3b2.ablation.a0.p07.p95_us",
+      "unit": "us",
+      "value": 6612.322581718
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a0.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "2.999",
+      "metric_id": "g3b2.ablation.a0.p08.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.999215785
+    },
+    {
+      "display_value": "349.607",
+      "metric_id": "g3b2.ablation.a0.p08.p50_us",
+      "unit": "us",
+      "value": 349.607402027
+    },
+    {
+      "display_value": "349.957",
+      "metric_id": "g3b2.ablation.a0.p08.p95_us",
+      "unit": "us",
+      "value": 349.957009429
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a0.p08.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.403",
+      "metric_id": "g3b2.ablation.a0.p09.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.402523315
+    },
+    {
+      "display_value": "162.809",
+      "metric_id": "g3b2.ablation.a0.p09.p50_us",
+      "unit": "us",
+      "value": 162.808587627
+    },
+    {
+      "display_value": "162.971",
+      "metric_id": "g3b2.ablation.a0.p09.p95_us",
+      "unit": "us",
+      "value": 162.971396214
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a0.p09.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.960",
+      "metric_id": "g3b2.ablation.a0.p10.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.959814759
+    },
+    {
+      "display_value": "139834.320",
+      "metric_id": "g3b2.ablation.a0.p10.p50_us",
+      "unit": "us",
+      "value": 139834.319533312
+    },
+    {
+      "display_value": "139974.154",
+      "metric_id": "g3b2.ablation.a0.p10.p95_us",
+      "unit": "us",
+      "value": 139974.153852845
+    },
+    {
+      "display_value": "126.0000",
+      "metric_id": "g3b2.ablation.a0.p10.phase_count",
+      "unit": "scalar",
+      "value": 126.0
+    },
+    {
+      "display_value": "1.844",
+      "metric_id": "g3b2.ablation.a0.p11.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.843539553
+    },
+    {
+      "display_value": "9100.364",
+      "metric_id": "g3b2.ablation.a0.p11.p50_us",
+      "unit": "us",
+      "value": 9100.363720832
+    },
+    {
+      "display_value": "9109.464",
+      "metric_id": "g3b2.ablation.a0.p11.p95_us",
+      "unit": "us",
+      "value": 9109.464084553
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a0.p11.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "1.099",
+      "metric_id": "g3b2.ablation.a0.p12.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.099345209
+    },
+    {
+      "display_value": "953.800",
+      "metric_id": "g3b2.ablation.a0.p12.p50_us",
+      "unit": "us",
+      "value": 953.799607552
+    },
+    {
+      "display_value": "954.753",
+      "metric_id": "g3b2.ablation.a0.p12.p95_us",
+      "unit": "us",
+      "value": 954.75340716
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a0.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "0.382",
+      "metric_id": "g3b2.ablation.a0.p13.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.381707926
+    },
+    {
+      "display_value": "351614.781",
+      "metric_id": "g3b2.ablation.a0.p13.p50_us",
+      "unit": "us",
+      "value": 351614.781422222
+    },
+    {
+      "display_value": "351966.396",
+      "metric_id": "g3b2.ablation.a0.p13.p95_us",
+      "unit": "us",
+      "value": 351966.396203644
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a0.p13.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "0.754",
+      "metric_id": "g3b2.ablation.a0.p14.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.753944638
+    },
+    {
+      "display_value": "22251.990",
+      "metric_id": "g3b2.ablation.a0.p14.p50_us",
+      "unit": "us",
+      "value": 22251.990088889
+    },
+    {
+      "display_value": "22274.242",
+      "metric_id": "g3b2.ablation.a0.p14.p95_us",
+      "unit": "us",
+      "value": 22274.242078978
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a0.p14.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.623",
+      "metric_id": "g3b2.ablation.a0.p15.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.622675875
+    },
+    {
+      "display_value": "1683.939",
+      "metric_id": "g3b2.ablation.a0.p15.p50_us",
+      "unit": "us",
+      "value": 1683.938755556
+    },
+    {
+      "display_value": "1685.623",
+      "metric_id": "g3b2.ablation.a0.p15.p95_us",
+      "unit": "us",
+      "value": 1685.622694311
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a0.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.338",
+      "metric_id": "g3b2.ablation.a0.p16.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.337915182
+    },
+    {
+      "display_value": "397185.598",
+      "metric_id": "g3b2.ablation.a0.p16.p50_us",
+      "unit": "us",
+      "value": 397185.597893333
+    },
+    {
+      "display_value": "397582.783",
+      "metric_id": "g3b2.ablation.a0.p16.p95_us",
+      "unit": "us",
+      "value": 397582.783491226
+    },
+    {
+      "display_value": "126.0000",
+      "metric_id": "g3b2.ablation.a0.p16.phase_count",
+      "unit": "scalar",
+      "value": 126.0
+    },
+    {
+      "display_value": "0.831",
+      "metric_id": "g3b2.ablation.a0.p17.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.830855317
+    },
+    {
+      "display_value": "1292203.875",
+      "metric_id": "g3b2.ablation.a0.p17.p50_us",
+      "unit": "us",
+      "value": 1292203.8746816
+    },
+    {
+      "display_value": "1293496.079",
+      "metric_id": "g3b2.ablation.a0.p17.p95_us",
+      "unit": "us",
+      "value": 1293496.078556282
+    },
+    {
+      "display_value": "2046.0000",
+      "metric_id": "g3b2.ablation.a0.p17.phase_count",
+      "unit": "scalar",
+      "value": 2046.0
+    },
+    {
+      "display_value": "1.662",
+      "metric_id": "g3b2.ablation.a0.p18.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.661671954
+    },
+    {
+      "display_value": "646116.977",
+      "metric_id": "g3b2.ablation.a0.p18.p50_us",
+      "unit": "us",
+      "value": 646116.9773408
+    },
+    {
+      "display_value": "646763.094",
+      "metric_id": "g3b2.ablation.a0.p18.p95_us",
+      "unit": "us",
+      "value": 646763.094318141
+    },
+    {
+      "display_value": "1023.0000",
+      "metric_id": "g3b2.ablation.a0.p18.phase_count",
+      "unit": "scalar",
+      "value": 1023.0
+    },
+    {
+      "display_value": "0.107",
+      "metric_id": "g3b2.ablation.a1.p01.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.10694784
+    },
+    {
+      "display_value": "9.575",
+      "metric_id": "g3b2.ablation.a1.p01.p50_us",
+      "unit": "us",
+      "value": 9.575080114
+    },
+    {
+      "display_value": "9.585",
+      "metric_id": "g3b2.ablation.a1.p01.p95_us",
+      "unit": "us",
+      "value": 9.584655194
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a1.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "4.424",
+      "metric_id": "g3b2.ablation.a1.p02.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.423582904
+    },
+    {
+      "display_value": "14.816",
+      "metric_id": "g3b2.ablation.a1.p02.p50_us",
+      "unit": "us",
+      "value": 14.815633849
+    },
+    {
+      "display_value": "14.830",
+      "metric_id": "g3b2.ablation.a1.p02.p95_us",
+      "unit": "us",
+      "value": 14.830449483
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a1.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "4.422",
+      "metric_id": "g3b2.ablation.a1.p03.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.422090531
+    },
+    {
+      "display_value": "14.821",
+      "metric_id": "g3b2.ablation.a1.p03.p50_us",
+      "unit": "us",
+      "value": 14.820633849
+    },
+    {
+      "display_value": "14.835",
+      "metric_id": "g3b2.ablation.a1.p03.p95_us",
+      "unit": "us",
+      "value": 14.835454483
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a1.p03.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "5.283",
+      "metric_id": "g3b2.ablation.a1.p04.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 5.282667294
+    },
+    {
+      "display_value": "198.500",
+      "metric_id": "g3b2.ablation.a1.p04.p50_us",
+      "unit": "us",
+      "value": 198.500283176
+    },
+    {
+      "display_value": "198.699",
+      "metric_id": "g3b2.ablation.a1.p04.p95_us",
+      "unit": "us",
+      "value": 198.69878346
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a1.p04.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "12.089",
+      "metric_id": "g3b2.ablation.a1.p05.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 12.088629092
+    },
+    {
+      "display_value": "1387.897",
+      "metric_id": "g3b2.ablation.a1.p05.p50_us",
+      "unit": "us",
+      "value": 1387.897265411
+    },
+    {
+      "display_value": "1389.285",
+      "metric_id": "g3b2.ablation.a1.p05.p95_us",
+      "unit": "us",
+      "value": 1389.285162677
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a1.p05.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "12.241",
+      "metric_id": "g3b2.ablation.a1.p06.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 12.241188925
+    },
+    {
+      "display_value": "10964.801",
+      "metric_id": "g3b2.ablation.a1.p06.p50_us",
+      "unit": "us",
+      "value": 10964.801123291
+    },
+    {
+      "display_value": "10975.766",
+      "metric_id": "g3b2.ablation.a1.p06.p95_us",
+      "unit": "us",
+      "value": 10975.765924414
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a1.p06.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "2.725",
+      "metric_id": "g3b2.ablation.a1.p07.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.724808312
+    },
+    {
+      "display_value": "6157.045",
+      "metric_id": "g3b2.ablation.a1.p07.p50_us",
+      "unit": "us",
+      "value": 6157.045450914
+    },
+    {
+      "display_value": "6163.202",
+      "metric_id": "g3b2.ablation.a1.p07.p95_us",
+      "unit": "us",
+      "value": 6163.202496365
+    },
+    {
+      "display_value": "8.0000",
+      "metric_id": "g3b2.ablation.a1.p07.phase_count",
+      "unit": "scalar",
+      "value": 8.0
+    },
+    {
+      "display_value": "3.711",
+      "metric_id": "g3b2.ablation.a1.p08.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.71062144
+    },
+    {
+      "display_value": "282.580",
+      "metric_id": "g3b2.ablation.a1.p08.p50_us",
+      "unit": "us",
+      "value": 282.580170341
+    },
+    {
+      "display_value": "282.863",
+      "metric_id": "g3b2.ablation.a1.p08.p95_us",
+      "unit": "us",
+      "value": 282.862750511
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a1.p08.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "0.621",
+      "metric_id": "g3b2.ablation.a1.p09.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.620512326
+    },
+    {
+      "display_value": "105.613",
+      "metric_id": "g3b2.ablation.a1.p09.p50_us",
+      "unit": "us",
+      "value": 105.613135646
+    },
+    {
+      "display_value": "105.719",
+      "metric_id": "g3b2.ablation.a1.p09.p95_us",
+      "unit": "us",
+      "value": 105.718748782
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a1.p09.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "1.018",
+      "metric_id": "g3b2.ablation.a1.p10.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.018127911
+    },
+    {
+      "display_value": "131825.326",
+      "metric_id": "g3b2.ablation.a1.p10.p50_us",
+      "unit": "us",
+      "value": 131825.325873664
+    },
+    {
+      "display_value": "131957.151",
+      "metric_id": "g3b2.ablation.a1.p10.p95_us",
+      "unit": "us",
+      "value": 131957.151199538
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a1.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "2.022",
+      "metric_id": "g3b2.ablation.a1.p11.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.022027046
+    },
+    {
+      "display_value": "8297.060",
+      "metric_id": "g3b2.ablation.a1.p11.p50_us",
+      "unit": "us",
+      "value": 8297.060367104
+    },
+    {
+      "display_value": "8305.357",
+      "metric_id": "g3b2.ablation.a1.p11.p95_us",
+      "unit": "us",
+      "value": 8305.357427471
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a1.p11.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "1.810",
+      "metric_id": "g3b2.ablation.a1.p12.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.810264512
+    },
+    {
+      "display_value": "579.228",
+      "metric_id": "g3b2.ablation.a1.p12.p50_us",
+      "unit": "us",
+      "value": 579.227522944
+    },
+    {
+      "display_value": "579.807",
+      "metric_id": "g3b2.ablation.a1.p12.p95_us",
+      "unit": "us",
+      "value": 579.806750467
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a1.p12.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "0.403",
+      "metric_id": "g3b2.ablation.a1.p13.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.403350778
+    },
+    {
+      "display_value": "332747.961",
+      "metric_id": "g3b2.ablation.a1.p13.p50_us",
+      "unit": "us",
+      "value": 332747.961347369
+    },
+    {
+      "display_value": "333080.709",
+      "metric_id": "g3b2.ablation.a1.p13.p95_us",
+      "unit": "us",
+      "value": 333080.709308716
+    },
+    {
+      "display_value": "8.0000",
+      "metric_id": "g3b2.ablation.a1.p13.phase_count",
+      "unit": "scalar",
+      "value": 8.0
+    },
+    {
+      "display_value": "0.803",
+      "metric_id": "g3b2.ablation.a1.p14.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.802670112
+    },
+    {
+      "display_value": "20901.200",
+      "metric_id": "g3b2.ablation.a1.p14.p50_us",
+      "unit": "us",
+      "value": 20901.200084211
+    },
+    {
+      "display_value": "20922.101",
+      "metric_id": "g3b2.ablation.a1.p14.p95_us",
+      "unit": "us",
+      "value": 20922.101284295
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a1.p14.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "0.741",
+      "metric_id": "g3b2.ablation.a1.p15.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.740687027
+    },
+    {
+      "display_value": "1415.643",
+      "metric_id": "g3b2.ablation.a1.p15.p50_us",
+      "unit": "us",
+      "value": 1415.642505263
+    },
+    {
+      "display_value": "1417.058",
+      "metric_id": "g3b2.ablation.a1.p15.p95_us",
+      "unit": "us",
+      "value": 1417.058147768
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a1.p15.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "0.359",
+      "metric_id": "g3b2.ablation.a1.p16.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.358540018
+    },
+    {
+      "display_value": "374337.695",
+      "metric_id": "g3b2.ablation.a1.p16.p50_us",
+      "unit": "us",
+      "value": 374337.694846316
+    },
+    {
+      "display_value": "374712.033",
+      "metric_id": "g3b2.ablation.a1.p16.p95_us",
+      "unit": "us",
+      "value": 374712.032541162
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a1.p16.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "0.886",
+      "metric_id": "g3b2.ablation.a1.p17.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.885680721
+    },
+    {
+      "display_value": "1212213.877",
+      "metric_id": "g3b2.ablation.a1.p17.p50_us",
+      "unit": "us",
+      "value": 1212213.877066779
+    },
+    {
+      "display_value": "1213426.091",
+      "metric_id": "g3b2.ablation.a1.p17.p95_us",
+      "unit": "us",
+      "value": 1213426.090943846
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a1.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "1.771",
+      "metric_id": "g3b2.ablation.a1.p18.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.771317488
+    },
+    {
+      "display_value": "606121.979",
+      "metric_id": "g3b2.ablation.a1.p18.p50_us",
+      "unit": "us",
+      "value": 606121.97853339
+    },
+    {
+      "display_value": "606728.101",
+      "metric_id": "g3b2.ablation.a1.p18.p95_us",
+      "unit": "us",
+      "value": 606728.100511923
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a1.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    },
+    {
+      "display_value": "0.032",
+      "metric_id": "g3b2.ablation.a2.p01.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.03150482
+    },
+    {
+      "display_value": "32.504",
+      "metric_id": "g3b2.ablation.a2.p01.p50_us",
+      "unit": "us",
+      "value": 32.50404695
+    },
+    {
+      "display_value": "32.537",
+      "metric_id": "g3b2.ablation.a2.p01.p95_us",
+      "unit": "us",
+      "value": 32.536550997
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a2.p01.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "2.798",
+      "metric_id": "g3b2.ablation.a2.p02.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.798385051
+    },
+    {
+      "display_value": "23.420",
+      "metric_id": "g3b2.ablation.a2.p02.p50_us",
+      "unit": "us",
+      "value": 23.420002396
+    },
+    {
+      "display_value": "23.443",
+      "metric_id": "g3b2.ablation.a2.p02.p95_us",
+      "unit": "us",
+      "value": 23.443422399
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a2.p02.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "2.798",
+      "metric_id": "g3b2.ablation.a2.p03.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.797787744
+    },
+    {
+      "display_value": "23.425",
+      "metric_id": "g3b2.ablation.a2.p03.p50_us",
+      "unit": "us",
+      "value": 23.425002396
+    },
+    {
+      "display_value": "23.448",
+      "metric_id": "g3b2.ablation.a2.p03.p95_us",
+      "unit": "us",
+      "value": 23.448427399
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a2.p03.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "4.669",
+      "metric_id": "g3b2.ablation.a2.p04.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.66879161
+    },
+    {
+      "display_value": "224.600",
+      "metric_id": "g3b2.ablation.a2.p04.p50_us",
+      "unit": "us",
+      "value": 224.600076686
+    },
+    {
+      "display_value": "224.825",
+      "metric_id": "g3b2.ablation.a2.p04.p95_us",
+      "unit": "us",
+      "value": 224.824676763
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a2.p04.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "11.397",
+      "metric_id": "g3b2.ablation.a2.p05.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.397359691
+    },
+    {
+      "display_value": "1472.076",
+      "metric_id": "g3b2.ablation.a2.p05.p50_us",
+      "unit": "us",
+      "value": 1472.07561349
+    },
+    {
+      "display_value": "1473.548",
+      "metric_id": "g3b2.ablation.a2.p05.p95_us",
+      "unit": "us",
+      "value": 1473.547689103
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a2.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "11.591",
+      "metric_id": "g3b2.ablation.a2.p06.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.590791762
+    },
+    {
+      "display_value": "11580.072",
+      "metric_id": "g3b2.ablation.a2.p06.p50_us",
+      "unit": "us",
+      "value": 11580.071907918
+    },
+    {
+      "display_value": "11591.652",
+      "metric_id": "g3b2.ablation.a2.p06.p95_us",
+      "unit": "us",
+      "value": 11591.651979826
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a2.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "2.540",
+      "metric_id": "g3b2.ablation.a2.p07.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.539734742
+    },
+    {
+      "display_value": "6605.717",
+      "metric_id": "g3b2.ablation.a2.p07.p50_us",
+      "unit": "us",
+      "value": 6605.716864853
+    },
+    {
+      "display_value": "6612.323",
+      "metric_id": "g3b2.ablation.a2.p07.p95_us",
+      "unit": "us",
+      "value": 6612.322581718
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a2.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "2.999",
+      "metric_id": "g3b2.ablation.a2.p08.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.999215785
+    },
+    {
+      "display_value": "349.607",
+      "metric_id": "g3b2.ablation.a2.p08.p50_us",
+      "unit": "us",
+      "value": 349.607402027
+    },
+    {
+      "display_value": "349.957",
+      "metric_id": "g3b2.ablation.a2.p08.p95_us",
+      "unit": "us",
+      "value": 349.957009429
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a2.p08.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.403",
+      "metric_id": "g3b2.ablation.a2.p09.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.402523315
+    },
+    {
+      "display_value": "162.809",
+      "metric_id": "g3b2.ablation.a2.p09.p50_us",
+      "unit": "us",
+      "value": 162.808587627
+    },
+    {
+      "display_value": "162.971",
+      "metric_id": "g3b2.ablation.a2.p09.p95_us",
+      "unit": "us",
+      "value": 162.971396214
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a2.p09.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.960",
+      "metric_id": "g3b2.ablation.a2.p10.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.959814759
+    },
+    {
+      "display_value": "139834.320",
+      "metric_id": "g3b2.ablation.a2.p10.p50_us",
+      "unit": "us",
+      "value": 139834.319533312
+    },
+    {
+      "display_value": "139974.154",
+      "metric_id": "g3b2.ablation.a2.p10.p95_us",
+      "unit": "us",
+      "value": 139974.153852845
+    },
+    {
+      "display_value": "126.0000",
+      "metric_id": "g3b2.ablation.a2.p10.phase_count",
+      "unit": "scalar",
+      "value": 126.0
+    },
+    {
+      "display_value": "1.844",
+      "metric_id": "g3b2.ablation.a2.p11.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.843539553
+    },
+    {
+      "display_value": "9100.364",
+      "metric_id": "g3b2.ablation.a2.p11.p50_us",
+      "unit": "us",
+      "value": 9100.363720832
+    },
+    {
+      "display_value": "9109.464",
+      "metric_id": "g3b2.ablation.a2.p11.p95_us",
+      "unit": "us",
+      "value": 9109.464084553
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a2.p11.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "1.099",
+      "metric_id": "g3b2.ablation.a2.p12.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.099345209
+    },
+    {
+      "display_value": "953.800",
+      "metric_id": "g3b2.ablation.a2.p12.p50_us",
+      "unit": "us",
+      "value": 953.799607552
+    },
+    {
+      "display_value": "954.753",
+      "metric_id": "g3b2.ablation.a2.p12.p95_us",
+      "unit": "us",
+      "value": 954.75340716
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a2.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "0.382",
+      "metric_id": "g3b2.ablation.a2.p13.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.381707926
+    },
+    {
+      "display_value": "351614.781",
+      "metric_id": "g3b2.ablation.a2.p13.p50_us",
+      "unit": "us",
+      "value": 351614.781422222
+    },
+    {
+      "display_value": "351966.396",
+      "metric_id": "g3b2.ablation.a2.p13.p95_us",
+      "unit": "us",
+      "value": 351966.396203644
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a2.p13.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "0.754",
+      "metric_id": "g3b2.ablation.a2.p14.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.753944638
+    },
+    {
+      "display_value": "22251.990",
+      "metric_id": "g3b2.ablation.a2.p14.p50_us",
+      "unit": "us",
+      "value": 22251.990088889
+    },
+    {
+      "display_value": "22274.242",
+      "metric_id": "g3b2.ablation.a2.p14.p95_us",
+      "unit": "us",
+      "value": 22274.242078978
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a2.p14.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.623",
+      "metric_id": "g3b2.ablation.a2.p15.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.622675875
+    },
+    {
+      "display_value": "1683.939",
+      "metric_id": "g3b2.ablation.a2.p15.p50_us",
+      "unit": "us",
+      "value": 1683.938755556
+    },
+    {
+      "display_value": "1685.623",
+      "metric_id": "g3b2.ablation.a2.p15.p95_us",
+      "unit": "us",
+      "value": 1685.622694311
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a2.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.338",
+      "metric_id": "g3b2.ablation.a2.p16.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.337915182
+    },
+    {
+      "display_value": "397185.598",
+      "metric_id": "g3b2.ablation.a2.p16.p50_us",
+      "unit": "us",
+      "value": 397185.597893333
+    },
+    {
+      "display_value": "397582.783",
+      "metric_id": "g3b2.ablation.a2.p16.p95_us",
+      "unit": "us",
+      "value": 397582.783491226
+    },
+    {
+      "display_value": "126.0000",
+      "metric_id": "g3b2.ablation.a2.p16.phase_count",
+      "unit": "scalar",
+      "value": 126.0
+    },
+    {
+      "display_value": "0.831",
+      "metric_id": "g3b2.ablation.a2.p17.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.830855317
+    },
+    {
+      "display_value": "1292203.875",
+      "metric_id": "g3b2.ablation.a2.p17.p50_us",
+      "unit": "us",
+      "value": 1292203.8746816
+    },
+    {
+      "display_value": "1293496.079",
+      "metric_id": "g3b2.ablation.a2.p17.p95_us",
+      "unit": "us",
+      "value": 1293496.078556282
+    },
+    {
+      "display_value": "2046.0000",
+      "metric_id": "g3b2.ablation.a2.p17.phase_count",
+      "unit": "scalar",
+      "value": 2046.0
+    },
+    {
+      "display_value": "1.662",
+      "metric_id": "g3b2.ablation.a2.p18.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.661671954
+    },
+    {
+      "display_value": "646116.977",
+      "metric_id": "g3b2.ablation.a2.p18.p50_us",
+      "unit": "us",
+      "value": 646116.9773408
+    },
+    {
+      "display_value": "646763.094",
+      "metric_id": "g3b2.ablation.a2.p18.p95_us",
+      "unit": "us",
+      "value": 646763.094318141
+    },
+    {
+      "display_value": "1023.0000",
+      "metric_id": "g3b2.ablation.a2.p18.phase_count",
+      "unit": "scalar",
+      "value": 1023.0
+    },
+    {
+      "display_value": "0.107",
+      "metric_id": "g3b2.ablation.a3.p01.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.10694784
+    },
+    {
+      "display_value": "9.575",
+      "metric_id": "g3b2.ablation.a3.p01.p50_us",
+      "unit": "us",
+      "value": 9.575080114
+    },
+    {
+      "display_value": "9.585",
+      "metric_id": "g3b2.ablation.a3.p01.p95_us",
+      "unit": "us",
+      "value": 9.584655194
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a3.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "4.244",
+      "metric_id": "g3b2.ablation.a3.p02.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.243811131
+    },
+    {
+      "display_value": "15.443",
+      "metric_id": "g3b2.ablation.a3.p02.p50_us",
+      "unit": "us",
+      "value": 15.443237832
+    },
+    {
+      "display_value": "15.459",
+      "metric_id": "g3b2.ablation.a3.p02.p95_us",
+      "unit": "us",
+      "value": 15.458681069
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a3.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "3.259",
+      "metric_id": "g3b2.ablation.a3.p03.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.259242845
+    },
+    {
+      "display_value": "20.108",
+      "metric_id": "g3b2.ablation.a3.p03.p50_us",
+      "unit": "us",
+      "value": 20.108407911
+    },
+    {
+      "display_value": "20.129",
+      "metric_id": "g3b2.ablation.a3.p03.p95_us",
+      "unit": "us",
+      "value": 20.128516319
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a3.p03.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "4.669",
+      "metric_id": "g3b2.ablation.a3.p04.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.66879161
+    },
+    {
+      "display_value": "224.600",
+      "metric_id": "g3b2.ablation.a3.p04.p50_us",
+      "unit": "us",
+      "value": 224.600076686
+    },
+    {
+      "display_value": "224.825",
+      "metric_id": "g3b2.ablation.a3.p04.p95_us",
+      "unit": "us",
+      "value": 224.824676763
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a3.p04.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "11.397",
+      "metric_id": "g3b2.ablation.a3.p05.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.397359691
+    },
+    {
+      "display_value": "1472.076",
+      "metric_id": "g3b2.ablation.a3.p05.p50_us",
+      "unit": "us",
+      "value": 1472.07561349
+    },
+    {
+      "display_value": "1473.548",
+      "metric_id": "g3b2.ablation.a3.p05.p95_us",
+      "unit": "us",
+      "value": 1473.547689103
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a3.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "11.591",
+      "metric_id": "g3b2.ablation.a3.p06.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.590791762
+    },
+    {
+      "display_value": "11580.072",
+      "metric_id": "g3b2.ablation.a3.p06.p50_us",
+      "unit": "us",
+      "value": 11580.071907918
+    },
+    {
+      "display_value": "11591.652",
+      "metric_id": "g3b2.ablation.a3.p06.p95_us",
+      "unit": "us",
+      "value": 11591.651979826
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a3.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "2.540",
+      "metric_id": "g3b2.ablation.a3.p07.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.539734742
+    },
+    {
+      "display_value": "6605.717",
+      "metric_id": "g3b2.ablation.a3.p07.p50_us",
+      "unit": "us",
+      "value": 6605.716864853
+    },
+    {
+      "display_value": "6612.323",
+      "metric_id": "g3b2.ablation.a3.p07.p95_us",
+      "unit": "us",
+      "value": 6612.322581718
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a3.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "2.999",
+      "metric_id": "g3b2.ablation.a3.p08.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.999215785
+    },
+    {
+      "display_value": "349.607",
+      "metric_id": "g3b2.ablation.a3.p08.p50_us",
+      "unit": "us",
+      "value": 349.607402027
+    },
+    {
+      "display_value": "349.957",
+      "metric_id": "g3b2.ablation.a3.p08.p95_us",
+      "unit": "us",
+      "value": 349.957009429
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a3.p08.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.403",
+      "metric_id": "g3b2.ablation.a3.p09.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.402523315
+    },
+    {
+      "display_value": "162.809",
+      "metric_id": "g3b2.ablation.a3.p09.p50_us",
+      "unit": "us",
+      "value": 162.808587627
+    },
+    {
+      "display_value": "162.971",
+      "metric_id": "g3b2.ablation.a3.p09.p95_us",
+      "unit": "us",
+      "value": 162.971396214
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a3.p09.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "1.018",
+      "metric_id": "g3b2.ablation.a3.p10.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.018127911
+    },
+    {
+      "display_value": "131825.326",
+      "metric_id": "g3b2.ablation.a3.p10.p50_us",
+      "unit": "us",
+      "value": 131825.325873664
+    },
+    {
+      "display_value": "131957.151",
+      "metric_id": "g3b2.ablation.a3.p10.p95_us",
+      "unit": "us",
+      "value": 131957.151199538
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a3.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "1.811",
+      "metric_id": "g3b2.ablation.a3.p11.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.810684909
+    },
+    {
+      "display_value": "9265.489",
+      "metric_id": "g3b2.ablation.a3.p11.p50_us",
+      "unit": "us",
+      "value": 9265.488645587
+    },
+    {
+      "display_value": "9274.754",
+      "metric_id": "g3b2.ablation.a3.p11.p95_us",
+      "unit": "us",
+      "value": 9274.754134232
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a3.p11.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "1.099",
+      "metric_id": "g3b2.ablation.a3.p12.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.099345209
+    },
+    {
+      "display_value": "953.800",
+      "metric_id": "g3b2.ablation.a3.p12.p50_us",
+      "unit": "us",
+      "value": 953.799607552
+    },
+    {
+      "display_value": "954.753",
+      "metric_id": "g3b2.ablation.a3.p12.p95_us",
+      "unit": "us",
+      "value": 954.75340716
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a3.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "0.348",
+      "metric_id": "g3b2.ablation.a3.p13.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.348101703
+    },
+    {
+      "display_value": "385560.161",
+      "metric_id": "g3b2.ablation.a3.p13.p50_us",
+      "unit": "us",
+      "value": 385560.16148043
+    },
+    {
+      "display_value": "385945.722",
+      "metric_id": "g3b2.ablation.a3.p13.p95_us",
+      "unit": "us",
+      "value": 385945.721641911
+    },
+    {
+      "display_value": "9",
+      "metric_id": "g3b2.ablation.a3.p13.phase_count",
+      "unit": "count",
+      "value": 9
+    },
+    {
+      "display_value": "0.719",
+      "metric_id": "g3b2.ablation.a3.p14.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.718603108
+    },
+    {
+      "display_value": "23346.362",
+      "metric_id": "g3b2.ablation.a3.p14.p50_us",
+      "unit": "us",
+      "value": 23346.362447059
+    },
+    {
+      "display_value": "23369.709",
+      "metric_id": "g3b2.ablation.a3.p14.p95_us",
+      "unit": "us",
+      "value": 23369.708809506
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a3.p14.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "0.623",
+      "metric_id": "g3b2.ablation.a3.p15.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.622675875
+    },
+    {
+      "display_value": "1683.939",
+      "metric_id": "g3b2.ablation.a3.p15.p50_us",
+      "unit": "us",
+      "value": 1683.938755556
+    },
+    {
+      "display_value": "1685.623",
+      "metric_id": "g3b2.ablation.a3.p15.p95_us",
+      "unit": "us",
+      "value": 1685.622694311
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a3.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.291",
+      "metric_id": "g3b2.ablation.a3.p16.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.291011695
+    },
+    {
+      "display_value": "461201.546",
+      "metric_id": "g3b2.ablation.a3.p16.p50_us",
+      "unit": "us",
+      "value": 461201.545607677
+    },
+    {
+      "display_value": "461662.747",
+      "metric_id": "g3b2.ablation.a3.p16.p95_us",
+      "unit": "us",
+      "value": 461662.747153285
+    },
+    {
+      "display_value": "21",
+      "metric_id": "g3b2.ablation.a3.p16.phase_count",
+      "unit": "count",
+      "value": 21
+    },
+    {
+      "display_value": "0.886",
+      "metric_id": "g3b2.ablation.a3.p17.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.885680721
+    },
+    {
+      "display_value": "1212213.877",
+      "metric_id": "g3b2.ablation.a3.p17.p50_us",
+      "unit": "us",
+      "value": 1212213.877066779
+    },
+    {
+      "display_value": "1213426.091",
+      "metric_id": "g3b2.ablation.a3.p17.p95_us",
+      "unit": "us",
+      "value": 1213426.090943846
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a3.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "1.585",
+      "metric_id": "g3b2.ablation.a3.p18.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.584911046
+    },
+    {
+      "display_value": "677409.917",
+      "metric_id": "g3b2.ablation.a3.p18.p50_us",
+      "unit": "us",
+      "value": 677409.917184376
+    },
+    {
+      "display_value": "678087.327",
+      "metric_id": "g3b2.ablation.a3.p18.p95_us",
+      "unit": "us",
+      "value": 678087.327101561
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a3.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    },
+    {
+      "display_value": "0.107",
+      "metric_id": "g3b2.ablation.a4.p01.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.10694784
+    },
+    {
+      "display_value": "9.575",
+      "metric_id": "g3b2.ablation.a4.p01.p50_us",
+      "unit": "us",
+      "value": 9.575080114
+    },
+    {
+      "display_value": "9.585",
+      "metric_id": "g3b2.ablation.a4.p01.p95_us",
+      "unit": "us",
+      "value": 9.584655194
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a4.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "4.244",
+      "metric_id": "g3b2.ablation.a4.p02.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.243811131
+    },
+    {
+      "display_value": "15.443",
+      "metric_id": "g3b2.ablation.a4.p02.p50_us",
+      "unit": "us",
+      "value": 15.443237832
+    },
+    {
+      "display_value": "15.459",
+      "metric_id": "g3b2.ablation.a4.p02.p95_us",
+      "unit": "us",
+      "value": 15.458681069
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a4.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "3.259",
+      "metric_id": "g3b2.ablation.a4.p03.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.259242845
+    },
+    {
+      "display_value": "20.108",
+      "metric_id": "g3b2.ablation.a4.p03.p50_us",
+      "unit": "us",
+      "value": 20.108407911
+    },
+    {
+      "display_value": "20.129",
+      "metric_id": "g3b2.ablation.a4.p03.p95_us",
+      "unit": "us",
+      "value": 20.128516319
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a4.p03.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "4.653",
+      "metric_id": "g3b2.ablation.a4.p04.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.653253148
+    },
+    {
+      "display_value": "225.350",
+      "metric_id": "g3b2.ablation.a4.p04.p50_us",
+      "unit": "us",
+      "value": 225.350076686
+    },
+    {
+      "display_value": "225.575",
+      "metric_id": "g3b2.ablation.a4.p04.p95_us",
+      "unit": "us",
+      "value": 225.575426763
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a4.p04.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "11.374",
+      "metric_id": "g3b2.ablation.a4.p05.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.374179809
+    },
+    {
+      "display_value": "1475.076",
+      "metric_id": "g3b2.ablation.a4.p05.p50_us",
+      "unit": "us",
+      "value": 1475.07561349
+    },
+    {
+      "display_value": "1476.551",
+      "metric_id": "g3b2.ablation.a4.p05.p95_us",
+      "unit": "us",
+      "value": 1476.550689103
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a4.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "11.591",
+      "metric_id": "g3b2.ablation.a4.p06.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.590791762
+    },
+    {
+      "display_value": "11580.072",
+      "metric_id": "g3b2.ablation.a4.p06.p50_us",
+      "unit": "us",
+      "value": 11580.071907918
+    },
+    {
+      "display_value": "11591.652",
+      "metric_id": "g3b2.ablation.a4.p06.p95_us",
+      "unit": "us",
+      "value": 11591.651979826
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a4.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "2.539",
+      "metric_id": "g3b2.ablation.a4.p07.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.53858184
+    },
+    {
+      "display_value": "6608.717",
+      "metric_id": "g3b2.ablation.a4.p07.p50_us",
+      "unit": "us",
+      "value": 6608.716864853
+    },
+    {
+      "display_value": "6615.326",
+      "metric_id": "g3b2.ablation.a4.p07.p95_us",
+      "unit": "us",
+      "value": 6615.325581718
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a4.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "2.993",
+      "metric_id": "g3b2.ablation.a4.p08.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.99279545
+    },
+    {
+      "display_value": "350.357",
+      "metric_id": "g3b2.ablation.a4.p08.p50_us",
+      "unit": "us",
+      "value": 350.357402027
+    },
+    {
+      "display_value": "350.708",
+      "metric_id": "g3b2.ablation.a4.p08.p95_us",
+      "unit": "us",
+      "value": 350.707759429
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a4.p08.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.403",
+      "metric_id": "g3b2.ablation.a4.p09.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.402523315
+    },
+    {
+      "display_value": "162.809",
+      "metric_id": "g3b2.ablation.a4.p09.p50_us",
+      "unit": "us",
+      "value": 162.808587627
+    },
+    {
+      "display_value": "162.971",
+      "metric_id": "g3b2.ablation.a4.p09.p95_us",
+      "unit": "us",
+      "value": 162.971396214
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a4.p09.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "1.018",
+      "metric_id": "g3b2.ablation.a4.p10.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.018127911
+    },
+    {
+      "display_value": "131825.326",
+      "metric_id": "g3b2.ablation.a4.p10.p50_us",
+      "unit": "us",
+      "value": 131825.325873664
+    },
+    {
+      "display_value": "131957.151",
+      "metric_id": "g3b2.ablation.a4.p10.p95_us",
+      "unit": "us",
+      "value": 131957.151199538
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a4.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "1.810",
+      "metric_id": "g3b2.ablation.a4.p11.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.810098831
+    },
+    {
+      "display_value": "9268.489",
+      "metric_id": "g3b2.ablation.a4.p11.p50_us",
+      "unit": "us",
+      "value": 9268.488645587
+    },
+    {
+      "display_value": "9277.757",
+      "metric_id": "g3b2.ablation.a4.p11.p95_us",
+      "unit": "us",
+      "value": 9277.757134232
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a4.p11.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "1.098",
+      "metric_id": "g3b2.ablation.a4.p12.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.098481442
+    },
+    {
+      "display_value": "954.550",
+      "metric_id": "g3b2.ablation.a4.p12.p50_us",
+      "unit": "us",
+      "value": 954.549607552
+    },
+    {
+      "display_value": "955.504",
+      "metric_id": "g3b2.ablation.a4.p12.p95_us",
+      "unit": "us",
+      "value": 955.50415716
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a4.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "0.348",
+      "metric_id": "g3b2.ablation.a4.p13.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.348101703
+    },
+    {
+      "display_value": "385560.161",
+      "metric_id": "g3b2.ablation.a4.p13.p50_us",
+      "unit": "us",
+      "value": 385560.16148043
+    },
+    {
+      "display_value": "385945.722",
+      "metric_id": "g3b2.ablation.a4.p13.p95_us",
+      "unit": "us",
+      "value": 385945.721641911
+    },
+    {
+      "display_value": "9",
+      "metric_id": "g3b2.ablation.a4.p13.phase_count",
+      "unit": "count",
+      "value": 9
+    },
+    {
+      "display_value": "0.719",
+      "metric_id": "g3b2.ablation.a4.p14.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.71851078
+    },
+    {
+      "display_value": "23349.362",
+      "metric_id": "g3b2.ablation.a4.p14.p50_us",
+      "unit": "us",
+      "value": 23349.362447059
+    },
+    {
+      "display_value": "23372.712",
+      "metric_id": "g3b2.ablation.a4.p14.p95_us",
+      "unit": "us",
+      "value": 23372.711809506
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a4.p14.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "0.622",
+      "metric_id": "g3b2.ablation.a4.p15.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.622398669
+    },
+    {
+      "display_value": "1684.689",
+      "metric_id": "g3b2.ablation.a4.p15.p50_us",
+      "unit": "us",
+      "value": 1684.688755556
+    },
+    {
+      "display_value": "1686.373",
+      "metric_id": "g3b2.ablation.a4.p15.p95_us",
+      "unit": "us",
+      "value": 1686.373444311
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a4.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.291",
+      "metric_id": "g3b2.ablation.a4.p16.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.291011695
+    },
+    {
+      "display_value": "461201.546",
+      "metric_id": "g3b2.ablation.a4.p16.p50_us",
+      "unit": "us",
+      "value": 461201.545607677
+    },
+    {
+      "display_value": "461662.747",
+      "metric_id": "g3b2.ablation.a4.p16.p95_us",
+      "unit": "us",
+      "value": 461662.747153285
+    },
+    {
+      "display_value": "21",
+      "metric_id": "g3b2.ablation.a4.p16.phase_count",
+      "unit": "count",
+      "value": 21
+    },
+    {
+      "display_value": "0.886",
+      "metric_id": "g3b2.ablation.a4.p17.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.885715793
+    },
+    {
+      "display_value": "1212165.877",
+      "metric_id": "g3b2.ablation.a4.p17.p50_us",
+      "unit": "us",
+      "value": 1212165.877066779
+    },
+    {
+      "display_value": "1213378.043",
+      "metric_id": "g3b2.ablation.a4.p17.p95_us",
+      "unit": "us",
+      "value": 1213378.042943846
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a4.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "1.585",
+      "metric_id": "g3b2.ablation.a4.p18.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.585023358
+    },
+    {
+      "display_value": "677361.917",
+      "metric_id": "g3b2.ablation.a4.p18.p50_us",
+      "unit": "us",
+      "value": 677361.917184376
+    },
+    {
+      "display_value": "678039.279",
+      "metric_id": "g3b2.ablation.a4.p18.p95_us",
+      "unit": "us",
+      "value": 678039.279101561
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a4.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    },
+    {
+      "display_value": "0.107",
+      "metric_id": "g3b2.ablation.a5.p01.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.10694784
+    },
+    {
+      "display_value": "9.575",
+      "metric_id": "g3b2.ablation.a5.p01.p50_us",
+      "unit": "us",
+      "value": 9.575080114
+    },
+    {
+      "display_value": "9.585",
+      "metric_id": "g3b2.ablation.a5.p01.p95_us",
+      "unit": "us",
+      "value": 9.584655194
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a5.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "4.244",
+      "metric_id": "g3b2.ablation.a5.p02.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.243811131
+    },
+    {
+      "display_value": "15.443",
+      "metric_id": "g3b2.ablation.a5.p02.p50_us",
+      "unit": "us",
+      "value": 15.443237832
+    },
+    {
+      "display_value": "15.459",
+      "metric_id": "g3b2.ablation.a5.p02.p95_us",
+      "unit": "us",
+      "value": 15.458681069
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a5.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "3.259",
+      "metric_id": "g3b2.ablation.a5.p03.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.259242845
+    },
+    {
+      "display_value": "20.108",
+      "metric_id": "g3b2.ablation.a5.p03.p50_us",
+      "unit": "us",
+      "value": 20.108407911
+    },
+    {
+      "display_value": "20.129",
+      "metric_id": "g3b2.ablation.a5.p03.p95_us",
+      "unit": "us",
+      "value": 20.128516319
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a5.p03.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "4.781",
+      "metric_id": "g3b2.ablation.a5.p04.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.780894961
+    },
+    {
+      "display_value": "219.334",
+      "metric_id": "g3b2.ablation.a5.p04.p50_us",
+      "unit": "us",
+      "value": 219.333610609
+    },
+    {
+      "display_value": "219.553",
+      "metric_id": "g3b2.ablation.a5.p04.p95_us",
+      "unit": "us",
+      "value": 219.55294422
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a5.p04.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "11.374",
+      "metric_id": "g3b2.ablation.a5.p05.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.374179809
+    },
+    {
+      "display_value": "1475.076",
+      "metric_id": "g3b2.ablation.a5.p05.p50_us",
+      "unit": "us",
+      "value": 1475.07561349
+    },
+    {
+      "display_value": "1476.551",
+      "metric_id": "g3b2.ablation.a5.p05.p95_us",
+      "unit": "us",
+      "value": 1476.550689103
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a5.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "11.591",
+      "metric_id": "g3b2.ablation.a5.p06.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.590791762
+    },
+    {
+      "display_value": "11580.072",
+      "metric_id": "g3b2.ablation.a5.p06.p50_us",
+      "unit": "us",
+      "value": 11580.071907918
+    },
+    {
+      "display_value": "11591.652",
+      "metric_id": "g3b2.ablation.a5.p06.p95_us",
+      "unit": "us",
+      "value": 11591.651979826
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a5.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "2.539",
+      "metric_id": "g3b2.ablation.a5.p07.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.53858184
+    },
+    {
+      "display_value": "6608.717",
+      "metric_id": "g3b2.ablation.a5.p07.p50_us",
+      "unit": "us",
+      "value": 6608.716864853
+    },
+    {
+      "display_value": "6615.326",
+      "metric_id": "g3b2.ablation.a5.p07.p95_us",
+      "unit": "us",
+      "value": 6615.325581718
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a5.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "3.432",
+      "metric_id": "g3b2.ablation.a5.p08.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.431804155
+    },
+    {
+      "display_value": "305.538",
+      "metric_id": "g3b2.ablation.a5.p08.p50_us",
+      "unit": "us",
+      "value": 305.538425675
+    },
+    {
+      "display_value": "305.844",
+      "metric_id": "g3b2.ablation.a5.p08.p95_us",
+      "unit": "us",
+      "value": 305.843964101
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a5.p08.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "0.464",
+      "metric_id": "g3b2.ablation.a5.p09.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.464353099
+    },
+    {
+      "display_value": "141.130",
+      "metric_id": "g3b2.ablation.a5.p09.p50_us",
+      "unit": "us",
+      "value": 141.130214388
+    },
+    {
+      "display_value": "141.271",
+      "metric_id": "g3b2.ablation.a5.p09.p95_us",
+      "unit": "us",
+      "value": 141.271344603
+    },
+    {
+      "display_value": "3.2500",
+      "metric_id": "g3b2.ablation.a5.p09.phase_count",
+      "unit": "scalar",
+      "value": 3.25
+    },
+    {
+      "display_value": "1.018",
+      "metric_id": "g3b2.ablation.a5.p10.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.018127911
+    },
+    {
+      "display_value": "131825.326",
+      "metric_id": "g3b2.ablation.a5.p10.p50_us",
+      "unit": "us",
+      "value": 131825.325873664
+    },
+    {
+      "display_value": "131957.151",
+      "metric_id": "g3b2.ablation.a5.p10.p95_us",
+      "unit": "us",
+      "value": 131957.151199538
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a5.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "1.843",
+      "metric_id": "g3b2.ablation.a5.p11.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.842932017
+    },
+    {
+      "display_value": "9103.364",
+      "metric_id": "g3b2.ablation.a5.p11.p50_us",
+      "unit": "us",
+      "value": 9103.363720832
+    },
+    {
+      "display_value": "9112.467",
+      "metric_id": "g3b2.ablation.a5.p11.p95_us",
+      "unit": "us",
+      "value": 9112.467084553
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a5.p11.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "1.098",
+      "metric_id": "g3b2.ablation.a5.p12.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.098481442
+    },
+    {
+      "display_value": "954.550",
+      "metric_id": "g3b2.ablation.a5.p12.p50_us",
+      "unit": "us",
+      "value": 954.549607552
+    },
+    {
+      "display_value": "955.504",
+      "metric_id": "g3b2.ablation.a5.p12.p95_us",
+      "unit": "us",
+      "value": 955.50415716
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a5.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "0.403",
+      "metric_id": "g3b2.ablation.a5.p13.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.403350778
+    },
+    {
+      "display_value": "332747.961",
+      "metric_id": "g3b2.ablation.a5.p13.p50_us",
+      "unit": "us",
+      "value": 332747.961347369
+    },
+    {
+      "display_value": "333080.709",
+      "metric_id": "g3b2.ablation.a5.p13.p95_us",
+      "unit": "us",
+      "value": 333080.709308716
+    },
+    {
+      "display_value": "8.0000",
+      "metric_id": "g3b2.ablation.a5.p13.phase_count",
+      "unit": "scalar",
+      "value": 8.0
+    },
+    {
+      "display_value": "0.754",
+      "metric_id": "g3b2.ablation.a5.p14.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.753843006
+    },
+    {
+      "display_value": "22254.990",
+      "metric_id": "g3b2.ablation.a5.p14.p50_us",
+      "unit": "us",
+      "value": 22254.990088889
+    },
+    {
+      "display_value": "22277.245",
+      "metric_id": "g3b2.ablation.a5.p14.p95_us",
+      "unit": "us",
+      "value": 22277.245078978
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a5.p14.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.622",
+      "metric_id": "g3b2.ablation.a5.p15.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.622398669
+    },
+    {
+      "display_value": "1684.689",
+      "metric_id": "g3b2.ablation.a5.p15.p50_us",
+      "unit": "us",
+      "value": 1684.688755556
+    },
+    {
+      "display_value": "1686.373",
+      "metric_id": "g3b2.ablation.a5.p15.p95_us",
+      "unit": "us",
+      "value": 1686.373444311
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a5.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.359",
+      "metric_id": "g3b2.ablation.a5.p16.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.358540018
+    },
+    {
+      "display_value": "374337.695",
+      "metric_id": "g3b2.ablation.a5.p16.p50_us",
+      "unit": "us",
+      "value": 374337.694846316
+    },
+    {
+      "display_value": "374712.033",
+      "metric_id": "g3b2.ablation.a5.p16.p95_us",
+      "unit": "us",
+      "value": 374712.032541162
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a5.p16.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "0.886",
+      "metric_id": "g3b2.ablation.a5.p17.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.885715793
+    },
+    {
+      "display_value": "1212165.877",
+      "metric_id": "g3b2.ablation.a5.p17.p50_us",
+      "unit": "us",
+      "value": 1212165.877066779
+    },
+    {
+      "display_value": "1213378.043",
+      "metric_id": "g3b2.ablation.a5.p17.p95_us",
+      "unit": "us",
+      "value": 1213378.042943846
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a5.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "1.585",
+      "metric_id": "g3b2.ablation.a5.p18.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.585023358
+    },
+    {
+      "display_value": "677361.917",
+      "metric_id": "g3b2.ablation.a5.p18.p50_us",
+      "unit": "us",
+      "value": 677361.917184376
+    },
+    {
+      "display_value": "678039.279",
+      "metric_id": "g3b2.ablation.a5.p18.p95_us",
+      "unit": "us",
+      "value": 678039.279101561
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a5.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    },
+    {
+      "display_value": "0.107",
+      "metric_id": "g3b2.ablation.a6.p01.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.10694784
+    },
+    {
+      "display_value": "9.575",
+      "metric_id": "g3b2.ablation.a6.p01.p50_us",
+      "unit": "us",
+      "value": 9.575080114
+    },
+    {
+      "display_value": "9.585",
+      "metric_id": "g3b2.ablation.a6.p01.p95_us",
+      "unit": "us",
+      "value": 9.584655194
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a6.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "4.244",
+      "metric_id": "g3b2.ablation.a6.p02.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.243811131
+    },
+    {
+      "display_value": "15.443",
+      "metric_id": "g3b2.ablation.a6.p02.p50_us",
+      "unit": "us",
+      "value": 15.443237832
+    },
+    {
+      "display_value": "15.459",
+      "metric_id": "g3b2.ablation.a6.p02.p95_us",
+      "unit": "us",
+      "value": 15.458681069
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a6.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "3.259",
+      "metric_id": "g3b2.ablation.a6.p03.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.259242845
+    },
+    {
+      "display_value": "20.108",
+      "metric_id": "g3b2.ablation.a6.p03.p50_us",
+      "unit": "us",
+      "value": 20.108407911
+    },
+    {
+      "display_value": "20.129",
+      "metric_id": "g3b2.ablation.a6.p03.p95_us",
+      "unit": "us",
+      "value": 20.128516319
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a6.p03.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "4.781",
+      "metric_id": "g3b2.ablation.a6.p04.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.780894961
+    },
+    {
+      "display_value": "219.334",
+      "metric_id": "g3b2.ablation.a6.p04.p50_us",
+      "unit": "us",
+      "value": 219.333610609
+    },
+    {
+      "display_value": "219.553",
+      "metric_id": "g3b2.ablation.a6.p04.p95_us",
+      "unit": "us",
+      "value": 219.55294422
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a6.p04.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "11.374",
+      "metric_id": "g3b2.ablation.a6.p05.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.374179809
+    },
+    {
+      "display_value": "1475.076",
+      "metric_id": "g3b2.ablation.a6.p05.p50_us",
+      "unit": "us",
+      "value": 1475.07561349
+    },
+    {
+      "display_value": "1476.551",
+      "metric_id": "g3b2.ablation.a6.p05.p95_us",
+      "unit": "us",
+      "value": 1476.550689103
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a6.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "11.591",
+      "metric_id": "g3b2.ablation.a6.p06.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 11.590791762
+    },
+    {
+      "display_value": "11580.072",
+      "metric_id": "g3b2.ablation.a6.p06.p50_us",
+      "unit": "us",
+      "value": 11580.071907918
+    },
+    {
+      "display_value": "11591.652",
+      "metric_id": "g3b2.ablation.a6.p06.p95_us",
+      "unit": "us",
+      "value": 11591.651979826
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a6.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "2.539",
+      "metric_id": "g3b2.ablation.a6.p07.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 2.53858184
+    },
+    {
+      "display_value": "6608.717",
+      "metric_id": "g3b2.ablation.a6.p07.p50_us",
+      "unit": "us",
+      "value": 6608.716864853
+    },
+    {
+      "display_value": "6615.326",
+      "metric_id": "g3b2.ablation.a6.p07.p95_us",
+      "unit": "us",
+      "value": 6615.325581718
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a6.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "3.432",
+      "metric_id": "g3b2.ablation.a6.p08.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.431804155
+    },
+    {
+      "display_value": "305.538",
+      "metric_id": "g3b2.ablation.a6.p08.p50_us",
+      "unit": "us",
+      "value": 305.538425675
+    },
+    {
+      "display_value": "305.844",
+      "metric_id": "g3b2.ablation.a6.p08.p95_us",
+      "unit": "us",
+      "value": 305.843964101
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a6.p08.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "0.464",
+      "metric_id": "g3b2.ablation.a6.p09.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.464353099
+    },
+    {
+      "display_value": "141.130",
+      "metric_id": "g3b2.ablation.a6.p09.p50_us",
+      "unit": "us",
+      "value": 141.130214388
+    },
+    {
+      "display_value": "141.271",
+      "metric_id": "g3b2.ablation.a6.p09.p95_us",
+      "unit": "us",
+      "value": 141.271344603
+    },
+    {
+      "display_value": "3.2500",
+      "metric_id": "g3b2.ablation.a6.p09.phase_count",
+      "unit": "scalar",
+      "value": 3.25
+    },
+    {
+      "display_value": "1.018",
+      "metric_id": "g3b2.ablation.a6.p10.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.018127911
+    },
+    {
+      "display_value": "131825.326",
+      "metric_id": "g3b2.ablation.a6.p10.p50_us",
+      "unit": "us",
+      "value": 131825.325873664
+    },
+    {
+      "display_value": "131957.151",
+      "metric_id": "g3b2.ablation.a6.p10.p95_us",
+      "unit": "us",
+      "value": 131957.151199538
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a6.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "1.843",
+      "metric_id": "g3b2.ablation.a6.p11.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.842932017
+    },
+    {
+      "display_value": "9103.364",
+      "metric_id": "g3b2.ablation.a6.p11.p50_us",
+      "unit": "us",
+      "value": 9103.363720832
+    },
+    {
+      "display_value": "9112.467",
+      "metric_id": "g3b2.ablation.a6.p11.p95_us",
+      "unit": "us",
+      "value": 9112.467084553
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a6.p11.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "1.098",
+      "metric_id": "g3b2.ablation.a6.p12.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.098481442
+    },
+    {
+      "display_value": "954.550",
+      "metric_id": "g3b2.ablation.a6.p12.p50_us",
+      "unit": "us",
+      "value": 954.549607552
+    },
+    {
+      "display_value": "955.504",
+      "metric_id": "g3b2.ablation.a6.p12.p95_us",
+      "unit": "us",
+      "value": 955.50415716
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a6.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "0.403",
+      "metric_id": "g3b2.ablation.a6.p13.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.403350778
+    },
+    {
+      "display_value": "332747.961",
+      "metric_id": "g3b2.ablation.a6.p13.p50_us",
+      "unit": "us",
+      "value": 332747.961347369
+    },
+    {
+      "display_value": "333080.709",
+      "metric_id": "g3b2.ablation.a6.p13.p95_us",
+      "unit": "us",
+      "value": 333080.709308716
+    },
+    {
+      "display_value": "8.0000",
+      "metric_id": "g3b2.ablation.a6.p13.phase_count",
+      "unit": "scalar",
+      "value": 8.0
+    },
+    {
+      "display_value": "0.754",
+      "metric_id": "g3b2.ablation.a6.p14.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.753843006
+    },
+    {
+      "display_value": "22254.990",
+      "metric_id": "g3b2.ablation.a6.p14.p50_us",
+      "unit": "us",
+      "value": 22254.990088889
+    },
+    {
+      "display_value": "22277.245",
+      "metric_id": "g3b2.ablation.a6.p14.p95_us",
+      "unit": "us",
+      "value": 22277.245078978
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a6.p14.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.622",
+      "metric_id": "g3b2.ablation.a6.p15.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.622398669
+    },
+    {
+      "display_value": "1684.689",
+      "metric_id": "g3b2.ablation.a6.p15.p50_us",
+      "unit": "us",
+      "value": 1684.688755556
+    },
+    {
+      "display_value": "1686.373",
+      "metric_id": "g3b2.ablation.a6.p15.p95_us",
+      "unit": "us",
+      "value": 1686.373444311
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a6.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.359",
+      "metric_id": "g3b2.ablation.a6.p16.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.358540018
+    },
+    {
+      "display_value": "374337.695",
+      "metric_id": "g3b2.ablation.a6.p16.p50_us",
+      "unit": "us",
+      "value": 374337.694846316
+    },
+    {
+      "display_value": "374712.033",
+      "metric_id": "g3b2.ablation.a6.p16.p95_us",
+      "unit": "us",
+      "value": 374712.032541162
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a6.p16.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "0.886",
+      "metric_id": "g3b2.ablation.a6.p17.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.885715793
+    },
+    {
+      "display_value": "1212165.877",
+      "metric_id": "g3b2.ablation.a6.p17.p50_us",
+      "unit": "us",
+      "value": 1212165.877066779
+    },
+    {
+      "display_value": "1213378.043",
+      "metric_id": "g3b2.ablation.a6.p17.p95_us",
+      "unit": "us",
+      "value": 1213378.042943846
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a6.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "1.585",
+      "metric_id": "g3b2.ablation.a6.p18.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.585023358
+    },
+    {
+      "display_value": "677361.917",
+      "metric_id": "g3b2.ablation.a6.p18.p50_us",
+      "unit": "us",
+      "value": 677361.917184376
+    },
+    {
+      "display_value": "678039.279",
+      "metric_id": "g3b2.ablation.a6.p18.p95_us",
+      "unit": "us",
+      "value": 678039.279101561
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a6.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    },
+    {
+      "display_value": "0.107",
+      "metric_id": "g3b2.ablation.a7.p01.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.10694784
+    },
+    {
+      "display_value": "9.575",
+      "metric_id": "g3b2.ablation.a7.p01.p50_us",
+      "unit": "us",
+      "value": 9.575080114
+    },
+    {
+      "display_value": "9.585",
+      "metric_id": "g3b2.ablation.a7.p01.p95_us",
+      "unit": "us",
+      "value": 9.584655194
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a7.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "4.244",
+      "metric_id": "g3b2.ablation.a7.p02.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.243811131
+    },
+    {
+      "display_value": "15.443",
+      "metric_id": "g3b2.ablation.a7.p02.p50_us",
+      "unit": "us",
+      "value": 15.443237832
+    },
+    {
+      "display_value": "15.459",
+      "metric_id": "g3b2.ablation.a7.p02.p95_us",
+      "unit": "us",
+      "value": 15.458681069
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a7.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "3.259",
+      "metric_id": "g3b2.ablation.a7.p03.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.259242845
+    },
+    {
+      "display_value": "20.108",
+      "metric_id": "g3b2.ablation.a7.p03.p50_us",
+      "unit": "us",
+      "value": 20.108407911
+    },
+    {
+      "display_value": "20.129",
+      "metric_id": "g3b2.ablation.a7.p03.p95_us",
+      "unit": "us",
+      "value": 20.128516319
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a7.p03.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "7.649",
+      "metric_id": "g3b2.ablation.a7.p04.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 7.649431937
+    },
+    {
+      "display_value": "137.084",
+      "metric_id": "g3b2.ablation.a7.p04.p50_us",
+      "unit": "us",
+      "value": 137.083506631
+    },
+    {
+      "display_value": "137.221",
+      "metric_id": "g3b2.ablation.a7.p04.p95_us",
+      "unit": "us",
+      "value": 137.220590138
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a7.p04.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "21.410",
+      "metric_id": "g3b2.ablation.a7.p05.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 21.410220816
+    },
+    {
+      "display_value": "783.634",
+      "metric_id": "g3b2.ablation.a7.p05.p50_us",
+      "unit": "us",
+      "value": 783.633919667
+    },
+    {
+      "display_value": "784.418",
+      "metric_id": "g3b2.ablation.a7.p05.p95_us",
+      "unit": "us",
+      "value": 784.417553586
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a7.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "22.479",
+      "metric_id": "g3b2.ablation.a7.p06.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 22.479111296
+    },
+    {
+      "display_value": "5970.975",
+      "metric_id": "g3b2.ablation.a7.p06.p50_us",
+      "unit": "us",
+      "value": 5970.97457752
+    },
+    {
+      "display_value": "5976.946",
+      "metric_id": "g3b2.ablation.a7.p06.p95_us",
+      "unit": "us",
+      "value": 5976.945552098
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a7.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "4.779",
+      "metric_id": "g3b2.ablation.a7.p07.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.778506993
+    },
+    {
+      "display_value": "3510.881",
+      "metric_id": "g3b2.ablation.a7.p07.p50_us",
+      "unit": "us",
+      "value": 3510.880834453
+    },
+    {
+      "display_value": "3514.392",
+      "metric_id": "g3b2.ablation.a7.p07.p95_us",
+      "unit": "us",
+      "value": 3514.391715288
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a7.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "5.491",
+      "metric_id": "g3b2.ablation.a7.p08.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 5.490886648
+    },
+    {
+      "display_value": "190.962",
+      "metric_id": "g3b2.ablation.a7.p08.p50_us",
+      "unit": "us",
+      "value": 190.961516047
+    },
+    {
+      "display_value": "191.152",
+      "metric_id": "g3b2.ablation.a7.p08.p95_us",
+      "unit": "us",
+      "value": 191.152477563
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a7.p08.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "0.464",
+      "metric_id": "g3b2.ablation.a7.p09.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.464353099
+    },
+    {
+      "display_value": "141.130",
+      "metric_id": "g3b2.ablation.a7.p09.p50_us",
+      "unit": "us",
+      "value": 141.130214388
+    },
+    {
+      "display_value": "141.271",
+      "metric_id": "g3b2.ablation.a7.p09.p95_us",
+      "unit": "us",
+      "value": 141.271344603
+    },
+    {
+      "display_value": "3.2500",
+      "metric_id": "g3b2.ablation.a7.p09.phase_count",
+      "unit": "scalar",
+      "value": 3.25
+    },
+    {
+      "display_value": "1.975",
+      "metric_id": "g3b2.ablation.a7.p10.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.974551101
+    },
+    {
+      "display_value": "67972.434",
+      "metric_id": "g3b2.ablation.a7.p10.p50_us",
+      "unit": "us",
+      "value": 67972.433653608
+    },
+    {
+      "display_value": "68040.406",
+      "metric_id": "g3b2.ablation.a7.p10.p95_us",
+      "unit": "us",
+      "value": 68040.406087262
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a7.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "3.469",
+      "metric_id": "g3b2.ablation.a7.p11.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.469048502
+    },
+    {
+      "display_value": "4836.162",
+      "metric_id": "g3b2.ablation.a7.p11.p50_us",
+      "unit": "us",
+      "value": 4836.161976692
+    },
+    {
+      "display_value": "4840.998",
+      "metric_id": "g3b2.ablation.a7.p11.p95_us",
+      "unit": "us",
+      "value": 4840.998138669
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a7.p11.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "1.758",
+      "metric_id": "g3b2.ablation.a7.p12.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.757570306
+    },
+    {
+      "display_value": "596.594",
+      "metric_id": "g3b2.ablation.a7.p12.p50_us",
+      "unit": "us",
+      "value": 596.59350472
+    },
+    {
+      "display_value": "597.190",
+      "metric_id": "g3b2.ablation.a7.p12.p95_us",
+      "unit": "us",
+      "value": 597.190098225
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a7.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "0.782",
+      "metric_id": "g3b2.ablation.a7.p13.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.782256054
+    },
+    {
+      "display_value": "171573.168",
+      "metric_id": "g3b2.ablation.a7.p13.p50_us",
+      "unit": "us",
+      "value": 171573.167569737
+    },
+    {
+      "display_value": "171744.741",
+      "metric_id": "g3b2.ablation.a7.p13.p95_us",
+      "unit": "us",
+      "value": 171744.740737307
+    },
+    {
+      "display_value": "8.0000",
+      "metric_id": "g3b2.ablation.a7.p13.phase_count",
+      "unit": "scalar",
+      "value": 8.0
+    },
+    {
+      "display_value": "1.419",
+      "metric_id": "g3b2.ablation.a7.p14.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.418998599
+    },
+    {
+      "display_value": "11822.963",
+      "metric_id": "g3b2.ablation.a7.p14.p50_us",
+      "unit": "us",
+      "value": 11822.963484722
+    },
+    {
+      "display_value": "11834.786",
+      "metric_id": "g3b2.ablation.a7.p14.p95_us",
+      "unit": "us",
+      "value": 11834.786448207
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a7.p14.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.996",
+      "metric_id": "g3b2.ablation.a7.p15.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.99583787
+    },
+    {
+      "display_value": "1052.930",
+      "metric_id": "g3b2.ablation.a7.p15.p50_us",
+      "unit": "us",
+      "value": 1052.930472222
+    },
+    {
+      "display_value": "1053.983",
+      "metric_id": "g3b2.ablation.a7.p15.p95_us",
+      "unit": "us",
+      "value": 1053.983402694
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a7.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "0.695",
+      "metric_id": "g3b2.ablation.a7.p16.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.695350337
+    },
+    {
+      "display_value": "193017.874",
+      "metric_id": "g3b2.ablation.a7.p16.p50_us",
+      "unit": "us",
+      "value": 193017.873905132
+    },
+    {
+      "display_value": "193210.892",
+      "metric_id": "g3b2.ablation.a7.p16.p95_us",
+      "unit": "us",
+      "value": 193210.891779037
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a7.p16.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "1.744",
+      "metric_id": "g3b2.ablation.a7.p17.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.744178792
+    },
+    {
+      "display_value": "615552.984",
+      "metric_id": "g3b2.ablation.a7.p17.p50_us",
+      "unit": "us",
+      "value": 615552.984447974
+    },
+    {
+      "display_value": "616168.537",
+      "metric_id": "g3b2.ablation.a7.p17.p95_us",
+      "unit": "us",
+      "value": 616168.537432422
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a7.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "3.121",
+      "metric_id": "g3b2.ablation.a7.p18.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.121276767
+    },
+    {
+      "display_value": "343972.849",
+      "metric_id": "g3b2.ablation.a7.p18.p50_us",
+      "unit": "us",
+      "value": 343972.848570191
+    },
+    {
+      "display_value": "344316.821",
+      "metric_id": "g3b2.ablation.a7.p18.p95_us",
+      "unit": "us",
+      "value": 344316.821418761
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a7.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    }
+  ],
+  "truth_label": "SIMULATED_ONLY"
+}

@@ -1,0 +1,182 @@
+{
+  "reports": [
+    {
+      "claim_refs": [
+        "C-ARCH-001",
+        "C-ARCH-002",
+        "C-PAIR-001"
+      ],
+      "metric_refs": [
+        "g3b2.algorithm.butterfly.allgather",
+        "g3b2.algorithm.butterfly.allreduce",
+        "g3b2.algorithm.butterfly.reducescatter",
+        "g3b2.algorithm.hierarchical.allgather",
+        "g3b2.algorithm.hierarchical.allreduce",
+        "g3b2.algorithm.hierarchical.reducescatter",
+        "g3b2.algorithm.mesh.allgather",
+        "g3b2.algorithm.mesh.allreduce",
+        "g3b2.algorithm.mesh.reducescatter",
+        "g3b2.algorithm.nhr.allgather",
+        "g3b2.algorithm.nhr.allreduce",
+        "g3b2.algorithm.nhr.reducescatter",
+        "g3b2.algorithm.ring.allgather",
+        "g3b2.algorithm.ring.allreduce",
+        "g3b2.algorithm.ring.reducescatter",
+        "g3b3.agent.evaluation_records",
+        "g3b3.agent.proposal_records",
+        "g3b3.agent.reflection_records",
+        "g3b3.gates.pairwise"
+      ],
+      "path": "docs/submission/reports/01_system_architecture_and_algorithm_design.md",
+      "report_id": "R01"
+    },
+    {
+      "claim_refs": [
+        "C-IR-001"
+      ],
+      "metric_refs": [
+        "g3b2.parity.all_canonical_equal",
+        "g3b2.parity.case_count",
+        "g3b2.parity.representative_schedule_hash"
+      ],
+      "path": "docs/submission/reports/02_collective_schedule_ir_and_algorithm_evolution.md",
+      "report_id": "R02"
+    },
+    {
+      "claim_refs": [],
+      "metric_refs": [],
+      "path": "docs/submission/reports/03_topology_and_hardware_model.md",
+      "report_id": "R03"
+    },
+    {
+      "claim_refs": [
+        "C-SPARSE-001"
+      ],
+      "metric_refs": [
+        "g3b2.correctness.all_scenarios_correct",
+        "g3b3.sparse.benchmark_correct_case_count",
+        "g3b3.sparse.supported_dtypes_count",
+        "g3b3.sparse.supported_primitives_count",
+        "g3b3.sparse.supported_reduce_ops_count"
+      ],
+      "path": "docs/submission/reports/04_dense_and_sparse_correctness_report.md",
+      "report_id": "R04"
+    },
+    {
+      "claim_refs": [
+        "C-SPARSE-002",
+        "C-SPARSE-003"
+      ],
+      "metric_refs": [
+        "g3b3.sparse.break_even.bf16_1048576",
+        "g3b3.sparse.break_even.bf16_1073741824",
+        "g3b3.sparse.break_even.bf16_134217728",
+        "g3b3.sparse.break_even.bf16_16777216",
+        "g3b3.sparse.break_even.bf16_65536",
+        "g3b3.sparse.break_even.fp16_1048576",
+        "g3b3.sparse.break_even.fp16_1073741824",
+        "g3b3.sparse.break_even.fp16_134217728",
+        "g3b3.sparse.break_even.fp16_16777216",
+        "g3b3.sparse.break_even.fp16_65536",
+        "g3b3.sparse.break_even.fp32_1048576",
+        "g3b3.sparse.break_even.fp32_1073741824",
+        "g3b3.sparse.break_even.fp32_134217728",
+        "g3b3.sparse.break_even.fp32_16777216",
+        "g3b3.sparse.break_even.fp32_65536",
+        "g3b3.sparse.dense_fallback_case_count"
+      ],
+      "path": "docs/submission/reports/05_sparse_communication_and_wire_accounting_report.md",
+      "report_id": "R05"
+    },
+    {
+      "claim_refs": [
+        "C-MODEL-001",
+        "C-PERF-001",
+        "C-PERF-002",
+        "C-PIPE-001",
+        "C-PROFILE-001",
+        "C-SCALE-001",
+        "C-TRAIN-001"
+      ],
+      "metric_refs": [
+        "g3b2.outcomes.losses",
+        "g3b2.outcomes.ties",
+        "g3b2.outcomes.wins",
+        "g3b2.performance.scenario_count",
+        "g3b2.performance.weighted_geomean_improvement_percent",
+        "g3b2.scale.p17.p50",
+        "g3b2.scale.p18.p50"
+      ],
+      "path": "docs/submission/reports/06_simulator_performance_and_scale_report.md",
+      "report_id": "R06"
+    },
+    {
+      "claim_refs": [
+        "C-BP-001",
+        "C-CRC-001",
+        "C-RETRY-001"
+      ],
+      "metric_refs": [
+        "g3b3.flow.normal_load.blocked_producer_events",
+        "g3b3.flow.recovery.blocked_producer_events",
+        "g3b3.flow.sustained_congestion.blocked_producer_events",
+        "g3b3.flow.temporary_congestion.blocked_producer_events",
+        "g3b3.integrity.crc_c_python_parity",
+        "g3b3.integrity.crc_vector_count",
+        "g3b3.retry.case_count",
+        "g3b3.retry.timeout_recovered_attempt_count",
+        "g3b3.retry.timeout_terminal_attempt_count",
+        "g3b3.retry.timeout_wall_clock_sleep"
+      ],
+      "path": "docs/submission/reports/07_integrity_retry_and_reliability_report.md",
+      "report_id": "R07"
+    },
+    {
+      "claim_refs": [],
+      "metric_refs": [],
+      "path": "docs/submission/reports/08_simulator_user_manual.md",
+      "report_id": "R08"
+    },
+    {
+      "claim_refs": [
+        "C-ABI-001"
+      ],
+      "metric_refs": [
+        "g3b3.native.artifact_sha256",
+        "g3b3.native.dependency_count",
+        "g3b3.native.exported_symbol_count",
+        "g3b3.native.reproducible_build_status",
+        "g3b3.native.soname",
+        "g3b3.regression.ctest_failed",
+        "g3b3.regression.ctest_passed",
+        "g3b3.regression.python_passed"
+      ],
+      "path": "docs/submission/reports/09_native_plugin_and_abi_appendix.md",
+      "report_id": "R09"
+    },
+    {
+      "claim_refs": [
+        "C-DIRECT-001",
+        "C-DIRECT-002"
+      ],
+      "metric_refs": [
+        "g3b3.direct.official_call_expression_count",
+        "g3b3.direct.runtime_execution"
+      ],
+      "path": "docs/submission/reports/10_direct_compile_link_readiness_appendix.md",
+      "report_id": "R10"
+    },
+    {
+      "claim_refs": [
+        "C-INT8-001"
+      ],
+      "metric_refs": [
+        "g3b3.gates.int8_quantization",
+        "g3b3.gates.pairwise"
+      ],
+      "path": "docs/submission/reports/11_known_limitations_and_future_hardware_plan.md",
+      "report_id": "R11"
+    }
+  ],
+  "schema_version": "g3-c-report-source-index-v1"
+}

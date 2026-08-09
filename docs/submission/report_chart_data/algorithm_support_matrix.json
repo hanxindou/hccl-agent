@@ -1,0 +1,115 @@
+{
+  "chart_id": "algorithm_support_matrix",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b2.algorithm.butterfly.allgather",
+    "g3b2.algorithm.butterfly.allreduce",
+    "g3b2.algorithm.butterfly.reducescatter",
+    "g3b2.algorithm.hierarchical.allgather",
+    "g3b2.algorithm.hierarchical.allreduce",
+    "g3b2.algorithm.hierarchical.reducescatter",
+    "g3b2.algorithm.mesh.allgather",
+    "g3b2.algorithm.mesh.allreduce",
+    "g3b2.algorithm.mesh.reducescatter",
+    "g3b2.algorithm.nhr.allgather",
+    "g3b2.algorithm.nhr.allreduce",
+    "g3b2.algorithm.nhr.reducescatter",
+    "g3b2.algorithm.ring.allgather",
+    "g3b2.algorithm.ring.allreduce",
+    "g3b2.algorithm.ring.reducescatter"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "SUPPORTED",
+      "metric_id": "g3b2.algorithm.butterfly.allgather",
+      "unit": "string",
+      "value": "SUPPORTED"
+    },
+    {
+      "display_value": "SUPPORTED",
+      "metric_id": "g3b2.algorithm.butterfly.allreduce",
+      "unit": "string",
+      "value": "SUPPORTED"
+    },
+    {
+      "display_value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR",
+      "metric_id": "g3b2.algorithm.butterfly.reducescatter",
+      "unit": "string",
+      "value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+    },
+    {
+      "display_value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR",
+      "metric_id": "g3b2.algorithm.hierarchical.allgather",
+      "unit": "string",
+      "value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+    },
+    {
+      "display_value": "SUPPORTED",
+      "metric_id": "g3b2.algorithm.hierarchical.allreduce",
+      "unit": "string",
+      "value": "SUPPORTED"
+    },
+    {
+      "display_value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR",
+      "metric_id": "g3b2.algorithm.hierarchical.reducescatter",
+      "unit": "string",
+      "value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+    },
+    {
+      "display_value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR",
+      "metric_id": "g3b2.algorithm.mesh.allgather",
+      "unit": "string",
+      "value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+    },
+    {
+      "display_value": "SUPPORTED",
+      "metric_id": "g3b2.algorithm.mesh.allreduce",
+      "unit": "string",
+      "value": "SUPPORTED"
+    },
+    {
+      "display_value": "SUPPORTED",
+      "metric_id": "g3b2.algorithm.mesh.reducescatter",
+      "unit": "string",
+      "value": "SUPPORTED"
+    },
+    {
+      "display_value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR",
+      "metric_id": "g3b2.algorithm.nhr.allgather",
+      "unit": "string",
+      "value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+    },
+    {
+      "display_value": "SUPPORTED",
+      "metric_id": "g3b2.algorithm.nhr.allreduce",
+      "unit": "string",
+      "value": "SUPPORTED"
+    },
+    {
+      "display_value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR",
+      "metric_id": "g3b2.algorithm.nhr.reducescatter",
+      "unit": "string",
+      "value": "UNSUPPORTED_ALGORITHM_PRIMITIVE_PAIR"
+    },
+    {
+      "display_value": "SUPPORTED",
+      "metric_id": "g3b2.algorithm.ring.allgather",
+      "unit": "string",
+      "value": "SUPPORTED"
+    },
+    {
+      "display_value": "SUPPORTED",
+      "metric_id": "g3b2.algorithm.ring.allreduce",
+      "unit": "string",
+      "value": "SUPPORTED"
+    },
+    {
+      "display_value": "SUPPORTED",
+      "metric_id": "g3b2.algorithm.ring.reducescatter",
+      "unit": "string",
+      "value": "SUPPORTED"
+    }
+  ],
+  "truth_label": "HISTORICAL_EVIDENCE"
+}

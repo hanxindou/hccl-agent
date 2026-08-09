@@ -1,0 +1,26 @@
+{
+  "g3_b2_and_g3_b3_are_independent_evidence_families": true,
+  "levels": [
+    {
+      "commit": "540d530e2982403376a229e8c7767902820b3199",
+      "level": "L1",
+      "source": "merged main source/tests/configs"
+    },
+    {
+      "identity": "CURRENT_FINAL_FEATURE_EVIDENCE",
+      "level": "L2",
+      "source": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z"
+    },
+    {
+      "identity": "HISTORICAL_OPTIMIZATION_EVIDENCE",
+      "level": "L3",
+      "source": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z"
+    },
+    {
+      "identity": "HISTORICAL_EVIDENCE",
+      "level": "L4-L8",
+      "source": "G3-B/G3-A/G2-F/current and historical docs"
+    }
+  ],
+  "schema_version": "g3-c-source-hierarchy-v1"
+}

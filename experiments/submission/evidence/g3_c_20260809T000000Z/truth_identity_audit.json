@@ -1,0 +1,17 @@
+{
+  "prohibited_identities_present": [],
+  "status": "PASS",
+  "valid_identities": [
+    "CPU_EXECUTED",
+    "DIRECT_COMPILE_LINK_ONLY",
+    "DIRECT_READINESS_ONLY",
+    "HISTORICAL_EVIDENCE",
+    "HOST_EXECUTED",
+    "HOST_INTEGRITY_VALIDATED",
+    "HOST_RETRY_VALIDATED",
+    "LOSSLESS_SPARSE_HOST_EXECUTED",
+    "REAL_DEVICE_NOT_EXECUTED",
+    "SIMULATED_BACKPRESSURE",
+    "SIMULATED_ONLY"
+  ]
+}

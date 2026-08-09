@@ -1,0 +1,89 @@
+{
+  "baseline": "G3-A historical matrix; G3-B2 and G3-B3 frozen evidence",
+  "changes": [
+    {
+      "basis": "G3-C reports and verifier",
+      "current": "SATISFIED",
+      "previous": "PARTIAL",
+      "requirement": "formal technical report suite"
+    },
+    {
+      "basis": "reports R01/R02",
+      "current": "SATISFIED",
+      "previous": "PARTIAL",
+      "requirement": "algorithm and Schedule IR explanation"
+    },
+    {
+      "basis": "report R08",
+      "current": "SATISFIED",
+      "previous": "PARTIAL",
+      "requirement": "simulator user manual"
+    },
+    {
+      "basis": "report_data_ledger",
+      "current": "SATISFIED",
+      "previous": "PARTIAL",
+      "requirement": "numeric traceability"
+    },
+    {
+      "basis": "cannot be upgraded by reporting",
+      "current": "PARTIAL",
+      "previous": "PARTIAL",
+      "requirement": "real performance"
+    },
+    {
+      "basis": "no authorized hardware runtime",
+      "current": "HARDWARE_BLOCKED",
+      "previous": "HARDWARE_BLOCKED",
+      "requirement": "real-device acceptance"
+    },
+    {
+      "basis": "CPU_SIM project ABI only",
+      "current": "PARTIAL",
+      "previous": "PARTIAL",
+      "requirement": "official loader ABI"
+    }
+  ],
+  "historical_matrix_modified": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-c-requirement-delta-v1",
+  "user_action_required": [
+    {
+      "id": "UA-B-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "project license/copyright"
+    },
+    {
+      "id": "UA-B-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "official asset redistribution"
+    },
+    {
+      "id": "UA-B-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "controlled competition material"
+    },
+    {
+      "id": "UA-B-004",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "platform archive and size requirements"
+    },
+    {
+      "id": "UA-C-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "FP32/FP16/BF16 precision interpretation for <=1e-6"
+    },
+    {
+      "default": "Chinese body with English technical terminology",
+      "id": "UA-C-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final report language"
+    },
+    {
+      "id": "UA-C-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final submission template, page, cover, font, anonymity, and PDF rules"
+    }
+  ]
+}

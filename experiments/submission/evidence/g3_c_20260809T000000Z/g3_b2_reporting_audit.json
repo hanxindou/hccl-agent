@@ -1,0 +1,17 @@
+{
+  "fixed_ring_baseline_explicit": true,
+  "logical_1024_not_real_devices": true,
+  "losses": 0,
+  "pipeline_overlap_simulator_modeled": true,
+  "source_metric_refs": [
+    "g3b2.performance.weighted_geomean_improvement_percent",
+    "g3b2.outcomes.wins",
+    "g3b2.outcomes.ties",
+    "g3b2.outcomes.losses"
+  ],
+  "status": "PASS",
+  "ties": 0,
+  "truth_label": "SIMULATED_ONLY",
+  "weighted_simulated_improvement_percent": 45.59283008,
+  "wins": 18
+}

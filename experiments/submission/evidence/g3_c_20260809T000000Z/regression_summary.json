@@ -1,0 +1,23 @@
+{
+  "full_regression": {
+    "errors": 0,
+    "failures": 0,
+    "passed": 959,
+    "path": "dist/g3-c-report-results/full-regression.xml",
+    "skipped": 1,
+    "status": "PASS",
+    "tests": 960
+  },
+  "new_performance_benchmark_executed": false,
+  "real_device_api_executed": false,
+  "reporting_focused": {
+    "errors": 0,
+    "failures": 0,
+    "passed": 166,
+    "path": "dist/g3-c-report-results/reporting-focused.xml",
+    "skipped": 0,
+    "status": "PASS",
+    "tests": 166
+  },
+  "status": "PASS"
+}

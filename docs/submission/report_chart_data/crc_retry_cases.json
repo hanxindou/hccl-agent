@@ -1,0 +1,178 @@
+{
+  "chart_id": "crc_retry_cases",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b3.integrity.crc_c_python_parity",
+    "g3b3.integrity.crc_vector_count",
+    "g3b3.retry.case_1.attempt_count",
+    "g3b3.retry.case_1.classification",
+    "g3b3.retry.case_1.failure_reason",
+    "g3b3.retry.case_1.recovered",
+    "g3b3.retry.case_1.retransmitted_bytes",
+    "g3b3.retry.case_1.timed_out",
+    "g3b3.retry.case_2.attempt_count",
+    "g3b3.retry.case_2.classification",
+    "g3b3.retry.case_2.failure_reason",
+    "g3b3.retry.case_2.recovered",
+    "g3b3.retry.case_2.retransmitted_bytes",
+    "g3b3.retry.case_2.timed_out",
+    "g3b3.retry.case_3.attempt_count",
+    "g3b3.retry.case_3.classification",
+    "g3b3.retry.case_3.failure_reason",
+    "g3b3.retry.case_3.recovered",
+    "g3b3.retry.case_3.retransmitted_bytes",
+    "g3b3.retry.case_3.timed_out",
+    "g3b3.retry.case_count",
+    "g3b3.retry.timeout_recovered_attempt_count",
+    "g3b3.retry.timeout_terminal_attempt_count",
+    "g3b3.retry.timeout_wall_clock_sleep"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "true",
+      "metric_id": "g3b3.integrity.crc_c_python_parity",
+      "unit": "boolean",
+      "value": true
+    },
+    {
+      "display_value": "4",
+      "metric_id": "g3b3.integrity.crc_vector_count",
+      "unit": "count",
+      "value": 4
+    },
+    {
+      "display_value": "1",
+      "metric_id": "g3b3.retry.case_1.attempt_count",
+      "unit": "count",
+      "value": 1
+    },
+    {
+      "display_value": "NONE",
+      "metric_id": "g3b3.retry.case_1.classification",
+      "unit": "string",
+      "value": "NONE"
+    },
+    {
+      "display_value": "NONE",
+      "metric_id": "g3b3.retry.case_1.failure_reason",
+      "unit": "string",
+      "value": "NONE"
+    },
+    {
+      "display_value": "false",
+      "metric_id": "g3b3.retry.case_1.recovered",
+      "unit": "boolean",
+      "value": false
+    },
+    {
+      "display_value": "0",
+      "metric_id": "g3b3.retry.case_1.retransmitted_bytes",
+      "unit": "byte",
+      "value": 0
+    },
+    {
+      "display_value": "false",
+      "metric_id": "g3b3.retry.case_1.timed_out",
+      "unit": "boolean",
+      "value": false
+    },
+    {
+      "display_value": "2",
+      "metric_id": "g3b3.retry.case_2.attempt_count",
+      "unit": "count",
+      "value": 2
+    },
+    {
+      "display_value": "NONE",
+      "metric_id": "g3b3.retry.case_2.classification",
+      "unit": "string",
+      "value": "NONE"
+    },
+    {
+      "display_value": "NONE",
+      "metric_id": "g3b3.retry.case_2.failure_reason",
+      "unit": "string",
+      "value": "NONE"
+    },
+    {
+      "display_value": "true",
+      "metric_id": "g3b3.retry.case_2.recovered",
+      "unit": "boolean",
+      "value": true
+    },
+    {
+      "display_value": "17",
+      "metric_id": "g3b3.retry.case_2.retransmitted_bytes",
+      "unit": "byte",
+      "value": 17
+    },
+    {
+      "display_value": "false",
+      "metric_id": "g3b3.retry.case_2.timed_out",
+      "unit": "boolean",
+      "value": false
+    },
+    {
+      "display_value": "4",
+      "metric_id": "g3b3.retry.case_3.attempt_count",
+      "unit": "count",
+      "value": 4
+    },
+    {
+      "display_value": "TERMINAL",
+      "metric_id": "g3b3.retry.case_3.classification",
+      "unit": "string",
+      "value": "TERMINAL"
+    },
+    {
+      "display_value": "RETRY_EXHAUSTED",
+      "metric_id": "g3b3.retry.case_3.failure_reason",
+      "unit": "string",
+      "value": "RETRY_EXHAUSTED"
+    },
+    {
+      "display_value": "false",
+      "metric_id": "g3b3.retry.case_3.recovered",
+      "unit": "boolean",
+      "value": false
+    },
+    {
+      "display_value": "51",
+      "metric_id": "g3b3.retry.case_3.retransmitted_bytes",
+      "unit": "byte",
+      "value": 51
+    },
+    {
+      "display_value": "false",
+      "metric_id": "g3b3.retry.case_3.timed_out",
+      "unit": "boolean",
+      "value": false
+    },
+    {
+      "display_value": "3",
+      "metric_id": "g3b3.retry.case_count",
+      "unit": "count",
+      "value": 3
+    },
+    {
+      "display_value": "2",
+      "metric_id": "g3b3.retry.timeout_recovered_attempt_count",
+      "unit": "count",
+      "value": 2
+    },
+    {
+      "display_value": "3",
+      "metric_id": "g3b3.retry.timeout_terminal_attempt_count",
+      "unit": "count",
+      "value": 3
+    },
+    {
+      "display_value": "false",
+      "metric_id": "g3b3.retry.timeout_wall_clock_sleep",
+      "unit": "boolean",
+      "value": false
+    }
+  ],
+  "truth_label": "HOST_INTEGRITY_VALIDATED + HOST_RETRY_VALIDATED"
+}

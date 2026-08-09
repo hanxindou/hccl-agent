@@ -1,0 +1,16 @@
+{
+  "hccl": {
+    "branch": "competition/campus-2026",
+    "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+    "repository": "hccl",
+    "source_identity": "FROZEN_OFFICIAL_REFERENCE_NOT_MODIFIED",
+    "tracked_worktree_clean": true
+  },
+  "hcomm": {
+    "branch": "competition/campus-2026",
+    "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+    "repository": "hcomm",
+    "source_identity": "FROZEN_OFFICIAL_REFERENCE_NOT_MODIFIED",
+    "tracked_worktree_clean": true
+  }
+}

@@ -1,0 +1,458 @@
+{
+  "claim_count": 21,
+  "claims": [
+    {
+      "allowed_wording": [
+        "project CPU_SIM ABI"
+      ],
+      "claim_id": "C-ABI-001",
+      "claim_text": "The 19-symbol library is a project CPU_SIM ABI, not the official HCCL plugin-loader ABI.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/native_elf_audit.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [
+        "g3b3.native.exported_symbol_count"
+      ],
+      "prohibited_wording": [
+        "official plugin ABI verified"
+      ],
+      "report_id": "R09",
+      "status": "SUPPORTED",
+      "truth_label": "CPU_EXECUTED"
+    },
+    {
+      "allowed_wording": [
+        "default backend=CPU_SIM",
+        "fallback=NONE"
+      ],
+      "claim_id": "C-ARCH-001",
+      "claim_text": "CPU_SIM is the default project-owned host backend and fallback is NONE.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/g3_b3_baseline_reference.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "automatic real-device fallback"
+      ],
+      "report_id": "R01",
+      "status": "SUPPORTED",
+      "truth_label": "HOST_EXECUTED"
+    },
+    {
+      "allowed_wording": [
+        "independent validation track"
+      ],
+      "claim_id": "C-ARCH-002",
+      "claim_text": "SIMULATOR_ACCEPTANCE is a validation track, not a fourth backend.",
+      "evidence_refs": [
+        "tools/submission_cli/core.py"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "fourth backend"
+      ],
+      "report_id": "R01",
+      "status": "SUPPORTED",
+      "truth_label": "HISTORICAL_EVIDENCE"
+    },
+    {
+      "allowed_wording": [
+        "simulated backpressure"
+      ],
+      "claim_id": "C-BP-001",
+      "claim_text": "Credit flow control and backpressure behavior are simulated with bounded inflight state.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/flow_control_audit.json",
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/backpressure_audit.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "NIC backpressure implemented",
+        "HCCL backpressure measured"
+      ],
+      "report_id": "R07",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_BACKPRESSURE"
+    },
+    {
+      "allowed_wording": [
+        "host CRC32 integrity"
+      ],
+      "claim_id": "C-CRC-001",
+      "claim_text": "CPU_SIM host payload paths validate CRC32 integrity semantics.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/crc_audit.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [
+        "g3b3.integrity.crc_vector_count",
+        "g3b3.integrity.crc_c_python_parity"
+      ],
+      "prohibited_wording": [
+        "hardware CRC",
+        "NIC CRC",
+        "HCCL internal CRC"
+      ],
+      "report_id": "R07",
+      "status": "SUPPORTED",
+      "truth_label": "HOST_INTEGRITY_VALIDATED"
+    },
+    {
+      "allowed_wording": [
+        "actual official API call expressions",
+        "compile/link-only production source readiness"
+      ],
+      "claim_id": "C-DIRECT-001",
+      "claim_text": "Official ACL/HCCL API call expressions are present in a compile/link-only source artifact.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/official_api_call_expression_audit.json"
+      ],
+      "hardware_dependency": true,
+      "limitations": [],
+      "metric_refs": [
+        "g3b3.direct.official_call_expression_count"
+      ],
+      "prohibited_wording": [
+        "runtime executed",
+        "real collective executed"
+      ],
+      "report_id": "R10",
+      "status": "SUPPORTED",
+      "truth_label": "DIRECT_COMPILE_LINK_ONLY"
+    },
+    {
+      "allowed_wording": [
+        "loaded=false",
+        "executed=false",
+        "runtime_api_calls=[]",
+        "direct_hccl_api_call=false"
+      ],
+      "claim_id": "C-DIRECT-002",
+      "claim_text": "The Direct source was not loaded or executed and runtime_api_calls remains empty.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/direct_compile_link_audit.json",
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/result.json"
+      ],
+      "hardware_dependency": true,
+      "limitations": [],
+      "metric_refs": [
+        "g3b3.direct.runtime_execution"
+      ],
+      "prohibited_wording": [
+        "DIRECT_RUNTIME_EXECUTED",
+        "REAL_HCCL_COLLECTIVE_EXECUTED"
+      ],
+      "report_id": "R10",
+      "status": "SUPPORTED",
+      "truth_label": "REAL_DEVICE_NOT_EXECUTED"
+    },
+    {
+      "allowed_wording": [
+        "DEFERRED_BY_PRECISION_GATE"
+      ],
+      "claim_id": "C-INT8-001",
+      "claim_text": "INT8 quantization is deferred by the precision gate.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/result.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "INT8 implemented"
+      ],
+      "report_id": "R11",
+      "status": "SUPPORTED",
+      "truth_label": "HISTORICAL_EVIDENCE"
+    },
+    {
+      "allowed_wording": [
+        "v1 history remains immutable",
+        "v2 extension"
+      ],
+      "claim_id": "C-IR-001",
+      "claim_text": "Schedule IR v2 extends v1 without rewriting frozen G3-B2 history.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/schedule_ir_v2_audit.json",
+        "feature_completion/contracts.py"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "v2 replaces G3-B2 evidence"
+      ],
+      "report_id": "R02",
+      "status": "SUPPORTED",
+      "truth_label": "HOST_EXECUTED"
+    },
+    {
+      "allowed_wording": [
+        "real_model_executed=false",
+        "training_throughput=null"
+      ],
+      "claim_id": "C-MODEL-001",
+      "claim_text": "No real BERT or LLaMA model was executed.",
+      "evidence_refs": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/result.json"
+      ],
+      "hardware_dependency": true,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "real model throughput"
+      ],
+      "report_id": "R06",
+      "status": "SUPPORTED",
+      "truth_label": "REAL_DEVICE_NOT_EXECUTED"
+    },
+    {
+      "allowed_wording": [
+        "SKIPPED_BY_VALUE_GATE"
+      ],
+      "claim_id": "C-PAIR-001",
+      "claim_text": "PairWise is skipped by the value gate and is not in the implemented algorithm matrix.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/result.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "PairWise implemented"
+      ],
+      "report_id": "R01",
+      "status": "SUPPORTED",
+      "truth_label": "HISTORICAL_EVIDENCE"
+    },
+    {
+      "allowed_wording": [
+        "weighted simulated collective-time improvement",
+        "relative to frozen fixed-Ring baseline"
+      ],
+      "claim_id": "C-PERF-001",
+      "claim_text": "The G3-B2 optimization stack achieved the frozen weighted simulated collective-time improvement relative to fixed Ring.",
+      "evidence_refs": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/performance_summary.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [
+        "communication simulator only"
+      ],
+      "metric_refs": [
+        "g3b2.performance.weighted_geomean_improvement_percent"
+      ],
+      "prohibited_wording": [
+        "real HCCL speedup",
+        "NPU speedup",
+        "training speedup"
+      ],
+      "report_id": "R06",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_ONLY"
+    },
+    {
+      "allowed_wording": [
+        "18 wins, 0 ties, 0 losses against fixed Ring"
+      ],
+      "claim_id": "C-PERF-002",
+      "claim_text": "The frozen G3-B2 outcome inventory is reported as wins, ties, and losses against fixed Ring.",
+      "evidence_refs": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/wins_ties_losses.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [
+        "g3b2.outcomes.wins",
+        "g3b2.outcomes.ties",
+        "g3b2.outcomes.losses"
+      ],
+      "prohibited_wording": [
+        "all real workloads win"
+      ],
+      "report_id": "R06",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_ONLY"
+    },
+    {
+      "allowed_wording": [
+        "SIMULATED_PIPELINED_OVERLAP"
+      ],
+      "claim_id": "C-PIPE-001",
+      "claim_text": "Pipeline overlap in A7 is simulator-modeled.",
+      "evidence_refs": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/pipeline_summary.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "hardware stream overlap verified"
+      ],
+      "report_id": "R06",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_ONLY"
+    },
+    {
+      "allowed_wording": [
+        "profiling_source=SIMULATOR_TRACE",
+        "msprof_executed=false"
+      ],
+      "claim_id": "C-PROFILE-001",
+      "claim_text": "Profiling evidence is simulator trace only and msprof was not executed.",
+      "evidence_refs": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/result.json"
+      ],
+      "hardware_dependency": true,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "msprof profile"
+      ],
+      "report_id": "R06",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_ONLY"
+    },
+    {
+      "allowed_wording": [
+        "logical timeout",
+        "bounded retry"
+      ],
+      "claim_id": "C-RETRY-001",
+      "claim_text": "Logical timeout and bounded retry semantics are host validated.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/retry_audit.json",
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/timeout_audit.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [
+        "g3b3.retry.case_count"
+      ],
+      "prohibited_wording": [
+        "real HCCL transport retransmission",
+        "real network timeout"
+      ],
+      "report_id": "R07",
+      "status": "SUPPORTED",
+      "truth_label": "HOST_RETRY_VALIDATED"
+    },
+    {
+      "allowed_wording": [
+        "1024 logical ranks"
+      ],
+      "claim_id": "C-SCALE-001",
+      "claim_text": "The 1024-rank cases are logical simulator scale.",
+      "evidence_refs": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/scale_summary.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [
+        "not a physical cluster"
+      ],
+      "metric_refs": [
+        "g3b2.scale.p17.p50",
+        "g3b2.scale.p18.p50"
+      ],
+      "prohibited_wording": [
+        "1024 real devices",
+        "1024-card validation"
+      ],
+      "report_id": "R06",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_ONLY"
+    },
+    {
+      "allowed_wording": [
+        "lossless sparse host correctness"
+      ],
+      "claim_id": "C-SPARSE-001",
+      "claim_text": "The sparse index/value codec preserves host-observed collective semantics and reconstruction correctness.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/sparse_correctness.json",
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/sparse_c_python_parity.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "real sparse network speedup"
+      ],
+      "report_id": "R04",
+      "status": "SUPPORTED",
+      "truth_label": "LOSSLESS_SPARSE_HOST_EXECUTED"
+    },
+    {
+      "allowed_wording": [
+        "modeled wire bytes",
+        "modeled payload-byte reduction"
+      ],
+      "claim_id": "C-SPARSE-002",
+      "claim_text": "Sparse reporting distinguishes logical, value, index, metadata, and modeled wire bytes.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/sparse_benchmark.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "physically measured NIC bytes",
+        "real wire reduction measured"
+      ],
+      "report_id": "R05",
+      "status": "SUPPORTED",
+      "truth_label": "LOSSLESS_SPARSE_HOST_EXECUTED"
+    },
+    {
+      "allowed_wording": [
+        "dense fallback"
+      ],
+      "claim_id": "C-SPARSE-003",
+      "claim_text": "Dense fallback is retained when sparse modeled cost is unfavorable.",
+      "evidence_refs": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/dense_fallback_audit.json"
+      ],
+      "hardware_dependency": false,
+      "limitations": [],
+      "metric_refs": [
+        "g3b3.sparse.dense_fallback_case_count"
+      ],
+      "prohibited_wording": [
+        "sparse always wins"
+      ],
+      "report_id": "R05",
+      "status": "SUPPORTED",
+      "truth_label": "HOST_EXECUTED"
+    },
+    {
+      "allowed_wording": [
+        "TRAINING_LINEAR_SPEEDUP_NOT_VERIFIED=true"
+      ],
+      "claim_id": "C-TRAIN-001",
+      "claim_text": "Communication simulator scaling does not verify 90% training linear speedup.",
+      "evidence_refs": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/claim_boundary_audit.json"
+      ],
+      "hardware_dependency": true,
+      "limitations": [],
+      "metric_refs": [],
+      "prohibited_wording": [
+        "90% training scale achieved"
+      ],
+      "report_id": "R06",
+      "status": "SUPPORTED",
+      "truth_label": "REAL_DEVICE_NOT_EXECUTED"
+    }
+  ],
+  "schema_version": "g3-c-report-claim-ledger-v1",
+  "source_commit": "540d530e2982403376a229e8c7767902820b3199"
+}
