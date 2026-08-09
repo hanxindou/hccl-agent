@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">G3-B3 feature decision flow</title>
+  <desc id="desc">G3-B3 feature decision flow. Show implemented, deferred, and skipped decisions without hiding negative gates. Truth: RECONSTRUCTED_FROM_FROZEN_EVIDENCE, HISTORICAL_TRACE_UNAVAILABLE. Limits: historical Prompt/Response unavailable. Classification: SUPPORTING.</desc>
+  <defs>
+    <style>text{font-family:Arial,'Noto Sans',sans-serif;fill:#152238}.title{font-size:34px;font-weight:700}.sub{font-size:17px;fill:#53657a}.label{font-size:16px}.small{font-size:13px;fill:#53657a}.value{font-size:15px;font-weight:700}.node{fill:#f6f8fb;stroke:#9aabc0;stroke-width:2}.primary{fill:#1769aa}.secondary{fill:#3da58a}.warning{fill:#d9852b}.blocked{fill:#c74c4c}.grid{stroke:#d8e0ea;stroke-width:1}.arrow{stroke:#63768c;stroke-width:2;fill:none}.badge{fill:#e8eef5;stroke:#b9c7d7}.badgeText{font-size:12px;font-weight:700}</style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#63768c"/></marker>
+  </defs>
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <rect x="0" y="0" width="14" height="720" fill="#1769aa"/>
+  <text class="title" x="54" y="64">G3-B3 feature decision flow</text>
+  <text class="sub" x="54" y="94">Evidence-derived · offline deterministic SVG</text>
+  <rect class="badge" x="54" y="112" width="552" height="28" rx="14"/>
+  <text class="badgeText" x="70" y="131">RECONSTRUCTED_FROM_FROZEN_EVIDENCE · HISTORICAL_TRACE_UNAVAILABLE</text>
+  <rect class="node" x="54" y="280" width="165" height="140" rx="14"/>
+  <text class="label" x="136.5" y="330" text-anchor="middle" fill="#152238">Feature proposal</text>
+  <line class="arrow" x1="223" y1="350" x2="241" y2="350" marker-end="url(#arrow)"/>
+  <rect class="node" x="249" y="280" width="165" height="140" rx="14"/>
+  <text class="label" x="331.5" y="330" text-anchor="middle" fill="#152238">Evidence gate</text>
+  <line class="arrow" x1="418" y1="350" x2="436" y2="350" marker-end="url(#arrow)"/>
+  <rect class="node" x="444" y="280" width="165" height="140" rx="14"/>
+  <text class="label" x="526.5" y="330" text-anchor="middle" fill="#152238">Implemented</text>
+  <line class="arrow" x1="613" y1="350" x2="631" y2="350" marker-end="url(#arrow)"/>
+  <rect class="node" x="639" y="280" width="165" height="140" rx="14"/>
+  <text class="label" x="721.5" y="330" text-anchor="middle" fill="#152238">INT8: deferred</text>
+  <line class="arrow" x1="808" y1="350" x2="826" y2="350" marker-end="url(#arrow)"/>
+  <rect class="node" x="834" y="280" width="165" height="140" rx="14"/>
+  <text class="label" x="916.5" y="330" text-anchor="middle" fill="#152238">PairWise: skipped</text>
+  <line class="arrow" x1="1003" y1="350" x2="1021" y2="350" marker-end="url(#arrow)"/>
+  <rect class="node" x="1029" y="280" width="165" height="140" rx="14"/>
+  <text class="label" x="1111.5" y="330" text-anchor="middle" fill="#152238">Frozen decision</text>
+  <text class="label" x="1111.5" y="354" text-anchor="middle" fill="#152238">record</text>
+  <line class="grid" x1="54" y1="665" x2="1226" y2="665"/>
+  <text class="small" x="54" y="691">Source: docs/submission/agent_delivery/traces/g3_b3_feature_completion_trace.json</text>
+</svg>

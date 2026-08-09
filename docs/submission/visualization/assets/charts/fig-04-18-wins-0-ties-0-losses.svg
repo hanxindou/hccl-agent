@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">18 wins, 0 ties, 0 losses</title>
+  <desc id="desc">18 wins, 0 ties, 0 losses. Summarize the frozen simulated scenario comparison and canonical weighted result. Truth: SIMULATED_ONLY. Limits: 18 frozen simulated scenarios only; 45.59% is canonical display, not hardware speedup. Classification: MAIN.</desc>
+  <defs>
+    <style>text{font-family:Arial,'Noto Sans',sans-serif;fill:#152238}.title{font-size:34px;font-weight:700}.sub{font-size:17px;fill:#53657a}.label{font-size:16px}.small{font-size:13px;fill:#53657a}.value{font-size:15px;font-weight:700}.node{fill:#f6f8fb;stroke:#9aabc0;stroke-width:2}.primary{fill:#1769aa}.secondary{fill:#3da58a}.warning{fill:#d9852b}.blocked{fill:#c74c4c}.grid{stroke:#d8e0ea;stroke-width:1}.arrow{stroke:#63768c;stroke-width:2;fill:none}.badge{fill:#e8eef5;stroke:#b9c7d7}.badgeText{font-size:12px;font-weight:700}</style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#63768c"/></marker>
+  </defs>
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <rect x="0" y="0" width="14" height="720" fill="#1769aa"/>
+  <text class="title" x="54" y="64">18 wins, 0 ties, 0 losses</text>
+  <text class="sub" x="54" y="94">Evidence-derived · offline deterministic SVG</text>
+  <rect class="badge" x="54" y="112" width="230" height="28" rx="14"/>
+  <text class="badgeText" x="70" y="131">SIMULATED_ONLY</text>
+  <rect class="node" x="85" y="235" width="250" height="220" rx="18"/>
+  <circle class="primary" cx="210" cy="315" r="44"/>
+  <text x="210" y="329" text-anchor="middle" font-size="38" font-weight="700" fill="#ffffff">18</text>
+  <text class="label" x="210" y="400" text-anchor="middle">WINS</text>
+  <rect class="node" x="385" y="235" width="250" height="220" rx="18"/>
+  <circle class="warning" cx="510" cy="315" r="44"/>
+  <text x="510" y="329" text-anchor="middle" font-size="38" font-weight="700" fill="#ffffff">0</text>
+  <text class="label" x="510" y="400" text-anchor="middle">TIES</text>
+  <rect class="node" x="685" y="235" width="250" height="220" rx="18"/>
+  <circle class="blocked" cx="810" cy="315" r="44"/>
+  <text x="810" y="329" text-anchor="middle" font-size="38" font-weight="700" fill="#ffffff">0</text>
+  <text class="label" x="810" y="400" text-anchor="middle">LOSSES</text>
+  <rect class="node" x="985" y="235" width="220" height="220" rx="18"/>
+  <text x="1095" y="325" text-anchor="middle" font-size="34" font-weight="700">45.59%%</text>
+  <text class="small" x="1095" y="374" text-anchor="middle">weighted modeled</text>
+  <text class="small" x="1095" y="396" text-anchor="middle">improvement</text>
+  <text class="small" x="640" y="530" text-anchor="middle">Frozen simulated scenarios only · not real Ascend/NPU performance</text>
+  <line class="grid" x1="54" y1="665" x2="1226" y2="665"/>
+  <text class="small" x="54" y="691">Source: docs/submission/report_chart_data/g3_b2_latency_comparison.json, docs/submission/report_chart_data/g3_b2_bandwidth_comparison.json</text>
+</svg>
