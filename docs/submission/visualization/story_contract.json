@@ -1,0 +1,32 @@
+{
+  "agent_wording": "Agent-assisted, deterministically evaluated, human-governed, offline replayable",
+  "final_language": "USER_ACTION_REQUIRED",
+  "final_template": "USER_ACTION_REQUIRED",
+  "layers_required": [
+    "30-second",
+    "3-minute",
+    "technical defense"
+  ],
+  "real_device_acceptance": "HARDWARE_BLOCKED",
+  "schema_version": "g3-e-story-contract-v1",
+  "sequence": [
+    "Problem",
+    "System",
+    "Optimization",
+    "Feature completion",
+    "Agent role",
+    "Evidence",
+    "Limitations",
+    "Competition value"
+  ],
+  "status": "STRUCTURE_FROZEN_FINAL_NARRATIVE_NOT_WRITTEN",
+  "strongest_evidence_boundary": {
+    "authoritative_source": "docs/submission/report_data_ledger.json",
+    "canonical_display": "45.59%",
+    "losses": 0,
+    "raw": 45.59283008,
+    "ties": 0,
+    "truth_identity": "SIMULATED_ONLY",
+    "wins": 18
+  }
+}

@@ -13773,3 +13773,1567 @@ STOP
 ```
 
 不得自动开始 G3-E implementation。
+
+# 15. G3-E — Competition Visualization and Innovation Narrative
+
+## 15.1 阶段定位
+
+G3-E 的正式名称为：
+
+```text
+G3-E — Competition Visualization and Innovation Narrative
+```
+
+阶段身份为：
+
+```text
+VISUALIZATION
+EVIDENCE COMMUNICATION
+INNOVATION NARRATIVE
+COMPETITION PRESENTATION READINESS
+```
+
+G3-E 在 G3-C、G3-D 完成并合并进入 `main` 后执行。它把已经冻结的技术事实转换为比赛评审能够快速理解、能够追溯、能够离线重建的：
+
+```text
+figures
+charts
+diagrams
+captions
+innovation evidence mappings
+competition narrative
+defense storyline
+reusable presentation assets
+```
+
+G3-E 不是：
+
+```text
+FEATURE DEVELOPMENT
+BENCHMARK DEVELOPMENT
+PERFORMANCE OPTIMIZATION
+NEW AGENT DEVELOPMENT
+HARDWARE ACCEPTANCE
+```
+
+G3-E 不产生新的 technical truth，只允许：
+
+```text
+existing authority
+→ evidence-safe visualization
+→ competition-safe narrative
+```
+
+不得为了“更好看的数字”重新选择 benchmark、重新计算结果、修改 chart-data、重新解释 historical Agent records，或把模拟、host、compile/link readiness 视觉升级为 real-device execution。
+
+最终评审者必须能够从 G3-E 交付中快速回答：
+
+1. 项目解决的核心通信问题是什么；
+2. 系统架构和执行边界是什么；
+3. Schedule IR、拓扑与算法优化做了什么；
+4. `45.59%` 的计算来源、适用范围和 truth identity 是什么；
+5. topology、logical scale、sparse、integrity、retry、backpressure 各自解决什么问题；
+6. Agent proposal、deterministic evaluation 与 human governance 分别扮演什么角色；
+7. 哪些结果是 host/CPU executed；
+8. 哪些结果是 simulated；
+9. 哪些结果仅是 Direct compile/link readiness；
+10. 哪些事项仍未经过真实 Ascend/NPU 验证；
+11. 最强的 3–5 个 competition-facing innovation candidates 是什么；
+12. 每个 innovation 由哪些 source、figure、trace、evidence、metric 和 claim 支撑；
+13. 哪些表达可以用于答辩，哪些必须附加条件，哪些禁止使用。
+
+本节是 G3-E 的唯一执行计划。本次计划编写不授权生成 chart、修改 chart-data、创建 visualization implementation、生成 G3-E evidence、创建 PPT/视频、创建分支或 commit，也不授权开始 G3-F。
+
+---
+
+## 15.2 当前 merged authority 基线
+
+G3-E-A 开始时必须从 merged `main` 重新读取并验证下列事实。下面数量是编写本节时对当前 merged artifacts 的实测基线，不得取代 G3-E-A 的正式 inventory validation。
+
+### G3-C formal reporting baseline
+
+当前 `tools.report_cli verify` 验证为 `PASS`：
+
+```text
+chart-data artifacts                  16
+claims                                21
+unique metrics                        1082
+chart metric rows checked             1085
+formal reports                        11
+report files including index/README   13
+source files                          21
+```
+
+当前 G3-C final evidence root：
+
+```text
+experiments/submission/evidence/g3_c_20260809T000000Z
+```
+
+其 `SHA256SUMS` authority digest 当前由 `EVIDENCE_SHA256` 锚定为：
+
+```text
+cc29469e79d9a242aa7eb2859d5ca94357bc2700ad6a6887ffdce1852bf44707
+```
+
+G3-E-A 必须重新验证 ledger、claim、chart-data、report source index、rounding rule、truth identity、source pointer 和 source hash。不得只相信本节数量。
+
+### G3-D Agent/Prompt delivery baseline
+
+当前 `tools.agent_delivery_cli verify` 和 final evidence verifier 验证为 `PASS`：
+
+```text
+Prompts                                12
+Skills                                 31
+normalized traces                       2
+source/commit/evidence/claim mappings   56
+historical human-intervention records    6
+formal Agent/Prompt documents             9
+```
+
+当前 G3-D final evidence root：
+
+```text
+experiments/submission/evidence/g3_d_20260809T123956Z
+```
+
+当前 G3-D `SHA256SUMS` digest：
+
+```text
+1f702c043e6e73bf2f1464a1d40367eb4d8599d5b56b67604acdac69494bb312
+```
+
+G3-E-A 必须重新验证 Prompt Registry、Skill Registry、trace index、human disclosure、provenance mappings、offline replay docs 和 final evidence，不得只复制计划值。
+
+### Visualization tooling baseline
+
+当前 merged source 中未发现专用的：
+
+```text
+docs/submission/visualization/
+tools/visualization_cli.py
+tests/visualization/
+authoritative Python packaging/dependency declaration
+```
+
+当前也没有已声明的 mandatory matplotlib/Pillow/CairoSVG/Plotly 等 visualization dependency。G3-E 不得因此预先引入大型 framework；G3-E-A 必须先完成 inventory 和 renderer decision，G3-E-B 才允许实现最小、离线、确定性的 rendering path。
+
+---
+
+## 15.3 Authority hierarchy 与冲突规则
+
+G3-E 使用以下权威层级，优先级从高到低。
+
+### L1：merged main / Final Feature Freeze source
+
+用途：验证当前架构、模块、功能存在性、代码路径、ABI 和当前实现事实。
+
+### L2：G3-C formal reporting system
+
+至少消费：
+
+```text
+docs/submission/report_data_ledger.json
+docs/submission/report_claim_ledger.json
+docs/submission/report_chart_data/
+docs/submission/reports/
+docs/submission/reports/report_source_index.md
+experiments/submission/evidence/g3_c_20260809T000000Z/
+```
+
+L2 是所有 numerical value、canonical rounding、chart source data 与 external claim language 的核心 authority。
+
+### L3：G3-D Agent / Prompt Reproducible Delivery
+
+至少消费：
+
+```text
+docs/submission/agent_delivery/prompt_registry.json
+docs/submission/agent_delivery/skill_registry.json
+docs/submission/agent_delivery/trace_index.json
+docs/submission/agent_delivery/traces/
+docs/submission/agent_delivery/human_intervention_disclosure.json
+docs/submission/agent_delivery/source_commit_evidence_claim_mapping.json
+docs/submission/agent_delivery/*.md
+experiments/submission/evidence/g3_d_20260809T123956Z/
+```
+
+L3 定义 Agent/Prompt/Skill provenance、historical availability、offline replay、human role 和 trace relationship。
+
+### L4：G3-B3 final feature completion authority
+
+用途：feature implementation、Schedule IR v2、ablation、implemented/deferred/skipped gate 和 feature decision history。
+
+权威 root 与 digest：
+
+```text
+experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z
+45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754
+```
+
+### L5：G3-B2 optimization authority
+
+用途：Schedule IR、topology-aware optimization、optimization Agent trace、A0-A7 ablation、18-scenario comparison，以及：
+
+```text
+45.59283008% raw
+45.59% canonical display
+18 wins / 0 ties / 0 losses
+```
+
+权威 root 与 digest：
+
+```text
+experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z
+99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483
+```
+
+其 execution/truth identity 始终为 `SIMULATED_ONLY`。
+
+### L6：G3-A requirement / gap / claim audit
+
+用途：解释赛事要求覆盖、历史 gap 和 roadmap lineage；不得覆盖当前 source、ledger、claim 或 provenance authority。
+
+### Authority routing
+
+```text
+numeric fact          → G3-C report_data_ledger
+external wording      → G3-C report_claim_ledger
+chart source data     → G3-C report_chart_data
+Agent provenance      → G3-D registries / normalized traces / mappings
+feature implementation→ merged source + G3-B3 evidence
+optimization history  → G3-B2 evidence
+historical gap        → G3-A audit
+```
+
+无法按上述层级消解的冲突必须：
+
+```text
+STOP
+status=BLOCKED_BY_AUTHORITY_CONFLICT
+```
+
+不得选择更漂亮的数字、更利于宣传的历史版本，不得手工计算后覆盖 ledger，也不得修改 claim ledger 或 chart-data 迁就 figure/narrative。
+
+---
+
+## 15.4 Numerical authority、truth identity 与 visual integrity
+
+### 唯一 numerical data path
+
+所有 numerical figure 必须严格遵循：
+
+```text
+G3-C report_chart_data
++ G3-C report_data_ledger
++ G3-C canonical rounding rules
+```
+
+renderer 的允许数据流为：
+
+```text
+read authoritative chart-data
+→ validate source hash and ledger pointer
+→ validate metric IDs, units and truth identity
+→ apply canonical display rounding
+→ render canonical asset
+→ register reproducibility hash
+```
+
+不得从 raw benchmark log、旧 Markdown、terminal output、historical README、memory 或 manually typed constant 生成最终 numerical figure。renderer 中不得把 `45.59`、`18`、`1024`、`11`、`12` 等写成 authoritative constant。任何显示数字都必须能回溯到 machine-readable source。
+
+非数值 architecture、Agent 或 provenance diagram 可以消费 merged source 和 G3-D mappings，但必须登记 source/evidence/provenance refs；不得创建没有 source mapping 的装饰性技术图。
+
+### Core truth / execution identity
+
+所有 figure、caption、registry 和 narrative 必须携带可解析 identity，至少支持：
+
+```text
+HOST_EXECUTED
+CPU_EXECUTED
+SIMULATED_ONLY
+LOSSLESS_SPARSE_HOST_EXECUTED
+HOST_INTEGRITY_VALIDATED
+HOST_RETRY_VALIDATED
+SIMULATED_BACKPRESSURE
+DIRECT_READINESS_ONLY
+DIRECT_COMPILE_LINK_ONLY
+REAL_DEVICE_NOT_EXECUTED
+HISTORICAL_EVIDENCE
+OFFLINE_REPLAY
+REPLAYED_FROM_FROZEN_TRACE
+RECONSTRUCTED_FROM_FROZEN_EVIDENCE
+AGENT_GENERATED
+DETERMINISTIC_EVALUATION
+HUMAN_INTERVENTION
+HISTORICAL_TRACE_UNAVAILABLE
+ONLINE_LLM_OPTIONAL
+```
+
+不得创建与 G3-C/G3-D vocabulary 含义冲突的新 identity。必须持续区分：
+
+```text
+simulation
+!= host execution
+!= direct compile/link readiness
+!= real-device execution
+
+historical Agent execution
+!= offline replay
+!= reconstructed narrative
+```
+
+### Visual integrity rules
+
+1. 不使用无必要 3D chart，不用面积或体积夸大差异；
+2. bar axis 不得无理由截断；非零 baseline 必须显式标注；
+3. 避免无必要 dual-axis；必须使用时要证明单位、scale 与对照不会误导；
+4. normalized score 与 physical measurement 必须使用不同 label/legend；
+5. simulated bandwidth 不得标为 measured hardware bandwidth；
+6. logical rank scale 不得标为 physical NPU cluster；
+7. modeled sparse wire bytes 不得标为 NIC measurement；
+8. p50/p95 必须标明单位、统计范围和 execution identity；
+9. predicted/model output 与 host execution 必须使用不同视觉语义；
+10. 关键 distinction 不得只靠颜色，必须同时使用 label、legend、line style、shape 或 annotation；
+11. 每个 final figure 必须有 title、units、caption、alt text、source/claim mapping、truth identity、limitations 和 forbidden interpretation；
+12. 若数字不能在合理视觉中准确表达，优先拒绝该 chart，而不是制作误导性 figure。
+
+---
+
+## 15.5 Final Feature Freeze、hardware 与 mandatory offline boundary
+
+### Final Feature Freeze
+
+G3-E 禁止修改：
+
+```text
+collective algorithms and semantics
+Schedule IR semantics
+topology optimization semantics
+Sparse codec semantics
+CRC / integrity semantics
+timeout / retry semantics
+flow-control / backpressure semantics
+selector and cost/performance model
+simulator equations
+benchmark scenarios and results
+correctness thresholds
+CPU_SIM public ABI
+SONAME
+19-symbol allowlist
+Direct runtime semantics
+Prompt / Skill implementation
+Agent decision semantics
+G3-B2 frozen evidence
+G3-B3 frozen evidence
+G3-C factual ledgers and chart-data
+G3-D normalized traces and provenance facts
+```
+
+允许范围只有：
+
+```text
+visualization contract
+chart candidate/registry metadata
+deterministic chart rendering tooling
+figure and diagram assets
+captions and alt text
+innovation evidence mapping
+competition-safe narrative and storyline
+existing submission staging integration
+G3-E focused tests and final evidence
+```
+
+如果完成某个 chart/narrative 必须修改 frozen technical fact：
+
+```text
+STOP
+record blocker
+do not reopen Final Feature Freeze
+```
+
+### Hardware boundary
+
+G3-E 禁止执行：
+
+```text
+ACL runtime
+HCCL runtime
+device / context / stream
+communicator
+real collective
+MPI
+hccl_test
+msprof
+real training
+real failover
+```
+
+Real-device acceptance 继续为 `HARDWARE_BLOCKED`。除非未来 G3-H 或独立 hardware checkpoint 获得真实 authority evidence，G3-E 不得产生：
+
+```text
+REAL_DEVICE_PASS
+real_ascend_npu_validated=true
+direct_hccl_api_call=true
+measured_on_real_npu=true
+```
+
+### Mandatory offline visualization build
+
+Mandatory path 必须：
+
+```text
+no network
+no remote image or font
+no CDN
+no API Key
+no external LLM
+no browser/cloud rendering service
+no benchmark rerun
+no hardware runtime
+```
+
+---
+
+## 15.6 G3-E 总体 checkpoint
+
+| Checkpoint | 名称 | 核心目标 |
+| ---------- | ---- | -------- |
+| G3-E-A | Visualization Authority and Story Contract | 冻结 authority、chart-data inventory、candidate figures、visual rules 和 story contract |
+| G3-E-B | Final Evidence-Derived Chart Suite | 从 authoritative chart-data/source 构建 deterministic final chart suite |
+| G3-E-C | Innovation Evidence Mapping | 选择 3–5 个 evidence-backed competition innovations 并建立映射 |
+| G3-E-D | Competition Narrative and Defense Storyline | 建立三层 narrative、phrasebook、figure story map 和高风险 defense boundary |
+| G3-E-E | Final Asset Validation, Staging and Evidence Freeze | 完成 validation、existing staging、full regression 和唯一 final evidence |
+
+必须按：
+
+```text
+G3-E-A → G3-E-B → G3-E-C → G3-E-D → G3-E-E
+```
+
+顺序执行。A 完成前不得开始画图；B 完成前不得把 candidate figure 当作 final；C 完成前不得固定 innovation narrative；E 完成后必须停止，不得自动进入 G3-F。
+
+---
+
+## 15.7 G3-E-A — Visualization Authority and Story Contract
+
+### Objective
+
+冻结 G3-E authority、完整 chart-data inventory、candidate figure inventory、visual integrity rules 和 competition story contract。先盘点，禁止先画图。
+
+### Inputs / Authority
+
+必须读取并验证：
+
+```text
+docs/submission/report_data_ledger.json
+docs/submission/report_claim_ledger.json
+docs/submission/report_chart_data/
+docs/submission/reports/
+docs/submission/reports/report_source_index.md
+G3-C final evidence
+docs/submission/agent_delivery/
+G3-D final evidence
+G3-B2/G3-B3 final authority pointers and hashes
+merged source paths used by architecture candidates
+existing submission staging/tooling/dependency state
+```
+
+### Implementation scope
+
+1. 重新运行 read-only G3-C/G3-D validators；
+2. 盘点全部 G3-C chart-data artifact，不假设数量仍为 16；
+3. 为每个 chart-data 建立 `chart_data_id`、path、SHA、metric IDs、claim refs、units、rounding、truth identity、scenario scope、allowed visualizations、forbidden interpretations 和 story role；
+4. 验证每个 metric/claim/source pointer 可解析；
+5. 盘点 merged source 与 G3-D provenance 可支持的非数值 diagram；
+6. 建立 candidate figure inventory；
+7. 冻结 visual integrity/design rules；
+8. 冻结 story contract，但不写最终 narrative；
+9. 做 renderer/dependency decision：优先 existing tooling，其次 Python stdlib/deterministic SVG；无必要不得增加 dependency。
+
+Candidate figure 每项至少包含：
+
+```text
+figure_id
+title
+purpose
+figure_type
+data_source
+metric_ids
+claim_refs
+truth_identity
+audience_question
+story_position
+priority
+limitations
+status
+```
+
+`status` allowlist 至少为：
+
+```text
+REQUIRED
+RECOMMENDED
+OPTIONAL
+REJECTED_BY_EVIDENCE
+REJECTED_BY_CLARITY
+NOT_APPLICABLE
+```
+
+Story contract 必须覆盖：
+
+```text
+Problem
+→ System
+→ Optimization
+→ Feature completion
+→ Agent role
+→ Evidence
+→ Limitations
+→ Competition value
+```
+
+### Expected artifacts
+
+建议逻辑产物：
+
+```text
+docs/submission/visualization/visualization_contract.json
+docs/submission/visualization/chart_data_inventory.json
+docs/submission/visualization/chart_candidate_inventory.json
+docs/submission/visualization/story_contract.json
+docs/submission/visualization/README.md
+```
+
+具体路径可按实现时仓库结构最小调整，但不得建立平行 submission root。
+
+### Tests / Acceptance criteria
+
+- current G3-C/G3-D validators PASS；
+- 所有 chart-data 被 inventory，实际数量被记录；
+- 所有 source SHA、metric IDs、claim refs、units、rounding 和 truth identity 可解析；
+- no manual numerical source；
+- candidate figure 的 evidence、story role 和 limitation 完整；
+- rejected/misleading candidates 被记录，不被静默删除；
+- visual integrity 和 design rules 已冻结；
+- story contract 完整但 final narrative 尚未生成；
+- renderer decision 不要求 network/browser/cloud/LLM/benchmark；
+- no feature or old authority file modified。
+
+成功 sentinel：
+
+```text
+G3_E_VISUALIZATION_AUTHORITY_OK
+```
+
+### Truth boundaries
+
+- inventory 只说明 authority 可支持什么，不说明所有 candidate 都会成为 final figure；
+- candidate priority 不是 evidence strength 的替代；
+- architecture diagram 只表达 source-backed component relationship；
+- G3-E-A 不产生新的 metric、claim、innovation 或 performance conclusion。
+
+### Forbidden changes
+
+- 不生成 final SVG/PNG；
+- 不修改 ledger、claim、chart-data、reports、G3-D mappings 或 frozen evidence；
+- 不新增 benchmark、feature、Agent behavior 或大型 dependency；
+- 不把 `OPTIONAL` candidate 写成 mandatory commitment；
+- 不写 final competition narrative。
+
+### Commit boundary
+
+只允许提交 authority readers/validators、visualization/story contract 和 candidate inventories。
+
+建议 commit：
+
+```text
+G3-E-A freeze visualization and story contract
+```
+
+### Exit criteria
+
+- G3-C/G3-D current baseline revalidated；
+- chart-data inventory complete；
+- candidate status/priority/limitations complete；
+- authority conflict none；
+- visual/story contracts frozen；
+- `G3_E_VISUALIZATION_AUTHORITY_OK` emitted；
+- no chart、feature、benchmark 或 final narrative generated。
+
+---
+
+## 15.8 G3-E-B — Final Evidence-Derived Chart Suite
+
+### Objective
+
+从 G3-E-A 选定的 authoritative sources 构建 final competition chart suite。所有 numerical chart 必须 machine-generated、可重建、可验证。
+
+### Inputs / Authority
+
+消费：
+
+```text
+G3-E-A visualization contract
+G3-E-A chart-data and candidate inventories
+G3-C chart-data / data ledger / claim ledger / rounding rules
+merged source for non-numerical architecture diagrams
+G3-D normalized traces and mappings for Agent/provenance diagrams
+existing local tooling/dependency inventory
+```
+
+### Implementation scope
+
+1. 按 evidence strength、competition relevance、technical distinctness、clarity 和 story role 选择 final figures；
+2. 建议 8–12 个高价值 main figures 加少量 supporting figures，但最终数量由 A 的 authority inventory 决定，不强制凑数；
+3. 实现统一、离线、deterministic builder/validator；
+4. canonical asset 优先 SVG；PNG 仅在平台/G3-F compatibility 确有价值时从 canonical source 生成；
+5. 建立 machine-readable final chart registry、captions、alt text 和 chart index；
+6. 两次 clean build 比较 canonical output/hash；
+7. 验证 build 不触发 benchmark、network、LLM 或 hardware runtime。
+
+候选主题必须审计但不强制全部采用：
+
+1. System architecture overview；
+2. Schedule IR / optimization pipeline；
+3. G3-B2 scenario-level simulated comparison；
+4. 18 wins / 0 ties / 0 losses；
+5. logical scaling trend；
+6. topology-aware behavior；
+7. sparse density/wire-accounting；
+8. integrity/retry/backpressure layers；
+9. feature ablation；
+10. Agent optimization closed loop；
+11. G3-B3 feature decision flow；
+12. Direct readiness validation ladder；
+13. evidence/truth boundary matrix。
+
+### Chart registry contract
+
+每个 numerical figure 至少记录：
+
+```text
+figure_id
+version
+title
+asset_paths
+source_data_paths
+source_data_sha256
+metric_ids
+claim_refs
+truth_identity
+units
+rounding_rule
+renderer
+renderer_version_if_relevant
+build_command
+caption_path_or_text
+alt_text
+story_role
+limitations
+forbidden_interpretations
+reproducibility_hash
+```
+
+非数值 diagram 必须登记 `source_paths`、`source_sha256`、`provenance_refs`、`evidence_refs` 和 applicable claim refs。
+
+### Rendering and design contract
+
+Renderer 优先级：
+
+```text
+existing declared/local tooling
+→ deterministic Python stdlib
+→ deterministic self-contained SVG generation
+→ only-if-proven minimal dependency
+```
+
+禁止 web dashboard、remote rendering、CDN、online icon/font library、browser-only mandatory build 和 cloud plotting API。
+
+若现有架构确实缺统一入口，可新增最小等价 CLI：
+
+```text
+python -m tools.visualization_cli describe
+python -m tools.visualization_cli build
+python -m tools.visualization_cli verify
+```
+
+具体名称在 A 中决定。不得破坏 G3-C `report_cli` 或 G3-D Agent delivery CLI 的职责边界。
+
+Design contract 必须：presentation-first、16:9-friendly、vector-first、slide-embedding readable、axis/units 完整、accessible contrast、key semantics not color-only、terminology/algorithm/topology/truth badge/number format 一致、caption 可独立理解、limitations 可见、diagram node count 有界。
+
+最终语言/template 受 UA-C-002、UA-C-003、UA-E-001、UA-E-002 约束。未确认前使用 stable IDs、language-neutral data asset 和可替换 label/caption source；不得捆绑 private font。
+
+### Special claim boundaries
+
+- `45.59283008%` 只按 canonical display `45.59%` 展示，并显式标记 `SIMULATED_ONLY`；
+- 18/0/0 必须说明是 frozen simulated benchmark scenario comparison；
+- 1024 ranks 必须标为 logical/model scale，不是 physical 1024-NPU validation；
+- sparse 必须区分 lossless host correctness 与 modeled/logical wire accounting；
+- reliability 必须区分 host CRC/retry、simulated backpressure/fault model 和 real hardware not executed；
+- Direct 必须显示 `DIRECT_COMPILE_LINK_ONLY` 与 `REAL_DEVICE_NOT_EXECUTED`，不得用绿色勾选或流程箭头暗示已完成真实 collective。
+
+### Expected artifacts
+
+建议逻辑结构：
+
+```text
+docs/submission/visualization/
+├── README.md
+├── visualization_contract.json
+├── chart_registry.json
+├── chart_index.md
+├── captions.md
+├── charts/
+│   ├── <figure>.svg
+│   └── <optional-figure>.png
+└── diagrams/
+    └── <diagram>.svg
+
+tools/<minimal visualization builder/verifier>
+tests/<visualization focused tests>
+```
+
+G3-E 不创建 PDF、PPT 或 video。
+
+### Tests / Acceptance criteria
+
+- every numerical chart reads only authoritative chart-data；
+- source SHA、metric refs、claim refs、units、rounding 和 truth identity PASS；
+- no manually typed authoritative numeric constant；
+- repeated build produces identical canonical SVG/hash；
+- PNG metadata/timestamp deterministic where PNG exists；
+- all final assets registered，无 orphan/missing asset；
+- captions、alt text、limitations 和 forbidden interpretations complete；
+- axis/legend/contrast/truth badge visual-integrity checks PASS；
+- assets parse/open；SVG self-contained；
+- no unsupported hardware/Agent language、secret 或 absolute path；
+- no network/font/CDN/browser/API key；
+- no benchmark execution；
+- staging coverage contract defined。
+
+成功 sentinel：
+
+```text
+G3_E_CHART_SUITE_OK
+```
+
+### Truth boundaries
+
+- canonical SVG hash 是 vector asset authority；
+- 若 PNG 无法完全消除平台 metadata nondeterminism，必须以 SVG 为 canonical authority 并明确 PNG reproducibility contract；
+- figure 只表达 registry 中声明的 scope，不扩大 ledger claim；
+- figure aesthetics 不能改变 truth identity。
+
+### Forbidden changes
+
+- 不修改 chart-data/ledger/claim/benchmark；
+- 不重跑 benchmark；
+- 不创建 PPT/PDF/video/dashboard；
+- 不下载 remote asset/font/icon；
+- 不引入未经证明必要的大型 dependency；
+- 不为图形效果硬编码权威数字。
+
+### Commit boundary
+
+只允许提交 deterministic renderer/verifier、chart registry/index、captions、final figures 和 focused tests。
+
+建议 commit：
+
+```text
+G3-E-B build final evidence-derived chart suite
+```
+
+### Exit criteria
+
+- final chart suite 数量由 inventory 明确；
+- every figure registered and evidence-backed；
+- deterministic offline rebuild PASS；
+- visual integrity PASS；
+- `G3_E_CHART_SUITE_OK` emitted；
+- no benchmark/feature/old authority modification。
+
+---
+
+## 15.9 G3-E-C — Innovation Evidence Mapping
+
+### Objective
+
+从冻结实现和 authority evidence 中 audit innovation candidates，选择最终 3–5 个最强的 competition-facing innovations。不得使用无 external literature authority 的“首创”“行业领先”或 SOTA claim。
+
+### Inputs / Authority
+
+消费：
+
+```text
+G3-E-A story/candidate contracts
+G3-E-B final chart registry
+G3-C ledgers/chart-data/claim ledger
+G3-D Prompt/Skill/trace/provenance/human mappings
+merged source
+G3-B2/G3-B3 frozen evidence
+```
+
+### Implementation scope
+
+重点 audit，但不强制全部选择：
+
+```text
+A  Agent-assisted closed-loop optimization / decision pipeline
+B  Schedule IR + topology-aware/hierarchical algorithm optimization
+C  Lossless sparse + wire-aware decision/accounting
+D  Integrity + bounded retry + simulated reliability/backpressure
+E  CPU_SIM/native ABI + Direct compile/link readiness + layered validation
+F  Evidence-driven Agent/Prompt reproducibility and provenance
+```
+
+选择维度：competition relevance、technical distinctness、evidence strength、demonstrability、visual explainability、claim safety。不得使用“novelty score”暗示已完成学术 novelty research。
+
+Agent candidate 必须区分 proposal、deterministic evaluation、human governance、offline replay 和 historical availability。Sparse/reliability/Direct candidates 必须保持 host/simulator/compile-link/real-device boundary。Agent/Prompt reproducibility 可以是 engineering/delivery innovation，不得伪装成通信算法创新。
+
+### Innovation mapping schema
+
+每个 final innovation 至少记录：
+
+```text
+innovation_id
+title
+one_sentence_claim
+problem
+technical_mechanism
+implemented_components
+source_paths
+source_sha256
+figure_refs
+trace_refs
+evidence_refs
+claim_refs
+truth_identity
+quantitative_support
+qualitative_support
+Agent_role
+human_role
+limitations
+forbidden_phrases
+defense_question
+defense_answer_boundary
+```
+
+Quantitative support 必须引用 G3-C metric/chart-data；Agent role 必须引用 G3-D provenance。没有独立 quantitative evidence 的 candidate 可以使用 evidence-backed qualitative support，不得挪用无关 metric 凑数字。
+
+### Expected artifacts
+
+```text
+docs/submission/visualization/innovation_evidence_map.json
+docs/submission/visualization/innovation_evidence_map.md
+```
+
+允许等价命名，但必须同时有 machine-readable 和 reviewer-readable 版本。
+
+### Tests / Acceptance criteria
+
+- final 3–5 innovations source-backed and technically distinct；
+- every strong claim、figure、trace、evidence、metric 和 claim ref resolves；
+- every number ledger-backed；
+- Agent/human roles provenance-backed；
+- no historical Agent fabrication；
+- no real-hardware overclaim；
+- no unsupported academic novelty/SOTA/first/leading phrase；
+- duplicated mechanism disclosure exists，不把同一机制静默重复计为多项 innovation；
+- qualitative-only innovation 不滥用 unrelated metric。
+
+成功 sentinel：
+
+```text
+G3_E_INNOVATION_MAPPING_OK
+```
+
+### Truth boundaries
+
+- “competition innovation”表示本项目 evidence-backed mechanism/value，不表示已完成全球 novelty 或 SOTA literature proof；
+- `AGENT_GENERATED` 只用于 G3-D 对具体 record 支持的关系；
+- quantitative support 的 scope 不得超过 G3-C claim ledger。
+
+### Forbidden changes
+
+- 不做外部 novelty ranking 或未经授权的 literature claim；
+- 不创造新 performance number；
+- 不修改 source/feature/Agent/ledger/chart-data/old evidence；
+- 不固定未经用户批准的最终宣传措辞到 G3-F asset。
+
+### Commit boundary
+
+只允许提交 innovation candidate audit、final mapping、validators 和必要文档。
+
+建议 commit：
+
+```text
+G3-E-C map competition innovations to frozen evidence
+```
+
+### Exit criteria
+
+- strongest 3–5 candidates selected or更少但有明确 evidence/clarity reason；
+- all refs and boundaries PASS；
+- user approval requirement recorded；
+- `G3_E_INNOVATION_MAPPING_OK` emitted；
+- no novelty/hardware/history overclaim。
+
+---
+
+## 15.10 G3-E-D — Competition Narrative and Defense Storyline
+
+### Objective
+
+把 G3-C factual evidence、G3-D Agent provenance、G3-E figures 和 innovation mapping 组织成 competition narrative、三层 storyline、claim-safe phrasebook 和高风险 defense answer boundaries。本阶段不创建 PPT、视频、最终旁白或字幕。
+
+### Inputs / Authority
+
+消费：
+
+```text
+G3-C claim/data ledgers and formal reports
+G3-D registries/traces/provenance/human disclosure
+G3-E-A story contract
+G3-E-B final chart registry/captions
+G3-E-C innovation evidence map
+USER_ACTION_REQUIRED language/template/wording decisions
+```
+
+### Implementation scope
+
+Narrative 必须是问题导向的主线，不按源码目录机械罗列。推荐结构：
+
+1. Problem；
+2. Why a simple/static approach is insufficient；
+3. System architecture；
+4. Core optimization mechanism；
+5. Agent-assisted decision loop；
+6. Feature completion and reliability；
+7. Quantitative evidence；
+8. Reproducibility and engineering readiness；
+9. Limitations and hardware boundary；
+10. Competition value。
+
+必须形成：
+
+```text
+Layer 1 — 30-second version
+Problem → core solution → strongest evidence → boundary
+
+Layer 2 — 3-minute version
+system → innovations → performance evidence → Agent role → reliability → limitations
+
+Layer 3 — technical defense version
+Schedule IR → topology → selector → sparse → CRC/retry/backpressure
+→ Agent proposal/evaluation → simulation methodology → Direct readiness → claim boundaries
+```
+
+### Claim-safe phrasebook
+
+至少维护 `SAFE`、`CONDITIONAL`、`FORBIDDEN` 三类，并由 validator 检查正式文档。
+
+SAFE examples：
+
+```text
+在冻结的模拟 benchmark 中，优化方案取得 18 wins、0 ties、0 losses。
+加权模拟性能改善为 45.59%。
+Lossless sparse correctness 已在 host path 验证。
+CRC/integrity 与 bounded retry 已完成 host validation。
+Direct path 已完成 official ACL/HCCL compile/link-only readiness。
+真实 Ascend/NPU 运行仍未执行。
+```
+
+CONDITIONAL examples：
+
+```text
+Agent-generated
+```
+
+只有 G3-D provenance 对具体 record 支持时使用。
+
+```text
+自动优化
+```
+
+必须同时说明 Agent-assisted、deterministic evaluation 和 human-governed boundary。
+
+FORBIDDEN examples：
+
+```text
+真实昇腾性能提升 45.59%
+1024 卡集群实测
+真实 HCCL 已验证
+实机吞吐提升
+全部代码由 AI 自动生成
+完全自主 Agent
+SOTA
+state-of-the-art
+行业首创
+```
+
+除非未来新增相应 authority evidence，否则不得使用。
+
+### Defense question map
+
+至少覆盖：
+
+- 45.59% 如何计算；
+- 为什么是 simulation 而不是 real-device；
+- 1024 ranks 的 logical/model 含义；
+- 为什么没有真实 NPU；
+- Agent 实际自动完成什么；
+- 人参与哪些输入、审批或实现；
+- sparse 的 host correctness 与 modeled wire saving；
+- CRC/retry 是否是官方 HCCL/NIC 内部能力；
+- backpressure 是否实测；
+- 17 个 ACL/HCCL call expressions 证明什么、不证明什么；
+- C/C++ plugin 与 official HCCL plugin 的差别；
+- CPU_SIM 与真实 Ascend 的差别；
+- INT8 为何 `DEFERRED_BY_PRECISION_GATE`；
+- PairWise 为何 `SKIPPED_BY_VALUE_GATE`；
+- 为什么可以称为 competition innovation；
+- 哪些结果可现场 offline replay/rebuild。
+
+每个回答必须 link evidence、state truth identity、state limitation、avoid unsupported extension。
+
+### Expected artifacts
+
+```text
+docs/submission/visualization/competition_narrative.md
+docs/submission/visualization/defense_storyline.md
+docs/submission/visualization/figure_story_map.md
+docs/submission/visualization/claim_safe_phrasebook.md
+docs/submission/visualization/defense_question_map.md
+```
+
+### Tests / Acceptance criteria
+
+- narrative claim/number/figure/innovation refs resolve；
+- numerical values ledger-backed；
+- Agent claims G3-D provenance-backed；
+- safe/conditional/forbidden phrase rules enforced；
+- `45.59%` always includes simulated context；
+- logical rank claims include logical/model context；
+- Direct claims include compile/link-only and real-device-not-executed；
+- human role and historical-unavailable state disclosed；
+- no hidden chain-of-thought or fabricated historical record；
+- no unsupported novelty phrase；
+- no secret or local absolute path；
+- 30-second/3-minute/technical layers complete；
+- high-risk defense questions mapped。
+
+成功 sentinel：
+
+```text
+G3_E_NARRATIVE_OK
+```
+
+### Truth boundaries
+
+- narrative wording must conform to claim ledger；发生冲突时修改 G3-E wording；
+- reconstructed explanation is not historical execution；
+- phrasebook does not authorize claims beyond its evidence refs；
+- current language/template remains provisional until user action is closed。
+
+### Forbidden changes
+
+- 不创建 PPT、video、screen recording、voiceover、subtitle 或 timeline；
+- 不修改 claim ledger、charts、innovations、old evidence 或 Agent provenance；
+- 不保存 hidden chain-of-thought；
+- 不用强宣传 wording 覆盖 limitation。
+
+### Commit boundary
+
+只允许提交 narrative、storyline、phrasebook、figure story map、defense map 和 validators。
+
+建议 commit：
+
+```text
+G3-E-D build competition narrative and defense storyline
+```
+
+### Exit criteria
+
+- three-layer narrative complete；
+- claim-safe phrasebook and defense boundaries validated；
+- all figures/innovations/Agent claims traceable；
+- `G3_E_NARRATIVE_OK` emitted；
+- no G3-F asset created。
+
+---
+
+## 15.11 G3-E-E — Final Asset Validation, Staging and Evidence Freeze
+
+### Objective
+
+完成 charts/narrative asset validation、existing submission staging integration、full regression、old-authority immutability audit 和唯一 G3-E final evidence freeze。
+
+### Inputs / Authority
+
+消费：
+
+```text
+G3-E-A authority/story contracts
+G3-E-B chart suite/registry
+G3-E-C innovation mapping
+G3-E-D narrative/phrasebook/defense maps
+existing tools.submission_cli staging framework
+scripts/validate_linux_cpu_sim.sh
+G3-B2/B3/C/D authority roots and hashes
+```
+
+不得创建第二套 staging framework。
+
+### Implementation scope
+
+1. 完成 focused G3-E verifier；
+2. 验证 authority、chart build、registry、source hashes、metric/claim refs、rounding、truth identity；
+3. 验证 visual integrity、innovation mapping、narrative、phrasebook、figure/story mapping；
+4. 把 visualization/narrative logical artifacts 纳入 existing submission staging；
+5. 验证 staging coverage、asset policy、portability 和 exclusion；
+6. 执行 focused tests 与完整 Linux CPU_SIM regression；
+7. 比较 G3-B2/B3/C/D old authority hashes；
+8. 生成唯一 final evidence、`SHA256SUMS` 和 final Git state；
+9. 最终停止，不进入 G3-F。
+
+### Expected artifacts
+
+唯一 final evidence 建议放在：
+
+```text
+experiments/submission/evidence/g3_e_<timestamp>/
+```
+
+至少包含：
+
+```text
+README.md
+manifest.json
+result.json
+visualization_authority_validation.json
+chart_data_validation.json
+chart_registry_validation.json
+chart_build_validation.json
+chart_reproducibility.json
+visual_integrity_audit.json
+innovation_mapping_validation.json
+narrative_claim_validation.json
+phrasebook_validation.json
+figure_story_mapping_validation.json
+asset_portability_audit.json
+staging_verification.json
+old_authority_immutability.json
+regression_summary.json
+no_secrets_audit.json
+git_state.json
+user_action_required.json
+SHA256SUMS
+```
+
+不得复制完整 G3-B2/B3/C/D evidence tree，只能通过 relative pointer、hash、claim ID、metric ID、trace ID 和 provenance mapping ID 引用。
+
+### Tests / Acceptance criteria
+
+Focused final validation 至少覆盖：
+
+```text
+visualization authority
+chart-data inventory and source hashes
+chart registry completeness
+deterministic chart build
+metric/claim refs and units
+canonical rounding
+truth identity and visual integrity
+innovation mapping
+narrative/phrasebook/defense claims
+figure/story mapping
+asset integrity and portability
+staging coverage
+no secrets and no local paths
+old authority immutability
+full regression
+```
+
+成功 sentinels：
+
+```text
+G3_E_VISUALIZATION_AUTHORITY_OK
+G3_E_CHART_SUITE_OK
+G3_E_INNOVATION_MAPPING_OK
+G3_E_NARRATIVE_OK
+G3_E_CLAIM_BOUNDARIES_OK
+G3_E_ASSET_PORTABILITY_OK
+G3_E_STAGING_OK
+G3_E_COMPETITION_VISUALIZATION_OK
+```
+
+必须存在唯一最终 sentinel：
+
+```text
+G3_E_COMPETITION_VISUALIZATION_OK
+```
+
+运行 focused G3-E tests 后必须完整执行：
+
+```bash
+bash scripts/validate_linux_cpu_sim.sh /tmp/hccl-agent-linux-review
+```
+
+必须满足：
+
+```text
+CMake configure PASS
+build PASS
+CTest PASS
+focused CPU_SIM unittest PASS
+full pytest PASS
+existing skip count no abnormal increase
+LINUX_CPU_SIM_VALIDATION_OK
+```
+
+并执行：
+
+```text
+git diff --check
+```
+
+不得重跑 G3-B2 performance benchmark、G3-B3 feature benchmark 或 real-device acceptance。Chart build 不得隐式触发 benchmark。
+
+### Old authority immutability
+
+final evidence freeze 前后必须比较：
+
+```text
+G3-B2 authority root unchanged
+G3-B3 authority root unchanged
+G3-C claim ledger unchanged
+G3-C data ledger unchanged
+G3-C report_chart_data tree unchanged
+G3-D Prompt Registry unchanged
+G3-D Skill Registry unchanged
+G3-D normalized traces unchanged
+G3-D provenance mappings unchanged
+```
+
+发现 authority bug 时必须 `STOP`；G3-E 不得自行修订旧 checkpoint。
+
+### Truth boundaries
+
+- G3-E evidence 证明 evidence-safe visualization、traceable narrative 和 asset reproducibility，不证明新技术事实或 real-device execution；
+- final evidence timestamp 只表示 G3-E freeze time；
+- full regression 不是 real-device acceptance；
+- staged asset 不改变 source/evidence authority；
+- `runtime_api_calls=[]`。
+
+### Forbidden changes
+
+- 不降低测试或增加无理由 skip；
+- 不修改 old authority、feature/Agent semantics、benchmark 或 chart-data；
+- 不调用 network/LLM/hardware runtime；
+- 不创建 parallel staging、release、archive、tag、PPT 或 video；
+- 不把 PARTIAL/HARDWARE_BLOCKED 用于掩盖 asset/claim/validation failure。
+
+### Commit boundary
+
+只允许提交 final validators、existing staging integration、唯一 G3-E evidence 和必要 focused tests。
+
+建议 commit：
+
+```text
+G3-E-E finalize visualization assets and evidence
+```
+
+完成本 commit 后立即 `STOP`。
+
+### Exit criteria
+
+- all focused sentinels and unique final sentinel PASS；
+- chart/narrative/innovation/staging/portability validation PASS；
+- deterministic offline rebuild PASS；
+- full pytest、CTest、Linux CPU_SIM validation PASS；
+- no secrets/local paths/forbidden assets；
+- old authority unchanged；
+- unique evidence and SHA256SUMS frozen；
+- Feature Freeze preserved；
+- real-device state unchanged；
+- worktree clean after final commit；
+- no push/merge/G3-F。
+
+---
+
+## 15.12 Cross-check requirements：reproducibility 与 asset policy
+
+### Reproducibility
+
+1. Mandatory build 完全 offline；
+2. build command 必须从 clean output directory 运行；
+3. repeated canonical build 必须 hash-identical；
+4. renderer 不读取 wall-clock timestamp、random seed、hostname、user path 或 locale-dependent default；
+5. SVG 必须 self-contained，不引用 remote stylesheet、font、image 或 script；
+6. PNG 如存在，必须移除/固定 timestamp、software、profile 等 nondeterministic metadata；否则明确 SVG-only canonical authority；
+7. build/verify 不执行 benchmark、Agent online path 或 hardware runtime。
+
+### Asset policy
+
+最终 assets 不得包含：
+
+```text
+private fonts
+copyright-unclear stock image
+remote web image
+local screenshot with secrets
+SDK-controlled asset
+official HCOMM/HCCL source copy
+private logs
+API key
+absolute Windows/user path
+/home/<user> private path
+temporary files
+cache / venv / build directories
+```
+
+第三方 visual asset 如确实使用，必须登记 source、license、hash 和 inclusion decision。优先使用项目自行生成的 chart 和 architecture diagram。Competition/school/Huawei/Ascend logo 在 UA-E-003 未关闭前不得成为 mandatory asset。
+
+---
+
+## 15.13 USER_ACTION_REQUIRED
+
+G3-E 继承并保持 unresolved：
+
+```text
+UA-B-001 project license/copyright
+UA-B-002 official artifact redistribution
+UA-B-003 controlled competition material
+UA-B-004 submission archive/size rules
+UA-C-001 precision interpretation
+UA-C-002 final report language
+UA-C-003 final template/page/cover/font/anonymity/PDF rules
+UA-D-001 historical Prompt/Agent run availability
+UA-D-002 final Agent/Prompt disclosure detail
+UA-D-003 real-device acceptance
+```
+
+### UA-E-001：Final Visual Language
+
+确认图表和正式答辩材料使用 Chinese、English 或 Bilingual。未确认前使用 stable machine IDs、language-neutral data assets 和可替换 label/caption source，不得把语言写死到不可逆 pipeline。
+
+### UA-E-002：Competition Visual Template
+
+确认是否存在 PPT template、colors、logo、page size、safe area、font、anonymity、watermark 和 figure resolution 规则。未知时使用中性、自包含、16:9-friendly vector assets。
+
+### UA-E-003：External Asset / Logo Permission
+
+确认 competition、school、Huawei/Ascend 和 third-party icon/logo 是否允许使用。未确认前不得把受控 logo 作为 mandatory final asset。
+
+### UA-E-004：Final Innovation Wording Approval
+
+最终 3–5 个 innovation titles 和 one-line claims 在进入 G3-F 前必须由用户确认，避免未经审核把高风险 wording 固化到视频或演示。
+
+G3-E 不得自行关闭 USER_ACTION_REQUIRED。
+
+---
+
+## 15.14 Failure 与状态分类
+
+### FAIL
+
+用于：
+
+```text
+chart-data or source hash mismatch
+manual authoritative numeric value
+metric/claim/unit/rounding mismatch
+misleading visual encoding
+unsupported hardware or Agent/autonomy claim
+fabricated innovation or historical evidence
+forbidden novelty claim
+non-deterministic canonical build
+secret/private path leakage
+old authority mutation
+staging failure
+full regression failure
+Feature Freeze violation
+```
+
+### PARTIAL
+
+只用于 non-mandatory supporting visualization 或 optional asset 缺失。不得用 PARTIAL 绕过 main chart suite、claim validation、innovation mapping、narrative、staging 或 final evidence。
+
+### USER_ACTION_REQUIRED
+
+只用于语言、template、logo、external asset、final innovation wording 和其他外部决策。
+
+### ENV_BLOCKED
+
+只用于 repository/authority unreadable、required local toolchain unavailable、filesystem/Git object corruption，或已选 mandatory renderer 在授权环境无法运行且没有等价 safe fallback。
+
+### HARDWARE_BLOCKED
+
+只用于 real-device validation。不得用 HARDWARE_BLOCKED 掩盖 chart、renderer、asset、claim、narrative、staging 或 regression bug。
+
+### BLOCKED_BY_AUTHORITY_CONFLICT
+
+只用于 L1–L6 无法消解的事实冲突。必须停止，不得选用更有利版本。
+
+---
+
+## 15.15 Branch 与 commit strategy
+
+建议单一分支：
+
+```text
+codex/g3-e-visualization-innovation-narrative
+```
+
+建议五个阶段性 commit：
+
+```text
+G3-E-A freeze visualization and story contract
+G3-E-B build final evidence-derived chart suite
+G3-E-C map competition innovations to frozen evidence
+G3-E-D build competition narrative and defense storyline
+G3-E-E finalize visualization assets and evidence
+```
+
+实际文案允许最小调整，但必须保持 A→B→C→D→E 阶段边界。
+
+G3-E 执行时不得：
+
+```text
+push
+merge
+rebase
+amend published history
+reset --hard
+git clean -fd
+create release
+create tag
+create submission archive
+```
+
+完成 G3-E-E 后停在本地 branch，等待用户检查。
+
+---
+
+## 15.16 G3-E Exit Criteria
+
+只有以下全部满足，才允许标记：
+
+```text
+G3-E Competition Visualization and Innovation Narrative: COMPLETED
+```
+
+必须：
+
+- visualization authority complete；
+- all current G3-C chart-data inventoried；
+- final chart suite frozen；
+- every numerical figure ledger-derived；
+- source hashes、metric refs、claim refs、units、rounding PASS；
+- visual integrity audit PASS；
+- truth identities visible and machine-auditable；
+- no misleading real-device implication；
+- innovation evidence map complete；
+- final 3–5 innovations evidence-backed，或更少且有 evidence/clarity rejection record；
+- no unsupported novelty/SOTA/first/leading claim；
+- Agent innovation wording G3-D provenance-backed；
+- competition narrative complete；
+- 30-second、3-minute、technical defense layers complete；
+- high-risk defense boundaries complete；
+- phrasebook and figure/story mapping validated；
+- deterministic offline asset build PASS；
+- no network/API/LLM/browser/remote asset dependency；
+- no benchmark rerun；
+- no old authority mutation；
+- focused G3-E tests PASS；
+- full pytest、CTest、Linux CPU_SIM validation PASS；
+- existing skip count no abnormal increase；
+- staging PASS；
+- no secrets/local absolute paths/forbidden assets；
+- unique G3-E final evidence frozen；
+- `SHA256SUMS` PASS；
+- `G3_E_COMPETITION_VISUALIZATION_OK` emitted；
+- Final Feature Freeze preserved；
+- real-device status unchanged；
+- worktree clean after final commit；
+- no push/merge/G3-F implementation。
+
+最终 `result.json` 至少记录：
+
+```text
+checkpoint=G3-E
+checkpoint_status=COMPLETED
+
+visualization_authority=COMPLETED
+chart_suite=COMPLETED
+innovation_mapping=COMPLETED
+competition_narrative=COMPLETED
+defense_storyline=COMPLETED
+asset_staging=COMPLETED
+
+numerical_charts_ledger_derived=true
+claim_boundaries_preserved=true
+canonical_rounding_preserved=true
+visual_integrity_pass=true
+
+benchmark_rerun=false
+external_llm_required=false
+network_required=false
+
+old_authority_modified=false
+final_feature_freeze_preserved=true
+
+real_device_acceptance=HARDWARE_BLOCKED
+real_device_api_executed=false
+measured_on_real_npu=false
+msprof_executed=false
+runtime_api_calls=[]
+```
+
+---
+
+## 15.17 G3-F boundary
+
+只有 G3-E 满足 15.16 全部 exit criteria 并由用户确认后，才允许进入 G3-F。
+
+G3-F 将消费：
+
+```text
+G3-C factual reports / metrics / claims
++ G3-D Agent provenance / replay
++ G3-E charts / figures / innovation mapping / narrative / defense storyline
+```
+
+用于：
+
+```text
+demo
+video
+storyboard
+screen-recording plan
+narration
+subtitles
+final competition presentation flow
+```
+
+G3-F 不得回头重新计算 G3-E chart number。
+
+G3-E 不创建：
+
+```text
+PPT deck
+final video
+screen recording
+voiceover
+subtitle track
+video timeline
+```
+
+G3-E-E 完成后必须：
+
+```text
+STOP
+```
+
+不得自动开始 G3-F implementation。

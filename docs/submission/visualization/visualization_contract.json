@@ -1,0 +1,90 @@
+{
+  "authority_conflict_status": "BLOCKED_BY_AUTHORITY_CONFLICT",
+  "authority_routing": {
+    "agent_provenance": "docs/submission/agent_delivery",
+    "chart_source_data": "docs/submission/report_chart_data",
+    "external_wording": "docs/submission/report_claim_ledger.json",
+    "feature_implementation": "merged source and G3-B3 evidence",
+    "historical_gap": "G3-A audit",
+    "numeric_fact": "docs/submission/report_data_ledger.json",
+    "optimization_history": "G3-B2 evidence"
+  },
+  "candidate_statuses": [
+    "REQUIRED",
+    "RECOMMENDED",
+    "OPTIONAL",
+    "REJECTED_BY_EVIDENCE",
+    "REJECTED_BY_CLARITY",
+    "NOT_APPLICABLE"
+  ],
+  "checkpoint": "G3-E-A",
+  "design_contract": {
+    "accessible_contrast": true,
+    "key_semantics_color_only": false,
+    "language": "USER_ACTION_REQUIRED",
+    "presentation_friendly": "16:9",
+    "private_fonts": false,
+    "self_contained": true,
+    "template": "USER_ACTION_REQUIRED",
+    "vector_first": true
+  },
+  "feature_freeze": "PRESERVED",
+  "mandatory_offline_boundary": {
+    "api_keys": [],
+    "benchmark_rerun": false,
+    "external_llm": false,
+    "hardware_runtime": false,
+    "network": false,
+    "remote_assets": false
+  },
+  "numerical_policy": {
+    "display_value_is_canonical": true,
+    "manual_authoritative_constants": false,
+    "raw_benchmark_input": false,
+    "single_source": "G3-C chart-data plus data ledger plus canonical display rounding"
+  },
+  "real_device_acceptance": "HARDWARE_BLOCKED",
+  "renderer_decision": {
+    "browser_service_required": false,
+    "canonical_asset": "SVG",
+    "external_dependency_required": false,
+    "mandatory": "Python stdlib deterministic self-contained SVG",
+    "network_required": false,
+    "png": "OPTIONAL_NON_CANONICAL_ONLY_IF_DETERMINISTIC"
+  },
+  "runtime_api_calls": [],
+  "schema_version": "g3-e-visualization-contract-v1",
+  "source_baseline": "2e688c26df3808a7f2a191ee1cf817f3a4246f28",
+  "status": "FROZEN_CONTRACT",
+  "truth_identities": [
+    "HOST_EXECUTED",
+    "CPU_EXECUTED",
+    "SIMULATED_ONLY",
+    "LOSSLESS_SPARSE_HOST_EXECUTED",
+    "HOST_INTEGRITY_VALIDATED",
+    "HOST_RETRY_VALIDATED",
+    "SIMULATED_BACKPRESSURE",
+    "DIRECT_READINESS_ONLY",
+    "DIRECT_COMPILE_LINK_ONLY",
+    "REAL_DEVICE_NOT_EXECUTED",
+    "HISTORICAL_EVIDENCE",
+    "OFFLINE_REPLAY",
+    "REPLAYED_FROM_FROZEN_TRACE",
+    "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+    "AGENT_GENERATED",
+    "DETERMINISTIC_EVALUATION",
+    "HUMAN_INTERVENTION",
+    "HISTORICAL_TRACE_UNAVAILABLE",
+    "ONLINE_LLM_OPTIONAL"
+  ],
+  "visual_integrity_rules": [
+    "no unnecessary 3D, area, or volume encoding",
+    "no unjustified truncated axis; non-zero baseline must be explicit",
+    "no unnecessary dual axis",
+    "simulation, host execution, readiness, and real device remain visually distinct",
+    "logical ranks are never physical NPU validation",
+    "modeled wire bytes are never NIC measurement",
+    "truth identity is not encoded by color alone",
+    "every final figure has units, caption, alt text, source/claim mapping, limitations, and forbidden interpretations"
+  ]
+}
