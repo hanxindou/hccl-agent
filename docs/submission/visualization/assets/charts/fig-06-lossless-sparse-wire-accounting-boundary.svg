@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Lossless sparse wire-accounting boundary</title>
+  <desc id="desc">Lossless sparse wire-accounting boundary. Explain density, modeled bytes, break-even, compression ratio, and dense fallback. Truth: LOSSLESS_SPARSE_HOST_EXECUTED. Limits: host correctness plus modeled/logical bytes; not NIC measurement. Classification: MAIN.</desc>
+  <defs>
+    <style>text{font-family:Arial,'Noto Sans',sans-serif;fill:#152238}.title{font-size:34px;font-weight:700}.sub{font-size:17px;fill:#53657a}.label{font-size:16px}.small{font-size:13px;fill:#53657a}.value{font-size:15px;font-weight:700}.node{fill:#f6f8fb;stroke:#9aabc0;stroke-width:2}.primary{fill:#1769aa}.secondary{fill:#3da58a}.warning{fill:#d9852b}.blocked{fill:#c74c4c}.grid{stroke:#d8e0ea;stroke-width:1}.arrow{stroke:#63768c;stroke-width:2;fill:none}.badge{fill:#e8eef5;stroke:#b9c7d7}.badgeText{font-size:12px;font-weight:700}</style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#63768c"/></marker>
+  </defs>
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <rect x="0" y="0" width="14" height="720" fill="#1769aa"/>
+  <text class="title" x="54" y="64">Lossless sparse wire-accounting boundary</text>
+  <text class="sub" x="54" y="94">Evidence-derived · offline deterministic SVG</text>
+  <rect class="badge" x="54" y="112" width="264" height="28" rx="14"/>
+  <text class="badgeText" x="70" y="131">LOSSLESS_SPARSE_HOST_EXECUTED</text>
+  <text class="small" x="930" y="160">Scale: log10(value + 1)</text>
+  <text class="small" x="54" y="202">s01.index bytes</text>
+  <rect x="310" y="189" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="189" width="345.0" height="17" rx="4"/>
+  <text class="value" x="980" y="203">32768 byte</text>
+  <text class="small" x="54" y="233">s03.logical bytes</text>
+  <rect x="310" y="220" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="220" width="368.0" height="17" rx="4"/>
+  <text class="value" x="980" y="234">65536 byte</text>
+  <text class="small" x="54" y="264">s05.metadata bytes</text>
+  <rect x="310" y="251" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="251" width="138.5" height="17" rx="4"/>
+  <text class="value" x="980" y="265">64 byte</text>
+  <text class="small" x="54" y="295">s07.value bytes</text>
+  <rect x="310" y="282" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="282" width="450.4" height="17" rx="4"/>
+  <text class="value" x="980" y="296">786432 byte</text>
+  <text class="small" x="54" y="326">s09.wire bytes</text>
+  <rect x="310" y="313" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="313" width="437.0" height="17" rx="4"/>
+  <text class="value" x="980" y="327">524352 byte</text>
+  <text class="small" x="54" y="357">s12.index bytes</text>
+  <rect x="310" y="344" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="344" width="565.4" height="17" rx="4"/>
+  <text class="value" x="980" y="358">25165824 byte</text>
+  <text class="small" x="54" y="388">s14.logical bytes</text>
+  <rect x="310" y="375" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="375" width="552.0" height="17" rx="4"/>
+  <text class="value" x="980" y="389">16777216 byte</text>
+  <text class="small" x="54" y="419">s16.metadata bytes</text>
+  <rect x="310" y="406" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="406" width="138.5" height="17" rx="4"/>
+  <text class="value" x="980" y="420">64 byte</text>
+  <text class="small" x="54" y="450">s18.value bytes</text>
+  <rect x="310" y="437" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="437" width="544.6" height="17" rx="4"/>
+  <text class="value" x="980" y="451">13421772 byte</text>
+  <text class="small" x="54" y="481">s20.wire bytes</text>
+  <rect x="310" y="468" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="468" width="650.0" height="17" rx="4"/>
+  <text class="value" x="980" y="482">322122610 byte</text>
+  <text class="small" x="54" y="512">break even.fp32 1048576</text>
+  <rect x="310" y="499" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="499" width="13.7" height="17" rx="4"/>
+  <text class="value" x="980" y="513">0.5100 ratio</text>
+  <text class="small" x="54" y="543">s07.compression ratio</text>
+  <rect x="310" y="530" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="530" width="12.2" height="17" rx="4"/>
+  <text class="value" x="980" y="544">0.4444 ratio</text>
+  <text class="small" x="54" y="574">s18.compression ratio</text>
+  <rect x="310" y="561" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="561" width="48.7" height="17" rx="4"/>
+  <text class="value" x="980" y="575">3.3333 ratio</text>
+  <text class="small" x="54" y="605">s09.sparsity ratio</text>
+  <rect x="310" y="592" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="592" width="18.6" height="17" rx="4"/>
+  <text class="value" x="980" y="606">0.7500 ratio</text>
+  <line class="grid" x1="54" y1="665" x2="1226" y2="665"/>
+  <text class="small" x="54" y="691">Source: docs/submission/report_chart_data/sparse_wire_bytes.json, docs/submission/report_chart_data/sparse_break_even.json, docs/submission/report_chart_</text>
+</svg>

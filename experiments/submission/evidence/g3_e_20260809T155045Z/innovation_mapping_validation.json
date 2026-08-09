@@ -1,0 +1,13 @@
+{
+  "benchmark_rerun": false,
+  "claim_reference_count": 14,
+  "errors": [],
+  "figure_reference_count": 11,
+  "innovation_count": 5,
+  "metric_reference_count": 888,
+  "runtime_api_calls": [],
+  "schema_version": "g3-e-innovation-validation-v1",
+  "sentinel": "G3_E_INNOVATION_MAPPING_OK",
+  "status": "PASS",
+  "trace_reference_count": 2
+}

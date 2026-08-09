@@ -1,0 +1,54 @@
+{
+  "authority_roots": {
+    "g3_b2": {
+      "expected_sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+      "files_checked": 25,
+      "mismatches": [],
+      "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+      "status": "PASS"
+    },
+    "g3_b3": {
+      "expected_sha256sums_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754",
+      "files_checked": 35,
+      "mismatches": [],
+      "path": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+      "sha256sums_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754",
+      "status": "PASS"
+    },
+    "g3_c": {
+      "expected_sha256sums_sha256": "cc29469e79d9a242aa7eb2859d5ca94357bc2700ad6a6887ffdce1852bf44707",
+      "files_checked": 27,
+      "mismatches": [],
+      "path": "experiments/submission/evidence/g3_c_20260809T000000Z",
+      "sha256sums_sha256": "cc29469e79d9a242aa7eb2859d5ca94357bc2700ad6a6887ffdce1852bf44707",
+      "status": "PASS"
+    },
+    "g3_d": {
+      "expected_sha256sums_sha256": "1f702c043e6e73bf2f1464a1d40367eb4d8599d5b56b67604acdac69494bb312",
+      "files_checked": 23,
+      "mismatches": [],
+      "path": "experiments/submission/evidence/g3_d_20260809T123956Z",
+      "sha256sums_sha256": "1f702c043e6e73bf2f1464a1d40367eb4d8599d5b56b67604acdac69494bb312",
+      "status": "PASS"
+    }
+  },
+  "benchmark_rerun": false,
+  "candidate_count": 13,
+  "chart_data_count": 16,
+  "claim_count": 21,
+  "errors": [],
+  "final_assets_built": false,
+  "g3_d_counts": {
+    "human_records": 6,
+    "mappings": 56,
+    "prompts": 12,
+    "skills": 31,
+    "traces": 2
+  },
+  "metric_count": 1082,
+  "runtime_api_calls": [],
+  "schema_version": "g3-e-visualization-authority-validation-v1",
+  "sentinel": "G3_E_VISUALIZATION_AUTHORITY_OK",
+  "status": "PASS"
+}

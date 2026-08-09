@@ -1,0 +1,345 @@
+{
+  "candidate_count": 13,
+  "candidates": [
+    {
+      "audience_question": "What is the system and what actually ran?",
+      "claim_refs": [
+        "C-ARCH-001",
+        "C-ARCH-002"
+      ],
+      "data_sources": [
+        "main.py",
+        "agent/hccl_agent.py",
+        "tools/submission_cli/core.py"
+      ],
+      "figure_id": "FIG-01",
+      "figure_type": "architecture diagram",
+      "limitations": [
+        "architecture relation only; not performance evidence"
+      ],
+      "priority": 1,
+      "purpose": "Separate CPU_SIM, simulator validation, Direct readiness, and real-device gap.",
+      "status": "REQUIRED",
+      "story_position": "System",
+      "title": "System execution and validation architecture",
+      "truth_identity": [
+        "HOST_EXECUTED",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    },
+    {
+      "audience_question": "What changed in the optimization pipeline?",
+      "claim_refs": [
+        "C-IR-001"
+      ],
+      "data_sources": [
+        "docs/submission/report_chart_data/schedule_phase_comparison.json",
+        "docs/submission/report_chart_data/algorithm_support_matrix.json"
+      ],
+      "figure_id": "FIG-02",
+      "figure_type": "process diagram",
+      "limitations": [
+        "optimization outcomes are simulated"
+      ],
+      "priority": 2,
+      "purpose": "Explain schedule generation, topology costs, selection, and replanning.",
+      "status": "REQUIRED",
+      "story_position": "Optimization",
+      "title": "Schedule IR and topology-aware optimization pipeline",
+      "truth_identity": [
+        "HOST_EXECUTED",
+        "SIMULATED_ONLY"
+      ]
+    },
+    {
+      "audience_question": "Where does the optimization improvement appear?",
+      "claim_refs": [
+        "C-PERF-001"
+      ],
+      "data_sources": [
+        "docs/submission/report_chart_data/g3_b2_latency_comparison.json"
+      ],
+      "figure_id": "FIG-03",
+      "figure_type": "log-scale paired bars",
+      "limitations": [
+        "not real NPU or training latency"
+      ],
+      "priority": 3,
+      "purpose": "Show scenario-level baseline versus final modeled latency.",
+      "status": "REQUIRED",
+      "story_position": "Evidence",
+      "title": "Frozen simulated latency comparison",
+      "truth_identity": [
+        "SIMULATED_ONLY"
+      ]
+    },
+    {
+      "audience_question": "How consistent was the modeled result?",
+      "claim_refs": [
+        "C-PERF-001",
+        "C-PERF-002"
+      ],
+      "data_sources": [
+        "docs/submission/report_chart_data/g3_b2_latency_comparison.json",
+        "docs/submission/report_chart_data/g3_b2_bandwidth_comparison.json"
+      ],
+      "figure_id": "FIG-04",
+      "figure_type": "directly labeled outcome summary",
+      "limitations": [
+        "18 frozen simulated scenarios only",
+        "45.59% is canonical display, not hardware speedup"
+      ],
+      "priority": 4,
+      "purpose": "Summarize the frozen simulated scenario comparison and canonical weighted result.",
+      "status": "REQUIRED",
+      "story_position": "Evidence",
+      "title": "18 wins, 0 ties, 0 losses",
+      "truth_identity": [
+        "SIMULATED_ONLY"
+      ]
+    },
+    {
+      "audience_question": "What scale was modeled?",
+      "claim_refs": [
+        "C-SCALE-001"
+      ],
+      "data_sources": [
+        "docs/submission/report_chart_data/g3_b2_scale.json"
+      ],
+      "figure_id": "FIG-05",
+      "figure_type": "line chart",
+      "limitations": [
+        "logical/model ranks, not physical NPU cluster"
+      ],
+      "priority": 7,
+      "purpose": "Show modeled behavior through the frozen logical rank range.",
+      "status": "RECOMMENDED",
+      "story_position": "Evidence",
+      "title": "Logical scale trend",
+      "truth_identity": [
+        "SIMULATED_ONLY"
+      ]
+    },
+    {
+      "audience_question": "When is sparse useful and what was actually validated?",
+      "claim_refs": [
+        "C-SPARSE-001",
+        "C-SPARSE-002",
+        "C-SPARSE-003"
+      ],
+      "data_sources": [
+        "docs/submission/report_chart_data/sparse_wire_bytes.json",
+        "docs/submission/report_chart_data/sparse_break_even.json",
+        "docs/submission/report_chart_data/sparse_compression_ratio.json",
+        "docs/submission/report_chart_data/sparse_dense_fallback.json"
+      ],
+      "figure_id": "FIG-06",
+      "figure_type": "small multiples",
+      "limitations": [
+        "host correctness plus modeled/logical bytes; not NIC measurement"
+      ],
+      "priority": 5,
+      "purpose": "Explain density, modeled bytes, break-even, compression ratio, and dense fallback.",
+      "status": "REQUIRED",
+      "story_position": "Feature completion",
+      "title": "Lossless sparse wire-accounting boundary",
+      "truth_identity": [
+        "LOSSLESS_SPARSE_HOST_EXECUTED"
+      ]
+    },
+    {
+      "audience_question": "Which reliability properties were validated at each layer?",
+      "claim_refs": [
+        "C-CRC-001",
+        "C-RETRY-001",
+        "C-BP-001"
+      ],
+      "data_sources": [
+        "docs/submission/report_chart_data/crc_retry_cases.json",
+        "docs/submission/report_chart_data/backpressure_behavior.json",
+        "docs/submission/report_chart_data/reliability_outcomes.json"
+      ],
+      "figure_id": "FIG-07",
+      "figure_type": "layered outcome matrix",
+      "limitations": [
+        "not NIC/HCCL hardware reliability"
+      ],
+      "priority": 6,
+      "purpose": "Separate host CRC, host retry, and simulated backpressure evidence.",
+      "status": "REQUIRED",
+      "story_position": "Feature completion",
+      "title": "Integrity, retry, and backpressure layers",
+      "truth_identity": [
+        "HOST_INTEGRITY_VALIDATED",
+        "HOST_RETRY_VALIDATED",
+        "SIMULATED_BACKPRESSURE"
+      ]
+    },
+    {
+      "audience_question": "What did the Agent and humans actually do?",
+      "claim_refs": [
+        "C-PERF-001",
+        "C-IR-001"
+      ],
+      "data_sources": [
+        "docs/submission/agent_delivery/trace_index.json",
+        "docs/submission/agent_delivery/source_commit_evidence_claim_mapping.json"
+      ],
+      "figure_id": "FIG-08",
+      "figure_type": "provenance process diagram",
+      "limitations": [
+        "normalized reconstruction is not hidden reasoning or original historical execution"
+      ],
+      "priority": 5,
+      "purpose": "Show proposal, deterministic evaluation, human governance, reflection/replanning, and evidence mapping.",
+      "status": "REQUIRED",
+      "story_position": "Agent role",
+      "title": "Agent-assisted optimization loop",
+      "truth_identity": [
+        "AGENT_GENERATED",
+        "DETERMINISTIC_EVALUATION",
+        "HUMAN_INTERVENTION",
+        "RECONSTRUCTED_FROM_FROZEN_EVIDENCE"
+      ]
+    },
+    {
+      "audience_question": "Why were INT8 and PairWise not implemented?",
+      "claim_refs": [
+        "C-INT8-001",
+        "C-PAIR-001"
+      ],
+      "data_sources": [
+        "docs/submission/agent_delivery/traces/g3_b3_feature_completion_trace.json"
+      ],
+      "figure_id": "FIG-09",
+      "figure_type": "decision flow diagram",
+      "limitations": [
+        "historical Prompt/Response unavailable"
+      ],
+      "priority": 8,
+      "purpose": "Show implemented, deferred, and skipped decisions without hiding negative gates.",
+      "status": "RECOMMENDED",
+      "story_position": "Agent role",
+      "title": "G3-B3 feature decision flow",
+      "truth_identity": [
+        "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+        "HISTORICAL_TRACE_UNAVAILABLE"
+      ]
+    },
+    {
+      "audience_question": "What does Direct readiness prove?",
+      "claim_refs": [
+        "C-DIRECT-001",
+        "C-DIRECT-002",
+        "C-ABI-001"
+      ],
+      "data_sources": [
+        "docs/submission/report_chart_data/direct_readiness_status.json",
+        "hcccl/submission/native_plugin_abi_manifest.json"
+      ],
+      "figure_id": "FIG-10",
+      "figure_type": "validation ladder",
+      "limitations": [
+        "no ACL/HCCL runtime, communicator, or real collective executed"
+      ],
+      "priority": 6,
+      "purpose": "Distinguish source call expressions, compile/link readiness, CPU_SIM ABI, and missing runtime execution.",
+      "status": "REQUIRED",
+      "story_position": "Limitations",
+      "title": "Direct readiness validation ladder",
+      "truth_identity": [
+        "CPU_EXECUTED",
+        "DIRECT_COMPILE_LINK_ONLY",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    },
+    {
+      "audience_question": "Which stages contributed to the modeled result?",
+      "claim_refs": [
+        "C-PERF-001",
+        "C-PIPE-001"
+      ],
+      "data_sources": [
+        "docs/submission/report_chart_data/g3_b2_ablation.json"
+      ],
+      "figure_id": "FIG-11",
+      "figure_type": "waterfall-style bars",
+      "limitations": [
+        "modeled ablation, not hardware attribution"
+      ],
+      "priority": 9,
+      "purpose": "Attribute modeled contribution across the frozen optimization stages.",
+      "status": "RECOMMENDED",
+      "story_position": "Evidence",
+      "title": "Optimization ablation",
+      "truth_identity": [
+        "SIMULATED_ONLY"
+      ]
+    },
+    {
+      "audience_question": "Which statements are safe at each evidence layer?",
+      "claim_refs": [
+        "C-ARCH-001",
+        "C-DIRECT-002",
+        "C-MODEL-001"
+      ],
+      "data_sources": [
+        "docs/submission/report_chart_data/claim_boundary_summary.json"
+      ],
+      "figure_id": "FIG-12",
+      "figure_type": "labeled matrix",
+      "limitations": [
+        "summary does not replace claim ledger"
+      ],
+      "priority": 2,
+      "purpose": "Give reviewers a compact host/simulator/readiness/real-device map.",
+      "status": "REQUIRED",
+      "story_position": "Limitations",
+      "title": "Truth and evidence boundary matrix",
+      "truth_identity": [
+        "HOST_EXECUTED",
+        "SIMULATED_ONLY",
+        "DIRECT_READINESS_ONLY",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    },
+    {
+      "audience_question": "What algorithm/topology breadth is implemented?",
+      "claim_refs": [
+        "C-IR-001"
+      ],
+      "data_sources": [
+        "docs/submission/report_chart_data/algorithm_support_matrix.json",
+        "docs/submission/report_chart_data/schedule_phase_comparison.json"
+      ],
+      "figure_id": "FIG-13",
+      "figure_type": "coverage matrix",
+      "limitations": [
+        "coverage does not imply real-device validation"
+      ],
+      "priority": 10,
+      "purpose": "Show implemented primitives/algorithm families and topology-aware phase differences.",
+      "status": "RECOMMENDED",
+      "story_position": "System",
+      "title": "Algorithm and topology coverage",
+      "truth_identity": [
+        "HOST_EXECUTED",
+        "SIMULATED_ONLY"
+      ]
+    }
+  ],
+  "recommended_main_figure_range": {
+    "hard_requirement": false,
+    "maximum": 12,
+    "minimum": 8
+  },
+  "schema_version": "g3-e-chart-candidate-inventory-v1",
+  "selection_policy": [
+    "competition relevance",
+    "technical distinctness",
+    "evidence strength",
+    "clarity",
+    "claim safety"
+  ],
+  "status": "CANDIDATES_FROZEN_NO_ASSETS_BUILT"
+}

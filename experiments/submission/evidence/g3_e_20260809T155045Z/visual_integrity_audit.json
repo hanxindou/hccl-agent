@@ -1,0 +1,191 @@
+{
+  "errors": [],
+  "figure_count": 13,
+  "misleading_encoding_findings": [],
+  "records": [
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-01"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-02"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-03"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-04"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-05"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-06"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-07"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-08"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-09"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-10"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-11"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-12"
+    },
+    {
+      "checks": {
+        "alt_text": true,
+        "caption": true,
+        "description": true,
+        "limitations": true,
+        "presentation_ratio": true,
+        "self_contained": true,
+        "source_visible": true,
+        "title": true,
+        "truth_identity_visible": true
+      },
+      "figure_id": "FIG-13"
+    }
+  ],
+  "schema_version": "g3-e-visual-integrity-v1",
+  "status": "PASS"
+}

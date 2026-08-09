@@ -1,0 +1,15 @@
+{
+  "asset_count": 13,
+  "benchmark_rerun": false,
+  "canonical_format": "SVG",
+  "errors": [],
+  "main_figure_count": 10,
+  "network_access": false,
+  "png_generated": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-e-chart-suite-validation-v1",
+  "sentinel": "G3_E_CHART_SUITE_OK",
+  "status": "PASS",
+  "supporting_figure_count": 3,
+  "unique_asset_hash_count": 13
+}

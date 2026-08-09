@@ -1,0 +1,21 @@
+{
+  "closed_by_g3_e": [],
+  "items": [
+    "UA-B-001",
+    "UA-B-002",
+    "UA-B-003",
+    "UA-B-004",
+    "UA-C-001",
+    "UA-C-002",
+    "UA-C-003",
+    "UA-D-001",
+    "UA-D-002",
+    "UA-D-003",
+    "UA-E-001",
+    "UA-E-002",
+    "UA-E-003",
+    "UA-E-004"
+  ],
+  "schema_version": "g3-e-user-action-required-v1",
+  "status": "USER_ACTION_REQUIRED"
+}

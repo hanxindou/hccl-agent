@@ -1,0 +1,19 @@
+{
+  "branch": "codex/g3-e-visualization-innovation-narrative",
+  "commit": "21097756bea81337e8adc71addca27747c3ccfea",
+  "g3_f_started": false,
+  "merge_performed": false,
+  "push_performed": false,
+  "status_short": [
+    "M docs/submission/visualization/chart_registry.json",
+    " M tests/visualization/test_g3_e_innovation.py",
+    " M tools/agent_delivery/finalize.py",
+    " M tools/submission_cli/core.py",
+    " M tools/visualization/innovation.py",
+    " M tools/visualization_cli.py",
+    "?? dist/",
+    "?? tests/visualization/test_g3_e_finalization.py",
+    "?? tools/visualization/finalize.py"
+  ],
+  "worktree_state": "G3-E-E files pending authorized final local commit"
+}

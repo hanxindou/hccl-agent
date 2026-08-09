@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Integrity, retry, and backpressure layers</title>
+  <desc id="desc">Integrity, retry, and backpressure layers. Separate host CRC, host retry, and simulated backpressure evidence. Truth: HOST_INTEGRITY_VALIDATED, HOST_RETRY_VALIDATED, SIMULATED_BACKPRESSURE. Limits: not NIC/HCCL hardware reliability. Classification: MAIN.</desc>
+  <defs>
+    <style>text{font-family:Arial,'Noto Sans',sans-serif;fill:#152238}.title{font-size:34px;font-weight:700}.sub{font-size:17px;fill:#53657a}.label{font-size:16px}.small{font-size:13px;fill:#53657a}.value{font-size:15px;font-weight:700}.node{fill:#f6f8fb;stroke:#9aabc0;stroke-width:2}.primary{fill:#1769aa}.secondary{fill:#3da58a}.warning{fill:#d9852b}.blocked{fill:#c74c4c}.grid{stroke:#d8e0ea;stroke-width:1}.arrow{stroke:#63768c;stroke-width:2;fill:none}.badge{fill:#e8eef5;stroke:#b9c7d7}.badgeText{font-size:12px;font-weight:700}</style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#63768c"/></marker>
+  </defs>
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <rect x="0" y="0" width="14" height="720" fill="#1769aa"/>
+  <text class="title" x="54" y="64">Integrity, retry, and backpressure layers</text>
+  <text class="sub" x="54" y="94">Evidence-derived · offline deterministic SVG</text>
+  <rect class="badge" x="54" y="112" width="608" height="28" rx="14"/>
+  <text class="badgeText" x="70" y="131">HOST_INTEGRITY_VALIDATED · HOST_RETRY_VALIDATED · SIMULATED_BACKPRESSURE</text>
+  <text class="small" x="930" y="160">Scale: log10(value + 1)</text>
+  <text class="small" x="54" y="202">integrity.crc vector count</text>
+  <rect x="310" y="189" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="189" width="69.9" height="17" rx="4"/>
+  <text class="value" x="980" y="203">4 count</text>
+  <text class="small" x="54" y="233">case 1.retransmitted bytes</text>
+  <rect x="310" y="220" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="220" width="2.0" height="17" rx="4"/>
+  <text class="value" x="980" y="234">0 byte</text>
+  <text class="small" x="54" y="264">case 2.retransmitted bytes</text>
+  <rect x="310" y="251" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="251" width="125.6" height="17" rx="4"/>
+  <text class="value" x="980" y="265">17 byte</text>
+  <text class="small" x="54" y="295">case 3.retransmitted bytes</text>
+  <rect x="310" y="282" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="282" width="171.7" height="17" rx="4"/>
+  <text class="value" x="980" y="296">51 byte</text>
+  <text class="small" x="54" y="326">retry.timeout recovered attempt count</text>
+  <rect x="310" y="313" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="313" width="47.7" height="17" rx="4"/>
+  <text class="value" x="980" y="327">2 count</text>
+  <text class="small" x="54" y="357">normal load.blocked producer events</text>
+  <rect x="310" y="344" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="344" width="2.0" height="17" rx="4"/>
+  <text class="value" x="980" y="358">0 count</text>
+  <text class="small" x="54" y="388">normal load.max inflight observed</text>
+  <rect x="310" y="375" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="375" width="47.7" height="17" rx="4"/>
+  <text class="value" x="980" y="389">2 count</text>
+  <text class="small" x="54" y="419">normal load.ticks</text>
+  <rect x="310" y="406" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="406" width="125.6" height="17" rx="4"/>
+  <text class="value" x="980" y="420">17 count</text>
+  <text class="small" x="54" y="450">recovery.credit return events</text>
+  <rect x="310" y="437" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="437" width="151.9" height="17" rx="4"/>
+  <text class="value" x="980" y="451">32 count</text>
+  <text class="small" x="54" y="481">recovery.peak materialized bytes</text>
+  <rect x="310" y="468" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="468" width="650.0" height="17" rx="4"/>
+  <text class="value" x="980" y="482">3145728 byte</text>
+  <text class="small" x="54" y="512">sustained congestion.blocked producer events</text>
+  <rect x="310" y="499" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="499" width="120.5" height="17" rx="4"/>
+  <text class="value" x="980" y="513">15 count</text>
+  <text class="small" x="54" y="543">sustained congestion.max inflight observed</text>
+  <rect x="310" y="530" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="530" width="60.2" height="17" rx="4"/>
+  <text class="value" x="980" y="544">3 count</text>
+  <text class="small" x="54" y="574">sustained congestion.ticks</text>
+  <rect x="310" y="561" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="561" width="154.5" height="17" rx="4"/>
+  <text class="value" x="980" y="575">34 count</text>
+  <text class="small" x="54" y="605">temporary congestion.credit return events</text>
+  <rect x="310" y="592" width="650" height="17" fill="#edf1f6" rx="4"/>
+  <rect class="primary" x="310" y="592" width="151.9" height="17" rx="4"/>
+  <text class="value" x="980" y="606">32 count</text>
+  <line class="grid" x1="54" y1="665" x2="1226" y2="665"/>
+  <text class="small" x="54" y="691">Source: docs/submission/report_chart_data/crc_retry_cases.json, docs/submission/report_chart_data/backpressure_behavior.json, docs/submission/report_char</text>
+</svg>

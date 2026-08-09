@@ -1,0 +1,37 @@
+{
+  "asset_count": 13,
+  "authority_pointers": {
+    "g3_b2": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+    "g3_b3": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+    "g3_c": "experiments/submission/evidence/g3_c_20260809T000000Z",
+    "g3_d": "experiments/submission/evidence/g3_d_20260809T123956Z"
+  },
+  "authority_sha256sums": {
+    "g3_b2": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+    "g3_b3": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754",
+    "g3_c": "cc29469e79d9a242aa7eb2859d5ca94357bc2700ad6a6887ffdce1852bf44707",
+    "g3_d": "1f702c043e6e73bf2f1464a1d40367eb4d8599d5b56b67604acdac69494bb312"
+  },
+  "checkpoint": "G3-E",
+  "innovation_count": 5,
+  "narrative_document_count": 5,
+  "schema_version": "g3-e-final-evidence-v1",
+  "source_commit": "21097756bea81337e8adc71addca27747c3ccfea",
+  "user_action_required": [
+    "UA-B-001",
+    "UA-B-002",
+    "UA-B-003",
+    "UA-B-004",
+    "UA-C-001",
+    "UA-C-002",
+    "UA-C-003",
+    "UA-D-001",
+    "UA-D-002",
+    "UA-D-003",
+    "UA-E-001",
+    "UA-E-002",
+    "UA-E-003",
+    "UA-E-004"
+  ],
+  "worktree_revision": "G3-E-E final files pending authorized local commit"
+}
