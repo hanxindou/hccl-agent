@@ -1,0 +1,16 @@
+{
+  "bounded_retry": "COMPLETED",
+  "c_python_crc_parity": "COMPLETED",
+  "checkpoint": "G3-B3-C",
+  "checkpoint_status": "COMPLETED",
+  "crc32_integrity": "COMPLETED",
+  "failure_classification": "COMPLETED",
+  "host_integrity_validation": "COMPLETED",
+  "logical_timeout": "COMPLETED",
+  "old_evidence_modified": false,
+  "public_abi_changed": false,
+  "real_device_api_executed": false,
+  "retry_exhaustion": "COMPLETED",
+  "runtime_api_calls": [],
+  "schema_version": "g3-b3-c-result-v1"
+}

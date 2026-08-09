@@ -1,0 +1,16 @@
+{
+  "bounded_sparse_large_message": "COMPLETED",
+  "checkpoint": "G3-B3-B",
+  "checkpoint_status": "COMPLETED",
+  "dense_fallback": "COMPLETED",
+  "lossless_sparse": "COMPLETED",
+  "old_evidence_modified": false,
+  "public_abi_changed": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-b3-b-result-v1",
+  "sparse_allgather": "COMPLETED",
+  "sparse_allreduce": "COMPLETED",
+  "sparse_c_python_parity": "COMPLETED",
+  "sparse_reducescatter": "COMPLETED"
+}

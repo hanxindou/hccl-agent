@@ -1,0 +1,66 @@
+{
+  "expected_attempt_count": 4,
+  "expected_retransmitted_bytes": 51,
+  "passed": true,
+  "result": {
+    "attempt_count": 4,
+    "classification": "TERMINAL",
+    "completion_tick": 7,
+    "corruption_detected": true,
+    "deadline_tick": 14,
+    "failure_reason": "RETRY_EXHAUSTED",
+    "metadata": {
+      "attempt": 3,
+      "chunk_id": 2,
+      "crc32": 3369664153,
+      "payload_length": 17,
+      "sequence_id": 2,
+      "transfer_id": 7
+    },
+    "recovered": false,
+    "result_code": "HCCL_ERR_CRC_MISMATCH",
+    "retransmitted_bytes": 51,
+    "sequence_valid": true,
+    "start_tick": 6,
+    "timed_out": false,
+    "trace": [
+      {
+        "attempt": 0,
+        "classification": "RETRYABLE",
+        "completion_tick": 1,
+        "crc32": 3369664153,
+        "deadline_tick": 8,
+        "failure_reason": "CRC_MISMATCH",
+        "start_tick": 0
+      },
+      {
+        "attempt": 1,
+        "classification": "RETRYABLE",
+        "completion_tick": 3,
+        "crc32": 3369664153,
+        "deadline_tick": 10,
+        "failure_reason": "CRC_MISMATCH",
+        "start_tick": 2
+      },
+      {
+        "attempt": 2,
+        "classification": "RETRYABLE",
+        "completion_tick": 5,
+        "crc32": 3369664153,
+        "deadline_tick": 12,
+        "failure_reason": "CRC_MISMATCH",
+        "start_tick": 4
+      },
+      {
+        "attempt": 3,
+        "classification": "RETRYABLE",
+        "completion_tick": 7,
+        "crc32": 3369664153,
+        "deadline_tick": 14,
+        "failure_reason": "CRC_MISMATCH",
+        "start_tick": 6
+      }
+    ]
+  },
+  "schema_version": "g3-b3-retry-exhaustion-v1"
+}

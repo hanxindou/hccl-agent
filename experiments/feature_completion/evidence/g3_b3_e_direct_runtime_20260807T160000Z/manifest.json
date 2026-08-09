@@ -1,0 +1,21 @@
+{
+  "baseline_commit": "e8dc9cd",
+  "checkpoint": "G3-B3-E",
+  "checkpoint_status": "COMPLETED",
+  "official_repositories": {
+    "hccl": {
+      "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "tracked_worktree_clean": true
+    },
+    "hcomm": {
+      "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "tracked_worktree_clean": true
+    }
+  },
+  "old_evidence_modified": false,
+  "project_commit": "e8dc9cdf042f14e19dd87125e8341d29ce1c0c56",
+  "public_abi_changed": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-b3-e-evidence-manifest-v1"
+}

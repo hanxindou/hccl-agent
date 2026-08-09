@@ -1,0 +1,62 @@
+{
+  "checkpoint": "G3-B3-F",
+  "final_commit_message": "G3-B3-F freeze final competition feature baseline and evidence",
+  "frozen_contracts": {
+    "agent_proposal": "g3-b3-agent-proposal-v2",
+    "default_backend": "CPU_SIM",
+    "exported_symbol_count": 19,
+    "fallback_policy": "NONE",
+    "plugin_role": "CPU_SIM_REFERENCE_PLUGIN",
+    "public_abi_changed": false,
+    "schedule_ir": "g3-b3-schedule-ir-v2",
+    "soname": "libhccl_plugin.so"
+  },
+  "g3_b2_final_integrity": {
+    "files_checked": 25,
+    "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+    "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+    "status": "PASS"
+  },
+  "schema_version": "g3-b3-f-evidence-v1",
+  "source_commit": "3585d5074d827459f117d79484aaa4f282cbf19c",
+  "source_evidence": {
+    "a": {
+      "files_checked": 14,
+      "path": "experiments/feature_completion/evidence/g3_b3_a_baseline_20260807T133749Z",
+      "sha256sums_sha256": "05b7a3b9a70ad70bb7f25604cd5a1bc7c3272007878e4b717560e18e4b151399",
+      "status": "PASS"
+    },
+    "b": {
+      "files_checked": 12,
+      "path": "experiments/feature_completion/evidence/g3_b3_b_sparse_20260807T135447Z",
+      "sha256sums_sha256": "1fb06f4d668802697f30b44718627e155db282b1fc59f00dffc1d1f02cb5540a",
+      "status": "PASS"
+    },
+    "c": {
+      "files_checked": 14,
+      "path": "experiments/feature_completion/evidence/g3_b3_c_integrity_20260807T141931Z",
+      "sha256sums_sha256": "d139812e13b98b2bab09b67bbe17036eba96bf2ba5e60a464decbaba38773f55",
+      "status": "PASS"
+    },
+    "d": {
+      "files_checked": 14,
+      "path": "experiments/feature_completion/evidence/g3_b3_d_agent_flow_20260807T150515Z",
+      "sha256sums_sha256": "c6e7216623ff155ad597bded16196ac79b0079889196fc1f636e79b65dd1f628",
+      "status": "PASS"
+    },
+    "e": {
+      "files_checked": 13,
+      "path": "experiments/feature_completion/evidence/g3_b3_e_direct_runtime_20260807T160000Z",
+      "sha256sums_sha256": "13c1b66433e8dcb710c323af7a5ffd16a70d7c6544e240841f02f00b8126bafe",
+      "status": "PASS"
+    }
+  },
+  "truth_boundary": {
+    "real_ascend_npu_validated": false,
+    "real_device_acceptance": "HARDWARE_BLOCKED",
+    "real_device_api_executed": false,
+    "real_device_performance_measured": false,
+    "runtime_api_calls": []
+  },
+  "worktree_revision": "G3-B3-F files pending the authorized local commit"
+}

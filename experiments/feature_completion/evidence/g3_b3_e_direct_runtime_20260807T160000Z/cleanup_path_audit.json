@@ -1,0 +1,18 @@
+{
+  "cleanup_errors_counted": true,
+  "first_error_preserved": true,
+  "no_double_free_guards": true,
+  "reverse_cleanup_order": [
+    "HcclCommDestroy(comm)",
+    "aclrtFree(device_recv)",
+    "aclrtFree(device_send)",
+    "aclrtDestroyStream(stream)",
+    "aclrtDestroyContext(context)",
+    "aclrtResetDevice(request->device_id)",
+    "aclFinalize()"
+  ],
+  "runtime_execution": false,
+  "schema_version": "g3-b3-direct-cleanup-static-audit-v1",
+  "source_only": true,
+  "status": "PASS"
+}

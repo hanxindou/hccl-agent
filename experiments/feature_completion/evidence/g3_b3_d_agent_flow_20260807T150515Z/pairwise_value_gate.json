@@ -1,0 +1,21 @@
+{
+  "pairwise_implemented": false,
+  "public_symbol_added": false,
+  "reason": "frozen tiny-message scenarios already have correctness-passing WIN results from Mesh/Butterfly; no quantified unique PairWise gap",
+  "schema_version": "g3-b3-pairwise-value-gate-v1",
+  "status": "SKIPPED_BY_VALUE_GATE",
+  "tiny_message_evidence": [
+    {
+      "outcome": "WIN",
+      "relative_difference_percent": -70.541883204,
+      "scenario_id": "P01",
+      "selected_existing_algorithm": "Mesh"
+    },
+    {
+      "outcome": "WIN",
+      "relative_difference_percent": -34.059623176,
+      "scenario_id": "P02",
+      "selected_existing_algorithm": "Butterfly"
+    }
+  ]
+}

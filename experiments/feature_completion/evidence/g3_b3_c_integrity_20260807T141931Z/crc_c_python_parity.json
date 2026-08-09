@@ -1,0 +1,26 @@
+{
+  "c_record": {
+    "empty_crc32": "00000000",
+    "known_vector": "123456789",
+    "known_vector_crc32": "cbf43926",
+    "non_aligned_crc32": "ad5809f9",
+    "non_aligned_hex": "00010203040506"
+  },
+  "comparisons": {
+    "empty_crc32": true,
+    "known_vector": true,
+    "known_vector_crc32": true,
+    "non_aligned_crc32": true,
+    "non_aligned_hex": true
+  },
+  "passed": true,
+  "python_record": {
+    "empty_crc32": "00000000",
+    "known_vector": "123456789",
+    "known_vector_crc32": "cbf43926",
+    "non_aligned_crc32": "ad5809f9",
+    "non_aligned_hex": "00010203040506"
+  },
+  "schema_version": "g3-b3-crc-c-python-parity-v1",
+  "truth_label": "HOST_EXECUTED"
+}

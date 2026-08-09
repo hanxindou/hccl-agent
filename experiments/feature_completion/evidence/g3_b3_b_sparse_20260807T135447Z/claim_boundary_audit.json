@@ -1,0 +1,13 @@
+{
+  "claim_contract_sha256": "4e678eddcadb81852562c99fa20fe5df1af47a2bf213f95275b782cc4170fd14",
+  "direct_hccl_api_call": false,
+  "passed": true,
+  "physical_wire_measurement": false,
+  "real_device_api_executed": false,
+  "real_sparse_network": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-b3-b-claim-boundary-audit-v1",
+  "sparse_host_execution": true,
+  "truth_label": "LOSSLESS_SPARSE_HOST_EXECUTED",
+  "wire_bytes_model": true
+}

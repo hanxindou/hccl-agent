@@ -1,0 +1,109 @@
+{
+  "clock": "DETERMINISTIC_LOGICAL_TICKS",
+  "faults": "TEST_ONLY_HOST_SIMULATED",
+  "frozen": true,
+  "scenarios": [
+    {
+      "event": "CLEAN_TRANSFER",
+      "expected": "COMPLETE_WITHOUT_RETRY",
+      "fault_attempts": [],
+      "scenario_id": "B3-R01"
+    },
+    {
+      "event": "SINGLE_CORRUPTION",
+      "expected": "RETRY_AND_COMPLETE",
+      "fault_attempts": [
+        0
+      ],
+      "scenario_id": "B3-R02"
+    },
+    {
+      "event": "REPEATED_CORRUPTION",
+      "expected": "RETRY_EXHAUSTED",
+      "fault_attempts": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "scenario_id": "B3-R03"
+    },
+    {
+      "event": "RETRY_EXHAUSTION",
+      "expected": "TERMINAL_RETRY_EXHAUSTED",
+      "fault_attempts": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "scenario_id": "B3-R04"
+    },
+    {
+      "completion_tick": 6,
+      "deadline_tick": 5,
+      "event": "LOGICAL_TIMEOUT",
+      "expected": "RETRYABLE_LOGICAL_TIMEOUT",
+      "scenario_id": "B3-R05"
+    },
+    {
+      "event": "INVALID_INPUT",
+      "expected": "NON_RETRYABLE",
+      "fault_attempts": [],
+      "scenario_id": "B3-R06"
+    },
+    {
+      "event": "NO_ALTERNATE_PATH",
+      "expected": "TERMINAL_WITHOUT_BLIND_RETRY",
+      "fault_attempts": [],
+      "scenario_id": "B3-R07"
+    },
+    {
+      "credit_window": 2,
+      "event": "CREDIT_EXHAUSTION",
+      "expected": "PRODUCER_BLOCKED",
+      "produced_chunks": 3,
+      "scenario_id": "B3-R08"
+    },
+    {
+      "consumer_release_tick": 3,
+      "credit_window": 2,
+      "event": "BACKPRESSURE_RECOVERY",
+      "expected": "EVENTUALLY_DRAINS",
+      "scenario_id": "B3-R09"
+    },
+    {
+      "event": "DUPLICATE_SEQUENCE",
+      "expected": "SEQUENCE_REJECTED",
+      "scenario_id": "B3-R10",
+      "sequence": [
+        0,
+        1,
+        1,
+        2
+      ]
+    },
+    {
+      "event": "MISSING_CHUNK",
+      "expected": "SEQUENCE_REJECTED",
+      "scenario_id": "B3-R11",
+      "sequence": [
+        0,
+        2
+      ]
+    },
+    {
+      "event": "REORDERED_CHUNK",
+      "expected": "SEQUENCE_REJECTED",
+      "scenario_id": "B3-R12",
+      "sequence": [
+        0,
+        2,
+        1
+      ]
+    }
+  ],
+  "schema_version": "g3-b3-reliability-benchmark-v1",
+  "seed": 20260807,
+  "wall_clock_sleep_allowed": false
+}

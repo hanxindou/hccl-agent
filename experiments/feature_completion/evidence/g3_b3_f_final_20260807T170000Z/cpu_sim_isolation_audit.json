@@ -1,0 +1,59 @@
+{
+  "artifact": "<build>/cpu-sim-default/libhccl_plugin.so",
+  "direct_source_linked_into_cpu_plugin": false,
+  "exact_19_symbol_allowlist": true,
+  "expected_exported_symbols": [
+    "butterfly_allgather",
+    "butterfly_allreduce",
+    "fattree_allreduce",
+    "hcclAllGather",
+    "hcclAllReduce",
+    "hcclBroadcast",
+    "hcclCommDestroy",
+    "hcclCommInit",
+    "hcclFreeTopology",
+    "hcclGetTopology",
+    "hcclPluginGetAlgorithms",
+    "hcclPluginGetVersion",
+    "hcclReduceScatter",
+    "hcclSetRank",
+    "mesh_allreduce",
+    "mesh_reducescatter",
+    "nhr_allreduce",
+    "ring_allgather",
+    "ring_allreduce"
+  ],
+  "expected_needed": [
+    "libc.so.6"
+  ],
+  "exported_symbols": [
+    "butterfly_allgather",
+    "butterfly_allreduce",
+    "fattree_allreduce",
+    "hcclAllGather",
+    "hcclAllReduce",
+    "hcclBroadcast",
+    "hcclCommDestroy",
+    "hcclCommInit",
+    "hcclFreeTopology",
+    "hcclGetTopology",
+    "hcclPluginGetAlgorithms",
+    "hcclPluginGetVersion",
+    "hcclReduceScatter",
+    "hcclSetRank",
+    "mesh_allreduce",
+    "mesh_reducescatter",
+    "nhr_allreduce",
+    "ring_allgather",
+    "ring_allreduce"
+  ],
+  "file": "<build>/cpu-sim-default/libhccl_plugin.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=ec291bdcc6e6a289ea3ce9c30704c4c3ce505cbd, not stripped",
+  "needed": [
+    "libc.so.6"
+  ],
+  "official_dependencies": [],
+  "public_abi_changed": false,
+  "schema_version": "g3-b3-cpu-sim-direct-isolation-audit-v1",
+  "soname": "libhccl_plugin.so",
+  "status": "PASS"
+}

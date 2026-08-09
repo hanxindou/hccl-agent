@@ -1,0 +1,37 @@
+{
+  "baseline_commit": "3b7047bf15bb7609e6142a15eea8b8bf588621aa",
+  "checkpoint": "G3-B3-A",
+  "checkpoint_status": "COMPLETED",
+  "direct_hccl_api_call": false,
+  "generated_artifacts": [
+    "baseline.json",
+    "schedule_ir_v2_schema.json",
+    "agent_proposal_v2_schema.json",
+    "data_profiles.json",
+    "sparse_benchmark_contract.json",
+    "reliability_benchmark_contract.json",
+    "claim_contract.json",
+    "g3_b2_baseline_integrity.json",
+    "baseline_metrics.json",
+    "v1_v2_compatibility.json",
+    "agent_proposal_v2_audit.json"
+  ],
+  "known_limitations": [
+    "wire bytes and latency values are host contract models, not physical measurements"
+  ],
+  "old_evidence_modified": false,
+  "project_commit": "3b7047bf15bb7609e6142a15eea8b8bf588621aa",
+  "real_ascend_npu_validated": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-b3-a-evidence-manifest-v1",
+  "source_documents": [
+    "docs/plans/g3-competition-delivery-readiness.md"
+  ],
+  "tests": [
+    "tests/feature_completion/test_g3_b3_contracts.py"
+  ],
+  "warnings": [
+    "G3-B3-A freezes contracts only; sparse, integrity, retry, flow control, and direct runtime source are not implemented here."
+  ]
+}

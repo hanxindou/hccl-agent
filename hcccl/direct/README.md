@@ -21,3 +21,11 @@ The SDK and official DSOs are not redistributed. The link-audit executable is
 for ELF inspection only and must never be run. With no device, the supported
 preflight result is `NO_DEVICE_EXPECTED`; real-device acceptance remains
 `HARDWARE_BLOCKED`.
+
+G3-B3-E also provides the independent `hccl_direct_runtime_source` shared
+build artifact. It contains actual official ACL/HCCL call expressions but has
+no executable entry point, is excluded from CTest, and is protected by an
+explicit runtime authorization guard. Configure it only for compile/link and
+ELF inspection by adding `-DHCCL_ENABLE_ASCEND_HCCL_RUNTIME_SOURCE=ON` to the
+direct-readiness configure command. Never execute or load it during host-only
+acceptance. The CPU_SIM plugin remains isolated and unchanged.

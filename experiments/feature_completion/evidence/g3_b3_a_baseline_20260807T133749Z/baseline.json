@@ -1,0 +1,51 @@
+{
+  "agent_proposal_version": "g3-b3-agent-proposal-v2",
+  "checkpoint": "G3-B3-A",
+  "checkpoint_status": "COMPLETED",
+  "contract_hashes": {
+    "agent_proposal_v2_schema_sha256": "8970e473a38ee51da2fb4e7fbf7d8d3c1f577b96a11f591c53448809727534ca",
+    "claim_contract_sha256": "4e678eddcadb81852562c99fa20fe5df1af47a2bf213f95275b782cc4170fd14",
+    "data_profiles_sha256": "fd21f1b0a7893a7e7b71b024f31a2dde6328eb66a76331564bcdf6d56ddbdecd",
+    "reliability_benchmark_sha256": "0a2f596465df56e4c16e4b1f37e1b8eef27435b76ea83fe2cd0a509a2c2158e4",
+    "schedule_ir_v2_schema_sha256": "b7bce00da6470987310f66dbf20e436094bd489c860eb56aa9d22bbf8ba97a21",
+    "sparse_benchmark_sha256": "6edece140a901edaf2e8e3285c11b32d0f2581f12b2e368a43fbe6f97ecbfebf"
+  },
+  "direct_hccl_api_call": false,
+  "flow_control_status": "NOT_IMPLEMENTED_IN_CONTRACT_PHASE",
+  "freeze_status": "FROZEN",
+  "g3_b2_baseline_modified": false,
+  "g3_b2_final_commit": "cc632a145b33a82c40244f9158ca0876d65ec5a0",
+  "integrity_status": "NOT_IMPLEMENTED_IN_CONTRACT_PHASE",
+  "model_parameters": {
+    "decode_cost_us_per_mib": 0.4,
+    "detect_cost_us_per_mib": 0.25,
+    "encode_cost_us_per_mib": 0.6,
+    "metadata_bytes_per_payload": 64,
+    "p95_multiplier": 1.05,
+    "schema_version": "g3-b3-contract-cost-model-v1",
+    "topology_bandwidth_gbps": {
+      "FAT_TREE": 50.0,
+      "FULL_MESH": 100.0,
+      "HETEROGENEOUS": 25.0,
+      "RING": 100.0
+    },
+    "topology_latency_us": {
+      "FAT_TREE": 5.0,
+      "FULL_MESH": 2.0,
+      "HETEROGENEOUS": 7.0,
+      "RING": 2.0
+    },
+    "truth_label": "HOST_CONTRACT_MODEL_ONLY"
+  },
+  "old_evidence_modified": false,
+  "real_device_api_executed": false,
+  "reliability_scenario_count": 12,
+  "retry_status": "NOT_IMPLEMENTED_IN_CONTRACT_PHASE",
+  "runtime_api_calls": [],
+  "schedule_ir_version": "g3-b3-schedule-ir-v2",
+  "schema_version": "g3-b3-a-incremental-baseline-v1",
+  "source_baseline_commit": "3b7047bf15bb7609e6142a15eea8b8bf588621aa",
+  "sparse_codec_status": "NOT_IMPLEMENTED_IN_CONTRACT_PHASE",
+  "sparse_scenario_count": 20,
+  "truth_label": "HOST_CONTRACT_MODEL_ONLY"
+}

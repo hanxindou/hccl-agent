@@ -1,0 +1,25 @@
+{
+  "c_cpu_sim_execution": true,
+  "codec_version": "g3-b3-sparse-index-value-v1",
+  "dtypes": [
+    "FP32",
+    "FP16",
+    "BF16"
+  ],
+  "index_types": [
+    "uint16",
+    "uint32",
+    "uint64"
+  ],
+  "lossy_transform": false,
+  "physical_wire_measurement": false,
+  "primitives": [
+    "AllReduce",
+    "AllGather",
+    "ReduceScatter"
+  ],
+  "public_symbols_added": [],
+  "python_host_execution": true,
+  "representation": "SPARSE_INDEX_VALUE",
+  "schema_version": "g3-b3-sparse-codec-manifest-v1"
+}

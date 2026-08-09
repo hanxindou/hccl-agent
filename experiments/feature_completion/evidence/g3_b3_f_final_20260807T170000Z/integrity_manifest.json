@@ -1,0 +1,23 @@
+{
+  "checksum": "CRC32_IEEE",
+  "failure_classes": [
+    "NONE",
+    "RETRYABLE",
+    "NON_RETRYABLE",
+    "TERMINAL"
+  ],
+  "fault_injection": "TEST_ONLY_HOST_SIMULATED",
+  "integrity_version": "g3-b3-host-integrity-crc32-v1",
+  "metadata": [
+    "transfer_id",
+    "sequence_id",
+    "chunk_id",
+    "attempt",
+    "payload_length",
+    "crc32"
+  ],
+  "public_symbols_added": [],
+  "retry_policy_version": "g3-b3-bounded-retry-v1",
+  "runtime_execution": "CPU_SIM_HOST_ONLY",
+  "schema_version": "g3-b3-integrity-manifest-v1"
+}

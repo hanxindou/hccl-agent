@@ -5808,5 +5808,3307 @@ FINAL ALGORITHM CODE FREEZE
 G3-B2-F 完成并合并后，下一阶段才是：
 
 ```text
-G3-C：证据驱动的正式技术报告体系
+G3-B3：赛题关键功能补齐、可靠性深化与官方接口代码化
+```
+
+# 12. G3-B3：赛题关键功能补齐、可靠性深化与官方接口代码化
+
+## 12.1 阶段定位
+
+G3-B3 是项目进入正式技术报告、演示和最终交付前的最后一次功能增强阶段。
+
+阶段性质：
+
+```text
+FINAL FEATURE ENHANCEMENT
+```
+
+G3-B3 不再以提高 G3-B2 已冻结的 45.59283008% 模拟性能改善为主要目标，也不继续无边界增加算法数量。
+
+核心目标是补齐当前仍然具有明显比赛价值、且能够在无真实 Ascend NPU 条件下真实实现和验证的代码能力：
+
+1. Lossless sparsity-aware communication；
+2. C/C++ 数据完整性校验；
+3. bounded timeout/retry；
+4. credit-based flow control / backpressure；
+5. Agent / Schedule / Cost Model 对 sparse 与 reliability 的统一集成；
+6. 官方 ACL/HCCL API 的 compile/link-only production source path；
+7. 最终 Feature Freeze。
+
+G3-B3 完成后：
+
+```text
+不得再创建 G3-B4 或其他常规功能开发阶段。
+```
+
+除阻塞性 bug、比赛平台兼容问题或真实性错误外，代码进入：
+
+```text
+FINAL FEATURE FREEZE
+```
+
+然后正式进入 G3-C。
+
+---
+
+# 12.2 G3-B3 目标状态
+
+G3-B3 的目标不是：
+
+```text
+“让所有赛题项全部 SATISFIED”
+```
+
+因为以下能力仍然无法在当前环境中完成真实验收：
+
+- 真实 Ascend NPU；
+- 真实 ACL runtime；
+- 真实 HCCL communicator；
+- 真实 HCCL collective；
+- 官方 plugin-loader 实机验收；
+- 真实 HCCS/RoCE/PCIe 指标；
+- 真实 sparse wire-byte；
+- 真实 quantized communication；
+- 真实 msprof；
+- 真实 failover；
+- 真实 72h；
+- 真实训练吞吐；
+- 真实 90% 训练加速；
+- 真实 zero-CPU；
+- 真实 UB/HBM reuse。
+
+G3-B3 的目标是：
+
+```text
+在不制造任何真实硬件声明的前提下，
+将当前环境能够实现和验证的赛题关键能力补到最终提交级别。
+```
+
+---
+
+# 12.3 G3-B3 前置基线
+
+开始前必须继承已合并的 G3-B2 Final Code Baseline。
+
+当前权威状态：
+
+```text
+G3-B2: COMPLETED
+Final Code Baseline: FROZEN
+
+default_backend=CPU_SIM
+fallback_policy=NONE
+
+libhccl_plugin.so
+  role=CPU_SIM_REFERENCE_PLUGIN
+
+public_abi=g3-b-cpu-sim-abi-v1
+SONAME=libhccl_plugin.so
+export_allowlist_count=19
+
+direct artifact
+  role=STATIC BUILD/LIFECYCLE READINESS ARTIFACT
+
+performance_target_achievement=PARTIALLY_SATISFIED
+real_device_acceptance=HARDWARE_BLOCKED
+```
+
+G3-B3 必须继承：
+
+```text
+G3-B2 benchmark matrix
+G3-B2 parameter freeze
+G3-B2 Schedule IR v1
+G3-B2 selector
+G3-B2 simulator semantics
+G3-B2 final evidence
+```
+
+作为不可修改历史基线。
+
+不得修改任何：
+
+```text
+G2
+G3-A
+G3-B
+G3-B2
+```
+
+历史 authority evidence。
+
+---
+
+# 12.4 冻结契约
+
+以下 ELF/public contract 在整个 G3-B3 中继续冻结：
+
+```text
+libhccl_plugin.so identity
+public ABI
+SONAME
+19-symbol export allowlist
+CPU_SIM/direct isolation
+default backend
+fallback policy
+```
+
+默认不得：
+
+- 新增 public C symbol；
+- 删除 public C symbol；
+- 修改现有函数签名；
+- 修改 public struct 大小；
+- 修改 enum 既有数值；
+- 修改 SONAME；
+- 将 CANN/HCCL dependency 链接入 CPU_SIM plugin；
+- 改变 CPU_SIM plugin 的 host-only 身份。
+
+内部实现允许变化：
+
+- private C/C++ structs；
+- internal helpers；
+- Schedule IR；
+- Agent proposal schema；
+- cost-model metadata；
+- simulator metadata；
+- internal test-only interfaces。
+
+---
+
+# 12.5 Schedule Contract 版本策略
+
+G3-B2 已冻结：
+
+```text
+g3-b2-schedule-ir-v1
+```
+
+G3-B3 不允许原地改变 v1 的语义。
+
+必须新增：
+
+```text
+g3-b3-schedule-ir-v2
+```
+
+并保持：
+
+```text
+v1 historical evidence remains valid
+v2 used only for G3-B3+
+```
+
+v2 必须向后兼容当前 dense schedule 的核心语义。
+
+同理，Agent proposal schema 应进行版本升级，例如：
+
+```text
+g3-b3-agent-proposal-v2
+```
+
+不得静默改变 G3-B2 trace 的解释规则。
+
+---
+
+# 12.6 G3-B3 总体 checkpoint
+
+G3-B3 拆分为六个内部阶段：
+
+| Checkpoint | 名称                                          | 核心目标                                           |
+| ---------- | --------------------------------------------- | -------------------------------------------------- |
+| G3-B3-A    | Contract v2 与增量基线冻结                    | IR v2、Agent schema v2、新 benchmark/data profiles |
+| G3-B3-B    | Lossless Sparse Integrated Path               | detector、codec、reconstruct、dense fallback       |
+| G3-B3-C    | C/C++ Integrity 与 Retry                      | CRC32、sequence、corruption、timeout/retry         |
+| G3-B3-D    | Wire-aware Selector、Agent 与 Backpressure    | wire cost、credit flow、Agent闭环、消融            |
+| G3-B3-E    | Official API Compile/Link-only Runtime Source | 真实官方 API 调用表达式，仅编译链接                |
+| G3-B3-F    | Final Validation 与 Feature Freeze            | 全量回归、新 evidence、最终冻结                    |
+
+执行方式可采用：
+
+```text
+一个功能分支
+一个 /goal
+六个阶段性 commit
+```
+
+但必须严格按照 A→F 顺序执行。
+
+---
+
+# 12.7 G3-B3 非目标
+
+G3-B3 明确不做：
+
+## Collective 扩张
+
+不新增：
+
+```text
+AlltoAll
+```
+
+不深化：
+
+```text
+Broadcast
+```
+
+Broadcast 已存在 public symbol，但不属于当前最高价值缺口。
+
+AlltoAll 会引入新的 public/API/semantic/test/benchmark 面，当前不值得重新打开冻结接口。
+
+---
+
+## 算法扩张
+
+默认不新增：
+
+```text
+PairWise
+```
+
+PairWise 仅保留 OPTIONAL gate。
+
+只有现有 tiny-message benchmark 能证明：
+
+```text
+Ring/Butterfly candidate set 存在可量化缺口
+```
+
+时才允许作为 internal Schedule candidate 实现。
+
+不得新增 public PairWise API。
+
+---
+
+## 量化压缩
+
+默认不实现：
+
+```text
+FP8
+INT4
+```
+
+BF16→INT8 只作为 OPTIONAL research path。
+
+不得让 INT8 阻塞 G3-B3 完成。
+
+---
+
+## 性能调参
+
+禁止继续围绕：
+
+```text
+45.59283008%
+```
+
+进行无边界性能优化。
+
+不得修改 G3-B2：
+
+- 18 个性能 benchmark；
+- 4 个 reliability benchmark；
+- frozen seed；
+- topology；
+- hardware constants；
+- statistics；
+- G3-B2 performance formulas。
+
+G3-B3 新功能使用独立增量 benchmark。
+
+---
+
+# 12.8 真实性标签
+
+G3-B3 允许使用：
+
+```text
+HOST_EXECUTED
+CPU_EXECUTED
+SIMULATED_ONLY
+LOSSLESS_SPARSE_HOST_EXECUTED
+HOST_INTEGRITY_VALIDATED
+HOST_RETRY_VALIDATED
+SIMULATED_BACKPRESSURE
+DIRECT_READINESS_ONLY
+DIRECT_COMPILE_LINK_ONLY
+REAL_DEVICE_NOT_EXECUTED
+```
+
+不得使用：
+
+```text
+REAL_DEVICE_PASS
+REAL_DEVICE_MEASURED
+DIRECT_RUNTIME_EXECUTED
+DIRECT_HCCL_API_EXECUTED
+REAL_SPARSE_SPEEDUP
+REAL_WIRE_COMPRESSION
+REAL_NPU_BANDWIDTH
+MSPROF_EXECUTED
+ZERO_CPU_INTERVENTION_VERIFIED
+UB_HBM_REUSE_VERIFIED
+REAL_FAILOVER_VERIFIED
+```
+
+特别注意：
+
+```text
+源码中出现 HcclAllReduce(...)
+```
+
+不等于：
+
+```text
+direct_hccl_api_call=true
+```
+
+后者只能表示运行时真正执行过 API。
+
+G3-B3-E 的正确标签必须是：
+
+```text
+DIRECT_COMPILE_LINK_ONLY
+runtime_api_calls=[]
+```
+
+---
+
+# 12.9 G3-B3-A：Contract v2、Sparse 基线与增量 Benchmark Freeze
+
+## 12.9.1 目标
+
+在任何 sparse、CRC、retry、flow-control 或 direct production source 修改之前：
+
+1. 建立 Schedule IR v2；
+2. 建立 Agent proposal v2；
+3. 冻结 G3-B3 数据 profile；
+4. 冻结 G3-B3 benchmark contract；
+5. 生成 G3-B3 增量 baseline；
+6. 保留 G3-B2 baseline 不变；
+7. 建立 G3-B3 truth/claim contract。
+
+---
+
+# 12.9.2 G3-B2 基线不可修改
+
+必须验证：
+
+```text
+G3-B2 benchmark SHA256
+G3-B2 parameter SHA256
+G3-B2 final evidence SHA256
+```
+
+仍有效。
+
+新增 G3-B3 baseline 必须独立存放：
+
+```text
+experiments/feature_completion/evidence/
+    g3_b3_a_baseline_<timestamp>/
+```
+
+不得覆盖：
+
+```text
+experiments/optimization/evidence/g3_b2_*
+```
+
+---
+
+# 12.9.3 Schedule IR v2
+
+建议新增字段：
+
+```text
+schema_version
+payload_transform
+integrity_policy
+transport_policy
+flow_control_policy
+```
+
+其中 `payload_transform` 至少包含：
+
+```text
+mode
+codec
+logical_bytes
+wire_bytes
+value_bytes
+index_bytes
+metadata_bytes
+compression_ratio
+sparsity_ratio
+eligibility
+fallback_reason
+```
+
+允许 mode：
+
+```text
+DENSE
+SPARSE_INDEX_VALUE
+```
+
+初始不得加入：
+
+```text
+LOSSY_INT8
+FP8
+INT4
+```
+
+作为正式路径。
+
+---
+
+## integrity_policy
+
+至少：
+
+```text
+checksum_type
+sequence_enabled
+chunk_id_enabled
+attempt_tracking
+verify_before_accept
+```
+
+checksum type 初始：
+
+```text
+NONE
+CRC32
+```
+
+parity 可以后续加入：
+
+```text
+CRC32_PLUS_PARITY
+```
+
+但不得代替 CRC32。
+
+---
+
+## transport_policy
+
+至少：
+
+```text
+timeout_enabled
+logical_timeout_ticks
+max_retries
+retry_backoff_policy
+retryable_error_classes
+terminal_error_classes
+```
+
+测试不得依赖 wall-clock sleep。
+
+使用逻辑时钟或确定性事件。
+
+---
+
+## flow_control_policy
+
+至少：
+
+```text
+enabled
+credit_window
+max_inflight_chunks
+high_watermark
+low_watermark
+```
+
+不得声称真实 NIC credit flow control。
+
+---
+
+# 12.9.4 Agent Proposal v2
+
+至少增加：
+
+```text
+data_profile
+sparsity_ratio
+payload_transform
+codec
+estimated_wire_bytes
+metadata_overhead
+encode_cost
+decode_cost
+dense_fallback_condition
+integrity_policy
+retry_policy
+flow_control_policy
+expected_benefit
+expected_risk
+validation_plan
+```
+
+Agent 必须输出：
+
+```text
+为什么 sparse
+为什么 dense
+为什么启用/禁用 CRC
+为什么需要 retry
+为什么选择 credit window
+```
+
+而不是只返回 algorithm。
+
+---
+
+# 12.9.5 Sparse Data Profiles
+
+必须建立冻结 data profiles。
+
+建议最低覆盖：
+
+```text
+S00  0% sparse
+S25  25% sparse
+S50  50% sparse
+S75  75% sparse
+S90  90% sparse
+S100 100% sparse
+```
+
+可增加：
+
+```text
+clustered sparsity
+random sparsity
+structured sparsity
+```
+
+但第一轮不要求复杂稀疏模式。
+
+必须固定：
+
+```text
+seed
+dtype
+message sizes
+rank sizes
+index format
+zero semantics
+```
+
+---
+
+# 12.9.6 Sparse Benchmark Matrix
+
+建议覆盖至少：
+
+### Message size
+
+```text
+64 KB
+1 MB
+16 MB
+128 MB
+logical 1 GiB
+```
+
+### Sparsity
+
+```text
+0%
+25%
+50%
+75%
+90%
+```
+
+### Primitive
+
+至少：
+
+```text
+AllReduce
+AllGather
+ReduceScatter
+```
+
+### Topology
+
+代表性：
+
+```text
+Full Mesh 8
+Ring 16
+Fat-Tree 64
+Heterogeneous 16
+```
+
+不需要形成和 G3-B2 一样大的性能矩阵。
+
+目标约：
+
+```text
+15–25 sparse representative cases
+```
+
+---
+
+# 12.9.7 Sparse Baseline Metrics
+
+必须记录：
+
+```text
+logical_bytes
+dense_wire_bytes
+sparse_wire_bytes
+index_bytes
+value_bytes
+metadata_bytes
+compression_ratio
+encode_cost
+decode_cost
+schedule_cost
+p50
+p95
+correctness
+dense_fallback
+```
+
+其中：
+
+```text
+wire_bytes
+```
+
+必须明确为：
+
+```text
+MODELED/HOST PAYLOAD BYTES
+```
+
+不是物理 NIC measured bytes。
+
+---
+
+# 12.9.8 Reliability Incremental Benchmark
+
+新增代表场景：
+
+```text
+R01 clean transfer
+R02 single corruption
+R03 repeated corruption
+R04 retry exhaustion
+R05 logical timeout
+R06 non-retryable invalid input
+R07 no alternate path
+R08 credit exhaustion
+R09 backpressure recovery
+R10 duplicate sequence
+R11 missing chunk
+R12 reordered chunk
+```
+
+所有 fault 必须确定性重放。
+
+---
+
+# 12.9.9 G3-B3 Claim Contract
+
+新增：
+
+```text
+docs/submission/g3_b3_claim_contract.json
+```
+
+至少明确：
+
+```text
+sparse_host_execution != real_sparse_network
+wire_bytes_model != physical_wire_measurement
+host_crc != hardware_crc
+host_retry != HCCL/NIC retry
+backpressure_model != NIC backpressure
+compile_link_direct != runtime_direct
+```
+
+---
+
+# 12.9.10 G3-B3-A Evidence
+
+至少：
+
+```text
+README.md
+baseline.json
+schedule_ir_v2_schema.json
+agent_proposal_v2_schema.json
+data_profiles.json
+sparse_benchmark_contract.json
+reliability_benchmark_contract.json
+claim_contract.json
+g3_b2_baseline_integrity.json
+SHA256SUMS
+```
+
+---
+
+# 12.9.11 G3-B3-A 完成条件
+
+- G3-B2 evidence 未变；
+- Schedule IR v2 完成；
+- v1仍可解析；
+- Agent proposal v2 完成；
+- sparse profiles 冻结；
+- sparse benchmark 冻结；
+- reliability benchmark 冻结；
+- baseline 完成；
+- claim contract 完成；
+- SHA256 完成；
+- 未修改算法实现；
+- 未实现 sparse；
+- 未修改 frozen public ABI。
+
+建议 commit：
+
+```text
+G3-B3-A freeze feature-completion contracts and incremental baseline
+```
+
+---
+
+# 12.10 G3-B3-B：Lossless Sparsity-Aware Collective Path
+
+## 12.10.1 目标
+
+实现：
+
+```text
+LOSSLESS SPARSITY-AWARE PAYLOAD TRANSFORM
+```
+
+形成完整路径：
+
+```text
+input
+→ sparsity detection
+→ eligibility
+→ dense/sparse decision
+→ index/value encode
+→ Schedule IR
+→ host collective execution
+→ reconstruction
+→ reference validation
+```
+
+不得实现孤立的 sparse helper 而不与：
+
+```text
+Schedule
+selector
+cost model
+Agent
+correctness
+```
+
+集成。
+
+---
+
+# 12.10.2 Sparse Codec
+
+第一版只允许：
+
+```text
+SPARSE_INDEX_VALUE
+```
+
+建议 representation：
+
+```text
+SparsePayload
+{
+  logical_element_count
+  nonzero_count
+  index_width
+  indices
+  values
+}
+```
+
+要求：
+
+- deterministic encoding；
+- stable ordering；
+- duplicate index rejection；
+- out-of-range index rejection；
+- deterministic decode；
+- full reconstruction；
+- dtype preserved；
+- no lossy transformation。
+
+---
+
+# 12.10.3 Index Format
+
+内部允许根据规模选择：
+
+```text
+uint16
+uint32
+uint64
+```
+
+但必须：
+
+- 明确规则；
+- 可预测；
+- 有测试；
+- 不形成 public ABI。
+
+例如：
+
+```text
+logical_elements <= 65535
+→ uint16
+
+otherwise
+→ uint32 / uint64
+```
+
+实际规则应由实现根据当前 message/rank 范围决定并冻结。
+
+---
+
+# 12.10.4 Sparse Eligibility
+
+不得使用固定：
+
+```text
+sparsity > 50% → sparse
+```
+
+这种粗糙规则。
+
+必须基于：
+
+```text
+sparse_wire_bytes
++
+metadata_bytes
++
+encode_cost
++
+decode_cost
+```
+
+与：
+
+```text
+dense_wire_bytes
+```
+
+进行比较。
+
+建议判定：
+
+```text
+estimated_sparse_total_cost
+<
+estimated_dense_total_cost
+```
+
+才允许 sparse。
+
+---
+
+# 12.10.5 Dense Fallback
+
+必须支持：
+
+```text
+DENSE_FALLBACK
+```
+
+典型原因：
+
+```text
+LOW_SPARSITY
+METADATA_OVERHEAD
+UNSUPPORTED_DTYPE
+UNSUPPORTED_PRIMITIVE
+MEMORY_LIMIT
+CODEC_ERROR
+CORRECTNESS_GATE
+```
+
+不得 silent fallback。
+
+Schedule/Agent output 必须记录 fallback_reason。
+
+---
+
+# 12.10.6 Primitive Support
+
+Lossless sparse 最低必须覆盖：
+
+```text
+AllReduce
+AllGather
+ReduceScatter
+```
+
+但允许在内部采用不同 sparse execution strategy。
+
+必须严格验证 collective semantics。
+
+---
+
+# 12.10.7 Sparse AllReduce
+
+必须回答一个关键语义问题：
+
+不同 rank 的 nonzero indices 不一定相同。
+
+实现必须处理：
+
+```text
+union of sparse indices
+```
+
+而不是假设所有 rank 有相同 sparsity pattern。
+
+SUM：
+
+```text
+same index → reduce values
+missing index → implicit zero
+```
+
+MAX/MIN：
+
+必须严格处理 implicit zero 与负值场景。
+
+不得通过只测试正值绕过语义问题。
+
+---
+
+# 12.10.8 Sparse AllGather
+
+应保持：
+
+```text
+rank ordering
+per-rank sparse payload boundaries
+```
+
+重建后必须等价于 dense AllGather reference。
+
+---
+
+# 12.10.9 Sparse ReduceScatter
+
+必须在 reduction 后保持：
+
+```text
+owner rank
+segment boundary
+index remapping
+```
+
+正确。
+
+不得把 global sparse index 直接错误地映射到 local output。
+
+---
+
+# 12.10.10 Dtype
+
+正式 sparse path 最低支持：
+
+```text
+FP32
+FP16
+BF16
+```
+
+INT32 可根据现有 correctness architecture 决定是否纳入。
+
+不得在这一阶段加入 INT8 lossy codec。
+
+---
+
+# 12.10.11 Logical Large Message
+
+必须继续满足 bounded materialization。
+
+logical ≥1 GiB sparse 场景不得：
+
+```text
+materialize full logical tensor
+```
+
+必须以：
+
+```text
+chunked sparse generation
+streaming encode
+bounded reconstruction/reference sampling
+```
+
+或现有可证明方法实现。
+
+---
+
+# 12.10.12 C/C++ 实现
+
+必须有真实 CPU_SIM C/C++ sparse execution capability，而不只是 Python simulator。
+
+原则：
+
+```text
+internal helpers only
+no new exported symbols
+```
+
+可以新增类似：
+
+```text
+hcccl/src/internal/sparse_codec.c
+hcccl/include/internal/sparse_codec.h
+```
+
+但优先适配仓库现有结构。
+
+---
+
+# 12.10.13 C/Python Parity
+
+至少验证：
+
+```text
+nonzero_count
+indices
+values
+logical_bytes
+wire_bytes
+metadata_bytes
+compression_ratio
+reconstruction_hash
+```
+
+一致。
+
+---
+
+# 12.10.14 Sparse Correctness Tests
+
+至少包括：
+
+1. all dense；
+2. all zero；
+3. single nonzero；
+4. 25% sparse；
+5. 50% sparse；
+6. 75% sparse；
+7. 90% sparse；
+8. random sparse pattern；
+9. per-rank different pattern；
+10. duplicate index rejection；
+11. unordered input canonicalization；
+12. invalid index rejection；
+13. empty payload；
+14. non-divisible chunk；
+15. multiple ranks；
+16. SUM；
+17. MAX；
+18. MIN；
+19. AllReduce；
+20. AllGather；
+21. ReduceScatter；
+22. FP32；
+23. FP16；
+24. BF16；
+25. dense fallback；
+26. logical large message；
+27. bounded memory；
+28. C/Python parity。
+
+---
+
+# 12.10.15 Sparse Performance Acceptance
+
+G3-B3 不要求每个 sparsity 场景都优于 dense。
+
+正确预期：
+
+```text
+低 sparsity → dense 胜出
+高 sparsity → sparse 胜出
+```
+
+必须展示 break-even。
+
+至少输出：
+
+```text
+sparsity ratio
+compression ratio
+wire byte reduction
+cost delta
+selected mode
+fallback
+```
+
+禁止只选择 sparse 获胜场景。
+
+---
+
+# 12.10.16 G3-B3-B Evidence
+
+至少：
+
+```text
+sparse_codec_manifest.json
+sparse_correctness.json
+sparse_c_python_parity.json
+sparse_benchmark.json
+sparse_break_even.json
+dense_fallback_audit.json
+bounded_sparse_memory.json
+claim_boundary_audit.json
+SHA256SUMS
+```
+
+---
+
+# 12.10.17 完成条件
+
+必须：
+
+```text
+Lossless Sparse: COMPLETED
+Dense Fallback: COMPLETED
+Three-Primitive Sparse Correctness: COMPLETED
+Sparse C/Python Parity: COMPLETED
+Bounded Sparse Large Message: COMPLETED
+```
+
+建议 commit：
+
+```text
+G3-B3-B add lossless sparsity-aware collective transport
+```
+
+---
+
+# 12.11 G3-B3-C：C/C++ Integrity、CRC32 与 Bounded Retry
+
+## 12.11.1 目标
+
+将 reliability 从：
+
+```text
+Python simulator / Schedule metadata
+```
+
+深化到：
+
+```text
+CPU_SIM C/C++ payload execution path
+```
+
+重点：
+
+```text
+chunk identity
+sequence
+CRC32
+corruption detection
+retry classification
+logical timeout
+bounded retry
+retry exhaustion
+```
+
+---
+
+# 12.11.2 Integrity Metadata
+
+每个内部 transfer/chunk 至少有：
+
+```text
+transfer_id
+sequence_id
+chunk_id
+attempt
+payload_length
+crc32
+```
+
+不得暴露为新 public ABI。
+
+---
+
+# 12.11.3 CRC32
+
+必须实现标准、确定性的 CRC32。
+
+最低验证：
+
+- known vectors；
+- empty payload；
+- 1 byte；
+- non-aligned length；
+- large chunk；
+- bit flip；
+- byte corruption；
+- wrong CRC；
+- C/Python parity。
+
+不得只调用一个 test stub 返回预设结果。
+
+---
+
+# 12.11.4 Corruption Injection
+
+只允许：
+
+```text
+TEST_ONLY / HOST_SIMULATED
+```
+
+注入。
+
+必须 deterministic。
+
+支持：
+
+```text
+bit flip
+byte flip
+CRC tamper
+duplicate chunk
+missing chunk
+reordered sequence
+```
+
+不得进入生产默认路径。
+
+---
+
+# 12.11.5 Failure Classification
+
+必须明确：
+
+```text
+RETRYABLE
+NON_RETRYABLE
+TERMINAL
+```
+
+推荐：
+
+### Retryable
+
+```text
+CRC_MISMATCH
+LOGICAL_TIMEOUT
+TRANSIENT_TRANSFER_FAILURE
+```
+
+### Non-retryable
+
+```text
+INVALID_ARGUMENT
+INVALID_RANK
+INVALID_BUFFER
+UNSUPPORTED_DTYPE
+UNSUPPORTED_PRIMITIVE
+```
+
+### Terminal
+
+```text
+RETRY_EXHAUSTED
+NO_ALTERNATE_PATH
+UNRECOVERABLE_INTEGRITY_FAILURE
+```
+
+---
+
+# 12.11.6 Timeout
+
+不得使用真实 `sleep()` 来人为制造可靠性测试。
+
+使用：
+
+```text
+logical clock
+event ticks
+deterministic deadline
+```
+
+每个 transfer 记录：
+
+```text
+start_tick
+deadline_tick
+completion_tick
+timed_out
+```
+
+---
+
+# 12.11.7 Retry
+
+至少：
+
+```text
+max_retries
+attempt_count
+retry_reason
+retransmitted_bytes
+terminal_reason
+```
+
+必须保证：
+
+```text
+attempt_count <= configured bound
+```
+
+不得出现 infinite retry。
+
+---
+
+# 12.11.8 CRC → Retry 联动
+
+必须真实实现：
+
+```text
+payload
+→ CRC
+→ corruption
+→ verify fail
+→ classify retryable
+→ retry
+→ verify pass
+```
+
+以及：
+
+```text
+repeated corruption
+→ retry exhaustion
+→ terminal failure
+```
+
+---
+
+# 12.11.9 No-path 与 Timeout 分离
+
+必须保证：
+
+```text
+NO_ALTERNATE_PATH
+```
+
+不被错误解释为 timeout。
+
+No-path 不应无意义重复 retry。
+
+---
+
+# 12.11.10 Parity
+
+Parity 为 SHOULD。
+
+仅在 CRC 完整完成后允许增加。
+
+不得用 parity 代替 CRC。
+
+若实现：
+
+```text
+PARITY_AUXILIARY
+```
+
+只作为：
+
+- 辅助检测；
+- 教学/算法实验；
+- evidence 扩展。
+
+不允许宣称硬件 ECC/parity。
+
+---
+
+# 12.11.11 C/C++ Tests
+
+至少：
+
+1. CRC known vector；
+2. C/Python CRC parity；
+3. clean transfer；
+4. single corruption；
+5. recover after retry；
+6. repeated corruption；
+7. retry exhausted；
+8. logical timeout；
+9. non-retryable error；
+10. no-path；
+11. duplicate sequence；
+12. missing chunk；
+13. reorder；
+14. max attempt；
+15. retransmitted bytes；
+16. sparse payload CRC；
+17. dense payload CRC；
+18. logical large chunk；
+19. bounded memory；
+20. deterministic replay。
+
+---
+
+# 12.11.12 G3-B3-C Evidence
+
+至少：
+
+```text
+integrity_manifest.json
+crc_known_vectors.json
+crc_c_python_parity.json
+corruption_cases.json
+retry_cases.json
+timeout_cases.json
+failure_classification.json
+retry_exhaustion.json
+sparse_integrity_crosscheck.json
+SHA256SUMS
+```
+
+---
+
+# 12.11.13 完成条件
+
+```text
+C/C++ CRC32: COMPLETED
+Host Integrity Validation: COMPLETED
+Bounded Retry: COMPLETED
+Logical Timeout: COMPLETED
+Failure Classification: COMPLETED
+```
+
+建议 commit：
+
+```text
+G3-B3-C add host integrity validation and bounded retry
+```
+
+---
+
+# 12.12 G3-B3-D：Wire-aware Cost、Agent 决策与 Credit Backpressure
+
+## 12.12.1 目标
+
+将 Sparse、Integrity 和 Retry 真正纳入：
+
+```text
+Schedule
+Cost Model
+Selector
+Agent
+```
+
+避免形成孤立功能。
+
+---
+
+# 12.12.2 Wire-aware Cost Model
+
+现有：
+
+```text
+transferred_bytes
+```
+
+应明确拆分：
+
+```text
+logical_bytes
+payload_bytes
+index_bytes
+metadata_bytes
+wire_bytes
+retransmitted_bytes
+```
+
+不得让：
+
+```text
+logical_bytes == wire_bytes
+```
+
+成为隐含假设。
+
+---
+
+# 12.12.3 Codec Cost
+
+至少考虑：
+
+```text
+detect_cost
+encode_cost
+decode_cost
+metadata_cost
+```
+
+这些都是：
+
+```text
+HOST/SIMULATOR MODEL
+```
+
+不得表示真实 Ascend codec latency。
+
+---
+
+# 12.12.4 Integrity Cost
+
+记录：
+
+```text
+crc_cost
+retry_probability
+expected_retry_bytes
+retry_penalty
+```
+
+如果使用 deterministic benchmark，原始故障与期望模型必须分开记录。
+
+---
+
+# 12.12.5 Flow Control
+
+实现：
+
+```text
+credit-based bounded in-flight model
+```
+
+至少包含：
+
+```text
+credit_window
+available_credit
+max_inflight_chunks
+high_watermark
+low_watermark
+blocked_producer_events
+credit_return_events
+```
+
+---
+
+# 12.12.6 Flow-control Invariants
+
+必须保证：
+
+```text
+available_credit >= 0
+inflight <= max_inflight
+credits conserved
+no deadlock
+eventually drains
+memory budget respected
+```
+
+---
+
+# 12.12.7 Backpressure
+
+在 consumer 处理能力不足或 queue saturation 时：
+
+```text
+producer pauses
+```
+
+而不是：
+
+```text
+无限累积 queue
+```
+
+至少模拟：
+
+```text
+normal load
+temporary congestion
+sustained congestion
+recovery
+```
+
+---
+
+# 12.12.8 Agent Data-aware Selection
+
+Agent 必须根据：
+
+```text
+primitive
+algorithm
+topology
+message size
+sparsity
+wire bytes
+codec overhead
+metadata overhead
+memory
+integrity policy
+retry cost
+flow control
+```
+
+选择：
+
+```text
+dense/sparse
+algorithm
+chunk size
+pipeline depth
+credit window
+integrity policy
+```
+
+---
+
+# 12.12.9 Agent Proposal
+
+至少：
+
+```text
+proposal_id
+schedule_algorithm
+payload_mode
+sparse_codec
+sparsity_ratio
+logical_bytes
+estimated_wire_bytes
+estimated_compression_ratio
+chunk_size
+pipeline_depth
+credit_window
+integrity_policy
+retry_policy
+fallback_conditions
+correctness_plan
+expected_benefit
+expected_risk
+```
+
+---
+
+# 12.12.10 Correctness Hard Gate
+
+任何 candidate：
+
+```text
+codec correctness fail
+CRC integrity fail
+reconstruction fail
+retry invariant fail
+flow-control invariant fail
+```
+
+必须被拒绝。
+
+性能不能覆盖正确性失败。
+
+---
+
+# 12.12.11 Sparse Ablation
+
+至少：
+
+```text
+B0 dense baseline
+B1 sparse codec only
+B2 + wire-aware cost
+B3 + Agent dense/sparse selection
+B4 + CRC
+B5 + retry
+B6 + credit flow-control
+```
+
+不得替换或覆盖 G3-B2 的 A0–A7。
+
+两套消融用途不同：
+
+```text
+G3-B2 A0–A7
+→ communication scheduling optimization
+
+G3-B3 B0–B6
+→ feature-completion stack
+```
+
+---
+
+# 12.12.12 Sparse Performance Gate
+
+不得要求：
+
+```text
+all scenarios WIN
+```
+
+正确 gate：
+
+1. correctness 100%；
+2. 低稀疏度能正确 fallback dense；
+3. 高稀疏度至少存在稳定 wire-byte 减少；
+4. 找到 reproducible break-even；
+5. metadata 计入成本；
+6. sparse 不得突破 memory budget；
+7. p95 不得异常失控；
+8. 使用固定 benchmark/data profiles；
+9. 不修改 G3-B2 parameter freeze；
+10. 不选择性删除 unfavorable cases。
+
+---
+
+# 12.12.13 Flow Control Gate
+
+必须：
+
+```text
+credit invariant PASS
+memory invariant PASS
+deadlock tests PASS
+temporary congestion recovery PASS
+```
+
+---
+
+# 12.12.14 OPTIONAL-GATE-1：PairWise
+
+只有在：
+
+```text
+existing tiny-message candidates
+```
+
+表现出明确缺口时才允许进入。
+
+必须先生成：
+
+```text
+pairwise_value_gate.json
+```
+
+若没有足够收益：
+
+```text
+status=SKIPPED_BY_VALUE_GATE
+```
+
+不影响 G3-B3 COMPLETED。
+
+若实现：
+
+- internal schedule only；
+- no public symbol；
+- focused benchmark；
+- correctness；
+- selector integration；
+- support matrix update。
+
+---
+
+# 12.12.15 OPTIONAL-GATE-2：INT8
+
+默认：
+
+```text
+DEFERRED_BY_PRECISION_GATE
+```
+
+只有全部满足时才允许：
+
+- MUST 项全部完成；
+- SHOULD 主体完成；
+- regression stable；
+- 无 unresolved correctness issue；
+- precision contract 可独立定义；
+- 有明显剩余执行预算。
+
+若实现，仅允许：
+
+```text
+per-chunk symmetric INT8
+```
+
+最低记录：
+
+```text
+scale
+saturation_count
+max_abs_error
+max_rel_error
+MSE
+compression_ratio
+dense_fallback
+```
+
+不得声称：
+
+```text
+lossless
+global ≤1e-6
+real NPU speedup
+```
+
+若无法满足稳定 correctness：
+
+```text
+INT8=DEFERRED
+```
+
+不影响 G3-B3。
+
+---
+
+# 12.12.16 G3-B3-D Evidence
+
+至少：
+
+```text
+wire_cost_audit.json
+selector_decisions.json
+agent_proposals.jsonl
+agent_evaluations.jsonl
+agent_reflections.jsonl
+flow_control_audit.json
+backpressure_cases.json
+feature_ablation.json
+sparse_break_even.json
+pairwise_value_gate.json
+int8_precision_gate.json
+SHA256SUMS
+```
+
+---
+
+# 12.12.17 完成条件
+
+```text
+Wire-aware Cost Model: COMPLETED
+Sparse-aware Selector: COMPLETED
+Agent Sparse/Integrity Proposal: COMPLETED
+Credit Flow Control: COMPLETED
+Backpressure Model: COMPLETED
+Feature Ablation: COMPLETED
+```
+
+PairWise/INT8 不属于完成必要条件。
+
+建议 commit：
+
+```text
+G3-B3-D integrate sparse reliability decisions and bounded backpressure
+```
+
+---
+
+# 12.13 G3-B3-E：Official ACL/HCCL Compile/Link-only Production Source Path
+
+## 12.13.1 目标
+
+当前 direct readiness 只有：
+
+```text
+official declarations
+static_assert
+symbol anchors
+link dependencies
+host lifecycle model
+```
+
+G3-B3-E 增加真正包含官方 runtime API 调用表达式的源码路径。
+
+该路径必须：
+
+```text
+存在真实调用表达式
+可以 compile
+可以 link
+默认 OFF
+当前环境绝不执行
+```
+
+---
+
+# 12.13.2 身份
+
+新的 artifact/target 必须定义为：
+
+```text
+DIRECT_COMPILE_LINK_ONLY_RUNTIME_SOURCE
+```
+
+不是：
+
+```text
+REAL_DEVICE_BACKEND
+OFFICIAL_PLUGIN
+REAL_RUNTIME_VALIDATED
+```
+
+---
+
+# 12.13.3 与现有 Direct Readiness 分离
+
+不得改变：
+
+```text
+libhccl_direct_adapter.a
+```
+
+现有角色。
+
+新 target 独立存在，例如概念：
+
+```text
+hccl_direct_runtime_source
+```
+
+实际名称由现有 CMake 风格决定。
+
+---
+
+# 12.13.4 Required API Expressions
+
+只有在 frozen official headers 中确实存在并签名确认后，才允许加入。
+
+预期涵盖：
+
+### Runtime initialization
+
+```text
+aclInit
+aclrtSetDevice
+```
+
+### Context / Stream
+
+```text
+aclrtCreateContext
+aclrtCreateStream
+```
+
+### Memory
+
+```text
+aclrtMalloc
+aclrtMemcpy
+```
+
+### HCCL communicator
+
+使用 frozen official API 中实际可用的：
+
+```text
+HcclCommInit*
+```
+
+不得凭记忆发明函数。
+
+### Collective
+
+必须存在三原语实际 call expression：
+
+```text
+HcclAllReduce
+HcclAllGather
+HcclReduceScatter
+```
+
+### Synchronization
+
+使用 frozen headers 中实际 API。
+
+### Cleanup
+
+必须逆序：
+
+```text
+communicator
+buffers
+stream
+context
+device/runtime
+```
+
+具体顺序以官方 API 合约为准。
+
+---
+
+# 12.13.5 Source Contract
+
+源码必须明确：
+
+```text
+THIS SOURCE IS NOT EXECUTED IN HOST-ONLY ACCEPTANCE
+```
+
+并通过 compile-time guard 防止 accidental host execution。
+
+---
+
+# 12.13.6 Runtime Reachability Guard
+
+必须至少两层保护：
+
+```text
+CMake default OFF
++
+runtime execution guard
+```
+
+当前 submission CLI 不能自动执行此 binary。
+
+即使 CANN root 存在：
+
+```text
+compile/link != execute
+```
+
+---
+
+# 12.13.7 ELF Audit
+
+必须确认：
+
+新 direct compile/link artifact 可以依赖：
+
+```text
+libacl_rt.so
+libhccl.so
+libhcomm.so
+```
+
+但：
+
+```text
+libhccl_plugin.so
+```
+
+仍只能依赖：
+
+```text
+libc.so.6
+```
+
+---
+
+# 12.13.8 API Call-expression Audit
+
+必须新增静态 audit，区分：
+
+```text
+DECLARATION
+STATIC_ASSERT
+SYMBOL_ADDRESS
+ACTUAL_CALL_EXPRESSION
+```
+
+G3-B3-E 必须证明：
+
+```text
+ACTUAL_CALL_EXPRESSION=PRESENT
+```
+
+但同时：
+
+```text
+RUNTIME_EXECUTION=false
+runtime_api_calls=[]
+```
+
+---
+
+# 12.13.9 Lifecycle Error Paths
+
+源码级必须包含：
+
+- init fail；
+- set device fail；
+- context fail；
+- stream fail；
+- allocation fail；
+- communicator fail；
+- collective fail；
+- synchronization fail；
+
+以及：
+
+```text
+reverse-order cleanup
+first-error preservation
+no double free
+```
+
+---
+
+# 12.13.10 No-device 环境
+
+当前不得运行 production runtime target。
+
+允许：
+
+```text
+compile
+link
+nm
+readelf
+ldd
+objdump/static source audit
+```
+
+不允许：
+
+```text
+execute
+```
+
+---
+
+# 12.13.11 Direct Evidence
+
+至少：
+
+```text
+direct_runtime_source_manifest.json
+official_api_call_expression_audit.json
+compile_result.json
+link_result.json
+elf_needed.json
+symbol_audit.json
+execution_guard_audit.json
+cleanup_path_audit.json
+cpu_sim_isolation_audit.json
+truth_boundary_audit.json
+SHA256SUMS
+```
+
+---
+
+# 12.13.12 完成条件
+
+```text
+Official API Call Expressions: PRESENT
+Compile: PASS
+Link: PASS
+Execution: NOT_EXECUTED
+CPU_SIM ABI Isolation: PASS
+CPU_SIM Dependency Isolation: PASS
+Runtime Guard: PASS
+Cleanup Static Audit: PASS
+```
+
+状态只能：
+
+```text
+Direct Production Source Readiness: COMPLETED
+Real-device Acceptance: HARDWARE_BLOCKED
+```
+
+不得将：
+
+```text
+C/C++ Plugin Compliance
+```
+
+自动提升为 SATISFIED。
+
+建议 commit：
+
+```text
+G3-B3-E add compile-only official ACL HCCL runtime source path
+```
+
+---
+
+# 12.14 G3-B3-F：Final Regression、Evidence Freeze 与 Final Feature Freeze
+
+## 12.14.1 目标
+
+冻结新的最终功能基线。
+
+G3-B3-F 之后：
+
+```text
+FINAL FEATURE FREEZE
+```
+
+生效。
+
+---
+
+# 12.14.2 最终 baseline
+
+生成：
+
+```text
+docs/submission/g3_b3_final_feature_baseline.md
+experiments/feature_completion/g3_b3_final_baseline.json
+```
+
+至少记录：
+
+```text
+final_source_commit
+public_abi_version
+SONAME
+exported_symbols
+plugin_sha256
+schedule_ir_version
+agent_proposal_version
+sparse_codec_version
+integrity_version
+retry_policy_version
+flow_control_version
+direct_source_version
+g3_b2_benchmark_sha256
+g3_b3_benchmark_sha256
+g3_b2_parameter_sha256
+final_evidence_path
+```
+
+---
+
+# 12.14.3 Final Support Matrix
+
+生成新的：
+
+```text
+feature_support_matrix.json
+```
+
+至少：
+
+| Capability           | Status            | Truth             |
+| -------------------- | ----------------- | ----------------- |
+| Dense AllReduce      | COMPLETED         | HOST_EXECUTED     |
+| Dense AllGather      | COMPLETED         | HOST_EXECUTED     |
+| Dense ReduceScatter  | COMPLETED         | HOST_EXECUTED     |
+| Sparse AllReduce     | COMPLETED         | HOST_EXECUTED     |
+| Sparse AllGather     | COMPLETED         | HOST_EXECUTED     |
+| Sparse ReduceScatter | COMPLETED         | HOST_EXECUTED     |
+| CRC32                | COMPLETED         | HOST_EXECUTED     |
+| Retry                | COMPLETED         | HOST_EXECUTED     |
+| Timeout              | COMPLETED         | HOST_EXECUTED     |
+| Backpressure         | COMPLETED         | HOST/SIMULATED    |
+| Direct source        | COMPLETED         | COMPILE_LINK_ONLY |
+| INT8                 | OPTIONAL/DEFERRED | EXPERIMENTAL      |
+| PairWise             | OPTIONAL/SKIPPED  | INTERNAL          |
+| Broadcast            | NOT_SELECTED      | —                 |
+| AlltoAll             | NOT_SELECTED      | —                 |
+
+---
+
+# 12.14.4 Final Regression
+
+必须运行：
+
+### G3-B
+
+```text
+submission check
+quick
+full
+```
+
+### C/C++
+
+- all CTest；
+- CPU_SIM clean build；
+- double clean build；
+- bit-for-bit reproducibility；
+- install；
+- external consumer；
+- ELF audit；
+- symbols；
+- dependency；
+- SONAME。
+
+### G3-B2
+
+- Schedule IR v1 authority evidence；
+- G3-B2 focused tests；
+- G3-B2 final evidence SHA；
+- G3-B2 benchmark unchanged。
+
+### G3-B3
+
+- IR v2；
+- sparse；
+- dense fallback；
+- C/Python parity；
+- CRC；
+- corruption；
+- retry；
+- timeout；
+- flow control；
+- Agent；
+- benchmark；
+- direct compile/link；
+- truth audit。
+
+### Python
+
+运行 submission-relevant + full repo regression。
+
+不得新增无理由 skip。
+
+---
+
+# 12.14.5 Reproducibility
+
+最终必须再次验证：
+
+```text
+libhccl_plugin.so
+```
+
+双构建：
+
+```text
+binary SHA equal
+SONAME equal
+NEEDED equal
+19 symbols equal
+headers equal
+CTest equal
+```
+
+因为 G3-B3 修改了内部 C 实现。
+
+最终 plugin SHA 可以变化，但 public contract 必须不变。
+
+---
+
+# 12.14.6 G3-B2 Regression Guard
+
+必须验证：
+
+```text
+18 wins / 0 ties / 0 losses
+45.59283008%
+```
+
+历史 evidence 未改变。
+
+G3-B3 不要求重新把 sparse/reliability 特性塞入 G3-B2 的 45.59% 数字。
+
+---
+
+# 12.14.7 Final Sparse Result
+
+必须报告：
+
+```text
+dense cases
+sparse cases
+fallback cases
+break-even
+compression ratios
+wire-byte model
+correctness
+memory
+```
+
+不得只报告最好的 compression ratio。
+
+---
+
+# 12.14.8 Final Reliability Result
+
+至少：
+
+```text
+clean transfer
+corruption detected
+retry recovered
+retry exhausted
+timeout recovered
+timeout terminal
+non-retryable rejected
+sequence error
+backpressure recovery
+no-path
+```
+
+---
+
+# 12.14.9 Submission CLI
+
+更新：
+
+```text
+python -m tools.submission_cli quick
+```
+
+加入轻量：
+
+- sparse representative case；
+- CRC known-vector；
+- retry recovery；
+- dense fallback；
+- IR v2 validation。
+
+`full` 加入：
+
+- sparse focused regression；
+- integrity；
+- flow control；
+- direct compile/link-only；
+- G3-B3 final evidence。
+
+不得让 quick 执行完整 sparse benchmark。
+
+---
+
+# 12.14.10 Staging
+
+新增：
+
+```text
+feature_completion/
+├── sparse/
+├── integrity/
+├── retry/
+├── flow_control/
+└── direct_source/
+```
+
+其中只放：
+
+- manifest；
+- source/docs；
+- representative evidence；
+- final summary。
+
+不得放：
+
+- CANN SDK；
+- official HCCL/HCOMM source；
+- official DSO；
+- private Codex logs；
+- build cache；
+- temporary benchmark dumps；
+- controlled competition documents。
+
+---
+
+# 12.14.11 Final Evidence
+
+唯一最终 authority evidence：
+
+```text
+experiments/feature_completion/evidence/
+    g3_b3_f_final_<timestamp>/
+```
+
+至少包含：
+
+```text
+README.md
+manifest.json
+result.json
+
+g3_b2_baseline_reference.json
+g3_b3_baseline_reference.json
+
+schedule_ir_v2_audit.json
+agent_proposal_v2_audit.json
+
+sparse_support_matrix.json
+sparse_correctness.json
+sparse_c_python_parity.json
+sparse_benchmark.json
+sparse_break_even.json
+dense_fallback_audit.json
+bounded_sparse_memory.json
+
+integrity_manifest.json
+crc_audit.json
+corruption_audit.json
+retry_audit.json
+timeout_audit.json
+failure_classification.json
+
+flow_control_audit.json
+backpressure_audit.json
+
+agent_trace_inventory.json
+feature_ablation.json
+
+direct_runtime_source_manifest.json
+official_api_call_expression_audit.json
+direct_compile_link_audit.json
+cpu_sim_isolation_audit.json
+
+native_elf_audit.json
+reproducible_build.json
+submission_regression.json
+staging_verification.json
+
+claim_boundary_audit.json
+requirement_delta.json
+user_action_required.json
+
+SHA256SUMS
+```
+
+---
+
+# 12.15 G3-B3 Requirement Delta
+
+不得修改 G3-A requirement matrix。
+
+生成：
+
+```text
+docs/submission/g3_b3_requirement_delta.json
+```
+
+重点重新评估：
+
+```text
+REQ-INNOV-004
+reliability CRC/integrity related requirements
+retry related requirements
+flow-control related requirements
+Agent algorithm generation related requirements
+direct interface readiness related requirements
+```
+
+可能升级：
+
+```text
+MISSING → PARTIALLY_SATISFIED
+PARTIALLY_SATISFIED → SATISFIED
+```
+
+只能以实际 evidence 为准。
+
+真实设备相关仍：
+
+```text
+HARDWARE_BLOCKED
+```
+
+---
+
+# 12.16 G3-B3 性能结论规则
+
+G3-B3 必须维护两套独立性能结论。
+
+## G3-B2 Scheduling Performance
+
+保持：
+
+```text
+18 wins
+0 ties
+0 losses
+weighted simulated improvement=45.59283008%
+```
+
+身份：
+
+```text
+SIMULATED_ONLY
+```
+
+---
+
+## G3-B3 Sparse Payload Result
+
+使用独立指标：
+
+```text
+wire-byte model reduction
+compression ratio
+break-even sparsity
+encode/decode overhead
+modeled communication benefit
+```
+
+不得把：
+
+```text
+50% fewer modeled wire bytes
+```
+
+直接写成：
+
+```text
+50% faster
+```
+
+除非 cost-model benchmark 确实得到该性能结果。
+
+---
+
+# 12.17 OPTIONAL INT8 精度规则
+
+若 INT8 gate 未开启：
+
+```text
+INT8 Status:
+DEFERRED_BY_PRECISION_GATE
+```
+
+这是正常完成状态。
+
+若开启：
+
+必须使用独立实验身份：
+
+```text
+EXPERIMENTAL_LOSSY_INT8
+```
+
+不得纳入 lossless sparse correctness 结论。
+
+必须报告：
+
+```text
+quantization scale
+saturation
+max_abs_error
+max_rel_error
+MSE
+compression ratio
+fallback
+```
+
+任何精度失败必须自动退回 dense/non-quantized path。
+
+---
+
+# 12.18 Documentation
+
+G3-B3 至少新增：
+
+```text
+docs/feature_completion/
+├── g3_b3_overview.md
+├── schedule_ir_v2.md
+├── lossless_sparse_design.md
+├── sparse_collective_semantics.md
+├── integrity_crc_retry_design.md
+├── flow_control_design.md
+├── agent_sparse_decision.md
+├── direct_compile_only_runtime_source.md
+├── g3_b3_ablation.md
+├── g3_b3_known_limitations.md
+└── g3_b3_final_feature_baseline.md
+```
+
+这些仍属于工程文档。
+
+正式比赛报告由 G3-C 生成。
+
+---
+
+# 12.19 Test Requirements
+
+至少覆盖以下类别。
+
+## Contract
+
+1. IR v1 historical compatibility；
+2. IR v2 schema；
+3. v2 canonical hash；
+4. proposal v2 schema；
+5. dense v2 compatibility；
+6. invalid transform rejection。
+
+## Sparse
+
+7. all dense；
+8. all zero；
+9. 25% sparse；
+10. 50% sparse；
+11. 75% sparse；
+12. 90% sparse；
+13. single nonzero；
+14. random sparsity；
+15. different rank patterns；
+16. duplicate index；
+17. invalid index；
+18. ordered canonical encoding；
+19. encode/decode；
+20. C/Python parity；
+21. dense fallback；
+22. break-even；
+23. logical large；
+24. bounded memory。
+
+## Sparse Collectives
+
+25. sparse AllReduce SUM；
+26. sparse AllReduce MAX；
+27. sparse AllReduce MIN；
+28. sparse AllGather；
+29. sparse ReduceScatter；
+30. FP32；
+31. FP16；
+32. BF16；
+33. ranks 2/4/8/16；
+34. representative 64-rank simulated case。
+
+## Integrity
+
+35. CRC known vector；
+36. empty CRC；
+37. C/Python CRC；
+38. bit corruption；
+39. byte corruption；
+40. CRC tamper；
+41. missing chunk；
+42. duplicate chunk；
+43. reorder；
+44. sequence validation。
+
+## Retry
+
+45. clean no retry；
+46. one retry；
+47. recovery；
+48. repeated failure；
+49. retry exhaustion；
+50. logical timeout；
+51. timeout recovery；
+52. non-retryable no retry；
+53. no-path no blind retry；
+54. attempt bound；
+55. retransmitted byte accounting。
+
+## Flow control
+
+56. credit conservation；
+57. no negative credit；
+58. max inflight；
+59. queue saturation；
+60. producer blocking；
+61. credit return；
+62. recovery；
+63. no deadlock；
+64. bounded memory；
+65. fairness/basic starvation guard。
+
+## Agent / Selector
+
+66. sparse candidate generation；
+67. dense fallback；
+68. wire cost；
+69. integrity proposal；
+70. retry proposal；
+71. credit proposal；
+72. correctness hard gate；
+73. deterministic selection；
+74. reflection/replanning trace。
+
+## Direct
+
+75. default OFF；
+76. official headers；
+77. actual API call expression；
+78. collective call expressions；
+79. compile；
+80. link；
+81. not executed；
+82. CPU_SIM dependency isolation；
+83. export allowlist unchanged；
+84. cleanup-path audit。
+
+## Regression
+
+85. CPU_SIM CTest；
+86. Python submission regression；
+87. full Python regression；
+88. G3-B quick；
+89. G3-B full；
+90. bit-for-bit native rebuild；
+91. G3-B2 evidence SHA；
+92. G3-B3 evidence SHA；
+93. staging verify；
+94. HCOMM tracked clean；
+95. HCCL tracked clean。
+
+数量可以因实际测试组织变化，但上述语义必须有覆盖。
+
+---
+
+# 12.20 USER_ACTION_REQUIRED
+
+继承：
+
+```text
+UA-B-001 project license/copyright
+UA-B-002 official asset redistribution
+UA-B-003 controlled competition material
+UA-B-004 platform archive/size
+```
+
+新增：
+
+## UA-B3-001
+
+```text
+INT8 precision interpretation
+```
+
+仅当 Optional INT8 被考虑时需要。
+
+不阻塞 MUST 范围。
+
+---
+
+# 12.21 失败与状态分类
+
+## FAIL
+
+用于：
+
+- sparse reconstruction错误；
+- collective语义错误；
+- CRC误检/漏检；
+- retry无界；
+- timeout错误；
+- flow-control deadlock；
+- credit泄漏；
+- C/Python parity失败；
+- G3-B2 regression；
+- ABI变化；
+- export变化；
+- CPU_SIM引入official dependency；
+- evidence SHA失败；
+- claim boundary失败。
+
+---
+
+## PARTIAL
+
+用于：
+
+- Sparse主体完成但某非核心 topology 未覆盖；
+- Backpressure部分完成；
+- Direct source只能部分覆盖官方 lifecycle；
+- optional能力未达到目标。
+
+---
+
+## ENV_BLOCKED
+
+用于：
+
+- compiler/CMake不可用；-必要 frozen SDK header 不可读取；-文件系统或环境损坏。
+
+---
+
+## HARDWARE_BLOCKED
+
+只用于真实硬件：
+
+- NPU；
+- ACL runtime；
+- HCCL communicator；
+- collective；
+- real network；
+- msprof；
+- real failover；
+- real training。
+
+不得用 HARDWARE_BLOCKED 掩盖代码 bug。
+
+---
+
+# 12.22 G3-B3 最终完成条件
+
+G3-B3 只有以下全部满足才可：
+
+```text
+G3-B3: COMPLETED
+```
+
+必须：
+
+- G3-B3-A baseline frozen；
+- Schedule IR v2；
+- Agent proposal v2；
+- G3-B2 v1 evidence保持有效；
+- lossless sparse detector；
+- sparse index/value codec；
+- reconstruction；
+- dense fallback；
+- three primitive sparse correctness；
+- sparse C/Python parity；
+- bounded sparse large-message；
+- wire-byte accounting；
+- sparse break-even；
+- C/C++ CRC32；
+- corruption detection；
+- sequence/chunk identity；
+- bounded retry；
+- logical timeout；
+- retry exhaustion；
+- failure classification；
+- wire-aware cost；
+- sparse-aware selector；
+- Agent sparse proposal；
+- Agent correctness hard gate；
+- credit-based flow control；
+- bounded inflight；
+- no-deadlock test；
+- feature ablation；
+- direct official API actual call expressions；
+- direct compile；
+- direct link；
+- direct execution disabled；
+- CPU_SIM ABI不变；
+- SONAME不变；
+- 19-symbol allowlist不变；
+- CPU_SIM dependency isolation；
+- G3-B quick/full通过；
+- native双构建 bit-for-bit；
+- final evidence完整；
+- staging verify；-旧 evidence未修改；-工作区 clean；
+- HCOMM/HCCL tracked clean；-未执行真实设备。
+
+PairWise 和 INT8 不属于完成必要条件。
+
+---
+
+# 12.23 G3-B3 最终状态
+
+成功后：
+
+```text
+G3-B3: COMPLETED
+
+Schedule IR v2: COMPLETED
+Lossless Sparse Communication: COMPLETED
+Sparse Three-Primitive Correctness: COMPLETED
+Dense Fallback: COMPLETED
+Sparse Wire Accounting: COMPLETED
+
+C/C++ CRC32 Integrity: COMPLETED
+Bounded Timeout/Retry: COMPLETED
+Failure Classification: COMPLETED
+
+Credit Flow Control: COMPLETED
+Backpressure Model: COMPLETED
+
+Sparse-aware Selector: COMPLETED
+Agent Feature Proposal Loop: COMPLETED
+Feature Ablation: COMPLETED
+
+Direct Compile/Link-only Runtime Source: COMPLETED
+
+CPU_SIM Public ABI: FROZEN
+SONAME: FROZEN
+19-symbol Export Allowlist: FROZEN
+
+Final Feature Baseline: FROZEN
+```
+
+仍保持：
+
+```text
+C/C++ Plugin Compliance: PARTIALLY_SATISFIED
+Competition Performance Target: PARTIALLY_SATISFIED
+Submission Release Readiness: PARTIAL
+G3 Delivery Readiness: PARTIAL
+Real-device Acceptance: HARDWARE_BLOCKED
+```
+
+---
+
+# 12.24 Final Feature Freeze
+
+G3-B3-F 合并进入 `main` 后：
+
+```text
+FINAL FEATURE FREEZE
+```
+
+正式生效。
+
+冻结：
+
+```text
+collective primitives
+algorithm families
+Schedule IR semantics
+sparse codec
+integrity semantics
+retry semantics
+flow-control semantics
+selector
+cost model
+Agent proposal contract
+simulator model
+benchmark contracts
+public ABI
+direct source structure
+```
+
+之后不得新增：
+
+- collective；-算法；
+- sparse codec；
+- compression codec；
+- reliability机制；
+- direct功能；
+- performance model。
+
+---
+
+# 12.25 Freeze 后允许修改
+
+只允许：
+
+### BLOCKING_BUGFIX
+
+- correctness bug；
+- build failure；
+- staging failure；
+- security/privacy；
+- evidence traceability bug。
+
+### DOCUMENTATION
+
+- report；-图表；
+- README；
+- explanation；
+- comments。
+
+### PLATFORM_COMPATIBILITY
+
+-比赛平台目录；
+
+- archive format；
+- packaging；
+- non-semantic launcher fixes。
+
+任何涉及：
+
+```text
+algorithm
+schedule
+performance formula
+benchmark
+correctness semantic
+```
+
+的修改都必须重新开放 freeze，并重新生成受影响 evidence。
+
+---
+
+# 12.26 Branch 与 Commit
+
+建议单一分支：
+
+```text
+codex/g3-b3-final-feature-completion
+```
+
+建议六个阶段性 commit：
+
+```text
+G3-B3-A freeze feature-completion contracts and incremental baseline
+
+G3-B3-B add lossless sparsity-aware collective transport
+
+G3-B3-C add host integrity validation and bounded retry
+
+G3-B3-D integrate sparse reliability decisions and bounded backpressure
+
+G3-B3-E add compile-only official ACL HCCL runtime source path
+
+G3-B3-F freeze final competition feature baseline and evidence
+```
+
+完成 G3-B3-F commit 后必须停止。
+
+不得：
+
+```text
+push
+merge
+start G3-C
+start G3-D
+create release
+create tag
+upload competition platform
+```
+
+由用户检查后再进行 PR/merge。
+
+---
+
+# 12.27 Final Evidence 状态字段
+
+最终 `result.json` 至少记录：
+
+```text
+checkpoint=G3-B3
+checkpoint_status=COMPLETED
+
+final_feature_freeze=FROZEN
+
+schedule_ir_v2=COMPLETED
+
+lossless_sparse=COMPLETED
+sparse_allreduce=COMPLETED
+sparse_allgather=COMPLETED
+sparse_reducescatter=COMPLETED
+dense_fallback=COMPLETED
+
+crc32_integrity=COMPLETED
+bounded_retry=COMPLETED
+logical_timeout=COMPLETED
+failure_classification=COMPLETED
+
+credit_flow_control=COMPLETED
+backpressure_model=COMPLETED
+
+agent_sparse_selection=COMPLETED
+feature_ablation=COMPLETED
+
+direct_compile_link_source=COMPLETED
+direct_runtime_execution=false
+
+pairwise=<SKIPPED_BY_VALUE_GATE|OPTIONAL_COMPLETED>
+int8=<DEFERRED_BY_PRECISION_GATE|EXPERIMENTAL_COMPLETED>
+
+public_abi_changed=false
+soname_changed=false
+export_allowlist_changed=false
+
+old_evidence_modified=false
+g3_b2_baseline_modified=false
+
+real_device_api_executed=false
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+measured_on_real_npu=false
+real_training_acceleration=false
+msprof_executed=false
+runtime_api_calls=[]
+
+c_cpp_plugin_compliance=PARTIALLY_SATISFIED
+competition_performance_target=PARTIALLY_SATISFIED
+submission_release_readiness=PARTIAL
+g3_delivery_readiness=PARTIAL
+real_device_acceptance=HARDWARE_BLOCKED
+```
+
+---
+
+# 12.28 最终汇报要求
+
+Codex最终汇报至少包含：
+
+1. G3-B3 总体状态、分支、六个 commit 和耗时；
+2. G3-B2 frozen baseline完整性；
+3. IR v2 和 Agent proposal v2；
+4. Sparse codec设计；
+5. Sparse三原语支持；
+6. dense fallback；
+7. sparse break-even；
+8. logical/wire/metadata bytes；
+9. C/Python sparse parity；
+10. CRC32；
+11. corruption detection；
+12. timeout/retry；
+13. retry exhaustion；
+14. flow control/backpressure；
+15. Agent sparse/reliability决策；
+16. B0–B6消融；
+17. PairWise gate；
+18. INT8 gate；
+19. direct actual call-expression audit；
+20. direct compile/link结果；
+21. direct execution guard；
+22. public ABI、SONAME、19 symbols；23.最终 plugin SHA；24.双构建 reproducibility；
+23. CTest/Python/quick/full；
+24. staging；
+25. final evidence；
+26. requirement delta；
+27. USER_ACTION_REQUIRED；
+28. HCOMM/HCCL状态；
+29. git status；32.真实性边界；33.未 push、未 merge、未开始 G3-C；
+30. Final Feature Baseline 是否 FROZEN。
+
+---
+
+# 12.29 G3-C 启动门槛
+
+只有满足：
+
+```text
+G3-B3 merge into main
++
+Final Feature Baseline=FROZEN
++
+final evidence SHA PASS
++
+git worktree clean
+```
+
+才允许正式执行 G3-C。
+
+G3-C 必须以：
+
+```text
+G3-B3 merged main commit
+```
+
+作为最终 source baseline。
+
+正式报告不得再使用 G3-B2：
+
+```text
+final code baseline
+```
+
+作为当前最终源码状态，但可以继续引用 G3-B2 的 optimization evidence 作为历史权威性能 evidence。
+
+最终证据链应变为：
+
+```text
+G3-B2
+→ scheduling / topology optimization evidence
+
+G3-B3
+→ sparse / integrity / retry / backpressure /
+   direct compile-link feature evidence
+
+G3-C
+→ formal report derived from both evidence families
 ```

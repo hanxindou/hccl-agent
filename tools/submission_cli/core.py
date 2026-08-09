@@ -37,6 +37,14 @@ G3_B2_A_EVIDENCE = ROOT / "experiments/optimization/evidence/g3_b2_a_baseline_20
 G3_B2_C_EVIDENCE = ROOT / "experiments/optimization/evidence/g3_b2_c_topology_20260807T021000Z"
 G3_B2_D_EVIDENCE = ROOT / "experiments/optimization/evidence/g3_b2_d_replan_20260807T023000Z"
 G3_B2_E_EVIDENCE = ROOT / "experiments/optimization/evidence/g3_b2_e_agent_round1_20260807T032000Z"
+G3_B3_EVIDENCE_ROOT = ROOT / "experiments/feature_completion/evidence"
+G3_B3_EVIDENCE_DIRS = {
+    "g3_b3_a": ROOT / "experiments/feature_completion/evidence/g3_b3_a_baseline_20260807T133749Z",
+    "g3_b3_b": ROOT / "experiments/feature_completion/evidence/g3_b3_b_sparse_20260807T135447Z",
+    "g3_b3_c": ROOT / "experiments/feature_completion/evidence/g3_b3_c_integrity_20260807T141931Z",
+    "g3_b3_d": ROOT / "experiments/feature_completion/evidence/g3_b3_d_agent_flow_20260807T150515Z",
+    "g3_b3_e": ROOT / "experiments/feature_completion/evidence/g3_b3_e_direct_runtime_20260807T160000Z",
+}
 
 EVIDENCE_DIRS = {
     "g2_e": ROOT / "experiments/hccl_vm/evidence/g2_e_summary_20260730T095800.105217Z",
@@ -334,8 +342,8 @@ def _build_once(name: str) -> dict[str, Any]:
     audit = _parse_native_audit(artifact)
     headers = {name: _sha256(install_dir / "include" / name) for name in ("hccl_comm.h", "hccl_algorithms.h")}
     test_count = _test_count(ctest["stdout"])
-    if test_count != 12:
-        raise SubmissionError(f"expected 12 CPU_SIM CTests, observed {test_count}")
+    if test_count != 14:
+        raise SubmissionError(f"expected 14 CPU_SIM CTests, observed {test_count}")
     return {
         "name": name, "status": "PASS", "build_dir": f"<build>/{name}",
         "install_dir": f"<install>/{name}", "source_commit": _git("rev-parse", "HEAD"),
@@ -368,15 +376,18 @@ def _direct_build(cann_root: str) -> dict[str, Any]:
     configure_args = [
         "cmake", "-S", f"{_linux_path(ROOT)}/hcccl", "-B", build_linux,
         "-DCMAKE_BUILD_TYPE=Release", "-DHCCL_BACKEND=CPU_SIM",
-        "-DHCCL_ENABLE_ASCEND_HCCL_DIRECT=ON", f"-DHCCL_CANN_ROOT={cann_root}",
+        "-DHCCL_ENABLE_ASCEND_HCCL_DIRECT=ON",
+        "-DHCCL_ENABLE_ASCEND_HCCL_RUNTIME_SOURCE=ON",
+        f"-DHCCL_CANN_ROOT={cann_root}",
     ]
     configure = _run_linux(configure_args)
     build = _run_linux(["cmake", "--build", build_linux, "--config", "Release", "--parallel", "2"])
     ctest = _run_linux(["ctest", "--test-dir", build_linux, "-R", "test_hccl_direct_lifecycle", "--output-on-failure"])
     archive = build_dir / "libhccl_direct_adapter.a"
     link_audit = build_dir / "hccl_direct_link_audit"
-    if not archive.is_file() or not link_audit.is_file():
-        raise SubmissionError("direct readiness archive or non-executed link-audit ELF is missing")
+    runtime_source = build_dir / "libhccl_direct_runtime_source.so"
+    if not archive.is_file() or not link_audit.is_file() or not runtime_source.is_file():
+        raise SubmissionError("direct readiness or compile/link-only runtime-source artifact is missing")
     archive_symbols_raw = _run_linux(["nm", "-g", "--defined-only", _linux_path(archive)])["stdout"]
     archive_symbols = sorted({
         line.rsplit(None, 1)[-1] for line in archive_symbols_raw.splitlines()
@@ -385,10 +396,21 @@ def _direct_build(cann_root: str) -> dict[str, Any]:
     dynamic = _run_linux(["readelf", "-d", _linux_path(link_audit)])["stdout"]
     needed = sorted(re.findall(r"Shared library: \[([^]]+)\]", dynamic))
     required_refs = {"libhccl.so", "libhcomm.so", "libacl_rt.so"}
+    runtime_dynamic = _run_linux(["readelf", "-d", _linux_path(runtime_source)])["stdout"]
+    runtime_needed = sorted(re.findall(r"Shared library: \[([^]]+)\]", runtime_dynamic))
+    runtime_source_text = (ROOT / "hcccl/direct/src/hccl_direct_runtime_source.cpp").read_text(encoding="utf-8")
+    required_calls = {
+        "aclInit", "aclrtSetDevice", "aclrtCreateContext", "aclrtCreateStream", "aclrtMalloc",
+        "aclrtMemcpy", "HcclCommInitClusterInfo", "HcclAllReduce", "HcclAllGather",
+        "HcclReduceScatter", "aclrtSynchronizeStream", "HcclCommDestroy", "aclrtFree",
+        "aclrtDestroyStream", "aclrtDestroyContext", "aclrtResetDevice", "aclFinalize",
+    }
+    observed_calls = sorted(name for name in required_calls if re.search(rf"\b{re.escape(name)}\s*\(", runtime_source_text))
     cpu_symbols = set(json.loads(NATIVE_MANIFEST.read_text(encoding="utf-8"))["exported_symbols"])
     leaked = sorted(set(archive_symbols) & cpu_symbols)
     direct_symbols = sorted(name for name in archive_symbols if name.startswith("hccl_direct_"))
-    if leaked or not direct_symbols or not required_refs.issubset(needed):
+    if (leaked or not direct_symbols or not required_refs.issubset(needed)
+            or not required_refs.issubset(runtime_needed) or set(observed_calls) != required_calls):
         raise SubmissionError("direct readiness ABI/link isolation audit failed")
     return _normalize_public_paths({
         "status": "PASS", "artifact_type": "STATIC BUILD/LIFECYCLE READINESS ARTIFACT",
@@ -399,6 +421,13 @@ def _direct_build(cann_root: str) -> dict[str, Any]:
         "lifecycle_ctest": {"passed": _test_count(ctest["stdout"]), "failed": 0},
         "no_device_status": "NO_DEVICE_EXPECTED", "official_runtime_execution": False,
         "direct_hccl_api_call": False, "runtime_api_calls": [],
+        "runtime_source": {
+            "status": "PASS", "artifact": "INSPECTED_NOT_LOADED_OR_EXECUTED",
+            "sha256": _sha256(runtime_source), "observed_needed": runtime_needed,
+            "official_api_call_expressions": observed_calls,
+            "actual_call_expressions_present": True, "reachable_runtime_execution": False,
+            "runtime_api_calls": [],
+        },
         "commands": [
             {"command": configure["command"], "exit_code": configure["exit_code"]},
             {"command": build["command"], "exit_code": build["exit_code"]},
@@ -559,6 +588,77 @@ def _g3_b2_full_checks(build_name: str) -> dict[str, Any]:
     }
 
 
+def _g3_b3_quick_checks() -> dict[str, Any]:
+    from algorithm.ring_schedule import generate_ring_schedule
+    from feature_completion.contracts import SCHEDULE_IR_VERSION, validate_schedule_v2
+    from feature_completion.reliability import Fault, IntegrityConfig, IntegrityMetadata, crc32, execute_transfer
+    from feature_completion.sparse import attach_payload_transform, decide_sparse, encode_values
+
+    v1 = generate_ring_schedule("AllReduce", 8, 4096)
+    sparse_payload = encode_values([1.0] + [0.0] * 1023, "FP32")
+    sparse_schedule = attach_payload_transform(v1, sparse_payload, decide_sparse(sparse_payload))
+    dense_payload = encode_values([1.0] * 1024, "FP32")
+    dense_schedule = attach_payload_transform(v1, dense_payload, decide_sparse(dense_payload))
+    invariants = validate_schedule_v2(sparse_schedule)
+    recovery = execute_transfer(
+        b"g3-b3-representative-payload",
+        IntegrityMetadata(1, 0, 0),
+        IntegrityConfig(max_retries=1, fault=Fault.BIT_FLIP, fault_until_attempt=0),
+    )
+    if (
+        sparse_schedule["schema_version"] != SCHEDULE_IR_VERSION
+        or sparse_schedule["payload_transform"]["mode"] != "SPARSE_INDEX_VALUE"
+        or dense_schedule["payload_transform"]["mode"] != "DENSE"
+        or crc32(b"123456789") != 0xCBF43926
+        or not recovery.recovered
+        or recovery.attempt_count != 2
+        or not invariants
+    ):
+        raise SubmissionError("G3-B3 quick feature-completion checks failed")
+    return {
+        "status": "PASS",
+        "schedule_ir_version": sparse_schedule["schema_version"],
+        "schedule_invariant_count": len(invariants),
+        "sparse_mode": sparse_schedule["payload_transform"]["mode"],
+        "dense_fallback_mode": dense_schedule["payload_transform"]["mode"],
+        "crc32_known_vector": "cbf43926",
+        "bounded_retry": {"recovered": recovery.recovered, "attempt_count": recovery.attempt_count},
+        "large_benchmark_executed": False,
+        "real_device_api_executed": False,
+    }
+
+
+def _g3_b3_full_checks() -> dict[str, Any]:
+    test_paths = [
+        "tests/feature_completion/test_g3_b3_contracts.py",
+        "tests/feature_completion/test_g3_b3_sparse.py",
+        "tests/feature_completion/test_g3_b3_reliability.py",
+        "tests/feature_completion/test_g3_b3_agent_flow.py",
+        "tests/feature_completion/test_g3_b3_final_audit.py",
+        "tests/test_direct_runtime_source_contract.py",
+        "tests/submission_cli/test_submission_cli.py",
+    ]
+    run = _run([sys.executable, "-m", "pytest", "-q", *test_paths])
+    integrity = {name: _verify_sha256sums(path) for name, path in G3_B3_EVIDENCE_DIRS.items()}
+    if any(item["status"] != "PASS" for item in integrity.values()):
+        raise SubmissionError("G3-B3 A-E evidence integrity failed")
+    final_dirs = sorted(G3_B3_EVIDENCE_ROOT.glob("g3_b3_f_final_*"))
+    if len(final_dirs) != 1:
+        raise SubmissionError("exactly one G3-B3-F final evidence directory is required")
+    final_integrity = _verify_sha256sums(final_dirs[0])
+    final_result = json.loads((final_dirs[0] / "result.json").read_text(encoding="utf-8"))
+    if final_integrity["status"] != "PASS" or final_result.get("checkpoint_status") != "COMPLETED":
+        raise SubmissionError("G3-B3-F final evidence validation failed")
+    return {
+        "status": "PASS", "focused_tests": test_paths,
+        "pytest_output": (run["stdout"] + run["stderr"]).strip(),
+        "evidence_integrity": integrity,
+        "final_evidence_validation": {"status": "PASS", "path": final_dirs[0].relative_to(ROOT).as_posix(),
+                                      "files_checked": final_integrity["files_checked"]},
+        "real_device_api_executed": False, "runtime_api_calls": [],
+    }
+
+
 def build_command(args: argparse.Namespace) -> dict[str, Any]:
     check_environment()
     if args.direct_readiness:
@@ -580,11 +680,13 @@ def quick_command(args: argparse.Namespace, *, persist: bool = True) -> dict[str
     replay = _simulator_replay(args)
     evidence = verify_old_evidence(["g2_f_5", "g2_f_6"])
     g3_b2 = _g3_b2_quick_checks()
+    g3_b3 = _g3_b3_quick_checks()
     result = {
         "schema_version": "g3-b-quick-v1", "status": "PASS",
         "command": "python -m tools.submission_cli quick", "environment": environment,
         "build": _public_build(build), "python_regression": regression,
         "simulator_replay": replay, "old_evidence": evidence, "g3_b2_schedule_checks": g3_b2,
+        "g3_b3_feature_checks": g3_b3,
         "expensive_simulator_evidence_regenerated": False,
         "real_device_api_executed": False, "runtime_api_calls": [],
     }
@@ -635,6 +737,8 @@ def full_command(args: argparse.Namespace) -> dict[str, Any]:
     progress("quick-regression")
     g3_b2 = _g3_b2_full_checks("build-a")
     progress("g3-b2-full-checks")
+    g3_b3 = _g3_b3_full_checks()
+    progress("g3-b3-full-checks")
     direct = _direct_build(args.cann_root or DEFAULT_CANN_ROOT)
     progress("direct-readiness")
     stage_args = argparse.Namespace(output=str(DEFAULT_STAGE.relative_to(ROOT)), clean_output=True, include_selected_evidence=True, exclude_controlled_docs=True, exclude_official_assets=True)
@@ -650,7 +754,7 @@ def full_command(args: argparse.Namespace) -> dict[str, Any]:
         "consumer_compile": consumer, "python_regression": regression,
         "simulator_replay": replay, "old_evidence": old_evidence, "quick_regression": {"status": quick["status"]},
         "direct_readiness": direct, "staging": staging, "staging_verification": verification,
-        "g3_b2_full_checks": g3_b2,
+        "g3_b2_full_checks": g3_b2, "g3_b3_full_checks": g3_b3,
         "expensive_simulator_evidence_regenerated": False,
         "real_device_api_executed": False, "direct_hccl_api_call": False,
         "real_ascend_npu_validated": False, "runtime_api_calls": [],
@@ -799,7 +903,7 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
         "docs/submission/deliverable_inventory.json", "docs/submission/risk_register.json",
     ):
         copy(rel)
-    for directory in ("agent", "algorithm", "plugin", "simulator", "skills", "topology", "hardware", "cost_model", "config", "configs/submission", "tools/submission_cli"):
+    for directory in ("agent", "algorithm", "feature_completion", "plugin", "simulator", "skills", "topology", "hardware", "cost_model", "config", "configs/submission", "configs/feature_completion", "tools/submission_cli"):
         source = ROOT / directory
         _copy_selected_tree(source, stage / directory, {".py", ".json", ".md", ".txt"})
         for path in (stage / directory).rglob("*"):
@@ -859,9 +963,25 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
     for rel in (
         "docs/submission/g3_b2_final_code_baseline.md",
         "docs/submission/g3_b2_requirement_delta.json",
+        "docs/submission/g3_b3_final_feature_baseline.md",
+        "docs/submission/g3_b3_requirement_delta.json",
     ):
         if (ROOT / rel).is_file():
             copy(rel)
+
+    if (ROOT / "docs/feature_completion").is_dir():
+        _copy_selected_tree(ROOT / "docs/feature_completion", stage / "docs/feature_completion", {".md", ".json"})
+        for path in (stage / "docs/feature_completion").rglob("*"):
+            if path.is_file():
+                source_map[path.relative_to(stage).as_posix()] = (ROOT / path.relative_to(stage)).relative_to(ROOT).as_posix()
+    for path in sorted((ROOT / "tests/feature_completion").glob("*.py")):
+        copy(path.relative_to(ROOT).as_posix())
+    if args.include_selected_evidence:
+        for name, directory in G3_B3_EVIDENCE_DIRS.items():
+            _copy_selected_tree(directory, stage / f"evidence/selected/{name}", {".json", ".md", ".txt", ".jsonl"})
+            for path in (stage / f"evidence/selected/{name}").rglob("*"):
+                if path.is_file():
+                    source_map[path.relative_to(stage).as_posix()] = (directory / path.relative_to(stage / f"evidence/selected/{name}")).relative_to(ROOT).as_posix()
 
     _write_text(stage / "QUICKSTART.md", "# Quick start\n\n```text\npython -m tools.submission_cli check\npython -m tools.submission_cli quick\npython -m tools.submission_cli verify --stage .\n```\n")
     _write_text(stage / "CLAIM_BOUNDARIES.md", "# Claim boundaries\n\nCPU_SIM is host-executed project code. Direct is static/host readiness only. Scale, logical 1 GB, logical 72h, and failover are simulator-model results. No real NPU API was executed.\n")
@@ -869,7 +989,7 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
     _write_text(stage / "demo/PLACEHOLDER_G3_F.md", "# G3-F placeholder\n\nDemo and video material is not completed in G3-B.\n")
     status = {
         "g3_b": "COMPLETED", "native_delivery_normalization": "COMPLETED",
-        "g3_b2": "COMPLETED", "collective_schedule_ir": "COMPLETED",
+        "g3_b2": "COMPLETED", "g3_b3": "COMPLETED", "collective_schedule_ir": "COMPLETED",
         "topology_aware_hierarchical_optimization": "COMPLETED",
         "agent_optimization_trace": "COMPLETED", "performance_target_achievement": "PARTIALLY_SATISFIED",
         "cpu_sim_submission_plugin": "COMPLETED", "direct_readiness_package": "COMPLETED",
@@ -877,6 +997,7 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
         "real_device_acceptance": "HARDWARE_BLOCKED", "default_backend": "CPU_SIM",
         "fallback_policy": "NONE", "final_release_created": False,
         "real_device_api_executed": False, "direct_hccl_api_call": False,
+        "direct_runtime_call_expressions_present": True,
         "real_ascend_npu_validated": False, "measured_on_real_npu": False,
         "runtime_api_calls": [],
     }
@@ -899,6 +1020,8 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
         "schema_version": "g3-b-evidence-selection-v1",
         "policy": {
             "g2_f_5": "INCLUDE_FULL", "g2_f_6": "INCLUDE_FULL", "g3_a": "INCLUDE_FULL",
+            "g3_b3_a": "INCLUDE_FULL", "g3_b3_b": "INCLUDE_FULL", "g3_b3_c": "INCLUDE_FULL",
+            "g3_b3_d": "INCLUDE_FULL", "g3_b3_e": "INCLUDE_FULL",
             "g2_f_7": "INCLUDE_SUMMARY_ONLY", "g2_e": "INCLUDE_SUMMARY_ONLY",
             "g2_f_1": "REFERENCE_ONLY", "g2_f_2": "INCLUDE_SUMMARY_ONLY",
             "g2_f_3": "INCLUDE_SUMMARY_ONLY", "g2_f_4": "INCLUDE_SUMMARY_ONLY",
@@ -914,7 +1037,7 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
                     source_map[path.relative_to(stage).as_posix()] = (EVIDENCE_DIRS[name] / path.relative_to(stage / f"evidence/selected/{name}")).relative_to(ROOT).as_posix()
         for name, directory in EVIDENCE_DIRS.items():
             _write_json(stage / f"evidence/summaries/{name}.json", _safe_result_summary(name, directory))
-    _write_text(stage / "evidence/README.md", "# Selected evidence\n\nG2-F-5, G2-F-6, and G3-A are included in full; other frozen checkpoints use generated integrity-preserving summaries or references. Old evidence is never modified.\n")
+    _write_text(stage / "evidence/README.md", "# Selected evidence\n\nG2-F-5, G2-F-6, G3-A, and G3-B3 A-E are included in full; other frozen checkpoints use generated integrity-preserving summaries or references. Old evidence is never modified.\n")
 
     scan = _scan_stage(stage)
     if scan["status"] != "PASS":
@@ -1026,8 +1149,8 @@ def describe_command() -> dict[str, Any]:
         "validation_track": "SIMULATOR_ACCEPTANCE is not a fourth backend",
         "native_artifact": "libhccl_plugin.so: CPU_SIM_REFERENCE_PLUGIN",
         "direct_artifact": "libhccl_direct_adapter.a: STATIC BUILD/LIFECYCLE READINESS ARTIFACT",
-        "quick": "clean CPU_SIM build, 12 CTests, representative Python/simulator and G2-F-5/F-6 integrity",
-        "full": "two clean builds, ABI/ELF/dependency/install/consumer/regression/direct-readiness/staging audits",
+        "quick": "clean CPU_SIM build, 14 CTests, representative Python/simulator, G3-B2, and G3-B3 feature integrity",
+        "full": "two clean builds, ABI/ELF/dependency/install/consumer/regression/G3-B3/direct compile-link/staging audits",
         "limitations": ["official plugin ABI unverified", "real device API not executed", "release readiness partial"],
         "real_device_blocked_reason": "no authorized supported NPU runtime acceptance environment",
         "staging_policy": "exclude controlled DOCX, official assets, private logs, and conditional assets by default",

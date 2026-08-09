@@ -1,0 +1,1186 @@
+{
+  "g3_b2_a0_a7_modified": false,
+  "rows": [
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 37.17504,
+      "scenario_id": "S01",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 37.402004082,
+      "scenario_id": "S01",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 37.402004082,
+      "scenario_id": "S01",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 37.402004082,
+      "scenario_id": "S01",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 83.456404082,
+      "scenario_id": "S01",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 83.548604082,
+      "scenario_id": "S01",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 83.548604082,
+      "scenario_id": "S01",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 18.58752,
+      "scenario_id": "S02",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 18.714122041,
+      "scenario_id": "S02",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 18.714122041,
+      "scenario_id": "S02",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 18.714122041,
+      "scenario_id": "S02",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 41.741322041,
+      "scenario_id": "S02",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 41.787422041,
+      "scenario_id": "S02",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 41.987422041,
+      "scenario_id": "S02",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 18.58752,
+      "scenario_id": "S03",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 18.714122041,
+      "scenario_id": "S03",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 18.714122041,
+      "scenario_id": "S03",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 18.714122041,
+      "scenario_id": "S03",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 41.741322041,
+      "scenario_id": "S03",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 41.787422041,
+      "scenario_id": "S03",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 42.087422041,
+      "scenario_id": "S03",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 37.17504,
+      "scenario_id": "S04",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 14.448180615,
+      "scenario_id": "S04",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 14.448180615,
+      "scenario_id": "S04",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 14.448180615,
+      "scenario_id": "S04",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 32.188980615,
+      "scenario_id": "S04",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 32.224480615,
+      "scenario_id": "S04",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 32.324480615,
+      "scenario_id": "S04",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 18.58752,
+      "scenario_id": "S05",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 3.978945049,
+      "scenario_id": "S05",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 3.978945049,
+      "scenario_id": "S05",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 3.978945049,
+      "scenario_id": "S05",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 8.834145049,
+      "scenario_id": "S05",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 8.843845049,
+      "scenario_id": "S05",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 8.843845049,
+      "scenario_id": "S05",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 232.2864,
+      "scenario_id": "S06",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 233.065848594,
+      "scenario_id": "S06",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 233.065848594,
+      "scenario_id": "S06",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 233.065848594,
+      "scenario_id": "S06",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 1019.881848594,
+      "scenario_id": "S06",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 1021.455548594,
+      "scenario_id": "S06",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 1021.655548594,
+      "scenario_id": "S06",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 464.5728,
+      "scenario_id": "S07",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 465.712271956,
+      "scenario_id": "S07",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 465.712271956,
+      "scenario_id": "S07",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 465.712271956,
+      "scenario_id": "S07",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 2039.344271956,
+      "scenario_id": "S07",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 2042.491771956,
+      "scenario_id": "S07",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 2043.191771956,
+      "scenario_id": "S07",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 232.2864,
+      "scenario_id": "S08",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 233.065848594,
+      "scenario_id": "S08",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 233.065848594,
+      "scenario_id": "S08",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 233.065848594,
+      "scenario_id": "S08",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 1019.881848594,
+      "scenario_id": "S08",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 1021.455548594,
+      "scenario_id": "S08",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 1021.555548594,
+      "scenario_id": "S08",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 232.2864,
+      "scenario_id": "S09",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 117.243333833,
+      "scenario_id": "S09",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 117.243333833,
+      "scenario_id": "S09",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 117.243333833,
+      "scenario_id": "S09",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 511.611333833,
+      "scenario_id": "S09",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 512.400133833,
+      "scenario_id": "S09",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 512.400133833,
+      "scenario_id": "S09",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 464.5728,
+      "scenario_id": "S10",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 140.722033195,
+      "scenario_id": "S10",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 140.722033195,
+      "scenario_id": "S10",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 140.722033195,
+      "scenario_id": "S10",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 614.878033195,
+      "scenario_id": "S10",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 615.826533195,
+      "scenario_id": "S10",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 616.026533195,
+      "scenario_id": "S10",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3083.41152,
+      "scenario_id": "S11",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3093.629717796,
+      "scenario_id": "S11",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3093.629717796,
+      "scenario_id": "S11",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3093.629717796,
+      "scenario_id": "S11",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 55948.311317796,
+      "scenario_id": "S11",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 56054.022317796,
+      "scenario_id": "S11",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 56057.122317796,
+      "scenario_id": "S11",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3083.41152,
+      "scenario_id": "S12",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3093.629717796,
+      "scenario_id": "S12",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3093.629717796,
+      "scenario_id": "S12",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3093.629717796,
+      "scenario_id": "S12",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 55948.311317796,
+      "scenario_id": "S12",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 56054.022317796,
+      "scenario_id": "S12",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 56054.122317796,
+      "scenario_id": "S12",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 796.7351008,
+      "scenario_id": "S13",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 804.270136968,
+      "scenario_id": "S13",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 804.270136968,
+      "scenario_id": "S13",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 804.270136968,
+      "scenario_id": "S13",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 101470.638136968,
+      "scenario_id": "S13",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 101671.971636968,
+      "scenario_id": "S13",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 101671.971636968,
+      "scenario_id": "S13",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 3083.41152,
+      "scenario_id": "S14",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 1554.491311585,
+      "scenario_id": "S14",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 1554.491311585,
+      "scenario_id": "S14",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 1554.491311585,
+      "scenario_id": "S14",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 27997.960111585,
+      "scenario_id": "S14",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 28050.848711585,
+      "scenario_id": "S14",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 28051.048711585,
+      "scenario_id": "S14",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 3083.41152,
+      "scenario_id": "S15",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 935.178159963,
+      "scenario_id": "S15",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 935.178159963,
+      "scenario_id": "S15",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 935.178159963,
+      "scenario_id": "S15",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 16808.985759963,
+      "scenario_id": "S15",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 16840.734959963,
+      "scenario_id": "S15",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 16843.834959963,
+      "scenario_id": "S15",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 4268.26311808,
+      "scenario_id": "S16",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 4326.255172205,
+      "scenario_id": "S16",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 4326.255172205,
+      "scenario_id": "S16",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 4326.255172205,
+      "scenario_id": "S16",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 205654.383172205,
+      "scenario_id": "S16",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 206057.039772205,
+      "scenario_id": "S16",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 206057.139772205,
+      "scenario_id": "S16",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 31607.28,
+      "scenario_id": "S17",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 31692.710186282,
+      "scenario_id": "S17",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 31692.710186282,
+      "scenario_id": "S17",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 31692.710186282,
+      "scenario_id": "S17",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 132356.390186282,
+      "scenario_id": "S17",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 132557.717686282,
+      "scenario_id": "S17",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 132557.717686282,
+      "scenario_id": "S17",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 31607.28,
+      "scenario_id": "S18",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 9556.467347262,
+      "scenario_id": "S18",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 9556.467347262,
+      "scenario_id": "S18",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 9556.467347262,
+      "scenario_id": "S18",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 39756.606347262,
+      "scenario_id": "S18",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 39817.006747262,
+      "scenario_id": "S18",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "SPARSE_INDEX_VALUE",
+      "modeled_total_cost_us": 39817.206747262,
+      "scenario_id": "S18",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 12448.5116128,
+      "scenario_id": "S19",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 12890.483622698,
+      "scenario_id": "S19",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 12890.483622698,
+      "scenario_id": "S19",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 12890.483622698,
+      "scenario_id": "S19",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 6455353.715622698,
+      "scenario_id": "S19",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 6468238.645122698,
+      "scenario_id": "S19",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 6468241.745122697,
+      "scenario_id": "S19",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 169555.33728,
+      "scenario_id": "S20",
+      "stage": "B0",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 170154.753567229,
+      "scenario_id": "S20",
+      "stage": "B1",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 170154.753567229,
+      "scenario_id": "S20",
+      "stage": "B2",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 170154.753567229,
+      "scenario_id": "S20",
+      "stage": "B3",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3552447.950367229,
+      "scenario_id": "S20",
+      "stage": "B4",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3559212.538367229,
+      "scenario_id": "S20",
+      "stage": "B5",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    },
+    {
+      "correctness": true,
+      "mode": "DENSE",
+      "modeled_total_cost_us": 3559212.638367229,
+      "scenario_id": "S20",
+      "stage": "B6",
+      "truth_label": "HOST_SIMULATOR_MODEL"
+    }
+  ],
+  "schema_version": "g3-b3-feature-ablation-v1",
+  "stages": [
+    {
+      "all_correctness": true,
+      "p50_modeled_cost_us": 630.6539504,
+      "p95_modeled_cost_us": 31607.28,
+      "scenario_count": 20,
+      "stage": "B0",
+      "stage_name": "dense baseline"
+    },
+    {
+      "all_correctness": true,
+      "p50_modeled_cost_us": 634.991204462,
+      "p95_modeled_cost_us": 31692.710186282,
+      "scenario_count": 20,
+      "stage": "B1",
+      "stage_name": "sparse codec only"
+    },
+    {
+      "all_correctness": true,
+      "p50_modeled_cost_us": 634.991204462,
+      "p95_modeled_cost_us": 31692.710186282,
+      "scenario_count": 20,
+      "stage": "B2",
+      "stage_name": "+ wire-aware cost"
+    },
+    {
+      "all_correctness": true,
+      "p50_modeled_cost_us": 634.991204462,
+      "p95_modeled_cost_us": 31692.710186282,
+      "scenario_count": 20,
+      "stage": "B3",
+      "stage_name": "+ Agent dense/sparse selection"
+    },
+    {
+      "all_correctness": true,
+      "p50_modeled_cost_us": 9424.16501596,
+      "p95_modeled_cost_us": 3552447.950367229,
+      "scenario_count": 20,
+      "stage": "B4",
+      "stage_name": "+ CRC"
+    },
+    {
+      "all_correctness": true,
+      "p50_modeled_cost_us": 9441.613365959,
+      "p95_modeled_cost_us": 3559212.538367229,
+      "scenario_count": 20,
+      "stage": "B5",
+      "stage_name": "+ retry"
+    },
+    {
+      "all_correctness": true,
+      "p50_modeled_cost_us": 9443.513365959,
+      "p95_modeled_cost_us": 3559212.638367229,
+      "scenario_count": 20,
+      "stage": "B6",
+      "stage_name": "+ credit flow-control"
+    }
+  ],
+  "truth_label": "HOST_SIMULATOR_MODEL",
+  "unfavorable_cases_retained": true
+}

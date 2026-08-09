@@ -1,0 +1,111 @@
+{
+  "reproducible": true,
+  "rows": [
+    {
+      "break_even_sparsity_ratio": 0.35,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "FP32",
+      "index_width": 2,
+      "logical_bytes": 65536
+    },
+    {
+      "break_even_sparsity_ratio": 0.51,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "FP32",
+      "index_width": 4,
+      "logical_bytes": 1048576
+    },
+    {
+      "break_even_sparsity_ratio": 0.51,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "FP32",
+      "index_width": 4,
+      "logical_bytes": 16777216
+    },
+    {
+      "break_even_sparsity_ratio": 0.51,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "FP32",
+      "index_width": 4,
+      "logical_bytes": 134217728
+    },
+    {
+      "break_even_sparsity_ratio": 0.51,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "FP32",
+      "index_width": 4,
+      "logical_bytes": 1073741824
+    },
+    {
+      "break_even_sparsity_ratio": 0.52,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "FP16",
+      "index_width": 2,
+      "logical_bytes": 65536
+    },
+    {
+      "break_even_sparsity_ratio": 0.68,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "FP16",
+      "index_width": 4,
+      "logical_bytes": 1048576
+    },
+    {
+      "break_even_sparsity_ratio": 0.68,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "FP16",
+      "index_width": 4,
+      "logical_bytes": 16777216
+    },
+    {
+      "break_even_sparsity_ratio": 0.68,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "FP16",
+      "index_width": 4,
+      "logical_bytes": 134217728
+    },
+    {
+      "break_even_sparsity_ratio": 0.68,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "FP16",
+      "index_width": 4,
+      "logical_bytes": 1073741824
+    },
+    {
+      "break_even_sparsity_ratio": 0.52,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "BF16",
+      "index_width": 2,
+      "logical_bytes": 65536
+    },
+    {
+      "break_even_sparsity_ratio": 0.68,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "BF16",
+      "index_width": 4,
+      "logical_bytes": 1048576
+    },
+    {
+      "break_even_sparsity_ratio": 0.68,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "BF16",
+      "index_width": 4,
+      "logical_bytes": 16777216
+    },
+    {
+      "break_even_sparsity_ratio": 0.68,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "BF16",
+      "index_width": 4,
+      "logical_bytes": 134217728
+    },
+    {
+      "break_even_sparsity_ratio": 0.68,
+      "cost_includes_metadata_and_codec_equivalent_bytes": true,
+      "dtype": "BF16",
+      "index_width": 4,
+      "logical_bytes": 1073741824
+    }
+  ],
+  "schema_version": "g3-b3-sparse-break-even-v1"
+}

@@ -1,0 +1,18 @@
+{
+  "baseline_commit": "9124a9d",
+  "checkpoint": "G3-B3-D",
+  "checkpoint_status": "COMPLETED",
+  "g3_b2_a0_a7_modified": false,
+  "g3_b2_parameter_set_modified": false,
+  "old_evidence_modified": false,
+  "project_commit": "9124a9df95b275d2f51898adca6818c6f8182976",
+  "public_abi_changed": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "scenario_count": 20,
+  "schema_version": "g3-b3-d-evidence-manifest-v1",
+  "source_contracts": [
+    "configs/feature_completion/g3_b3_sparse_benchmark_matrix.json",
+    "configs/feature_completion/g3_b3_data_profiles.json"
+  ]
+}

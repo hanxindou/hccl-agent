@@ -1,0 +1,54 @@
+{
+  "c_focused_test_stdout": "  PASS CRC32 known vector\n  PASS CRC32 empty\n  PASS CRC32 one byte\n  PASS CRC32 non-aligned deterministic\n  PASS clean transfer no retry\n  PASS bit corruption detected and recovered\n  PASS single retry byte accounting\n  PASS byte corruption recovered\n  PASS CRC tamper recovered\n  PASS repeated corruption retry exhausted\n  PASS attempt bound\n  PASS exhausted retransmitted bytes\n  PASS logical timeout recovered\n  PASS logical timeout terminal\n  PASS invalid input non-retryable\n  PASS no-path terminal without blind retry\n  PASS transient transfer retryable and recovered\n  PASS sequence error terminal\n  PASS sequence error terminal\n  PASS sequence error terminal\n  PASS logical large chunked integrity\n  PASS sparse payload CRC retry integration\nintegrity/retry tests: 22 run, 0 failed\n",
+  "passed": true,
+  "python_retry_result": {
+    "attempt_count": 2,
+    "classification": "NONE",
+    "completion_tick": 3,
+    "corruption_detected": true,
+    "deadline_tick": 10,
+    "failure_reason": "NONE",
+    "metadata": {
+      "attempt": 1,
+      "chunk_id": 0,
+      "crc32": 3599253142,
+      "payload_length": 8,
+      "sequence_id": 0,
+      "transfer_id": 11
+    },
+    "recovered": true,
+    "result_code": "HCCL_SUCCESS",
+    "retransmitted_bytes": 8,
+    "sequence_valid": true,
+    "start_tick": 2,
+    "timed_out": false,
+    "trace": [
+      {
+        "attempt": 0,
+        "classification": "RETRYABLE",
+        "completion_tick": 1,
+        "crc32": 3599253142,
+        "deadline_tick": 8,
+        "failure_reason": "CRC_MISMATCH",
+        "start_tick": 0
+      },
+      {
+        "attempt": 1,
+        "classification": "NONE",
+        "completion_tick": 3,
+        "crc32": 3599253142,
+        "deadline_tick": 10,
+        "failure_reason": "NONE",
+        "start_tick": 2
+      }
+    ]
+  },
+  "schema_version": "g3-b3-sparse-integrity-crosscheck-v1",
+  "sparse_payload": {
+    "logical_bytes": 1024,
+    "nonzero_count": 1,
+    "reconstruction_hash": "2a69b6354d8319f04958d86e933af6e0ef10985312da8e15909ab15754d15b8f",
+    "wire_bytes": 70
+  },
+  "truth_label": "HOST_INTEGRITY_VALIDATED"
+}

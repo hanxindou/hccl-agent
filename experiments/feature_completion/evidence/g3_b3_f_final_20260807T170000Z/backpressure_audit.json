@@ -1,0 +1,1861 @@
+{
+  "cases": [
+    {
+      "available_credit": 4,
+      "blocked_producer_events": 0,
+      "bounded_inflight": true,
+      "case": "normal_load",
+      "chunk_bytes": 1048576,
+      "completed_order": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "config": {
+        "credit_window": 4,
+        "high_watermark": 3,
+        "low_watermark": 1,
+        "max_inflight_chunks": 4,
+        "memory_budget_bytes": 67108864,
+        "producer_rate": 2
+      },
+      "consumer_capacity_pattern": [
+        2
+      ],
+      "credit_return_events": 32,
+      "credits_conserved": true,
+      "eventually_drains": true,
+      "fairness": true,
+      "max_inflight_observed": 2,
+      "memory_budget_respected": true,
+      "no_deadlock": true,
+      "no_negative_credit": true,
+      "peak_materialized_bytes": 2097152,
+      "schema_version": "g3-b3-credit-flow-control-v1",
+      "ticks": 17,
+      "total_chunks": 32,
+      "trace": [
+        {
+          "available_credit": 2,
+          "consumed_chunks": [],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            0,
+            1
+          ],
+          "produced_chunks": [
+            0,
+            1
+          ],
+          "producer_paused": false,
+          "tick": 0
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            0,
+            1
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            2,
+            3
+          ],
+          "produced_chunks": [
+            2,
+            3
+          ],
+          "producer_paused": false,
+          "tick": 1
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            2,
+            3
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            4,
+            5
+          ],
+          "produced_chunks": [
+            4,
+            5
+          ],
+          "producer_paused": false,
+          "tick": 2
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            4,
+            5
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            6,
+            7
+          ],
+          "produced_chunks": [
+            6,
+            7
+          ],
+          "producer_paused": false,
+          "tick": 3
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            6,
+            7
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            8,
+            9
+          ],
+          "produced_chunks": [
+            8,
+            9
+          ],
+          "producer_paused": false,
+          "tick": 4
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            8,
+            9
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            10,
+            11
+          ],
+          "produced_chunks": [
+            10,
+            11
+          ],
+          "producer_paused": false,
+          "tick": 5
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            10,
+            11
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            12,
+            13
+          ],
+          "produced_chunks": [
+            12,
+            13
+          ],
+          "producer_paused": false,
+          "tick": 6
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            12,
+            13
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            14,
+            15
+          ],
+          "produced_chunks": [
+            14,
+            15
+          ],
+          "producer_paused": false,
+          "tick": 7
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            14,
+            15
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            16,
+            17
+          ],
+          "produced_chunks": [
+            16,
+            17
+          ],
+          "producer_paused": false,
+          "tick": 8
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            16,
+            17
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            18,
+            19
+          ],
+          "produced_chunks": [
+            18,
+            19
+          ],
+          "producer_paused": false,
+          "tick": 9
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            18,
+            19
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            20,
+            21
+          ],
+          "produced_chunks": [
+            20,
+            21
+          ],
+          "producer_paused": false,
+          "tick": 10
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            20,
+            21
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            22,
+            23
+          ],
+          "produced_chunks": [
+            22,
+            23
+          ],
+          "producer_paused": false,
+          "tick": 11
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            22,
+            23
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            24,
+            25
+          ],
+          "produced_chunks": [
+            24,
+            25
+          ],
+          "producer_paused": false,
+          "tick": 12
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            24,
+            25
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            26,
+            27
+          ],
+          "produced_chunks": [
+            26,
+            27
+          ],
+          "producer_paused": false,
+          "tick": 13
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            26,
+            27
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            28,
+            29
+          ],
+          "produced_chunks": [
+            28,
+            29
+          ],
+          "producer_paused": false,
+          "tick": 14
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            28,
+            29
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            30,
+            31
+          ],
+          "produced_chunks": [
+            30,
+            31
+          ],
+          "producer_paused": false,
+          "tick": 15
+        },
+        {
+          "available_credit": 4,
+          "consumed_chunks": [
+            30,
+            31
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [],
+          "produced_chunks": [],
+          "producer_paused": false,
+          "tick": 16
+        }
+      ],
+      "truth_label": "SIMULATED_BACKPRESSURE"
+    },
+    {
+      "available_credit": 4,
+      "blocked_producer_events": 2,
+      "bounded_inflight": true,
+      "case": "temporary_congestion",
+      "chunk_bytes": 1048576,
+      "completed_order": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "config": {
+        "credit_window": 4,
+        "high_watermark": 3,
+        "low_watermark": 1,
+        "max_inflight_chunks": 4,
+        "memory_budget_bytes": 67108864,
+        "producer_rate": 2
+      },
+      "consumer_capacity_pattern": [
+        2,
+        0,
+        0,
+        1,
+        2
+      ],
+      "credit_return_events": 32,
+      "credits_conserved": true,
+      "eventually_drains": true,
+      "fairness": true,
+      "max_inflight_observed": 3,
+      "memory_budget_respected": true,
+      "no_deadlock": true,
+      "no_negative_credit": true,
+      "peak_materialized_bytes": 3145728,
+      "schema_version": "g3-b3-credit-flow-control-v1",
+      "ticks": 20,
+      "total_chunks": 32,
+      "trace": [
+        {
+          "available_credit": 2,
+          "consumed_chunks": [],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            0,
+            1
+          ],
+          "produced_chunks": [
+            0,
+            1
+          ],
+          "producer_paused": false,
+          "tick": 0
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [],
+          "consumer_capacity": 0,
+          "credit_conserved": true,
+          "inflight": [
+            0,
+            1,
+            2
+          ],
+          "produced_chunks": [
+            2
+          ],
+          "producer_paused": true,
+          "tick": 1
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [],
+          "consumer_capacity": 0,
+          "credit_conserved": true,
+          "inflight": [
+            0,
+            1,
+            2
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 2
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            0
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            1,
+            2
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 3
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            1,
+            2
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            3,
+            4
+          ],
+          "produced_chunks": [
+            3,
+            4
+          ],
+          "producer_paused": false,
+          "tick": 4
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            3,
+            4
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            5,
+            6
+          ],
+          "produced_chunks": [
+            5,
+            6
+          ],
+          "producer_paused": false,
+          "tick": 5
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            5,
+            6
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            7,
+            8
+          ],
+          "produced_chunks": [
+            7,
+            8
+          ],
+          "producer_paused": false,
+          "tick": 6
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            7,
+            8
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            9,
+            10
+          ],
+          "produced_chunks": [
+            9,
+            10
+          ],
+          "producer_paused": false,
+          "tick": 7
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            9,
+            10
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            11,
+            12
+          ],
+          "produced_chunks": [
+            11,
+            12
+          ],
+          "producer_paused": false,
+          "tick": 8
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            11,
+            12
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            13,
+            14
+          ],
+          "produced_chunks": [
+            13,
+            14
+          ],
+          "producer_paused": false,
+          "tick": 9
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            13,
+            14
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            15,
+            16
+          ],
+          "produced_chunks": [
+            15,
+            16
+          ],
+          "producer_paused": false,
+          "tick": 10
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            15,
+            16
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            17,
+            18
+          ],
+          "produced_chunks": [
+            17,
+            18
+          ],
+          "producer_paused": false,
+          "tick": 11
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            17,
+            18
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            19,
+            20
+          ],
+          "produced_chunks": [
+            19,
+            20
+          ],
+          "producer_paused": false,
+          "tick": 12
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            19,
+            20
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            21,
+            22
+          ],
+          "produced_chunks": [
+            21,
+            22
+          ],
+          "producer_paused": false,
+          "tick": 13
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            21,
+            22
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            23,
+            24
+          ],
+          "produced_chunks": [
+            23,
+            24
+          ],
+          "producer_paused": false,
+          "tick": 14
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            23,
+            24
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            25,
+            26
+          ],
+          "produced_chunks": [
+            25,
+            26
+          ],
+          "producer_paused": false,
+          "tick": 15
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            25,
+            26
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            27,
+            28
+          ],
+          "produced_chunks": [
+            27,
+            28
+          ],
+          "producer_paused": false,
+          "tick": 16
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            27,
+            28
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            29,
+            30
+          ],
+          "produced_chunks": [
+            29,
+            30
+          ],
+          "producer_paused": false,
+          "tick": 17
+        },
+        {
+          "available_credit": 3,
+          "consumed_chunks": [
+            29,
+            30
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [
+            31
+          ],
+          "produced_chunks": [
+            31
+          ],
+          "producer_paused": false,
+          "tick": 18
+        },
+        {
+          "available_credit": 4,
+          "consumed_chunks": [
+            31
+          ],
+          "consumer_capacity": 2,
+          "credit_conserved": true,
+          "inflight": [],
+          "produced_chunks": [],
+          "producer_paused": false,
+          "tick": 19
+        }
+      ],
+      "truth_label": "SIMULATED_BACKPRESSURE"
+    },
+    {
+      "available_credit": 4,
+      "blocked_producer_events": 15,
+      "bounded_inflight": true,
+      "case": "sustained_congestion",
+      "chunk_bytes": 1048576,
+      "completed_order": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "config": {
+        "credit_window": 4,
+        "high_watermark": 3,
+        "low_watermark": 1,
+        "max_inflight_chunks": 4,
+        "memory_budget_bytes": 67108864,
+        "producer_rate": 2
+      },
+      "consumer_capacity_pattern": [
+        0,
+        0,
+        1
+      ],
+      "credit_return_events": 32,
+      "credits_conserved": true,
+      "eventually_drains": true,
+      "fairness": true,
+      "max_inflight_observed": 3,
+      "memory_budget_respected": true,
+      "no_deadlock": true,
+      "no_negative_credit": true,
+      "peak_materialized_bytes": 3145728,
+      "schema_version": "g3-b3-credit-flow-control-v1",
+      "ticks": 34,
+      "total_chunks": 32,
+      "trace": [
+        {
+          "available_credit": 2,
+          "consumed_chunks": [],
+          "consumer_capacity": 0,
+          "credit_conserved": true,
+          "inflight": [
+            0,
+            1
+          ],
+          "produced_chunks": [
+            0,
+            1
+          ],
+          "producer_paused": false,
+          "tick": 0
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [],
+          "consumer_capacity": 0,
+          "credit_conserved": true,
+          "inflight": [
+            0,
+            1,
+            2
+          ],
+          "produced_chunks": [
+            2
+          ],
+          "producer_paused": true,
+          "tick": 1
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            0
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            1,
+            2
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 2
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            1
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            2,
+            3,
+            4
+          ],
+          "produced_chunks": [
+            3,
+            4
+          ],
+          "producer_paused": true,
+          "tick": 3
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            2
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            3,
+            4
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 4
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            3
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            4,
+            5,
+            6
+          ],
+          "produced_chunks": [
+            5,
+            6
+          ],
+          "producer_paused": true,
+          "tick": 5
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            4
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            5,
+            6
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 6
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            5
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            6,
+            7,
+            8
+          ],
+          "produced_chunks": [
+            7,
+            8
+          ],
+          "producer_paused": true,
+          "tick": 7
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            6
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            7,
+            8
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 8
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            7
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            8,
+            9,
+            10
+          ],
+          "produced_chunks": [
+            9,
+            10
+          ],
+          "producer_paused": true,
+          "tick": 9
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            8
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            9,
+            10
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 10
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            9
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            10,
+            11,
+            12
+          ],
+          "produced_chunks": [
+            11,
+            12
+          ],
+          "producer_paused": true,
+          "tick": 11
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            10
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            11,
+            12
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 12
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            11
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            12,
+            13,
+            14
+          ],
+          "produced_chunks": [
+            13,
+            14
+          ],
+          "producer_paused": true,
+          "tick": 13
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            12
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            13,
+            14
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 14
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            13
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            14,
+            15,
+            16
+          ],
+          "produced_chunks": [
+            15,
+            16
+          ],
+          "producer_paused": true,
+          "tick": 15
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            14
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            15,
+            16
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 16
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            15
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            16,
+            17,
+            18
+          ],
+          "produced_chunks": [
+            17,
+            18
+          ],
+          "producer_paused": true,
+          "tick": 17
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            16
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            17,
+            18
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 18
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            17
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            18,
+            19,
+            20
+          ],
+          "produced_chunks": [
+            19,
+            20
+          ],
+          "producer_paused": true,
+          "tick": 19
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            18
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            19,
+            20
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 20
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            19
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            20,
+            21,
+            22
+          ],
+          "produced_chunks": [
+            21,
+            22
+          ],
+          "producer_paused": true,
+          "tick": 21
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            20
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            21,
+            22
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 22
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            21
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            22,
+            23,
+            24
+          ],
+          "produced_chunks": [
+            23,
+            24
+          ],
+          "producer_paused": true,
+          "tick": 23
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            22
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            23,
+            24
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 24
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            23
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            24,
+            25,
+            26
+          ],
+          "produced_chunks": [
+            25,
+            26
+          ],
+          "producer_paused": true,
+          "tick": 25
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            24
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            25,
+            26
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 26
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            25
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            26,
+            27,
+            28
+          ],
+          "produced_chunks": [
+            27,
+            28
+          ],
+          "producer_paused": true,
+          "tick": 27
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            26
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            27,
+            28
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 28
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [
+            27
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            28,
+            29,
+            30
+          ],
+          "produced_chunks": [
+            29,
+            30
+          ],
+          "producer_paused": true,
+          "tick": 29
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            28
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            29,
+            30
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 30
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            29
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            30,
+            31
+          ],
+          "produced_chunks": [
+            31
+          ],
+          "producer_paused": false,
+          "tick": 31
+        },
+        {
+          "available_credit": 3,
+          "consumed_chunks": [
+            30
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [
+            31
+          ],
+          "produced_chunks": [],
+          "producer_paused": false,
+          "tick": 32
+        },
+        {
+          "available_credit": 4,
+          "consumed_chunks": [
+            31
+          ],
+          "consumer_capacity": 1,
+          "credit_conserved": true,
+          "inflight": [],
+          "produced_chunks": [],
+          "producer_paused": false,
+          "tick": 33
+        }
+      ],
+      "truth_label": "SIMULATED_BACKPRESSURE"
+    },
+    {
+      "available_credit": 4,
+      "blocked_producer_events": 1,
+      "bounded_inflight": true,
+      "case": "recovery",
+      "chunk_bytes": 1048576,
+      "completed_order": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "config": {
+        "credit_window": 4,
+        "high_watermark": 3,
+        "low_watermark": 1,
+        "max_inflight_chunks": 4,
+        "memory_budget_bytes": 67108864,
+        "producer_rate": 2
+      },
+      "consumer_capacity_pattern": [
+        0,
+        0,
+        0,
+        4
+      ],
+      "credit_return_events": 32,
+      "credits_conserved": true,
+      "eventually_drains": true,
+      "fairness": true,
+      "max_inflight_observed": 3,
+      "memory_budget_respected": true,
+      "no_deadlock": true,
+      "no_negative_credit": true,
+      "peak_materialized_bytes": 3145728,
+      "schema_version": "g3-b3-credit-flow-control-v1",
+      "ticks": 19,
+      "total_chunks": 32,
+      "trace": [
+        {
+          "available_credit": 2,
+          "consumed_chunks": [],
+          "consumer_capacity": 0,
+          "credit_conserved": true,
+          "inflight": [
+            0,
+            1
+          ],
+          "produced_chunks": [
+            0,
+            1
+          ],
+          "producer_paused": false,
+          "tick": 0
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [],
+          "consumer_capacity": 0,
+          "credit_conserved": true,
+          "inflight": [
+            0,
+            1,
+            2
+          ],
+          "produced_chunks": [
+            2
+          ],
+          "producer_paused": true,
+          "tick": 1
+        },
+        {
+          "available_credit": 1,
+          "consumed_chunks": [],
+          "consumer_capacity": 0,
+          "credit_conserved": true,
+          "inflight": [
+            0,
+            1,
+            2
+          ],
+          "produced_chunks": [],
+          "producer_paused": true,
+          "tick": 2
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            0,
+            1,
+            2
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            3,
+            4
+          ],
+          "produced_chunks": [
+            3,
+            4
+          ],
+          "producer_paused": false,
+          "tick": 3
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            3,
+            4
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            5,
+            6
+          ],
+          "produced_chunks": [
+            5,
+            6
+          ],
+          "producer_paused": false,
+          "tick": 4
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            5,
+            6
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            7,
+            8
+          ],
+          "produced_chunks": [
+            7,
+            8
+          ],
+          "producer_paused": false,
+          "tick": 5
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            7,
+            8
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            9,
+            10
+          ],
+          "produced_chunks": [
+            9,
+            10
+          ],
+          "producer_paused": false,
+          "tick": 6
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            9,
+            10
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            11,
+            12
+          ],
+          "produced_chunks": [
+            11,
+            12
+          ],
+          "producer_paused": false,
+          "tick": 7
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            11,
+            12
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            13,
+            14
+          ],
+          "produced_chunks": [
+            13,
+            14
+          ],
+          "producer_paused": false,
+          "tick": 8
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            13,
+            14
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            15,
+            16
+          ],
+          "produced_chunks": [
+            15,
+            16
+          ],
+          "producer_paused": false,
+          "tick": 9
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            15,
+            16
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            17,
+            18
+          ],
+          "produced_chunks": [
+            17,
+            18
+          ],
+          "producer_paused": false,
+          "tick": 10
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            17,
+            18
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            19,
+            20
+          ],
+          "produced_chunks": [
+            19,
+            20
+          ],
+          "producer_paused": false,
+          "tick": 11
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            19,
+            20
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            21,
+            22
+          ],
+          "produced_chunks": [
+            21,
+            22
+          ],
+          "producer_paused": false,
+          "tick": 12
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            21,
+            22
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            23,
+            24
+          ],
+          "produced_chunks": [
+            23,
+            24
+          ],
+          "producer_paused": false,
+          "tick": 13
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            23,
+            24
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            25,
+            26
+          ],
+          "produced_chunks": [
+            25,
+            26
+          ],
+          "producer_paused": false,
+          "tick": 14
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            25,
+            26
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            27,
+            28
+          ],
+          "produced_chunks": [
+            27,
+            28
+          ],
+          "producer_paused": false,
+          "tick": 15
+        },
+        {
+          "available_credit": 2,
+          "consumed_chunks": [
+            27,
+            28
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            29,
+            30
+          ],
+          "produced_chunks": [
+            29,
+            30
+          ],
+          "producer_paused": false,
+          "tick": 16
+        },
+        {
+          "available_credit": 3,
+          "consumed_chunks": [
+            29,
+            30
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [
+            31
+          ],
+          "produced_chunks": [
+            31
+          ],
+          "producer_paused": false,
+          "tick": 17
+        },
+        {
+          "available_credit": 4,
+          "consumed_chunks": [
+            31
+          ],
+          "consumer_capacity": 4,
+          "credit_conserved": true,
+          "inflight": [],
+          "produced_chunks": [],
+          "producer_paused": false,
+          "tick": 18
+        }
+      ],
+      "truth_label": "SIMULATED_BACKPRESSURE"
+    }
+  ],
+  "passed": true,
+  "schema_version": "g3-b3-backpressure-cases-v1"
+}

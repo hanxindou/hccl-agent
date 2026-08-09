@@ -12,8 +12,20 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 option(HCCL_ENABLE_ASCEND_HCCL_DIRECT
     "Build isolated direct-HCCL readiness targets (compile-only adapter and link audit)"
     OFF)
+option(HCCL_ENABLE_ASCEND_HCCL_RUNTIME_SOURCE
+    "Build the non-executed official ACL/HCCL call-expression source target"
+    OFF)
 set(HCCL_CANN_ROOT "" CACHE PATH
     "CANN/Ascend SDK root for the direct HCCL adapter")
+
+if(HCCL_ENABLE_ASCEND_HCCL_RUNTIME_SOURCE AND
+   NOT HCCL_ENABLE_ASCEND_HCCL_DIRECT)
+    message(FATAL_ERROR
+        "HCCL_ENABLE_ASCEND_HCCL_RUNTIME_SOURCE=ON requires "
+        "HCCL_ENABLE_ASCEND_HCCL_DIRECT=ON so the frozen SDK/link contract "
+        "is established first. Both options are OFF by default."
+    )
+endif()
 
 set(HCCL_BACKEND "CPU_SIM" CACHE STRING "HCCL backend: CPU_SIM or ASCEND_CANN")
 set_property(CACHE HCCL_BACKEND PROPERTY STRINGS CPU_SIM ASCEND_CANN)
@@ -44,6 +56,8 @@ set(SOURCES
     src/hccl_comm.c
     src/hccl_algorithms.c
     src/schedule_ir.c
+    src/internal/sparse_codec.c
+    src/internal/integrity_transport.c
 )
 
 set(HEADERS
@@ -65,6 +79,7 @@ target_include_directories(hccl_plugin
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
+target_include_directories(hccl_plugin PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if(HCCL_BACKEND STREQUAL "CPU_SIM")
     target_compile_definitions(hccl_plugin PRIVATE HCCL_BACKEND_CPU_SIM=1)
@@ -237,6 +252,35 @@ if(HCCL_ENABLE_ASCEND_HCCL_DIRECT)
     set_property(TARGET hccl_direct_link_audit APPEND_STRING PROPERTY LINK_FLAGS
         " -Wl,--no-as-needed -Wl,--allow-shlib-undefined -Wl,-rpath-link,${HCCL_DIRECT_CANN_REAL_ROOT}/x86_64-linux/devlib")
 
+    if(HCCL_ENABLE_ASCEND_HCCL_RUNTIME_SOURCE)
+        # This shared object has no executable entry point and is never added
+        # to CTest.  Its sole purpose is compile/link/static inspection of real
+        # official API call expressions.  It must not be executed in host-only
+        # acceptance and is intentionally not linked into hccl_plugin.
+        add_library(hccl_direct_runtime_source SHARED
+            direct/src/hccl_direct_runtime_source.cpp
+        )
+        target_include_directories(hccl_direct_runtime_source
+            PRIVATE ${HCCL_DIRECT_CANN_INCLUDE_DIR}
+        )
+        target_compile_features(hccl_direct_runtime_source PRIVATE cxx_std_17)
+        target_compile_definitions(hccl_direct_runtime_source
+            PRIVATE HCCL_DIRECT_RUNTIME_SOURCE_COMPILE_LINK_ONLY=1
+        )
+        target_link_libraries(hccl_direct_runtime_source PRIVATE
+            "${HCCL_DIRECT_hccl_LIBRARY}"
+            "${HCCL_DIRECT_hcomm_LIBRARY}"
+            "${HCCL_DIRECT_acl_rt_LIBRARY}"
+        )
+        set_target_properties(hccl_direct_runtime_source PROPERTIES
+            CXX_VISIBILITY_PRESET hidden
+            VISIBILITY_INLINES_HIDDEN YES
+        )
+        set_property(TARGET hccl_direct_runtime_source APPEND_STRING PROPERTY LINK_FLAGS
+            " -Wl,--no-as-needed -Wl,--allow-shlib-undefined -Wl,-rpath-link,${HCCL_DIRECT_CANN_REAL_ROOT}/x86_64-linux/devlib")
+        message(STATUS "G3-B3-E direct runtime source: compile/link-only target enabled; execution remains forbidden.")
+    endif()
+
     message(STATUS "G2-F direct adapter: compile-only target and non-executed official-library link audit enabled.")
     message(STATUS "G2-F direct link root: ${HCCL_DIRECT_CANN_REAL_ROOT}")
 endif()
@@ -397,6 +441,45 @@ add_executable(schedule_ir_dump
     src/schedule_ir.c
 )
 target_include_directories(schedule_ir_dump PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+add_executable(test_sparse_collective
+    tests/test_sparse_collective.c
+    ${SOURCES}
+)
+target_include_directories(test_sparse_collective PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+add_test(NAME test_sparse_collective COMMAND test_sparse_collective)
+
+add_executable(sparse_codec_dump
+    tests/sparse_codec_dump.c
+    src/internal/sparse_codec.c
+    src/internal/integrity_transport.c
+)
+target_include_directories(sparse_codec_dump PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+add_executable(test_integrity_retry
+    tests/test_integrity_retry.c
+    ${SOURCES}
+)
+target_include_directories(test_integrity_retry PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+add_test(NAME test_integrity_retry COMMAND test_integrity_retry)
+
+add_executable(integrity_crc_dump
+    tests/integrity_crc_dump.c
+    src/internal/integrity_transport.c
+)
+target_include_directories(integrity_crc_dump PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 set_tests_properties(test_dtype_emulation PROPERTIES
     WORKING_DIRECTORY $<TARGET_FILE_DIR:test_dtype_emulation>
 )
@@ -449,6 +532,7 @@ install(FILES
 install(FILES
     direct/src/hccl_direct_adapter.cpp
     direct/src/hccl_direct_link_audit.cpp
+    direct/src/hccl_direct_runtime_source.cpp
     DESTINATION ${CMAKE_INSTALL_DATADIR}/hccl-direct-readiness/src
 )
 install(FILES

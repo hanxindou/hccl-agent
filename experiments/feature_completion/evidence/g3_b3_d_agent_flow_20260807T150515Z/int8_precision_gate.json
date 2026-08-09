@@ -1,0 +1,8 @@
+{
+  "int8_implemented": false,
+  "lossless_claim": false,
+  "real_npu_speedup_claim": false,
+  "reason": "lossless MUST scope takes precedence and no independent INT8 precision contract authorizes lossy correctness",
+  "schema_version": "g3-b3-int8-precision-gate-v1",
+  "status": "DEFERRED_BY_PRECISION_GATE"
+}

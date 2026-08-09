@@ -1,0 +1,13 @@
+{
+  "best_simulated_improvement_percent": 45.59283008,
+  "integrity": {
+    "files_checked": 25,
+    "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+    "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+    "status": "PASS"
+  },
+  "performance_scenarios": 18,
+  "real_device_measured": false,
+  "reliability_scenarios": 4,
+  "status": "PASS"
+}

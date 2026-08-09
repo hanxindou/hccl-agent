@@ -1,0 +1,39 @@
+{
+  "baseline": "G3-A matrix plus frozen G3-B2 final baseline",
+  "g3_a_matrix_modified": false,
+  "real_device_api_executed": false,
+  "requirements": [
+    {
+      "capability": "lossless sparsity-aware collective transport",
+      "evidence": "G3-B3-B",
+      "id": "G3-B3-R1",
+      "status": "HOST_EXECUTED"
+    },
+    {
+      "capability": "CRC32, corruption detection, logical timeout, bounded retry",
+      "evidence": "G3-B3-C",
+      "id": "G3-B3-R2",
+      "status": "HOST_EXECUTED"
+    },
+    {
+      "capability": "Schedule IR v2, selector, cost model, Agent and bounded backpressure integration",
+      "evidence": "G3-B3-D",
+      "id": "G3-B3-R3",
+      "status": "SIMULATOR_ONLY"
+    },
+    {
+      "capability": "official ACL/HCCL actual call-expression source path",
+      "evidence": "G3-B3-E",
+      "id": "G3-B3-R4",
+      "status": "DIRECT_READINESS_ONLY"
+    },
+    {
+      "capability": "real-device correctness and performance acceptance",
+      "evidence": null,
+      "id": "G3-B3-R5",
+      "status": "HARDWARE_BLOCKED"
+    }
+  ],
+  "runtime_api_calls": [],
+  "schema_version": "g3-b3-requirement-delta-v1"
+}

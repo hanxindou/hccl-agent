@@ -1,0 +1,10 @@
+{
+  "items": [
+    "UA-B-001 project license/copyright decision",
+    "UA-B-002 official asset redistribution decision",
+    "UA-B-003 controlled competition document handling",
+    "UA-B-004 platform archive format and size",
+    "Supported Ascend NPU runtime acceptance and real-device performance validation"
+  ],
+  "status": "USER_ACTION_REQUIRED"
+}

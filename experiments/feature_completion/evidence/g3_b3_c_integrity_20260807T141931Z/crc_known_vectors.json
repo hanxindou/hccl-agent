@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "schema_version": "g3-b3-crc-known-vectors-v1",
+  "vectors": [
+    {
+      "crc32": "00000000",
+      "hex": "",
+      "name": "empty"
+    },
+    {
+      "crc32": "cbf43926",
+      "name": "check",
+      "text": "123456789"
+    },
+    {
+      "crc32": "e8b7be43",
+      "hex": "61",
+      "name": "one-byte-a"
+    },
+    {
+      "crc32": "ad5809f9",
+      "hex": "00010203040506",
+      "name": "non-aligned"
+    }
+  ]
+}

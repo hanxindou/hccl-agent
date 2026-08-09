@@ -1,0 +1,36 @@
+{
+  "baseline_commit": "112551a",
+  "checkpoint": "G3-B3-C",
+  "checkpoint_status": "COMPLETED",
+  "direct_hccl_api_call": false,
+  "generated_artifacts": [
+    "integrity_manifest.json",
+    "crc_known_vectors.json",
+    "crc_c_python_parity.json",
+    "corruption_cases.json",
+    "retry_cases.json",
+    "timeout_cases.json",
+    "failure_classification.json",
+    "retry_exhaustion.json",
+    "sparse_integrity_crosscheck.json"
+  ],
+  "known_limitations": [
+    "no real communicator, collective, network, or device runtime was executed"
+  ],
+  "old_evidence_modified": false,
+  "project_commit": "112551a73abe09d671d9f602cef39b03cd09b2fc",
+  "real_ascend_npu_validated": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-b3-c-evidence-manifest-v1",
+  "source_documents": [
+    "docs/plans/g3-competition-delivery-readiness.md"
+  ],
+  "tests": [
+    "tests/feature_completion/test_g3_b3_reliability.py",
+    "hcccl/tests/test_integrity_retry.c"
+  ],
+  "warnings": [
+    "faults, timeouts, and retries are deterministic host execution, not HCCL/NIC behavior"
+  ]
+}

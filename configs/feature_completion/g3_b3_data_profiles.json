@@ -1,0 +1,36 @@
+{
+  "schema_version": "g3-b3-sparse-data-profiles-v1",
+  "frozen": true,
+  "seed": 20260807,
+  "dtypes": ["FP32", "FP16", "BF16"],
+  "message_size_bytes": [65536, 1048576, 16777216, 134217728, 1073741824],
+  "rank_sizes": [2, 4, 8, 16, 64],
+  "index_format_rule": [
+    {"maximum_logical_elements": 65535, "index_type": "uint16"},
+    {"maximum_logical_elements": 4294967295, "index_type": "uint32"},
+    {"maximum_logical_elements": null, "index_type": "uint64"}
+  ],
+  "zero_semantics": {
+    "positive_zero_is_zero": true,
+    "negative_zero_is_zero": true,
+    "nan_is_zero": false,
+    "infinity_is_zero": false,
+    "comparison": "numeric equality to zero after source dtype quantization"
+  },
+  "profiles": [
+    {"profile_id": "S00", "sparsity_ratio": 0.0, "pattern": "SEEDED_RANDOM_NONZERO", "seed": 20260807},
+    {"profile_id": "S25", "sparsity_ratio": 0.25, "pattern": "SEEDED_RANDOM", "seed": 20260807},
+    {"profile_id": "S50", "sparsity_ratio": 0.5, "pattern": "SEEDED_RANDOM", "seed": 20260807},
+    {"profile_id": "S75", "sparsity_ratio": 0.75, "pattern": "SEEDED_RANDOM", "seed": 20260807},
+    {"profile_id": "S90", "sparsity_ratio": 0.9, "pattern": "SEEDED_RANDOM", "seed": 20260807},
+    {"profile_id": "S100", "sparsity_ratio": 1.0, "pattern": "ALL_ZERO", "seed": 20260807}
+  ],
+  "large_message_policy": {
+    "logical_threshold_bytes": 1073741824,
+    "materialization": "BOUNDED_CHUNK_STREAMING",
+    "full_logical_tensor_materialization": false,
+    "reference_validation": "BOUNDED_SAMPLING_AND_HASH"
+  },
+  "truth_label": "HOST_PROFILE_CONTRACT_ONLY",
+  "real_device_calibrated": false
+}
