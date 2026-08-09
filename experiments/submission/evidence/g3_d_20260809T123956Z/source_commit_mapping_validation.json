@@ -1,0 +1,7 @@
+{
+  "commit_validity": "VALIDATED_WHERE_ASSERTED",
+  "relationship_count": 56,
+  "schema_version": "g3-d-source-commit-mapping-validation-v1",
+  "status": "PASS",
+  "unavailable_relationships_preserved": true
+}

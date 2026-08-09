@@ -1,0 +1,8 @@
+{
+  "fabricated_history": false,
+  "g3_b3_human_intervention": "HISTORICAL_TRACE_UNAVAILABLE",
+  "g3_b3_prompt_response": "HISTORICAL_TRACE_UNAVAILABLE",
+  "hidden_chain_of_thought_included": false,
+  "schema_version": "g3-d-historical-unavailable-validation-v1",
+  "status": "PASS"
+}

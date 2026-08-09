@@ -1,0 +1,1390 @@
+{
+  "checkpoint": "G3-D-A",
+  "components": [
+    {
+      "authority_level": "L1",
+      "component_id": "agent-entry",
+      "component_type": "AGENT_ENTRY",
+      "current_status": "CURRENT_IMPLEMENTED",
+      "entry_or_owner": "HCCLAgent CLI",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "CLI arguments"
+      ],
+      "limitations": [
+        "not used by mandatory G3-D replay"
+      ],
+      "online_dependency": false,
+      "outputs": [
+        "Agent result"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "relevant_evidence": [],
+      "side_effects": [
+        "CPU_SIM run may write local logs"
+      ],
+      "source_path": "main.py",
+      "source_sha256": "a073bb22e1b197745d8c8ba57a67a8bb548b6dd77558cc8ab7863a1af6ec81b5",
+      "tests": [
+        "tests/test_agent.py",
+        "tests/test_backend_selection.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "agent-orchestrator",
+      "component_type": "AGENT_ORCHESTRATION",
+      "current_status": "CURRENT_IMPLEMENTED",
+      "entry_or_owner": "HCCLAgent",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "nodes",
+        "message_size",
+        "primitive"
+      ],
+      "limitations": [
+        "best-effort online reasoning; not mandatory replay"
+      ],
+      "online_dependency": false,
+      "outputs": [
+        "plan",
+        "proposal",
+        "decision trace",
+        "report fields"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "relevant_evidence": [],
+      "side_effects": [
+        "writes ignored logs and local knowledge/experience"
+      ],
+      "source_path": "agent/hccl_agent.py",
+      "source_sha256": "e448d0b3088dfa59f6e98c5970e812d4a6e055cc5749a48ef3a44deb930ac44a",
+      "tests": [
+        "tests/test_agent.py",
+        "tests/test_algorithm_selection_flow.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "online-llm",
+      "component_type": "LLM_BOUNDARY",
+      "current_status": "OPTIONAL_ONLINE",
+      "entry_or_owner": "LLMClient",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "prompt",
+        "optional system prompt"
+      ],
+      "limitations": [
+        "DeepSeek only; API key and network required when explicitly used"
+      ],
+      "online_dependency": true,
+      "outputs": [
+        "provider response"
+      ],
+      "provenance": "ONLINE_LLM_OPTIONAL",
+      "relevant_evidence": [],
+      "side_effects": [],
+      "source_path": "agent/llm_client.py",
+      "source_sha256": "f05c00e3a751a58aeaf14d05ccba22dc63af210904dc3f19d9cb4d0e548e3daa",
+      "tests": [
+        "tests/test_llm_client.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "prompt-engine",
+      "component_type": "PROMPT_ENGINE",
+      "current_status": "PARTIAL",
+      "entry_or_owner": "AgentPromptEngine",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "template",
+        "parameters"
+      ],
+      "limitations": [
+        "ignored local logs are not authority evidence"
+      ],
+      "online_dependency": false,
+      "outputs": [
+        "filled prompt"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "relevant_evidence": [],
+      "side_effects": [
+        "writes ignored logs/prompt_calls.jsonl"
+      ],
+      "source_path": "agent/prompt_engine.py",
+      "source_sha256": "c7ef3e958a364b12d73195b95cd2a3187d7614ac136383bde19d0dcf45c22814",
+      "tests": []
+    },
+    {
+      "authority_level": "L4",
+      "component_id": "g3-b2-loop",
+      "component_type": "DETERMINISTIC_AGENT_LOOP",
+      "current_status": "FROZEN_HISTORICAL",
+      "entry_or_owner": "hccl-agent:g3_b2_optimization_loop",
+      "frozen_status": true,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "AVAILABLE_IN_FROZEN_EVIDENCE",
+      "inputs": [
+        "g3-b2-agent-input-v1"
+      ],
+      "limitations": [
+        "performance identity is SIMULATED_ONLY"
+      ],
+      "online_dependency": false,
+      "outputs": [
+        "proposal",
+        "evaluation",
+        "reflection",
+        "replanning",
+        "selection"
+      ],
+      "provenance": "HISTORICAL_EVIDENCE",
+      "relevant_evidence": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/agent_trace_inventory.json"
+      ],
+      "side_effects": [],
+      "source_path": "agent/g3_b2_optimization_loop.py",
+      "source_sha256": "784dcfb4cba647b00f315afc46a97f86b641eb455e9bd0f79767f51678d498ce",
+      "tests": [
+        "tests/optimization/test_g3_b2_agent_ablation.py"
+      ]
+    },
+    {
+      "authority_level": "L4",
+      "component_id": "g3-b3-loop",
+      "component_type": "DETERMINISTIC_AGENT_LOOP",
+      "current_status": "FROZEN_HISTORICAL",
+      "entry_or_owner": "hccl-agent:g3_b3_feature_loop",
+      "frozen_status": true,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "PARTIAL_FROZEN_RECORDS_NO_HISTORICAL_PROMPT_RESPONSE",
+      "inputs": [
+        "g3-b3 feature input"
+      ],
+      "limitations": [
+        "host/simulator model; no historical Prompt/Response"
+      ],
+      "online_dependency": false,
+      "outputs": [
+        "proposal v2",
+        "evaluation",
+        "reflection",
+        "decision"
+      ],
+      "provenance": "HISTORICAL_EVIDENCE",
+      "relevant_evidence": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/agent_trace_inventory.json"
+      ],
+      "side_effects": [],
+      "source_path": "agent/g3_b3_feature_loop.py",
+      "source_sha256": "7907be0c8b4dfbcd72e62777d00110747890ebf65b1e36bf5e0311407d98a410",
+      "tests": [
+        "tests/feature_completion/test_g3_b3_agent_flow.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "offline-template-demo",
+      "component_type": "CONTROLLED_DEMO",
+      "current_status": "CURRENT_IMPLEMENTED",
+      "entry_or_owner": "OfflineDevelopmentLoop",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "requirement"
+      ],
+      "limitations": [
+        "not provenance for production C/C++ source"
+      ],
+      "online_dependency": false,
+      "outputs": [
+        "temporary generated checker",
+        "compile/test/fix records"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "relevant_evidence": [],
+      "side_effects": [
+        "temporary directory only"
+      ],
+      "source_path": "agent/autonomous_development_loop.py",
+      "source_sha256": "d8aa750a6cee0b56a318dab9a2da2d4cb75b672f13c6bea5249236e7e123c273",
+      "tests": [
+        "tests/test_autonomous_development_loop.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "planning-skill",
+      "component_type": "SKILL",
+      "current_status": "CURRENT_IMPLEMENTED",
+      "entry_or_owner": "PlanningSkill",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "nodes",
+        "message_size",
+        "primitive"
+      ],
+      "limitations": [],
+      "online_dependency": false,
+      "outputs": [
+        "ordered plan"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "relevant_evidence": [],
+      "side_effects": [],
+      "source_path": "agent/planning_skill.py",
+      "source_sha256": "9d359e02acab7ed86a482c2892afc9300b5135c73333fbbad6045991a5506553",
+      "tests": [
+        "tests/test_planning_skill.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "reasoning-skill",
+      "component_type": "SKILL",
+      "current_status": "OPTIONAL_ONLINE",
+      "entry_or_owner": "ReasoningSkill",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "scenario",
+        "candidates"
+      ],
+      "limitations": [],
+      "online_dependency": true,
+      "outputs": [
+        "recommendation",
+        "reasoning"
+      ],
+      "provenance": "ONLINE_LLM_OPTIONAL",
+      "relevant_evidence": [],
+      "side_effects": [],
+      "source_path": "agent/reasoning_skill.py",
+      "source_sha256": "f34bc8b408d601a7b134beae56d5d2989bab32472739416aa0ee229e080e5ccb",
+      "tests": [
+        "tests/test_reasoning_skill.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "evaluation-skill",
+      "component_type": "SKILL",
+      "current_status": "CURRENT_IMPLEMENTED",
+      "entry_or_owner": "EvaluationSkill",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "performance result"
+      ],
+      "limitations": [],
+      "online_dependency": false,
+      "outputs": [
+        "grade",
+        "recommendation"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "relevant_evidence": [],
+      "side_effects": [],
+      "source_path": "agent/evaluation_skill.py",
+      "source_sha256": "97625c098f30d155dea72941b1ba9d2456e4bdef30f7dc548fca8af1bbe70dec",
+      "tests": [
+        "tests/test_evaluation_skill.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "execution-skill",
+      "component_type": "SKILL",
+      "current_status": "CURRENT_IMPLEMENTED",
+      "entry_or_owner": "ExecutionSkill",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "algorithm",
+        "host input data"
+      ],
+      "limitations": [
+        "host CPU_SIM; not real HCCL runtime"
+      ],
+      "online_dependency": false,
+      "outputs": [
+        "CPU_SIM execution result"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "relevant_evidence": [],
+      "side_effects": [],
+      "source_path": "agent/execution_skill.py",
+      "source_sha256": "70c378ae329eb0f109cd519418bccd63d5912f80d8272e4efe5d4b24486217e1",
+      "tests": [
+        "tests/test_execution_skill.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "reflection-skill",
+      "component_type": "SKILL",
+      "current_status": "CURRENT_IMPLEMENTED",
+      "entry_or_owner": "ReflectionSkill",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "prediction",
+        "host execution result",
+        "candidates"
+      ],
+      "limitations": [],
+      "online_dependency": false,
+      "outputs": [
+        "reflection",
+        "replan decision"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "relevant_evidence": [],
+      "side_effects": [],
+      "source_path": "agent/reflection_skill.py",
+      "source_sha256": "3cca022644282b02f813a53581fbb049c18ae0ef232c0077e291287b53e573bd",
+      "tests": [
+        "tests/test_reflection_skill.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "replanning-skill",
+      "component_type": "SKILL",
+      "current_status": "CURRENT_IMPLEMENTED",
+      "entry_or_owner": "ReplanningSkill",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "current algorithm",
+        "ranking"
+      ],
+      "limitations": [],
+      "online_dependency": false,
+      "outputs": [
+        "alternative"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "relevant_evidence": [],
+      "side_effects": [],
+      "source_path": "agent/replanning_skill.py",
+      "source_sha256": "965fc022a68e23c07f9a6133baafe5f0e62a46bdfc2ad16bc5aff5f37f145df0",
+      "tests": [
+        "tests/test_replanning_skill.py"
+      ]
+    },
+    {
+      "authority_level": "L1",
+      "component_id": "explanation-skill",
+      "component_type": "SKILL",
+      "current_status": "CURRENT_IMPLEMENTED",
+      "entry_or_owner": "ExplanationSkill",
+      "frozen_status": false,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "HISTORICAL_TRACE_UNAVAILABLE",
+      "inputs": [
+        "topology",
+        "candidates",
+        "selection",
+        "reflection"
+      ],
+      "limitations": [
+        "auditable summary only; no hidden chain-of-thought"
+      ],
+      "online_dependency": false,
+      "outputs": [
+        "auditable decision trace"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "relevant_evidence": [],
+      "side_effects": [],
+      "source_path": "agent/explanation_skill.py",
+      "source_sha256": "43396d205c297c7462e07e26847ee44afad227cb65d6ccc799d3fd1568c421e6",
+      "tests": [
+        "tests/test_explanation_skill.py"
+      ]
+    },
+    {
+      "authority_level": "L4",
+      "component_id": "g3-b2-prompt-registry",
+      "component_type": "PROMPT_REGISTRY",
+      "current_status": "FROZEN_HISTORICAL",
+      "entry_or_owner": "G3-B2",
+      "frozen_status": true,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "AVAILABLE_IN_FROZEN_EVIDENCE",
+      "inputs": [
+        "five canonical prompt files"
+      ],
+      "limitations": [],
+      "online_dependency": false,
+      "outputs": [
+        "prompt ids, versions, hashes"
+      ],
+      "provenance": "HISTORICAL_EVIDENCE",
+      "relevant_evidence": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/agent_trace_inventory.json"
+      ],
+      "side_effects": [],
+      "source_path": "agent/evidence/g3_b2/prompt_registry.json",
+      "source_sha256": "73262c233c1c5c9aa86d897dff168677a88c6557825bb8aafee83678d48dd412",
+      "tests": [
+        "tests/optimization/test_g3_b2_baseline.py"
+      ]
+    },
+    {
+      "authority_level": "L4",
+      "component_id": "g3-c-claim-ledger",
+      "component_type": "CLAIM_AUTHORITY",
+      "current_status": "FROZEN_HISTORICAL",
+      "entry_or_owner": "G3-C",
+      "frozen_status": true,
+      "g3_d_output_mapping": [],
+      "historical_record_availability": "AVAILABLE_IN_FROZEN_EVIDENCE",
+      "inputs": [
+        "frozen evidence"
+      ],
+      "limitations": [],
+      "online_dependency": false,
+      "outputs": [
+        "allowed/prohibited claim language"
+      ],
+      "provenance": "HISTORICAL_EVIDENCE",
+      "relevant_evidence": [
+        "experiments/submission/evidence/g3_c_20260809T000000Z/claim_boundary_audit.json"
+      ],
+      "side_effects": [],
+      "source_path": "docs/submission/report_claim_ledger.json",
+      "source_sha256": "2c7c9d5356fd514fc02c877a398f1da30c6b6d14009eba80a263a5a63a138053",
+      "tests": [
+        "tests/reporting/test_claim_boundaries.py"
+      ]
+    }
+  ],
+  "historical_record_policy": "unproven relationships use HISTORICAL_TRACE_UNAVAILABLE",
+  "ignored_logs_are_authority": false,
+  "schema_version": "g3-d-authority-inventory-v1",
+  "source_baseline": "3d67163e756a2aca9c7be8b2b0c981cb0038cac8",
+  "status": "CURRENT_INVENTORY",
+  "tracked_file_inventory": [
+    {
+      "path": "agent/auto_tuning_skill.py",
+      "sha256": "1b9a663b2b8e568272ab5d605f76bbde3989384c4081af974b6781daaed754e2"
+    },
+    {
+      "path": "agent/autonomous_development_loop.py",
+      "sha256": "d8aa750a6cee0b56a318dab9a2da2d4cb75b672f13c6bea5249236e7e123c273"
+    },
+    {
+      "path": "agent/backend_control.py",
+      "sha256": "fce41fa07c2a171f42a3e75c74ba77efcba1c329da5d2e85c1aeefd6a5e90383"
+    },
+    {
+      "path": "agent/benchmark_skill.py",
+      "sha256": "5789d58b5ddd1b481cc909f2bd7d67482a9dbd2769be76a2526dea032717a3f4"
+    },
+    {
+      "path": "agent/calibration_explanation_skill.py",
+      "sha256": "54fe0a0819b4f581171ee810b758902d6fa10c7469884f40f704f60f6743564f"
+    },
+    {
+      "path": "agent/code_generation_skill.py",
+      "sha256": "355bd73b015b2fd9271583cdd1979ea5071cff5d8290bdb9b62f9af240a0e603"
+    },
+    {
+      "path": "agent/convergence_analysis_skill.py",
+      "sha256": "54f918c8adf572b5ee5a5cfb1543e92f5a3ac4d57c4a0bfe828628eb037b096e"
+    },
+    {
+      "path": "agent/decision_skill.py",
+      "sha256": "0a019ddfd1c3bba9cce65319ef179a19a79c9aa2fc3fdcfdbf6cb2695de0130d"
+    },
+    {
+      "path": "agent/evaluation_skill.py",
+      "sha256": "97625c098f30d155dea72941b1ba9d2456e4bdef30f7dc548fca8af1bbe70dec"
+    },
+    {
+      "path": "agent/evidence/g3_b2/README.md",
+      "sha256": "a4dbd36a0e25d5b6552657fa3bd21992ecdc5dd6c42a679659a63bf9da52b58f"
+    },
+    {
+      "path": "agent/evidence/g3_b2/commit_mapping.json",
+      "sha256": "fc61efc011106fa88d68ac2e3d6b0ac8c8b53c8c56a16848406d15b8c97365b0"
+    },
+    {
+      "path": "agent/evidence/g3_b2/evaluations/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "agent/evidence/g3_b2/evaluations/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "1fd972c19b18e4051de297904a12fdaead833dcf6b090ab97e2d403d5fd473ed"
+    },
+    {
+      "path": "agent/evidence/g3_b2/evaluations/g3-b2-e-authoritative-optimization.json",
+      "sha256": "e7de621a7d03ba13496df15416d81a6aa3b1898eda4aede2f40d8ee5a08cee8c"
+    },
+    {
+      "path": "agent/evidence/g3_b2/human_intervention.json",
+      "sha256": "89331dac7763247a700a40d0f1f5cd58f9bd9d050d44a198d7b45564dfd6df58"
+    },
+    {
+      "path": "agent/evidence/g3_b2/prompt_registry.json",
+      "sha256": "73262c233c1c5c9aa86d897dff168677a88c6557825bb8aafee83678d48dd412"
+    },
+    {
+      "path": "agent/evidence/g3_b2/proposals/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "agent/evidence/g3_b2/proposals/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "ae54ebf5d81db4f91a7332974f8883753579f18d25929585be5c94a58d05a6a5"
+    },
+    {
+      "path": "agent/evidence/g3_b2/proposals/g3-b2-e-authoritative-optimization.json",
+      "sha256": "ae54ebf5d81db4f91a7332974f8883753579f18d25929585be5c94a58d05a6a5"
+    },
+    {
+      "path": "agent/evidence/g3_b2/reflections/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "agent/evidence/g3_b2/reflections/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "999fffa4d0a87f19e19837c34a659f41f6eb7d511201e427e30ad724b569e601"
+    },
+    {
+      "path": "agent/evidence/g3_b2/reflections/g3-b2-e-authoritative-optimization.json",
+      "sha256": "bd7b84197d584d9a7653e6ead557c4b6171aea4e487042d4c7a72a7c2818201d"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "298caa8ad917a589fed6b00ac923a82fb78951b8c56fc0961ef38cc809560e0a"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3-b2-e-authoritative-optimization.json",
+      "sha256": "635abb39fee5917e3862934e81e07df91e0b317dcce52921597aa7b2d1aa0c8f"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3_b2_b_schedule_ir.json",
+      "sha256": "e0316deebf15f4060e68a7eecdbb4c211b08a4abc95dfaeb6b5ec90aeead4b0d"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3_b2_c_topology_optimization.json",
+      "sha256": "17d6e8924e3fe1ea3ca6ed6ef31583e6835f57a70d2d67997c54839cf50fabf1"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3_b2_d_replan_memory_pipeline.json",
+      "sha256": "58c2d5c7bcbf8d52e0954cd779995ed7e34253fcfcf7f759b85c2c82f771a9a6"
+    },
+    {
+      "path": "agent/evidence/g3_b2/trace_manifest.json",
+      "sha256": "2faaddb9a8e549b814aaaf28ab13e3491e394ec27de58cde393654dca0cf5204"
+    },
+    {
+      "path": "agent/execution_skill.py",
+      "sha256": "70c378ae329eb0f109cd519418bccd63d5912f80d8272e4efe5d4b24486217e1"
+    },
+    {
+      "path": "agent/experience_store.py",
+      "sha256": "0d351c2d9a414d74b8828d2cec4693ca3b2a4cfeb521f45f5292fcc05c29ebc2"
+    },
+    {
+      "path": "agent/experiment_logger.py",
+      "sha256": "c8bae11e5e8f109638bf9ec8628a90fd9243af3b349ce501dd6cd6ede0718c65"
+    },
+    {
+      "path": "agent/explanation_skill.py",
+      "sha256": "43396d205c297c7462e07e26847ee44afad227cb65d6ccc799d3fd1568c421e6"
+    },
+    {
+      "path": "agent/final_audit.py",
+      "sha256": "8ce644d598338002060de56aab2a12706957c04a8361aef2afbfa9c5fa89fbc7"
+    },
+    {
+      "path": "agent/g3_b2_optimization_loop.py",
+      "sha256": "784dcfb4cba647b00f315afc46a97f86b641eb455e9bd0f79767f51678d498ce"
+    },
+    {
+      "path": "agent/g3_b3_feature_loop.py",
+      "sha256": "7907be0c8b4dfbcd72e62777d00110747890ebf65b1e36bf5e0311407d98a410"
+    },
+    {
+      "path": "agent/hccl_agent.py",
+      "sha256": "e448d0b3088dfa59f6e98c5970e812d4a6e055cc5749a48ef3a44deb930ac44a"
+    },
+    {
+      "path": "agent/knowledge_report_skill.py",
+      "sha256": "582da1f4f4642aecdffdc76ef8a142cb9cd6272d139645694c72ea480600ee15"
+    },
+    {
+      "path": "agent/llm_client.py",
+      "sha256": "f05c00e3a751a58aeaf14d05ccba22dc63af210904dc3f19d9cb4d0e548e3daa"
+    },
+    {
+      "path": "agent/optimization_loop_skill.py",
+      "sha256": "58b2f1701cf156217ec58c0935fb28d0133bf8a571d94eb765a22d0abbbf2e44"
+    },
+    {
+      "path": "agent/optimization_proposal_skill.py",
+      "sha256": "18de183d1cbf1431c0c4206909eed8ce99fa8c68f9c509450a36024737f8d753"
+    },
+    {
+      "path": "agent/planning_skill.py",
+      "sha256": "9d359e02acab7ed86a482c2892afc9300b5135c73333fbbad6045991a5506553"
+    },
+    {
+      "path": "agent/plugin_capability.py",
+      "sha256": "06ddeb2ab1543acde3672d90968e30305dba4e249000f7d50854364999a37f89"
+    },
+    {
+      "path": "agent/plugin_manager.py",
+      "sha256": "c24af571c4cc23213d91ab73a0992ca2a150223f1c62364684ee8bfe2c702ab4"
+    },
+    {
+      "path": "agent/policy_engine.py",
+      "sha256": "2725d9a6759d1a1dc19efc0f088213b6df0912c50841b56369ad5a0155ec0e07"
+    },
+    {
+      "path": "agent/prompt_engine.py",
+      "sha256": "c7ef3e958a364b12d73195b95cd2a3187d7614ac136383bde19d0dcf45c22814"
+    },
+    {
+      "path": "agent/reasoning_skill.py",
+      "sha256": "f34bc8b408d601a7b134beae56d5d2989bab32472739416aa0ee229e080e5ccb"
+    },
+    {
+      "path": "agent/reflection_skill.py",
+      "sha256": "3cca022644282b02f813a53581fbb049c18ae0ef232c0077e291287b53e573bd"
+    },
+    {
+      "path": "agent/replanning_skill.py",
+      "sha256": "965fc022a68e23c07f9a6133baafe5f0e62a46bdfc2ad16bc5aff5f37f145df0"
+    },
+    {
+      "path": "agent/report_generator.py",
+      "sha256": "e1f55899af53ae47fb170146bba2a8e4fb0c14ab0fe5cbc0b1fe64a4d7f51a91"
+    },
+    {
+      "path": "prompts/algorithm_prompt.txt",
+      "sha256": "2a3befaeb5090c1039bdd87d695e10a2eee9f4457ad4297faa02872703bfd359"
+    },
+    {
+      "path": "prompts/g3_b2/benchmark_evaluation_v1.md",
+      "sha256": "3c8a75ee59b0da8ca391e8887ed9f69b1c70e0815b7e607c7056ba3965c7406b"
+    },
+    {
+      "path": "prompts/g3_b2/reflection_v1.md",
+      "sha256": "0791037c5fd33067f8694df254db90e46acf090c59ae5e8a209ed17865f2ecfc"
+    },
+    {
+      "path": "prompts/g3_b2/replanning_v1.md",
+      "sha256": "3f281b84eadb86d2965f8de7d931e99c3870651ad4319743b24b2dd9cffda293"
+    },
+    {
+      "path": "prompts/g3_b2/schedule_generation_v1.md",
+      "sha256": "439d4042a89d34f81d2977ec70edfdafda4542af7d731e1706ab22357dd2ea0e"
+    },
+    {
+      "path": "prompts/g3_b2/topology_optimization_v1.md",
+      "sha256": "4232aee8ba260aef62b612ea12b9a1ade04948efc0abf432f107835f478010c2"
+    },
+    {
+      "path": "skills/algorithm_selector.py",
+      "sha256": "ebeed5cd5e87184a55a25d65387170e409c7bd0b74786b490f433747bfd8bdee"
+    },
+    {
+      "path": "skills/algorithm_skill.py",
+      "sha256": "36fe8220c1c1015692dd068af682cca6f644084d49c79e6e33863cb1a09f6ff4"
+    },
+    {
+      "path": "skills/benchmark_suite_skill.py",
+      "sha256": "463727fa279efdff1e5f95018f3e3e426924ec9e7e530b7409bf77e7ac8fad9b"
+    },
+    {
+      "path": "skills/case_retrieval_skill.py",
+      "sha256": "989f89172af74080c2fbdb1fed3d1cbb6d24202aec6f7215a4bc56eb30540cb3"
+    },
+    {
+      "path": "skills/config_skill.py",
+      "sha256": "7c351286a976904dcb82ae3c63523865034b7ace85a52cb902c8bab5b923fda4"
+    },
+    {
+      "path": "skills/decision_validation_skill.py",
+      "sha256": "cda5e8b5ef90b1eef3aa0109e8b5d36fd306fa528b95f181437dcc25d89c7c82"
+    },
+    {
+      "path": "skills/experience_learning_skill.py",
+      "sha256": "8e34b841a02a279688aacf618110e1e166a74d8c9b7bcfc9a5c2540b58e56128"
+    },
+    {
+      "path": "skills/hardware_reasoning_skill.py",
+      "sha256": "4def36ac5ae2eac03103720f59c69d489a8ec1ef39bd0849812e26086610ad2c"
+    },
+    {
+      "path": "skills/knowledge_extraction_skill.py",
+      "sha256": "14a7c3446326ec06ecd536facea2ffdd9cc8a1094e628a9777718030b2d64bd5"
+    },
+    {
+      "path": "skills/optimization_skill.py",
+      "sha256": "0bd4ec1d4b94322a007d8e0a4abc9246bd1e57612d8e23a86f559b6262f5bc44"
+    },
+    {
+      "path": "skills/performance_model.py",
+      "sha256": "66767567824ab560808d1246376ecf2c01208dcc6e62755dd5798884e25f5763"
+    },
+    {
+      "path": "skills/strategy_skill.py",
+      "sha256": "cdae6c7d69970729bd413b6768ff36c71670fc37b3ff8f59906e9eda0690f89e"
+    },
+    {
+      "path": "skills/topology_graph.py",
+      "sha256": "2eab304b6bdf63bac5d457fc97a4da4194b56855a5d99103ce849d764e3506d8"
+    },
+    {
+      "path": "skills/topology_reasoning_skill.py",
+      "sha256": "1df628a7fbb2c3a3ca8c1bc2069a822cedd1ca8004eaeeb356a416e5efc8a654"
+    },
+    {
+      "path": "skills/topology_skill.py",
+      "sha256": "baa54ab9a99044e00108ad48eea02ca8363bb1e7064f56cce36252161756cca8"
+    },
+    {
+      "path": "tests/feature_completion/test_g3_b3_agent_flow.py",
+      "sha256": "69942d76d547ec68c593c06c3fc8f96fefa7a3a7c02204c1514b6c2e513f5cdf"
+    },
+    {
+      "path": "tests/feature_completion/test_g3_b3_contracts.py",
+      "sha256": "9439cadf088428781bff1cd5f59aabd3b27bca908ea5b268922c2af886395aa4"
+    },
+    {
+      "path": "tests/feature_completion/test_g3_b3_final_audit.py",
+      "sha256": "9b0dfb7406329167362c52185139acebd5257e26daa1b125761cb48dc58a3d9a"
+    },
+    {
+      "path": "tests/feature_completion/test_g3_b3_reliability.py",
+      "sha256": "66efb899262dfebdc5cc900b188cbc009427e69991c67d3fc9c5f3e4718e4fd1"
+    },
+    {
+      "path": "tests/feature_completion/test_g3_b3_sparse.py",
+      "sha256": "01e7ba7028b6141718a0bd570dc505357723cdab77814911f6142b21faf09d6c"
+    },
+    {
+      "path": "tests/optimization/test_g3_b2_agent_ablation.py",
+      "sha256": "5ab49606826756a1e85f39f5e50e283b673601500e24f3c3abcf8dde80cf91c2"
+    },
+    {
+      "path": "tests/optimization/test_g3_b2_baseline.py",
+      "sha256": "b1da2bf1c07f45691a14fb63a1b280eeaea052b27bd071b42ea35d058a6813dd"
+    },
+    {
+      "path": "tests/optimization/test_g3_b2_final_audit.py",
+      "sha256": "069d1dfd676702c794ba55018b1cb2abe1f573de399ae3c341f33c2ca6a7a82b"
+    },
+    {
+      "path": "tests/optimization/test_g3_b2_replan_memory_pipeline.py",
+      "sha256": "8b1bfb50e6410b2893456ad9fb885b76d092d474d6a15de7c209cb41a56712c7"
+    },
+    {
+      "path": "tests/optimization/test_g3_b2_schedule_ir.py",
+      "sha256": "9ac2bfb6e3673ec4094ea7f5ed01f45d07885ebe05f1c4fe7210a2ce4f3013c9"
+    },
+    {
+      "path": "tests/optimization/test_g3_b2_topology_optimization.py",
+      "sha256": "e6d651a59caf55436a147c12b0075095988ce1e1c7b98a50df12d40187f559a0"
+    },
+    {
+      "path": "tests/reporting/__init__.py",
+      "sha256": "6f4b5f63a6438a51c366ef202c1c1211f7ec2638522ff5dae5fb62e7dd353866"
+    },
+    {
+      "path": "tests/reporting/test_claim_boundaries.py",
+      "sha256": "95a323ef267944d751f97b78f9326207c7c9f9a498693edd908b993553d318c4"
+    },
+    {
+      "path": "tests/reporting/test_cli_and_staging.py",
+      "sha256": "da7d48c2fc93514e047e447a54b3b6b80f797e44f686683624c8fff0e7f7f173"
+    },
+    {
+      "path": "tests/reporting/test_git_base_ref.py",
+      "sha256": "27ace9d8a4ca0df893f1b09cb8f866d5a3ed243b2d75441c7089bb851ee2161e"
+    },
+    {
+      "path": "tests/reporting/test_ledger_contract.py",
+      "sha256": "c6b33cfe0250b5a84e0da013ec2da7473b4cdc94ccb3c43667a4e6105672ba4b"
+    },
+    {
+      "path": "tests/reporting/test_report_suite.py",
+      "sha256": "c0da99ab25cc92db5a9357e47ba073a826d7255d50436fec23bc103e0813dd3e"
+    },
+    {
+      "path": "tests/submission_audit/test_g3_a_audit.py",
+      "sha256": "17251b53b2cc7c49445ed7486e5628114281e81a453598336af9b8dc58da1635"
+    },
+    {
+      "path": "tests/submission_cli/__init__.py",
+      "sha256": "db139a38bd4ba476eb52949776924ecffa73c4a4b6f557999d9f6a1fa079c44f"
+    },
+    {
+      "path": "tests/submission_cli/test_submission_cli.py",
+      "sha256": "87d737c48bc52d9de2d24c9405ca9f34bc8a1e70b5c27990e171a59caa6721ca"
+    },
+    {
+      "path": "tests/test_affinity_engine.py",
+      "sha256": "05132ade767c1d95d0b576f4327104a638d30bc81e2acdeb2e155a94ade21a2a"
+    },
+    {
+      "path": "tests/test_agent.py",
+      "sha256": "6309352d5b14c588425bc328ae70ba83e66349aa25798469b808a16d0c35f4a8"
+    },
+    {
+      "path": "tests/test_algorithm_reflection.py",
+      "sha256": "425823f816c1dc5123dd4b26954ac5a2b9d85f9bdcafa931715dd4d12452570e"
+    },
+    {
+      "path": "tests/test_algorithm_selection_flow.py",
+      "sha256": "7a8657817ddd04a29c442ca348b7dba13c05dd9f1ffa53efdbb279bbd2b389ae"
+    },
+    {
+      "path": "tests/test_algorithm_selector.py",
+      "sha256": "a8d52e574e8b612ea177532ffaceb3ac2031843446cb814a4174da86c46bde75"
+    },
+    {
+      "path": "tests/test_algorithm_sensitivity_report.py",
+      "sha256": "0a7b18867d8811029f411f194fff00b5599fc0a9ce9acd9f0a2b083b74d304a2"
+    },
+    {
+      "path": "tests/test_allgather.py",
+      "sha256": "09c4f55ee15064a64413a3fed5f81519dffd7da2b9f33f9c134b26d500afac2d"
+    },
+    {
+      "path": "tests/test_auto_tuning_flow.py",
+      "sha256": "b7ab89485e42d75f185af0b9ec9a2c433295d2049f85d07b963869be9df33aae"
+    },
+    {
+      "path": "tests/test_auto_tuning_report.py",
+      "sha256": "84507cd8995e726d93f97cbc1bceb625aa486e46433bea4858f543e59cd04fa4"
+    },
+    {
+      "path": "tests/test_auto_tuning_skill.py",
+      "sha256": "ca69bb9bfc213ffbd9fc029f7c9584ad4e7adb337ecf559bf2bb0a3b21c1ae96"
+    },
+    {
+      "path": "tests/test_autonomous_development_loop.py",
+      "sha256": "a8f59cd1003598a1da42c12644d4b240f0200f2af78863ba2a977a0dd1541fe3"
+    },
+    {
+      "path": "tests/test_backend_selection.py",
+      "sha256": "3b076d1bdef8a7c378c7c10fa06801834e36b154cf2fd46035187051e878dfaf"
+    },
+    {
+      "path": "tests/test_benchmark_reports.py",
+      "sha256": "fb15dfe74efce38f106397ba22545bc3d7a4484568e7837ebbc14ee9ac7768b1"
+    },
+    {
+      "path": "tests/test_benchmark_runner.py",
+      "sha256": "2c609bee56531c17f4d78eb948f930d17bac784d1dc259d611e85f396a3b5f5b"
+    },
+    {
+      "path": "tests/test_benchmark_skill.py",
+      "sha256": "8077ebbe2c9ab4808fc5d7679573473147cec277f4967240d6786c6e2b8d63da"
+    },
+    {
+      "path": "tests/test_bottleneck_detection.py",
+      "sha256": "c1e1a590f9e6222e7d4da786b14287dcbd1d3412e34b06f53059df6be5937aa3"
+    },
+    {
+      "path": "tests/test_calibration_profile.py",
+      "sha256": "73907de83a4d1b4bd50141e468b777beb5e6afeb50b65a9adf51393ea8f94c68"
+    },
+    {
+      "path": "tests/test_calibration_registry.py",
+      "sha256": "8af1858964768b73fc7ee6128d3fa167ff29ad59c62fb28fce1a400f5cf60c7b"
+    },
+    {
+      "path": "tests/test_calibration_report.py",
+      "sha256": "0831e313fde50b28a8a16783b9758762222844ca967d9d147c4c4f308c091453"
+    },
+    {
+      "path": "tests/test_case_retrieval.py",
+      "sha256": "24df922e653eeda034328945b20b3498e5c262b3c7a7d4c578b51499b54a37d0"
+    },
+    {
+      "path": "tests/test_code_generation_flow.py",
+      "sha256": "7d20f1b43dd101dab6fbb26e396aa4c58a1809d7eaf4dcfe420515d5075681b2"
+    },
+    {
+      "path": "tests/test_code_generation_skill.py",
+      "sha256": "fadeba803554f93307cfa332ef324d11292f2fa41344bb530106cee26dd44b96"
+    },
+    {
+      "path": "tests/test_convergence_analysis.py",
+      "sha256": "d1846011f7fe0d2d45f16a23ad7f29b0832b4f0ca266e82d552b0eb7816f8a49"
+    },
+    {
+      "path": "tests/test_cost_model.py",
+      "sha256": "8b3b1312cfdcf15e27fb3b80fc2eec3c256a831d03c9ff131eccf4c45064a54b"
+    },
+    {
+      "path": "tests/test_d1_topology_cost_model.py",
+      "sha256": "0e0cd91d0ad0688e747ab5f3db9976731c2a04c4c7c6da410f0670be7f03ced9"
+    },
+    {
+      "path": "tests/test_decision_skill.py",
+      "sha256": "4a072b0a00cc902a20a5e8bafab9545919e461f35b6ade418e843c56a4858462"
+    },
+    {
+      "path": "tests/test_decision_trace_flow.py",
+      "sha256": "31e5248ba8559e7b11d4f052350e71fecbfdb54819ade17d219e0702a9fcc232"
+    },
+    {
+      "path": "tests/test_decision_validation.py",
+      "sha256": "2097f083fef12083d7ba4ebdd016d0e72277a3d209b8641883b36fbac29b2f5d"
+    },
+    {
+      "path": "tests/test_direct_adapter_build_contract.py",
+      "sha256": "a7a21c2c240fa12dab6128829eb8ba2ec09d66c8814fd8be3e5ba0a4f345046b"
+    },
+    {
+      "path": "tests/test_direct_api_backend.py",
+      "sha256": "6f75c58d80fd974c2af19bfd9bb08bf96d6f972614734ce190b4548f39825975"
+    },
+    {
+      "path": "tests/test_direct_api_manifest.py",
+      "sha256": "aabaeedfcececd257ec7d282ef7562298eb446c4e5c1f9f15f684cd233d1db3b"
+    },
+    {
+      "path": "tests/test_direct_lifecycle_contract.py",
+      "sha256": "cfa57062e400027ed21a75142dc437ff3bda44b5783031ad6883b5bc91d7cd60"
+    },
+    {
+      "path": "tests/test_direct_link_contract.py",
+      "sha256": "a69f02d4b03375c201dd8249e9f576a27989c4d2c86304e5d935eccf5d7d5c86"
+    },
+    {
+      "path": "tests/test_direct_runtime_source_contract.py",
+      "sha256": "d0b84a0f484c6fc84f5e551e55a94c60622fdea84f94ff84752b1449587a62f5"
+    },
+    {
+      "path": "tests/test_dtype_emulation.py",
+      "sha256": "5b83c89bdf7cfdc69f21522217d42bb8ceaa58135c96a3ca5fe90be01608285c"
+    },
+    {
+      "path": "tests/test_dynamic_topology.py",
+      "sha256": "6689a38618dddcc3e59a680091935eb84570e909b2479ed3d172afdf8b8fc6fe"
+    },
+    {
+      "path": "tests/test_evaluation_skill.py",
+      "sha256": "d8a05b255c58512dc1bc668292e234399f556442cc281e627479f9eb1b43798f"
+    },
+    {
+      "path": "tests/test_execution_engine.py",
+      "sha256": "60b953f96c7cb224864a1a0e876d6feec670d9e06e7231752d2aaebaab5670de"
+    },
+    {
+      "path": "tests/test_execution_hccl_flow.py",
+      "sha256": "401f82e21212a9153358f07ed3959ad5d9c21ce1c330d6c6ab536284fc17de30"
+    },
+    {
+      "path": "tests/test_execution_report_flow.py",
+      "sha256": "db6e41644448c0dc89bb63017e6e4b7c85f445fc5ea8239ccf6a98326e46cf58"
+    },
+    {
+      "path": "tests/test_execution_skill.py",
+      "sha256": "b1879782141a20fe6c6dfa21071a108c6f640c8ceee89136d653b25983d7225c"
+    },
+    {
+      "path": "tests/test_experience_driven_selection.py",
+      "sha256": "4754f75635de97ed223e30f0851c93f5f45c217f72c784fe3035cb2c22215e72"
+    },
+    {
+      "path": "tests/test_experience_learning.py",
+      "sha256": "af22501e7012d6aee37b640f3ba8d6eb0de5f6741c3c69ad7d0977edca4d8383"
+    },
+    {
+      "path": "tests/test_experience_reflection.py",
+      "sha256": "47d20239f18ea78a032e970ca9ee7d2cff8786663b024d3082a74bb508fa1200"
+    },
+    {
+      "path": "tests/test_experience_report.py",
+      "sha256": "3ed3add62e547ceacac714af88fda8a2e7073f974c862fb79d4ba4757fc76fc3"
+    },
+    {
+      "path": "tests/test_experience_store.py",
+      "sha256": "52c2e47458b026d610f783e629f6e7d9463002e738279758de5d5ce0013539c1"
+    },
+    {
+      "path": "tests/test_explanation_skill.py",
+      "sha256": "123486669095d46f6ead00befa8e584727eb3a99e11428427867950c23f8d522"
+    },
+    {
+      "path": "tests/test_f1_reliability_validation.py",
+      "sha256": "c20deabd569e8c24fbfcc824ecc9fcf5c4c5348920860166060be6e7f9b97b74"
+    },
+    {
+      "path": "tests/test_failover_engine.py",
+      "sha256": "59c728aa35c43294add7168ddffc51968ba1a9220f995d9e7922ca7deadf2fec"
+    },
+    {
+      "path": "tests/test_g1_cann_backend_config.py",
+      "sha256": "ca615d3c20c88d5afb872527cee92ed2dd9a5369d0218f336055ec86b70a7f3d"
+    },
+    {
+      "path": "tests/test_g2_f_6_simulator_acceptance.py",
+      "sha256": "427c52b7510ca8a306248af4eebd8b14a57f806b639ab4ba1f2f6eaf0bd7e34f"
+    },
+    {
+      "path": "tests/test_g2_f_7_backend_final_audit.py",
+      "sha256": "8911aed0253ffc77a5fd00ef94b539dffcef730b788fa1a4d3e402e1f5632ce0"
+    },
+    {
+      "path": "tests/test_graph_simulator.py",
+      "sha256": "cd43a246662841a7ae4968bcb54a888390fcd7d2d341f1421a0d2ae2e39b1fe2"
+    },
+    {
+      "path": "tests/test_hardware_aware_selection.py",
+      "sha256": "7e778b5ff0eb735d1e0b620cd2b6b0e2dba57184e1a166851879a71b48816c54"
+    },
+    {
+      "path": "tests/test_hardware_decision_trace.py",
+      "sha256": "b4ef5a5702517b79f0c3a8bb5483bbb19487602ad2298b9b28b145a360e4edf7"
+    },
+    {
+      "path": "tests/test_hardware_profile.py",
+      "sha256": "34312a812534c69d0a14cf89b389ab828b3844962820872458badc2208b8905f"
+    },
+    {
+      "path": "tests/test_hardware_reasoning_skill.py",
+      "sha256": "88d08bfdf3e49c187d87105c3eed7dbb8379709e8d1c9636b5cc084dbd132ced"
+    },
+    {
+      "path": "tests/test_hccl_api.py",
+      "sha256": "ed254f466f1a689830ada90bc6aa775dea04331cb0b04e8aaaada071c621b454"
+    },
+    {
+      "path": "tests/test_hccl_vm_checker.py",
+      "sha256": "cf15682d110f75669d42f1e9653f93d6a277276ccb11c8b7c38b43d0e9f49e83"
+    },
+    {
+      "path": "tests/test_hccl_vm_env.py",
+      "sha256": "baa9b5ad2ebd62bb8d39484fe86f666cb7a9e3ecccd66f3404006fbd61b0a407"
+    },
+    {
+      "path": "tests/test_hccl_vm_multi_primitive_checker.py",
+      "sha256": "0187d9cf5dae486c888c1fdae4acdc3690b611551f4be785b8080045ebf9f300"
+    },
+    {
+      "path": "tests/test_hccl_vm_multi_primitive_commands.py",
+      "sha256": "2ea24e936f137abd33cbd67ebbfa78ada3eda87859ef7d642bf959561f37c219"
+    },
+    {
+      "path": "tests/test_hccl_vm_official_flow.py",
+      "sha256": "b9767ebfd9747a729594ce731114336890d73aca13cba86c9587508163584e3c"
+    },
+    {
+      "path": "tests/test_hccl_vm_registry.py",
+      "sha256": "836e349ad4ddaf81314472a7da9d066fff183c7e88f6b7eaf0bfcdc5594a4d1a"
+    },
+    {
+      "path": "tests/test_hccl_vm_report.py",
+      "sha256": "fb6af739d3886821520e33728af9c83b10c0e16f4b0401f836c97acd770e1b17"
+    },
+    {
+      "path": "tests/test_hccl_vm_runner_dry_run.py",
+      "sha256": "5e77967a5670a21863d0f8d6006978ae6a804ca8375a786abf690da27ef8dd59"
+    },
+    {
+      "path": "tests/test_hccl_vm_suite_report.py",
+      "sha256": "3411ff889dfd80d4ac95d9cedd8eaf776bd9c8e49f6055213b2edb78b1f88c24"
+    },
+    {
+      "path": "tests/test_health_monitor.py",
+      "sha256": "44fef77587a8fa8e6773326c9657f1a4a17171845b09b79ac8c82bd2e815cd90"
+    },
+    {
+      "path": "tests/test_knowledge_base.py",
+      "sha256": "8bb1809326b760465a66a02118d3389ebbbcfd74dc8d6a4957ac989204b05f2c"
+    },
+    {
+      "path": "tests/test_knowledge_extraction.py",
+      "sha256": "34c6e5ea83bf0f0d560738b4bbe6f5c2ac67ffd81b975caae6b52c14dc217274"
+    },
+    {
+      "path": "tests/test_knowledge_flow.py",
+      "sha256": "e064e3e4a9e7199e2625c00ae7eca2ccff8be53508d4e6e27fe0fafcda0fd6b6"
+    },
+    {
+      "path": "tests/test_llm_client.py",
+      "sha256": "a412455aebf8714f2130a3aa4b62b51c09e22b6522cc22e4844f5ae1563dd636"
+    },
+    {
+      "path": "tests/test_node_profile.py",
+      "sha256": "f67adf4095da96d9e5e29467cac83d728e0558d2792d1353e3c1d146a434f09c"
+    },
+    {
+      "path": "tests/test_optimization_flow.py",
+      "sha256": "106048b3f53ec5aded6cd412d8aaa87dac66acef3bd0e940445feefae1e40033"
+    },
+    {
+      "path": "tests/test_optimization_history.py",
+      "sha256": "333860c36830ede4871562c5337737ccefd8c472b66d50c0561c0ad51a1684ee"
+    },
+    {
+      "path": "tests/test_optimization_loop.py",
+      "sha256": "45f11683717cd5dd536fc421e7ae9b98f753e9893910710cf0c1785cf6561c44"
+    },
+    {
+      "path": "tests/test_optimization_proposal.py",
+      "sha256": "4eba931a5f1e2f67da88ba559188e8982c753826de07cfcb6a5518814eef5007"
+    },
+    {
+      "path": "tests/test_performance_calibration.py",
+      "sha256": "ee51b50d9dcac2b48d9764cef7eda70f364162282e973df218279295dbeb12d4"
+    },
+    {
+      "path": "tests/test_performance_model.py",
+      "sha256": "84cae725caf9867738a772df5ac93d539016e26330536cd7cf82ffcfc8e4c538"
+    },
+    {
+      "path": "tests/test_planning_hccl_integration.py",
+      "sha256": "584d4da58f4c1bf34a854d7ff95e1bd8a09ef83195b8aaf2e52c69e071ece74e"
+    },
+    {
+      "path": "tests/test_planning_skill.py",
+      "sha256": "277f396ed7ed7fcf3af8b2cc5ea6049a1a201c9c8b39acf5a255d99149533030"
+    },
+    {
+      "path": "tests/test_plugin_bridge.py",
+      "sha256": "27d73c9fe01814ede448b7a535bb1d19f9a0b0e997f6a24097d5ceee547fbcdf"
+    },
+    {
+      "path": "tests/test_plugin_manager.py",
+      "sha256": "f61c100bd4d0f821b0fd4f9f68a933654770356d45e3ec811dd28192087f0286"
+    },
+    {
+      "path": "tests/test_policy_engine.py",
+      "sha256": "7a99f43ce82d1659baa079534935f66a3787c2e9c1fe56ecbb24746cda745be5"
+    },
+    {
+      "path": "tests/test_randomized_collective_correctness.py",
+      "sha256": "c790ac20b056ab1a296a442f142fe8ebcc2d76cbb4d59682aef76c662fbcd7d4"
+    },
+    {
+      "path": "tests/test_reasoning_skill.py",
+      "sha256": "ed319b2141ae4c73fb4120ba78129192102370fe9d48677a1fb8aa894e1e76fd"
+    },
+    {
+      "path": "tests/test_reduce_ops.py",
+      "sha256": "6a22605d62dc17e8b22da2613b581af1befb39b75ae9cdd74b9976b993217382"
+    },
+    {
+      "path": "tests/test_reducescatter.py",
+      "sha256": "997af2fd0551a7d8157e8f7f86d5ed626027842838d94abe4d98c9d9632c9e24"
+    },
+    {
+      "path": "tests/test_reflection_decision_quality.py",
+      "sha256": "cd11f7dbe031f403d97a1fc52237e23907a4955d70f4384585f4077d5ace50a9"
+    },
+    {
+      "path": "tests/test_reflection_skill.py",
+      "sha256": "d57f3e163d28d8e9e3b9c4bc3e319d79d5ff4649d541bb384513a216fc279ec0"
+    },
+    {
+      "path": "tests/test_reliability_flow.py",
+      "sha256": "946b22144c13a7eb7ed429e4ba48aed131ec1402b28e28582fd88e6f60731bf6"
+    },
+    {
+      "path": "tests/test_replanning_skill.py",
+      "sha256": "545763a267f1f254b52958956da926b61dde86fcb7de9ec3160e7b5841261c5b"
+    },
+    {
+      "path": "tests/test_report_generator.py",
+      "sha256": "31ce7bf1b31c2da60aa57984f99f474f6f5d1e8fba2237196ef057a9f41fcd07"
+    },
+    {
+      "path": "tests/test_resource_manager.py",
+      "sha256": "28319e0adebf4eab28ca7af4e1119c627429b3bda8ad90b1fb8601c52ea401c4"
+    },
+    {
+      "path": "tests/test_retry_policy.py",
+      "sha256": "bf3c6d225e3f4cbfe10969277da3910a8863e66c87607376b0e3d83f056292d6"
+    },
+    {
+      "path": "tests/test_scaling_analysis.py",
+      "sha256": "ef30b32a0eecb845ef6f1c64df27b789bc2a9105f9a997e3a3864c2101f21fc2"
+    },
+    {
+      "path": "tests/test_score_breakdown.py",
+      "sha256": "fc2a107474d8d3f0ed6b601a66039be8546c9285006673eb8dc039eaf7aa4ac2"
+    },
+    {
+      "path": "tests/test_simulator_collective_correctness.py",
+      "sha256": "dd56b343761a387968d73a74b4be773e2b3c30fb515393a78268cc7406c134f6"
+    },
+    {
+      "path": "tests/test_simulator_model.py",
+      "sha256": "ca8701c52b02e7d72004df1331a482561d792487abec74b6562eb09e83b07835"
+    },
+    {
+      "path": "tests/test_topology_change_detection.py",
+      "sha256": "555a6838f50e08cfef42301df33c0b1b04e351260cadfdf28e9cf64e96b22a3e"
+    },
+    {
+      "path": "tests/test_topology_events.py",
+      "sha256": "e8eeebc38af51023bbeec391a7339b4c111c59678b2e16c367f890b9ac698b2e"
+    },
+    {
+      "path": "tests/test_topology_graph.py",
+      "sha256": "4d39412a5ca5df2a8a374431f610ef2d983f4d9a88a10e2ac856fa3984f83f34"
+    },
+    {
+      "path": "tests/test_topology_reasoning.py",
+      "sha256": "e700c865ca2e53fbf9ac51551979376e9c8ea6f75b88d21d36bc4909da48b6c3"
+    },
+    {
+      "path": "tests/test_topology_replanning.py",
+      "sha256": "82f97b505508e9241be41ce3d7096bebcb7d98a2ce5f342572fa4dc7d15a2083"
+    },
+    {
+      "path": "tests/test_topology_sensitivity_report.py",
+      "sha256": "49d3e06dc286170c86ef6d4ec8073042130ac865648136313c37a9b9e7ce4516"
+    },
+    {
+      "path": "tools/g3_b2_agent_audit.py",
+      "sha256": "2425c05a1674a2959467f761fbf7b49ac2ab3ea288a471c6f0e7066667de400e"
+    },
+    {
+      "path": "tools/g3_b2_baseline.py",
+      "sha256": "d36fdebb34248b826648ced2a83d2c9047b1006bea3ab4b9661d54c53bc75b21"
+    },
+    {
+      "path": "tools/g3_b2_final_audit.py",
+      "sha256": "b9bb83e31555d2527b29c4ffa91d0f2563a62ad259fb1a19c5ca0289d7623187"
+    },
+    {
+      "path": "tools/g3_b2_replan_audit.py",
+      "sha256": "0b60b1d4243a4f629fc77bd93c85480b6feea2d4e8f05d9f532ae976f55aa324"
+    },
+    {
+      "path": "tools/g3_b2_schedule_audit.py",
+      "sha256": "6d1e3f93f6d756cf5ca5d90071f1fc8edf3586f2324c25b2b561e40ff5c1e999"
+    },
+    {
+      "path": "tools/g3_b2_topology_audit.py",
+      "sha256": "ae4ca5c202fd924204738ab1a496525d239303986c1c1f9e4170c65d503b5586"
+    },
+    {
+      "path": "tools/g3_b3_baseline.py",
+      "sha256": "918a6a260a3326e79a82bd343026222a2f1e71511c7474bb35cfe9044e7e8985"
+    },
+    {
+      "path": "tools/g3_b3_feature_audit.py",
+      "sha256": "ebb8a3efd35af0bce5c78d1f47f3b1c29461b7231f713a57f2bb70bebe685e8c"
+    },
+    {
+      "path": "tools/g3_b3_final_audit.py",
+      "sha256": "c13c003c87ed14a7f734ff4f78529bc06fbd330f285d74b285b3acd1b476a3aa"
+    },
+    {
+      "path": "tools/g3_b3_integrity_audit.py",
+      "sha256": "eb81867682e432a7b01c0fd2e27bf24b31fdcafddd9462fbc16d4dadd2407ca2"
+    },
+    {
+      "path": "tools/g3_b3_sparse_audit.py",
+      "sha256": "a84dcca79e21af40d248fe7955208be64ca4d0a186cdc7aef42153bf70672154"
+    },
+    {
+      "path": "tools/report_cli.py",
+      "sha256": "a728085735a8d63ee394c12112eba7e802e7ce1c96bfa4081817507bd5b6794f"
+    },
+    {
+      "path": "tools/reporting/__init__.py",
+      "sha256": "91febfa82e60247781a2c04bba2f0613b42585caa865715b6051f508ded61e18"
+    },
+    {
+      "path": "tools/reporting/claim_builder.py",
+      "sha256": "7b7c7088d6778b74c0e7a5446a3958585a6208e40c67b846213f4b7a6f731990"
+    },
+    {
+      "path": "tools/reporting/evidence_reader.py",
+      "sha256": "519713d0f1d6f0a50258444fc127e44466361f2a1a6c325e8bdb2af4d52688fd"
+    },
+    {
+      "path": "tools/reporting/final_evidence.py",
+      "sha256": "fe69dc788637680cb1afcf938ad0f69f56150c10e685d34b913d73ea8411243e"
+    },
+    {
+      "path": "tools/reporting/ledger_builder.py",
+      "sha256": "738251b602039d0d3160eeb81e33f3ff8978df80d6a1abd6b4897a1475e05fa0"
+    },
+    {
+      "path": "tools/reporting/report_renderer.py",
+      "sha256": "413923d9a3a5f7ed9b531fbe89822caaf5e849643a70a9a3b97c00f07b124892"
+    },
+    {
+      "path": "tools/reporting/report_verifier.py",
+      "sha256": "2719a1d2e3d027cac46b4856e21a59d8f0fc7f31dc2e9002da0437e653ced823"
+    },
+    {
+      "path": "tools/reporting/schemas.py",
+      "sha256": "aedcd39c1a9b151ad27c8799e958902676de82493d46455be710fcdb131ef664"
+    },
+    {
+      "path": "tools/reporting/staging.py",
+      "sha256": "047534d7d5190dd50a39eac28bee3535f6dbfb52afef6bb8c1ffdd6be3f8fdff"
+    },
+    {
+      "path": "tools/run_g2_f_7_final_audit.py",
+      "sha256": "c6561dac507b890590583359dae8869ad8b5acd0b34bbb94f4b75c71d5c850bf"
+    },
+    {
+      "path": "tools/submission_audit/__init__.py",
+      "sha256": "ea07f00ba0e6e741358dfb46f070b6f81c18e6d1cd5e44616701eb15c2911e02"
+    },
+    {
+      "path": "tools/submission_audit/collect_native_static_audit.py",
+      "sha256": "cf3c58f40e63e9dcc844d8e46ab9b3147d85f9f8b6d8cca64f597321de44dd72"
+    },
+    {
+      "path": "tools/submission_audit/extract_docx_text.py",
+      "sha256": "d10342fbe40227a50a1fc4325643760bfa6041508a8ea2f78d427808aee3ffe9"
+    },
+    {
+      "path": "tools/submission_audit/g3_a_audit.py",
+      "sha256": "aad4da38194cc223f68d368beef8002018d6a2aae677396e59142f1e0ec1d05f"
+    },
+    {
+      "path": "tools/submission_cli/__init__.py",
+      "sha256": "9bb3bd92f450cc2e232d869b821e39e3f5f7cd907e3bab4427bfe9ac20c0bb57"
+    },
+    {
+      "path": "tools/submission_cli/__main__.py",
+      "sha256": "889f673c2145e28095264339dbb3be024859a0bd7242435c479850567be2fd49"
+    },
+    {
+      "path": "tools/submission_cli/core.py",
+      "sha256": "f87589f84a90bc193f0448463b3dc94ac1858db082fa6969ac01cef0c5e4df27"
+    }
+  ]
+}

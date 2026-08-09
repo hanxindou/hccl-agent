@@ -71,12 +71,18 @@ def test_missing_all_refs_raises_stable_reporting_error(monkeypatch: pytest.Monk
     assert "exit status 128" not in message
 
 
-def test_source_commit_uses_resolved_ref(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_source_commit_falls_back_to_resolved_ref(monkeypatch: pytest.MonkeyPatch, tmp_path) -> None:
     calls: list[tuple[str, ...]] = []
     monkeypatch.setattr(evidence_reader, "resolve_reporting_base_ref", lambda: "origin/release")
     monkeypatch.setattr(evidence_reader, "git", lambda *args: calls.append(args) or "b" * 40)
-    assert evidence_reader.source_commit() == "b" * 40
+    assert evidence_reader.source_commit(tmp_path / "unavailable.json") == "b" * 40
     assert calls == [("merge-base", "HEAD", "origin/release")]
+
+
+def test_source_commit_prefers_frozen_g3_c_authority(tmp_path) -> None:
+    source = tmp_path / "source_commit.json"
+    source.write_text('{"source_commit":"' + "c" * 40 + '"}\n', encoding="utf-8")
+    assert evidence_reader.source_commit(source) == "c" * 40
 
 
 def test_report_verifier_diff_uses_shared_resolver(monkeypatch: pytest.MonkeyPatch) -> None:

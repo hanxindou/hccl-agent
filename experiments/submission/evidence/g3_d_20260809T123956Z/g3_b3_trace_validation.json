@@ -1,0 +1,23 @@
+{
+  "hidden_chain_of_thought_included": false,
+  "historical_execution": false,
+  "normalized_trace": {
+    "path": "docs/submission/agent_delivery/traces/g3_b3_feature_completion_trace.json",
+    "prompt_relationship_status": "HISTORICAL_TRACE_UNAVAILABLE",
+    "provenance": "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+    "sha256": "bdaf79748bb28c5ae2e6e3ad7871bc74cded9e75c972b37c8e3673c8f5a6c6af",
+    "source_checkpoint": "G3-B3",
+    "source_commit": "3585d5074d827459f117d79484aaa4f282cbf19c",
+    "source_evidence_root": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+    "source_evidence_root_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754",
+    "trace_id": "g3-b3-feature-completion-agent-flow"
+  },
+  "provenance_identity": "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+  "schema_version": "g3-d-normalized-trace-evidence-validation-v1",
+  "source_checkpoint": "G3-B3",
+  "source_commit": "3585d5074d827459f117d79484aaa4f282cbf19c",
+  "source_evidence_path": "experiments/feature_completion/evidence/g3_b3_d_agent_flow_20260807T150515Z/agent_proposals.jsonl",
+  "source_evidence_sha256": "c893f46c2984bb5746befa3c201ddc2baf8c6b660a8f8d5a66085f6e29b24742",
+  "status": "PASS",
+  "trace_id": "g3-b3-feature-completion-agent-flow"
+}

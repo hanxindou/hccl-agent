@@ -1,0 +1,26 @@
+{
+  "component_count": 16,
+  "errors": [],
+  "g3_b2": {
+    "expected_sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+    "files_checked": 25,
+    "mismatches": [],
+    "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+    "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+    "status": "PASS"
+  },
+  "g3_b3": {
+    "expected_sha256sums_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754",
+    "files_checked": 35,
+    "mismatches": [],
+    "path": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+    "sha256sums_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754",
+    "status": "PASS"
+  },
+  "g3_c_claim_count": 21,
+  "g3_c_metric_count": 1082,
+  "schema_version": "g3-d-authority-validation-v1",
+  "sentinel": "G3_D_AUTHORITY_INVENTORY_OK",
+  "status": "PASS",
+  "tracked_file_count": 225
+}

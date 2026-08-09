@@ -1,0 +1,126 @@
+{
+  "authority_hierarchy": [
+    {
+      "identity": "CURRENT_FINAL_FEATURE_FREEZE_SOURCE",
+      "level": "L1",
+      "path": "."
+    },
+    {
+      "identity": "G3_C_FORMAL_REPORTING",
+      "level": "L2",
+      "paths": [
+        "docs/submission/report_claim_ledger.json",
+        "docs/submission/report_data_ledger.json",
+        "docs/submission/report_chart_data",
+        "docs/submission/reports",
+        "experiments/submission/evidence/g3_c_20260809T000000Z"
+      ]
+    },
+    {
+      "identity": "G3_B3_FINAL_FEATURE_EVIDENCE",
+      "level": "L3",
+      "path": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+      "sha256sums_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754"
+    },
+    {
+      "identity": "G3_B2_HISTORICAL_OPTIMIZATION_EVIDENCE",
+      "level": "L4",
+      "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483"
+    },
+    {
+      "identity": "G3_A_HISTORICAL_AUDIT",
+      "level": "L5",
+      "paths": [
+        "docs/submission/requirement_matrix.json",
+        "docs/submission/g3_a_gap_report.md",
+        "docs/submission/risk_register.json",
+        "docs/submission/roadmap_assignment.json"
+      ]
+    }
+  ],
+  "branch": "codex/g3-d-agent-prompt-delivery",
+  "checkpoint": "G3-D-A",
+  "claim_language_authority": "docs/submission/report_claim_ledger.json",
+  "expected_artifacts": [
+    "authority_inventory.json",
+    "delivery_contract.json",
+    "prompt_registry.json",
+    "skill_registry.json",
+    "trace_index.json",
+    "traces/g3_b2_optimization_trace.json",
+    "traces/g3_b3_feature_completion_trace.json",
+    "source_commit_evidence_claim_mapping.json",
+    "human_intervention_disclosure.json"
+  ],
+  "feature_freeze": {
+    "forbidden_changes": [
+      "collective algorithms",
+      "algorithm semantics",
+      "Schedule IR execution semantics",
+      "topology optimization semantics",
+      "Sparse codec semantics",
+      "CRC/integrity semantics",
+      "timeout/retry semantics",
+      "flow-control/backpressure semantics",
+      "selector behavior",
+      "performance model",
+      "simulator equations",
+      "benchmark scenarios/results",
+      "correctness thresholds",
+      "CPU_SIM public ABI",
+      "SONAME",
+      "19-symbol allowlist",
+      "Direct runtime semantics",
+      "G3-B2 frozen evidence",
+      "G3-B3 frozen evidence",
+      "G3-C factual ledgers"
+    ],
+    "status": "FROZEN"
+  },
+  "hardware_boundary": {
+    "forbidden_actions": [
+      "ACL runtime",
+      "HCCL runtime",
+      "device/context/stream",
+      "communicator",
+      "real collective",
+      "MPI",
+      "hccl_test",
+      "msprof"
+    ],
+    "real_device_acceptance": "HARDWARE_BLOCKED",
+    "runtime_api_calls": []
+  },
+  "mandatory_path": {
+    "api_keys_required": [],
+    "historical_execution": false,
+    "identity": "OFFLINE_REPLAY",
+    "network_required": false,
+    "online_llm": "ONLINE_LLM_OPTIONAL"
+  },
+  "provenance_vocabulary": [
+    "AGENT_GENERATED",
+    "DETERMINISTIC_EVALUATION",
+    "HUMAN_INTERVENTION",
+    "HISTORICAL_EVIDENCE",
+    "REPLAYED_FROM_FROZEN_TRACE",
+    "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+    "HISTORICAL_TRACE_UNAVAILABLE",
+    "OFFLINE_REPLAY",
+    "ONLINE_LLM_OPTIONAL"
+  ],
+  "schema_version": "g3-d-delivery-contract-v1",
+  "source_baseline": "3d67163e756a2aca9c7be8b2b0c981cb0038cac8",
+  "validation_sentinels": [
+    "G3_D_AUTHORITY_INVENTORY_OK",
+    "PROMPT_REGISTRY_OK",
+    "SKILL_REGISTRY_OK",
+    "TRACE_INDEX_OK",
+    "OFFLINE_REPLAY_OK",
+    "PROVENANCE_OK",
+    "CLAIM_BOUNDARIES_OK",
+    "NO_SECRETS_OK",
+    "G3_D_AGENT_PROMPT_DELIVERY_OK"
+  ]
+}

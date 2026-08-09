@@ -1,0 +1,64 @@
+{
+  "autonomy_claim": "Agent-assisted, deterministically evaluated, human-governed, and offline replayable",
+  "g3_b2": {
+    "provenance": "HISTORICAL_EVIDENCE",
+    "records": [
+      {
+        "actor": "user",
+        "algorithm_choice": false,
+        "decision": "AUTHORIZED",
+        "phase": "G3-B2-A",
+        "scope": "one branch, six ordered commits, simulator-only optimization; no device API"
+      },
+      {
+        "actor": "Codex",
+        "algorithm_choice": false,
+        "decision": "IMPLEMENT_TRACE_AND_BASELINE_CONTRACT",
+        "phase": "G3-B2-A",
+        "scope": "contract implementation only"
+      },
+      {
+        "actor": "hccl-agent",
+        "algorithm_choice": true,
+        "decision": "SELECT_BY_CORRECTNESS_THEN_FROZEN_BENCHMARK",
+        "phase": "G3-B2-E",
+        "scope": "explicit schedule candidates"
+      },
+      {
+        "actor": "Codex",
+        "algorithm_choice": false,
+        "decision": "ONE_EVIDENCE_BASED_FLOW_CORRECTION",
+        "phase": "G3-B2-E",
+        "scope": "fix shard/chunk interpretation, benchmark-before-selection, and activate already-defined simulator-only pipeline exposed path"
+      },
+      {
+        "actor": "user",
+        "algorithm_choice": false,
+        "decision": "NO_SCENARIO_LEVEL_INTERVENTION",
+        "phase": "G3-B2-E",
+        "scope": "existing G3-B2 authorization only"
+      },
+      {
+        "actor": "user",
+        "algorithm_choice": false,
+        "decision": "AUTHORIZED_LOCAL_STAGING_COMMITS_AND_WSL_FOCUSED_TESTS",
+        "phase": "G3-B2-F",
+        "scope": "G3-B2 goal only; no push, merge, release, device API, or G3-C"
+      }
+    ],
+    "source": "agent/evidence/g3_b2/human_intervention.json",
+    "status": "HUMAN_INTERVENTION"
+  },
+  "g3_b3": {
+    "limitations": [
+      "frozen feature evidence does not contain a complete historical human-intervention log"
+    ],
+    "provenance": "HISTORICAL_TRACE_UNAVAILABLE",
+    "records": [],
+    "source": null,
+    "status": "HISTORICAL_TRACE_UNAVAILABLE"
+  },
+  "hidden_chain_of_thought_included": false,
+  "schema_version": "g3-d-human-intervention-disclosure-v1",
+  "status": "HUMAN_GOVERNED_WITH_HISTORICAL_LIMITATIONS"
+}

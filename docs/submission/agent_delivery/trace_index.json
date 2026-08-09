@@ -1,0 +1,28 @@
+{
+  "schema_version": "g3-d-trace-index-v1",
+  "status": "NORMALIZED",
+  "traces": [
+    {
+      "path": "docs/submission/agent_delivery/traces/g3_b2_optimization_trace.json",
+      "prompt_relationship_status": "HISTORICAL_EVIDENCE",
+      "provenance": "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+      "sha256": "28806594224d0c27075f2aaaebab7c714bce836ac335ac7c442f01c78c1234ff",
+      "source_checkpoint": "G3-B2",
+      "source_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+      "source_evidence_root": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "source_evidence_root_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+      "trace_id": "g3-b2-optimization-authoritative-round1"
+    },
+    {
+      "path": "docs/submission/agent_delivery/traces/g3_b3_feature_completion_trace.json",
+      "prompt_relationship_status": "HISTORICAL_TRACE_UNAVAILABLE",
+      "provenance": "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+      "sha256": "bdaf79748bb28c5ae2e6e3ad7871bc74cded9e75c972b37c8e3673c8f5a6c6af",
+      "source_checkpoint": "G3-B3",
+      "source_commit": "3585d5074d827459f117d79484aaa4f282cbf19c",
+      "source_evidence_root": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+      "source_evidence_root_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754",
+      "trace_id": "g3-b3-feature-completion-agent-flow"
+    }
+  ]
+}

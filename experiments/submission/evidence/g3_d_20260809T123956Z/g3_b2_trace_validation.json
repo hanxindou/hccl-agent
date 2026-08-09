@@ -1,0 +1,23 @@
+{
+  "hidden_chain_of_thought_included": false,
+  "historical_execution": false,
+  "normalized_trace": {
+    "path": "docs/submission/agent_delivery/traces/g3_b2_optimization_trace.json",
+    "prompt_relationship_status": "HISTORICAL_EVIDENCE",
+    "provenance": "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+    "sha256": "28806594224d0c27075f2aaaebab7c714bce836ac335ac7c442f01c78c1234ff",
+    "source_checkpoint": "G3-B2",
+    "source_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+    "source_evidence_root": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+    "source_evidence_root_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+    "trace_id": "g3-b2-optimization-authoritative-round1"
+  },
+  "provenance_identity": "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+  "schema_version": "g3-d-normalized-trace-evidence-validation-v1",
+  "source_checkpoint": "G3-B2",
+  "source_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+  "source_evidence_path": "agent/evidence/g3_b2/runs/g3-b2-e-authoritative-optimization-round1.json",
+  "source_evidence_sha256": "298caa8ad917a589fed6b00ac923a82fb78951b8c56fc0961ef38cc809560e0a",
+  "status": "PASS",
+  "trace_id": "g3-b2-optimization-authoritative-round1"
+}

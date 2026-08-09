@@ -1,0 +1,1967 @@
+{
+  "api_keys_used": [],
+  "historical_execution": false,
+  "mandatory_identity": "OFFLINE_REPLAY",
+  "network_used": false,
+  "replays": {
+    "g3-b2-optimization-authoritative-round1": {
+      "api_keys_used": [],
+      "execution_identity": "SIMULATED_ONLY",
+      "hidden_chain_of_thought_included": false,
+      "historical_execution": false,
+      "network_used": false,
+      "offline": true,
+      "provenance_identity": "REPLAYED_FROM_FROZEN_TRACE",
+      "replay_sha256": "9f73391ac51f8a232ecde078c0cee620a849a646f26d5cd76b00c130cb8f28ff",
+      "runtime_api_calls": [],
+      "schema_version": "g3-d-offline-replay-v1",
+      "source_record_provenance": "HISTORICAL_EVIDENCE",
+      "source_trace_path": "docs/submission/agent_delivery/traces/g3_b2_optimization_trace.json",
+      "source_trace_sha256": "28806594224d0c27075f2aaaebab7c714bce836ac335ac7c442f01c78c1234ff",
+      "status": "PASS",
+      "steps": [
+        {
+          "record": {
+            "input_hash": "32b6eedb6e1a241ed1435298d166342cd1d26711b1c06d699b5078bc90e8e7bd",
+            "original_full_input": "HISTORICAL_TRACE_UNAVAILABLE"
+          },
+          "stage": "input"
+        },
+        {
+          "record": {
+            "algorithm": "Butterfly",
+            "chunk_size": 1048576,
+            "expected_benefit": "minimum explicit multi-objective analytical score",
+            "expected_risk": "simulator model is not hardware calibrated",
+            "pipeline_depth": 4,
+            "proposal_hash": "a2d1382a327e1b7348354adcfedc8c3ef3c4de5c8cabbc7f39100887255489c7",
+            "proposal_id": "proposal-864b659a09c89582",
+            "required_tests": [
+              "schedule invariants",
+              "semantic correctness",
+              "frozen benchmark",
+              "bounded memory",
+              "reliability/no-path"
+            ],
+            "routing_policy": "Butterfly",
+            "schedule_parameters": {
+              "phase_count": 4,
+              "rank_size": 16,
+              "schedule_hash": "864b659a09c89582b08d30ea22a7f358b7a88640245b405c02cfba8be3d1fddc"
+            },
+            "unsupported_conditions": []
+          },
+          "stage": "proposal"
+        },
+        {
+          "record": {
+            "correctness_hard_gate": true,
+            "losses": 0,
+            "multi_objective": {
+              "multi_objective": {
+                "congestion_penalty": "minimize",
+                "correctness_gate": true,
+                "effective_bandwidth": "maximize",
+                "p50_latency": "minimize",
+                "p95_latency": "minimize",
+                "peak_memory": "bounded",
+                "reliability_penalty": "minimize"
+              },
+              "selected": true
+            },
+            "performance_gates": {
+              "all_correctness": true,
+              "default_performance_gate_met": true,
+              "improvement_source": "schedule/benchmark selection/routing/chunking/hierarchy/congestion handling and explicitly simulator-only A7 exposed critical-path overlap; frozen model constants unchanged",
+              "logical_1024_gate": true,
+              "logical_1024_max_regression_percent": -46.763069129,
+              "memory_gate": true,
+              "no_path_semantics": "VERIFIED_IN_G3_B2_D",
+              "p95_gate": true,
+              "priority_gate": true,
+              "priority_scenarios_at_least_10_percent": 9,
+              "regression_gate": true,
+              "regressions_over_5_percent": 0,
+              "weighted_geomean_at_least_8_percent": true,
+              "weighted_geomean_improvement_percent": 45.59283008
+            },
+            "run_id": "g3-b2-e-authoritative-optimization-round1",
+            "selected": {
+              "algorithm": "Butterfly",
+              "schedule_hash": "a0d6674340c6f1cf5ea050c9cbea9c8f25739b04f298faa8713fc7e59442f59f"
+            },
+            "ties": 0,
+            "wins": 18
+          },
+          "stage": "deterministic_evaluation"
+        },
+        {
+          "record": {
+            "action": "freeze stable correctness-passing selection",
+            "adjustment_rounds_used": 1,
+            "model_boundary": "SIMULATED_ONLY",
+            "observation": "Every win, tie, loss, regression, and simulator-only pipeline contribution remains explicit.",
+            "performance_target_status": "SATISFIED",
+            "run_id": "g3-b2-e-authoritative-optimization-round1"
+          },
+          "stage": "reflection"
+        },
+        {
+          "record": {
+            "record": {
+              "baseline_commit": "486974f",
+              "benchmark_result": "REPLAN_AND_MODEL_VALIDATION_PHASE_D",
+              "changed_files": [
+                "algorithm/replanner.py",
+                "algorithm/memory_model.py",
+                "algorithm/pipeline_model.py"
+              ],
+              "development_agent": "Codex",
+              "human_decision": "AUTHORIZED_G3_B2_SEQUENCE",
+              "input_hash": "resolved-by-g3-b2-d-manifest",
+              "input_schema_version": "g3-b2-replan-request-v1",
+              "output_schema_version": "g3-b2-replan-result-v1",
+              "prompt_id": "g3-b2-replanning",
+              "prompt_version": "1.0.0",
+              "proposal_hash": "resolved-by-replan-trace",
+              "reflection": "No-path remains an explicit expected failure; pipeline overlap remains simulator-only.",
+              "result_commit": "RESOLVED_BY_COMMIT_MAPPING",
+              "run_id": "g3-b2-d-replan-memory-pipeline",
+              "runtime_agent": "hccl-agent-not-invoked-phase-d",
+              "selected": true,
+              "tests": [
+                "replan/memory/pipeline focused assertions 4/4",
+                "CTest 12/12",
+                "C/Python parity 3/3"
+              ],
+              "timestamp": "2026-08-07T02:30:00Z"
+            },
+            "source_ref": {
+              "path": "agent/evidence/g3_b2/runs/g3_b2_d_replan_memory_pipeline.json",
+              "sha256": "58c2d5c7bcbf8d52e0954cd779995ed7e34253fcfcf7f759b85c2c82f771a9a6"
+            },
+            "status": "RECONSTRUCTED_FROM_FROZEN_EVIDENCE"
+          },
+          "stage": "replanning"
+        },
+        {
+          "record": {
+            "losses": 0,
+            "selected": true,
+            "selected_schedule": {
+              "algorithm": "Butterfly",
+              "schedule_hash": "a0d6674340c6f1cf5ea050c9cbea9c8f25739b04f298faa8713fc7e59442f59f"
+            },
+            "ties": 0,
+            "weighted_simulated_improvement_display": "45.59%",
+            "weighted_simulated_improvement_raw_percent": 45.59283008,
+            "wins": 18
+          },
+          "stage": "final_decision"
+        }
+      ],
+      "trace_id": "g3-b2-optimization-authoritative-round1"
+    },
+    "g3-b3-feature-completion-agent-flow": {
+      "api_keys_used": [],
+      "execution_identity": [
+        "LOSSLESS_SPARSE_HOST_EXECUTED",
+        "HOST_INTEGRITY_VALIDATED",
+        "HOST_RETRY_VALIDATED",
+        "SIMULATED_BACKPRESSURE",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ],
+      "hidden_chain_of_thought_included": false,
+      "historical_execution": false,
+      "network_used": false,
+      "offline": true,
+      "provenance_identity": "REPLAYED_FROM_FROZEN_TRACE",
+      "replay_sha256": "da92470766c7082be45a8fe555dc58636ff016d40a47e0c98059b8112e9865dd",
+      "runtime_api_calls": [],
+      "schema_version": "g3-d-offline-replay-v1",
+      "source_record_provenance": "HISTORICAL_EVIDENCE",
+      "source_trace_path": "docs/submission/agent_delivery/traces/g3_b3_feature_completion_trace.json",
+      "source_trace_sha256": "bdaf79748bb28c5ae2e6e3ad7871bc74cded9e75c972b37c8e3673c8f5a6c6af",
+      "status": "PASS",
+      "steps": [
+        {
+          "record": {
+            "original_prompt_response": "HISTORICAL_TRACE_UNAVAILABLE",
+            "record_count": 20
+          },
+          "stage": "input"
+        },
+        {
+          "record": {
+            "records": [
+              {
+                "chunk_size": 8192,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S00",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9956246961594555,
+                "estimated_wire_bytes": 922458,
+                "expected_benefit": "select DENSE because total modeled cost is 83.548604082 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 917504,
+                "metadata_overhead": 4032,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "e4f4395c732ec8509c145a99428da087d8f980ece052619cf49c2e58cc635935",
+                "proposal_id": "proposal-136f3aaf38d45c0e",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.0,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 8192,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S25",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9956246961594555,
+                "estimated_wire_bytes": 461229,
+                "expected_benefit": "select DENSE because total modeled cost is 41.987422041 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 458752,
+                "metadata_overhead": 2016,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "c4e3f2ff48ce98eb5902ec3c9fa477cf1700945c6f53a22727a6153b430eaba6",
+                "proposal_id": "proposal-8e4cf778b2b616b0",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.25,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 8192,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S50",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9956246961594555,
+                "estimated_wire_bytes": 461229,
+                "expected_benefit": "select DENSE because total modeled cost is 42.087422041 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 458752,
+                "metadata_overhead": 2016,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "df5cd7075ff050fe93918abe422a66161ab52f96dbfb5345d5abb264d75d3df1",
+                "proposal_id": "proposal-d9d1bea78cce829a",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.5,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 8192,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S75",
+                "decode_cost": 0.00656,
+                "dense_fallback_condition": null,
+                "encode_cost": 0.00656,
+                "estimated_compression_ratio": 2.5825977301387137,
+                "estimated_wire_bytes": 355619,
+                "expected_benefit": "select SPARSE_INDEX_VALUE because total modeled cost is 32.324480615 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 917504,
+                "metadata_overhead": 11200,
+                "payload_mode": "SPARSE_INDEX_VALUE",
+                "pipeline_depth": 4,
+                "proposal_hash": "f030b1462df5145c26a0a118ecbd8e24822ad0f3333a322625e517ed2ddc9f3e",
+                "proposal_id": "proposal-3002d17e7a23dd50",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "SPARSE_INDEX_VALUE",
+                "sparsity_ratio": 0.75,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 8192,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S90",
+                "decode_cost": 0.00264,
+                "dense_fallback_condition": null,
+                "encode_cost": 0.00264,
+                "estimated_compression_ratio": 4.713463751438435,
+                "estimated_wire_bytes": 97425,
+                "expected_benefit": "select SPARSE_INDEX_VALUE because total modeled cost is 8.843845049 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 458752,
+                "metadata_overhead": 5600,
+                "payload_mode": "SPARSE_INDEX_VALUE",
+                "pipeline_depth": 4,
+                "proposal_hash": "6a7756bba025c4a389acf67fba1e1980eb4b2310e62ff68f7756240858554066",
+                "proposal_id": "proposal-6b7af4683e2325e9",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "SPARSE_INDEX_VALUE",
+                "sparsity_ratio": 0.9,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 65536,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S00",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9994509851765998,
+                "estimated_wire_bytes": 15753017,
+                "expected_benefit": "select DENSE because total modeled cost is 1021.655548594 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 15728640,
+                "metadata_overhead": 8640,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "e12115e7550d0e60b55f1a70afb980e8d937f752931e890ce601f7018ca70fbc",
+                "proposal_id": "proposal-51ada732fed33d08",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.0,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 65536,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S25",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9994509851765998,
+                "estimated_wire_bytes": 31506035,
+                "expected_benefit": "select DENSE because total modeled cost is 2043.191771956 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 31457280,
+                "metadata_overhead": 17280,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "21ec31ce43025a1f6d333535f08debdec72c661d0df07ce1a04b4afc5e96c19c",
+                "proposal_id": "proposal-a38158f72a9574a9",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.25,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 65536,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S50",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9994509851765998,
+                "estimated_wire_bytes": 15753017,
+                "expected_benefit": "select DENSE because total modeled cost is 1021.555548594 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 15728640,
+                "metadata_overhead": 8640,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "432250d814c785734a2a5d6518291138ed1cd29215400af9a4d07c49f0ef3f4a",
+                "proposal_id": "proposal-a2335e7b18cfd713",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.5,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 65536,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S75",
+                "decode_cost": 0.10488,
+                "dense_fallback_condition": null,
+                "encode_cost": 0.10488,
+                "estimated_compression_ratio": 1.993915054156018,
+                "estimated_wire_bytes": 7896208,
+                "expected_benefit": "select SPARSE_INDEX_VALUE because total modeled cost is 512.400133833 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 15728640,
+                "metadata_overhead": 24000,
+                "payload_mode": "SPARSE_INDEX_VALUE",
+                "pipeline_depth": 4,
+                "proposal_hash": "ab86bbf7f001ed4e8e571f66c996e2d3e0c32a94d49c255207e8b61b9928bd4b",
+                "proposal_id": "proposal-e5eba18577aac429",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "SPARSE_INDEX_VALUE",
+                "sparsity_ratio": 0.75,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 65536,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S90",
+                "decode_cost": 0.04196,
+                "dense_fallback_condition": null,
+                "encode_cost": 0.04196,
+                "estimated_compression_ratio": 3.316515270362592,
+                "estimated_wire_bytes": 9494525,
+                "expected_benefit": "select SPARSE_INDEX_VALUE because total modeled cost is 616.026533195 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 31457280,
+                "metadata_overhead": 48000,
+                "payload_mode": "SPARSE_INDEX_VALUE",
+                "pipeline_depth": 4,
+                "proposal_hash": "f28f86fa4a581e03cdc471439559a5ea7bc0d99cb17f2ee6441a13cc20374cd4",
+                "proposal_id": "proposal-d8a652bc0f9a42b6",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "SPARSE_INDEX_VALUE",
+                "sparsity_ratio": 0.9,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 262144,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S00",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.99986268975513,
+                "estimated_wire_bytes": 1058166870,
+                "expected_benefit": "select DENSE because total modeled cost is 56057.122317796 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 1056964608,
+                "metadata_overhead": 145152,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "8273ff82109457de678f0453eb3c3a6f879aa2f572076cb3284bc8f14a7e1fd9",
+                "proposal_id": "proposal-6f2fcf8b27a3d6ac",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.0,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 262144,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S25",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.99986268975513,
+                "estimated_wire_bytes": 1058166870,
+                "expected_benefit": "select DENSE because total modeled cost is 56054.122317796 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 1056964608,
+                "metadata_overhead": 145152,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "509dfdaa4d13ea522c25b79696f6dff4014f4100f8b6062130e27ef2977cd835",
+                "proposal_id": "proposal-a4be394edaaedf99",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.25,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 1048576,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S50",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9999656689032741,
+                "estimated_wire_bytes": 2015348375,
+                "expected_benefit": "select DENSE because total modeled cost is 101671.971636968 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 2013265920,
+                "metadata_overhead": 69120,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "028babac2f5dc467daaaebbd4887f9773dd6b178f813781a840cac8c9a053319",
+                "proposal_id": "proposal-be433d002909b0a2",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Hierarchical",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.5,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 262144,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S75",
+                "decode_cost": 1.67776,
+                "dense_fallback_condition": null,
+                "encode_cost": 1.67776,
+                "estimated_compression_ratio": 1.9984752843594669,
+                "estimated_wire_bytes": 529414390,
+                "expected_benefit": "select SPARSE_INDEX_VALUE because total modeled cost is 28051.048711585 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 1056964608,
+                "metadata_overhead": 403200,
+                "payload_mode": "SPARSE_INDEX_VALUE",
+                "pipeline_depth": 4,
+                "proposal_hash": "ac9acd79efc4eca5db9f2fb15d0d3ecf90d040369614145e805cc1410bb820c5",
+                "proposal_id": "proposal-b161a6ae553b3253",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "SPARSE_INDEX_VALUE",
+                "sparsity_ratio": 0.75,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 262144,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S90",
+                "decode_cost": 0.67112,
+                "dense_fallback_condition": null,
+                "encode_cost": 0.67112,
+                "estimated_compression_ratio": 3.3291033344180843,
+                "estimated_wire_bytes": 317809772,
+                "expected_benefit": "select SPARSE_INDEX_VALUE because total modeled cost is 16843.834959963 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 1056964608,
+                "metadata_overhead": 403200,
+                "payload_mode": "SPARSE_INDEX_VALUE",
+                "pipeline_depth": 4,
+                "proposal_hash": "14fff5aea338530c19481c4d4ab43a3fbf44c00b928becfa8bba39f2c0e5309b",
+                "proposal_id": "proposal-8273dd6401d5e060",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "SPARSE_INDEX_VALUE",
+                "sparsity_ratio": 0.9,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 4194304,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S00",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9999914170048207,
+                "estimated_wire_bytes": 4030592966,
+                "expected_benefit": "select DENSE because total modeled cost is 206057.139772205 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 4026531840,
+                "metadata_overhead": 34560,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "9f51f973c20ce7686dfe61cd80cf724f26231aa35eb967c437259f5e543036b4",
+                "proposal_id": "proposal-ade0061a56f1d9f1",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Hierarchical",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.0,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 8388608,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S50",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9999957084839933,
+                "estimated_wire_bytes": 2015287835,
+                "expected_benefit": "select DENSE because total modeled cost is 132557.717686282 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 2013265920,
+                "metadata_overhead": 8640,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "2753611efb1dd1e5eb29bde4ad34a0c0bc61a3e990cd063918569aa14b79848d",
+                "proposal_id": "proposal-e1c49caa1ee77f5e",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.5,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 8388608,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S90",
+                "decode_cost": 5.36872,
+                "dense_fallback_condition": null,
+                "encode_cost": 5.36872,
+                "estimated_compression_ratio": 3.3332010824966085,
+                "estimated_wire_bytes": 604607744,
+                "expected_benefit": "select SPARSE_INDEX_VALUE because total modeled cost is 39817.206747262 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 2013265920,
+                "metadata_overhead": 24000,
+                "payload_mode": "SPARSE_INDEX_VALUE",
+                "pipeline_depth": 4,
+                "proposal_hash": "fabba9156fb9a3f20d9b5542caeea2033cdc45e87ba323ce58d67193c4725669",
+                "proposal_id": "proposal-75a1b92c9276fee5",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "SPARSE_INDEX_VALUE",
+                "sparsity_ratio": 0.9,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 16777216,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S75",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9999978542373924,
+                "estimated_wire_bytes": 128978144655,
+                "expected_benefit": "select DENSE because total modeled cost is 6468241.745122697 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 128849018880,
+                "metadata_overhead": 276480,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "4df96808e973fed61fb46a519e5cf7e3374fa82c56aab4e083296166fe1265a3",
+                "proposal_id": "proposal-61d91f924df34bec",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Hierarchical",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.75,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              },
+              {
+                "chunk_size": 16777216,
+                "correctness_plan": [
+                  "compare lossless reconstruction with independent dense reference",
+                  "verify CRC32 before accept",
+                  "reject retry and flow invariant failures"
+                ],
+                "credit_window": 4,
+                "data_profile": "S90",
+                "decode_cost": 0.0,
+                "dense_fallback_condition": "AGENT_DENSE_CANDIDATE",
+                "encode_cost": 0.0,
+                "estimated_compression_ratio": 0.9999978542373924,
+                "estimated_wire_bytes": 67713525944,
+                "expected_benefit": "select DENSE because total modeled cost is 3559212.638367229 us after wire, codec, integrity, retry, and flow accounting",
+                "expected_risk": "host/simulator cost is not calibrated to Ascend hardware and wire bytes are not physical measurements",
+                "fallback_conditions": [
+                  "sparse wire plus codec cost is not lower than dense",
+                  "memory budget would be exceeded",
+                  "any correctness or integrity hard gate fails"
+                ],
+                "flow_control_policy": {
+                  "credit_window": 4,
+                  "enabled": true,
+                  "high_watermark": 3,
+                  "low_watermark": 1,
+                  "max_inflight_chunks": 4
+                },
+                "integrity_policy": {
+                  "attempt_tracking": true,
+                  "checksum_type": "CRC32",
+                  "chunk_id_enabled": true,
+                  "sequence_enabled": true,
+                  "verify_before_accept": true
+                },
+                "logical_bytes": 67645734912,
+                "metadata_overhead": 145152,
+                "payload_mode": "DENSE",
+                "pipeline_depth": 4,
+                "proposal_hash": "50d3174a999802b55fab5896b08b020379bdf2863da306198b482bff8bd742aa",
+                "proposal_id": "proposal-11423b98c4eb026c",
+                "retry_policy": {
+                  "logical_timeout_ticks": 8,
+                  "max_retries": 3,
+                  "retry_backoff_policy": "FIXED_LOGICAL_TICKS",
+                  "retryable_error_classes": [
+                    "CRC_MISMATCH",
+                    "LOGICAL_TIMEOUT",
+                    "TRANSIENT_TRANSFER_FAILURE"
+                  ],
+                  "terminal_error_classes": [
+                    "RETRY_EXHAUSTED",
+                    "NO_ALTERNATE_PATH",
+                    "UNRECOVERABLE_INTEGRITY_FAILURE"
+                  ],
+                  "timeout_enabled": true
+                },
+                "schedule_algorithm": "Ring",
+                "schema_version": "g3-b3-agent-proposal-v2",
+                "sparse_codec": "NONE",
+                "sparsity_ratio": 0.9,
+                "validation_plan": [
+                  "fixed sparse profile replay",
+                  "schedule v2 invariant validation",
+                  "bounded credit and eventual-drain checks"
+                ]
+              }
+            ]
+          },
+          "stage": "proposal"
+        },
+        {
+          "record": {
+            "records": [
+              {
+                "candidate_count": 4,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-136f3aaf38d45c0e",
+                "rejected_count": 5,
+                "scenario_id": "S01",
+                "selected": true,
+                "selected_total_cost_us": 83.548604082,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 2,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-8e4cf778b2b616b0",
+                "rejected_count": 5,
+                "scenario_id": "S02",
+                "selected": true,
+                "selected_total_cost_us": 41.987422041,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 2,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-d9d1bea78cce829a",
+                "rejected_count": 5,
+                "scenario_id": "S03",
+                "selected": true,
+                "selected_total_cost_us": 42.087422041,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 8,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-3002d17e7a23dd50",
+                "rejected_count": 1,
+                "scenario_id": "S04",
+                "selected": true,
+                "selected_total_cost_us": 32.324480615,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 4,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-6b7af4683e2325e9",
+                "rejected_count": 3,
+                "scenario_id": "S05",
+                "selected": true,
+                "selected_total_cost_us": 8.843845049,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 2,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-51ada732fed33d08",
+                "rejected_count": 5,
+                "scenario_id": "S06",
+                "selected": true,
+                "selected_total_cost_us": 1021.655548594,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 4,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-a38158f72a9574a9",
+                "rejected_count": 5,
+                "scenario_id": "S07",
+                "selected": true,
+                "selected_total_cost_us": 2043.191771956,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 2,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-a2335e7b18cfd713",
+                "rejected_count": 5,
+                "scenario_id": "S08",
+                "selected": true,
+                "selected_total_cost_us": 1021.555548594,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 4,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-e5eba18577aac429",
+                "rejected_count": 3,
+                "scenario_id": "S09",
+                "selected": true,
+                "selected_total_cost_us": 512.400133833,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 8,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-d8a652bc0f9a42b6",
+                "rejected_count": 1,
+                "scenario_id": "S10",
+                "selected": true,
+                "selected_total_cost_us": 616.026533195,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 2,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-6f2fcf8b27a3d6ac",
+                "rejected_count": 5,
+                "scenario_id": "S11",
+                "selected": true,
+                "selected_total_cost_us": 56057.122317796,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 2,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-a4be394edaaedf99",
+                "rejected_count": 5,
+                "scenario_id": "S12",
+                "selected": true,
+                "selected_total_cost_us": 56054.122317796,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 5,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-be433d002909b0a2",
+                "rejected_count": 5,
+                "scenario_id": "S13",
+                "selected": true,
+                "selected_total_cost_us": 101671.971636968,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 4,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-b161a6ae553b3253",
+                "rejected_count": 3,
+                "scenario_id": "S14",
+                "selected": true,
+                "selected_total_cost_us": 28051.048711585,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 4,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-8273dd6401d5e060",
+                "rejected_count": 3,
+                "scenario_id": "S15",
+                "selected": true,
+                "selected_total_cost_us": 16843.834959963,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 5,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-ade0061a56f1d9f1",
+                "rejected_count": 5,
+                "scenario_id": "S16",
+                "selected": true,
+                "selected_total_cost_us": 206057.139772205,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 2,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-e1c49caa1ee77f5e",
+                "rejected_count": 5,
+                "scenario_id": "S17",
+                "selected": true,
+                "selected_total_cost_us": 132557.717686282,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 4,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-75a1b92c9276fee5",
+                "rejected_count": 3,
+                "scenario_id": "S18",
+                "selected": true,
+                "selected_total_cost_us": 39817.206747262,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 5,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-61d91f924df34bec",
+                "rejected_count": 5,
+                "scenario_id": "S19",
+                "selected": true,
+                "selected_total_cost_us": 6468241.745122697,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              },
+              {
+                "candidate_count": 2,
+                "correctness_hard_gate": true,
+                "proposal_id": "proposal-11423b98c4eb026c",
+                "rejected_count": 5,
+                "scenario_id": "S20",
+                "selected": true,
+                "selected_total_cost_us": 3559212.638367229,
+                "truth_label": "HOST_SIMULATOR_MODEL"
+              }
+            ]
+          },
+          "stage": "deterministic_evaluation"
+        },
+        {
+          "record": {
+            "records": [
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-136f3aaf38d45c0e",
+                "scenario_id": "S01"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-8e4cf778b2b616b0",
+                "scenario_id": "S02"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-d9d1bea78cce829a",
+                "scenario_id": "S03"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "sparse payload reduces modeled total cost after metadata",
+                "proposal_id": "proposal-3002d17e7a23dd50",
+                "scenario_id": "S04"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "sparse payload reduces modeled total cost after metadata",
+                "proposal_id": "proposal-6b7af4683e2325e9",
+                "scenario_id": "S05"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-51ada732fed33d08",
+                "scenario_id": "S06"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-a38158f72a9574a9",
+                "scenario_id": "S07"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-a2335e7b18cfd713",
+                "scenario_id": "S08"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "sparse payload reduces modeled total cost after metadata",
+                "proposal_id": "proposal-e5eba18577aac429",
+                "scenario_id": "S09"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "sparse payload reduces modeled total cost after metadata",
+                "proposal_id": "proposal-d8a652bc0f9a42b6",
+                "scenario_id": "S10"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-6f2fcf8b27a3d6ac",
+                "scenario_id": "S11"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-a4be394edaaedf99",
+                "scenario_id": "S12"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-be433d002909b0a2",
+                "scenario_id": "S13"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "sparse payload reduces modeled total cost after metadata",
+                "proposal_id": "proposal-b161a6ae553b3253",
+                "scenario_id": "S14"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "sparse payload reduces modeled total cost after metadata",
+                "proposal_id": "proposal-8273dd6401d5e060",
+                "scenario_id": "S15"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-ade0061a56f1d9f1",
+                "scenario_id": "S16"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-e1c49caa1ee77f5e",
+                "scenario_id": "S17"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "sparse payload reduces modeled total cost after metadata",
+                "proposal_id": "proposal-75a1b92c9276fee5",
+                "scenario_id": "S18"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-61d91f924df34bec",
+                "scenario_id": "S19"
+              },
+              {
+                "action": "accept correctness-passing minimum wire-aware modeled cost candidate",
+                "flow_reason": "credit window bounds in-flight chunks and producer pauses under modeled saturation",
+                "integrity_reason": "CRC32 verification and bounded retry remain mandatory for both dense and sparse",
+                "model_boundary": "HOST_SIMULATOR_MODEL",
+                "payload_reason": "dense fallback retained: AGENT_DENSE_CANDIDATE",
+                "proposal_id": "proposal-11423b98c4eb026c",
+                "scenario_id": "S20"
+              }
+            ]
+          },
+          "stage": "reflection"
+        },
+        {
+          "record": {
+            "reason": "frozen G3-B3 feature loop records proposal/evaluation/reflection and deterministic gates, not a replan stage",
+            "status": "NOT_APPLICABLE"
+          },
+          "stage": "replanning"
+        },
+        {
+          "record": {
+            "implemented": [
+              "lossless_sparse",
+              "host_integrity_crc_retry",
+              "agent_flow_control_integration"
+            ],
+            "int8_quantization": "DEFERRED_BY_PRECISION_GATE",
+            "pairwise": "SKIPPED_BY_VALUE_GATE",
+            "record_counts": {
+              "evaluation": 20,
+              "proposal": 20,
+              "reflection": 20
+            },
+            "runtime_api_calls": []
+          },
+          "stage": "final_decision"
+        }
+      ],
+      "trace_id": "g3-b3-feature-completion-agent-flow"
+    }
+  },
+  "runtime_api_calls": [],
+  "schema_version": "g3-d-offline-replay-validation-v1",
+  "status": "PASS"
+}

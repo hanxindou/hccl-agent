@@ -1,0 +1,989 @@
+{
+  "implementation_rule": "source and tests, never roadmap or filename alone",
+  "schema_version": "g3-d-skill-registry-v1",
+  "skills": [
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "AlgorithmSkill",
+          "AlgorithmSkill.choose_algorithms"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "AlgorithmSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [
+        "current-algorithm-selection"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Current repository module; purpose derived from source symbols.",
+      "side_effects": [],
+      "skill_id": "algorithm-skill",
+      "source_path": "skills/algorithm_skill.py",
+      "source_sha256": "36fe8220c1c1015692dd068af682cca6f644084d49c79e6e33863cb1a09f6ff4",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_agent.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "AutoTuningSkill",
+          "AutoTuningSkill.generate_parameter_space",
+          "AutoTuningSkill.enumerate_configurations",
+          "AutoTuningSkill.evaluate_configuration",
+          "AutoTuningSkill.grid_search"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "AutoTuningSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Auto-Tuning Skill — search parameter space for optimal communication config.",
+      "side_effects": [],
+      "skill_id": "auto-tuning-skill",
+      "source_path": "agent/auto_tuning_skill.py",
+      "source_sha256": "1b9a663b2b8e568272ab5d605f76bbde3989384c4081af974b6781daaed754e2",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_auto_tuning_skill.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "CommandRecord",
+          "CommandRecord.as_dict",
+          "OfflineDevelopmentLoop",
+          "OfflineDevelopmentLoop.run_demo"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "CommandRecord",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Offline autonomous development loop for controlled demonstrations.",
+      "side_effects": [],
+      "skill_id": "autonomous-development-loop",
+      "source_path": "agent/autonomous_development_loop.py",
+      "source_sha256": "d8aa750a6cee0b56a318dab9a2da2d4cb75b672f13c6bea5249236e7e123c273",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_autonomous_development_loop.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "HOST_EXECUTED",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "BenchmarkSkill",
+          "BenchmarkSkill.set_execution_skill",
+          "BenchmarkSkill.benchmark_execution"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "BenchmarkSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [
+        "current-performance-analysis",
+        "g3-b2-benchmark-evaluation"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Benchmark Skill — measure actual execution time of algorithms.",
+      "side_effects": [
+        "see authority inventory"
+      ],
+      "skill_id": "benchmark-skill",
+      "source_path": "agent/benchmark_skill.py",
+      "source_sha256": "5789d58b5ddd1b481cc909f2bd7d67482a9dbd2769be76a2526dea032717a3f4",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_benchmark_skill.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "BenchmarkSuiteSkill",
+          "BenchmarkSuiteSkill.set_agent",
+          "BenchmarkSuiteSkill.load_scenario",
+          "BenchmarkSuiteSkill.load_all_scenarios",
+          "BenchmarkSuiteSkill.run_scenario",
+          "BenchmarkSuiteSkill.run_all_scenarios",
+          "BenchmarkSuiteSkill.generate_scenario_report",
+          "BenchmarkSuiteSkill.generate_summary"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "BenchmarkSuiteSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Benchmark Suite Skill — run standard scenarios and generate reports.",
+      "side_effects": [],
+      "skill_id": "benchmark-suite-skill",
+      "source_path": "skills/benchmark_suite_skill.py",
+      "source_sha256": "463727fa279efdff1e5f95018f3e3e426924ec9e7e530b7409bf77e7ac8fad9b",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_benchmark_reports.py",
+        "tests/test_benchmark_runner.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "CalibrationExplanationSkill",
+          "CalibrationExplanationSkill.explain"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "CalibrationExplanationSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Calibration Explanation Skill — explain parameter provenance and impact.",
+      "side_effects": [],
+      "skill_id": "calibration-explanation-skill",
+      "source_path": "agent/calibration_explanation_skill.py",
+      "source_sha256": "54fe0a0819b4f581171ee810b758902d6fa10c7469884f40f704f60f6743564f",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_calibration_report.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "CaseRetrievalSkill",
+          "CaseRetrievalSkill.set_kb",
+          "CaseRetrievalSkill.retrieve"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "CaseRetrievalSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Case Retrieval Skill — find similar historical cases.",
+      "side_effects": [],
+      "skill_id": "case-retrieval-skill",
+      "source_path": "skills/case_retrieval_skill.py",
+      "source_sha256": "989f89172af74080c2fbdb1fed3d1cbb6d24202aec6f7215a4bc56eb30540cb3",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_case_retrieval.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "CodeGenerationSkill",
+          "CodeGenerationSkill.generate_hccl_config",
+          "CodeGenerationSkill.generate_execution_plan",
+          "CodeGenerationSkill.generate_algorithm_skeleton",
+          "CodeGenerationSkill.generate_optimization_notes"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "CodeGenerationSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [
+        "current-code-generation",
+        "current-test-generation"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Code Generation Skill — produce HCCL configs, execution plans,",
+      "side_effects": [],
+      "skill_id": "code-generation-skill",
+      "source_path": "agent/code_generation_skill.py",
+      "source_sha256": "355bd73b015b2fd9271583cdd1979ea5071cff5d8290bdb9b62f9af240a0e603",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_code_generation_flow.py",
+        "tests/test_code_generation_skill.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "ConfigSkill",
+          "ConfigSkill.load_cluster_info",
+          "ConfigSkill.get_link_by_type"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "ConfigSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Current repository module; purpose derived from source symbols.",
+      "side_effects": [],
+      "skill_id": "config-skill",
+      "source_path": "skills/config_skill.py",
+      "source_sha256": "7c351286a976904dcb82ae3c63523865034b7ace85a52cb902c8bab5b923fda4",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_agent.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "ConvergenceAnalysisSkill",
+          "ConvergenceAnalysisSkill.analyze"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "ConvergenceAnalysisSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Convergence Analysis Skill — analyse optimization loop results.",
+      "side_effects": [],
+      "skill_id": "convergence-analysis-skill",
+      "source_path": "agent/convergence_analysis_skill.py",
+      "source_sha256": "54f918c8adf572b5ee5a5cfb1543e92f5a3ac4d57c4a0bfe828628eb037b096e",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_convergence_analysis.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "OPTIONAL_ONLINE",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "DecisionSkill",
+          "DecisionSkill.choose_algorithm"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [
+        "not part of mandatory offline replay"
+      ],
+      "name": "DecisionSkill",
+      "online_dependency": true,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [
+        "current-online-decision-inline"
+      ],
+      "provenance": "ONLINE_LLM_OPTIONAL",
+      "purpose": "Decision Skill — LLM-based algorithm selection.",
+      "side_effects": [],
+      "skill_id": "decision-skill",
+      "source_path": "agent/decision_skill.py",
+      "source_sha256": "0a019ddfd1c3bba9cce65319ef179a19a79c9aa2fc3fdcfdbf6cb2695de0130d",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_decision_skill.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "DecisionValidationSkill",
+          "DecisionValidationSkill.validate"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "DecisionValidationSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Decision Validation Skill — verify that the selected algorithm is optimal.",
+      "side_effects": [],
+      "skill_id": "decision-validation-skill",
+      "source_path": "skills/decision_validation_skill.py",
+      "source_sha256": "cda5e8b5ef90b1eef3aa0109e8b5d36fd306fa528b95f181437dcc25d89c7c82",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_decision_validation.py"
+      ]
+    },
+    {
+      "agent_stage": "evaluation",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "EvaluationSkill",
+          "EvaluationSkill.evaluate"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "EvaluationSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [
+        "current-performance-analysis"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Evaluation Skill — grade algorithm performance and recommend actions.",
+      "side_effects": [],
+      "skill_id": "evaluation-skill",
+      "source_path": "agent/evaluation_skill.py",
+      "source_sha256": "97625c098f30d155dea72941b1ba9d2456e4bdef30f7dc548fca8af1bbe70dec",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_evaluation_skill.py"
+      ]
+    },
+    {
+      "agent_stage": "execution",
+      "deterministic_classification": "HOST_EXECUTED",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "ExecutionSkill",
+          "ExecutionSkill.execute"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "ExecutionSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Execution Skill — Agent-facing wrapper around the Execution Engine.",
+      "side_effects": [],
+      "skill_id": "execution-skill",
+      "source_path": "agent/execution_skill.py",
+      "source_sha256": "70c378ae329eb0f109cd519418bccd63d5912f80d8272e4efe5d4b24486217e1",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_benchmark_skill.py",
+        "tests/test_execution_hccl_flow.py",
+        "tests/test_execution_skill.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "ExperienceLearningSkill",
+          "ExperienceLearningSkill.set_store",
+          "ExperienceLearningSkill.find_similar",
+          "ExperienceLearningSkill.aggregate",
+          "ExperienceLearningSkill.recommend_algorithm",
+          "ExperienceLearningSkill.compute_experience_bonus"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "ExperienceLearningSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Experience Learning Skill — similarity search, aggregation,",
+      "side_effects": [],
+      "skill_id": "experience-learning-skill",
+      "source_path": "skills/experience_learning_skill.py",
+      "source_sha256": "8e34b841a02a279688aacf618110e1e166a74d8c9b7bcfc9a5c2540b58e56128",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_experience_driven_selection.py",
+        "tests/test_experience_learning.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "ExplanationSkill",
+          "ExplanationSkill.generate_decision_trace"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "ExplanationSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Explanation Skill — generate human-readable decision traces.",
+      "side_effects": [],
+      "skill_id": "explanation-skill",
+      "source_path": "agent/explanation_skill.py",
+      "source_sha256": "43396d205c297c7462e07e26847ee44afad227cb65d6ccc799d3fd1568c421e6",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_calibration_report.py",
+        "tests/test_decision_trace_flow.py",
+        "tests/test_explanation_skill.py",
+        "tests/test_hardware_decision_trace.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/agent_trace_inventory.json"
+      ],
+      "inputs": {
+        "callables": [
+          "structured_proposal",
+          "run_chain"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "structured_proposal",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Replayable G3-B2 runtime-agent schedule optimization chain.",
+      "side_effects": [],
+      "skill_id": "g3-b2-optimization-loop",
+      "source_path": "agent/g3_b2_optimization_loop.py",
+      "source_sha256": "784dcfb4cba647b00f315afc46a97f86b641eb455e9bd0f79767f51678d498ce",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/optimization/test_g3_b2_agent_ablation.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [
+        "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z/agent_trace_inventory.json"
+      ],
+      "inputs": {
+        "callables": [
+          "run_feature_agent"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "run_feature_agent",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Replayable G3-B3 Agent loop for sparse, integrity, and flow decisions.",
+      "side_effects": [],
+      "skill_id": "g3-b3-feature-loop",
+      "source_path": "agent/g3_b3_feature_loop.py",
+      "source_sha256": "7907be0c8b4dfbcd72e62777d00110747890ebf65b1e36bf5e0311407d98a410",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/feature_completion/test_g3_b3_agent_flow.py"
+      ]
+    },
+    {
+      "agent_stage": "reasoning",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "HardwareReasoningSkill",
+          "HardwareReasoningSkill.analyze_resources",
+          "HardwareReasoningSkill.detect_bottlenecks",
+          "HardwareReasoningSkill.recommend_placement"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "HardwareReasoningSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Hardware Reasoning Skill — analyze resources, detect bottlenecks.",
+      "side_effects": [],
+      "skill_id": "hardware-reasoning-skill",
+      "source_path": "skills/hardware_reasoning_skill.py",
+      "source_sha256": "4def36ac5ae2eac03103720f59c69d489a8ec1ef39bd0849812e26086610ad2c",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_hardware_reasoning_skill.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "KnowledgeExtractionSkill",
+          "KnowledgeExtractionSkill.generate_lesson"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "KnowledgeExtractionSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Knowledge Extraction Skill — generate lessons from run results.",
+      "side_effects": [],
+      "skill_id": "knowledge-extraction-skill",
+      "source_path": "skills/knowledge_extraction_skill.py",
+      "source_sha256": "14a7c3446326ec06ecd536facea2ffdd9cc8a1094e628a9777718030b2d64bd5",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_knowledge_extraction.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "KnowledgeReportSkill",
+          "KnowledgeReportSkill.generate_summary"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [
+        "no focused test mapping discovered"
+      ],
+      "name": "KnowledgeReportSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Knowledge Report Skill — summarise retrieved knowledge context.",
+      "side_effects": [],
+      "skill_id": "knowledge-report-skill",
+      "source_path": "agent/knowledge_report_skill.py",
+      "source_sha256": "582da1f4f4642aecdffdc76ef8a142cb9cd6272d139645694c72ea480600ee15",
+      "status": "PARTIAL",
+      "tests": []
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "OptimizationLoopSkill",
+          "OptimizationLoopSkill.run_until_converged"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "OptimizationLoopSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Optimization Loop Skill — iterate Plan→Execute→Reflect→Optimize until convergence.",
+      "side_effects": [],
+      "skill_id": "optimization-loop-skill",
+      "source_path": "agent/optimization_loop_skill.py",
+      "source_sha256": "58b2f1701cf156217ec58c0935fb28d0133bf8a571d94eb765a22d0abbbf2e44",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_optimization_loop.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "OptimizationProposalSkill",
+          "OptimizationProposalSkill.generate_proposal"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "OptimizationProposalSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Optimization Proposal Skill — analyse, recommend, estimate, plan.",
+      "side_effects": [],
+      "skill_id": "optimization-proposal-skill",
+      "source_path": "agent/optimization_proposal_skill.py",
+      "source_sha256": "18de183d1cbf1431c0c4206909eed8ce99fa8c68f9c509450a36024737f8d753",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_bottleneck_detection.py",
+        "tests/test_optimization_proposal.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "SIMULATOR_MODEL",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "OptimizationSkill",
+          "OptimizationSkill.optimize"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [
+        "no focused test mapping discovered"
+      ],
+      "name": "OptimizationSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [
+        "current-algorithm-selection"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Current repository module; purpose derived from source symbols.",
+      "side_effects": [],
+      "skill_id": "optimization-skill",
+      "source_path": "skills/optimization_skill.py",
+      "source_sha256": "0bd4ec1d4b94322a007d8e0a4abc9246bd1e57612d8e23a86f559b6262f5bc44",
+      "status": "PARTIAL",
+      "tests": []
+    },
+    {
+      "agent_stage": "planning",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "PlanningSkill",
+          "PlanningSkill.create_plan"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "PlanningSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Planning Skill — decompose a high-level optimisation goal into",
+      "side_effects": [],
+      "skill_id": "planning-skill",
+      "source_path": "agent/planning_skill.py",
+      "source_sha256": "9d359e02acab7ed86a482c2892afc9300b5135c73333fbbad6045991a5506553",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_algorithm_selection_flow.py",
+        "tests/test_planning_hccl_integration.py",
+        "tests/test_planning_skill.py",
+        "tests/test_replanning_skill.py"
+      ]
+    },
+    {
+      "agent_stage": "reasoning",
+      "deterministic_classification": "OPTIONAL_ONLINE",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "ReasoningSkill",
+          "ReasoningSkill.analyze"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [
+        "not part of mandatory offline replay"
+      ],
+      "name": "ReasoningSkill",
+      "online_dependency": true,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [
+        "current-online-reasoning-inline",
+        "current-reliability-generation"
+      ],
+      "provenance": "ONLINE_LLM_OPTIONAL",
+      "purpose": "Reasoning Skill — use DeepSeek to analyse candidate algorithms.",
+      "side_effects": [],
+      "skill_id": "reasoning-skill",
+      "source_path": "agent/reasoning_skill.py",
+      "source_sha256": "f34bc8b408d601a7b134beae56d5d2989bab32472739416aa0ee229e080e5ccb",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_algorithm_selection_flow.py",
+        "tests/test_code_generation_flow.py",
+        "tests/test_decision_trace_flow.py",
+        "tests/test_hardware_aware_selection.py",
+        "tests/test_hardware_reasoning_skill.py",
+        "tests/test_reasoning_skill.py",
+        "tests/test_topology_change_detection.py",
+        "tests/test_topology_reasoning.py"
+      ]
+    },
+    {
+      "agent_stage": "reflection",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "ReflectionSkill",
+          "ReflectionSkill.reflect"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "ReflectionSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [
+        "g3-b2-reflection"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Reflection Skill — post-execution analysis and self-assessment.",
+      "side_effects": [],
+      "skill_id": "reflection-skill",
+      "source_path": "agent/reflection_skill.py",
+      "source_sha256": "3cca022644282b02f813a53581fbb049c18ae0ef232c0077e291287b53e573bd",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_experience_reflection.py",
+        "tests/test_reflection_decision_quality.py",
+        "tests/test_reflection_skill.py"
+      ]
+    },
+    {
+      "agent_stage": "replanning",
+      "deterministic_classification": "DETERMINISTIC",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "ReplanningSkill",
+          "ReplanningSkill.choose_alternative"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "ReplanningSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [
+        "g3-b2-replanning"
+      ],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Replanning Skill — choose an alternative algorithm when reflection",
+      "side_effects": [],
+      "skill_id": "replanning-skill",
+      "source_path": "agent/replanning_skill.py",
+      "source_sha256": "965fc022a68e23c07f9a6133baafe5f0e62a46bdfc2ad16bc5aff5f37f145df0",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_replanning_skill.py",
+        "tests/test_topology_replanning.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "SIMULATOR_MODEL",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "StrategySkill",
+          "StrategySkill.generate"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "StrategySkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Current repository module; purpose derived from source symbols.",
+      "side_effects": [],
+      "skill_id": "strategy-skill",
+      "source_path": "skills/strategy_skill.py",
+      "source_sha256": "cdae6c7d69970729bd413b6768ff36c71670fc37b3ff8f59906e9eda0690f89e",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_agent.py"
+      ]
+    },
+    {
+      "agent_stage": "reasoning",
+      "deterministic_classification": "SIMULATOR_MODEL",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "TopologyReasoningSkill",
+          "TopologyReasoningSkill.analyze",
+          "TopologyReasoningSkill.topology_summary",
+          "TopologyReasoningSkill.detect_topology_change",
+          "TopologyReasoningSkill.hardware_summary"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [],
+      "name": "TopologyReasoningSkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Topology Reasoning Skill — analyse a CommunicationGraph.",
+      "side_effects": [],
+      "skill_id": "topology-reasoning-skill",
+      "source_path": "skills/topology_reasoning_skill.py",
+      "source_sha256": "1df628a7fbb2c3a3ca8c1bc2069a822cedd1ca8004eaeeb356a416e5efc8a654",
+      "status": "CURRENT_IMPLEMENTED",
+      "tests": [
+        "tests/test_algorithm_selection_flow.py",
+        "tests/test_code_generation_flow.py",
+        "tests/test_decision_trace_flow.py",
+        "tests/test_hardware_aware_selection.py",
+        "tests/test_topology_change_detection.py",
+        "tests/test_topology_reasoning.py"
+      ]
+    },
+    {
+      "agent_stage": "support",
+      "deterministic_classification": "SIMULATOR_MODEL",
+      "frozen_evidence": [],
+      "inputs": {
+        "callables": [
+          "TopologySkill",
+          "TopologySkill.analyze"
+        ],
+        "contract_source": "public callable signatures"
+      },
+      "limitations": [
+        "no focused test mapping discovered"
+      ],
+      "name": "TopologySkill",
+      "online_dependency": false,
+      "outputs": {
+        "contract_source": "source implementation and mapped tests"
+      },
+      "prompt_dependency": [],
+      "provenance": "DETERMINISTIC_EVALUATION",
+      "purpose": "Current repository module; purpose derived from source symbols.",
+      "side_effects": [],
+      "skill_id": "topology-skill",
+      "source_path": "skills/topology_skill.py",
+      "source_sha256": "baa54ab9a99044e00108ad48eea02ca8363bb1e7064f56cce36252161756cca8",
+      "status": "PARTIAL",
+      "tests": []
+    }
+  ],
+  "status": "CURRENT_SOURCE_REGISTRY"
+}

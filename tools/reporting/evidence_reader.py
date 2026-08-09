@@ -22,6 +22,9 @@ STALE_AUDIT = ROOT / "docs/submission/stale_document_audit.md"
 REQUIREMENT_DELTA = ROOT / "docs/submission/g3_c_requirement_delta.json"
 STAGE_ROOT = ROOT / "dist/g3-c-report-staging"
 RESULT_ROOT = ROOT / "dist/g3-c-report-results"
+G3_C_FROZEN_SOURCE_COMMIT = (
+    ROOT / "experiments/submission/evidence/g3_c_20260809T000000Z/source_commit.json"
+)
 
 
 def sha256(path: Path) -> str:
@@ -106,8 +109,14 @@ def resolve_reporting_base_ref(github_base_ref: str | None = None) -> str:
     )
 
 
-def source_commit() -> str:
-    """Return the merged-main baseline, not a later G3-C reporting commit."""
+def source_commit(frozen_source: Path | None = None) -> str:
+    """Return the frozen G3-C baseline, including after G3-C is merged."""
+    source_path = G3_C_FROZEN_SOURCE_COMMIT if frozen_source is None else frozen_source
+    if source_path.is_file():
+        value = read_json(source_path).get("source_commit", "")
+        if len(value) != 40 or any(character not in "0123456789abcdef" for character in value):
+            raise RuntimeError("invalid frozen G3-C source commit")
+        return value
     return git("merge-base", "HEAD", resolve_reporting_base_ref())
 
 

@@ -1,0 +1,14 @@
+{
+  "errors": [],
+  "replay_hashes": {
+    "g3-b2-optimization-authoritative-round1": "9f73391ac51f8a232ecde078c0cee620a849a646f26d5cd76b00c130cb8f28ff",
+    "g3-b3-feature-completion-agent-flow": "da92470766c7082be45a8fe555dc58636ff016d40a47e0c98059b8112e9865dd"
+  },
+  "schema_version": "g3-d-trace-validation-v1",
+  "sentinels": [
+    "TRACE_INDEX_OK",
+    "OFFLINE_REPLAY_OK"
+  ],
+  "status": "PASS",
+  "trace_count": 2
+}
