@@ -11936,3 +11936,1840 @@ G3-C 的职责不是制造新 evidence，而是将以上 evidence 转化成：
 ```text
 一套一致、正式、可信、可审计的技术叙事。
 ```
+
+# 14. G3-D — Agent / Prompt Reproducible Delivery
+
+## 14.1 阶段定位
+
+G3-D 的正式名称为：
+
+```text
+G3-D — Agent / Prompt Reproducible Delivery
+```
+
+阶段身份为：
+
+```text
+DELIVERY
+REPRODUCIBILITY
+PROVENANCE
+SUBMISSION READINESS
+```
+
+G3-D 在 G3-C 完成并合并进入 `main` 后执行。核心目标是把当前已经存在的 Agent、Prompt、Skills、proposal/evaluation/reflection/replanning records、human intervention records、source/commit/evidence mappings，以及 G3-B2/G3-B3 frozen evidence，整理成比赛可提交、可解释、可审计、可离线复现的正式 Agent/Prompt 交付体系。
+
+G3-D 不是新的 Agent feature development 阶段。G3-B3-F 建立的：
+
+```text
+FINAL FEATURE FREEZE
+```
+
+继续有效。
+
+G3-D 不得重新设计 Agent，不得新增算法能力，不得重新优化 benchmark，不得修改冻结功能语义，也不得通过重放材料制造新的历史事实。
+
+最终评审者必须能够从提交材料中直接回答：
+
+1. Agent 由哪些当前源码模块组成；
+2. 当前实际使用或冻结记录引用了哪些 Prompt；
+3. 每个 Prompt 的版本、来源、hash 和输入输出 contract 是什么；
+4. Agent 可以调用哪些真实存在的 Skill；
+5. 哪些步骤是 Agent proposal；
+6. 哪些步骤是 deterministic evaluation；
+7. 哪些步骤包含 human input、approval 或 intervention；
+8. 哪些 trace 是历史冻结证据；
+9. 哪些记录只是 replay 或 reconstruction；
+10. Prompt、Skill、Trace、Source、Commit、Evidence 与 G3-C Claim 如何映射；
+11. 在没有 DeepSeek、OpenAI、Anthropic API Key 时，mandatory replay 与 verification 是否仍可完成。
+
+---
+
+## 14.2 当前实现与证据基线
+
+G3-D-A 开始时必须以 merged `main` 重新验证以下盘点结论，不得只复制本计划中的描述。
+
+### Agent entry 与模块
+
+当前已知入口和模块包括：
+
+```text
+main.py
+agent/hccl_agent.py
+agent/llm_client.py
+agent/prompt_engine.py
+agent/g3_b2_optimization_loop.py
+agent/g3_b3_feature_loop.py
+agent/autonomous_development_loop.py
+agent/*_skill.py
+skills/*.py
+```
+
+其中：
+
+- `HCCLAgent` 是现有综合编排入口；
+- `LLMClient` 是 DeepSeek online client，缺少 Key 时会失败，由上层 best-effort 路径降级；
+- `AgentPromptEngine` 读取 `prompts/algorithm_prompt.txt` 并把本机调用日志写入 ignored `logs/`；
+- `g3_b2_optimization_loop.py` 是 deterministic、replayable 的 Schedule optimization chain；
+- `g3_b3_feature_loop.py` 是 deterministic、replayable 的 sparse/integrity/flow feature decision chain；
+- `OfflineDevelopmentLoop` 是隔离临时目录中的 `OFFLINE_TEMPLATE` 演示，不等同 G3-B2/G3-B3 historical Agent execution；
+- ignored `logs/`、临时目录输出和本机私有日志不是 authority evidence。
+
+### Prompt
+
+当前存在：
+
+```text
+prompts/algorithm_prompt.txt
+prompts/g3_b2/schedule_generation_v1.md
+prompts/g3_b2/topology_optimization_v1.md
+prompts/g3_b2/benchmark_evaluation_v1.md
+prompts/g3_b2/reflection_v1.md
+prompts/g3_b2/replanning_v1.md
+```
+
+`agent/evidence/g3_b2/prompt_registry.json` 已冻结 5 个 G3-B2 Prompt 的 `prompt_id`、`version=1.0.0`、source path 和 SHA256。G3-D 必须复用并验证该 registry。
+
+`prompts/algorithm_prompt.txt` 的多个 section 当前没有等价的完整比赛 registry contract；必须在 G3-D 中登记 current canonical source，但不得反向伪造 historical version。
+
+G3-B3 deterministic feature loop 当前没有独立、可证明的 historical Prompt/Response log。G3-D 必须将其 proposal/evaluation/reflection 归入 frozen deterministic trace；若无法证明 historical Prompt relationship，使用：
+
+```text
+HISTORICAL_TRACE_UNAVAILABLE
+```
+
+或：
+
+```text
+RECONSTRUCTED_FROM_FROZEN_EVIDENCE
+```
+
+不得为 G3-B3 补造 Prompt。
+
+### Skill
+
+当前 `agent/` 与 `skills/` 中存在 planning、reasoning、selection、execution、evaluation、reflection、replanning、explanation、benchmark、proposal、optimization、topology、hardware、knowledge 和 reporting 等模块。
+
+当前没有统一、提交级的 Skill Registry。G3-D-B 必须先从真实 source、imports、tests 和 frozen evidence 建立 registry，不得仅按文件名把模块全部声明成已实现 Skill。
+
+### Frozen Agent traces
+
+G3-B2 已有：
+
+```text
+agent/evidence/g3_b2/trace_manifest.json
+agent/evidence/g3_b2/prompt_registry.json
+agent/evidence/g3_b2/human_intervention.json
+agent/evidence/g3_b2/commit_mapping.json
+agent/evidence/g3_b2/runs/
+agent/evidence/g3_b2/proposals/
+agent/evidence/g3_b2/evaluations/
+agent/evidence/g3_b2/reflections/
+```
+
+并由 G3-B2 final evidence 的 `agent_trace_inventory.json` 逐文件 hash 锚定。
+
+G3-B3 已有 20 条 proposal、20 条 evaluation、20 条 reflection 记录，source authority 通过 G3-B3 final `manifest.json` 指向：
+
+```text
+experiments/feature_completion/evidence/
+    g3_b3_d_agent_flow_20260807T150515Z/
+```
+
+其 SHA256SUMS digest 已由 final manifest 锚定。G3-D 不得复制或修改这些 frozen records，只能以 pointer/hash 引用和归一化解释。
+
+### 当前交付缺口
+
+G3-D 当前需要关闭：
+
+1. 缺统一 Agent/Prompt delivery contract；
+2. 缺完整 Prompt Registry；
+3. 缺提交级 Skill Registry；
+4. 缺跨 G3-B2/G3-B3 的 normalized trace schema/index；
+5. 缺只读取 frozen evidence 的统一 offline replay/verify 入口；
+6. 缺 human/Agent/deterministic/reconstructed provenance 的统一披露；
+7. 缺 Prompt→Skill→Trace→Source→Commit→Evidence→Claim 的正式映射；
+8. 缺 Agent/Prompt 专项 staging 与最终 authority evidence。
+
+这些都是交付与可复现性缺口，不授权重新打开 Agent 或通信功能开发。
+
+---
+
+## 14.3 Authority hierarchy
+
+G3-D 必须使用以下权威层级，优先级从高到低。
+
+### L1：merged main Final Feature Freeze source
+
+```text
+当前 merged main 上的 source / tests / configs
+```
+
+它定义当前实现事实、当前入口、当前 Prompt/Skill source 和 current canonical behavior。
+
+### L2：G3-C formal reporting system
+
+至少包括：
+
+```text
+docs/submission/report_claim_ledger.json
+docs/submission/report_data_ledger.json
+docs/submission/report_chart_data/
+docs/submission/reports/
+docs/submission/reports/report_source_index.md
+experiments/submission/evidence/g3_c_20260809T000000Z/
+```
+
+其中 `docs/submission/report_claim_ledger.json` 是 G3-D 对外 claim language 和 claim boundary 的最高权威之一。
+
+### L3：G3-B3 final feature completion evidence
+
+权威 evidence root：
+
+```text
+experiments/feature_completion/evidence/
+    g3_b3_f_final_20260807T170000Z
+```
+
+权威 `SHA256SUMS` digest：
+
+```text
+45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754
+```
+
+重点消费 Agent proposal v2、Schedule IR v2、20 proposal/evaluation/reflection inventory、implemented/deferred/skipped gate decisions、feature ablation、human/deterministic gate information where recorded，以及 source evidence pointers。
+
+### L4：G3-B2 optimization evidence
+
+权威 evidence root：
+
+```text
+experiments/optimization/evidence/
+    g3_b2_f_final_20260807T040000Z
+```
+
+权威 `SHA256SUMS` digest：
+
+```text
+99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483
+```
+
+重点消费 Agent optimization trace、proposal、evaluation、reflection、replanning、A0-A7 ablation、human intervention、commit mapping 和 prompt registry。
+
+### L5：G3-A requirement / gap / claim audit
+
+重点消费：
+
+```text
+REQ-AGENT-002
+REQ-AGENT-004
+REQ-AGENT-005
+REQ-AGENT-006
+REQ-AGENT-007
+REQ-DOC-005
+REQ-PACKAGE-002
+corresponding risks and roadmap assignments
+```
+
+G3-A 是 historical audit。G3-D 不得覆盖或修改 G3-A historical requirement matrix；只能生成 G3-D 独立 validation/result，并说明当前新增交付如何响应旧 gap。
+
+### 冲突规则
+
+```text
+current implementation fact        → L1
+external claim wording             → L2 claim ledger
+G3-B3 historical feature decision  → L3
+G3-B2 historical optimization      → L4
+historical gap identity            → L5
+```
+
+无法按层级消解的冲突必须：
+
+```text
+STOP
+status=BLOCKED_BY_AUTHORITY_CONFLICT
+```
+
+不得选择更有利的描述。
+
+---
+
+## 14.4 Truth / provenance vocabulary
+
+G3-D 必须建立统一、machine-readable 的 provenance vocabulary，至少包含：
+
+```text
+AGENT_GENERATED
+DETERMINISTIC_EVALUATION
+HUMAN_INTERVENTION
+HISTORICAL_EVIDENCE
+REPLAYED_FROM_FROZEN_TRACE
+RECONSTRUCTED_FROM_FROZEN_EVIDENCE
+HISTORICAL_TRACE_UNAVAILABLE
+OFFLINE_REPLAY
+ONLINE_LLM_OPTIONAL
+```
+
+| Vocabulary | 允许含义 |
+| ---------- | -------- |
+| `AGENT_GENERATED` | frozen record 明确把某个 proposal/output 标识为 Agent 生成；不自动表示无人干预或 LLM 生成 |
+| `DETERMINISTIC_EVALUATION` | 当前 source/test 或 frozen evidence 可确定性复算的 schema、correctness、cost、gate 或 selection |
+| `HUMAN_INTERVENTION` | 有明确 actor、decision、scope 或 approval record 的人工输入/干预 |
+| `HISTORICAL_EVIDENCE` | G3-D 之前已经冻结且 hash 可验证的原始仓库 evidence |
+| `REPLAYED_FROM_FROZEN_TRACE` | G3-D 使用 frozen trace 输入按固定规则重放的结果；不是历史执行本身 |
+| `RECONSTRUCTED_FROM_FROZEN_EVIDENCE` | 由多个 frozen artifact 组合出的解释或 normalized record；不是 original Agent log |
+| `HISTORICAL_TRACE_UNAVAILABLE` | 历史 Prompt、Response、execution log 或关系无法从 authority source 证明 |
+| `OFFLINE_REPLAY` | 不使用外部模型、网络或 API Key 的 mandatory deterministic replay |
+| `ONLINE_LLM_OPTIONAL` | 已存在但不属于 mandatory submission path 的 online LLM 能力 |
+
+允许新增更细 vocabulary，但必须先写入 schema/allowlist，并保持以上含义不变。
+
+以下区分必须始终存在：
+
+```text
+historical execution
+!=
+G3-D replay
+!=
+G3-D reconstruction
+```
+
+如果缺乏原始历史 Prompt/Response/Agent execution log，必须标记 `HISTORICAL_TRACE_UNAVAILABLE` 或 `RECONSTRUCTED_FROM_FROZEN_EVIDENCE`。
+
+不得补造历史时间戳、未保存的 Prompt/Response、hidden chain-of-thought、Agent 内部推理过程、未证明的人工决策、未证明的 source/commit relationship 或“全部代码由 Agent 自主生成”结论。
+
+G3-D 不得输出或保存 hidden chain-of-thought。对外只允许可审计 decision record，例如：
+
+```text
+input
+proposal
+deterministic_evaluation
+reflection_or_replanning_result
+final_decision
+human_intervention_status
+evidence_pointer
+```
+
+---
+
+## 14.5 Mandatory offline boundary
+
+G3-D mandatory path 必须完全 offline。
+
+不得要求：
+
+```text
+DEEPSEEK_API_KEY
+OPENAI_API_KEY
+ANTHROPIC_API_KEY
+```
+
+不得发起真实外部模型请求，不得把 network availability 作为通过条件。
+
+现有 DeepSeek `LLMClient` 可以继续存在，但只能登记为 `ONLINE_LLM_OPTIONAL`。G3-D 不得为了本阶段重新设计 LLM client、provider abstraction 或 Agent reasoning semantics。
+
+submission mandatory path 必须通过 `OFFLINE_REPLAY` 完成，并满足：
+
+1. 不实例化或调用 online LLM client；
+2. 不读取或要求 API Key；
+3. 不访问网络；
+4. 读取 frozen trace/evidence；
+5. 校验 schema、hash、source pointer；
+6. 确定性重放 proposal→evaluation→reflection/replanning→final decision；
+7. 输出 machine-readable canonical JSON；
+8. 多次运行产生相同 canonical output/hash；
+9. 不修改 frozen evidence；
+10. 不把 replay 标记成 historical execution。
+
+现有 `HCCLAgent.run()` 会包含日志写入、best-effort online reasoning 和 CPU_SIM execution orchestration，因此不得直接作为 G3-D mandatory replay contract。G3-D 应复用已有 deterministic G3-B2/G3-B3 loop、schema、validator 和 evidence reader，在其上建立最小 delivery wrapper。
+
+---
+
+## 14.6 G3-C Claim Ledger boundary
+
+`docs/submission/report_claim_ledger.json` 是 G3-D 对外 claim language authority。
+
+G3-D 不得为了 Agent 文档修改 claim ledger 来放宽 claim。若 G3-D wording 与 ledger 冲突：
+
+```text
+modify G3-D wording
+```
+
+不得修改 ledger 以迁就 G3-D。
+
+必须继续保持：
+
+```text
+LOSSLESS_SPARSE_HOST_EXECUTED
+HOST_INTEGRITY_VALIDATED
+HOST_RETRY_VALIDATED
+SIMULATED_BACKPRESSURE
+SIMULATED_ONLY
+DIRECT_COMPILE_LINK_ONLY
+REAL_DEVICE_NOT_EXECUTED
+```
+
+特别禁止：
+
+- 把 `45.59283008%` raw / `45.59%` display 写成真实 Ascend/NPU/HCCL/training 性能提升；
+- 把 18 wins / 0 ties / 0 losses 写成真实 workloads 全胜；
+- 把 official ACL/HCCL call expressions 写成 real-device execution；
+- 把 sparse modeled wire bytes 写成物理 NIC measurement；
+- 把 host CRC/retry 写成 HCCL/NIC reliability；
+- 把 backpressure model 写成真实 NIC backpressure；
+- 把 optional online LLM 写成 mandatory autonomous Agent；
+- 无 evidence 使用 `fully autonomous`。
+
+优先使用受 evidence 支持的描述：
+
+```text
+Agent-assisted
+Agent-generated proposal
+deterministically evaluated
+human-governed
+offline replayable
+evidence-backed
+```
+
+---
+
+## 14.7 Feature Freeze 与 hardware boundary
+
+### Feature Freeze boundary
+
+G3-D 禁止修改：
+
+```text
+collective algorithms
+algorithm semantics
+Schedule IR execution semantics
+topology optimization semantics
+Sparse codec semantics
+CRC / integrity semantics
+timeout / retry semantics
+flow-control / backpressure semantics
+selector behavior
+performance model
+simulator equations
+benchmark scenarios / results
+correctness thresholds
+CPU_SIM public ABI
+SONAME
+19-symbol allowlist
+Direct runtime semantics
+G3-B2 frozen evidence
+G3-B3 frozen evidence
+G3-C factual ledgers
+```
+
+允许的实现范围只有：
+
+```text
+delivery metadata
+registry/schema
+read-only evidence readers
+normalization
+offline replay wrapper
+verification
+documentation
+staging integration
+new G3-D evidence
+```
+
+如果完成任务必须修改冻结项目：
+
+```text
+STOP
+record blocker
+do not reopen Final Feature Freeze
+```
+
+### Hardware boundary
+
+G3-D 不允许执行：
+
+```text
+ACL runtime
+HCCL runtime
+device/context/stream
+communicator
+real collective
+MPI
+hccl_test
+msprof
+```
+
+Real-device acceptance 继续为 `HARDWARE_BLOCKED`，除非未来独立取得真实硬件 evidence。
+
+G3-D 不得产生：
+
+```text
+REAL_DEVICE_PASS
+real_ascend_npu_validated=true
+direct_hccl_api_call=true
+real_device_api_executed=true
+runtime_api_calls=[...]
+```
+
+---
+
+## 14.8 G3-D 总体 checkpoint
+
+G3-D 拆分为五个有序阶段：
+
+| Checkpoint | 名称 | 核心目标 |
+| ---------- | ---- | -------- |
+| G3-D-A | Authority, Inventory and Delivery Contract | 冻结 authority、inventory、truth 与 delivery contract |
+| G3-D-B | Prompt Registry and Skill Registry | 建立 current canonical Prompt/Skill registries |
+| G3-D-C | Trace Normalization and Offline Replay | 归一化 G3-B2/G3-B3 frozen traces 并提供 deterministic offline replay |
+| G3-D-D | Provenance, Human Intervention and Submission Documentation | 完成正式 Agent/Prompt 文档和 provenance/autonomy disclosure |
+| G3-D-E | Final Validation, Staging and Evidence Freeze | 完成测试、staging、唯一最终 evidence 与 SHA freeze |
+
+必须按：
+
+```text
+G3-D-A → G3-D-B → G3-D-C → G3-D-D → G3-D-E
+```
+
+顺序执行。不得在 inventory/contract 完成前创建重复实现。
+
+---
+
+## 14.9 G3-D-A — Authority, Inventory and Delivery Contract
+
+### Objective
+
+冻结 G3-D Agent/Prompt delivery contract，并完整盘点当前已有实现、tests、documentation、staging 和 historical frozen evidence。本阶段只建立交付 contract，不做 Agent feature enhancement。
+
+### Inputs / Authority
+
+必须读取并验证：
+
+```text
+agent/
+skills/
+prompts/
+tools/
+tests/
+experiments/optimization/
+experiments/feature_completion/
+docs/submission/
+```
+
+以及 14.3 的 L1–L5 authority。必须验证 G3-B2/G3-B3 `SHA256SUMS` digest 与 final manifest source pointer，不得只检查目录存在。
+
+### Implementation scope
+
+盘点至少覆盖：
+
+```text
+Agent entry point
+backend boundary
+LLM boundary
+prompt engine
+prompt files
+prompt registry
+skill registry status
+planning
+reasoning
+candidate generation
+selection
+evaluation
+execution
+reflection
+replanning
+explanation
+benchmark integration
+Schedule IR integration
+feature proposal path
+optimization trace
+human intervention representation
+commit/source mapping
+replay capability
+logging side effects
+staging coverage
+tests
+```
+
+每项必须记录：
+
+```text
+component_id
+component_type
+source_path
+authority_level
+current_status
+frozen_status
+entry_or_owner
+inputs
+outputs
+side_effects
+online_dependency
+tests
+relevant_evidence
+historical_record_availability
+provenance
+g3_d_output_mapping
+limitations
+```
+
+状态至少允许：
+
+```text
+CURRENT_IMPLEMENTED
+FROZEN_HISTORICAL
+PARTIAL
+OPTIONAL_ONLINE
+DOCUMENTATION_ONLY
+HISTORICAL_TRACE_UNAVAILABLE
+NOT_IN_SCOPE
+```
+
+不得把 aspirational docs、roadmap、Prompt text 或文件名当作 implemented capability。
+
+### Expected artifacts
+
+建议建立：
+
+```text
+docs/submission/agent_delivery/
+├── delivery_contract.json
+├── authority_inventory.json
+└── inventory_summary.md
+```
+
+`delivery_contract.json` 至少冻结 schema versions、authority roots/hashes、provenance vocabulary、mandatory offline rule、forbidden claims、Feature Freeze boundary、hardware boundary、expected artifacts、staging destinations 和 validation sentinels。
+
+### Tests / Acceptance criteria
+
+至少验证：
+
+1. inventory 中每个 source/test/evidence path 存在；
+2. authority level 合法；
+3. status 与 provenance vocabulary 合法；
+4. G3-B2/G3-B3 SHA authority PASS；
+5. G3-C claim/data ledger 可读取；
+6. ignored local logs 不作为 authority；
+7. roadmap-only capability 不标 implemented；
+8. online/offline、side-effect 和 hardware boundary 完整；
+9. required artifact mapping 完整；
+10. 只使用 repository-relative paths。
+
+预期 sentinel：
+
+```text
+G3_D_AUTHORITY_INVENTORY_OK
+```
+
+### Truth boundaries
+
+- inventory 是 G3-D 当前盘点，不是 historical Agent log；
+- source/hash 证明文件身份，不证明某次历史调用；
+- `HCCLAgent` module existence 不证明所有生产代码由 Agent 生成；
+- `OfflineDevelopmentLoop` 只证明受控模板演示，不证明 online LLM 自主开发；
+- ignored `logs/` 不得升级成 official evidence。
+
+### Forbidden changes
+
+- 不修改 Agent/Skill/Prompt behavior；
+- 不新增 replay engine；
+- 不修改 frozen evidence 或 G3-C ledger；
+- 不更新算法或 benchmark；
+- contract/inventory 验证通过前不得创建后续重复实现。
+
+### Commit boundary
+
+本阶段只允许提交 authority、inventory、delivery contract 及其 focused tests/validator。
+
+建议 commit：
+
+```text
+G3-D-A freeze Agent prompt delivery contract
+```
+
+### Exit criteria
+
+- authority hierarchy frozen；
+- current component inventory complete；
+- historical availability逐项标记；
+- G3-B2/G3-B3 authority hash validated；
+- G3-C ledger authority recorded；
+- offline/online boundary recorded；
+- Feature Freeze/hardware boundary recorded；
+- no duplicate implementation created；
+- focused G3-D-A tests PASS；
+- working diff limited to G3-D-A scope。
+
+---
+
+## 14.10 G3-D-B — Prompt Registry and Skill Registry
+
+### Objective
+
+建立比赛正式使用的 Prompt Registry 与 Skill Registry，并将 current canonical source、frozen historical references、tests 和 provenance 统一映射。
+
+### Inputs / Authority
+
+优先复用：
+
+```text
+agent/evidence/g3_b2/prompt_registry.json
+agent/evidence/g3_b2/trace_manifest.json
+prompts/g3_b2/*.md
+prompts/algorithm_prompt.txt
+agent/prompt_engine.py
+agent/reasoning_skill.py
+agent/g3_b2_optimization_loop.py
+agent/g3_b3_feature_loop.py
+agent/*_skill.py
+skills/*.py
+tests/
+G3-B2/G3-B3 frozen evidence
+G3-D-A authority_inventory.json
+```
+
+禁止无必要重新设计 G3-B2/G3-B3 已有 schema。
+
+### Implementation scope
+
+#### Prompt Registry
+
+每项应尽可能记录：
+
+```text
+prompt_id
+current_canonical_version
+historical_version_status
+purpose
+source_path
+source_sha256
+owning_stage
+owning_module
+input_contract
+output_contract
+referenced_skills
+online_offline_classification
+provenance
+source_commit
+evidence_pointer
+tests
+limitations
+```
+
+规则：
+
+1. 复用 G3-B2 的五个 frozen prompt_id/version/hash；
+2. 对 `prompts/algorithm_prompt.txt` 可建立 current canonical registry entries 或 section entries，但 version 只能表示 G3-D current canonical source；
+3. 若 historical prompt version 从未存在，必须设置 `historical_version_status=HISTORICAL_TRACE_UNAVAILABLE`；
+4. G3-B3 deterministic proposal/evaluation 不得伪装成有 historical Prompt/Response；
+5. source hash 必须基于 repository bytes；
+6. Prompt 中 aspirational/overclaim wording 必须在 limitations 中披露，不能据此升级 capability claim。
+
+#### Skill Registry
+
+每项应尽可能记录：
+
+```text
+skill_id
+name
+source_path
+source_sha256
+purpose
+inputs
+outputs
+deterministic_classification
+side_effects
+online_dependency
+agent_stage
+prompt_dependency
+tests
+frozen_evidence
+status
+provenance
+limitations
+```
+
+classification 至少区分：
+
+```text
+DETERMINISTIC
+OPTIONAL_ONLINE
+HOST_EXECUTED
+SIMULATOR_MODEL
+DELIVERY_ONLY
+```
+
+只登记当前源码真实存在并可映射到 tests/evidence 的能力。没有 focused tests 的项必须明确标记 test gap，不得虚构 coverage。
+
+### Expected artifacts
+
+```text
+docs/submission/agent_delivery/
+├── prompt_registry.json
+├── prompt_registry.md
+├── skill_registry.json
+└── skill_registry.md
+```
+
+如 schema 需要独立文件，建议使用 `tools/agent_delivery/schemas.py`，但不得引入第三方 dependency 或新的 packaging framework。
+
+### Tests / Acceptance criteria
+
+至少验证：
+
+1. registry schema；
+2. prompt_id/skill_id 唯一；
+3. source path 存在且相对；
+4. source SHA256 匹配；
+5. G3-B2 frozen registry 未改变；
+6. prompt input/output contract 非空或明确 unavailable；
+7. historical unavailable 不被虚构 version 替代；
+8. Skill source/import/test mapping 可解析；
+9. online Skill 不进入 mandatory replay dependency；
+10. roadmap-only/Prompt-only capability 不得标 `CURRENT_IMPLEMENTED`；
+11. secrets、absolute local paths 和 raw private logs 不进入 registry；
+12. stable ordering 与 deterministic serialization。
+
+预期 sentinels：
+
+```text
+PROMPT_REGISTRY_OK
+SKILL_REGISTRY_OK
+```
+
+### Truth boundaries
+
+- current canonical Prompt version 不等于 historical execution version；
+- Prompt source existence 不证明它被某个 historical run 调用；
+- Skill registration 不证明真实硬件执行；
+- `ReasoningSkill`/`LLMClient` 只能标 `ONLINE_LLM_OPTIONAL`；
+- deterministic G3-B2/G3-B3 loops 可登记为 offline-capable，但新运行不是历史运行。
+
+### Forbidden changes
+
+- 不改 Prompt 文本以改写历史；
+- 不改 Prompt engine/LLM behavior；
+- 不新增 algorithm/Skill capability；
+- 不更新 Schedule/selector/cost semantics；
+- 不修改 G3-B2 registry 或 frozen evidence；
+- 不把 stale documentation 直接转成 registry truth。
+
+### Commit boundary
+
+本阶段只允许提交 Prompt/Skill registries、schema、registry-focused tests 和必要的 read-only builder/validator。
+
+建议 commit：
+
+```text
+G3-D-B build prompt and skill registries
+```
+
+### Exit criteria
+
+- Prompt Registry complete and validated；
+- Skill Registry complete and validated；
+- all hashes PASS；
+- G3-B2 prompt identities preserved；
+- historical unavailable cases explicit；
+- mandatory path has no online dependency；
+- no feature semantics changed；
+- focused G3-D-B tests PASS。
+
+---
+
+## 14.11 G3-D-C — Trace Normalization and Offline Replay
+
+### Objective
+
+把已有 G3-B2/G3-B3 frozen Agent records 标准化为统一、可审计的 trace index，并建立 deterministic mandatory offline replay。
+
+### Inputs / Authority
+
+#### Evidence line A：G3-B2 Optimization Agent Trace
+
+必须消费：
+
+```text
+agent/evidence/g3_b2/
+experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/
+```
+
+覆盖 proposal、evaluation、reflection、replanning、final selection、A0-A7 ablation、human intervention 和 commit/evidence mapping。
+
+必须保持 frozen performance：
+
+```text
+raw weighted improvement = 45.59283008%
+display value            = 45.59%
+wins                     = 18
+ties                     = 0
+losses                   = 0
+truth identity           = SIMULATED_ONLY
+```
+
+#### Evidence line B：G3-B3 Feature Completion Agent Trace
+
+必须消费：
+
+```text
+experiments/feature_completion/evidence/
+    g3_b3_f_final_20260807T170000Z/
+experiments/feature_completion/evidence/
+    g3_b3_d_agent_flow_20260807T150515Z/
+```
+
+覆盖 feature proposal、deterministic evaluation、correctness hard gate、reflection、dense/sparse decision、integrity/retry/flow policy decision、B0-B6 ablation 和 final feature decisions。
+
+必须明确：
+
+```text
+INT8
+→ DEFERRED_BY_PRECISION_GATE
+
+PairWise
+→ SKIPPED_BY_VALUE_GATE
+```
+
+并引用已实施 feature 的现有 evidence，不得重跑 feature benchmark。
+
+### Implementation scope
+
+建立统一 normalized trace schema，每条 trace 至少包含：
+
+```text
+trace_id
+schema_version
+scenario
+source_checkpoint
+source_evidence_path
+source_evidence_sha256
+source_evidence_root_sha256
+source_commit
+prompt_id
+prompt_version
+prompt_relationship_status
+skills
+input
+proposal
+deterministic_evaluation
+reflection
+replanning
+final_decision
+human_intervention_status
+human_intervention_refs
+output_artifact
+source_refs
+commit_refs
+claim_refs
+limitations
+provenance_identity
+execution_identity
+```
+
+字段无法证明时必须使用 `null`、`[]`、`HISTORICAL_TRACE_UNAVAILABLE` 或 `RECONSTRUCTED_FROM_FROZEN_EVIDENCE`，不得填入猜测值。
+
+`replanning` 对不适用或无历史记录的场景必须明确 `NOT_APPLICABLE` 或 `HISTORICAL_TRACE_UNAVAILABLE`，不得为了满足 schema 生成虚假 replan。
+
+#### Offline replay CLI
+
+优先建立最小、独立的 delivery CLI：
+
+```text
+python -m tools.agent_delivery_cli describe
+python -m tools.agent_delivery_cli verify
+python -m tools.agent_delivery_cli replay --trace <trace_id>
+```
+
+若 G3-D-A 证明现有 `tools.submission_cli` 已有完全适合的 extension seam，可采用等价 subcommand；不得把 Agent delivery 行为塞入 G3-C `report_cli` 而破坏其 reporting-only contract。
+
+CLI contract：
+
+```text
+describe → read-only inventory summary
+verify   → read-only schema/hash/pointer/provenance validation
+replay   → read frozen normalized inputs and emit canonical decision flow
+```
+
+普通 `describe/verify/replay` 不得写 tracked file。G3-D-E final evidence generation 使用独立、明确授权的 freeze command 或 existing staging integration。
+
+### Expected artifacts
+
+```text
+docs/submission/agent_delivery/
+├── trace_index.json
+├── trace_index.md
+└── traces/
+    ├── g3_b2_optimization_trace.json
+    └── g3_b3_feature_completion_trace.json
+
+tools/agent_delivery/
+├── __init__.py
+├── schemas.py
+├── evidence_reader.py
+├── trace_normalizer.py
+├── replay.py
+└── verifier.py
+
+tools/agent_delivery_cli.py
+```
+
+实际文件可以按仓库风格合并，但 logical artifacts 和 CLI behavior 不得缺失。
+
+### Tests / Acceptance criteria
+
+至少验证：
+
+1. normalized trace schema 与 unique trace_id；
+2. frozen source path、file SHA、root SHA 和 manifest pointer；
+3. asserted source commit 可由本地 Git object 解析；
+4. 无法证明的 commit relationship 标 unavailable；
+5. Prompt id/version 可解析或明确 unavailable；
+6. Skill ids 可解析；
+7. G3-B2 45.59283008/45.59/18/0/0 与 G3-C ledger 一致；
+8. G3-B2 truth=`SIMULATED_ONLY`；
+9. G3-B3 20/20/20 inventory 与 frozen evidence 一致；
+10. INT8 deferred 与 PairWise skipped gate 一致；
+11. replay 不要求 API Key、不发起网络；
+12. replay 两次 canonical JSON/hash 完全相同；
+13. replay 不修改 frozen evidence 或 tracked worktree；
+14. reconstructed replay 不标 historical execution；
+15. no hidden chain-of-thought fields；
+16. malformed/overclaim/unresolved pointer 被拒绝。
+
+预期 sentinels：
+
+```text
+TRACE_INDEX_OK
+OFFLINE_REPLAY_OK
+```
+
+### Truth boundaries
+
+- G3-D 新执行 replay 不是 historical execution；
+- normalized trace 不是 original raw Agent log；
+- G3-B2 historical timestamp 只可原样引用，不能补写；
+- G3-B3 20/20/20 records 不证明 online LLM participation；
+- G3-B2 performance 仍是 `SIMULATED_ONLY`；
+- replay result 不构成新性能、硬件或 correctness claim。
+
+### Forbidden changes
+
+- 不重跑 G3-B2 benchmark/A0-A7 或 G3-B3 benchmark/B0-B6；
+- 不修改 frozen trace/evidence；
+- 不调用 external LLM 或 `HCCLAgent.run()` 作为 mandatory replay；
+- 不执行 ACL/HCCL/device API；
+- 不修改 selector/cost/Schedule/Agent proposal semantics；
+- 不补造 Prompt/Response/CoT/human decision。
+
+### Commit boundary
+
+本阶段只允许提交 normalized trace artifacts、offline replay/verify tooling 和 focused tests。
+
+建议 commit：
+
+```text
+G3-D-C normalize and replay frozen Agent traces
+```
+
+### Exit criteria
+
+- G3-B2/G3-B3 normalized traces validated；
+- trace index complete；
+- authority hashes and pointers PASS；
+- offline replay succeeds without Key/network；
+- replay determinism PASS；
+- historical/replay/reconstruction identities distinct；
+- no frozen evidence mutation；
+- focused G3-D-C tests PASS。
+
+---
+
+## 14.12 G3-D-D — Provenance, Human Intervention and Submission Documentation
+
+### Objective
+
+形成比赛正式 Agent/Prompt 文档，关闭 G3-A 中 provenance、autonomy、Prompt/Skill 和 reproduction 交付缺口。
+
+### Inputs / Authority
+
+必须从以下 authority 派生，不得手工创建第二套事实：
+
+```text
+G3-D-A authority/inventory
+G3-D-B Prompt/Skill registries
+G3-D-C normalized trace/index
+G3-C claim ledger
+G3-C data ledger
+G3-C reports/source index
+G3-B2/G3-B3 frozen evidence
+G3-A requirement/risk/roadmap records
+```
+
+### Implementation scope
+
+每个展示 workflow 必须区分：
+
+```text
+Agent-generated proposal
+deterministic evaluation
+human-supplied goal/constraint
+human approval/intervention
+offline replay
+reconstructed documentation
+historical evidence
+historical trace unavailable
+optional online LLM
+```
+
+建立完整可审计链：
+
+```text
+Prompt
+→ Skill
+→ Agent Trace
+→ Source
+→ Commit
+→ Evidence
+→ G3-C Claim
+```
+
+如果某个 historical relationship 无法证明，必须标记 `HISTORICAL_TRACE_UNAVAILABLE` 或 `RECONSTRUCTED_FROM_FROZEN_EVIDENCE`，不能通过文档叙事补齐关系。
+
+文档中涉及数字时必须使用：
+
+```text
+G3-C data ledger
+→ G3-D reference
+```
+
+不得重新从 benchmark 日志挑选或手工维护数字。
+
+### Expected artifacts
+
+`docs/submission/agent_delivery/` 至少形成：
+
+```text
+README.md
+01_agent_architecture_and_workflow.md
+02_prompt_registry_and_version_reference.md
+03_skill_inventory.md
+04_trace_and_provenance_index.md
+05_offline_replay_guide.md
+06_human_intervention_and_autonomy_disclosure.md
+07_limitations_and_online_llm_boundary.md
+08_source_commit_evidence_claim_mapping.md
+source_commit_evidence_claim_mapping.json
+human_intervention_disclosure.json
+```
+
+### Tests / Acceptance criteria
+
+至少验证：
+
+1. required documents 全部存在；
+2. docs 与 registries/trace index 一致；
+3. Prompt/Skill/Trace link 可解析；
+4. source/commit/evidence/claim mapping 可解析；
+5. G3-C claim refs 存在；
+6. 数值只引用 G3-C ledger；
+7. human intervention fields 完整；
+8. historical unavailable cases 显式；
+9. reconstructed docs 不标 original log；
+10. mandatory replay 文档不要求 API Key；
+11. online LLM 始终 optional；
+12. 禁止 `fully autonomous` 等 unsupported claim；
+13. no hidden chain-of-thought；
+14. no secrets；
+15. no local absolute paths；
+16. relative links PASS；
+17. stale `docs/agent_capabilities.md` / `docs/agent_development_demo.md` 不作为 current authority；是否 supersede 由本阶段显式说明，不删除历史文件。
+
+预期 sentinels：
+
+```text
+PROVENANCE_OK
+CLAIM_BOUNDARIES_OK
+```
+
+### Truth boundaries
+
+- 正式描述优先使用 `Agent-assisted`、`deterministically evaluated`、`human-governed`、`offline replayable`；
+- 只有 frozen evidence 明确支持时才使用 `AGENT_GENERATED`；
+- 无原始 historical trace 时不能声称 G3-D 恢复了 original prompt/response；
+- human authorization 不等于 human algorithm choice；
+- no scenario-level human intervention 只能按 G3-B2 frozen record 原样解释；
+- 当前 code generation demo 是 `OFFLINE_TEMPLATE` 临时目录演示，不得描述成核心 C/C++ 生产代码 provenance。
+
+### Forbidden changes
+
+- 不修改 G3-C claim/data ledger；
+- 不复制 G3-C 大量数字；
+- 不改 Agent feature source；
+- 不新增 Prompt、Skill 或 algorithm behavior；
+- 不修改 historical docs 以伪装历史；
+- 不披露 secrets/private logs；
+- 不输出 hidden chain-of-thought。
+
+### Commit boundary
+
+本阶段只允许提交 Agent/Prompt formal documentation、provenance/human disclosure、mapping artifact 和 documentation-focused verifier/tests。
+
+建议 commit：
+
+```text
+G3-D-D document Agent provenance and autonomy boundaries
+```
+
+### Exit criteria
+
+- formal Agent/Prompt documentation complete；
+- provenance chain auditable；
+- human/Agent/deterministic roles disclosed；
+- historical unavailable cases explicit；
+- G3-C claim wording preserved；
+- offline/online boundary documented；
+- no overclaim/secrets/local paths；
+- focused G3-D-D tests PASS。
+
+---
+
+## 14.13 G3-D-E — Final Validation, Staging and Evidence Freeze
+
+### Objective
+
+完成 G3-D 软件交付验收、existing submission staging integration、唯一 authority evidence freeze 和最终 stop。
+
+### Inputs / Authority
+
+消费：
+
+```text
+G3-D-A contract/inventory
+G3-D-B registries
+G3-D-C normalized traces/replay
+G3-D-D formal docs/mappings
+existing tools.submission_cli staging framework
+scripts/validate_linux_cpu_sim.sh
+G3-C ledgers and final evidence
+G3-B2/G3-B3 authority evidence
+```
+
+不得创建新的平行 staging framework。
+
+### Implementation scope
+
+1. 完成 focused G3-D verifier；
+2. 把 Agent/Prompt delivery logical artifacts 纳入 existing submission staging；
+3. 校验 staging coverage、exclude policy、relative paths 和 size；
+4. 执行完整 regression；
+5. 生成唯一 G3-D final authority evidence；
+6. 生成 `SHA256SUMS` 并校验 digest；
+7. 记录 final Git state、source commit 和 Feature Freeze state；
+8. 最终停止，不进入 G3-E。
+
+### Expected artifacts
+
+唯一最终 authority evidence 建议放在：
+
+```text
+experiments/submission/evidence/
+    g3_d_<timestamp>/
+```
+
+至少包含：
+
+```text
+README.md
+manifest.json
+result.json
+authority_inventory_validation.json
+delivery_contract_validation.json
+prompt_registry_validation.json
+skill_registry_validation.json
+trace_index_validation.json
+g3_b2_trace_validation.json
+g3_b3_trace_validation.json
+offline_replay_validation.json
+replay_determinism.json
+provenance_validation.json
+human_intervention_validation.json
+historical_unavailable_validation.json
+claim_boundary_validation.json
+source_commit_mapping_validation.json
+staging_verification.json
+regression_summary.json
+no_secrets_audit.json
+path_portability_audit.json
+git_state.json
+user_action_required.json
+SHA256SUMS
+```
+
+不得复制整个 G3-B2/G3-B3/G3-C evidence tree。只通过 relative pointer、source SHA256 和 authority root `SHA256SUMS` digest 引用。
+
+### Tests / Acceptance criteria
+
+focused tests 至少验证：
+
+```text
+prompt registry schema
+prompt hashes
+skill registry schema
+skill mappings/hashes
+trace schema
+trace evidence hashes
+evidence pointers
+commit validity where asserted
+provenance vocabulary
+offline replay without API keys
+offline replay without network
+replay determinism
+no frozen-evidence mutation
+human-intervention fields
+historical-unavailable handling
+G3-C claim reference resolution
+forbidden overclaim rejection
+no local absolute paths
+no secrets
+submission staging coverage
+```
+
+Mandatory validation 至少输出：
+
+```text
+G3_D_AUTHORITY_INVENTORY_OK
+PROMPT_REGISTRY_OK
+SKILL_REGISTRY_OK
+TRACE_INDEX_OK
+OFFLINE_REPLAY_OK
+PROVENANCE_OK
+CLAIM_BOUNDARIES_OK
+NO_SECRETS_OK
+G3_D_AGENT_PROMPT_DELIVERY_OK
+```
+
+名称可按现有 CLI convention 最小调整，但必须有唯一最终成功 sentinel：
+
+```text
+G3_D_AGENT_PROMPT_DELIVERY_OK
+```
+
+运行 focused G3-D tests 后，必须完整执行：
+
+```bash
+bash scripts/validate_linux_cpu_sim.sh /tmp/hccl-agent-linux-review
+```
+
+必须继续满足：
+
+```text
+CMake configure PASS
+build PASS
+CTest PASS
+focused CPU_SIM unittest PASS
+full pytest PASS
+existing skip count no abnormal increase
+LINUX_CPU_SIM_VALIDATION_OK
+```
+
+并执行：
+
+```text
+git diff --check
+```
+
+final evidence freeze 前后必须比较：
+
+```text
+G3-B2 authority hash unchanged
+G3-B3 authority hash unchanged
+G3-C factual ledger hash unchanged
+Final Feature Freeze source contracts unchanged
+```
+
+### Truth boundaries
+
+- G3-D evidence 证明 delivery、traceability 和 offline replay，不证明新 algorithm 或真实 hardware；
+- full regression 不得表述成 real-device execution；
+- G3-D final timestamp 只表示本次 evidence freeze，不表示 historical Agent execution 时间；
+- staging copy 不改变 source/evidence authority；
+- final evidence 中 `runtime_api_calls=[]`。
+
+### Forbidden changes
+
+- 不降低测试或增加无理由 skip；
+- 不修改 frozen feature semantics；
+- 不修改 G3-B2/G3-B3/G3-C evidence/ledgers；
+- 不重跑大型 benchmark；
+- 不调用 online LLM 或任何真实设备 API；
+- 不创建新 staging framework；
+- 不复制完整旧 evidence tree；
+- 不创建 release/archive/tag。
+
+### Commit boundary
+
+本阶段只允许提交 final validation、existing staging integration、G3-D final evidence 和必要 focused tests。
+
+建议 commit：
+
+```text
+G3-D-E finalize Agent prompt delivery evidence
+```
+
+完成本 commit 后立即 `STOP`。
+
+### Exit criteria
+
+- all G3-D focused tests PASS；
+- Prompt/Skill/Trace/Provenance/Claim sentinels PASS；
+- offline replay deterministic and keyless；
+- full pytest PASS；
+- CTest PASS；
+- Linux CPU_SIM validation PASS；
+- staging PASS；
+- no secrets/local absolute paths；
+- old evidence/ledgers unchanged；
+- unique final evidence frozen；
+- SHA256SUMS validated；
+- Feature Freeze preserved；
+- real-device state unchanged；
+- worktree clean after commit；
+- no push/merge/G3-E。
+
+---
+
+## 14.14 Normalized trace 与 mapping contract
+
+为避免 G3-D-C/G3-D-D 维护不一致数据，必须建立单一 machine-readable mapping source：
+
+```text
+prompt_id
+  └── skill_ids[]
+        └── trace_ids[]
+              ├── source_paths[]
+              ├── commit_refs[]
+              ├── evidence_refs[]
+              └── claim_refs[]
+```
+
+每条关系至少包含：
+
+```text
+relationship_id
+from_type
+from_id
+to_type
+to_id
+authority_level
+source_pointer
+source_sha256
+provenance
+confidence
+limitations
+```
+
+若 `claim_refs=[]`，必须说明没有适用 G3-C external claim，而不是发明 Agent claim。
+
+若 commit 只能由 frozen mapping 中的 abbreviated SHA 或 unresolved placeholder 表示，必须设置：
+
+```text
+commit_validity=UNRESOLVED
+provenance=HISTORICAL_TRACE_UNAVAILABLE
+```
+
+不得擅自匹配相似 commit message。
+
+---
+
+## 14.15 G3-D Test Requirements
+
+至少覆盖以下类别。
+
+### Authority / inventory
+
+1. authority schema；
+2. L1–L5 level validation；
+3. G3-B2 root digest；
+4. G3-B3 root digest；
+5. G3-C ledger readability；
+6. source path existence；
+7. current/frozen/unavailable status validation；
+8. ignored logs excluded；
+9. roadmap-only rejection；
+10. deterministic ordering。
+
+### Prompt Registry
+
+11. prompt schema；
+12. unique prompt_id；
+13. current version rule；
+14. historical unavailable rule；
+15. prompt source SHA；
+16. input contract；
+17. output contract；
+18. online/offline classification；
+19. G3-B2 registry parity；
+20. aspirational wording limitation。
+
+### Skill Registry
+
+21. skill schema；
+22. unique skill_id；
+23. source SHA；
+24. inputs/outputs；
+25. deterministic/online classification；
+26. Agent stage mapping；
+27. prompt dependency；
+28. test mapping；
+29. frozen evidence mapping；
+30. untested/partial status handling。
+
+### Trace / replay
+
+31. trace schema；
+32. unique trace_id；
+33. evidence pointer；
+34. evidence SHA；
+35. source commit validity；
+36. unavailable commit handling；
+37. G3-B2 proposal/evaluation/reflection/replan；
+38. G3-B2 human intervention；
+39. G3-B2 45.59283008/45.59；
+40. G3-B2 18/0/0；
+41. G3-B2 `SIMULATED_ONLY`；
+42. G3-B3 20/20/20；
+43. G3-B3 deterministic hard gate；
+44. INT8 deferred；
+45. PairWise skipped；
+46. missing historical Prompt handling；
+47. no fabricated replanning；
+48. replay canonical output；
+49. replay repeat hash equality；
+50. no network；
+51. no API key；
+52. no tracked writes；
+53. no old evidence mutation。
+
+### Provenance / docs / claims
+
+54. vocabulary allowlist；
+55. Agent/human/deterministic distinction；
+56. historical/replay/reconstruction distinction；
+57. no hidden chain-of-thought；
+58. G3-C claim resolution；
+59. 45.59 real-speedup rejection；
+60. Direct runtime overclaim rejection；
+61. sparse physical-wire overclaim rejection；
+62. CRC/NIC overclaim rejection；
+63. retry/HCCL overclaim rejection；
+64. backpressure/NIC overclaim rejection；
+65. `fully autonomous` rejection without evidence；
+66. required docs/headings；
+67. relative links；
+68. no absolute paths；
+69. no secrets；
+70. source/commit/evidence/claim mapping completeness。
+
+### Staging / regression
+
+71. staging inventory；
+72. Prompt/Skill/trace/docs included；
+73. frozen evidence referenced not copied wholesale；
+74. private logs excluded；
+75. controlled material excluded；
+76. official SDK/source/DSO excluded；
+77. focused G3-D tests；
+78. full pytest；
+79. CTest；
+80. Linux CPU_SIM validation；
+81. existing skip count guard；
+82. G3-B2/G3-B3/G3-C hash immutability；
+83. final evidence SHA；
+84. git diff check；
+85. clean final worktree。
+
+实际测试数量可以更多，但以上语义必须覆盖，且不得新增无理由 skip。
+
+---
+
+## 14.16 USER_ACTION_REQUIRED
+
+G3-D 继承并保持 unresolved：
+
+```text
+UA-B-001 project license/copyright
+UA-B-002 official artifact redistribution
+UA-B-003 controlled competition material
+UA-B-004 submission archive/size rules
+UA-C-001 FP32/FP16/BF16 precision interpretation for <=1e-6
+UA-C-002 final report language
+UA-C-003 final submission template/page/cover/font/anonymity/PDF rules
+```
+
+### UA-D-001：Historical Prompt / Agent Run Availability
+
+确认是否存在可合法提交的 original historical Prompt、Response、Agent run log、generation log 或更完整 human-intervention record，以及是否授权公开使用。
+
+在用户未提供并授权前，必须保留：
+
+```text
+HISTORICAL_TRACE_UNAVAILABLE
+```
+
+该 user action 不阻塞以 frozen evidence 完成 mandatory offline replay，但会限制历史“核心代码由 Agent 全流程生成”的 claim。
+
+### UA-D-002：Final Agent/Prompt Disclosure Detail
+
+确认最终平台是否要求：
+
+```text
+raw prompt/response
+model/provider/version
+token usage
+human intervention disclosure format
+generated-code provenance form
+```
+
+在未知时采用最小、脱敏、evidence-backed disclosure，不猜测平台要求。
+
+### UA-D-003：Real-device Acceptance
+
+继续保留真实硬件验收需求，状态必须是：
+
+```text
+HARDWARE_BLOCKED
+```
+
+G3-D 不得自行关闭任何 USER_ACTION_REQUIRED。
+
+---
+
+## 14.17 Failure 与状态分类
+
+### FAIL
+
+用于：
+
+```text
+registry schema/hash failure
+trace schema/hash failure
+evidence pointer mismatch
+false commit mapping
+replay nondeterminism
+mandatory online/API-key dependency
+network access in mandatory replay
+frozen evidence mutation
+G3-C ledger mutation
+provenance vocabulary violation
+historical execution fabrication
+hidden chain-of-thought exposure
+forbidden overclaim
+secret/private path leakage
+staging coverage failure
+full regression failure
+Feature Freeze violation
+```
+
+### PARTIAL
+
+只用于非 mandatory relationship 或 disclosure 的有限缺失，例如 optional historical Prompt relationship unavailable、optional online LLM metadata incomplete 或 non-critical Skill lacks dedicated historical evidence。
+
+不得用 PARTIAL 绕过 mandatory registry、offline replay、provenance、claim 或 staging gate。
+
+### ENV_BLOCKED
+
+只用于：
+
+```text
+repository/evidence unreadable
+Python/CMake/toolchain unavailable
+filesystem corruption
+Git object database unavailable for asserted commit validation
+```
+
+### USER_ACTION_REQUIRED
+
+用于 14.16 中需要外部规则或用户材料/授权的事项。
+
+### HARDWARE_BLOCKED
+
+只用于：
+
+```text
+real NPU
+ACL/HCCL runtime
+communicator
+real collective
+real topology/network
+msprof
+real training
+real failover
+real long-running stress
+```
+
+不得用 HARDWARE_BLOCKED 掩盖 registry、trace、replay、documentation 或 testing bug。
+
+---
+
+## 14.18 Branch 与 commit strategy
+
+建议单一分支：
+
+```text
+codex/g3-d-agent-prompt-delivery
+```
+
+建议五个阶段性 commit：
+
+```text
+G3-D-A freeze Agent prompt delivery contract
+
+G3-D-B build prompt and skill registries
+
+G3-D-C normalize and replay frozen Agent traces
+
+G3-D-D document Agent provenance and autonomy boundaries
+
+G3-D-E finalize Agent prompt delivery evidence
+```
+
+实际文案允许根据实现做最小调整，但必须保持 A→E 顺序和阶段边界。
+
+G3-D 执行时不得：
+
+```text
+push
+merge
+rebase
+amend published history
+reset --hard
+git clean -fd
+create tag
+create release
+create submission archive
+```
+
+最终停在本地 commits，等待用户检查。
+
+---
+
+## 14.19 G3-D Exit Criteria
+
+只有以下全部满足，才允许标记：
+
+```text
+G3-D Agent/Prompt Delivery: COMPLETED
+```
+
+必须：
+
+- authority/inventory complete；
+- delivery contract validated；
+- Prompt Registry validated；
+- Skill Registry validated；
+- Prompt/Skill source hashes PASS；
+- normalized G3-B2 trace validated；
+- normalized G3-B3 trace validated；
+- G3-B2 performance identity保持 `SIMULATED_ONLY`；
+- 45.59283008 raw / 45.59 display / 18-0-0 与 G3-C ledger 一致；
+- INT8=`DEFERRED_BY_PRECISION_GATE`；
+- PairWise=`SKIPPED_BY_VALUE_GATE`；
+- offline replay deterministic；
+- no mandatory external API dependency；
+- no mandatory network dependency；
+- human/Agent/deterministic provenance disclosed；
+- historical unavailable cases explicitly marked；
+- replay/reconstruction 与 historical execution 明确区分；
+- no hidden chain-of-thought；
+- source/commit/evidence/claim mapping validated；
+- G3-C claim boundaries preserved；
+- G3-C factual ledgers unchanged；
+- G3-B2/G3-B3 frozen evidence unchanged；
+- focused G3-D tests PASS；
+- full pytest PASS；
+- CTest PASS；
+- Linux CPU_SIM validation PASS；
+- existing skip count无异常增加；
+- staging PASS；
+- no secrets；
+- no local absolute paths；
+- G3-D unique final evidence frozen；
+- `SHA256SUMS` PASS；
+- `G3_D_AGENT_PROMPT_DELIVERY_OK` emitted；
+- Final Feature Freeze preserved；
+- CPU_SIM public ABI/SONAME/19 symbols unchanged；
+- real-device status unchanged；
+- `runtime_api_calls=[]`；
+- worktree clean after final commit；
+- 未 push、未 merge、未开始 G3-E。
+
+最终 `result.json` 至少记录：
+
+```text
+checkpoint=G3-D
+checkpoint_status=COMPLETED
+
+authority_inventory=COMPLETED
+prompt_registry=COMPLETED
+skill_registry=COMPLETED
+normalized_traces=COMPLETED
+offline_replay=COMPLETED
+provenance_disclosure=COMPLETED
+human_intervention_disclosure=COMPLETED
+submission_staging=COMPLETED
+
+mandatory_external_api_dependency=false
+mandatory_network_dependency=false
+online_llm=OPTIONAL
+historical_unavailable_cases_disclosed=true
+hidden_chain_of_thought_included=false
+
+final_feature_freeze_preserved=true
+old_evidence_modified=false
+g3_c_factual_ledgers_modified=false
+public_abi_changed=false
+soname_changed=false
+export_allowlist_changed=false
+
+real_device_acceptance=HARDWARE_BLOCKED
+real_device_api_executed=false
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+measured_on_real_npu=false
+msprof_executed=false
+runtime_api_calls=[]
+```
+
+---
+
+## 14.20 G3-E boundary
+
+只有 G3-D 满足 14.19 全部 exit criteria 并由用户确认后，才允许进入 G3-E。
+
+G3-E 将消费：
+
+```text
+G3-C report_data_ledger.json
+G3-C report_chart_data/
+G3-C report_claim_ledger.json
++
+G3-D Agent provenance
+G3-D normalized trace
+G3-D innovation evidence mapping
+```
+
+进行：
+
+```text
+charts
+innovation narrative
+```
+
+G3-E 不得重新运行 benchmark，不得重新解释 G3-B2/G3-B3 Agent history，也不得改变 G3-C/G3-D claim boundary。
+
+G3-D-E 完成后必须：
+
+```text
+STOP
+```
+
+不得自动开始 G3-E implementation。
