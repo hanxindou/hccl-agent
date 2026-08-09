@@ -1,0 +1,41 @@
+{
+  "asset_count": 13,
+  "benchmark_rerun": false,
+  "build_count": 2,
+  "first_hashes": {
+    "FIG-01": "ce1071cdb021791a99966e6a1d3baae69cd2b6e9a77bb66131804c16e398df74",
+    "FIG-02": "d072bba10c7c3467973d1b67724d2fc749f0a17c315bed1fdad29cd2f46e8708",
+    "FIG-03": "2b4e396bdac33a0a81c16627988296360823d1b303d450232fdfc9e1b021ecce",
+    "FIG-04": "56e650d368f73a662346348b9b0fbd0de54374cd89eca5199ad82caa592a362a",
+    "FIG-05": "3634dfc9ea5db000c77c5faa01bd60a3f9f1b82f2ed87003914083850bfeaaf8",
+    "FIG-06": "87f19628c7ec3f809d6506bfb34957af58887e72c42ceef285cd4a25cec85231",
+    "FIG-07": "a9da0e65594a42060f2a3d89b27024b7dca8076f0f0598fbc29f959dfcc8bfca",
+    "FIG-08": "22d2c5a955abbb5c896ce0981be197cfa36f4e750b523c928c18d42c7d7f33e1",
+    "FIG-09": "2bc1c974a39585a15a48cfdaefb11609f1d10a094c4cef2fed95b2276e67e708",
+    "FIG-10": "d06eb5507554407042d54fc18d5a3610ba80aad7b625953b41ce0226303fe401",
+    "FIG-11": "276a6ff2ee0bd2757f0c0c390130cde9195f10d37f2de71f4cf10760464a3754",
+    "FIG-12": "1c934bc87bfc0a3ab07ea892b3f9ff0d4629717263f883934a17b77acc38e139",
+    "FIG-13": "e2fe41d70aacfbbab59a7b8c7a2df80fad9ffd0bb33d1f68f55962311c446832"
+  },
+  "hash_identical": true,
+  "network_access": false,
+  "registry_identical": true,
+  "runtime_api_calls": [],
+  "schema_version": "g3-e-chart-reproducibility-v1",
+  "second_hashes": {
+    "FIG-01": "ce1071cdb021791a99966e6a1d3baae69cd2b6e9a77bb66131804c16e398df74",
+    "FIG-02": "d072bba10c7c3467973d1b67724d2fc749f0a17c315bed1fdad29cd2f46e8708",
+    "FIG-03": "2b4e396bdac33a0a81c16627988296360823d1b303d450232fdfc9e1b021ecce",
+    "FIG-04": "56e650d368f73a662346348b9b0fbd0de54374cd89eca5199ad82caa592a362a",
+    "FIG-05": "3634dfc9ea5db000c77c5faa01bd60a3f9f1b82f2ed87003914083850bfeaaf8",
+    "FIG-06": "87f19628c7ec3f809d6506bfb34957af58887e72c42ceef285cd4a25cec85231",
+    "FIG-07": "a9da0e65594a42060f2a3d89b27024b7dca8076f0f0598fbc29f959dfcc8bfca",
+    "FIG-08": "22d2c5a955abbb5c896ce0981be197cfa36f4e750b523c928c18d42c7d7f33e1",
+    "FIG-09": "2bc1c974a39585a15a48cfdaefb11609f1d10a094c4cef2fed95b2276e67e708",
+    "FIG-10": "d06eb5507554407042d54fc18d5a3610ba80aad7b625953b41ce0226303fe401",
+    "FIG-11": "276a6ff2ee0bd2757f0c0c390130cde9195f10d37f2de71f4cf10760464a3754",
+    "FIG-12": "1c934bc87bfc0a3ab07ea892b3f9ff0d4629717263f883934a17b77acc38e139",
+    "FIG-13": "e2fe41d70aacfbbab59a7b8c7a2df80fad9ffd0bb33d1f68f55962311c446832"
+  },
+  "status": "PASS"
+}

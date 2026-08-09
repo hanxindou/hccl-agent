@@ -1,0 +1,8 @@
+{
+  "claim_count": 21,
+  "forbidden_overclaims": [],
+  "innovation_count": 5,
+  "schema_version": "g3-e-claim-boundary-validation-v1",
+  "sentinel": "G3_E_CLAIM_BOUNDARIES_OK",
+  "status": "PASS"
+}

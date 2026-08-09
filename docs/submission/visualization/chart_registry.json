@@ -32,7 +32,7 @@
       "source_sha256": {
         "agent/hccl_agent.py": "e448d0b3088dfa59f6e98c5970e812d4a6e055cc5749a48ef3a44deb930ac44a",
         "main.py": "a073bb22e1b197745d8c8ba57a67a8bb548b6dd77558cc8ab7863a1af6ec81b5",
-        "tools/submission_cli/core.py": "698c989fc3e6aad7a05e6ced68762f6a65179e1ea49f8e0f0b32563f20ab0f28"
+        "tools/submission_cli/core.py": "b1057c45bc7c3477b4d169a9a58387cd9dd6e4e2a93799ef1f9bdd949f25080d"
       },
       "title": "System execution and validation architecture",
       "truth_identity": [

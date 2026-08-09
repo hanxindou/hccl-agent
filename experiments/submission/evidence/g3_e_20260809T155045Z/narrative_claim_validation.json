@@ -1,0 +1,18 @@
+{
+  "benchmark_rerun": false,
+  "claim_count": 21,
+  "document_count": 5,
+  "errors": [],
+  "figure_count": 13,
+  "final_language": "USER_ACTION_REQUIRED",
+  "final_template": "USER_ACTION_REQUIRED",
+  "layers": [
+    "30-second",
+    "3-minute",
+    "technical-defense"
+  ],
+  "runtime_api_calls": [],
+  "schema_version": "g3-e-narrative-validation-v1",
+  "sentinel": "G3_E_NARRATIVE_OK",
+  "status": "PASS"
+}

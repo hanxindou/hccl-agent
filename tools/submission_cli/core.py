@@ -858,6 +858,8 @@ def _manifest_entry(stage: Path, path: Path, source_map: dict[str, str]) -> dict
         category, role = "SIMULATOR", "SIMULATOR_SOURCE_OR_CONFIG"
     elif rel.startswith("evidence/"):
         category, role = "EVIDENCE", "SELECTED_FROZEN_EVIDENCE"
+    elif rel.startswith("docs/submission/visualization/"):
+        category, role = "TECHNICAL_REPORT", "G3_E_VISUALIZATION_AND_NARRATIVE"
     elif rel.startswith("docs/submission/agent_delivery/"):
         category, role = "AGENT_ENGINEERING", "G3_D_AGENT_PROMPT_DELIVERY"
     elif rel.startswith("prompts/"):
@@ -906,10 +908,10 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
         "docs/submission/claim_boundary_matrix.json", "docs/submission/requirement_matrix.json",
         "docs/submission/deliverable_inventory.json", "docs/submission/risk_register.json",
         "docs/submission/report_claim_ledger.json", "docs/submission/report_data_ledger.json",
-        "tools/agent_delivery_cli.py",
+        "tools/agent_delivery_cli.py", "tools/visualization_cli.py",
     ):
         copy(rel)
-    for directory in ("agent", "algorithm", "feature_completion", "plugin", "simulator", "skills", "prompts", "topology", "hardware", "cost_model", "config", "configs/submission", "configs/feature_completion", "tools/submission_cli", "tools/agent_delivery", "docs/submission/agent_delivery"):
+    for directory in ("agent", "algorithm", "feature_completion", "plugin", "simulator", "skills", "prompts", "topology", "hardware", "cost_model", "config", "configs/submission", "configs/feature_completion", "tools/submission_cli", "tools/agent_delivery", "tools/visualization", "docs/submission/agent_delivery"):
         source = ROOT / directory
         _copy_selected_tree(source, stage / directory, {".py", ".json", ".md", ".txt"})
         for path in (stage / directory).rglob("*"):
@@ -932,6 +934,15 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
         _copy_selected_tree(ROOT / "tests/agent_delivery", stage / "tests/agent_delivery", {".py"})
         for path in (stage / "tests/agent_delivery").rglob("*.py"):
             source_map[path.relative_to(stage).as_posix()] = (ROOT / path.relative_to(stage)).relative_to(ROOT).as_posix()
+    if (ROOT / "tests/visualization").is_dir():
+        _copy_selected_tree(ROOT / "tests/visualization", stage / "tests/visualization", {".py"})
+        for path in (stage / "tests/visualization").rglob("*.py"):
+            source_map[path.relative_to(stage).as_posix()] = (ROOT / path.relative_to(stage)).relative_to(ROOT).as_posix()
+    if (ROOT / "docs/submission/visualization").is_dir():
+        _copy_selected_tree(ROOT / "docs/submission/visualization", stage / "docs/submission/visualization", {".json", ".md", ".svg"})
+        for path in (stage / "docs/submission/visualization").rglob("*"):
+            if path.is_file():
+                source_map[path.relative_to(stage).as_posix()] = (ROOT / path.relative_to(stage)).relative_to(ROOT).as_posix()
 
     artifact = None
     for candidate in (INSTALL_ROOT / "build-a/lib/libhccl_plugin.so", INSTALL_ROOT / "quick/lib/libhccl_plugin.so"):
@@ -1001,6 +1012,7 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
         "g3_b": "COMPLETED", "native_delivery_normalization": "COMPLETED",
         "g3_b2": "COMPLETED", "g3_b3": "COMPLETED", "collective_schedule_ir": "COMPLETED",
         "g3_c_formal_reporting": "COMPLETED", "g3_d_agent_prompt_delivery": "COMPLETED",
+        "g3_e_competition_visualization": "COMPLETED",
         "topology_aware_hierarchical_optimization": "COMPLETED",
         "agent_optimization_trace": "COMPLETED", "performance_target_achievement": "PARTIALLY_SATISFIED",
         "cpu_sim_submission_plugin": "COMPLETED", "direct_readiness_package": "COMPLETED",
@@ -1152,6 +1164,20 @@ def verify_stage(stage: Path) -> dict[str, Any]:
     missing_g3_d = sorted(g3_d_required - set(staging_paths))
     if missing_g3_d:
         raise SubmissionError(f"G3-D staging coverage is incomplete: {missing_g3_d}")
+    g3_e_required = {
+        "docs/submission/visualization/visualization_contract.json",
+        "docs/submission/visualization/chart_registry.json",
+        "docs/submission/visualization/innovation_map.json",
+        "docs/submission/visualization/competition_narrative.md",
+        "docs/submission/visualization/claim_safe_phrasebook.md",
+        "docs/submission/visualization/figure_story_map.md",
+        "tools/visualization_cli.py",
+        "tests/visualization/test_g3_e_charts.py",
+    }
+    missing_g3_e = sorted(g3_e_required - set(staging_paths))
+    staged_svg_count = sum(path.startswith("docs/submission/visualization/assets/") and path.endswith(".svg") for path in staging_paths)
+    if missing_g3_e or staged_svg_count != 13:
+        raise SubmissionError(f"G3-E staging coverage is incomplete: missing={missing_g3_e} svg_count={staged_svg_count}")
     return {
         "schema_version": "g3-b-stage-verification-v1", "status": "PASS",
         "files_verified": len(checksummed), "manifest_entries_verified": len(entries),
@@ -1159,7 +1185,8 @@ def verify_stage(stage: Path) -> dict[str, Any]:
         "native_elf_audit": native, "controlled_competition_doc_included": False,
         "official_binaries_included": False, "official_source_included": False,
         "absolute_user_paths": [], "symlink_escape": False,
-        "g3_d_agent_prompt_delivery": "PASS",
+        "g3_d_agent_prompt_delivery": "PASS", "g3_e_visualization_and_narrative": "PASS",
+        "g3_e_svg_asset_count": staged_svg_count,
     }
 
 

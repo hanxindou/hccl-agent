@@ -194,5 +194,5 @@ def validate_innovation_map() -> dict[str, Any]:
         "figure_reference_count": len({figure for row in payload.get("innovations", []) for figure in row["figure_refs"]}),
         "benchmark_rerun": False,
         "runtime_api_calls": [],
-        "sentinel": "G3_E_INNOVATION_MAP_OK" if not errors else None,
+        "sentinel": "G3_E_INNOVATION_MAPPING_OK" if not errors else None,
     }

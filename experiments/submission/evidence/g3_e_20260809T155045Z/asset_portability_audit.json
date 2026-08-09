@@ -1,0 +1,11 @@
+{
+  "canonical_format": "SVG",
+  "findings": [],
+  "logos_included": false,
+  "private_fonts": false,
+  "remote_assets": false,
+  "schema_version": "g3-e-asset-portability-v1",
+  "sentinel": "G3_E_ASSET_PORTABILITY_OK",
+  "status": "PASS",
+  "third_party_images": false
+}

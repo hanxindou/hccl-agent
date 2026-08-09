@@ -79,6 +79,13 @@ ALLOWED_G3_D_CHANGE_PREFIXES = (
     "tools/agent_delivery_cli.py",
     "tools/reporting/evidence_reader.py",
     "tools/submission_cli/core.py",
+    # Later delivery-only checkpoints may add presentation artifacts and their
+    # validators without reopening the G3-B3 technical Feature Freeze.
+    "docs/submission/visualization/",
+    "experiments/submission/evidence/g3_e_",
+    "tests/visualization/",
+    "tools/visualization/",
+    "tools/visualization_cli.py",
 )
 
 USER_ACTION_REQUIRED = (

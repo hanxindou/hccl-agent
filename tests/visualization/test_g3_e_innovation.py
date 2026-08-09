@@ -9,7 +9,7 @@ class G3EInnovationMapTests(unittest.TestCase):
     def test_innovation_map_resolves_all_authorities(self):
         result = build_innovation_map()
         self.assertEqual(result["status"], "PASS", result["errors"])
-        self.assertEqual(result["sentinel"], "G3_E_INNOVATION_MAP_OK")
+        self.assertEqual(result["sentinel"], "G3_E_INNOVATION_MAPPING_OK")
         self.assertEqual(result["innovation_count"], 5)
         self.assertGreater(result["claim_reference_count"], 0)
         self.assertGreater(result["metric_reference_count"], 0)
