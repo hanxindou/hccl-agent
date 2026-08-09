@@ -1,0 +1,276 @@
+{
+  "claim_refs": [
+    "C-PERF-001",
+    "C-PERF-002",
+    "C-PIPE-001",
+    "C-SCALE-001"
+  ],
+  "commit_refs": [
+    {
+      "commit": "12f5b977461500deba8e4c2be0a398b7a52ada1d",
+      "commit_validity": "VALID",
+      "provenance": "HISTORICAL_EVIDENCE",
+      "recorded_value": "12f5b97",
+      "relationship": "G3-B2-A"
+    },
+    {
+      "commit": "045e801ba2a3a3ffbf00a73e8aa71d753250d6c8",
+      "commit_validity": "VALID",
+      "provenance": "HISTORICAL_EVIDENCE",
+      "recorded_value": "045e801",
+      "relationship": "G3-B2-B"
+    },
+    {
+      "commit": "486974fc50ecd89604c687114b7c320442e65830",
+      "commit_validity": "VALID",
+      "provenance": "HISTORICAL_EVIDENCE",
+      "recorded_value": "486974f",
+      "relationship": "G3-B2-C"
+    },
+    {
+      "commit": "44dad2e2c8e9bd9459dd90e603c79a86c697267f",
+      "commit_validity": "VALID",
+      "provenance": "HISTORICAL_EVIDENCE",
+      "recorded_value": "44dad2e",
+      "relationship": "G3-B2-D"
+    },
+    {
+      "commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+      "commit_validity": "VALID",
+      "provenance": "HISTORICAL_EVIDENCE",
+      "recorded_value": "efd946c47ec626d996667ab941a1acf598157ce0",
+      "relationship": "G3-B2-E"
+    },
+    {
+      "commit": null,
+      "commit_validity": "UNRESOLVED",
+      "provenance": "HISTORICAL_TRACE_UNAVAILABLE",
+      "recorded_value": "SELF_COMMIT_REPORTED_IN_FINAL_HANDOFF",
+      "relationship": "G3-B2-F"
+    }
+  ],
+  "deterministic_evaluation": {
+    "correctness_hard_gate": true,
+    "losses": 0,
+    "multi_objective": {
+      "multi_objective": {
+        "congestion_penalty": "minimize",
+        "correctness_gate": true,
+        "effective_bandwidth": "maximize",
+        "p50_latency": "minimize",
+        "p95_latency": "minimize",
+        "peak_memory": "bounded",
+        "reliability_penalty": "minimize"
+      },
+      "selected": true
+    },
+    "performance_gates": {
+      "all_correctness": true,
+      "default_performance_gate_met": true,
+      "improvement_source": "schedule/benchmark selection/routing/chunking/hierarchy/congestion handling and explicitly simulator-only A7 exposed critical-path overlap; frozen model constants unchanged",
+      "logical_1024_gate": true,
+      "logical_1024_max_regression_percent": -46.763069129,
+      "memory_gate": true,
+      "no_path_semantics": "VERIFIED_IN_G3_B2_D",
+      "p95_gate": true,
+      "priority_gate": true,
+      "priority_scenarios_at_least_10_percent": 9,
+      "regression_gate": true,
+      "regressions_over_5_percent": 0,
+      "weighted_geomean_at_least_8_percent": true,
+      "weighted_geomean_improvement_percent": 45.59283008
+    },
+    "run_id": "g3-b2-e-authoritative-optimization-round1",
+    "selected": {
+      "algorithm": "Butterfly",
+      "schedule_hash": "a0d6674340c6f1cf5ea050c9cbea9c8f25739b04f298faa8713fc7e59442f59f"
+    },
+    "ties": 0,
+    "wins": 18
+  },
+  "execution_identity": "SIMULATED_ONLY",
+  "final_decision": {
+    "losses": 0,
+    "selected": true,
+    "selected_schedule": {
+      "algorithm": "Butterfly",
+      "schedule_hash": "a0d6674340c6f1cf5ea050c9cbea9c8f25739b04f298faa8713fc7e59442f59f"
+    },
+    "ties": 0,
+    "weighted_simulated_improvement_display": "45.59%",
+    "weighted_simulated_improvement_raw_percent": 45.59283008,
+    "wins": 18
+  },
+  "hidden_chain_of_thought_included": false,
+  "human_intervention_refs": [
+    {
+      "actor": "user",
+      "algorithm_choice": false,
+      "decision": "AUTHORIZED",
+      "phase": "G3-B2-A",
+      "scope": "one branch, six ordered commits, simulator-only optimization; no device API"
+    },
+    {
+      "actor": "Codex",
+      "algorithm_choice": false,
+      "decision": "IMPLEMENT_TRACE_AND_BASELINE_CONTRACT",
+      "phase": "G3-B2-A",
+      "scope": "contract implementation only"
+    },
+    {
+      "actor": "hccl-agent",
+      "algorithm_choice": true,
+      "decision": "SELECT_BY_CORRECTNESS_THEN_FROZEN_BENCHMARK",
+      "phase": "G3-B2-E",
+      "scope": "explicit schedule candidates"
+    },
+    {
+      "actor": "Codex",
+      "algorithm_choice": false,
+      "decision": "ONE_EVIDENCE_BASED_FLOW_CORRECTION",
+      "phase": "G3-B2-E",
+      "scope": "fix shard/chunk interpretation, benchmark-before-selection, and activate already-defined simulator-only pipeline exposed path"
+    },
+    {
+      "actor": "user",
+      "algorithm_choice": false,
+      "decision": "NO_SCENARIO_LEVEL_INTERVENTION",
+      "phase": "G3-B2-E",
+      "scope": "existing G3-B2 authorization only"
+    },
+    {
+      "actor": "user",
+      "algorithm_choice": false,
+      "decision": "AUTHORIZED_LOCAL_STAGING_COMMITS_AND_WSL_FOCUSED_TESTS",
+      "phase": "G3-B2-F",
+      "scope": "G3-B2 goal only; no push, merge, release, device API, or G3-C"
+    }
+  ],
+  "human_intervention_status": "HUMAN_INTERVENTION",
+  "input": {
+    "input_hash": "32b6eedb6e1a241ed1435298d166342cd1d26711b1c06d699b5078bc90e8e7bd",
+    "original_full_input": "HISTORICAL_TRACE_UNAVAILABLE"
+  },
+  "limitations": [
+    "SIMULATED_ONLY",
+    "not real HCCL, NPU, training, or physical network performance",
+    "normalized record is not an original raw Agent log"
+  ],
+  "output_artifact": "agent/evidence/g3_b2/evaluations/g3-b2-e-authoritative-optimization-round1.json",
+  "prompt_id": "g3-b2-benchmark-evaluation",
+  "prompt_relationship_status": "HISTORICAL_EVIDENCE",
+  "prompt_version": "1.0.0",
+  "proposal": {
+    "algorithm": "Butterfly",
+    "chunk_size": 1048576,
+    "expected_benefit": "minimum explicit multi-objective analytical score",
+    "expected_risk": "simulator model is not hardware calibrated",
+    "pipeline_depth": 4,
+    "proposal_hash": "a2d1382a327e1b7348354adcfedc8c3ef3c4de5c8cabbc7f39100887255489c7",
+    "proposal_id": "proposal-864b659a09c89582",
+    "required_tests": [
+      "schedule invariants",
+      "semantic correctness",
+      "frozen benchmark",
+      "bounded memory",
+      "reliability/no-path"
+    ],
+    "routing_policy": "Butterfly",
+    "schedule_parameters": {
+      "phase_count": 4,
+      "rank_size": 16,
+      "schedule_hash": "864b659a09c89582b08d30ea22a7f358b7a88640245b405c02cfba8be3d1fddc"
+    },
+    "unsupported_conditions": []
+  },
+  "provenance_identity": "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+  "reflection": {
+    "action": "freeze stable correctness-passing selection",
+    "adjustment_rounds_used": 1,
+    "model_boundary": "SIMULATED_ONLY",
+    "observation": "Every win, tie, loss, regression, and simulator-only pipeline contribution remains explicit.",
+    "performance_target_status": "SATISFIED",
+    "run_id": "g3-b2-e-authoritative-optimization-round1"
+  },
+  "replanning": {
+    "record": {
+      "baseline_commit": "486974f",
+      "benchmark_result": "REPLAN_AND_MODEL_VALIDATION_PHASE_D",
+      "changed_files": [
+        "algorithm/replanner.py",
+        "algorithm/memory_model.py",
+        "algorithm/pipeline_model.py"
+      ],
+      "development_agent": "Codex",
+      "human_decision": "AUTHORIZED_G3_B2_SEQUENCE",
+      "input_hash": "resolved-by-g3-b2-d-manifest",
+      "input_schema_version": "g3-b2-replan-request-v1",
+      "output_schema_version": "g3-b2-replan-result-v1",
+      "prompt_id": "g3-b2-replanning",
+      "prompt_version": "1.0.0",
+      "proposal_hash": "resolved-by-replan-trace",
+      "reflection": "No-path remains an explicit expected failure; pipeline overlap remains simulator-only.",
+      "result_commit": "RESOLVED_BY_COMMIT_MAPPING",
+      "run_id": "g3-b2-d-replan-memory-pipeline",
+      "runtime_agent": "hccl-agent-not-invoked-phase-d",
+      "selected": true,
+      "tests": [
+        "replan/memory/pipeline focused assertions 4/4",
+        "CTest 12/12",
+        "C/Python parity 3/3"
+      ],
+      "timestamp": "2026-08-07T02:30:00Z"
+    },
+    "source_ref": {
+      "path": "agent/evidence/g3_b2/runs/g3_b2_d_replan_memory_pipeline.json",
+      "sha256": "58c2d5c7bcbf8d52e0954cd779995ed7e34253fcfcf7f759b85c2c82f771a9a6"
+    },
+    "status": "RECONSTRUCTED_FROM_FROZEN_EVIDENCE"
+  },
+  "scenario": "G3-B2 frozen scheduling/topology optimization and A0-A7 evaluation",
+  "schema_version": "g3-d-normalized-agent-trace-v1",
+  "skills": [
+    "g3-b2-optimization-loop",
+    "benchmark-skill",
+    "reflection-skill",
+    "replanning-skill"
+  ],
+  "source_checkpoint": "G3-B2",
+  "source_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+  "source_evidence_path": "agent/evidence/g3_b2/runs/g3-b2-e-authoritative-optimization-round1.json",
+  "source_evidence_root": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+  "source_evidence_root_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+  "source_evidence_sha256": "298caa8ad917a589fed6b00ac923a82fb78951b8c56fc0961ef38cc809560e0a",
+  "source_record_provenance": "HISTORICAL_EVIDENCE",
+  "source_refs": [
+    {
+      "path": "agent/evidence/g3_b2/runs/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "298caa8ad917a589fed6b00ac923a82fb78951b8c56fc0961ef38cc809560e0a"
+    },
+    {
+      "path": "agent/evidence/g3_b2/proposals/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "ae54ebf5d81db4f91a7332974f8883753579f18d25929585be5c94a58d05a6a5"
+    },
+    {
+      "path": "agent/evidence/g3_b2/evaluations/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "1fd972c19b18e4051de297904a12fdaead833dcf6b090ab97e2d403d5fd473ed"
+    },
+    {
+      "path": "agent/evidence/g3_b2/reflections/g3-b2-e-authoritative-optimization-round1.json",
+      "sha256": "999fffa4d0a87f19e19837c34a659f41f6eb7d511201e427e30ad724b569e601"
+    },
+    {
+      "path": "agent/evidence/g3_b2/runs/g3_b2_d_replan_memory_pipeline.json",
+      "sha256": "58c2d5c7bcbf8d52e0954cd779995ed7e34253fcfcf7f759b85c2c82f771a9a6"
+    },
+    {
+      "path": "agent/evidence/g3_b2/human_intervention.json",
+      "sha256": "89331dac7763247a700a40d0f1f5cd58f9bd9d050d44a198d7b45564dfd6df58"
+    },
+    {
+      "path": "agent/evidence/g3_b2/commit_mapping.json",
+      "sha256": "fc61efc011106fa88d68ac2e3d6b0ac8c8b53c8c56a16848406d15b8c97365b0"
+    }
+  ],
+  "trace_id": "g3-b2-optimization-authoritative-round1"
+}
