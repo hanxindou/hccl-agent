@@ -8,6 +8,7 @@ from typing import Any
 
 from tools.visualization.authority import build_authority, validate_authority
 from tools.visualization.innovation import build_innovation_map, validate_innovation_map
+from tools.visualization.narrative import build_narrative, validate_narrative
 from tools.visualization.render import build_charts, validate_charts
 
 
@@ -26,6 +27,8 @@ def main(argv: list[str] | None = None) -> int:
     subparsers.add_parser("verify-charts", help="Validate deterministic G3-E-B SVG assets")
     subparsers.add_parser("build-innovation", help="Build G3-E-C innovation traceability")
     subparsers.add_parser("verify-innovation", help="Validate G3-E-C innovation traceability")
+    subparsers.add_parser("build-narrative", help="Build G3-E-D claim-safe narrative")
+    subparsers.add_parser("verify-narrative", help="Validate G3-E-D claim-safe narrative")
     args = parser.parse_args(argv)
     if args.command == "build-authority":
         return _emit(build_authority())
@@ -37,7 +40,11 @@ def main(argv: list[str] | None = None) -> int:
         return _emit(validate_charts())
     if args.command == "build-innovation":
         return _emit(build_innovation_map())
-    return _emit(validate_innovation_map())
+    if args.command == "verify-innovation":
+        return _emit(validate_innovation_map())
+    if args.command == "build-narrative":
+        return _emit(build_narrative())
+    return _emit(validate_narrative())
 
 
 if __name__ == "__main__":

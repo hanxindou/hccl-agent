@@ -1,0 +1,32 @@
+{
+  "agent_provenance_authority": "docs/submission/agent_delivery",
+  "claim_authority": "docs/submission/report_claim_ledger.json",
+  "documents": [
+    "competition_narrative.md",
+    "defense_storyline.md",
+    "figure_story_map.md",
+    "claim_safe_phrasebook.md",
+    "defense_question_map.md"
+  ],
+  "final_language": "USER_ACTION_REQUIRED",
+  "final_template": "USER_ACTION_REQUIRED",
+  "layers": [
+    "30-second",
+    "3-minute",
+    "technical-defense"
+  ],
+  "numeric_authority": "docs/submission/report_data_ledger.json",
+  "real_device_acceptance": "HARDWARE_BLOCKED",
+  "schema_version": "g3-e-narrative-contract-v1",
+  "status": "CLAIM_SAFE",
+  "story_order": [
+    "Problem",
+    "System",
+    "Optimization",
+    "Feature completion",
+    "Agent role",
+    "Evidence",
+    "Limitations",
+    "Competition value"
+  ]
+}
