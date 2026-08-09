@@ -1,0 +1,293 @@
+{
+  "historical_version_policy": "never invent missing historical versions",
+  "prompts": [
+    {
+      "current_canonical_version": "sha256:2a3befaeb5090c10",
+      "evidence_pointer": [],
+      "historical_version_status": "HISTORICAL_TRACE_UNAVAILABLE",
+      "input_contract": "scenario parameters",
+      "limitations": [
+        "current canonical source only; no original historical invocation record",
+        "template wording is not evidence of implemented or real-device capability"
+      ],
+      "online_offline_classification": "TEMPLATE_ONLY",
+      "output_contract": "recommendation fields",
+      "owning_module": "prompts/algorithm_prompt.txt",
+      "owning_stage": "CURRENT_CANONICAL",
+      "prompt_id": "current-algorithm-selection",
+      "provenance": "HISTORICAL_TRACE_UNAVAILABLE",
+      "purpose": "Current algorithm-selection template section.",
+      "referenced_skills": [
+        "algorithm-skill",
+        "optimization-skill"
+      ],
+      "source_commit": null,
+      "source_path": "prompts/algorithm_prompt.txt",
+      "source_sha256": "2a3befaeb5090c1039bdd87d695e10a2eee9f4457ad4297faa02872703bfd359",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "sha256:2a3befaeb5090c10",
+      "evidence_pointer": [],
+      "historical_version_status": "HISTORICAL_TRACE_UNAVAILABLE",
+      "input_contract": "algorithm specification",
+      "limitations": [
+        "current canonical source only; no original historical invocation record",
+        "template wording is not evidence of implemented or real-device capability"
+      ],
+      "online_offline_classification": "TEMPLATE_ONLY",
+      "output_contract": "C/C++ text",
+      "owning_module": "prompts/algorithm_prompt.txt",
+      "owning_stage": "CURRENT_CANONICAL",
+      "prompt_id": "current-code-generation",
+      "provenance": "HISTORICAL_TRACE_UNAVAILABLE",
+      "purpose": "Current code-generation template section.",
+      "referenced_skills": [
+        "code-generation-skill"
+      ],
+      "source_commit": null,
+      "source_path": "prompts/algorithm_prompt.txt",
+      "source_sha256": "2a3befaeb5090c1039bdd87d695e10a2eee9f4457ad4297faa02872703bfd359",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "sha256:0a019ddfd1c3bba9",
+      "evidence_pointer": [],
+      "historical_version_status": "HISTORICAL_TRACE_UNAVAILABLE",
+      "input_contract": "runtime scenario dictionary",
+      "limitations": [
+        "not used by mandatory G3-D replay",
+        "no historical raw provider response is asserted"
+      ],
+      "online_offline_classification": "ONLINE_LLM_OPTIONAL",
+      "output_contract": "provider text parsed into an advisory result",
+      "owning_module": "agent/decision_skill.py",
+      "owning_stage": "CURRENT_CANONICAL",
+      "prompt_id": "current-online-decision-inline",
+      "provenance": "ONLINE_LLM_OPTIONAL",
+      "purpose": "Optional DeepSeek candidate decision prompt.",
+      "referenced_skills": [
+        "decision-skill"
+      ],
+      "source_commit": null,
+      "source_path": "agent/decision_skill.py",
+      "source_sha256": "0a019ddfd1c3bba9cce65319ef179a19a79c9aa2fc3fdcfdbf6cb2695de0130d",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "sha256:f34bc8b408d601a7",
+      "evidence_pointer": [],
+      "historical_version_status": "HISTORICAL_TRACE_UNAVAILABLE",
+      "input_contract": "runtime scenario dictionary",
+      "limitations": [
+        "not used by mandatory G3-D replay",
+        "no historical raw provider response is asserted"
+      ],
+      "online_offline_classification": "ONLINE_LLM_OPTIONAL",
+      "output_contract": "provider text parsed into an advisory result",
+      "owning_module": "agent/reasoning_skill.py",
+      "owning_stage": "CURRENT_CANONICAL",
+      "prompt_id": "current-online-reasoning-inline",
+      "provenance": "ONLINE_LLM_OPTIONAL",
+      "purpose": "Optional DeepSeek scenario reasoning prompt.",
+      "referenced_skills": [
+        "reasoning-skill"
+      ],
+      "source_commit": null,
+      "source_path": "agent/reasoning_skill.py",
+      "source_sha256": "f34bc8b408d601a7b134beae56d5d2989bab32472739416aa0ee229e080e5ccb",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "sha256:2a3befaeb5090c10",
+      "evidence_pointer": [],
+      "historical_version_status": "HISTORICAL_TRACE_UNAVAILABLE",
+      "input_contract": "logs and baseline",
+      "limitations": [
+        "current canonical source only; no original historical invocation record",
+        "template wording is not evidence of implemented or real-device capability"
+      ],
+      "online_offline_classification": "TEMPLATE_ONLY",
+      "output_contract": "analysis text",
+      "owning_module": "prompts/algorithm_prompt.txt",
+      "owning_stage": "CURRENT_CANONICAL",
+      "prompt_id": "current-performance-analysis",
+      "provenance": "HISTORICAL_TRACE_UNAVAILABLE",
+      "purpose": "Current performance-analysis template section.",
+      "referenced_skills": [
+        "benchmark-skill",
+        "evaluation-skill"
+      ],
+      "source_commit": null,
+      "source_path": "prompts/algorithm_prompt.txt",
+      "source_sha256": "2a3befaeb5090c1039bdd87d695e10a2eee9f4457ad4297faa02872703bfd359",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "sha256:2a3befaeb5090c10",
+      "evidence_pointer": [],
+      "historical_version_status": "HISTORICAL_TRACE_UNAVAILABLE",
+      "input_contract": "algorithm and link parameters",
+      "limitations": [
+        "current canonical source only; no original historical invocation record",
+        "template wording is not evidence of implemented or real-device capability"
+      ],
+      "online_offline_classification": "TEMPLATE_ONLY",
+      "output_contract": "reliability design text",
+      "owning_module": "prompts/algorithm_prompt.txt",
+      "owning_stage": "CURRENT_CANONICAL",
+      "prompt_id": "current-reliability-generation",
+      "provenance": "HISTORICAL_TRACE_UNAVAILABLE",
+      "purpose": "Current reliability template section.",
+      "referenced_skills": [
+        "reasoning-skill"
+      ],
+      "source_commit": null,
+      "source_path": "prompts/algorithm_prompt.txt",
+      "source_sha256": "2a3befaeb5090c1039bdd87d695e10a2eee9f4457ad4297faa02872703bfd359",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "sha256:2a3befaeb5090c10",
+      "evidence_pointer": [],
+      "historical_version_status": "HISTORICAL_TRACE_UNAVAILABLE",
+      "input_contract": "generated code and primitive",
+      "limitations": [
+        "current canonical source only; no original historical invocation record",
+        "template wording is not evidence of implemented or real-device capability"
+      ],
+      "online_offline_classification": "TEMPLATE_ONLY",
+      "output_contract": "test source text",
+      "owning_module": "prompts/algorithm_prompt.txt",
+      "owning_stage": "CURRENT_CANONICAL",
+      "prompt_id": "current-test-generation",
+      "provenance": "HISTORICAL_TRACE_UNAVAILABLE",
+      "purpose": "Current test-generation template section.",
+      "referenced_skills": [
+        "code-generation-skill"
+      ],
+      "source_commit": null,
+      "source_path": "prompts/algorithm_prompt.txt",
+      "source_sha256": "2a3befaeb5090c1039bdd87d695e10a2eee9f4457ad4297faa02872703bfd359",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "1.0.0",
+      "evidence_pointer": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/agent_trace_inventory.json"
+      ],
+      "historical_version_status": "AVAILABLE_IN_FROZEN_EVIDENCE",
+      "input_contract": "g3-b2-evaluation-input-v1",
+      "limitations": [],
+      "online_offline_classification": "OFFLINE_REPLAY",
+      "output_contract": "g3-b2-evaluation-result-v1",
+      "owning_module": "prompts/g3_b2/benchmark_evaluation_v1.md",
+      "owning_stage": "G3-B2",
+      "prompt_id": "g3-b2-benchmark-evaluation",
+      "provenance": "HISTORICAL_EVIDENCE",
+      "purpose": "Evaluate candidates against the immutable G3-B2 benchmark contract.",
+      "referenced_skills": [
+        "g3-b2-loop",
+        "benchmark-skill"
+      ],
+      "source_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+      "source_path": "prompts/g3_b2/benchmark_evaluation_v1.md",
+      "source_sha256": "3c8a75ee59b0da8ca391e8887ed9f69b1c70e0815b7e607c7056ba3965c7406b",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "1.0.0",
+      "evidence_pointer": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/agent_trace_inventory.json"
+      ],
+      "historical_version_status": "AVAILABLE_IN_FROZEN_EVIDENCE",
+      "input_contract": "g3-b2-evaluation-result-v1",
+      "limitations": [],
+      "online_offline_classification": "OFFLINE_REPLAY",
+      "output_contract": "g3-b2-reflection-v1",
+      "owning_module": "prompts/g3_b2/reflection_v1.md",
+      "owning_stage": "G3-B2",
+      "prompt_id": "g3-b2-reflection",
+      "provenance": "HISTORICAL_EVIDENCE",
+      "purpose": "Explain benchmark outcomes and one bounded adjustment round.",
+      "referenced_skills": [
+        "reflection-skill"
+      ],
+      "source_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+      "source_path": "prompts/g3_b2/reflection_v1.md",
+      "source_sha256": "0791037c5fd33067f8694df254db90e46acf090c59ae5e8a209ed17865f2ecfc",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "1.0.0",
+      "evidence_pointer": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/agent_trace_inventory.json"
+      ],
+      "historical_version_status": "AVAILABLE_IN_FROZEN_EVIDENCE",
+      "input_contract": "g3-b2-replan-request-v1",
+      "limitations": [],
+      "online_offline_classification": "OFFLINE_REPLAY",
+      "output_contract": "g3-b2-replan-result-v1",
+      "owning_module": "prompts/g3_b2/replanning_v1.md",
+      "owning_stage": "G3-B2",
+      "prompt_id": "g3-b2-replanning",
+      "provenance": "HISTORICAL_EVIDENCE",
+      "purpose": "Replan after a structured topology event.",
+      "referenced_skills": [
+        "replanning-skill"
+      ],
+      "source_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+      "source_path": "prompts/g3_b2/replanning_v1.md",
+      "source_sha256": "3f281b84eadb86d2965f8de7d931e99c3870651ad4319743b24b2dd9cffda293",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "1.0.0",
+      "evidence_pointer": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/agent_trace_inventory.json"
+      ],
+      "historical_version_status": "AVAILABLE_IN_FROZEN_EVIDENCE",
+      "input_contract": "g3-b2-schedule-request-v1",
+      "limitations": [],
+      "online_offline_classification": "OFFLINE_REPLAY",
+      "output_contract": "g3-b2-schedule-proposal-v1",
+      "owning_module": "prompts/g3_b2/schedule_generation_v1.md",
+      "owning_stage": "G3-B2",
+      "prompt_id": "g3-b2-schedule-generation",
+      "provenance": "HISTORICAL_EVIDENCE",
+      "purpose": "Generate bounded collective Schedule IR candidates.",
+      "referenced_skills": [
+        "g3-b2-loop"
+      ],
+      "source_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+      "source_path": "prompts/g3_b2/schedule_generation_v1.md",
+      "source_sha256": "439d4042a89d34f81d2977ec70edfdafda4542af7d731e1706ab22357dd2ea0e",
+      "tests": []
+    },
+    {
+      "current_canonical_version": "1.0.0",
+      "evidence_pointer": [
+        "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z/agent_trace_inventory.json"
+      ],
+      "historical_version_status": "AVAILABLE_IN_FROZEN_EVIDENCE",
+      "input_contract": "g3-b2-topology-optimization-input-v1",
+      "limitations": [],
+      "online_offline_classification": "OFFLINE_REPLAY",
+      "output_contract": "g3-b2-schedule-proposal-v1",
+      "owning_module": "prompts/g3_b2/topology_optimization_v1.md",
+      "owning_stage": "G3-B2",
+      "prompt_id": "g3-b2-topology-optimization",
+      "provenance": "HISTORICAL_EVIDENCE",
+      "purpose": "Propose topology-aware hierarchical non-uniform schedules.",
+      "referenced_skills": [
+        "g3-b2-loop"
+      ],
+      "source_commit": "efd946c47ec626d996667ab941a1acf598157ce0",
+      "source_path": "prompts/g3_b2/topology_optimization_v1.md",
+      "source_sha256": "4232aee8ba260aef62b612ea12b9a1ade04948efc0abf432f107835f478010c2",
+      "tests": []
+    }
+  ],
+  "schema_version": "g3-d-prompt-registry-v1",
+  "status": "CURRENT_CANONICAL_WITH_FROZEN_G3_B2_HISTORY"
+}
