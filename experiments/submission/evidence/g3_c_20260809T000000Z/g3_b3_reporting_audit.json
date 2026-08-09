@@ -1,0 +1,13 @@
+{
+  "backpressure": "SIMULATED_BACKPRESSURE",
+  "direct": "DIRECT_COMPILE_LINK_ONLY",
+  "int8": "DEFERRED_BY_PRECISION_GATE",
+  "integrity": "HOST_INTEGRITY_VALIDATED",
+  "official_call_expression_count": 17,
+  "pairwise": "SKIPPED_BY_VALUE_GATE",
+  "retry": "HOST_RETRY_VALIDATED",
+  "runtime_api_calls": [],
+  "runtime_execution": false,
+  "sparse": "LOSSLESS_SPARSE_HOST_EXECUTED",
+  "status": "PASS"
+}

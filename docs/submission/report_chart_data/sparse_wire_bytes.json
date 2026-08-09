@@ -1,0 +1,710 @@
+{
+  "chart_id": "sparse_wire_bytes",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b3.sparse.s01.index_bytes",
+    "g3b3.sparse.s01.logical_bytes",
+    "g3b3.sparse.s01.metadata_bytes",
+    "g3b3.sparse.s01.value_bytes",
+    "g3b3.sparse.s01.wire_bytes",
+    "g3b3.sparse.s02.index_bytes",
+    "g3b3.sparse.s02.logical_bytes",
+    "g3b3.sparse.s02.metadata_bytes",
+    "g3b3.sparse.s02.value_bytes",
+    "g3b3.sparse.s02.wire_bytes",
+    "g3b3.sparse.s03.index_bytes",
+    "g3b3.sparse.s03.logical_bytes",
+    "g3b3.sparse.s03.metadata_bytes",
+    "g3b3.sparse.s03.value_bytes",
+    "g3b3.sparse.s03.wire_bytes",
+    "g3b3.sparse.s04.index_bytes",
+    "g3b3.sparse.s04.logical_bytes",
+    "g3b3.sparse.s04.metadata_bytes",
+    "g3b3.sparse.s04.value_bytes",
+    "g3b3.sparse.s04.wire_bytes",
+    "g3b3.sparse.s05.index_bytes",
+    "g3b3.sparse.s05.logical_bytes",
+    "g3b3.sparse.s05.metadata_bytes",
+    "g3b3.sparse.s05.value_bytes",
+    "g3b3.sparse.s05.wire_bytes",
+    "g3b3.sparse.s06.index_bytes",
+    "g3b3.sparse.s06.logical_bytes",
+    "g3b3.sparse.s06.metadata_bytes",
+    "g3b3.sparse.s06.value_bytes",
+    "g3b3.sparse.s06.wire_bytes",
+    "g3b3.sparse.s07.index_bytes",
+    "g3b3.sparse.s07.logical_bytes",
+    "g3b3.sparse.s07.metadata_bytes",
+    "g3b3.sparse.s07.value_bytes",
+    "g3b3.sparse.s07.wire_bytes",
+    "g3b3.sparse.s08.index_bytes",
+    "g3b3.sparse.s08.logical_bytes",
+    "g3b3.sparse.s08.metadata_bytes",
+    "g3b3.sparse.s08.value_bytes",
+    "g3b3.sparse.s08.wire_bytes",
+    "g3b3.sparse.s09.index_bytes",
+    "g3b3.sparse.s09.logical_bytes",
+    "g3b3.sparse.s09.metadata_bytes",
+    "g3b3.sparse.s09.value_bytes",
+    "g3b3.sparse.s09.wire_bytes",
+    "g3b3.sparse.s10.index_bytes",
+    "g3b3.sparse.s10.logical_bytes",
+    "g3b3.sparse.s10.metadata_bytes",
+    "g3b3.sparse.s10.value_bytes",
+    "g3b3.sparse.s10.wire_bytes",
+    "g3b3.sparse.s11.index_bytes",
+    "g3b3.sparse.s11.logical_bytes",
+    "g3b3.sparse.s11.metadata_bytes",
+    "g3b3.sparse.s11.value_bytes",
+    "g3b3.sparse.s11.wire_bytes",
+    "g3b3.sparse.s12.index_bytes",
+    "g3b3.sparse.s12.logical_bytes",
+    "g3b3.sparse.s12.metadata_bytes",
+    "g3b3.sparse.s12.value_bytes",
+    "g3b3.sparse.s12.wire_bytes",
+    "g3b3.sparse.s13.index_bytes",
+    "g3b3.sparse.s13.logical_bytes",
+    "g3b3.sparse.s13.metadata_bytes",
+    "g3b3.sparse.s13.value_bytes",
+    "g3b3.sparse.s13.wire_bytes",
+    "g3b3.sparse.s14.index_bytes",
+    "g3b3.sparse.s14.logical_bytes",
+    "g3b3.sparse.s14.metadata_bytes",
+    "g3b3.sparse.s14.value_bytes",
+    "g3b3.sparse.s14.wire_bytes",
+    "g3b3.sparse.s15.index_bytes",
+    "g3b3.sparse.s15.logical_bytes",
+    "g3b3.sparse.s15.metadata_bytes",
+    "g3b3.sparse.s15.value_bytes",
+    "g3b3.sparse.s15.wire_bytes",
+    "g3b3.sparse.s16.index_bytes",
+    "g3b3.sparse.s16.logical_bytes",
+    "g3b3.sparse.s16.metadata_bytes",
+    "g3b3.sparse.s16.value_bytes",
+    "g3b3.sparse.s16.wire_bytes",
+    "g3b3.sparse.s17.index_bytes",
+    "g3b3.sparse.s17.logical_bytes",
+    "g3b3.sparse.s17.metadata_bytes",
+    "g3b3.sparse.s17.value_bytes",
+    "g3b3.sparse.s17.wire_bytes",
+    "g3b3.sparse.s18.index_bytes",
+    "g3b3.sparse.s18.logical_bytes",
+    "g3b3.sparse.s18.metadata_bytes",
+    "g3b3.sparse.s18.value_bytes",
+    "g3b3.sparse.s18.wire_bytes",
+    "g3b3.sparse.s19.index_bytes",
+    "g3b3.sparse.s19.logical_bytes",
+    "g3b3.sparse.s19.metadata_bytes",
+    "g3b3.sparse.s19.value_bytes",
+    "g3b3.sparse.s19.wire_bytes",
+    "g3b3.sparse.s20.index_bytes",
+    "g3b3.sparse.s20.logical_bytes",
+    "g3b3.sparse.s20.metadata_bytes",
+    "g3b3.sparse.s20.value_bytes",
+    "g3b3.sparse.s20.wire_bytes"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "32768",
+      "metric_id": "g3b3.sparse.s01.index_bytes",
+      "unit": "byte",
+      "value": 32768
+    },
+    {
+      "display_value": "65536",
+      "metric_id": "g3b3.sparse.s01.logical_bytes",
+      "unit": "byte",
+      "value": 65536
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s01.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "65536",
+      "metric_id": "g3b3.sparse.s01.value_bytes",
+      "unit": "byte",
+      "value": 65536
+    },
+    {
+      "display_value": "98368",
+      "metric_id": "g3b3.sparse.s01.wire_bytes",
+      "unit": "byte",
+      "value": 98368
+    },
+    {
+      "display_value": "49152",
+      "metric_id": "g3b3.sparse.s02.index_bytes",
+      "unit": "byte",
+      "value": 49152
+    },
+    {
+      "display_value": "65536",
+      "metric_id": "g3b3.sparse.s02.logical_bytes",
+      "unit": "byte",
+      "value": 65536
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s02.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "49152",
+      "metric_id": "g3b3.sparse.s02.value_bytes",
+      "unit": "byte",
+      "value": 49152
+    },
+    {
+      "display_value": "98368",
+      "metric_id": "g3b3.sparse.s02.wire_bytes",
+      "unit": "byte",
+      "value": 98368
+    },
+    {
+      "display_value": "32768",
+      "metric_id": "g3b3.sparse.s03.index_bytes",
+      "unit": "byte",
+      "value": 32768
+    },
+    {
+      "display_value": "65536",
+      "metric_id": "g3b3.sparse.s03.logical_bytes",
+      "unit": "byte",
+      "value": 65536
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s03.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "32768",
+      "metric_id": "g3b3.sparse.s03.value_bytes",
+      "unit": "byte",
+      "value": 32768
+    },
+    {
+      "display_value": "65600",
+      "metric_id": "g3b3.sparse.s03.wire_bytes",
+      "unit": "byte",
+      "value": 65600
+    },
+    {
+      "display_value": "8192",
+      "metric_id": "g3b3.sparse.s04.index_bytes",
+      "unit": "byte",
+      "value": 8192
+    },
+    {
+      "display_value": "65536",
+      "metric_id": "g3b3.sparse.s04.logical_bytes",
+      "unit": "byte",
+      "value": 65536
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s04.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "16384",
+      "metric_id": "g3b3.sparse.s04.value_bytes",
+      "unit": "byte",
+      "value": 16384
+    },
+    {
+      "display_value": "24640",
+      "metric_id": "g3b3.sparse.s04.wire_bytes",
+      "unit": "byte",
+      "value": 24640
+    },
+    {
+      "display_value": "6552",
+      "metric_id": "g3b3.sparse.s05.index_bytes",
+      "unit": "byte",
+      "value": 6552
+    },
+    {
+      "display_value": "65536",
+      "metric_id": "g3b3.sparse.s05.logical_bytes",
+      "unit": "byte",
+      "value": 65536
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s05.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "6552",
+      "metric_id": "g3b3.sparse.s05.value_bytes",
+      "unit": "byte",
+      "value": 6552
+    },
+    {
+      "display_value": "13168",
+      "metric_id": "g3b3.sparse.s05.wire_bytes",
+      "unit": "byte",
+      "value": 13168
+    },
+    {
+      "display_value": "1048576",
+      "metric_id": "g3b3.sparse.s06.index_bytes",
+      "unit": "byte",
+      "value": 1048576
+    },
+    {
+      "display_value": "1048576",
+      "metric_id": "g3b3.sparse.s06.logical_bytes",
+      "unit": "byte",
+      "value": 1048576
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s06.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "1048576",
+      "metric_id": "g3b3.sparse.s06.value_bytes",
+      "unit": "byte",
+      "value": 1048576
+    },
+    {
+      "display_value": "2097216",
+      "metric_id": "g3b3.sparse.s06.wire_bytes",
+      "unit": "byte",
+      "value": 2097216
+    },
+    {
+      "display_value": "1572864",
+      "metric_id": "g3b3.sparse.s07.index_bytes",
+      "unit": "byte",
+      "value": 1572864
+    },
+    {
+      "display_value": "1048576",
+      "metric_id": "g3b3.sparse.s07.logical_bytes",
+      "unit": "byte",
+      "value": 1048576
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s07.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "786432",
+      "metric_id": "g3b3.sparse.s07.value_bytes",
+      "unit": "byte",
+      "value": 786432
+    },
+    {
+      "display_value": "2359360",
+      "metric_id": "g3b3.sparse.s07.wire_bytes",
+      "unit": "byte",
+      "value": 2359360
+    },
+    {
+      "display_value": "1048576",
+      "metric_id": "g3b3.sparse.s08.index_bytes",
+      "unit": "byte",
+      "value": 1048576
+    },
+    {
+      "display_value": "1048576",
+      "metric_id": "g3b3.sparse.s08.logical_bytes",
+      "unit": "byte",
+      "value": 1048576
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s08.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "524288",
+      "metric_id": "g3b3.sparse.s08.value_bytes",
+      "unit": "byte",
+      "value": 524288
+    },
+    {
+      "display_value": "1572928",
+      "metric_id": "g3b3.sparse.s08.wire_bytes",
+      "unit": "byte",
+      "value": 1572928
+    },
+    {
+      "display_value": "262144",
+      "metric_id": "g3b3.sparse.s09.index_bytes",
+      "unit": "byte",
+      "value": 262144
+    },
+    {
+      "display_value": "1048576",
+      "metric_id": "g3b3.sparse.s09.logical_bytes",
+      "unit": "byte",
+      "value": 1048576
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s09.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "262144",
+      "metric_id": "g3b3.sparse.s09.value_bytes",
+      "unit": "byte",
+      "value": 262144
+    },
+    {
+      "display_value": "524352",
+      "metric_id": "g3b3.sparse.s09.wire_bytes",
+      "unit": "byte",
+      "value": 524352
+    },
+    {
+      "display_value": "209712",
+      "metric_id": "g3b3.sparse.s10.index_bytes",
+      "unit": "byte",
+      "value": 209712
+    },
+    {
+      "display_value": "1048576",
+      "metric_id": "g3b3.sparse.s10.logical_bytes",
+      "unit": "byte",
+      "value": 1048576
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s10.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "104856",
+      "metric_id": "g3b3.sparse.s10.value_bytes",
+      "unit": "byte",
+      "value": 104856
+    },
+    {
+      "display_value": "314632",
+      "metric_id": "g3b3.sparse.s10.wire_bytes",
+      "unit": "byte",
+      "value": 314632
+    },
+    {
+      "display_value": "16777216",
+      "metric_id": "g3b3.sparse.s11.index_bytes",
+      "unit": "byte",
+      "value": 16777216
+    },
+    {
+      "display_value": "16777216",
+      "metric_id": "g3b3.sparse.s11.logical_bytes",
+      "unit": "byte",
+      "value": 16777216
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s11.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "16777216",
+      "metric_id": "g3b3.sparse.s11.value_bytes",
+      "unit": "byte",
+      "value": 16777216
+    },
+    {
+      "display_value": "33554496",
+      "metric_id": "g3b3.sparse.s11.wire_bytes",
+      "unit": "byte",
+      "value": 33554496
+    },
+    {
+      "display_value": "25165824",
+      "metric_id": "g3b3.sparse.s12.index_bytes",
+      "unit": "byte",
+      "value": 25165824
+    },
+    {
+      "display_value": "16777216",
+      "metric_id": "g3b3.sparse.s12.logical_bytes",
+      "unit": "byte",
+      "value": 16777216
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s12.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "12582912",
+      "metric_id": "g3b3.sparse.s12.value_bytes",
+      "unit": "byte",
+      "value": 12582912
+    },
+    {
+      "display_value": "37748800",
+      "metric_id": "g3b3.sparse.s12.wire_bytes",
+      "unit": "byte",
+      "value": 37748800
+    },
+    {
+      "display_value": "16777216",
+      "metric_id": "g3b3.sparse.s13.index_bytes",
+      "unit": "byte",
+      "value": 16777216
+    },
+    {
+      "display_value": "16777216",
+      "metric_id": "g3b3.sparse.s13.logical_bytes",
+      "unit": "byte",
+      "value": 16777216
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s13.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "8388608",
+      "metric_id": "g3b3.sparse.s13.value_bytes",
+      "unit": "byte",
+      "value": 8388608
+    },
+    {
+      "display_value": "25165888",
+      "metric_id": "g3b3.sparse.s13.wire_bytes",
+      "unit": "byte",
+      "value": 25165888
+    },
+    {
+      "display_value": "4194304",
+      "metric_id": "g3b3.sparse.s14.index_bytes",
+      "unit": "byte",
+      "value": 4194304
+    },
+    {
+      "display_value": "16777216",
+      "metric_id": "g3b3.sparse.s14.logical_bytes",
+      "unit": "byte",
+      "value": 16777216
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s14.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "4194304",
+      "metric_id": "g3b3.sparse.s14.value_bytes",
+      "unit": "byte",
+      "value": 4194304
+    },
+    {
+      "display_value": "8388672",
+      "metric_id": "g3b3.sparse.s14.wire_bytes",
+      "unit": "byte",
+      "value": 8388672
+    },
+    {
+      "display_value": "3355440",
+      "metric_id": "g3b3.sparse.s15.index_bytes",
+      "unit": "byte",
+      "value": 3355440
+    },
+    {
+      "display_value": "16777216",
+      "metric_id": "g3b3.sparse.s15.logical_bytes",
+      "unit": "byte",
+      "value": 16777216
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s15.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "1677720",
+      "metric_id": "g3b3.sparse.s15.value_bytes",
+      "unit": "byte",
+      "value": 1677720
+    },
+    {
+      "display_value": "5033224",
+      "metric_id": "g3b3.sparse.s15.wire_bytes",
+      "unit": "byte",
+      "value": 5033224
+    },
+    {
+      "display_value": "134217728",
+      "metric_id": "g3b3.sparse.s16.index_bytes",
+      "unit": "byte",
+      "value": 134217728
+    },
+    {
+      "display_value": "134217728",
+      "metric_id": "g3b3.sparse.s16.logical_bytes",
+      "unit": "byte",
+      "value": 134217728
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s16.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "134217728",
+      "metric_id": "g3b3.sparse.s16.value_bytes",
+      "unit": "byte",
+      "value": 134217728
+    },
+    {
+      "display_value": "268435520",
+      "metric_id": "g3b3.sparse.s16.wire_bytes",
+      "unit": "byte",
+      "value": 268435520
+    },
+    {
+      "display_value": "134217728",
+      "metric_id": "g3b3.sparse.s17.index_bytes",
+      "unit": "byte",
+      "value": 134217728
+    },
+    {
+      "display_value": "134217728",
+      "metric_id": "g3b3.sparse.s17.logical_bytes",
+      "unit": "byte",
+      "value": 134217728
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s17.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "67108864",
+      "metric_id": "g3b3.sparse.s17.value_bytes",
+      "unit": "byte",
+      "value": 67108864
+    },
+    {
+      "display_value": "201326656",
+      "metric_id": "g3b3.sparse.s17.wire_bytes",
+      "unit": "byte",
+      "value": 201326656
+    },
+    {
+      "display_value": "26843544",
+      "metric_id": "g3b3.sparse.s18.index_bytes",
+      "unit": "byte",
+      "value": 26843544
+    },
+    {
+      "display_value": "134217728",
+      "metric_id": "g3b3.sparse.s18.logical_bytes",
+      "unit": "byte",
+      "value": 134217728
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s18.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "13421772",
+      "metric_id": "g3b3.sparse.s18.value_bytes",
+      "unit": "byte",
+      "value": 13421772
+    },
+    {
+      "display_value": "40265380",
+      "metric_id": "g3b3.sparse.s18.wire_bytes",
+      "unit": "byte",
+      "value": 40265380
+    },
+    {
+      "display_value": "268435456",
+      "metric_id": "g3b3.sparse.s19.index_bytes",
+      "unit": "byte",
+      "value": 268435456
+    },
+    {
+      "display_value": "1073741824",
+      "metric_id": "g3b3.sparse.s19.logical_bytes",
+      "unit": "byte",
+      "value": 1073741824
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s19.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "268435456",
+      "metric_id": "g3b3.sparse.s19.value_bytes",
+      "unit": "byte",
+      "value": 268435456
+    },
+    {
+      "display_value": "536870976",
+      "metric_id": "g3b3.sparse.s19.wire_bytes",
+      "unit": "byte",
+      "value": 536870976
+    },
+    {
+      "display_value": "214748364",
+      "metric_id": "g3b3.sparse.s20.index_bytes",
+      "unit": "byte",
+      "value": 214748364
+    },
+    {
+      "display_value": "1073741824",
+      "metric_id": "g3b3.sparse.s20.logical_bytes",
+      "unit": "byte",
+      "value": 1073741824
+    },
+    {
+      "display_value": "64",
+      "metric_id": "g3b3.sparse.s20.metadata_bytes",
+      "unit": "byte",
+      "value": 64
+    },
+    {
+      "display_value": "107374182",
+      "metric_id": "g3b3.sparse.s20.value_bytes",
+      "unit": "byte",
+      "value": 107374182
+    },
+    {
+      "display_value": "322122610",
+      "metric_id": "g3b3.sparse.s20.wire_bytes",
+      "unit": "byte",
+      "value": 322122610
+    }
+  ],
+  "truth_label": "LOSSLESS_SPARSE_HOST_EXECUTED"
+}

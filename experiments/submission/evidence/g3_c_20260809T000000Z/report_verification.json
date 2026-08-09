@@ -1,0 +1,76 @@
+{
+  "chart_data": {
+    "chart_count": 16,
+    "metric_rows_checked": 1085,
+    "single_numeric_source": "docs/submission/report_data_ledger.json",
+    "status": "PASS"
+  },
+  "claims": {
+    "claim_count": 21,
+    "status": "PASS",
+    "truth_identities": [
+      "CPU_EXECUTED",
+      "DIRECT_COMPILE_LINK_ONLY",
+      "HISTORICAL_EVIDENCE",
+      "HOST_EXECUTED",
+      "HOST_INTEGRITY_VALIDATED",
+      "HOST_RETRY_VALIDATED",
+      "LOSSLESS_SPARSE_HOST_EXECUTED",
+      "REAL_DEVICE_NOT_EXECUTED",
+      "SIMULATED_BACKPRESSURE",
+      "SIMULATED_ONLY"
+    ],
+    "unique_claim_ids": 21
+  },
+  "final_feature_freeze_preserved": true,
+  "forbidden_claim_audit": {
+    "findings": [],
+    "status": "PASS"
+  },
+  "frozen_evidence_changes": [],
+  "ledger": {
+    "g3_b2_sha": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+    "g3_b3_sha": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754",
+    "metric_count": 1082,
+    "source_file_count": 21,
+    "status": "PASS",
+    "unique_metric_ids": 1082
+  },
+  "numeric_traceability": {
+    "metrics": 1082,
+    "report_markers": 72,
+    "status": "PASS"
+  },
+  "old_evidence_modified": false,
+  "real_device_api_executed": false,
+  "reports": {
+    "absolute_private_paths": [],
+    "forbidden_positive_claims": [],
+    "formal_report_count": 11,
+    "metric_markers_checked": 72,
+    "relative_links_checked": 31,
+    "report_file_count": 13,
+    "status": "PASS"
+  },
+  "runtime_api_calls": [],
+  "schema_version": "g3-c-report-verification-v1",
+  "source_commit": "540d530e2982403376a229e8c7767902820b3199",
+  "status": "PASS",
+  "truth_identity_audit": {
+    "prohibited_identities_present": [],
+    "status": "PASS",
+    "valid_identities": [
+      "CPU_EXECUTED",
+      "DIRECT_COMPILE_LINK_ONLY",
+      "DIRECT_READINESS_ONLY",
+      "HISTORICAL_EVIDENCE",
+      "HOST_EXECUTED",
+      "HOST_INTEGRITY_VALIDATED",
+      "HOST_RETRY_VALIDATED",
+      "LOSSLESS_SPARSE_HOST_EXECUTED",
+      "REAL_DEVICE_NOT_EXECUTED",
+      "SIMULATED_BACKPRESSURE",
+      "SIMULATED_ONLY"
+    ]
+  }
+}

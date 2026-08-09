@@ -1,0 +1,66 @@
+{
+  "chart_id": "g3_b2_scale",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b2.scale.p17.bandwidth",
+    "g3b2.scale.p17.p50",
+    "g3b2.scale.p17.p95",
+    "g3b2.scale.p17.relative_difference_percent",
+    "g3b2.scale.p18.bandwidth",
+    "g3b2.scale.p18.p50",
+    "g3b2.scale.p18.p95",
+    "g3b2.scale.p18.relative_difference_percent"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "1.744",
+      "metric_id": "g3b2.scale.p17.bandwidth",
+      "unit": "GB/s_decimal",
+      "value": 1.744178792
+    },
+    {
+      "display_value": "615552.984",
+      "metric_id": "g3b2.scale.p17.p50",
+      "unit": "us",
+      "value": 615552.984447974
+    },
+    {
+      "display_value": "616168.537",
+      "metric_id": "g3b2.scale.p17.p95",
+      "unit": "us",
+      "value": 616168.537432422
+    },
+    {
+      "display_value": "-52.36%",
+      "metric_id": "g3b2.scale.p17.relative_difference_percent",
+      "unit": "percent",
+      "value": -52.364096989
+    },
+    {
+      "display_value": "3.121",
+      "metric_id": "g3b2.scale.p18.bandwidth",
+      "unit": "GB/s_decimal",
+      "value": 3.121276767
+    },
+    {
+      "display_value": "343972.849",
+      "metric_id": "g3b2.scale.p18.p50",
+      "unit": "us",
+      "value": 343972.848570191
+    },
+    {
+      "display_value": "344316.821",
+      "metric_id": "g3b2.scale.p18.p95",
+      "unit": "us",
+      "value": 344316.821418761
+    },
+    {
+      "display_value": "-46.76%",
+      "metric_id": "g3b2.scale.p18.relative_difference_percent",
+      "unit": "percent",
+      "value": -46.763069129
+    }
+  ],
+  "truth_label": "SIMULATED_ONLY"
+}

@@ -1,0 +1,14 @@
+{
+  "absolute_private_paths": [],
+  "controlled_competition_doc_included": false,
+  "file_count": 51,
+  "manifest_entries": 49,
+  "official_assets_included": false,
+  "private_logs_included": false,
+  "real_device_api_executed": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-c-staging-verification-v1",
+  "sha256_entries": 50,
+  "source_commit": "540d530e2982403376a229e8c7767902820b3199",
+  "status": "PASS"
+}

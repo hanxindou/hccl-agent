@@ -1,0 +1,45 @@
+{
+  "chart_id": "correctness_coverage",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b2.correctness.all_scenarios_correct",
+    "g3b3.sparse.benchmark_correct_case_count",
+    "g3b3.sparse.supported_dtypes_count",
+    "g3b3.sparse.supported_primitives_count",
+    "g3b3.sparse.supported_reduce_ops_count"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "true",
+      "metric_id": "g3b2.correctness.all_scenarios_correct",
+      "unit": "boolean",
+      "value": true
+    },
+    {
+      "display_value": "20",
+      "metric_id": "g3b3.sparse.benchmark_correct_case_count",
+      "unit": "count",
+      "value": 20
+    },
+    {
+      "display_value": "3",
+      "metric_id": "g3b3.sparse.supported_dtypes_count",
+      "unit": "count",
+      "value": 3
+    },
+    {
+      "display_value": "3",
+      "metric_id": "g3b3.sparse.supported_primitives_count",
+      "unit": "count",
+      "value": 3
+    },
+    {
+      "display_value": "3",
+      "metric_id": "g3b3.sparse.supported_reduce_ops_count",
+      "unit": "count",
+      "value": 3
+    }
+  ],
+  "truth_label": "SIMULATED_ONLY + LOSSLESS_SPARSE_HOST_EXECUTED"
+}

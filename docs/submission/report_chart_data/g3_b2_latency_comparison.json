@@ -1,0 +1,514 @@
+{
+  "chart_id": "g3_b2_latency_comparison",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b2.scenario.p01.baseline_p50_us",
+    "g3b2.scenario.p01.baseline_p95_us",
+    "g3b2.scenario.p01.candidate_p50_us",
+    "g3b2.scenario.p01.candidate_p95_us",
+    "g3b2.scenario.p02.baseline_p50_us",
+    "g3b2.scenario.p02.baseline_p95_us",
+    "g3b2.scenario.p02.candidate_p50_us",
+    "g3b2.scenario.p02.candidate_p95_us",
+    "g3b2.scenario.p03.baseline_p50_us",
+    "g3b2.scenario.p03.baseline_p95_us",
+    "g3b2.scenario.p03.candidate_p50_us",
+    "g3b2.scenario.p03.candidate_p95_us",
+    "g3b2.scenario.p04.baseline_p50_us",
+    "g3b2.scenario.p04.baseline_p95_us",
+    "g3b2.scenario.p04.candidate_p50_us",
+    "g3b2.scenario.p04.candidate_p95_us",
+    "g3b2.scenario.p05.baseline_p50_us",
+    "g3b2.scenario.p05.baseline_p95_us",
+    "g3b2.scenario.p05.candidate_p50_us",
+    "g3b2.scenario.p05.candidate_p95_us",
+    "g3b2.scenario.p06.baseline_p50_us",
+    "g3b2.scenario.p06.baseline_p95_us",
+    "g3b2.scenario.p06.candidate_p50_us",
+    "g3b2.scenario.p06.candidate_p95_us",
+    "g3b2.scenario.p07.baseline_p50_us",
+    "g3b2.scenario.p07.baseline_p95_us",
+    "g3b2.scenario.p07.candidate_p50_us",
+    "g3b2.scenario.p07.candidate_p95_us",
+    "g3b2.scenario.p08.baseline_p50_us",
+    "g3b2.scenario.p08.baseline_p95_us",
+    "g3b2.scenario.p08.candidate_p50_us",
+    "g3b2.scenario.p08.candidate_p95_us",
+    "g3b2.scenario.p09.baseline_p50_us",
+    "g3b2.scenario.p09.baseline_p95_us",
+    "g3b2.scenario.p09.candidate_p50_us",
+    "g3b2.scenario.p09.candidate_p95_us",
+    "g3b2.scenario.p10.baseline_p50_us",
+    "g3b2.scenario.p10.baseline_p95_us",
+    "g3b2.scenario.p10.candidate_p50_us",
+    "g3b2.scenario.p10.candidate_p95_us",
+    "g3b2.scenario.p11.baseline_p50_us",
+    "g3b2.scenario.p11.baseline_p95_us",
+    "g3b2.scenario.p11.candidate_p50_us",
+    "g3b2.scenario.p11.candidate_p95_us",
+    "g3b2.scenario.p12.baseline_p50_us",
+    "g3b2.scenario.p12.baseline_p95_us",
+    "g3b2.scenario.p12.candidate_p50_us",
+    "g3b2.scenario.p12.candidate_p95_us",
+    "g3b2.scenario.p13.baseline_p50_us",
+    "g3b2.scenario.p13.baseline_p95_us",
+    "g3b2.scenario.p13.candidate_p50_us",
+    "g3b2.scenario.p13.candidate_p95_us",
+    "g3b2.scenario.p14.baseline_p50_us",
+    "g3b2.scenario.p14.baseline_p95_us",
+    "g3b2.scenario.p14.candidate_p50_us",
+    "g3b2.scenario.p14.candidate_p95_us",
+    "g3b2.scenario.p15.baseline_p50_us",
+    "g3b2.scenario.p15.baseline_p95_us",
+    "g3b2.scenario.p15.candidate_p50_us",
+    "g3b2.scenario.p15.candidate_p95_us",
+    "g3b2.scenario.p16.baseline_p50_us",
+    "g3b2.scenario.p16.baseline_p95_us",
+    "g3b2.scenario.p16.candidate_p50_us",
+    "g3b2.scenario.p16.candidate_p95_us",
+    "g3b2.scenario.p17.baseline_p50_us",
+    "g3b2.scenario.p17.baseline_p95_us",
+    "g3b2.scenario.p17.candidate_p50_us",
+    "g3b2.scenario.p17.candidate_p95_us",
+    "g3b2.scenario.p18.baseline_p50_us",
+    "g3b2.scenario.p18.baseline_p95_us",
+    "g3b2.scenario.p18.candidate_p50_us",
+    "g3b2.scenario.p18.candidate_p95_us"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "32.504",
+      "metric_id": "g3b2.scenario.p01.baseline_p50_us",
+      "unit": "us",
+      "value": 32.50404695
+    },
+    {
+      "display_value": "32.537",
+      "metric_id": "g3b2.scenario.p01.baseline_p95_us",
+      "unit": "us",
+      "value": 32.536550997
+    },
+    {
+      "display_value": "9.575",
+      "metric_id": "g3b2.scenario.p01.candidate_p50_us",
+      "unit": "us",
+      "value": 9.575080114
+    },
+    {
+      "display_value": "9.585",
+      "metric_id": "g3b2.scenario.p01.candidate_p95_us",
+      "unit": "us",
+      "value": 9.584655194
+    },
+    {
+      "display_value": "23.420",
+      "metric_id": "g3b2.scenario.p02.baseline_p50_us",
+      "unit": "us",
+      "value": 23.420002396
+    },
+    {
+      "display_value": "23.443",
+      "metric_id": "g3b2.scenario.p02.baseline_p95_us",
+      "unit": "us",
+      "value": 23.443422399
+    },
+    {
+      "display_value": "15.443",
+      "metric_id": "g3b2.scenario.p02.candidate_p50_us",
+      "unit": "us",
+      "value": 15.443237832
+    },
+    {
+      "display_value": "15.459",
+      "metric_id": "g3b2.scenario.p02.candidate_p95_us",
+      "unit": "us",
+      "value": 15.458681069
+    },
+    {
+      "display_value": "23.425",
+      "metric_id": "g3b2.scenario.p03.baseline_p50_us",
+      "unit": "us",
+      "value": 23.425002396
+    },
+    {
+      "display_value": "23.448",
+      "metric_id": "g3b2.scenario.p03.baseline_p95_us",
+      "unit": "us",
+      "value": 23.448427399
+    },
+    {
+      "display_value": "20.108",
+      "metric_id": "g3b2.scenario.p03.candidate_p50_us",
+      "unit": "us",
+      "value": 20.108407911
+    },
+    {
+      "display_value": "20.129",
+      "metric_id": "g3b2.scenario.p03.candidate_p95_us",
+      "unit": "us",
+      "value": 20.128516319
+    },
+    {
+      "display_value": "224.600",
+      "metric_id": "g3b2.scenario.p04.baseline_p50_us",
+      "unit": "us",
+      "value": 224.600076686
+    },
+    {
+      "display_value": "224.825",
+      "metric_id": "g3b2.scenario.p04.baseline_p95_us",
+      "unit": "us",
+      "value": 224.824676763
+    },
+    {
+      "display_value": "137.084",
+      "metric_id": "g3b2.scenario.p04.candidate_p50_us",
+      "unit": "us",
+      "value": 137.083506631
+    },
+    {
+      "display_value": "137.221",
+      "metric_id": "g3b2.scenario.p04.candidate_p95_us",
+      "unit": "us",
+      "value": 137.220590138
+    },
+    {
+      "display_value": "1472.076",
+      "metric_id": "g3b2.scenario.p05.baseline_p50_us",
+      "unit": "us",
+      "value": 1472.07561349
+    },
+    {
+      "display_value": "1473.548",
+      "metric_id": "g3b2.scenario.p05.baseline_p95_us",
+      "unit": "us",
+      "value": 1473.547689103
+    },
+    {
+      "display_value": "783.634",
+      "metric_id": "g3b2.scenario.p05.candidate_p50_us",
+      "unit": "us",
+      "value": 783.633919667
+    },
+    {
+      "display_value": "784.418",
+      "metric_id": "g3b2.scenario.p05.candidate_p95_us",
+      "unit": "us",
+      "value": 784.417553586
+    },
+    {
+      "display_value": "11580.072",
+      "metric_id": "g3b2.scenario.p06.baseline_p50_us",
+      "unit": "us",
+      "value": 11580.071907918
+    },
+    {
+      "display_value": "11591.652",
+      "metric_id": "g3b2.scenario.p06.baseline_p95_us",
+      "unit": "us",
+      "value": 11591.651979826
+    },
+    {
+      "display_value": "5970.975",
+      "metric_id": "g3b2.scenario.p06.candidate_p50_us",
+      "unit": "us",
+      "value": 5970.97457752
+    },
+    {
+      "display_value": "5976.946",
+      "metric_id": "g3b2.scenario.p06.candidate_p95_us",
+      "unit": "us",
+      "value": 5976.945552098
+    },
+    {
+      "display_value": "6605.717",
+      "metric_id": "g3b2.scenario.p07.baseline_p50_us",
+      "unit": "us",
+      "value": 6605.716864853
+    },
+    {
+      "display_value": "6612.323",
+      "metric_id": "g3b2.scenario.p07.baseline_p95_us",
+      "unit": "us",
+      "value": 6612.322581718
+    },
+    {
+      "display_value": "3510.881",
+      "metric_id": "g3b2.scenario.p07.candidate_p50_us",
+      "unit": "us",
+      "value": 3510.880834453
+    },
+    {
+      "display_value": "3514.392",
+      "metric_id": "g3b2.scenario.p07.candidate_p95_us",
+      "unit": "us",
+      "value": 3514.391715288
+    },
+    {
+      "display_value": "349.607",
+      "metric_id": "g3b2.scenario.p08.baseline_p50_us",
+      "unit": "us",
+      "value": 349.607402027
+    },
+    {
+      "display_value": "349.957",
+      "metric_id": "g3b2.scenario.p08.baseline_p95_us",
+      "unit": "us",
+      "value": 349.957009429
+    },
+    {
+      "display_value": "190.962",
+      "metric_id": "g3b2.scenario.p08.candidate_p50_us",
+      "unit": "us",
+      "value": 190.961516047
+    },
+    {
+      "display_value": "191.152",
+      "metric_id": "g3b2.scenario.p08.candidate_p95_us",
+      "unit": "us",
+      "value": 191.152477563
+    },
+    {
+      "display_value": "162.809",
+      "metric_id": "g3b2.scenario.p09.baseline_p50_us",
+      "unit": "us",
+      "value": 162.808587627
+    },
+    {
+      "display_value": "162.971",
+      "metric_id": "g3b2.scenario.p09.baseline_p95_us",
+      "unit": "us",
+      "value": 162.971396214
+    },
+    {
+      "display_value": "141.130",
+      "metric_id": "g3b2.scenario.p09.candidate_p50_us",
+      "unit": "us",
+      "value": 141.130214388
+    },
+    {
+      "display_value": "141.271",
+      "metric_id": "g3b2.scenario.p09.candidate_p95_us",
+      "unit": "us",
+      "value": 141.271344603
+    },
+    {
+      "display_value": "139834.320",
+      "metric_id": "g3b2.scenario.p10.baseline_p50_us",
+      "unit": "us",
+      "value": 139834.319533312
+    },
+    {
+      "display_value": "139974.154",
+      "metric_id": "g3b2.scenario.p10.baseline_p95_us",
+      "unit": "us",
+      "value": 139974.153852845
+    },
+    {
+      "display_value": "67972.434",
+      "metric_id": "g3b2.scenario.p10.candidate_p50_us",
+      "unit": "us",
+      "value": 67972.433653608
+    },
+    {
+      "display_value": "68040.406",
+      "metric_id": "g3b2.scenario.p10.candidate_p95_us",
+      "unit": "us",
+      "value": 68040.406087262
+    },
+    {
+      "display_value": "9100.364",
+      "metric_id": "g3b2.scenario.p11.baseline_p50_us",
+      "unit": "us",
+      "value": 9100.363720832
+    },
+    {
+      "display_value": "9109.464",
+      "metric_id": "g3b2.scenario.p11.baseline_p95_us",
+      "unit": "us",
+      "value": 9109.464084553
+    },
+    {
+      "display_value": "4836.162",
+      "metric_id": "g3b2.scenario.p11.candidate_p50_us",
+      "unit": "us",
+      "value": 4836.161976692
+    },
+    {
+      "display_value": "4840.998",
+      "metric_id": "g3b2.scenario.p11.candidate_p95_us",
+      "unit": "us",
+      "value": 4840.998138669
+    },
+    {
+      "display_value": "953.800",
+      "metric_id": "g3b2.scenario.p12.baseline_p50_us",
+      "unit": "us",
+      "value": 953.799607552
+    },
+    {
+      "display_value": "954.753",
+      "metric_id": "g3b2.scenario.p12.baseline_p95_us",
+      "unit": "us",
+      "value": 954.75340716
+    },
+    {
+      "display_value": "596.594",
+      "metric_id": "g3b2.scenario.p12.candidate_p50_us",
+      "unit": "us",
+      "value": 596.59350472
+    },
+    {
+      "display_value": "597.190",
+      "metric_id": "g3b2.scenario.p12.candidate_p95_us",
+      "unit": "us",
+      "value": 597.190098225
+    },
+    {
+      "display_value": "351614.781",
+      "metric_id": "g3b2.scenario.p13.baseline_p50_us",
+      "unit": "us",
+      "value": 351614.781422222
+    },
+    {
+      "display_value": "351966.396",
+      "metric_id": "g3b2.scenario.p13.baseline_p95_us",
+      "unit": "us",
+      "value": 351966.396203644
+    },
+    {
+      "display_value": "171573.168",
+      "metric_id": "g3b2.scenario.p13.candidate_p50_us",
+      "unit": "us",
+      "value": 171573.167569737
+    },
+    {
+      "display_value": "171744.741",
+      "metric_id": "g3b2.scenario.p13.candidate_p95_us",
+      "unit": "us",
+      "value": 171744.740737307
+    },
+    {
+      "display_value": "22251.990",
+      "metric_id": "g3b2.scenario.p14.baseline_p50_us",
+      "unit": "us",
+      "value": 22251.990088889
+    },
+    {
+      "display_value": "22274.242",
+      "metric_id": "g3b2.scenario.p14.baseline_p95_us",
+      "unit": "us",
+      "value": 22274.242078978
+    },
+    {
+      "display_value": "11822.963",
+      "metric_id": "g3b2.scenario.p14.candidate_p50_us",
+      "unit": "us",
+      "value": 11822.963484722
+    },
+    {
+      "display_value": "11834.786",
+      "metric_id": "g3b2.scenario.p14.candidate_p95_us",
+      "unit": "us",
+      "value": 11834.786448207
+    },
+    {
+      "display_value": "1683.939",
+      "metric_id": "g3b2.scenario.p15.baseline_p50_us",
+      "unit": "us",
+      "value": 1683.938755556
+    },
+    {
+      "display_value": "1685.623",
+      "metric_id": "g3b2.scenario.p15.baseline_p95_us",
+      "unit": "us",
+      "value": 1685.622694311
+    },
+    {
+      "display_value": "1052.930",
+      "metric_id": "g3b2.scenario.p15.candidate_p50_us",
+      "unit": "us",
+      "value": 1052.930472222
+    },
+    {
+      "display_value": "1053.983",
+      "metric_id": "g3b2.scenario.p15.candidate_p95_us",
+      "unit": "us",
+      "value": 1053.983402694
+    },
+    {
+      "display_value": "397185.598",
+      "metric_id": "g3b2.scenario.p16.baseline_p50_us",
+      "unit": "us",
+      "value": 397185.597893333
+    },
+    {
+      "display_value": "397582.783",
+      "metric_id": "g3b2.scenario.p16.baseline_p95_us",
+      "unit": "us",
+      "value": 397582.783491226
+    },
+    {
+      "display_value": "193017.874",
+      "metric_id": "g3b2.scenario.p16.candidate_p50_us",
+      "unit": "us",
+      "value": 193017.873905132
+    },
+    {
+      "display_value": "193210.892",
+      "metric_id": "g3b2.scenario.p16.candidate_p95_us",
+      "unit": "us",
+      "value": 193210.891779037
+    },
+    {
+      "display_value": "1292203.875",
+      "metric_id": "g3b2.scenario.p17.baseline_p50_us",
+      "unit": "us",
+      "value": 1292203.8746816
+    },
+    {
+      "display_value": "1293496.079",
+      "metric_id": "g3b2.scenario.p17.baseline_p95_us",
+      "unit": "us",
+      "value": 1293496.078556282
+    },
+    {
+      "display_value": "615552.984",
+      "metric_id": "g3b2.scenario.p17.candidate_p50_us",
+      "unit": "us",
+      "value": 615552.984447974
+    },
+    {
+      "display_value": "616168.537",
+      "metric_id": "g3b2.scenario.p17.candidate_p95_us",
+      "unit": "us",
+      "value": 616168.537432422
+    },
+    {
+      "display_value": "646116.977",
+      "metric_id": "g3b2.scenario.p18.baseline_p50_us",
+      "unit": "us",
+      "value": 646116.9773408
+    },
+    {
+      "display_value": "646763.094",
+      "metric_id": "g3b2.scenario.p18.baseline_p95_us",
+      "unit": "us",
+      "value": 646763.094318141
+    },
+    {
+      "display_value": "343972.849",
+      "metric_id": "g3b2.scenario.p18.candidate_p50_us",
+      "unit": "us",
+      "value": 343972.848570191
+    },
+    {
+      "display_value": "344316.821",
+      "metric_id": "g3b2.scenario.p18.candidate_p95_us",
+      "unit": "us",
+      "value": 344316.821418761
+    }
+  ],
+  "truth_label": "SIMULATED_ONLY"
+}

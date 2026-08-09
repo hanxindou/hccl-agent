@@ -1,0 +1,136 @@
+{
+  "chart_id": "g3_b2_bandwidth_comparison",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b2.scenario.p01.effective_bandwidth_gb_s",
+    "g3b2.scenario.p02.effective_bandwidth_gb_s",
+    "g3b2.scenario.p03.effective_bandwidth_gb_s",
+    "g3b2.scenario.p04.effective_bandwidth_gb_s",
+    "g3b2.scenario.p05.effective_bandwidth_gb_s",
+    "g3b2.scenario.p06.effective_bandwidth_gb_s",
+    "g3b2.scenario.p07.effective_bandwidth_gb_s",
+    "g3b2.scenario.p08.effective_bandwidth_gb_s",
+    "g3b2.scenario.p09.effective_bandwidth_gb_s",
+    "g3b2.scenario.p10.effective_bandwidth_gb_s",
+    "g3b2.scenario.p11.effective_bandwidth_gb_s",
+    "g3b2.scenario.p12.effective_bandwidth_gb_s",
+    "g3b2.scenario.p13.effective_bandwidth_gb_s",
+    "g3b2.scenario.p14.effective_bandwidth_gb_s",
+    "g3b2.scenario.p15.effective_bandwidth_gb_s",
+    "g3b2.scenario.p16.effective_bandwidth_gb_s",
+    "g3b2.scenario.p17.effective_bandwidth_gb_s",
+    "g3b2.scenario.p18.effective_bandwidth_gb_s"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "0.107",
+      "metric_id": "g3b2.scenario.p01.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.10694784
+    },
+    {
+      "display_value": "4.244",
+      "metric_id": "g3b2.scenario.p02.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.243811131
+    },
+    {
+      "display_value": "3.259",
+      "metric_id": "g3b2.scenario.p03.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.259242845
+    },
+    {
+      "display_value": "7.649",
+      "metric_id": "g3b2.scenario.p04.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 7.649431937
+    },
+    {
+      "display_value": "21.410",
+      "metric_id": "g3b2.scenario.p05.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 21.410220816
+    },
+    {
+      "display_value": "22.479",
+      "metric_id": "g3b2.scenario.p06.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 22.479111296
+    },
+    {
+      "display_value": "4.779",
+      "metric_id": "g3b2.scenario.p07.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 4.778506993
+    },
+    {
+      "display_value": "5.491",
+      "metric_id": "g3b2.scenario.p08.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 5.490886648
+    },
+    {
+      "display_value": "0.464",
+      "metric_id": "g3b2.scenario.p09.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.464353099
+    },
+    {
+      "display_value": "1.975",
+      "metric_id": "g3b2.scenario.p10.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.974551101
+    },
+    {
+      "display_value": "3.469",
+      "metric_id": "g3b2.scenario.p11.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.469048502
+    },
+    {
+      "display_value": "1.758",
+      "metric_id": "g3b2.scenario.p12.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.757570306
+    },
+    {
+      "display_value": "0.782",
+      "metric_id": "g3b2.scenario.p13.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.782256054
+    },
+    {
+      "display_value": "1.419",
+      "metric_id": "g3b2.scenario.p14.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.418998599
+    },
+    {
+      "display_value": "0.996",
+      "metric_id": "g3b2.scenario.p15.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.99583787
+    },
+    {
+      "display_value": "0.695",
+      "metric_id": "g3b2.scenario.p16.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 0.695350337
+    },
+    {
+      "display_value": "1.744",
+      "metric_id": "g3b2.scenario.p17.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 1.744178792
+    },
+    {
+      "display_value": "3.121",
+      "metric_id": "g3b2.scenario.p18.effective_bandwidth_gb_s",
+      "unit": "GB/s_decimal",
+      "value": 3.121276767
+    }
+  ],
+  "truth_label": "SIMULATED_ONLY"
+}

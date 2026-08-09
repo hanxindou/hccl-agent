@@ -1,0 +1,150 @@
+{
+  "chart_id": "sparse_compression_ratio",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b3.sparse.s01.compression_ratio",
+    "g3b3.sparse.s02.compression_ratio",
+    "g3b3.sparse.s03.compression_ratio",
+    "g3b3.sparse.s04.compression_ratio",
+    "g3b3.sparse.s05.compression_ratio",
+    "g3b3.sparse.s06.compression_ratio",
+    "g3b3.sparse.s07.compression_ratio",
+    "g3b3.sparse.s08.compression_ratio",
+    "g3b3.sparse.s09.compression_ratio",
+    "g3b3.sparse.s10.compression_ratio",
+    "g3b3.sparse.s11.compression_ratio",
+    "g3b3.sparse.s12.compression_ratio",
+    "g3b3.sparse.s13.compression_ratio",
+    "g3b3.sparse.s14.compression_ratio",
+    "g3b3.sparse.s15.compression_ratio",
+    "g3b3.sparse.s16.compression_ratio",
+    "g3b3.sparse.s17.compression_ratio",
+    "g3b3.sparse.s18.compression_ratio",
+    "g3b3.sparse.s19.compression_ratio",
+    "g3b3.sparse.s20.compression_ratio"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "0.6662",
+      "metric_id": "g3b3.sparse.s01.compression_ratio",
+      "unit": "ratio",
+      "value": 0.6662329212752115
+    },
+    {
+      "display_value": "0.6662",
+      "metric_id": "g3b3.sparse.s02.compression_ratio",
+      "unit": "ratio",
+      "value": 0.6662329212752115
+    },
+    {
+      "display_value": "0.9990",
+      "metric_id": "g3b3.sparse.s03.compression_ratio",
+      "unit": "ratio",
+      "value": 0.9990243902439024
+    },
+    {
+      "display_value": "2.6597",
+      "metric_id": "g3b3.sparse.s04.compression_ratio",
+      "unit": "ratio",
+      "value": 2.6597402597402597
+    },
+    {
+      "display_value": "4.9769",
+      "metric_id": "g3b3.sparse.s05.compression_ratio",
+      "unit": "ratio",
+      "value": 4.976913730255164
+    },
+    {
+      "display_value": "0.5000",
+      "metric_id": "g3b3.sparse.s06.compression_ratio",
+      "unit": "ratio",
+      "value": 0.4999847416765846
+    },
+    {
+      "display_value": "0.4444",
+      "metric_id": "g3b3.sparse.s07.compression_ratio",
+      "unit": "ratio",
+      "value": 0.44443238844432387
+    },
+    {
+      "display_value": "0.6666",
+      "metric_id": "g3b3.sparse.s08.compression_ratio",
+      "unit": "ratio",
+      "value": 0.6666395410343003
+    },
+    {
+      "display_value": "1.9998",
+      "metric_id": "g3b3.sparse.s09.compression_ratio",
+      "unit": "ratio",
+      "value": 1.9997558891736849
+    },
+    {
+      "display_value": "3.3327",
+      "metric_id": "g3b3.sparse.s10.compression_ratio",
+      "unit": "ratio",
+      "value": 3.332706145592311
+    },
+    {
+      "display_value": "0.5000",
+      "metric_id": "g3b3.sparse.s11.compression_ratio",
+      "unit": "ratio",
+      "value": 0.4999990463275026
+    },
+    {
+      "display_value": "0.4444",
+      "metric_id": "g3b3.sparse.s12.compression_ratio",
+      "unit": "ratio",
+      "value": 0.44444369092527447
+    },
+    {
+      "display_value": "0.6667",
+      "metric_id": "g3b3.sparse.s13.compression_ratio",
+      "unit": "ratio",
+      "value": 0.6666649712499714
+    },
+    {
+      "display_value": "2.0000",
+      "metric_id": "g3b3.sparse.s14.compression_ratio",
+      "unit": "ratio",
+      "value": 1.999984741327352
+    },
+    {
+      "display_value": "3.3333",
+      "metric_id": "g3b3.sparse.s15.compression_ratio",
+      "unit": "ratio",
+      "value": 3.33329412718369
+    },
+    {
+      "display_value": "0.5000",
+      "metric_id": "g3b3.sparse.s16.compression_ratio",
+      "unit": "ratio",
+      "value": 0.49999988079073887
+    },
+    {
+      "display_value": "0.6667",
+      "metric_id": "g3b3.sparse.s17.compression_ratio",
+      "unit": "ratio",
+      "value": 0.6666664547391081
+    },
+    {
+      "display_value": "3.3333",
+      "metric_id": "g3b3.sparse.s18.compression_ratio",
+      "unit": "ratio",
+      "value": 3.3333282338326375
+    },
+    {
+      "display_value": "2.0000",
+      "metric_id": "g3b3.sparse.s19.compression_ratio",
+      "unit": "ratio",
+      "value": 1.9999997615814493
+    },
+    {
+      "display_value": "3.3333",
+      "metric_id": "g3b3.sparse.s20.compression_ratio",
+      "unit": "ratio",
+      "value": 3.3333326834772636
+    }
+  ],
+  "truth_label": "LOSSLESS_SPARSE_HOST_EXECUTED"
+}

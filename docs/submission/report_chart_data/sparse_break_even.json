@@ -1,0 +1,115 @@
+{
+  "chart_id": "sparse_break_even",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b3.sparse.break_even.bf16_1048576",
+    "g3b3.sparse.break_even.bf16_1073741824",
+    "g3b3.sparse.break_even.bf16_134217728",
+    "g3b3.sparse.break_even.bf16_16777216",
+    "g3b3.sparse.break_even.bf16_65536",
+    "g3b3.sparse.break_even.fp16_1048576",
+    "g3b3.sparse.break_even.fp16_1073741824",
+    "g3b3.sparse.break_even.fp16_134217728",
+    "g3b3.sparse.break_even.fp16_16777216",
+    "g3b3.sparse.break_even.fp16_65536",
+    "g3b3.sparse.break_even.fp32_1048576",
+    "g3b3.sparse.break_even.fp32_1073741824",
+    "g3b3.sparse.break_even.fp32_134217728",
+    "g3b3.sparse.break_even.fp32_16777216",
+    "g3b3.sparse.break_even.fp32_65536"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "0.6800",
+      "metric_id": "g3b3.sparse.break_even.bf16_1048576",
+      "unit": "ratio",
+      "value": 0.68
+    },
+    {
+      "display_value": "0.6800",
+      "metric_id": "g3b3.sparse.break_even.bf16_1073741824",
+      "unit": "ratio",
+      "value": 0.68
+    },
+    {
+      "display_value": "0.6800",
+      "metric_id": "g3b3.sparse.break_even.bf16_134217728",
+      "unit": "ratio",
+      "value": 0.68
+    },
+    {
+      "display_value": "0.6800",
+      "metric_id": "g3b3.sparse.break_even.bf16_16777216",
+      "unit": "ratio",
+      "value": 0.68
+    },
+    {
+      "display_value": "0.5200",
+      "metric_id": "g3b3.sparse.break_even.bf16_65536",
+      "unit": "ratio",
+      "value": 0.52
+    },
+    {
+      "display_value": "0.6800",
+      "metric_id": "g3b3.sparse.break_even.fp16_1048576",
+      "unit": "ratio",
+      "value": 0.68
+    },
+    {
+      "display_value": "0.6800",
+      "metric_id": "g3b3.sparse.break_even.fp16_1073741824",
+      "unit": "ratio",
+      "value": 0.68
+    },
+    {
+      "display_value": "0.6800",
+      "metric_id": "g3b3.sparse.break_even.fp16_134217728",
+      "unit": "ratio",
+      "value": 0.68
+    },
+    {
+      "display_value": "0.6800",
+      "metric_id": "g3b3.sparse.break_even.fp16_16777216",
+      "unit": "ratio",
+      "value": 0.68
+    },
+    {
+      "display_value": "0.5200",
+      "metric_id": "g3b3.sparse.break_even.fp16_65536",
+      "unit": "ratio",
+      "value": 0.52
+    },
+    {
+      "display_value": "0.5100",
+      "metric_id": "g3b3.sparse.break_even.fp32_1048576",
+      "unit": "ratio",
+      "value": 0.51
+    },
+    {
+      "display_value": "0.5100",
+      "metric_id": "g3b3.sparse.break_even.fp32_1073741824",
+      "unit": "ratio",
+      "value": 0.51
+    },
+    {
+      "display_value": "0.5100",
+      "metric_id": "g3b3.sparse.break_even.fp32_134217728",
+      "unit": "ratio",
+      "value": 0.51
+    },
+    {
+      "display_value": "0.5100",
+      "metric_id": "g3b3.sparse.break_even.fp32_16777216",
+      "unit": "ratio",
+      "value": 0.51
+    },
+    {
+      "display_value": "0.3500",
+      "metric_id": "g3b3.sparse.break_even.fp32_65536",
+      "unit": "ratio",
+      "value": 0.35
+    }
+  ],
+  "truth_label": "SIMULATED_ONLY"
+}

@@ -20,6 +20,7 @@ jobs:
         with:
           persist-credentials: false
           set-safe-directory: true
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -30,6 +31,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends build-essential cmake
+
+      - name: Install Python test dependency
+        run: python -m pip install pytest
 
       - name: Validate Linux CPU_SIM
         run: bash scripts/validate_linux_cpu_sim.sh /tmp/hccl-agent-linux-review

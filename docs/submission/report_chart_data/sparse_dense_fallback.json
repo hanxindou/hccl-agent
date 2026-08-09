@@ -1,0 +1,290 @@
+{
+  "chart_id": "sparse_dense_fallback",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b3.sparse.s01.selected_mode",
+    "g3b3.sparse.s01.sparsity_ratio",
+    "g3b3.sparse.s02.selected_mode",
+    "g3b3.sparse.s02.sparsity_ratio",
+    "g3b3.sparse.s03.selected_mode",
+    "g3b3.sparse.s03.sparsity_ratio",
+    "g3b3.sparse.s04.selected_mode",
+    "g3b3.sparse.s04.sparsity_ratio",
+    "g3b3.sparse.s05.selected_mode",
+    "g3b3.sparse.s05.sparsity_ratio",
+    "g3b3.sparse.s06.selected_mode",
+    "g3b3.sparse.s06.sparsity_ratio",
+    "g3b3.sparse.s07.selected_mode",
+    "g3b3.sparse.s07.sparsity_ratio",
+    "g3b3.sparse.s08.selected_mode",
+    "g3b3.sparse.s08.sparsity_ratio",
+    "g3b3.sparse.s09.selected_mode",
+    "g3b3.sparse.s09.sparsity_ratio",
+    "g3b3.sparse.s10.selected_mode",
+    "g3b3.sparse.s10.sparsity_ratio",
+    "g3b3.sparse.s11.selected_mode",
+    "g3b3.sparse.s11.sparsity_ratio",
+    "g3b3.sparse.s12.selected_mode",
+    "g3b3.sparse.s12.sparsity_ratio",
+    "g3b3.sparse.s13.selected_mode",
+    "g3b3.sparse.s13.sparsity_ratio",
+    "g3b3.sparse.s14.selected_mode",
+    "g3b3.sparse.s14.sparsity_ratio",
+    "g3b3.sparse.s15.selected_mode",
+    "g3b3.sparse.s15.sparsity_ratio",
+    "g3b3.sparse.s16.selected_mode",
+    "g3b3.sparse.s16.sparsity_ratio",
+    "g3b3.sparse.s17.selected_mode",
+    "g3b3.sparse.s17.sparsity_ratio",
+    "g3b3.sparse.s18.selected_mode",
+    "g3b3.sparse.s18.sparsity_ratio",
+    "g3b3.sparse.s19.selected_mode",
+    "g3b3.sparse.s19.sparsity_ratio",
+    "g3b3.sparse.s20.selected_mode",
+    "g3b3.sparse.s20.sparsity_ratio"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s01.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.0000",
+      "metric_id": "g3b3.sparse.s01.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.0
+    },
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s02.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.2500",
+      "metric_id": "g3b3.sparse.s02.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.25
+    },
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s03.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.5000",
+      "metric_id": "g3b3.sparse.s03.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.5
+    },
+    {
+      "display_value": "SPARSE_INDEX_VALUE",
+      "metric_id": "g3b3.sparse.s04.selected_mode",
+      "unit": "string",
+      "value": "SPARSE_INDEX_VALUE"
+    },
+    {
+      "display_value": "0.7500",
+      "metric_id": "g3b3.sparse.s04.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.75
+    },
+    {
+      "display_value": "SPARSE_INDEX_VALUE",
+      "metric_id": "g3b3.sparse.s05.selected_mode",
+      "unit": "string",
+      "value": "SPARSE_INDEX_VALUE"
+    },
+    {
+      "display_value": "0.9000",
+      "metric_id": "g3b3.sparse.s05.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.9
+    },
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s06.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.0000",
+      "metric_id": "g3b3.sparse.s06.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.0
+    },
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s07.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.2500",
+      "metric_id": "g3b3.sparse.s07.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.25
+    },
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s08.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.5000",
+      "metric_id": "g3b3.sparse.s08.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.5
+    },
+    {
+      "display_value": "SPARSE_INDEX_VALUE",
+      "metric_id": "g3b3.sparse.s09.selected_mode",
+      "unit": "string",
+      "value": "SPARSE_INDEX_VALUE"
+    },
+    {
+      "display_value": "0.7500",
+      "metric_id": "g3b3.sparse.s09.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.75
+    },
+    {
+      "display_value": "SPARSE_INDEX_VALUE",
+      "metric_id": "g3b3.sparse.s10.selected_mode",
+      "unit": "string",
+      "value": "SPARSE_INDEX_VALUE"
+    },
+    {
+      "display_value": "0.9000",
+      "metric_id": "g3b3.sparse.s10.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.9
+    },
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s11.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.0000",
+      "metric_id": "g3b3.sparse.s11.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.0
+    },
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s12.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.2500",
+      "metric_id": "g3b3.sparse.s12.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.25
+    },
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s13.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.5000",
+      "metric_id": "g3b3.sparse.s13.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.5
+    },
+    {
+      "display_value": "SPARSE_INDEX_VALUE",
+      "metric_id": "g3b3.sparse.s14.selected_mode",
+      "unit": "string",
+      "value": "SPARSE_INDEX_VALUE"
+    },
+    {
+      "display_value": "0.7500",
+      "metric_id": "g3b3.sparse.s14.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.75
+    },
+    {
+      "display_value": "SPARSE_INDEX_VALUE",
+      "metric_id": "g3b3.sparse.s15.selected_mode",
+      "unit": "string",
+      "value": "SPARSE_INDEX_VALUE"
+    },
+    {
+      "display_value": "0.9000",
+      "metric_id": "g3b3.sparse.s15.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.9
+    },
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s16.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.0000",
+      "metric_id": "g3b3.sparse.s16.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.0
+    },
+    {
+      "display_value": "DENSE",
+      "metric_id": "g3b3.sparse.s17.selected_mode",
+      "unit": "string",
+      "value": "DENSE"
+    },
+    {
+      "display_value": "0.5000",
+      "metric_id": "g3b3.sparse.s17.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.5
+    },
+    {
+      "display_value": "SPARSE_INDEX_VALUE",
+      "metric_id": "g3b3.sparse.s18.selected_mode",
+      "unit": "string",
+      "value": "SPARSE_INDEX_VALUE"
+    },
+    {
+      "display_value": "0.9000",
+      "metric_id": "g3b3.sparse.s18.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.9
+    },
+    {
+      "display_value": "SPARSE_INDEX_VALUE",
+      "metric_id": "g3b3.sparse.s19.selected_mode",
+      "unit": "string",
+      "value": "SPARSE_INDEX_VALUE"
+    },
+    {
+      "display_value": "0.7500",
+      "metric_id": "g3b3.sparse.s19.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.75
+    },
+    {
+      "display_value": "SPARSE_INDEX_VALUE",
+      "metric_id": "g3b3.sparse.s20.selected_mode",
+      "unit": "string",
+      "value": "SPARSE_INDEX_VALUE"
+    },
+    {
+      "display_value": "0.9000",
+      "metric_id": "g3b3.sparse.s20.sparsity_ratio",
+      "unit": "ratio",
+      "value": 0.9
+    }
+  ],
+  "truth_label": "HOST_EXECUTED"
+}

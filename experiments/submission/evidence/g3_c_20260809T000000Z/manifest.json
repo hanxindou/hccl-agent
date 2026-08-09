@@ -1,0 +1,40 @@
+{
+  "branch": "codex/g3-c-final-formal-report-suite",
+  "chart_count": 16,
+  "checkpoint": "G3-C",
+  "claim_count": 21,
+  "final_commit_message": "G3-C build final evidence-derived competition report suite",
+  "g3_b2_final_evidence": {
+    "files_checked": 25,
+    "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+    "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+    "status": "PASS"
+  },
+  "g3_b3_final_evidence": {
+    "files_checked": 35,
+    "path": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+    "sha256sums_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754",
+    "status": "PASS"
+  },
+  "metric_count": 1082,
+  "official_repositories": {
+    "hccl": {
+      "branch": "competition/campus-2026",
+      "commit": "2c87cc1937bab23b8574ef24017c03572d3340e2",
+      "repository": "hccl",
+      "source_identity": "FROZEN_OFFICIAL_REFERENCE_NOT_MODIFIED",
+      "tracked_worktree_clean": true
+    },
+    "hcomm": {
+      "branch": "competition/campus-2026",
+      "commit": "c8a3dc68a37315aa1e908a971fa706abe612f6ee",
+      "repository": "hcomm",
+      "source_identity": "FROZEN_OFFICIAL_REFERENCE_NOT_MODIFIED",
+      "tracked_worktree_clean": true
+    }
+  },
+  "report_count": 11,
+  "schema_version": "g3-c-final-evidence-v1",
+  "source_commit": "540d530e2982403376a229e8c7767902820b3199",
+  "worktree_revision": "G3-C report files pending authorized local commit"
+}

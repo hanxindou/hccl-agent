@@ -1,0 +1,1018 @@
+{
+  "chart_id": "schedule_phase_comparison",
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [
+    "g3b2.ablation.a0.p01.phase_count",
+    "g3b2.ablation.a0.p02.phase_count",
+    "g3b2.ablation.a0.p03.phase_count",
+    "g3b2.ablation.a0.p04.phase_count",
+    "g3b2.ablation.a0.p05.phase_count",
+    "g3b2.ablation.a0.p06.phase_count",
+    "g3b2.ablation.a0.p07.phase_count",
+    "g3b2.ablation.a0.p08.phase_count",
+    "g3b2.ablation.a0.p09.phase_count",
+    "g3b2.ablation.a0.p10.phase_count",
+    "g3b2.ablation.a0.p11.phase_count",
+    "g3b2.ablation.a0.p12.phase_count",
+    "g3b2.ablation.a0.p13.phase_count",
+    "g3b2.ablation.a0.p14.phase_count",
+    "g3b2.ablation.a0.p15.phase_count",
+    "g3b2.ablation.a0.p16.phase_count",
+    "g3b2.ablation.a0.p17.phase_count",
+    "g3b2.ablation.a0.p18.phase_count",
+    "g3b2.ablation.a1.p01.phase_count",
+    "g3b2.ablation.a1.p02.phase_count",
+    "g3b2.ablation.a1.p03.phase_count",
+    "g3b2.ablation.a1.p04.phase_count",
+    "g3b2.ablation.a1.p05.phase_count",
+    "g3b2.ablation.a1.p06.phase_count",
+    "g3b2.ablation.a1.p07.phase_count",
+    "g3b2.ablation.a1.p08.phase_count",
+    "g3b2.ablation.a1.p09.phase_count",
+    "g3b2.ablation.a1.p10.phase_count",
+    "g3b2.ablation.a1.p11.phase_count",
+    "g3b2.ablation.a1.p12.phase_count",
+    "g3b2.ablation.a1.p13.phase_count",
+    "g3b2.ablation.a1.p14.phase_count",
+    "g3b2.ablation.a1.p15.phase_count",
+    "g3b2.ablation.a1.p16.phase_count",
+    "g3b2.ablation.a1.p17.phase_count",
+    "g3b2.ablation.a1.p18.phase_count",
+    "g3b2.ablation.a2.p01.phase_count",
+    "g3b2.ablation.a2.p02.phase_count",
+    "g3b2.ablation.a2.p03.phase_count",
+    "g3b2.ablation.a2.p04.phase_count",
+    "g3b2.ablation.a2.p05.phase_count",
+    "g3b2.ablation.a2.p06.phase_count",
+    "g3b2.ablation.a2.p07.phase_count",
+    "g3b2.ablation.a2.p08.phase_count",
+    "g3b2.ablation.a2.p09.phase_count",
+    "g3b2.ablation.a2.p10.phase_count",
+    "g3b2.ablation.a2.p11.phase_count",
+    "g3b2.ablation.a2.p12.phase_count",
+    "g3b2.ablation.a2.p13.phase_count",
+    "g3b2.ablation.a2.p14.phase_count",
+    "g3b2.ablation.a2.p15.phase_count",
+    "g3b2.ablation.a2.p16.phase_count",
+    "g3b2.ablation.a2.p17.phase_count",
+    "g3b2.ablation.a2.p18.phase_count",
+    "g3b2.ablation.a3.p01.phase_count",
+    "g3b2.ablation.a3.p02.phase_count",
+    "g3b2.ablation.a3.p03.phase_count",
+    "g3b2.ablation.a3.p04.phase_count",
+    "g3b2.ablation.a3.p05.phase_count",
+    "g3b2.ablation.a3.p06.phase_count",
+    "g3b2.ablation.a3.p07.phase_count",
+    "g3b2.ablation.a3.p08.phase_count",
+    "g3b2.ablation.a3.p09.phase_count",
+    "g3b2.ablation.a3.p10.phase_count",
+    "g3b2.ablation.a3.p11.phase_count",
+    "g3b2.ablation.a3.p12.phase_count",
+    "g3b2.ablation.a3.p13.phase_count",
+    "g3b2.ablation.a3.p14.phase_count",
+    "g3b2.ablation.a3.p15.phase_count",
+    "g3b2.ablation.a3.p16.phase_count",
+    "g3b2.ablation.a3.p17.phase_count",
+    "g3b2.ablation.a3.p18.phase_count",
+    "g3b2.ablation.a4.p01.phase_count",
+    "g3b2.ablation.a4.p02.phase_count",
+    "g3b2.ablation.a4.p03.phase_count",
+    "g3b2.ablation.a4.p04.phase_count",
+    "g3b2.ablation.a4.p05.phase_count",
+    "g3b2.ablation.a4.p06.phase_count",
+    "g3b2.ablation.a4.p07.phase_count",
+    "g3b2.ablation.a4.p08.phase_count",
+    "g3b2.ablation.a4.p09.phase_count",
+    "g3b2.ablation.a4.p10.phase_count",
+    "g3b2.ablation.a4.p11.phase_count",
+    "g3b2.ablation.a4.p12.phase_count",
+    "g3b2.ablation.a4.p13.phase_count",
+    "g3b2.ablation.a4.p14.phase_count",
+    "g3b2.ablation.a4.p15.phase_count",
+    "g3b2.ablation.a4.p16.phase_count",
+    "g3b2.ablation.a4.p17.phase_count",
+    "g3b2.ablation.a4.p18.phase_count",
+    "g3b2.ablation.a5.p01.phase_count",
+    "g3b2.ablation.a5.p02.phase_count",
+    "g3b2.ablation.a5.p03.phase_count",
+    "g3b2.ablation.a5.p04.phase_count",
+    "g3b2.ablation.a5.p05.phase_count",
+    "g3b2.ablation.a5.p06.phase_count",
+    "g3b2.ablation.a5.p07.phase_count",
+    "g3b2.ablation.a5.p08.phase_count",
+    "g3b2.ablation.a5.p09.phase_count",
+    "g3b2.ablation.a5.p10.phase_count",
+    "g3b2.ablation.a5.p11.phase_count",
+    "g3b2.ablation.a5.p12.phase_count",
+    "g3b2.ablation.a5.p13.phase_count",
+    "g3b2.ablation.a5.p14.phase_count",
+    "g3b2.ablation.a5.p15.phase_count",
+    "g3b2.ablation.a5.p16.phase_count",
+    "g3b2.ablation.a5.p17.phase_count",
+    "g3b2.ablation.a5.p18.phase_count",
+    "g3b2.ablation.a6.p01.phase_count",
+    "g3b2.ablation.a6.p02.phase_count",
+    "g3b2.ablation.a6.p03.phase_count",
+    "g3b2.ablation.a6.p04.phase_count",
+    "g3b2.ablation.a6.p05.phase_count",
+    "g3b2.ablation.a6.p06.phase_count",
+    "g3b2.ablation.a6.p07.phase_count",
+    "g3b2.ablation.a6.p08.phase_count",
+    "g3b2.ablation.a6.p09.phase_count",
+    "g3b2.ablation.a6.p10.phase_count",
+    "g3b2.ablation.a6.p11.phase_count",
+    "g3b2.ablation.a6.p12.phase_count",
+    "g3b2.ablation.a6.p13.phase_count",
+    "g3b2.ablation.a6.p14.phase_count",
+    "g3b2.ablation.a6.p15.phase_count",
+    "g3b2.ablation.a6.p16.phase_count",
+    "g3b2.ablation.a6.p17.phase_count",
+    "g3b2.ablation.a6.p18.phase_count",
+    "g3b2.ablation.a7.p01.phase_count",
+    "g3b2.ablation.a7.p02.phase_count",
+    "g3b2.ablation.a7.p03.phase_count",
+    "g3b2.ablation.a7.p04.phase_count",
+    "g3b2.ablation.a7.p05.phase_count",
+    "g3b2.ablation.a7.p06.phase_count",
+    "g3b2.ablation.a7.p07.phase_count",
+    "g3b2.ablation.a7.p08.phase_count",
+    "g3b2.ablation.a7.p09.phase_count",
+    "g3b2.ablation.a7.p10.phase_count",
+    "g3b2.ablation.a7.p11.phase_count",
+    "g3b2.ablation.a7.p12.phase_count",
+    "g3b2.ablation.a7.p13.phase_count",
+    "g3b2.ablation.a7.p14.phase_count",
+    "g3b2.ablation.a7.p15.phase_count",
+    "g3b2.ablation.a7.p16.phase_count",
+    "g3b2.ablation.a7.p17.phase_count",
+    "g3b2.ablation.a7.p18.phase_count"
+  ],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a0.p01.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a0.p02.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a0.p03.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a0.p04.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a0.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a0.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a0.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a0.p08.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a0.p09.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "126.0000",
+      "metric_id": "g3b2.ablation.a0.p10.phase_count",
+      "unit": "scalar",
+      "value": 126.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a0.p11.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a0.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a0.p13.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a0.p14.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a0.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "126.0000",
+      "metric_id": "g3b2.ablation.a0.p16.phase_count",
+      "unit": "scalar",
+      "value": 126.0
+    },
+    {
+      "display_value": "2046.0000",
+      "metric_id": "g3b2.ablation.a0.p17.phase_count",
+      "unit": "scalar",
+      "value": 2046.0
+    },
+    {
+      "display_value": "1023.0000",
+      "metric_id": "g3b2.ablation.a0.p18.phase_count",
+      "unit": "scalar",
+      "value": 1023.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a1.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a1.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a1.p03.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a1.p04.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a1.p05.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a1.p06.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "8.0000",
+      "metric_id": "g3b2.ablation.a1.p07.phase_count",
+      "unit": "scalar",
+      "value": 8.0
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a1.p08.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a1.p09.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a1.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a1.p11.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a1.p12.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "8.0000",
+      "metric_id": "g3b2.ablation.a1.p13.phase_count",
+      "unit": "scalar",
+      "value": 8.0
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a1.p14.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a1.p15.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a1.p16.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a1.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a1.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a2.p01.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a2.p02.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a2.p03.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a2.p04.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a2.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a2.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a2.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a2.p08.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a2.p09.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "126.0000",
+      "metric_id": "g3b2.ablation.a2.p10.phase_count",
+      "unit": "scalar",
+      "value": 126.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a2.p11.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a2.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a2.p13.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a2.p14.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a2.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "126.0000",
+      "metric_id": "g3b2.ablation.a2.p16.phase_count",
+      "unit": "scalar",
+      "value": 126.0
+    },
+    {
+      "display_value": "2046.0000",
+      "metric_id": "g3b2.ablation.a2.p17.phase_count",
+      "unit": "scalar",
+      "value": 2046.0
+    },
+    {
+      "display_value": "1023.0000",
+      "metric_id": "g3b2.ablation.a2.p18.phase_count",
+      "unit": "scalar",
+      "value": 1023.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a3.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a3.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a3.p03.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a3.p04.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a3.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a3.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a3.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a3.p08.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a3.p09.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a3.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a3.p11.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a3.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "9",
+      "metric_id": "g3b2.ablation.a3.p13.phase_count",
+      "unit": "count",
+      "value": 9
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a3.p14.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a3.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "21",
+      "metric_id": "g3b2.ablation.a3.p16.phase_count",
+      "unit": "count",
+      "value": 21
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a3.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a3.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a4.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a4.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a4.p03.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "14.0000",
+      "metric_id": "g3b2.ablation.a4.p04.phase_count",
+      "unit": "scalar",
+      "value": 14.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a4.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a4.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a4.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a4.p08.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a4.p09.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a4.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a4.p11.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a4.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "9",
+      "metric_id": "g3b2.ablation.a4.p13.phase_count",
+      "unit": "count",
+      "value": 9
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a4.p14.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a4.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "21",
+      "metric_id": "g3b2.ablation.a4.p16.phase_count",
+      "unit": "count",
+      "value": 21
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a4.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a4.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a5.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a5.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a5.p03.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a5.p04.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a5.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a5.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a5.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a5.p08.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "3.2500",
+      "metric_id": "g3b2.ablation.a5.p09.phase_count",
+      "unit": "scalar",
+      "value": 3.25
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a5.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a5.p11.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a5.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "8.0000",
+      "metric_id": "g3b2.ablation.a5.p13.phase_count",
+      "unit": "scalar",
+      "value": 8.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a5.p14.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a5.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a5.p16.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a5.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a5.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a6.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a6.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a6.p03.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a6.p04.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a6.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a6.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a6.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a6.p08.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "3.2500",
+      "metric_id": "g3b2.ablation.a6.p09.phase_count",
+      "unit": "scalar",
+      "value": 3.25
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a6.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a6.p11.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a6.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "8.0000",
+      "metric_id": "g3b2.ablation.a6.p13.phase_count",
+      "unit": "scalar",
+      "value": 8.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a6.p14.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a6.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a6.p16.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a6.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a6.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a7.p01.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "3.0000",
+      "metric_id": "g3b2.ablation.a7.p02.phase_count",
+      "unit": "scalar",
+      "value": 3.0
+    },
+    {
+      "display_value": "2.0500",
+      "metric_id": "g3b2.ablation.a7.p03.phase_count",
+      "unit": "scalar",
+      "value": 2.05
+    },
+    {
+      "display_value": "6.0000",
+      "metric_id": "g3b2.ablation.a7.p04.phase_count",
+      "unit": "scalar",
+      "value": 6.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a7.p05.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "7.0000",
+      "metric_id": "g3b2.ablation.a7.p06.phase_count",
+      "unit": "scalar",
+      "value": 7.0
+    },
+    {
+      "display_value": "30.0000",
+      "metric_id": "g3b2.ablation.a7.p07.phase_count",
+      "unit": "scalar",
+      "value": 30.0
+    },
+    {
+      "display_value": "4.0000",
+      "metric_id": "g3b2.ablation.a7.p08.phase_count",
+      "unit": "scalar",
+      "value": 4.0
+    },
+    {
+      "display_value": "3.2500",
+      "metric_id": "g3b2.ablation.a7.p09.phase_count",
+      "unit": "scalar",
+      "value": 3.25
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a7.p10.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a7.p11.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "63.0000",
+      "metric_id": "g3b2.ablation.a7.p12.phase_count",
+      "unit": "scalar",
+      "value": 63.0
+    },
+    {
+      "display_value": "8.0000",
+      "metric_id": "g3b2.ablation.a7.p13.phase_count",
+      "unit": "scalar",
+      "value": 8.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a7.p14.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "15.0000",
+      "metric_id": "g3b2.ablation.a7.p15.phase_count",
+      "unit": "scalar",
+      "value": 15.0
+    },
+    {
+      "display_value": "12.0000",
+      "metric_id": "g3b2.ablation.a7.p16.phase_count",
+      "unit": "scalar",
+      "value": 12.0
+    },
+    {
+      "display_value": "20.0000",
+      "metric_id": "g3b2.ablation.a7.p17.phase_count",
+      "unit": "scalar",
+      "value": 20.0
+    },
+    {
+      "display_value": "10.0000",
+      "metric_id": "g3b2.ablation.a7.p18.phase_count",
+      "unit": "scalar",
+      "value": 10.0
+    }
+  ],
+  "truth_label": "SIMULATED_ONLY"
+}

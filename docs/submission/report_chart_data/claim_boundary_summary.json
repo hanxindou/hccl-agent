@@ -1,0 +1,115 @@
+{
+  "chart_id": "claim_boundary_summary",
+  "claims": [
+    {
+      "claim_id": "C-ABI-001",
+      "status": "SUPPORTED",
+      "truth_label": "CPU_EXECUTED"
+    },
+    {
+      "claim_id": "C-ARCH-001",
+      "status": "SUPPORTED",
+      "truth_label": "HOST_EXECUTED"
+    },
+    {
+      "claim_id": "C-ARCH-002",
+      "status": "SUPPORTED",
+      "truth_label": "HISTORICAL_EVIDENCE"
+    },
+    {
+      "claim_id": "C-BP-001",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_BACKPRESSURE"
+    },
+    {
+      "claim_id": "C-CRC-001",
+      "status": "SUPPORTED",
+      "truth_label": "HOST_INTEGRITY_VALIDATED"
+    },
+    {
+      "claim_id": "C-DIRECT-001",
+      "status": "SUPPORTED",
+      "truth_label": "DIRECT_COMPILE_LINK_ONLY"
+    },
+    {
+      "claim_id": "C-DIRECT-002",
+      "status": "SUPPORTED",
+      "truth_label": "REAL_DEVICE_NOT_EXECUTED"
+    },
+    {
+      "claim_id": "C-INT8-001",
+      "status": "SUPPORTED",
+      "truth_label": "HISTORICAL_EVIDENCE"
+    },
+    {
+      "claim_id": "C-IR-001",
+      "status": "SUPPORTED",
+      "truth_label": "HOST_EXECUTED"
+    },
+    {
+      "claim_id": "C-MODEL-001",
+      "status": "SUPPORTED",
+      "truth_label": "REAL_DEVICE_NOT_EXECUTED"
+    },
+    {
+      "claim_id": "C-PAIR-001",
+      "status": "SUPPORTED",
+      "truth_label": "HISTORICAL_EVIDENCE"
+    },
+    {
+      "claim_id": "C-PERF-001",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_ONLY"
+    },
+    {
+      "claim_id": "C-PERF-002",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_ONLY"
+    },
+    {
+      "claim_id": "C-PIPE-001",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_ONLY"
+    },
+    {
+      "claim_id": "C-PROFILE-001",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_ONLY"
+    },
+    {
+      "claim_id": "C-RETRY-001",
+      "status": "SUPPORTED",
+      "truth_label": "HOST_RETRY_VALIDATED"
+    },
+    {
+      "claim_id": "C-SCALE-001",
+      "status": "SUPPORTED",
+      "truth_label": "SIMULATED_ONLY"
+    },
+    {
+      "claim_id": "C-SPARSE-001",
+      "status": "SUPPORTED",
+      "truth_label": "LOSSLESS_SPARSE_HOST_EXECUTED"
+    },
+    {
+      "claim_id": "C-SPARSE-002",
+      "status": "SUPPORTED",
+      "truth_label": "LOSSLESS_SPARSE_HOST_EXECUTED"
+    },
+    {
+      "claim_id": "C-SPARSE-003",
+      "status": "SUPPORTED",
+      "truth_label": "HOST_EXECUTED"
+    },
+    {
+      "claim_id": "C-TRAIN-001",
+      "status": "SUPPORTED",
+      "truth_label": "REAL_DEVICE_NOT_EXECUTED"
+    }
+  ],
+  "derived_from": "docs/submission/report_data_ledger.json",
+  "metric_refs": [],
+  "schema_version": "g3-c-chart-data-v1",
+  "series": [],
+  "truth_label": "REAL_DEVICE_NOT_EXECUTED"
+}

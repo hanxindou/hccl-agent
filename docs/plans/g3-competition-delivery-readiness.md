@@ -9112,3 +9112,2827 @@ G3-B3
 G3-C
 → formal report derived from both evidence families
 ```
+
+# 13. G3-C：Final Feature Freeze 后的证据驱动正式技术报告体系
+
+## 13.1 阶段定位
+
+G3-C 是在：
+
+```text
+G3-B2 Final Code Baseline
++
+G3-B3 Final Feature Baseline
+```
+
+均完成并合并进入 `main` 后执行的正式技术报告阶段。
+
+G3-C 的身份为：
+
+```text
+EVIDENCE-DERIVED FORMAL TECHNICAL REPORTING
+```
+
+本阶段不再开发新的通信算法、Sparse codec、可靠性机制、性能模型或 Direct runtime 能力。
+
+其目标是将已经冻结的：
+
+```text
+source
+configs
+tests
+benchmark contracts
+G2-F evidence
+G3-A audit
+G3-B delivery evidence
+G3-B2 optimization evidence
+G3-B3 feature-completion evidence
+```
+
+转换成：
+
+```text
+评委可阅读
+可复现
+可追踪
+数字可核验
+claim 有边界
+不同证据身份不混淆
+```
+
+的正式技术报告体系。
+
+---
+
+# 13.2 G3-C 前置条件
+
+开始 G3-C 前必须验证：
+
+```text
+G3-B3 已 merge into main
+Final Feature Baseline=FROZEN
+main == origin/main
+git worktree clean
+G3-B2 final evidence SHA PASS
+G3-B3 final evidence SHA PASS
+```
+
+执行开始时解析并记录：
+
+```text
+g3_c_source_commit=<CURRENT_MERGED_MAIN_COMMIT>
+g3_b2_final_source_commit
+g3_b3_final_source_commit
+g3_b2_final_evidence
+g3_b3_final_evidence
+```
+
+G3-C 不得依赖聊天记录中的 commit、性能数字或测试数字作为权威来源。
+
+所有正式报告中的数字必须重新从 repository/evidence 中提取。
+
+---
+
+# 13.3 Final Feature Freeze 约束
+
+G3-C 必须尊重 G3-B3-F 后的：
+
+```text
+FINAL FEATURE FREEZE
+```
+
+本阶段默认不得修改：
+
+- collective semantics；
+- algorithm families；
+- Schedule IR semantics；
+- Sparse codec；
+- CRC/integrity semantics；
+- retry semantics；
+- flow-control semantics；
+- topology model；
+- cost model；
+- selector；
+- Agent proposal semantics；
+- simulator formulas；
+- benchmark matrix；
+- benchmark seed；
+- correctness tolerance；
+- CPU_SIM public ABI；
+- Direct source semantics。
+
+如果在报告过程中发现：
+
+```text
+BLOCKING_CORRECTNESS_BUG
+SOURCE_EVIDENCE_CONFLICT
+REPORT_CANNOT_BE_MADE_TRUTHFUL_WITH_CURRENT_CODE
+```
+
+必须停止，记录问题，并由用户决定是否重新开放 Feature Freeze。
+
+不得为了让报告数字更漂亮而修改代码或 evidence。
+
+---
+
+# 13.4 G3-C 非目标
+
+G3-C 不负责：
+
+- 新算法；
+- 新 collective；
+- Broadcast；
+- AlltoAll；
+- PairWise 实现；
+- INT8 实现；
+- Sparse 算法继续优化；
+- CRC/retry继续扩展；
+- Direct runtime执行；
+- 新性能模型；
+- 新硬件参数；
+- 新 benchmark场景；-重新标定 HCCS/RoCE/PCIe；-重新生成 G3-B2/G3-B3 历史 benchmark；-训练 BERT/LLaMA；-调用 ACL/HCCL runtime；-真实 NPU；
+  -MPI；-`hccl_test`；-`msprof`；-制作最终展示图；-制作视频；-制作最终 PDF；-创建 release/archive/tag。
+
+最终图表美化属于 G3-E。
+
+视频和演示属于 G3-F。
+
+Release 与最终合规属于 G3-G。
+
+---
+
+# 13.5 权威证据层级
+
+正式报告必须使用以下 source-of-truth hierarchy。
+
+优先级从高到低：
+
+```text
+L1  G3-B3 merged main source/tests/configs
+L2  G3-B3 final frozen evidence
+L3  G3-B2 final frozen evidence
+L4  G3-B native/reproducibility evidence
+L5  G3-A requirement / claim / gap audit
+L6  G2-F simulator / direct / integration evidence
+L7  current engineering documentation
+L8  historical documentation and notes
+```
+
+如果不同层级之间发生冲突：
+
+### 当前代码行为
+
+以：
+
+```text
+L1 → L2
+```
+
+为准。
+
+### G3-B2 历史优化结果
+
+必须继续以：
+
+```text
+G3-B2 frozen evidence
+```
+
+为准。
+
+不得因为 G3-B3 出现新代码就修改 G3-B2 的历史实验结论。
+
+### G2/G3-A/G3-B 历史状态
+
+作为：
+
+```text
+HISTORICAL_EVIDENCE
+```
+
+保留。
+
+不得覆盖。
+
+---
+
+# 13.6 证据身份体系
+
+正式报告必须严格区分以下 truth / execution identities。
+
+允许：
+
+```text
+HOST_EXECUTED
+CPU_EXECUTED
+SIMULATED_ONLY
+LOSSLESS_SPARSE_HOST_EXECUTED
+HOST_INTEGRITY_VALIDATED
+HOST_RETRY_VALIDATED
+SIMULATED_BACKPRESSURE
+DIRECT_READINESS_ONLY
+DIRECT_COMPILE_LINK_ONLY
+REAL_DEVICE_NOT_EXECUTED
+HISTORICAL_EVIDENCE
+```
+
+不得生成：
+
+```text
+REAL_DEVICE_MEASURED
+REAL_DEVICE_PASS
+DIRECT_RUNTIME_EXECUTED
+REAL_HCCL_COLLECTIVE_EXECUTED
+REAL_SPARSE_NETWORK_MEASURED
+REAL_WIRE_BYTES_MEASURED
+REAL_HARDWARE_CRC_VALIDATED
+REAL_NIC_RETRY_VALIDATED
+REAL_BACKPRESSURE_VALIDATED
+REAL_TRAINING_SPEEDUP
+NPU_UTILIZATION_MEASURED
+MSPROF_EXECUTED
+ZERO_CPU_INTERVENTION_VERIFIED
+UB_HBM_REUSE_VERIFIED
+```
+
+---
+
+# 13.7 两条主要证据主线
+
+G3-C 必须明确区分两条技术证据主线。
+
+## 13.7.1 G3-B2：调度与拓扑优化主线
+
+用于证明：
+
+```text
+Collective Schedule IR v1
+Ring / Butterfly / Mesh / NHR / Hierarchical
+Topology-aware selection
+Asymmetric topology handling
+Adaptive chunking
+Congestion-aware scheduling
+Dynamic replanning
+Bounded materialization
+Simulated pipeline overlap
+Agent optimization loop
+A0–A7 ablation
+```
+
+G3-B2 的性能数字属于：
+
+```text
+SIMULATED_ONLY
+```
+
+其中最终 45.59283008% 只有在 final evidence 核验一致后才允许报告。
+
+正式名称应类似：
+
+```text
+weighted simulated collective-time improvement
+of the G3-B2 optimization stack
+relative to the frozen fixed-Ring baseline
+```
+
+不得写成：
+
+```text
+45.59% real HCCL speedup
+45.59% NPU speedup
+45.59% training speedup
+```
+
+---
+
+## 13.7.2 G3-B3：功能补齐主线
+
+用于证明：
+
+```text
+Schedule IR v2
+Lossless sparse payload transform
+Dense fallback
+Sparse break-even
+Logical / payload / metadata / wire-byte accounting
+CRC32
+Sequence/chunk integrity
+Logical timeout
+Bounded retry
+Failure classification
+Credit/backpressure model
+Agent feature proposal loop
+B0–B6 feature ablation
+Direct official API compile/link-only source
+```
+
+其中必须分别标记：
+
+```text
+Sparse correctness        → HOST_EXECUTED
+CRC32                      → HOST_EXECUTED
+Timeout/retry              → HOST_EXECUTED
+Backpressure/performance   → SIMULATED_ONLY
+Direct source              → DIRECT_COMPILE_LINK_ONLY
+```
+
+不得把上述能力全部笼统写成：
+
+```text
+真实通信系统已经验证
+```
+
+---
+
+# 13.8 Machine-readable Report Data Ledger
+
+必须建立：
+
+```text
+docs/submission/report_data_ledger.json
+```
+
+所有报告中的定量数字必须先进入 ledger，再进入 Markdown。
+
+不得：
+
+```text
+evidence → 手工抄数字 → report
+```
+
+正确流程：
+
+```text
+evidence
+→ extractor
+→ report_data_ledger
+→ report
+→ verifier
+```
+
+---
+
+# 13.9 Data Ledger Schema
+
+每个 metric 至少包含：
+
+```text
+metric_id
+metric_group
+report_id
+section_id
+
+value
+unit
+display_value
+rounding_rule
+
+truth_label
+execution_identity
+
+checkpoint
+feature_family
+backend
+track
+
+primitive
+algorithm
+schedule_ir_version
+topology
+rank_size
+message_size_bytes
+dtype
+reduce_op
+
+source_path
+source_json_pointer
+source_sha256
+source_evidence_root
+
+extraction_method
+limitations
+```
+
+---
+
+# 13.10 G3-B3 扩展数据字段
+
+Sparse/feature metrics 还应支持：
+
+```text
+sparsity_ratio
+payload_mode
+codec
+logical_bytes
+dense_wire_bytes
+payload_bytes
+value_bytes
+index_bytes
+metadata_bytes
+modeled_wire_bytes
+compression_ratio
+dense_fallback
+fallback_reason
+encode_cost
+decode_cost
+break_even_status
+```
+
+Reliability metrics 支持：
+
+```text
+crc_type
+corruption_type
+corruption_detected
+sequence_valid
+attempt_count
+max_retries
+retransmitted_bytes
+timeout_ticks
+retry_status
+terminal_reason
+```
+
+Flow-control metrics 支持：
+
+```text
+credit_window
+max_inflight_chunks
+peak_inflight_chunks
+blocked_producer_events
+credit_return_events
+deadlock_detected
+memory_budget_bytes
+```
+
+Direct metrics 支持：
+
+```text
+official_call_expression_count
+compile_passed
+link_passed
+loaded=false
+executed=false
+runtime_api_calls=[]
+```
+
+---
+
+# 13.11 Claim Ledger
+
+必须建立：
+
+```text
+docs/submission/report_claim_ledger.json
+```
+
+每个重要结论至少记录：
+
+```text
+claim_id
+report_id
+claim_text
+truth_label
+
+allowed_wording
+prohibited_wording
+
+evidence_refs
+metric_refs
+
+limitations
+hardware_dependency
+status
+```
+
+---
+
+# 13.12 必须建立的 Claim Boundary
+
+至少明确以下结论：
+
+### Logical scale
+
+```text
+1024 ranks
+```
+
+只能解释为：
+
+```text
+logical simulator scale
+```
+
+不是 1024 个真实设备。
+
+---
+
+### Logical large message
+
+```text
+1 GiB / 2 GiB
+```
+
+如采用 bounded materialization，只能解释为：
+
+```text
+logical message size validated under bounded host/simulator materialization
+```
+
+不是实机传输对应容量。
+
+---
+
+### 45.59283008%
+
+只能解释为：
+
+```text
+G3-B2 weighted simulated collective-time improvement
+```
+
+---
+
+### Sparse
+
+Host sparse codec 能证明：
+
+```text
+lossless sparse semantics
+reconstruction correctness
+modeled payload-byte reduction
+```
+
+不能证明：
+
+```text
+physical network bytes reduced by same amount
+real hardware acceleration
+```
+
+---
+
+### CRC
+
+Host CRC 能证明：
+
+```text
+CPU_SIM payload integrity detection
+```
+
+不能证明：
+
+```text
+hardware CRC
+NIC CRC
+HCCL internal CRC
+```
+
+---
+
+### Retry
+
+Host retry 能证明：
+
+```text
+bounded retry semantics
+logical timeout handling
+failure classification
+```
+
+不能证明：
+
+```text
+real HCCL transport retransmission
+```
+
+---
+
+### Backpressure
+
+只能：
+
+```text
+SIMULATED_BACKPRESSURE
+```
+
+---
+
+### Direct
+
+存在：
+
+```text
+actual official API call expressions
+```
+
+只证明 source readiness。
+
+即使官方函数以：
+
+```cpp
+HcclAllReduce(...)
+```
+
+形式出现在源码中，也必须保持：
+
+```text
+direct_hccl_api_call=false
+runtime_api_calls=[]
+```
+
+直到真实运行证据存在。
+
+---
+
+### INT8
+
+必须报告：
+
+```text
+DEFERRED_BY_PRECISION_GATE
+```
+
+如果 final evidence 如此记录。
+
+不得写成已实现量化压缩。
+
+---
+
+### PairWise
+
+必须报告：
+
+```text
+SKIPPED_BY_VALUE_GATE
+```
+
+如果 final evidence 如此记录。
+
+不得放入 implemented algorithm matrix。
+
+---
+
+# 13.13 正式报告目录
+
+最终 G3-C 建议生成：
+
+```text
+docs/submission/reports/
+├── README.md
+├── 01_system_architecture_and_algorithm_design.md
+├── 02_collective_schedule_ir_and_algorithm_evolution.md
+├── 03_topology_and_hardware_model.md
+├── 04_dense_and_sparse_correctness_report.md
+├── 05_sparse_communication_and_wire_accounting_report.md
+├── 06_simulator_performance_and_scale_report.md
+├── 07_integrity_retry_and_reliability_report.md
+├── 08_simulator_user_manual.md
+├── 09_native_plugin_and_abi_appendix.md
+├── 10_direct_compile_link_readiness_appendix.md
+├── 11_known_limitations_and_future_hardware_plan.md
+└── report_source_index.md
+```
+
+另生成：
+
+```text
+docs/submission/technical_report_index.md
+```
+
+作为正式报告入口。
+
+---
+
+# 13.14 所有报告统一头信息
+
+每个正式报告顶部至少包含：
+
+```text
+Report Status
+Source Commit
+Evidence Snapshot
+Execution Identity
+Real-device Validated
+Runtime API Executed
+Applicable Checkpoints
+```
+
+例如：
+
+```text
+Report Status: FINAL_EVIDENCE_DERIVED
+Source Commit: <merged-main-sha>
+Real-device Validated: false
+Runtime API Executed: false
+```
+
+不得写绝对本地路径。
+
+---
+
+# 13.15 所有报告统一章节结构
+
+原则上每份正式报告包含：
+
+```text
+1. Purpose
+2. Scope
+3. Validation Identity
+4. Source Evidence
+5. Methodology
+6. Results
+7. Interpretation
+8. Claim Boundaries
+9. Known Limitations
+10. Reproduction
+11. Artifact References
+```
+
+根据报告内容可增减，但：
+
+```text
+Validation Identity
+Claim Boundaries
+Known Limitations
+```
+
+不得删除。
+
+---
+
+# 13.16 Report 01：System Architecture and Algorithm Design
+
+文件：
+
+```text
+01_system_architecture_and_algorithm_design.md
+```
+
+必须覆盖：
+
+## 总体架构
+
+```text
+Agent Control Plane
+Schedule Layer
+Topology Layer
+Cost Model
+Simulator
+CPU_SIM
+ASCEND_HCCL_VM
+ASCEND_HCCL_DIRECT
+Submission/Evidence Layer
+```
+
+明确：
+
+```text
+SIMULATOR_ACCEPTANCE
+```
+
+是独立验证 track，不是第四个 backend。
+
+---
+
+## Backend Registry
+
+解释：
+
+```text
+CPU_SIM
+ASCEND_HCCL_VM
+ASCEND_HCCL_DIRECT
+```
+
+及：
+
+```text
+default backend=CPU_SIM
+fallback=NONE
+```
+
+---
+
+## 三原语
+
+正式解释：
+
+```text
+AllReduce
+AllGather
+ReduceScatter
+```
+
+包括：
+
+-输入/输出语义；
+-rank布局；
+-reduction语义；
+-Schedule表达。
+
+Broadcast/AlltoAll 不作为正式支持 primitive。
+
+---
+
+## 算法族
+
+至少：
+
+```text
+Ring
+Butterfly
+Mesh
+NHR
+Hierarchical/Fat-Tree
+```
+
+建立正式支持矩阵。
+
+不得把：
+
+```text
+PairWise
+```
+
+作为当前已实现算法，除非 final evidence 明确显示 OPTIONAL_COMPLETED。
+
+---
+
+## Algorithm Complexity
+
+建立算法复杂度矩阵，包括：
+
+```text
+phase complexity
+communication volume
+latency sensitivity
+bandwidth sensitivity
+topology assumptions
+rank constraints
+message-size characteristics
+```
+
+复杂度必须来自实现和算法定义，不得杜撰实机效率。
+
+---
+
+## Agent Decision Loop
+
+解释：
+
+```text
+input
+→ candidate schedules
+→ correctness hard gate
+→ cost evaluation
+→ selection
+→ reflection
+→ replanning
+```
+
+并区分：
+
+```text
+development_agent=Codex
+runtime_agent=hccl-agent
+human_reviewer=user
+```
+
+---
+
+# 13.17 Report 02：Collective Schedule IR and Algorithm Evolution
+
+文件：
+
+```text
+02_collective_schedule_ir_and_algorithm_evolution.md
+```
+
+这是 G3-B3 后新增的重要正式报告。
+
+必须解释：
+
+```text
+Schedule IR v1
+→ Schedule IR v2
+```
+
+---
+
+## IR v1
+
+说明 G3-B2：
+
+```text
+phases
+transfers
+chunks
+routes
+dependencies
+memory plan
+failure policy
+schedule hash
+```
+
+---
+
+## IR v2
+
+说明 G3-B3 增加：
+
+```text
+payload transform
+integrity policy
+transport/retry policy
+flow-control policy
+logical/wire accounting
+```
+
+---
+
+## Compatibility
+
+明确：
+
+```text
+v1 historical evidence remains immutable
+v2 does not rewrite v1 history
+```
+
+---
+
+## Canonical Hash / C-Python Parity
+
+必须从 evidence 提取：
+
+```text
+canonical schedule hash
+C/Python parity
+invariant validation
+```
+
+不得只写“经过测试”。
+
+---
+
+## Algorithm Schedule Examples
+
+至少展示代表性：
+
+```text
+Ring AllReduce
+Butterfly
+NHR
+Hierarchical
+Sparse-aware schedule
+```
+
+使用 Mermaid/表格/structured pseudo-trace。
+
+G3-C 可以生成 Mermaid 和表格，但最终专业图形留给 G3-E。
+
+---
+
+# 13.18 Report 03：Topology and Hardware Model
+
+文件：
+
+```text
+03_topology_and_hardware_model.md
+```
+
+必须覆盖：
+
+```text
+Full Mesh
+Ring
+Fat-Tree
+Hierarchical
+Heterogeneous
+Asymmetric links
+Dynamic topology
+No-path
+```
+
+---
+
+## HCCS / RoCE / PCIe
+
+所有：
+
+```text
+bandwidth
+latency
+fault probability
+```
+
+必须带 provenance。
+
+明确：
+
+```text
+PROJECT_CONFIG
+EXPLICIT_ASSUMPTION
+DERIVED_ANALYTICAL
+REAL_MEASUREMENT
+```
+
+当前无真实测量时不得标：
+
+```text
+REAL_MEASUREMENT
+```
+
+---
+
+## Hardware Calibration
+
+默认：
+
+```text
+hardware_calibrated=false
+```
+
+除非 evidence 明确证明相反。
+
+---
+
+## Topology Source
+
+明确：
+
+```text
+topology_source=SIMULATOR_CONFIG
+```
+
+除非某具体 track 使用不同来源。
+
+不得描述成：
+
+```text
+自动检测真实 1024 卡拓扑
+```
+
+---
+
+# 13.19 Report 04：Dense and Sparse Correctness
+
+文件：
+
+```text
+04_dense_and_sparse_correctness_report.md
+```
+
+G3-C 必须把 Dense 和 Sparse correctness 分开说明。
+
+---
+
+## Dense Correctness
+
+覆盖：
+
+```text
+AllReduce
+AllGather
+ReduceScatter
+
+FP32
+FP16
+BF16
+
+SUM
+MAX
+MIN
+
+rank coverage
+message-size coverage
+topology coverage
+```
+
+---
+
+## Coverage Identity
+
+每个 correctness 项必须分类：
+
+```text
+EXECUTED
+SAMPLED
+ANALYTICALLY_ACCOUNTED
+NOT_APPLICABLE
+NOT_TESTED
+```
+
+不得将 logical large-message 的 sampled/streamed correctness 写成 full physical materialization。
+
+---
+
+## Host Reference
+
+解释：
+
+```text
+reference independence
+exact cases
+random/stress cases
+output hash/error audit
+```
+
+---
+
+## Sparse Correctness
+
+必须正式解释：
+
+```text
+detect
+encode
+collective
+reconstruct
+validate
+```
+
+以及：
+
+```text
+per-rank different sparsity patterns
+implicit zeros
+index/value semantics
+dense fallback
+```
+
+---
+
+## Sparse 三原语
+
+分别说明：
+
+```text
+Sparse AllReduce
+Sparse AllGather
+Sparse ReduceScatter
+```
+
+特别说明：
+
+- AllReduce index union；
+- SUM/MAX/MIN implicit-zero语义；
+- AllGather rank boundaries；
+- ReduceScatter local index remapping。
+
+---
+
+## Precision Boundary
+
+必须继续保留：
+
+```text
+UA-C-001 / precision interpretation
+```
+
+若 FP16/BF16 的实际 tolerance 并非全局 `<=1e-6`，不得写成满足全局 `<=1e-6`。
+
+---
+
+# 13.20 Report 05：Sparse Communication and Wire Accounting
+
+文件：
+
+```text
+05_sparse_communication_and_wire_accounting_report.md
+```
+
+这是 G3-B3 后新增的核心创新报告。
+
+---
+
+## Sparse Design
+
+解释：
+
+```text
+LOSSLESS SPARSITY-AWARE PAYLOAD TRANSFORM
+```
+
+不是 Top-K、lossy gradient sparsification 或 quantization。
+
+---
+
+## Codec
+
+说明：
+
+```text
+index/value representation
+index width
+canonical ordering
+metadata
+reconstruction
+```
+
+---
+
+## Dense/Sparse Decision
+
+必须从真实实现说明：
+
+```text
+dense cost
+vs
+sparse cost
+```
+
+而非简单“超过某稀疏率就启用”。
+
+---
+
+## Byte Accounting
+
+必须明确区分：
+
+```text
+logical_bytes
+payload_bytes
+index_bytes
+metadata_bytes
+modeled_wire_bytes
+```
+
+必须突出：
+
+```text
+modeled_wire_bytes != physically measured NIC bytes
+```
+
+---
+
+## Compression Ratio
+
+只报告 evidence 中实际存在的 ratio。
+
+不得使用：
+
+```text
+理论最高压缩率
+```
+
+作为实验结果。
+
+---
+
+## Break-even
+
+必须展示：
+
+```text
+sparsity ratio
+dense/sparse selected mode
+modeled cost
+wire-byte difference
+fallback reason
+```
+
+正式回答：
+
+> 从什么 sparsity range 开始，当前模型认为 Sparse 有收益？
+
+若不同 message size 的 break-even 不同，必须分别报告。
+
+---
+
+## Dense Fallback
+
+必须展示不利场景。
+
+不得只报告：
+
+```text
+Sparse wins
+```
+
+---
+
+## Large Logical Message
+
+说明：
+
+```text
+bounded sparse materialization
+```
+
+和真实网络传输之间的区别。
+
+---
+
+# 13.21 Report 06：Simulator Performance and Scale
+
+文件：
+
+```text
+06_simulator_performance_and_scale_report.md
+```
+
+报告标题必须明确包含：
+
+```text
+SIMULATOR
+```
+
+不得使用模糊标题：
+
+```text
+Performance Report
+```
+
+而让读者误以为是实机。
+
+---
+
+## G3-B2 Performance
+
+正式报告：
+
+```text
+A0–A7
+18 frozen performance scenarios
+p50
+p95
+effective bandwidth
+algorithm/topology selection
+```
+
+45.59283008% 只有在 ledger 与 final evidence 核对一致后才能进入报告。
+
+---
+
+## 18/0/0
+
+若 final evidence 确认：
+
+```text
+18 wins
+0 ties
+0 losses
+```
+
+必须同时解释 baseline：
+
+```text
+fixed Ring baseline
+```
+
+以及优化栈包含哪些机制。
+
+不得单独写：
+
+```text
+所有算法场景全面胜出
+```
+
+---
+
+## Pipeline Caveat
+
+如果最终 stage 包含：
+
+```text
+SIMULATED_PIPELINED_OVERLAP
+```
+
+必须单独声明：
+
+```text
+pipeline overlap is simulator-modeled
+```
+
+不能当作硬件验证。
+
+---
+
+## Scale
+
+至少：
+
+```text
+8
+16
+64
+1024 logical ranks
+```
+
+说明：
+
+- p50；
+- p95；
+- bandwidth；
+- trend；
+- bottleneck。
+
+---
+
+## 90% 训练扩展目标
+
+必须保持：
+
+```text
+TRAINING_LINEAR_SPEEDUP_NOT_VERIFIED=true
+```
+
+不得用 communication simulator scale 推导训练 scale >=90%。
+
+---
+
+## BERT / LLaMA
+
+若只有 communication workload traces：
+
+```text
+real_model_executed=false
+training_throughput=null
+```
+
+---
+
+## Profiling
+
+若没有：
+
+```text
+msprof
+```
+
+必须：
+
+```text
+profiling_source=SIMULATOR_TRACE
+msprof_executed=false
+```
+
+---
+
+# 13.22 Report 07：Integrity, Retry and Reliability
+
+文件：
+
+```text
+07_integrity_retry_and_reliability_report.md
+```
+
+必须把 reliability 分层。
+
+---
+
+## Layer 1：Host Integrity
+
+正式报告：
+
+```text
+CRC32
+sequence/chunk identity
+corruption detection
+```
+
+truth：
+
+```text
+HOST_INTEGRITY_VALIDATED
+```
+
+---
+
+## Layer 2：Host Retry
+
+正式报告：
+
+```text
+logical timeout
+bounded retry
+attempt accounting
+retry exhaustion
+failure classification
+```
+
+truth：
+
+```text
+HOST_RETRY_VALIDATED
+```
+
+---
+
+## Layer 3：Simulator Reliability
+
+报告：
+
+```text
+link degradation
+link down
+dynamic replan
+no-path
+large-scale fault scenarios
+logical long-running scenarios
+```
+
+truth：
+
+```text
+SIMULATED_ONLY
+```
+
+---
+
+## CRC
+
+不得写：
+
+```text
+链路实现硬件 CRC32
+```
+
+正确表述：
+
+```text
+CPU_SIM host payload path validates CRC32 integrity semantics
+```
+
+---
+
+## Timeout
+
+必须写：
+
+```text
+logical timeout
+```
+
+而不是：
+
+```text
+real network timeout
+```
+
+---
+
+## Retry
+
+必须展示：
+
+```text
+retryable
+non-retryable
+terminal
+```
+
+失败分类。
+
+---
+
+## No-path
+
+必须明确：
+
+```text
+EXPECTED_NO_PATH_FAILURE
+```
+
+是正确的失败语义，而不是 reliability failure。
+
+---
+
+## Flow Control / Backpressure
+
+如果 final evidence 仍为模拟：
+
+```text
+SIMULATED_BACKPRESSURE
+```
+
+报告：
+
+- credit window；
+- max inflight；
+- queue saturation；
+- producer blocking；
+- recovery；
+- deadlock audit。
+
+不得写：
+
+```text
+NIC backpressure implemented
+```
+
+---
+
+## 100ms / 72h
+
+若历史 evidence 包含：
+
+```text
+100ms recovery
+logical 72h
+```
+
+必须分别写：
+
+```text
+simulated recovery time
+logical event-simulation duration
+```
+
+---
+
+# 13.23 Report 08：Simulator User Manual
+
+文件：
+
+```text
+08_simulator_user_manual.md
+```
+
+该手册应成为当前正式 simulator 用户入口，并取代 stale guide。
+
+至少包含：
+
+```text
+installation prerequisites
+repository layout
+backend selection
+config format
+topology config
+hardware profile
+primitive config
+algorithm config
+Schedule IR
+dense mode
+sparse mode
+fault/reliability mode
+seed
+benchmark
+replay
+quick/full
+evidence
+SHA verification
+limitations
+```
+
+---
+
+## Sparse 使用说明
+
+至少说明：
+
+```text
+data profile
+sparsity
+dense fallback
+logical/wire accounting
+```
+
+---
+
+## Reliability 使用说明
+
+说明：
+
+```text
+corruption tests
+logical timeout
+retry
+flow-control simulation
+```
+
+不得让用户误以为这些命令会操作真实 NIC。
+
+---
+
+## Direct
+
+必须明确：
+
+```text
+Direct compile/link source is not executed by simulator CLI.
+```
+
+---
+
+# 13.24 Report 09：Native Plugin and ABI Appendix
+
+文件：
+
+```text
+09_native_plugin_and_abi_appendix.md
+```
+
+必须使用最终 G3-B3 freeze 后 native artifact。
+
+记录：
+
+```text
+artifact name
+identity
+ABI version
+SONAME
+SHA256
+exports
+dependencies
+language/toolchain
+reproducibility
+```
+
+---
+
+## ABI Truth
+
+必须明确：
+
+```text
+CPU_SIM project ABI
+!=
+Direct control-plane/readiness ABI
+!=
+Official HCCL plugin-loader ABI
+```
+
+不得把 19 个 export 解释为：
+
+```text
+official plugin ABI verified
+```
+
+---
+
+## Reproducibility
+
+报告：
+
+```text
+double clean build
+bit-for-bit status
+CTest
+consumer tests
+```
+
+数字从 G3-B3 final evidence 提取。
+
+---
+
+# 13.25 Report 10：Direct Compile/Link Readiness Appendix
+
+文件：
+
+```text
+10_direct_compile_link_readiness_appendix.md
+```
+
+这是 G3-B3 后必须新增/重写的 appendix。
+
+---
+
+## Direct Evolution
+
+解释：
+
+```text
+G2/G3-B:
+signature / ABI / symbol / link readiness
+
+G3-B3:
+actual official API call expressions
+compile/link-only production source path
+```
+
+---
+
+## Call-expression Audit
+
+必须报告 evidence 中实际数量。
+
+当前 handoff 报告称：
+
+```text
+17 official ACL/HCCL call expressions
+```
+
+但正式报告必须从 G3-B3 final evidence 提取并核对，不能直接采用 handoff 文本。
+
+---
+
+## Runtime State
+
+即使 call expression 存在：
+
+```text
+loaded=false
+executed=false
+real_device_api_executed=false
+direct_hccl_api_call=false
+runtime_api_calls=[]
+```
+
+---
+
+## Lifecycle
+
+报告源码设计：
+
+```text
+runtime init
+device
+context
+stream
+memory
+communicator
+collective
+sync
+reverse cleanup
+```
+
+只描述实际 source 中存在的部分。
+
+不得补写不存在的 lifecycle。
+
+---
+
+## ELF Isolation
+
+验证并报告：
+
+```text
+Direct artifact may link official libraries
+CPU_SIM libhccl_plugin.so remains isolated
+```
+
+---
+
+## Claim Boundary
+
+正式结论：
+
+```text
+Direct Production Source Readiness: COMPLETED
+Real-device Acceptance: HARDWARE_BLOCKED
+```
+
+---
+
+# 13.26 Report 11：Known Limitations and Future Hardware Plan
+
+文件：
+
+```text
+11_known_limitations_and_future_hardware_plan.md
+```
+
+必须集中列出所有仍无法解除的限制。
+
+至少：
+
+```text
+no real Ascend NPU
+no real ACL runtime execution
+no real communicator
+no real collective
+official loader ABI not verified
+no real HCCS/RoCE/PCIe measurement
+no real sparse network byte measurement
+no real sparse speedup
+no real hardware CRC/parity
+no real transport retry
+no real NIC/HCCL backpressure
+no msprof
+no real BERT/LLaMA training
+no real 90% training scale validation
+no real failover timing
+no real 72h stress
+no zero-CPU verification
+no UB/HBM reuse verification
+INT8 deferred
+```
+
+---
+
+# 13.27 Future Hardware Acceptance Plan
+
+建立正式未来验收流程。
+
+建议至少覆盖：
+
+```text
+1. supported Ascend environment detection
+2. CANN version check
+3. official library check
+4. runtime initialization
+5. device/context/stream
+6. communicator bootstrap
+7. device buffers
+8. AllReduce correctness
+9. AllGather correctness
+10. ReduceScatter correctness
+11. FP32/FP16/BF16
+12. representative message sizes
+13. topology discovery
+14. real performance benchmark
+15. sparse real-wire experiment
+16. msprof
+17. fault/retry acceptance where platform permits
+18. long-running test
+19. cleanup/leak audit
+20. final REAL_DEVICE evidence freeze
+```
+
+必须注明：
+
+```text
+NOT EXECUTED IN G3-C
+```
+
+---
+
+# 13.28 Report Source Index
+
+生成：
+
+```text
+docs/submission/reports/report_source_index.md
+```
+
+每份报告映射到：
+
+```text
+source code
+tests
+configs
+evidence
+ledger metrics
+claim IDs
+```
+
+例如：
+
+```text
+05_sparse...
+  → G3-B3 final evidence
+  → sparse codec source
+  → sparse tests
+  → report_data_ledger metric IDs
+  → report_claim_ledger claim IDs
+```
+
+---
+
+# 13.29 Report Tooling
+
+建议新增：
+
+```text
+tools/reporting/
+├── __init__.py
+├── evidence_reader.py
+├── ledger_builder.py
+├── claim_builder.py
+├── report_renderer.py
+├── report_verifier.py
+└── schemas.py
+```
+
+并提供统一 CLI：
+
+```text
+python -m tools.report_cli build
+python -m tools.report_cli verify
+python -m tools.report_cli describe
+```
+
+可选：
+
+```text
+python -m tools.report_cli extract
+```
+
+---
+
+# 13.30 Reporting Tool 原则
+
+优先使用：
+
+```text
+Python standard library
+```
+
+避免为 G3-C 新增第三方 dependency。
+
+生成结果必须：
+
+```text
+deterministic
+relative-path only
+stable ordering
+stable formatting
+no local absolute paths
+no current-clock dependent report content
+```
+
+除非 timestamp 是冻结 evidence 本身的一部分。
+
+---
+
+# 13.31 Build 行为
+
+`build`：
+
+```text
+read frozen evidence
+verify source SHA
+build data ledger
+build claim ledger
+render Markdown reports
+render chart-data
+render indexes
+```
+
+不得：
+
+```text
+modify evidence
+run performance benchmarks
+modify source algorithms
+```
+
+---
+
+# 13.32 Verify 行为
+
+`verify` 至少验证：
+
+```text
+all ledger source files exist
+all JSON pointers resolve
+source SHA matches
+report values match ledger
+units match
+rounding is correct
+truth labels valid
+claims have evidence
+forbidden wording absent
+links resolve
+no absolute private paths
+no stale final-baseline references
+```
+
+---
+
+# 13.33 Describe 行为
+
+`describe`：
+
+```text
+read-only
+```
+
+输出：
+
+- source commit；
+- evidence roots；
+- report count；
+- metric count；
+- claim count；
+- unresolved user actions；
+- truth identities。
+
+不得生成/修改文件。
+
+---
+
+# 13.34 Report Numeric Rules
+
+所有数字必须：
+
+1. 保存 raw value；
+2. 明确单位；
+3. 定义 rounding rule；
+4. 报告显示值；
+5. 保持 ledger 可回溯。
+
+例如：
+
+```text
+raw=45.59283008
+display=45.59%
+rounding=2 decimal places
+```
+
+不得在不同报告中分别写：
+
+```text
+45.5%
+45.59%
+45.6%
+```
+
+而没有统一规则。
+
+---
+
+# 13.35 Latency / Bandwidth
+
+必须统一：
+
+```text
+latency → us or ms
+bandwidth → GB/s
+```
+
+并明确：
+
+```text
+GB/s
+```
+
+是否使用 decimal GB。
+
+不要在表格中混用：
+
+```text
+Gbps
+GB/s
+```
+
+而不解释。
+
+---
+
+# 13.36 Sparse Ratio
+
+统一定义：
+
+```text
+sparsity_ratio
+compression_ratio
+wire_reduction_percent
+```
+
+不得混用。
+
+例如：
+
+```text
+90% sparsity
+```
+
+不等于：
+
+```text
+90% wire reduction
+```
+
+---
+
+# 13.37 Chart-data 输出
+
+G3-C 不负责最终图形美化，但应提供 G3-E 的单一权威数据源。
+
+目录：
+
+```text
+docs/submission/report_chart_data/
+```
+
+建议至少：
+
+```text
+correctness_coverage.json
+algorithm_support_matrix.json
+schedule_phase_comparison.json
+
+g3_b2_latency_comparison.json
+g3_b2_bandwidth_comparison.json
+g3_b2_scale.json
+g3_b2_ablation.json
+
+sparse_compression_ratio.json
+sparse_break_even.json
+sparse_wire_bytes.json
+sparse_dense_fallback.json
+
+crc_retry_cases.json
+reliability_outcomes.json
+backpressure_behavior.json
+
+direct_readiness_status.json
+claim_boundary_summary.json
+```
+
+所有 chart-data 必须从 ledger 派生。
+
+不得手工维护第二套数字。
+
+---
+
+# 13.38 G3-E 接口
+
+G3-C 完成后：
+
+```text
+report_data_ledger.json
++
+report_chart_data/
+```
+
+成为 G3-E 唯一数值来源。
+
+G3-E 不得重新读取随机 benchmark 日志自行挑数字。
+
+---
+
+# 13.39 Stale Documentation Audit
+
+生成：
+
+```text
+docs/submission/stale_document_audit.md
+```
+
+每个重要文档分类：
+
+```text
+CURRENT
+SUPERSEDED
+HISTORICAL
+STALE
+INTERNAL_REFERENCE
+```
+
+---
+
+## G3-B2 Final Code Baseline
+
+G3-B3 merge 后，应明确：
+
+```text
+G3-B2 Final Code Baseline
+= HISTORICAL OPTIMIZATION BASELINE
+```
+
+不是 current final code。
+
+---
+
+## G3-B3 Final Feature Baseline
+
+应：
+
+```text
+CURRENT FINAL FEATURE BASELINE
+```
+
+---
+
+## 旧 simulator docs
+
+若被新的：
+
+```text
+08_simulator_user_manual.md
+```
+
+取代，应：
+
+```text
+SUPERSEDED
+```
+
+不要删除历史文档。
+
+---
+
+# 13.40 Requirement Delta
+
+不得修改 G3-A historical requirement matrix。
+
+生成：
+
+```text
+docs/submission/g3_c_requirement_delta.json
+```
+
+G3-C 只评估：
+
+```text
+报告/文档/可复现性/traceability
+```
+
+带来的状态变化。
+
+不要因为“写了报告”而把真实硬件要求升级。
+
+---
+
+# 13.41 G3-C 可能改善的 Requirement
+
+若 evidence 和报告完整，可建议：
+
+```text
+documentation requirements
+formal report requirements
+algorithm explanation requirements
+simulator manual requirements
+reproducibility explanation requirements
+```
+
+由：
+
+```text
+PARTIAL
+→ SATISFIED
+```
+
+---
+
+# 13.42 不得因 G3-C 升级的 Requirement
+
+以下不能因为写报告而升级：
+
+```text
+real performance
+real training scale
+real hardware topology
+real failover
+real 72h
+msprof
+zero CPU
+UB/HBM reuse
+official loader ABI
+```
+
+---
+
+# 13.43 USER_ACTION_REQUIRED
+
+继承：
+
+```text
+UA-B-001 project license/copyright
+UA-B-002 official asset redistribution
+UA-B-003 controlled competition material
+UA-B-004 platform archive/size requirements
+```
+
+---
+
+## UA-C-001：Precision Interpretation
+
+确认赛事：
+
+```text
+<=1e-6
+```
+
+如何适用于：
+
+```text
+FP32
+FP16
+BF16
+```
+
+在用户未确认前：
+
+```text
+FP16/BF16 global <=1e-6
+```
+
+不得成为正式 claim。
+
+---
+
+## UA-C-002：Final Report Language
+
+默认：
+
+```text
+Chinese body
++
+English technical terminology
+```
+
+该项不阻塞 Markdown 技术报告生成。
+
+---
+
+## UA-C-003：Final Submission Template
+
+待确认：
+
+```text
+page limit
+cover
+font
+anonymous requirement
+template
+PDF format
+```
+
+不阻塞 G3-C Markdown source。
+
+---
+
+# 13.44 G3-C Test Requirements
+
+至少覆盖：
+
+## Ledger
+
+1. schema validation；
+2. unique metric ID；
+3. valid source path；
+4. valid JSON pointer；
+5. source SHA；
+6. unit validation；
+7. rounding；
+8. truth identity；
+9. no unsupported truth labels。
+
+## Claims
+
+10. unique claim ID；
+11. evidence mapping；
+12. allowed wording；
+13. prohibited wording；
+14. real-device forbidden claims；
+15. Sparse boundary；
+16. CRC boundary；
+17. retry boundary；
+18. backpressure boundary；
+19. Direct call-expression/runtime distinction；
+20. INT8 deferred status；
+21. PairWise gate status。
+
+## Reports
+
+22. all required reports exist；
+23. required headings；
+24. source commit；
+25. evidence snapshot；
+26. truth identity；
+27. known limitations；
+28. reproduction instructions；
+29. no broken relative links；
+30. no absolute user paths。
+
+## G3-B2
+
+31. 45.59283008 source trace；
+32. 18/0/0 source trace；
+33. A0–A7 source trace；
+34. pipeline caveat；
+35. logical 1024 caveat。
+
+## G3-B3
+
+36. Sparse correctness source；
+37. break-even source；
+38. wire-byte source；
+39. dense fallback source；
+40. CRC source；
+41. retry source；
+42. timeout source；
+43. flow-control source；
+44. Direct call-expression source；
+45. direct runtime=false。
+
+## Documentation
+
+46. stale-doc audit；
+47. G3-B2 historical baseline；
+48. G3-B3 current baseline；
+49. source index completeness；
+50. chart-data derived from ledger。
+
+## Regression / Evidence
+
+51. G3-B2 SHA；
+52. G3-B3 SHA；
+53. current source commit；
+54. no old evidence modification；
+55. staging integration；
+56. HCOMM/HCCL frozen references clean if checked；
+57. worktree clean.
+
+实际测试数量可更多。
+
+不得新增无理由 skip。
+
+---
+
+# 13.45 G3-C Evidence
+
+只生成一个最终 authority evidence：
+
+```text
+experiments/submission/evidence/
+    g3_c_<timestamp>/
+```
+
+至少包含：
+
+```text
+README.md
+manifest.json
+result.json
+
+source_hierarchy.json
+source_commit.json
+evidence_inventory.json
+
+report_inventory.json
+report_data_ledger.json
+report_claim_ledger.json
+report_source_index.json
+
+numeric_traceability_audit.json
+claim_boundary_audit.json
+forbidden_claim_audit.json
+truth_identity_audit.json
+
+g3_b2_reporting_audit.json
+g3_b3_reporting_audit.json
+
+sparse_reporting_audit.json
+reliability_reporting_audit.json
+direct_reporting_audit.json
+
+stale_document_audit.json
+requirement_delta.json
+user_action_required.json
+
+report_verification.json
+chart_data_verification.json
+staging_verification.json
+regression_summary.json
+
+SHA256SUMS
+```
+
+---
+
+# 13.46 Evidence 真实性字段
+
+最终 `result.json` 至少：
+
+```text
+checkpoint=G3-C
+checkpoint_status=COMPLETED
+
+formal_report_suite=COMPLETED
+
+system_architecture_report=COMPLETED
+schedule_ir_report=COMPLETED
+topology_hardware_report=COMPLETED
+dense_sparse_correctness_report=COMPLETED
+sparse_communication_report=COMPLETED
+simulator_performance_scale_report=COMPLETED
+integrity_retry_reliability_report=COMPLETED
+simulator_manual=COMPLETED
+native_plugin_appendix=COMPLETED
+direct_compile_link_appendix=COMPLETED
+limitations_hardware_plan=COMPLETED
+
+data_ledger=COMPLETED
+claim_ledger=COMPLETED
+chart_data=COMPLETED
+stale_document_audit=COMPLETED
+
+final_feature_freeze_preserved=true
+old_evidence_modified=false
+
+performance_target_achievement=PARTIALLY_SATISFIED
+c_cpp_plugin_compliance=PARTIALLY_SATISFIED
+submission_release_readiness=PARTIAL
+g3_delivery_readiness=PARTIAL
+real_device_acceptance=HARDWARE_BLOCKED
+
+real_device_api_executed=false
+direct_hccl_api_call=false
+real_ascend_npu_validated=false
+measured_on_real_npu=false
+real_model_executed=false
+msprof_executed=false
+runtime_api_calls=[]
+```
+
+---
+
+# 13.47 G3-C Completion Gate
+
+只有以下全部满足才可：
+
+```text
+G3-C: COMPLETED
+```
+
+要求：
+
+- G3-B3 已 merge；
+- current source baseline frozen；
+- G3-B2 SHA PASS；
+- G3-B3 SHA PASS；
+- data ledger 完整；
+- claim ledger 完整；
+- 所有正式 reports 完成；-所有定量数字可回溯；
+  -Sparse truth boundary 完整；
+  -CRC/retry truth boundary 完整；
+  -backpressure truth boundary 完整；
+  -Direct compile-link/runtime边界完整；
+  -INT8状态真实；
+  -PairWise状态真实；
+  -45.59283008%有唯一来源；
+  -18/0/0有唯一来源；
+  -no real-device overclaim；
+  -simulator manual完成；
+  -stale docs audit完成；
+  -chart-data完成；
+  -report verify PASS；
+  -staging verify PASS；
+  -final evidence SHA PASS；
+  -old evidence未修改；
+  -Feature Freeze未重新打开；
+  -worktree clean；-未执行真实设备 API；-未开始 G3-D/G3-E/G3-F。
+
+---
+
+# 13.48 Block Classification
+
+## ENV_BLOCKED
+
+仅：
+
+```text
+evidence unreadable
+repository corruption
+Python/report tooling environment failure
+```
+
+---
+
+## USER_ACTION_REQUIRED
+
+用于：
+
+```text
+precision interpretation
+report language
+submission template
+license/copyright
+redistribution
+controlled competition material
+archive constraints
+```
+
+---
+
+## HARDWARE_BLOCKED
+
+只用于：
+
+```text
+real NPU
+real ACL/HCCL
+real communicator
+real collective
+real topology
+real profiler
+real training
+real failover
+real long-running stress
+```
+
+---
+
+## FAIL
+
+用于：
+
+```text
+report number cannot trace to evidence
+claim lacks evidence
+truth label incorrect
+real-device overclaim
+Sparse byte model called physical measurement
+Direct call-expression called runtime execution
+45.59% misrepresented
+broken links
+ledger/report mismatch
+old evidence modified
+```
+
+不得将报告或数据错误标记为 HARDWARE_BLOCKED。
+
+---
+
+# 13.49 Branch / Commit / Stop Boundary
+
+建议分支：
+
+```text
+codex/g3-c-final-formal-report-suite
+```
+
+G3-C 允许一个 `/goal` 完整执行。
+
+建议最终 commit：
+
+```text
+G3-C build final evidence-derived competition report suite
+```
+
+默认只创建一个 G3-C 本地 commit。
+
+如果 Codex 因实现 reporting infrastructure 确实需要内部恢复点，可创建少量阶段性 commit，但不得把 G3-C 拆成多个 branch/PR。
+
+完成后：
+
+```text
+STOP
+```
+
+不得：
+
+```text
+push
+merge
+start G3-D
+start G3-E
+start G3-F
+create PDF
+create release
+create archive
+```
+
+---
+
+# 13.50 G3-D / G3-E 的正式接口
+
+G3-C 完成后向 G3-D 提供：
+
+```text
+report_claim_ledger.json
+Agent-related report sections
+source/evidence index
+G3-B2 optimization trace references
+G3-B3 feature proposal trace references
+```
+
+G3-D 不应重新发明项目能力描述。
+
+---
+
+G3-C 向 G3-E 提供：
+
+```text
+report_data_ledger.json
+report_chart_data/
+```
+
+G3-E 不应重新运行 benchmark 或手工选择数字。
+
+---
+
+# 13.51 最终证据链
+
+完成后项目正式证据链应为：
+
+```text
+G2-F
+│
+├── simulator / direct / integration foundations
+│
+G3-A
+│
+├── competition gap and claim audit
+│
+G3-B
+│
+├── reproducible native delivery / staging
+│
+G3-B2
+│
+├── schedule / topology / algorithm optimization
+│   └── A0–A7 + frozen simulated performance
+│
+G3-B3
+│
+├── sparse / integrity / retry / backpressure
+│   └── IR v2 + Direct compile-link source
+│
+G3-C
+│
+└── evidence-derived formal technical report system
+```
+
+G3-C 的职责不是制造新 evidence，而是将以上 evidence 转化成：
+
+```text
+一套一致、正式、可信、可审计的技术叙事。
+```
