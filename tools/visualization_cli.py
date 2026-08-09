@@ -7,6 +7,7 @@ import json
 from typing import Any
 
 from tools.visualization.authority import build_authority, validate_authority
+from tools.visualization.innovation import build_innovation_map, validate_innovation_map
 from tools.visualization.render import build_charts, validate_charts
 
 
@@ -23,6 +24,8 @@ def main(argv: list[str] | None = None) -> int:
     subparsers.add_parser("verify", help="Validate current G3-E delivery artifacts")
     subparsers.add_parser("build-charts", help="Build deterministic G3-E-B SVG assets")
     subparsers.add_parser("verify-charts", help="Validate deterministic G3-E-B SVG assets")
+    subparsers.add_parser("build-innovation", help="Build G3-E-C innovation traceability")
+    subparsers.add_parser("verify-innovation", help="Validate G3-E-C innovation traceability")
     args = parser.parse_args(argv)
     if args.command == "build-authority":
         return _emit(build_authority())
@@ -30,7 +33,11 @@ def main(argv: list[str] | None = None) -> int:
         return _emit(validate_authority())
     if args.command == "build-charts":
         return _emit(build_charts())
-    return _emit(validate_charts())
+    if args.command == "verify-charts":
+        return _emit(validate_charts())
+    if args.command == "build-innovation":
+        return _emit(build_innovation_map())
+    return _emit(validate_innovation_map())
 
 
 if __name__ == "__main__":
