@@ -1,0 +1,31 @@
+{
+  "claim_authority": "docs/submission/report_claim_ledger.json",
+  "claim_count": 21,
+  "errors": [],
+  "forbidden_promotions": [
+    "45.59% as real Ascend NPU performance",
+    "17 official ACL/HCCL call expressions as real-device execution",
+    "simulation or compile-only readiness as runtime validation"
+  ],
+  "ledger_hashes": {
+    "claim_ledger": {
+      "current": "2c7c9d5356fd514fc02c877a398f1da30c6b6d14009eba80a263a5a63a138053",
+      "g3_c_frozen": "2c7c9d5356fd514fc02c877a398f1da30c6b6d14009eba80a263a5a63a138053"
+    },
+    "data_ledger": {
+      "current": "335a6ff28bee953cba098ed66f618d4e10f08f9c78e903d8f72333a0aa8a06e3",
+      "g3_c_frozen": "335a6ff28bee953cba098ed66f618d4e10f08f9c78e903d8f72333a0aa8a06e3"
+    }
+  },
+  "required_truth_labels": [
+    "DIRECT_COMPILE_LINK_ONLY",
+    "HOST_INTEGRITY_VALIDATED",
+    "HOST_RETRY_VALIDATED",
+    "LOSSLESS_SPARSE_HOST_EXECUTED",
+    "REAL_DEVICE_NOT_EXECUTED",
+    "SIMULATED_BACKPRESSURE",
+    "SIMULATED_ONLY"
+  ],
+  "schema_version": "g3-d-claim-boundary-validation-v1",
+  "status": "PASS"
+}

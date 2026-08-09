@@ -858,6 +858,10 @@ def _manifest_entry(stage: Path, path: Path, source_map: dict[str, str]) -> dict
         category, role = "SIMULATOR", "SIMULATOR_SOURCE_OR_CONFIG"
     elif rel.startswith("evidence/"):
         category, role = "EVIDENCE", "SELECTED_FROZEN_EVIDENCE"
+    elif rel.startswith("docs/submission/agent_delivery/"):
+        category, role = "AGENT_ENGINEERING", "G3_D_AGENT_PROMPT_DELIVERY"
+    elif rel.startswith("prompts/"):
+        category, role = "AGENT_ENGINEERING", "PROMPT_SOURCE"
     elif rel.startswith("tests/"):
         category, role = "TEST_TOOL", "SUBMISSION_RELEVANT_TEST"
     elif rel.startswith("tools/"):
@@ -901,9 +905,11 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
         "docs/submission/submission_staging_guide.md", "docs/submission/dependency_and_redistribution_boundary.md",
         "docs/submission/claim_boundary_matrix.json", "docs/submission/requirement_matrix.json",
         "docs/submission/deliverable_inventory.json", "docs/submission/risk_register.json",
+        "docs/submission/report_claim_ledger.json", "docs/submission/report_data_ledger.json",
+        "tools/agent_delivery_cli.py",
     ):
         copy(rel)
-    for directory in ("agent", "algorithm", "feature_completion", "plugin", "simulator", "skills", "topology", "hardware", "cost_model", "config", "configs/submission", "configs/feature_completion", "tools/submission_cli"):
+    for directory in ("agent", "algorithm", "feature_completion", "plugin", "simulator", "skills", "prompts", "topology", "hardware", "cost_model", "config", "configs/submission", "configs/feature_completion", "tools/submission_cli", "tools/agent_delivery", "docs/submission/agent_delivery"):
         source = ROOT / directory
         _copy_selected_tree(source, stage / directory, {".py", ".json", ".md", ".txt"})
         for path in (stage / directory).rglob("*"):
@@ -921,6 +927,10 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
     if (ROOT / "tests/submission_cli").is_dir():
         _copy_selected_tree(ROOT / "tests/submission_cli", stage / "tests/submission_cli", {".py"})
         for path in (stage / "tests/submission_cli").rglob("*.py"):
+            source_map[path.relative_to(stage).as_posix()] = (ROOT / path.relative_to(stage)).relative_to(ROOT).as_posix()
+    if (ROOT / "tests/agent_delivery").is_dir():
+        _copy_selected_tree(ROOT / "tests/agent_delivery", stage / "tests/agent_delivery", {".py"})
+        for path in (stage / "tests/agent_delivery").rglob("*.py"):
             source_map[path.relative_to(stage).as_posix()] = (ROOT / path.relative_to(stage)).relative_to(ROOT).as_posix()
 
     artifact = None
@@ -990,6 +1000,7 @@ def stage_command(args: argparse.Namespace) -> dict[str, Any]:
     status = {
         "g3_b": "COMPLETED", "native_delivery_normalization": "COMPLETED",
         "g3_b2": "COMPLETED", "g3_b3": "COMPLETED", "collective_schedule_ir": "COMPLETED",
+        "g3_c_formal_reporting": "COMPLETED", "g3_d_agent_prompt_delivery": "COMPLETED",
         "topology_aware_hierarchical_optimization": "COMPLETED",
         "agent_optimization_trace": "COMPLETED", "performance_target_achievement": "PARTIALLY_SATISFIED",
         "cpu_sim_submission_plugin": "COMPLETED", "direct_readiness_package": "COMPLETED",
@@ -1121,12 +1132,26 @@ def verify_stage(stage: Path) -> dict[str, Any]:
     scan = _scan_stage(stage)
     claim = _claim_boundary_audit(stage)
     native = _parse_native_audit(stage / "native/lib/libhccl_plugin.so")
-    required = {"native", "agent", "simulator", "evidence", "reports", "demo", "tools", "tests", "release"}
+    required = {"native", "agent", "prompts", "simulator", "evidence", "reports", "demo", "tools", "tests", "release"}
     missing = sorted(name for name in required if not (stage / name).is_dir())
     if scan["status"] != "PASS" or claim["status"] != "PASS" or missing:
         raise SubmissionError(f"staging policy verification failed: scan={scan['findings']} claim={claim['findings']} missing={missing}")
     if any(entry.get("source_path", "").startswith(("C:/Users/", "C:\\Users\\", "/home/")) for entry in entries):
         raise SubmissionError("absolute user path leaked into staging manifest")
+    g3_d_required = {
+        "docs/submission/agent_delivery/delivery_contract.json",
+        "docs/submission/agent_delivery/prompt_registry.json",
+        "docs/submission/agent_delivery/skill_registry.json",
+        "docs/submission/agent_delivery/trace_index.json",
+        "docs/submission/agent_delivery/human_intervention_disclosure.json",
+        "docs/submission/report_claim_ledger.json",
+        "docs/submission/report_data_ledger.json",
+        "tools/agent_delivery_cli.py",
+        "tests/agent_delivery/test_g3_d_traces.py",
+    }
+    missing_g3_d = sorted(g3_d_required - set(staging_paths))
+    if missing_g3_d:
+        raise SubmissionError(f"G3-D staging coverage is incomplete: {missing_g3_d}")
     return {
         "schema_version": "g3-b-stage-verification-v1", "status": "PASS",
         "files_verified": len(checksummed), "manifest_entries_verified": len(entries),
@@ -1134,6 +1159,7 @@ def verify_stage(stage: Path) -> dict[str, Any]:
         "native_elf_audit": native, "controlled_competition_doc_included": False,
         "official_binaries_included": False, "official_source_included": False,
         "absolute_user_paths": [], "symlink_escape": False,
+        "g3_d_agent_prompt_delivery": "PASS",
     }
 
 

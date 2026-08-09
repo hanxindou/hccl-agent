@@ -1,0 +1,12 @@
+{
+  "document_count": 9,
+  "errors": [],
+  "human_intervention_records": 6,
+  "relationship_count": 56,
+  "schema_version": "g3-d-documentation-validation-v1",
+  "sentinels": [
+    "PROVENANCE_OK",
+    "CLAIM_BOUNDARIES_OK"
+  ],
+  "status": "PASS"
+}

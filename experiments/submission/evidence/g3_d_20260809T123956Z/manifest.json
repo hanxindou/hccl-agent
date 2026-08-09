@@ -1,0 +1,45 @@
+{
+  "artifacts": [
+    "README.md",
+    "manifest.json",
+    "result.json",
+    "authority_inventory_validation.json",
+    "delivery_contract_validation.json",
+    "prompt_registry_validation.json",
+    "skill_registry_validation.json",
+    "trace_index_validation.json",
+    "g3_b2_trace_validation.json",
+    "g3_b3_trace_validation.json",
+    "offline_replay_validation.json",
+    "replay_determinism.json",
+    "provenance_validation.json",
+    "human_intervention_validation.json",
+    "historical_unavailable_validation.json",
+    "claim_boundary_validation.json",
+    "source_commit_mapping_validation.json",
+    "staging_verification.json",
+    "regression_summary.json",
+    "no_secrets_audit.json",
+    "path_portability_audit.json",
+    "git_state.json",
+    "user_action_required.json"
+  ],
+  "authority_mode": "POINTER_AND_HASH_NO_PRIOR_TREE_COPY",
+  "authority_roots": {
+    "g3_b2": {
+      "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483"
+    },
+    "g3_b3": {
+      "path": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+      "sha256sums_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754"
+    },
+    "g3_c": {
+      "claim_ledger_sha256": "2c7c9d5356fd514fc02c877a398f1da30c6b6d14009eba80a263a5a63a138053",
+      "path": "experiments/submission/evidence/g3_c_20260809T000000Z"
+    }
+  },
+  "schema_version": "g3-d-evidence-manifest-v1",
+  "source_commit_before_final_freeze": "95ce1dbdab6f9e25892f47a5d8c54a1facddc13f",
+  "status": "FROZEN"
+}

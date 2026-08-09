@@ -1,0 +1,42 @@
+{
+  "items": [
+    {
+      "id": "UA-B-001",
+      "status": "USER_ACTION_REQUIRED",
+      "topic": "license/copyright"
+    },
+    {
+      "id": "UA-B-002",
+      "status": "USER_ACTION_REQUIRED",
+      "topic": "official artifact redistribution"
+    },
+    {
+      "id": "UA-B-003",
+      "status": "USER_ACTION_REQUIRED",
+      "topic": "controlled competition materials"
+    },
+    {
+      "id": "UA-B-004",
+      "status": "USER_ACTION_REQUIRED",
+      "topic": "submission archive format and size limits"
+    },
+    {
+      "id": "UA-D-001",
+      "status": "USER_ACTION_REQUIRED",
+      "topic": "precision interpretation"
+    },
+    {
+      "id": "UA-D-002",
+      "status": "USER_ACTION_REQUIRED",
+      "topic": "final submission language and template"
+    },
+    {
+      "current_truth": "HARDWARE_BLOCKED",
+      "id": "UA-D-003",
+      "status": "USER_ACTION_REQUIRED",
+      "topic": "real-device acceptance"
+    }
+  ],
+  "schema_version": "g3-d-user-action-required-v1",
+  "status": "USER_ACTION_REQUIRED"
+}

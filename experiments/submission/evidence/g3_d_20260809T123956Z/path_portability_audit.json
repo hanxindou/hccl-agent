@@ -1,0 +1,6 @@
+{
+  "findings": [],
+  "scan_root": "docs/submission/agent_delivery",
+  "schema_version": "g3-d-path-portability-audit-v1",
+  "status": "PASS"
+}
