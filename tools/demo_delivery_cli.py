@@ -10,6 +10,7 @@ from typing import Any
 from tools.demo_delivery.authority import build_authority, validate_authority
 from tools.demo_delivery.demo import build_demo_package, run_profile, validate_demo_package
 from tools.demo_delivery.storyboard import build_storyboard, validate_storyboard
+from tools.demo_delivery.presentation import build_presentation, validate_presentation
 
 
 def _emit(value: dict[str, Any]) -> int:
@@ -32,6 +33,8 @@ def main(argv: list[str] | None = None) -> int:
     transcript.add_argument("--output")
     sub.add_parser("build-storyboard", help="Build G3-F-C storyboard and recording plan")
     sub.add_parser("verify-storyboard", help="Validate G3-F-C storyboard and privacy contract")
+    sub.add_parser("build-presentation", help="Build G3-F-D narration, subtitle, and presentation sources")
+    sub.add_parser("verify-presentation", help="Validate G3-F-D claim and localization boundaries")
     args = parser.parse_args(argv)
     if args.command == "build-authority":
         return _emit(build_authority())
@@ -45,6 +48,10 @@ def main(argv: list[str] | None = None) -> int:
         return _emit(build_storyboard())
     if args.command == "verify-storyboard":
         return _emit(validate_storyboard())
+    if args.command == "build-presentation":
+        return _emit(build_presentation())
+    if args.command == "verify-presentation":
+        return _emit(validate_presentation())
     output = Path(args.output) if args.output else None
     return _emit(run_profile(args.profile, output))
 

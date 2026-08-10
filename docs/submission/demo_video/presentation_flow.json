@@ -1,0 +1,707 @@
+{
+  "flows": [
+    {
+      "duration_status": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "items": [
+        {
+          "evidence": [
+            "INNOV-01"
+          ],
+          "expected_audience_takeaway": "Frame the collective-optimization and evidence-delivery problem",
+          "fallback": "TEXT-CARD-PROBLEM",
+          "figure_or_demo": [],
+          "key_sentence": "NARR_TEXT_01",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 1,
+          "scene": "SCENE-01",
+          "section": "Problem",
+          "speaker_goal": "Frame the collective-optimization and evidence-delivery problem",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "RECONSTRUCTED_FROM_FROZEN_EVIDENCE"
+          ]
+        },
+        {
+          "evidence": [
+            "C-ABI-001",
+            "C-DIRECT-001",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Show execution, simulation, Agent, and readiness layers",
+          "fallback": "FIG-01",
+          "figure_or_demo": [
+            "FIG-01"
+          ],
+          "key_sentence": "NARR_TEXT_02",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 2,
+          "scene": "SCENE-02",
+          "section": "System architecture",
+          "speaker_goal": "Show execution, simulation, Agent, and readiness layers",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "CPU_EXECUTED",
+            "SIMULATED_ONLY",
+            "DIRECT_COMPILE_LINK_ONLY",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "C-PERF-001",
+            "C-PERF-002",
+            "INNOV-02",
+            "g3b2.outcomes.losses",
+            "g3b2.outcomes.ties",
+            "g3b2.outcomes.wins",
+            "g3b2.performance.weighted_geomean_improvement_percent"
+          ],
+          "expected_audience_takeaway": "Present the frozen 18/0/0 result and 45.59% simulated improvement",
+          "fallback": "FIG-04",
+          "figure_or_demo": [
+            "FIG-03",
+            "FIG-04"
+          ],
+          "key_sentence": "NARR_TEXT_04",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 3,
+          "scene": "SCENE-04",
+          "section": "Schedule and topology optimization",
+          "speaker_goal": "Present the frozen 18/0/0 result and 45.59% simulated improvement",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "SIMULATED_ONLY"
+          ]
+        },
+        {
+          "evidence": [
+            "INNOV-01",
+            "g3-b2-optimization-authoritative-round1"
+          ],
+          "expected_audience_takeaway": "Replay proposal, deterministic evaluation, reflection, replanning, and selection",
+          "fallback": "FALLBACK-AGENT-REPLAY",
+          "figure_or_demo": [
+            "FIG-08"
+          ],
+          "key_sentence": "NARR_TEXT_05",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 4,
+          "scene": "SCENE-05",
+          "section": "Agent-assisted decision loop",
+          "speaker_goal": "Replay proposal, deterministic evaluation, reflection, replanning, and selection",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "AGENT_GENERATED",
+            "DETERMINISTIC_EVALUATION",
+            "HUMAN_INTERVENTION",
+            "OFFLINE_REPLAY",
+            "REPLAYED_FROM_FROZEN_TRACE"
+          ]
+        },
+        {
+          "evidence": [
+            "C-ABI-001",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Execute the project-owned CPU_SIM path and verify figures offline",
+          "fallback": "FALLBACK-CPU-SIM",
+          "figure_or_demo": [
+            "DEMO-CPU-SIM",
+            "DEMO-VISUAL-VERIFY"
+          ],
+          "key_sentence": "NARR_TEXT_09",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 5,
+          "scene": "SCENE-09",
+          "section": "Offline reproducibility and live demo",
+          "speaker_goal": "Execute the project-owned CPU_SIM path and verify figures offline",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "LIVE_DEMO_CPU_SIM",
+            "DEMO_REPLAY",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "C-DIRECT-002"
+          ],
+          "expected_audience_takeaway": "Make all execution and evidence boundaries explicit before the closing claim",
+          "fallback": "FIG-12",
+          "figure_or_demo": [
+            "FIG-12"
+          ],
+          "key_sentence": "NARR_TEXT_10",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 6,
+          "scene": "SCENE-10",
+          "section": "Limitations",
+          "speaker_goal": "Make all execution and evidence boundaries explicit before the closing claim",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "INNOV-01",
+            "INNOV-02",
+            "INNOV-03",
+            "INNOV-04",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Close with evidence-backed engineering value and reproducibility",
+          "fallback": "FIG-13",
+          "figure_or_demo": [
+            "FIG-13"
+          ],
+          "key_sentence": "NARR_TEXT_11",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 7,
+          "scene": "SCENE-11",
+          "section": "Competition value",
+          "speaker_goal": "Close with evidence-backed engineering value and reproducibility",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        }
+      ],
+      "profile": "SHORT"
+    },
+    {
+      "duration_status": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "items": [
+        {
+          "evidence": [
+            "INNOV-01"
+          ],
+          "expected_audience_takeaway": "Frame the collective-optimization and evidence-delivery problem",
+          "fallback": "TEXT-CARD-PROBLEM",
+          "figure_or_demo": [],
+          "key_sentence": "NARR_TEXT_01",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 1,
+          "scene": "SCENE-01",
+          "section": "Problem",
+          "speaker_goal": "Frame the collective-optimization and evidence-delivery problem",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "RECONSTRUCTED_FROM_FROZEN_EVIDENCE"
+          ]
+        },
+        {
+          "evidence": [
+            "C-ABI-001",
+            "C-DIRECT-001",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Show execution, simulation, Agent, and readiness layers",
+          "fallback": "FIG-01",
+          "figure_or_demo": [
+            "FIG-01"
+          ],
+          "key_sentence": "NARR_TEXT_02",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 2,
+          "scene": "SCENE-02",
+          "section": "System architecture",
+          "speaker_goal": "Show execution, simulation, Agent, and readiness layers",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "CPU_EXECUTED",
+            "SIMULATED_ONLY",
+            "DIRECT_COMPILE_LINK_ONLY",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "INNOV-02"
+          ],
+          "expected_audience_takeaway": "Explain schedule/topology-aware choice",
+          "fallback": "FIG-02",
+          "figure_or_demo": [
+            "FIG-02"
+          ],
+          "key_sentence": "NARR_TEXT_03",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 3,
+          "scene": "SCENE-03",
+          "section": "Why static selection is insufficient",
+          "speaker_goal": "Explain schedule/topology-aware choice",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "SIMULATED_ONLY",
+            "DETERMINISTIC_EVALUATION"
+          ]
+        },
+        {
+          "evidence": [
+            "C-PERF-001",
+            "C-PERF-002",
+            "INNOV-02",
+            "g3b2.outcomes.losses",
+            "g3b2.outcomes.ties",
+            "g3b2.outcomes.wins",
+            "g3b2.performance.weighted_geomean_improvement_percent"
+          ],
+          "expected_audience_takeaway": "Present the frozen 18/0/0 result and 45.59% simulated improvement",
+          "fallback": "FIG-04",
+          "figure_or_demo": [
+            "FIG-03",
+            "FIG-04"
+          ],
+          "key_sentence": "NARR_TEXT_04",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 4,
+          "scene": "SCENE-04",
+          "section": "Schedule and topology optimization",
+          "speaker_goal": "Present the frozen 18/0/0 result and 45.59% simulated improvement",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "SIMULATED_ONLY"
+          ]
+        },
+        {
+          "evidence": [
+            "INNOV-01",
+            "g3-b2-optimization-authoritative-round1"
+          ],
+          "expected_audience_takeaway": "Replay proposal, deterministic evaluation, reflection, replanning, and selection",
+          "fallback": "FALLBACK-AGENT-REPLAY",
+          "figure_or_demo": [
+            "FIG-08"
+          ],
+          "key_sentence": "NARR_TEXT_05",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 5,
+          "scene": "SCENE-05",
+          "section": "Agent-assisted decision loop",
+          "speaker_goal": "Replay proposal, deterministic evaluation, reflection, replanning, and selection",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "AGENT_GENERATED",
+            "DETERMINISTIC_EVALUATION",
+            "HUMAN_INTERVENTION",
+            "OFFLINE_REPLAY",
+            "REPLAYED_FROM_FROZEN_TRACE"
+          ]
+        },
+        {
+          "evidence": [
+            "C-SCALE-001"
+          ],
+          "expected_audience_takeaway": "Show logical scale trends with visible model boundary",
+          "fallback": "FIG-05",
+          "figure_or_demo": [
+            "FIG-05"
+          ],
+          "key_sentence": "NARR_TEXT_06",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 6,
+          "scene": "SCENE-06",
+          "section": "Frozen simulated evidence",
+          "speaker_goal": "Show logical scale trends with visible model boundary",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "SIMULATED_ONLY"
+          ]
+        },
+        {
+          "evidence": [
+            "C-BP-001",
+            "C-CRC-001",
+            "C-RETRY-001",
+            "C-SPARSE-001",
+            "INNOV-03",
+            "INNOV-04"
+          ],
+          "expected_audience_takeaway": "Separate host sparse/integrity/retry evidence from simulator backpressure",
+          "fallback": "FIG-07",
+          "figure_or_demo": [
+            "FIG-06",
+            "FIG-07"
+          ],
+          "key_sentence": "NARR_TEXT_07",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 7,
+          "scene": "SCENE-07",
+          "section": "Sparse and reliability",
+          "speaker_goal": "Separate host sparse/integrity/retry evidence from simulator backpressure",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "LOSSLESS_SPARSE_HOST_EXECUTED",
+            "HOST_INTEGRITY_VALIDATED",
+            "HOST_RETRY_VALIDATED",
+            "SIMULATED_BACKPRESSURE",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "C-DIRECT-001",
+            "C-DIRECT-002",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Explain the official ACL/HCCL production source path without executing it",
+          "fallback": "FIG-10",
+          "figure_or_demo": [
+            "FIG-10"
+          ],
+          "key_sentence": "NARR_TEXT_08",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 8,
+          "scene": "SCENE-08",
+          "section": "Direct readiness boundary",
+          "speaker_goal": "Explain the official ACL/HCCL production source path without executing it",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "DIRECT_COMPILE_LINK_ONLY",
+            "DIRECT_READINESS_ONLY",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "C-ABI-001",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Execute the project-owned CPU_SIM path and verify figures offline",
+          "fallback": "FALLBACK-CPU-SIM",
+          "figure_or_demo": [
+            "DEMO-CPU-SIM",
+            "DEMO-VISUAL-VERIFY"
+          ],
+          "key_sentence": "NARR_TEXT_09",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 9,
+          "scene": "SCENE-09",
+          "section": "Offline reproducibility and live demo",
+          "speaker_goal": "Execute the project-owned CPU_SIM path and verify figures offline",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "LIVE_DEMO_CPU_SIM",
+            "DEMO_REPLAY",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "C-DIRECT-002"
+          ],
+          "expected_audience_takeaway": "Make all execution and evidence boundaries explicit before the closing claim",
+          "fallback": "FIG-12",
+          "figure_or_demo": [
+            "FIG-12"
+          ],
+          "key_sentence": "NARR_TEXT_10",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 10,
+          "scene": "SCENE-10",
+          "section": "Limitations",
+          "speaker_goal": "Make all execution and evidence boundaries explicit before the closing claim",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "INNOV-01",
+            "INNOV-02",
+            "INNOV-03",
+            "INNOV-04",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Close with evidence-backed engineering value and reproducibility",
+          "fallback": "FIG-13",
+          "figure_or_demo": [
+            "FIG-13"
+          ],
+          "key_sentence": "NARR_TEXT_11",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 11,
+          "scene": "SCENE-11",
+          "section": "Competition value",
+          "speaker_goal": "Close with evidence-backed engineering value and reproducibility",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        }
+      ],
+      "profile": "STANDARD"
+    },
+    {
+      "duration_status": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "items": [
+        {
+          "evidence": [
+            "INNOV-01"
+          ],
+          "expected_audience_takeaway": "Frame the collective-optimization and evidence-delivery problem",
+          "fallback": "TEXT-CARD-PROBLEM",
+          "figure_or_demo": [],
+          "key_sentence": "NARR_TEXT_01",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 1,
+          "scene": "SCENE-01",
+          "section": "Problem",
+          "speaker_goal": "Frame the collective-optimization and evidence-delivery problem",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "RECONSTRUCTED_FROM_FROZEN_EVIDENCE"
+          ]
+        },
+        {
+          "evidence": [
+            "C-ABI-001",
+            "C-DIRECT-001",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Show execution, simulation, Agent, and readiness layers",
+          "fallback": "FIG-01",
+          "figure_or_demo": [
+            "FIG-01"
+          ],
+          "key_sentence": "NARR_TEXT_02",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 2,
+          "scene": "SCENE-02",
+          "section": "System architecture",
+          "speaker_goal": "Show execution, simulation, Agent, and readiness layers",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "CPU_EXECUTED",
+            "SIMULATED_ONLY",
+            "DIRECT_COMPILE_LINK_ONLY",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "INNOV-02"
+          ],
+          "expected_audience_takeaway": "Explain schedule/topology-aware choice",
+          "fallback": "FIG-02",
+          "figure_or_demo": [
+            "FIG-02"
+          ],
+          "key_sentence": "NARR_TEXT_03",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 3,
+          "scene": "SCENE-03",
+          "section": "Why static selection is insufficient",
+          "speaker_goal": "Explain schedule/topology-aware choice",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "SIMULATED_ONLY",
+            "DETERMINISTIC_EVALUATION"
+          ]
+        },
+        {
+          "evidence": [
+            "C-PERF-001",
+            "C-PERF-002",
+            "INNOV-02",
+            "g3b2.outcomes.losses",
+            "g3b2.outcomes.ties",
+            "g3b2.outcomes.wins",
+            "g3b2.performance.weighted_geomean_improvement_percent"
+          ],
+          "expected_audience_takeaway": "Present the frozen 18/0/0 result and 45.59% simulated improvement",
+          "fallback": "FIG-04",
+          "figure_or_demo": [
+            "FIG-03",
+            "FIG-04"
+          ],
+          "key_sentence": "NARR_TEXT_04",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 4,
+          "scene": "SCENE-04",
+          "section": "Schedule and topology optimization",
+          "speaker_goal": "Present the frozen 18/0/0 result and 45.59% simulated improvement",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "SIMULATED_ONLY"
+          ]
+        },
+        {
+          "evidence": [
+            "INNOV-01",
+            "g3-b2-optimization-authoritative-round1"
+          ],
+          "expected_audience_takeaway": "Replay proposal, deterministic evaluation, reflection, replanning, and selection",
+          "fallback": "FALLBACK-AGENT-REPLAY",
+          "figure_or_demo": [
+            "FIG-08"
+          ],
+          "key_sentence": "NARR_TEXT_05",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 5,
+          "scene": "SCENE-05",
+          "section": "Agent-assisted decision loop",
+          "speaker_goal": "Replay proposal, deterministic evaluation, reflection, replanning, and selection",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "AGENT_GENERATED",
+            "DETERMINISTIC_EVALUATION",
+            "HUMAN_INTERVENTION",
+            "OFFLINE_REPLAY",
+            "REPLAYED_FROM_FROZEN_TRACE"
+          ]
+        },
+        {
+          "evidence": [
+            "C-SCALE-001"
+          ],
+          "expected_audience_takeaway": "Show logical scale trends with visible model boundary",
+          "fallback": "FIG-05",
+          "figure_or_demo": [
+            "FIG-05"
+          ],
+          "key_sentence": "NARR_TEXT_06",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 6,
+          "scene": "SCENE-06",
+          "section": "Frozen simulated evidence",
+          "speaker_goal": "Show logical scale trends with visible model boundary",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "SIMULATED_ONLY"
+          ]
+        },
+        {
+          "evidence": [
+            "C-BP-001",
+            "C-CRC-001",
+            "C-RETRY-001",
+            "C-SPARSE-001",
+            "INNOV-03",
+            "INNOV-04"
+          ],
+          "expected_audience_takeaway": "Separate host sparse/integrity/retry evidence from simulator backpressure",
+          "fallback": "FIG-07",
+          "figure_or_demo": [
+            "FIG-06",
+            "FIG-07"
+          ],
+          "key_sentence": "NARR_TEXT_07",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 7,
+          "scene": "SCENE-07",
+          "section": "Sparse and reliability",
+          "speaker_goal": "Separate host sparse/integrity/retry evidence from simulator backpressure",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "LOSSLESS_SPARSE_HOST_EXECUTED",
+            "HOST_INTEGRITY_VALIDATED",
+            "HOST_RETRY_VALIDATED",
+            "SIMULATED_BACKPRESSURE",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "C-DIRECT-001",
+            "C-DIRECT-002",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Explain the official ACL/HCCL production source path without executing it",
+          "fallback": "FIG-10",
+          "figure_or_demo": [
+            "FIG-10"
+          ],
+          "key_sentence": "NARR_TEXT_08",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 8,
+          "scene": "SCENE-08",
+          "section": "Direct readiness boundary",
+          "speaker_goal": "Explain the official ACL/HCCL production source path without executing it",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "DIRECT_COMPILE_LINK_ONLY",
+            "DIRECT_READINESS_ONLY",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "C-ABI-001",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Execute the project-owned CPU_SIM path and verify figures offline",
+          "fallback": "FALLBACK-CPU-SIM",
+          "figure_or_demo": [
+            "DEMO-CPU-SIM",
+            "DEMO-VISUAL-VERIFY"
+          ],
+          "key_sentence": "NARR_TEXT_09",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 9,
+          "scene": "SCENE-09",
+          "section": "Offline reproducibility and live demo",
+          "speaker_goal": "Execute the project-owned CPU_SIM path and verify figures offline",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "LIVE_DEMO_CPU_SIM",
+            "DEMO_REPLAY",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "C-DIRECT-002"
+          ],
+          "expected_audience_takeaway": "Make all execution and evidence boundaries explicit before the closing claim",
+          "fallback": "FIG-12",
+          "figure_or_demo": [
+            "FIG-12"
+          ],
+          "key_sentence": "NARR_TEXT_10",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 10,
+          "scene": "SCENE-10",
+          "section": "Limitations",
+          "speaker_goal": "Make all execution and evidence boundaries explicit before the closing claim",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        },
+        {
+          "evidence": [
+            "INNOV-01",
+            "INNOV-02",
+            "INNOV-03",
+            "INNOV-04",
+            "INNOV-05"
+          ],
+          "expected_audience_takeaway": "Close with evidence-backed engineering value and reproducibility",
+          "fallback": "FIG-13",
+          "figure_or_demo": [
+            "FIG-13"
+          ],
+          "key_sentence": "NARR_TEXT_11",
+          "likely_question": "Use the G3-E defense question map for this scene's claim boundary.",
+          "order": 11,
+          "scene": "SCENE-11",
+          "section": "Competition value",
+          "speaker_goal": "Close with evidence-backed engineering value and reproducibility",
+          "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+          "truth_identity": [
+            "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+            "REAL_DEVICE_NOT_EXECUTED"
+          ]
+        }
+      ],
+      "profile": "TECHNICAL"
+    }
+  ],
+  "ppt_created": false,
+  "schema_version": "g3-f-presentation-flow-v1",
+  "status": "PASS"
+}

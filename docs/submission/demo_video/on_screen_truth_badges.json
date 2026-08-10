@@ -1,0 +1,67 @@
+{
+  "badges": [
+    {
+      "badge_id": "SIMULATED_ONLY",
+      "claim_boundary": "not real-device performance",
+      "display_text": "SIMULATED ONLY",
+      "placement": "same frame as the number/figure",
+      "required_scenes": [
+        "SCENE-03",
+        "SCENE-04",
+        "SCENE-06"
+      ]
+    },
+    {
+      "badge_id": "HOST_VALIDATED",
+      "claim_boundary": "host/CPU path only",
+      "display_text": "HOST VALIDATED",
+      "placement": "same frame as the result",
+      "required_scenes": [
+        "SCENE-07",
+        "SCENE-09"
+      ]
+    },
+    {
+      "badge_id": "LOGICAL_MODEL_SCALE",
+      "claim_boundary": "logical ranks are not physical cards",
+      "display_text": "LOGICAL MODEL SCALE",
+      "placement": "adjacent to rank count",
+      "required_scenes": [
+        "SCENE-06"
+      ]
+    },
+    {
+      "badge_id": "DIRECT_COMPILE_LINK_ONLY",
+      "claim_boundary": "no runtime call execution",
+      "display_text": "DIRECT: COMPILE/LINK ONLY",
+      "placement": "same frame as Direct flow",
+      "required_scenes": [
+        "SCENE-08"
+      ]
+    },
+    {
+      "badge_id": "REAL_DEVICE_NOT_EXECUTED",
+      "claim_boundary": "hardware acceptance remains blocked",
+      "display_text": "REAL DEVICE NOT EXECUTED",
+      "placement": "persistent lower-third",
+      "required_scenes": [
+        "SCENE-08",
+        "SCENE-09",
+        "SCENE-10",
+        "SCENE-11"
+      ]
+    },
+    {
+      "badge_id": "OFFLINE_REPLAY",
+      "claim_boundary": "not original historical execution",
+      "display_text": "OFFLINE REPLAY",
+      "placement": "same frame as replay output",
+      "required_scenes": [
+        "SCENE-05"
+      ]
+    }
+  ],
+  "narration_only_mitigation_allowed": false,
+  "schema_version": "g3-f-truth-badges-v1",
+  "status": "PASS"
+}

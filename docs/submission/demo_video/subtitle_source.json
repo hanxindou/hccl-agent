@@ -1,0 +1,200 @@
+{
+  "language_status": "USER_ACTION_REQUIRED",
+  "schema_version": "g3-f-subtitle-source-v1",
+  "srt_vtt_created": false,
+  "status": "PASS",
+  "subtitles": [
+    {
+      "claim_refs": [],
+      "end_anchor": "SCENE-01:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-01",
+      "scene_id": "SCENE-01",
+      "start_anchor": "SCENE-01:START",
+      "subtitle_id": "SUB-01",
+      "text_id": "NARR_TEXT_01",
+      "truth_identity": [
+        "RECONSTRUCTED_FROM_FROZEN_EVIDENCE"
+      ]
+    },
+    {
+      "claim_refs": [
+        "C-ABI-001",
+        "C-DIRECT-001"
+      ],
+      "end_anchor": "SCENE-02:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-02",
+      "scene_id": "SCENE-02",
+      "start_anchor": "SCENE-02:START",
+      "subtitle_id": "SUB-02",
+      "text_id": "NARR_TEXT_02",
+      "truth_identity": [
+        "CPU_EXECUTED",
+        "SIMULATED_ONLY",
+        "DIRECT_COMPILE_LINK_ONLY",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    },
+    {
+      "claim_refs": [],
+      "end_anchor": "SCENE-03:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-03",
+      "scene_id": "SCENE-03",
+      "start_anchor": "SCENE-03:START",
+      "subtitle_id": "SUB-03",
+      "text_id": "NARR_TEXT_03",
+      "truth_identity": [
+        "SIMULATED_ONLY",
+        "DETERMINISTIC_EVALUATION"
+      ]
+    },
+    {
+      "claim_refs": [
+        "C-PERF-001",
+        "C-PERF-002"
+      ],
+      "end_anchor": "SCENE-04:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-04",
+      "scene_id": "SCENE-04",
+      "start_anchor": "SCENE-04:START",
+      "subtitle_id": "SUB-04",
+      "text_id": "NARR_TEXT_04",
+      "truth_identity": [
+        "SIMULATED_ONLY"
+      ]
+    },
+    {
+      "claim_refs": [],
+      "end_anchor": "SCENE-05:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-05",
+      "scene_id": "SCENE-05",
+      "start_anchor": "SCENE-05:START",
+      "subtitle_id": "SUB-05",
+      "text_id": "NARR_TEXT_05",
+      "truth_identity": [
+        "AGENT_GENERATED",
+        "DETERMINISTIC_EVALUATION",
+        "HUMAN_INTERVENTION",
+        "OFFLINE_REPLAY",
+        "REPLAYED_FROM_FROZEN_TRACE"
+      ]
+    },
+    {
+      "claim_refs": [
+        "C-SCALE-001"
+      ],
+      "end_anchor": "SCENE-06:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-06",
+      "scene_id": "SCENE-06",
+      "start_anchor": "SCENE-06:START",
+      "subtitle_id": "SUB-06",
+      "text_id": "NARR_TEXT_06",
+      "truth_identity": [
+        "SIMULATED_ONLY"
+      ]
+    },
+    {
+      "claim_refs": [
+        "C-SPARSE-001",
+        "C-CRC-001",
+        "C-RETRY-001",
+        "C-BP-001"
+      ],
+      "end_anchor": "SCENE-07:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-07",
+      "scene_id": "SCENE-07",
+      "start_anchor": "SCENE-07:START",
+      "subtitle_id": "SUB-07",
+      "text_id": "NARR_TEXT_07",
+      "truth_identity": [
+        "LOSSLESS_SPARSE_HOST_EXECUTED",
+        "HOST_INTEGRITY_VALIDATED",
+        "HOST_RETRY_VALIDATED",
+        "SIMULATED_BACKPRESSURE",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    },
+    {
+      "claim_refs": [
+        "C-DIRECT-001",
+        "C-DIRECT-002"
+      ],
+      "end_anchor": "SCENE-08:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-08",
+      "scene_id": "SCENE-08",
+      "start_anchor": "SCENE-08:START",
+      "subtitle_id": "SUB-08",
+      "text_id": "NARR_TEXT_08",
+      "truth_identity": [
+        "DIRECT_COMPILE_LINK_ONLY",
+        "DIRECT_READINESS_ONLY",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    },
+    {
+      "claim_refs": [
+        "C-ABI-001"
+      ],
+      "end_anchor": "SCENE-09:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-09",
+      "scene_id": "SCENE-09",
+      "start_anchor": "SCENE-09:START",
+      "subtitle_id": "SUB-09",
+      "text_id": "NARR_TEXT_09",
+      "truth_identity": [
+        "LIVE_DEMO_CPU_SIM",
+        "DEMO_REPLAY",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    },
+    {
+      "claim_refs": [
+        "C-DIRECT-002"
+      ],
+      "end_anchor": "SCENE-10:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-10",
+      "scene_id": "SCENE-10",
+      "start_anchor": "SCENE-10:START",
+      "subtitle_id": "SUB-10",
+      "text_id": "NARR_TEXT_10",
+      "truth_identity": [
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    },
+    {
+      "claim_refs": [],
+      "end_anchor": "SCENE-11:END",
+      "estimated_duration": "PENDING_UA_F_001",
+      "language_status": "USER_ACTION_REQUIRED",
+      "narration_id": "NARR-11",
+      "scene_id": "SCENE-11",
+      "start_anchor": "SCENE-11:START",
+      "subtitle_id": "SUB-11",
+      "text_id": "NARR_TEXT_11",
+      "truth_identity": [
+        "RECONSTRUCTED_FROM_FROZEN_EVIDENCE",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ]
+    }
+  ],
+  "timeline_status": "ANCHORS_ONLY_PENDING_UA_F_001"
+}
