@@ -1,9 +1,32 @@
 from __future__ import annotations
 
+import shutil
+from pathlib import Path
+
+from tools.submission_cli import core as submission_core
 from tools.demo_delivery.finalize import (
-    EXPECTED_EVIDENCE_FILES, FINAL_SENTINELS, content_audits,
+    EXPECTED_EVIDENCE_FILES, FINAL_SENTINELS, build_staging, content_audits,
     old_authority_immutability, staging_validation,
 )
+
+
+def _remove_test_owned_generated_path(path: Path) -> None:
+    if not path.exists():
+        return
+    submission_core._assert_generated_target(path)
+    marker = path / submission_core.MARKER
+    if not marker.is_file():
+        raise AssertionError(f"refusing to remove unmarked generated path: {path}")
+    shutil.rmtree(path)
+
+
+def _clean_staging_integration_outputs() -> None:
+    for path in (
+        submission_core.DEFAULT_STAGE,
+        submission_core.INSTALL_ROOT / "quick",
+        submission_core.BUILD_ROOT / "quick",
+    ):
+        _remove_test_owned_generated_path(path)
 
 
 def test_old_authority_is_unchanged_from_origin_main() -> None:
@@ -35,7 +58,24 @@ def test_final_evidence_contract_and_sentinels_are_complete() -> None:
 
 
 def test_existing_staging_covers_g3_f_after_stage_is_built() -> None:
-    result = staging_validation()
-    assert result["status"] == "PASS"
-    assert result["g3_f_demo_video_delivery"] == "PASS"
-    assert result["g3_f_demo_asset_count"] >= 20
+    _clean_staging_integration_outputs()
+    assert not submission_core.DEFAULT_STAGE.exists()
+    assert not (submission_core.INSTALL_ROOT / "quick").exists()
+    assert not (submission_core.BUILD_ROOT / "quick").exists()
+    try:
+        quick_args = submission_core.build_parser().parse_args(["quick"])
+        quick = submission_core.quick_command(quick_args, persist=False)
+        assert quick["status"] == "PASS"
+        assert quick["expensive_simulator_evidence_regenerated"] is False
+        assert quick["real_device_api_executed"] is False
+        assert quick["runtime_api_calls"] == []
+
+        built = build_staging()
+        assert built["status"] == "PASS"
+
+        result = staging_validation()
+        assert result["status"] == "PASS"
+        assert result["g3_f_demo_video_delivery"] == "PASS"
+        assert result["g3_f_demo_asset_count"] >= 20
+    finally:
+        _clean_staging_integration_outputs()
