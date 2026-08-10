@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from tools.release_audit.authority import build_authority, validate_authority
-from tools.release_audit.cold_start import compare_runs, run_clean_worktree
+from tools.release_audit.cold_start import compare_runs, finalize_cold_start_results, run_clean_worktree
 from tools.release_audit.common import RELEASE_ROOT, ROOT
 
 
@@ -30,6 +30,10 @@ def main(argv: list[str] | None = None) -> int:
     compare.add_argument("--run-1", required=True)
     compare.add_argument("--run-2", required=True)
     compare.add_argument("--output", required=True)
+    finalize = sub.add_parser("finalize-cold-start")
+    finalize.add_argument("--run-1", required=True)
+    finalize.add_argument("--run-2", required=True)
+    finalize.add_argument("--comparison", required=True)
     args = parser.parse_args(argv)
     if args.command == "build-authority":
         return _emit(build_authority())
@@ -42,6 +46,10 @@ def main(argv: list[str] | None = None) -> int:
         paths = [Path(args.run_1), Path(args.run_2), Path(args.output)]
         paths = [path if path.is_absolute() else ROOT / path for path in paths]
         return _emit(compare_runs(paths[0], paths[1], paths[2]))
+    if args.command == "finalize-cold-start":
+        paths = [Path(args.run_1), Path(args.run_2), Path(args.comparison)]
+        paths = [path if path.is_absolute() else ROOT / path for path in paths]
+        return _emit(finalize_cold_start_results(paths[0], paths[1], paths[2]))
     raise AssertionError(args.command)
 
 

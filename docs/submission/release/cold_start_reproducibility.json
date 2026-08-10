@@ -1,0 +1,42 @@
+{
+  "archive_reproducibility_evaluated": false,
+  "classification": "BIT_FOR_BIT_FOR_DECLARED_OUTPUTS",
+  "comparisons": {
+    "fallback_transcript_sha256": {
+      "identical": true,
+      "run_1": "665b83474387ca8bb195ceb9ea56b3119fb22c131e3f6ea2c391009e0901929e",
+      "run_2": "665b83474387ca8bb195ceb9ea56b3119fb22c131e3f6ea2c391009e0901929e"
+    },
+    "native_sha256": {
+      "identical": true,
+      "run_1": "af91e76ac5dbb693ba7263330300acdbe89b5f2b1077a31fe1b48ba2e3631309",
+      "run_2": "af91e76ac5dbb693ba7263330300acdbe89b5f2b1077a31fe1b48ba2e3631309"
+    },
+    "quick_transcript_sha256": {
+      "identical": true,
+      "run_1": "f982f9dff9a6076099a37c4edbddc3298bd1b7c594d288da57ca90e534c957ae",
+      "run_2": "f982f9dff9a6076099a37c4edbddc3298bd1b7c594d288da57ca90e534c957ae"
+    },
+    "source_commit": {
+      "identical": true,
+      "run_1": "08355a873bac1ee1c9195e5c99fef98a130c94c7",
+      "run_2": "08355a873bac1ee1c9195e5c99fef98a130c94c7"
+    },
+    "stage_sha256sums_sha256": {
+      "identical": true,
+      "run_1": "00e0eef39f093235474e9b0ca6aa0b3edde294fe1257801d93c1eb6bb99bef16",
+      "run_2": "00e0eef39f093235474e9b0ca6aa0b3edde294fe1257801d93c1eb6bb99bef16"
+    },
+    "stage_tree_sha256": {
+      "identical": true,
+      "run_1": "f42f682511075f0b6f60b1b8f68c2014465fe5e3ae6f73b4e5e00fc0ca91900a",
+      "run_2": "f42f682511075f0b6f60b1b8f68c2014465fe5e3ae6f73b4e5e00fc0ca91900a"
+    }
+  },
+  "differences": [],
+  "manifest_reproducible": true,
+  "run_count": 2,
+  "schema_version": "g3-g-cold-start-reproducibility-v1",
+  "sentinel": "G3_G_COLD_START_REPRODUCTION_OK",
+  "status": "PASS"
+}
