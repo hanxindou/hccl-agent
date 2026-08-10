@@ -9,6 +9,7 @@ from typing import Any
 
 from tools.demo_delivery.authority import build_authority, validate_authority
 from tools.demo_delivery.demo import build_demo_package, run_profile, validate_demo_package
+from tools.demo_delivery.storyboard import build_storyboard, validate_storyboard
 
 
 def _emit(value: dict[str, Any]) -> int:
@@ -29,6 +30,8 @@ def main(argv: list[str] | None = None) -> int:
     transcript = sub.add_parser("transcript", help="Produce the deterministic fallback transcript")
     transcript.add_argument("--profile", choices=["fallback"], default="fallback")
     transcript.add_argument("--output")
+    sub.add_parser("build-storyboard", help="Build G3-F-C storyboard and recording plan")
+    sub.add_parser("verify-storyboard", help="Validate G3-F-C storyboard and privacy contract")
     args = parser.parse_args(argv)
     if args.command == "build-authority":
         return _emit(build_authority())
@@ -38,6 +41,10 @@ def main(argv: list[str] | None = None) -> int:
         return _emit(build_demo_package())
     if args.command == "verify-demo":
         return _emit(validate_demo_package())
+    if args.command == "build-storyboard":
+        return _emit(build_storyboard())
+    if args.command == "verify-storyboard":
+        return _emit(validate_storyboard())
     output = Path(args.output) if args.output else None
     return _emit(run_profile(args.profile, output))
 

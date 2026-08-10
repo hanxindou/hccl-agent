@@ -1,0 +1,478 @@
+{
+  "recording_status": "PLANNED_NOT_RECORDED",
+  "runtime_api_calls": [],
+  "scene_count": 11,
+  "scenes": [
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [],
+      "demo_step_ref": [],
+      "fallback_visual": "TEXT-CARD-PROBLEM",
+      "figure_ref": [],
+      "forbidden_interpretations": [
+        "do not claim SOTA, first, or production hardware validation"
+      ],
+      "innovation_refs": [
+        "INNOV-01"
+      ],
+      "limitations": [
+        "project value is bounded by frozen evidence"
+      ],
+      "metric_refs": [],
+      "narration_ref": "NARR-01",
+      "overlay_text": [
+        "EVIDENCE_SCOPE_DECLARED"
+      ],
+      "purpose": "Frame the collective-optimization and evidence-delivery problem",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-01",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "Problem",
+      "sequence": 1,
+      "subtitle_ref": "SUB-01",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "EVIDENCE_SCOPE_DECLARED"
+      ],
+      "visual_asset": null,
+      "visual_type": "TEXT_CARD"
+    },
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [
+        "C-ABI-001",
+        "C-DIRECT-001"
+      ],
+      "demo_step_ref": [],
+      "fallback_visual": "FIG-01",
+      "figure_ref": [
+        "FIG-01"
+      ],
+      "forbidden_interpretations": [
+        "do not depict every layer as real-device executed"
+      ],
+      "innovation_refs": [
+        "INNOV-05"
+      ],
+      "limitations": [
+        "layers have different evidence identities"
+      ],
+      "metric_refs": [],
+      "narration_ref": "NARR-02",
+      "overlay_text": [
+        "LAYERED_TRUTH_BOUNDARY"
+      ],
+      "purpose": "Show execution, simulation, Agent, and readiness layers",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-02",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "System architecture",
+      "sequence": 2,
+      "subtitle_ref": "SUB-02",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "LAYERED_TRUTH_BOUNDARY"
+      ],
+      "visual_asset": "docs/submission/visualization/assets/diagrams/fig-01-system-execution-and-validation-architecture.svg",
+      "visual_type": "ARCHITECTURE_DIAGRAM"
+    },
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [],
+      "demo_step_ref": [],
+      "fallback_visual": "FIG-02",
+      "figure_ref": [
+        "FIG-02"
+      ],
+      "forbidden_interpretations": [
+        "do not present modeled selection as measured device tuning"
+      ],
+      "innovation_refs": [
+        "INNOV-02"
+      ],
+      "limitations": [
+        "selection evidence uses a frozen analytical simulator"
+      ],
+      "metric_refs": [],
+      "narration_ref": "NARR-03",
+      "overlay_text": [
+        "SIMULATED_ONLY"
+      ],
+      "purpose": "Explain schedule/topology-aware choice",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-03",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "Why static selection is insufficient",
+      "sequence": 3,
+      "subtitle_ref": "SUB-03",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "SIMULATED_ONLY"
+      ],
+      "visual_asset": "docs/submission/visualization/assets/diagrams/fig-02-schedule-ir-and-topology-aware-optimization-pipeline.svg",
+      "visual_type": "ARCHITECTURE_DIAGRAM"
+    },
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [
+        "C-PERF-001",
+        "C-PERF-002"
+      ],
+      "demo_step_ref": [],
+      "fallback_visual": "FIG-04",
+      "figure_ref": [
+        "FIG-03",
+        "FIG-04"
+      ],
+      "forbidden_interpretations": [
+        "do not call this real Ascend performance improvement"
+      ],
+      "innovation_refs": [
+        "INNOV-02"
+      ],
+      "limitations": [
+        "45.59283008% raw / 45.59% display is frozen simulated evidence"
+      ],
+      "metric_refs": [
+        "g3b2.performance.weighted_geomean_improvement_percent",
+        "g3b2.outcomes.wins",
+        "g3b2.outcomes.ties",
+        "g3b2.outcomes.losses"
+      ],
+      "narration_ref": "NARR-04",
+      "overlay_text": [
+        "SIMULATED_ONLY"
+      ],
+      "purpose": "Present the frozen 18/0/0 result and 45.59% simulated improvement",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-04",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "Schedule and topology optimization",
+      "sequence": 4,
+      "subtitle_ref": "SUB-04",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "SIMULATED_ONLY"
+      ],
+      "visual_asset": "docs/submission/visualization/assets/charts/fig-04-18-wins-0-ties-0-losses.svg",
+      "visual_type": "REGISTERED_FIGURE"
+    },
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [],
+      "demo_step_ref": [
+        "DEMO-AGENT-REPLAY"
+      ],
+      "fallback_visual": "FALLBACK-AGENT-REPLAY",
+      "figure_ref": [
+        "FIG-08"
+      ],
+      "forbidden_interpretations": [
+        "do not claim a fully autonomous historical run"
+      ],
+      "innovation_refs": [
+        "INNOV-01"
+      ],
+      "limitations": [
+        "replay is not original historical execution",
+        "human governance remains disclosed"
+      ],
+      "metric_refs": [],
+      "narration_ref": "NARR-05",
+      "overlay_text": [
+        "OFFLINE_REPLAY"
+      ],
+      "purpose": "Replay proposal, deterministic evaluation, reflection, replanning, and selection",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-05",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "Agent-assisted decision loop",
+      "sequence": 5,
+      "subtitle_ref": "SUB-05",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [
+        "g3-b2-optimization-authoritative-round1"
+      ],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "OFFLINE_REPLAY"
+      ],
+      "visual_asset": null,
+      "visual_type": "LIVE_TERMINAL"
+    },
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [
+        "C-SCALE-001"
+      ],
+      "demo_step_ref": [],
+      "fallback_visual": "FIG-05",
+      "figure_ref": [
+        "FIG-05"
+      ],
+      "forbidden_interpretations": [
+        "do not call logical ranks a 1024-card measured cluster"
+      ],
+      "innovation_refs": [],
+      "limitations": [
+        "1024 ranks is logical/model scale"
+      ],
+      "metric_refs": [],
+      "narration_ref": "NARR-06",
+      "overlay_text": [
+        "SIMULATED_ONLY",
+        "LOGICAL_MODEL_SCALE"
+      ],
+      "purpose": "Show logical scale trends with visible model boundary",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-06",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "Frozen simulated evidence",
+      "sequence": 6,
+      "subtitle_ref": "SUB-06",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "SIMULATED_ONLY",
+        "LOGICAL_MODEL_SCALE"
+      ],
+      "visual_asset": "docs/submission/visualization/assets/charts/fig-05-logical-scale-trend.svg",
+      "visual_type": "REGISTERED_FIGURE"
+    },
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [
+        "C-SPARSE-001",
+        "C-CRC-001",
+        "C-RETRY-001",
+        "C-BP-001"
+      ],
+      "demo_step_ref": [],
+      "fallback_visual": "FIG-07",
+      "figure_ref": [
+        "FIG-06",
+        "FIG-07"
+      ],
+      "forbidden_interpretations": [
+        "do not present modeled bytes as NIC traffic or backpressure as host runtime execution"
+      ],
+      "innovation_refs": [
+        "INNOV-03",
+        "INNOV-04"
+      ],
+      "limitations": [
+        "sparse wire bytes are modeled",
+        "backpressure is simulator-only",
+        "no NIC/HCCL hardware reliability validation"
+      ],
+      "metric_refs": [],
+      "narration_ref": "NARR-07",
+      "overlay_text": [
+        "HOST_VALIDATED",
+        "SIMULATED_BACKPRESSURE"
+      ],
+      "purpose": "Separate host sparse/integrity/retry evidence from simulator backpressure",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-07",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "Sparse and reliability",
+      "sequence": 7,
+      "subtitle_ref": "SUB-07",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "HOST_VALIDATED",
+        "SIMULATED_BACKPRESSURE"
+      ],
+      "visual_asset": "docs/submission/visualization/assets/charts/fig-07-integrity-retry-and-backpressure-layers.svg",
+      "visual_type": "REGISTERED_FIGURE"
+    },
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [
+        "C-DIRECT-001",
+        "C-DIRECT-002"
+      ],
+      "demo_step_ref": [
+        "DEMO-SUBMISSION-DESCRIBE"
+      ],
+      "fallback_visual": "FIG-10",
+      "figure_ref": [
+        "FIG-10"
+      ],
+      "forbidden_interpretations": [
+        "do not animate the Direct path as an executed collective"
+      ],
+      "innovation_refs": [
+        "INNOV-05"
+      ],
+      "limitations": [
+        "17 official call expressions are compile/link-only readiness",
+        "runtime execution remains absent"
+      ],
+      "metric_refs": [],
+      "narration_ref": "NARR-08",
+      "overlay_text": [
+        "DIRECT_COMPILE_LINK_ONLY",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ],
+      "purpose": "Explain the official ACL/HCCL production source path without executing it",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-08",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "Direct readiness boundary",
+      "sequence": 8,
+      "subtitle_ref": "SUB-08",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "DIRECT_COMPILE_LINK_ONLY",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ],
+      "visual_asset": "docs/submission/visualization/assets/diagrams/fig-10-direct-readiness-validation-ladder.svg",
+      "visual_type": "ARCHITECTURE_DIAGRAM"
+    },
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [
+        "C-ABI-001"
+      ],
+      "demo_step_ref": [
+        "DEMO-CPU-SIM",
+        "DEMO-VISUAL-VERIFY"
+      ],
+      "fallback_visual": "FALLBACK-CPU-SIM",
+      "figure_ref": [],
+      "forbidden_interpretations": [
+        "do not label CPU_SIM as Ascend/NPU execution"
+      ],
+      "innovation_refs": [
+        "INNOV-05"
+      ],
+      "limitations": [
+        "CPU_SIM host execution only",
+        "visual verification does not rerun benchmarks"
+      ],
+      "metric_refs": [],
+      "narration_ref": "NARR-09",
+      "overlay_text": [
+        "HOST_VALIDATED",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ],
+      "purpose": "Execute the project-owned CPU_SIM path and verify figures offline",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-09",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "Offline reproducibility and live demo",
+      "sequence": 9,
+      "subtitle_ref": "SUB-09",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "HOST_VALIDATED",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ],
+      "visual_asset": null,
+      "visual_type": "LIVE_TERMINAL"
+    },
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [
+        "C-DIRECT-002"
+      ],
+      "demo_step_ref": [],
+      "fallback_visual": "FIG-12",
+      "figure_ref": [
+        "FIG-12"
+      ],
+      "forbidden_interpretations": [
+        "do not use a green hardware PASS or imply device acceptance"
+      ],
+      "innovation_refs": [],
+      "limitations": [
+        "real-device acceptance remains HARDWARE_BLOCKED",
+        "no ACL/HCCL runtime was executed"
+      ],
+      "metric_refs": [],
+      "narration_ref": "NARR-10",
+      "overlay_text": [
+        "REAL_DEVICE_NOT_EXECUTED"
+      ],
+      "purpose": "Make all execution and evidence boundaries explicit before the closing claim",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-10",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "Limitations",
+      "sequence": 10,
+      "subtitle_ref": "SUB-10",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "REAL_DEVICE_NOT_EXECUTED"
+      ],
+      "visual_asset": "docs/submission/visualization/assets/diagrams/fig-12-truth-and-evidence-boundary-matrix.svg",
+      "visual_type": "ARCHITECTURE_DIAGRAM"
+    },
+    {
+      "camera_or_crop": "repository-neutral crop; retain figure ID, truth badge, and limitations",
+      "claim_refs": [],
+      "demo_step_ref": [],
+      "fallback_visual": "FIG-13",
+      "figure_ref": [
+        "FIG-13"
+      ],
+      "forbidden_interpretations": [
+        "do not claim industry first, leading, or SOTA"
+      ],
+      "innovation_refs": [
+        "INNOV-01",
+        "INNOV-02",
+        "INNOV-03",
+        "INNOV-04",
+        "INNOV-05"
+      ],
+      "limitations": [
+        "competition innovation wording is project-scoped, not a global novelty claim"
+      ],
+      "metric_refs": [],
+      "narration_ref": "NARR-11",
+      "overlay_text": [
+        "EVIDENCE_BACKED",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ],
+      "purpose": "Close with evidence-backed engineering value and reproducibility",
+      "recording_status": "PLANNED_NOT_RECORDED",
+      "scene_id": "SCENE-11",
+      "screen_action": "present the registered asset or bounded final command summary; do not scroll raw logs",
+      "section": "Competition value",
+      "sequence": 11,
+      "subtitle_ref": "SUB-11",
+      "target_duration": "PRODUCTION_BUDGET_PENDING_UA_F_001",
+      "trace_refs": [],
+      "transition": "CUT_WITH_TRUTH_BADGE_RETAINED",
+      "truth_badge": [
+        "EVIDENCE_BACKED",
+        "REAL_DEVICE_NOT_EXECUTED"
+      ],
+      "visual_asset": "docs/submission/visualization/assets/charts/fig-13-algorithm-and-topology-coverage.svg",
+      "visual_type": "REGISTERED_FIGURE"
+    }
+  ],
+  "schema_version": "g3-f-storyboard-v1",
+  "status": "PASS",
+  "story_order_authority": "docs/submission/visualization/figure_story_map.md",
+  "video_binary_created": false
+}
