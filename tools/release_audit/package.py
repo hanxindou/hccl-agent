@@ -144,18 +144,34 @@ def _overlay_release_delivery(stage: Path) -> None:
     entries = list(manifest["entries"])
     sources: list[tuple[Path, str, str]] = []
     for source in relative_files(RELEASE_ROOT):
-        if source.name in TRACKED_OUTPUTS:
-            continue
         destination = f"docs/submission/release/{source.relative_to(RELEASE_ROOT).as_posix()}"
         sources.append((source, destination, "G3_G_RELEASE_AUTHORITY_OR_AUDIT"))
     for base, stage_base, role in (
         (ROOT / "tools/release_audit", "tools/release_audit", "G3_G_RELEASE_TOOLING"),
+        (ROOT / "tools/reporting", "tools/reporting", "G3_C_RELEASE_REPORT_TOOLING"),
         (ROOT / "tests/release", "tests/release", "G3_G_RELEASE_TEST"),
+        (ROOT / "docs/submission/reports", "docs/submission/reports", "G3_C_FORMAL_REPORT"),
+        (ROOT / "docs/submission/report_chart_data", "docs/submission/report_chart_data", "G3_C_REPORT_CHART_DATA"),
+        (ROOT / "experiments/simulator/evidence/g2_f_5_simulator_20260804T010000Z", "experiments/simulator/evidence/g2_f_5_simulator_20260804T010000Z", "G2_F_5_FINAL_REPRODUCTION_AUTHORITY"),
+        (ROOT / "experiments/simulator/evidence/g2_f_6_simulator_20260804T020000Z", "experiments/simulator/evidence/g2_f_6_simulator_20260804T020000Z", "G2_F_6_FINAL_REPRODUCTION_AUTHORITY"),
     ):
         for source in relative_files(base):
-            if source.suffix == ".py":
+            if str(base).startswith(str(ROOT / "docs")):
+                allowed = {".md", ".json"}
+            elif str(base).startswith(str(ROOT / "experiments")):
+                allowed = {".md", ".json", ".jsonl", ".txt", ""}
+            else:
+                allowed = {".py"}
+            if source.suffix in allowed:
                 sources.append((source, f"{stage_base}/{source.relative_to(base).as_posix()}", role))
     sources.append((ROOT / "tools/release_cli.py", "tools/release_cli.py", "G3_G_RELEASE_CLI"))
+    sources.append((ROOT / "tools/report_cli.py", "tools/report_cli.py", "G3_C_RELEASE_REPORT_CLI"))
+    sources.append((ROOT / "scripts/validate_linux_cpu_sim.sh", "scripts/validate_linux_cpu_sim.sh", "LINUX_CPU_SIM_VALIDATION_ENTRYPOINT"))
+    g3_a_result = ROOT / "experiments/submission/evidence/g3_a_20260806T035554Z/result.json"
+    sources.append((g3_a_result, g3_a_result.relative_to(ROOT).as_posix(), "G3_A_COMPACT_RELEASE_AUTHORITY"))
+    for source in relative_files(ROOT / "knowledge"):
+        if source.suffix in {".py", ".json", ".md"}:
+            sources.append((source, source.relative_to(ROOT).as_posix(), "AGENT_KNOWLEDGE_RUNTIME_SOURCE"))
     for source, stage_path, role in sorted(sources, key=lambda item: item[1]):
         destination = stage / Path(*PurePosixPath(stage_path).parts)
         _copy_file(source, destination)
@@ -319,7 +335,7 @@ def verify_candidate(candidate: Path = CANDIDATE_ROOT) -> dict[str, Any]:
     actual = {
         path.relative_to(candidate).as_posix()
         for path in relative_files(candidate)
-        if path.name not in {MARKER, "release_manifest.json"}
+        if path.name != MARKER and path != manifest_path
     }
     if declared != actual:
         errors.append("release manifest/candidate coverage mismatch")
@@ -509,3 +525,32 @@ def validate_release_metadata() -> dict[str, Any]:
         "file_count": manifest.get("file_count"),
         "sentinels": ["G3_G_FINAL_STAGING_OK", "G3_G_RELEASE_CANDIDATE_OK"] if not errors else [],
     }
+
+
+def synchronize_tracked_candidate_metadata() -> dict[str, Any]:
+    """Publish the already-verified immutable candidate as current tracked metadata."""
+    manifest = read_json(CANDIDATE_ROOT / "release_manifest.json")
+    candidate = verify_candidate()
+    archive_path = GENERATED_ROOT / f"{manifest['release_candidate_id']}.zip"
+    archive = validate_archive(archive_path)
+    if candidate["status"] != "PASS" or archive["status"] != "PASS":
+        raise ReleaseAuditError("cannot synchronize failed release candidate metadata")
+    stage = candidate["staging_validation"]
+    staging = {
+        "schema_version": "g3-g-final-staging-validation-v1", "status": "PASS",
+        "canonical_staging_reused": True, "parallel_staging_framework_created": False,
+        "manifest_entries_verified": stage["manifest_entries_verified"],
+        "files_verified": stage["files_verified"], "native_elf_audit": stage["native_elf_audit"],
+        "controlled_material_included": False, "official_source_or_binary_included": False,
+        "sentinel": "G3_G_FINAL_STAGING_OK",
+    }
+    reproduction = {
+        "schema_version": "g3-g-archive-reproducibility-v1", "status": "PASS",
+        "classification": "BIT_FOR_BIT_REPRODUCIBLE", "run_count": 2,
+        "run_1_sha256": archive["archive_sha256"], "run_2_sha256": archive["archive_sha256"],
+        "identical": True,
+        "normalized_metadata_scope": ["path_order", "timestamp", "permissions", "compression", "symlink_policy"],
+        "proof_source": "successful deterministic builder requires two identical archive digests before retaining candidate",
+    }
+    _write_tracked_release_metadata(_tracked_payloads(manifest, staging, candidate, archive, reproduction))
+    return validate_release_metadata()

@@ -1,7 +1,7 @@
 # G3-G release readiness
 
-This delivery layer validates cold-start reproducibility, canonical staging, deterministic release metadata, and clean extraction. It does not reopen Final Feature Freeze.
+Software Release Readiness is `COMPLETED` for the declared offline CPU_SIM environment. Final Competition Submission Authorization remains `USER_ACTION_REQUIRED`.
 
-The mandatory path is offline, keyless, CPU_SIM-only, and no-NPU. `SOFTWARE_RELEASE_READY` is not `FINAL_SUBMISSION_AUTHORIZED`. License and copyright findings are an inventory and risk audit, not legal authorization. Controlled material is excluded unless explicitly authorized.
+Authoritative local candidate: `G3-G-RC-9656F67C2ED85DA5`. Final evidence: `experiments/submission/evidence/g3_g_20260810T060000Z` with SHA256(SHA256SUMS) `572dcebe0e518753953fef299742671ed9d081cc8933ffa307d6dd323ded741e`.
 
-Current G3-G-A state: release authority is complete; software readiness is not yet evaluated; final competition submission authorization remains `USER_ACTION_REQUIRED`.
+No real-device API, external LLM, benchmark rerun, Git tag, GitHub release, or competition portal submission was performed. License, redistribution, controlled-material, format/size, language/template, branding/video, and final approval gates remain unresolved user actions.

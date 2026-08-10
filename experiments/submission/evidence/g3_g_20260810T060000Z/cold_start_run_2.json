@@ -1,0 +1,321 @@
+{
+  "api_keys_present": false,
+  "base_source_commit": "eb9fc0d903f62aa2f72848c4da67b6a75fb58e77",
+  "benchmark_rerun": false,
+  "clean_environment_model": "CLEAN_WORKTREE_REPRODUCTION",
+  "external_dependency_snapshot_used": true,
+  "external_llm_invoked": false,
+  "fallback_transcript_sha256": "665b83474387ca8bb195ceb9ea56b3119fb22c131e3f6ea2c391009e0901929e",
+  "initial_worktree_clean": true,
+  "local_clone_equivalent": true,
+  "local_clone_hardlinks_used": false,
+  "local_clone_network_used": false,
+  "native_sha256": "af91e76ac5dbb693ba7263330300acdbe89b5f2b1077a31fe1b48ba2e3631309",
+  "network_required": false,
+  "pending_checkpoint_overlay_paths": [
+    "tools/agent_delivery/finalize.py",
+    "tools/release_audit/cold_start.py"
+  ],
+  "pending_checkpoint_overlay_used": true,
+  "portable_transcript": true,
+  "prior_build_present": false,
+  "prior_dist_present": false,
+  "prior_staging_present": false,
+  "pytest_dependency_source": "HOST_INSTALLED_PURE_PYTHON_PACKAGES_COPIED_TO_RUN_OWNED_ROOT",
+  "pytest_packages": {
+    "_pytest": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "exceptiongroup": "EXISTING_EXTERNAL_LINUX_TEST_DEPENDENCY",
+    "iniconfig": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "packaging": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "pluggy": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "py": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "pygments": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "pytest": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "tomli": "EXISTING_EXTERNAL_LINUX_TEST_DEPENDENCY",
+    "typing_extensions": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY"
+  },
+  "quick_transcript_sha256": "f982f9dff9a6076099a37c4edbddc3298bd1b7c594d288da57ca90e534c957ae",
+  "raw_log_policy": "RUN_OWNED_TEMPORARY_NOT_TRACKED",
+  "real_device_api_executed": false,
+  "real_device_required": false,
+  "repository_local_venv_used": false,
+  "run_id": "run-2",
+  "runtime_api_calls": [],
+  "schema_version": "g3-g-clean-worktree-run-v1",
+  "source_commit": "08355a873bac1ee1c9195e5c99fef98a130c94c7",
+  "stage_sha256sums_sha256": "00e0eef39f093235474e9b0ca6aa0b3edde294fe1257801d93c1eb6bb99bef16",
+  "stage_tree_sha256": "f42f682511075f0b6f60b1b8f68c2014465fe5e3ae6f73b4e5e00fc0ca91900a",
+  "status": "PASS",
+  "steps": [
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.submission_cli",
+        "check"
+      ],
+      "duration_seconds": 2.0,
+      "exit_code": 0,
+      "output_summary": {
+        "schema_version": "g3-b-check-v1",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "04c3ead976f88921f3f0c5a00c0abc4285c0bfe6f5a5cbadafc75392b38bf540",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.submission_cli",
+        "quick",
+        "--rank-size",
+        "4",
+        "--message-size",
+        "4096"
+      ],
+      "duration_seconds": 28.812,
+      "exit_code": 0,
+      "output_summary": {
+        "command": "python -m tools.submission_cli quick",
+        "schema_version": "g3-b-quick-v1",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "ebbd6d3f83dbc6608fc870e78167c8b0ce379ce5a5673e1befd54f85bc5ac8af",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "tests",
+        "-q"
+      ],
+      "duration_seconds": 412.75,
+      "exit_code": 0,
+      "output_summary": {
+        "pytest_summary": "1029 passed, 1 skipped in 408.08s (0:06:48)"
+      },
+      "output_tail_sha256": "1b8b148fc2876c7c68f39c62d84343edc5feb8e057af8b842ecb3a726e4f6f29",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.report_cli",
+        "verify"
+      ],
+      "duration_seconds": 4.453,
+      "exit_code": 0,
+      "output_summary": {
+        "schema_version": "g3-c-report-verification-v1",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "b2b511d64153ea8faf55f8eab0a8a24e040e2c3b8e780386bad09e0cc66bd67e",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.agent_delivery_cli",
+        "verify"
+      ],
+      "duration_seconds": 0.656,
+      "exit_code": 0,
+      "output_summary": {
+        "schema_version": "g3-d-delivery-verification-v1",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "07e6f7876cb2a693b28b5b25b2c3b019fecbc6f5d4c2f1262bf5ef53e92b5695",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.agent_delivery_cli",
+        "replay",
+        "--trace",
+        "g3-b2-optimization-authoritative-round1"
+      ],
+      "duration_seconds": 0.266,
+      "exit_code": 0,
+      "output_summary": {
+        "replay_sha256": "9f73391ac51f8a232ecde078c0cee620a849a646f26d5cd76b00c130cb8f28ff",
+        "schema_version": "g3-d-offline-replay-v1",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "fc6ddcba29b7818899c7377140fa20214516370f30b56c23d82461ce4629ff8f",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.agent_delivery_cli",
+        "replay",
+        "--trace",
+        "g3-b3-feature-completion-agent-flow"
+      ],
+      "duration_seconds": 0.25,
+      "exit_code": 0,
+      "output_summary": {
+        "replay_sha256": "da92470766c7082be45a8fe555dc58636ff016d40a47e0c98059b8112e9865dd",
+        "schema_version": "g3-d-offline-replay-v1",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "8317ad06b78480425a3e6dc3ac4ff5a153b6d4d47ed35053e974f0c6778b9736",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.visualization_cli",
+        "build-charts"
+      ],
+      "duration_seconds": 0.516,
+      "exit_code": 0,
+      "output_summary": {
+        "asset_count": 13,
+        "schema_version": "g3-e-chart-suite-validation-v1",
+        "sentinel": "G3_E_CHART_SUITE_OK",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "b3ad15bca14e93e2efa5e254ce43b187a8c8237c6c9af28d58ed03f98e3a4139",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.visualization_cli",
+        "verify"
+      ],
+      "duration_seconds": 0.406,
+      "exit_code": 0,
+      "output_summary": {
+        "claim_count": 21,
+        "metric_count": 1082,
+        "schema_version": "g3-e-visualization-authority-validation-v1",
+        "sentinel": "G3_E_VISUALIZATION_AUTHORITY_OK",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "204637ab46d98f82d7fae0ced2ed0d2a75b9909391e654c5f61928498556dd16",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.demo_delivery_cli",
+        "run",
+        "--profile",
+        "quick",
+        "--output",
+        "dist/g3-g-cold-start-results/quick.json"
+      ],
+      "duration_seconds": 28.781,
+      "exit_code": 0,
+      "output_summary": {
+        "canonical_transcript_sha256": "f982f9dff9a6076099a37c4edbddc3298bd1b7c594d288da57ca90e534c957ae",
+        "profile": "QUICK_DEMO",
+        "schema_version": "g3-f-demo-run-v1",
+        "sentinel": "G3_F_OFFLINE_DEMO_OK",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "4cc003cb0186579f410d7977e32787dfe3d663434c6d98b8f1b7d5ab8a1a4aaf",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.demo_delivery_cli",
+        "transcript",
+        "--profile",
+        "fallback",
+        "--output",
+        "dist/g3-g-cold-start-results/fallback.json"
+      ],
+      "duration_seconds": 0.219,
+      "exit_code": 0,
+      "output_summary": {
+        "canonical_transcript_sha256": "665b83474387ca8bb195ceb9ea56b3119fb22c131e3f6ea2c391009e0901929e",
+        "profile": "FALLBACK_DEMO",
+        "schema_version": "g3-f-demo-run-v1",
+        "sentinel": "G3_F_DEMO_FALLBACK_OK",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "471acdb2b26d1b19a813fc97fd11a1f4a3a9278ef715b151a1cc87e4df55b0a1",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.demo_delivery_cli",
+        "stage"
+      ],
+      "duration_seconds": 29.828,
+      "exit_code": 0,
+      "output_summary": {
+        "files_verified": 376,
+        "g3_e_svg_asset_count": 13,
+        "g3_f_demo_asset_count": 27,
+        "manifest_entries_verified": 373,
+        "schema_version": "g3-b-stage-verification-v1",
+        "sentinel": "G3_F_STAGING_OK",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "b217bf1e0fa47cc49bd58cfde42279570f775777c556ed8efa7d3663d134e814",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.demo_delivery_cli",
+        "verify-stage"
+      ],
+      "duration_seconds": 2.469,
+      "exit_code": 0,
+      "output_summary": {
+        "files_verified": 376,
+        "g3_e_svg_asset_count": 13,
+        "g3_f_demo_asset_count": 27,
+        "manifest_entries_verified": 373,
+        "schema_version": "g3-b-stage-verification-v1",
+        "sentinel": "G3_F_STAGING_OK",
+        "status": "PASS"
+      },
+      "output_tail_sha256": "5daa87e563160f63ee4f24956efc9e44727f7ff008b3fb2f753df75047374f40",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "tools.release_cli",
+        "preflight"
+      ],
+      "duration_seconds": 0.437,
+      "exit_code": 0,
+      "output_summary": {
+        "authority_root_count": 6,
+        "schema_version": "g3-g-release-authority-validation-v1",
+        "sentinel": "G3_G_RELEASE_AUTHORITY_OK",
+        "status": "PASS",
+        "user_action_count": 26
+      },
+      "output_tail_sha256": "caf1611a11158954f57e59b26fd477bb8e6fc4acc93d3665825670653044340e",
+      "status": "PASS"
+    }
+  ],
+  "tracked_changes_after_run": [],
+  "untracked_input_used": false,
+  "venv_input_used": false
+}

@@ -135,6 +135,7 @@
   "controlled_material_policy": "EXCLUDE_UNLESS_EXPLICITLY_AUTHORIZED",
   "external_asset_policy": "EXCLUDE_UNLESS_SOURCE_AND_PERMISSION_ARE_DECLARED",
   "final_authorization_boundary": "SOFTWARE_RELEASE_READY != FINAL_SUBMISSION_AUTHORIZED",
+  "final_competition_submission_authorization": "USER_ACTION_REQUIRED",
   "final_submission_archive_status": "NOT_AUTHORIZED",
   "forbidden_file_types": [
     "private keys",
@@ -182,7 +183,7 @@
     "no environment dumps",
     "no raw private logs"
   ],
-  "release_candidate_archive_status": "NOT_CREATED",
+  "release_candidate_archive_status": "CREATED",
   "release_candidate_root": "dist/g3-g-release/candidate",
   "repository_source_baseline": "e4d5fbab2b50342b0b897b971bb5cd7c47cc1976",
   "required_documentation": [
@@ -210,6 +211,7 @@
     "private key headers",
     "credential assignments with recognizable token prefixes"
   ],
+  "software_release_readiness": "COMPLETED",
   "status": "PASS",
   "symlink_policy": "no symlinks in release candidate or archive",
   "timestamp_policy": "SOURCE_DATE_EPOCH or normalized zero/1980 archive timestamp; timestamps excluded from semantic reproducibility"

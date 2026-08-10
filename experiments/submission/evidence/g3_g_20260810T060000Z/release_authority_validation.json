@@ -1,0 +1,12 @@
+{
+  "authority_root_count": 6,
+  "errors": [],
+  "final_competition_submission_authorization": "USER_ACTION_REQUIRED",
+  "release_authority_status": "COMPLETED",
+  "schema_version": "g3-g-release-authority-validation-v1",
+  "sentinel": "G3_G_RELEASE_AUTHORITY_OK",
+  "software_release_readiness": "NOT_YET_EVALUATED",
+  "status": "PASS",
+  "tracked_file_count": 1187,
+  "user_action_count": 26
+}

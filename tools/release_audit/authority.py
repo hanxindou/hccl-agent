@@ -296,7 +296,7 @@ def validate_authority() -> dict[str, Any]:
         "errors": errors, "authority_root_count": len(AUTHORITY_ROOTS),
         "tracked_file_count": inventory.get("tracked_file_count"), "user_action_count": gate.get("item_count"),
         "release_authority_status": "COMPLETED" if not errors else "FAIL",
-        "software_release_readiness": "NOT_YET_EVALUATED",
+        "software_release_readiness": gate.get("software_release_readiness", "NOT_YET_EVALUATED"),
         "final_competition_submission_authorization": "USER_ACTION_REQUIRED",
         "sentinel": "G3_G_RELEASE_AUTHORITY_OK" if not errors else None,
     }

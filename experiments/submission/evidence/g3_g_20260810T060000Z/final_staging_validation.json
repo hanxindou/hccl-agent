@@ -1,8 +1,8 @@
 {
   "canonical_staging_reused": true,
   "controlled_material_included": false,
-  "files_verified": 504,
-  "manifest_entries_verified": 503,
+  "files_verified": 417,
+  "manifest_entries_verified": 414,
   "native_elf_audit": {
     "artifact": "<install>/lib/libhccl_plugin.so",
     "artifact_role": "CPU_SIM_REFERENCE_PLUGIN",
@@ -30,9 +30,9 @@
     "file": "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=13ab2a88b2b45cafa1422d796e469a12e123c5d2, not stripped",
     "forbidden_symbols": [],
     "ldd": [
-      "linux-vdso.so.1 (0x00007e02c7dcf000)",
-      "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007e02c7a00000)",
-      "/lib64/ld-linux-x86-64.so.2 (0x00007e02c7dd1000)"
+      "linux-vdso.so.1 (0x000073479b63f000)",
+      "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000073479b200000)",
+      "/lib64/ld-linux-x86-64.so.2 (0x000073479b641000)"
     ],
     "missing_symbols": [],
     "needed": [

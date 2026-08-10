@@ -1,0 +1,11 @@
+{
+  "absolute_paths": false,
+  "case_collisions": false,
+  "device_socket_fifo": false,
+  "duplicate_paths": false,
+  "entry_count": 508,
+  "path_traversal": false,
+  "schema_version": "g3-g-archive-extraction-safety-v1",
+  "status": "PASS",
+  "symlink_escape": false
+}

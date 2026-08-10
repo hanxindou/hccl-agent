@@ -1,14 +1,4 @@
 {
-  "archive_validation": {
-    "archive_sha256": "6ccb16494f87c87278f7716b22881a28dfcb0cf66accfc1dd36bbb2e9815b3cf",
-    "entry_count": 508,
-    "errors": [],
-    "path_traversal": false,
-    "schema_version": "g3-g-archive-validation-v1",
-    "sentinel": "G3_G_RELEASE_CANDIDATE_OK",
-    "status": "PASS",
-    "symlink_escape": false
-  },
   "candidate_tree_sha256": "2b8fcb14dcbef10ea171ff7773668eb2cf4b914ef3432e745979124a915669ab",
   "errors": [],
   "file_count": 507,
@@ -64,9 +54,9 @@
       "file": "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=13ab2a88b2b45cafa1422d796e469a12e123c5d2, not stripped",
       "forbidden_symbols": [],
       "ldd": [
-        "linux-vdso.so.1 (0x00007e02c7dcf000)",
-        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007e02c7a00000)",
-        "/lib64/ld-linux-x86-64.so.2 (0x00007e02c7dd1000)"
+        "linux-vdso.so.1 (0x000070d7464f2000)",
+        "libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000070d746200000)",
+        "/lib64/ld-linux-x86-64.so.2 (0x000070d7464f4000)"
       ],
       "missing_symbols": [],
       "needed": [

@@ -1,0 +1,24 @@
+{
+  "benchmark_rerun": false,
+  "ctest": {
+    "passed": 14,
+    "status": "PASS"
+  },
+  "focused_g3_g_tests": {
+    "passed": 24,
+    "status": "PASS"
+  },
+  "full_pytest": {
+    "passed": 1047,
+    "skip_increase": false,
+    "skipped": 1,
+    "status": "PASS"
+  },
+  "linux_cpu_sim_validation": {
+    "sentinel": "LINUX_CPU_SIM_VALIDATION_OK",
+    "status": "PASS"
+  },
+  "runtime_api_calls": [],
+  "schema_version": "g3-g-regression-summary-v1",
+  "status": "PASS"
+}

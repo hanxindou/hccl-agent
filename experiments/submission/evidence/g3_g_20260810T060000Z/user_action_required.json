@@ -212,6 +212,6 @@
     }
   ],
   "schema_version": "g3-g-user-action-release-gate-v1",
-  "software_release_readiness": "COMPLETED",
+  "software_release_readiness": "NOT_YET_EVALUATED",
   "status": "USER_ACTION_REQUIRED"
 }
