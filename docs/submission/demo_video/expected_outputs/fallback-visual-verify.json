@@ -1,0 +1,15 @@
+{
+  "display": "Registered G3-E figures verify against frozen source data",
+  "fallback_step_id": "FALLBACK-VISUAL-VERIFY",
+  "figure_refs": [
+    "FIG-03",
+    "FIG-04",
+    "FIG-12"
+  ],
+  "limitations": [
+    "45.59% is SIMULATED_ONLY",
+    "no benchmark rerun"
+  ],
+  "status": "FROZEN_VALIDATED_OUTPUT",
+  "truth_identity": "PRERECORDED_DETERMINISTIC_OUTPUT"
+}

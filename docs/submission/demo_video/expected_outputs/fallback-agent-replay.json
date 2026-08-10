@@ -1,0 +1,12 @@
+{
+  "display": "Frozen G3-B2 Agent decision flow is deterministically replayable offline",
+  "fallback_step_id": "FALLBACK-AGENT-REPLAY",
+  "limitations": [
+    "replay is not historical execution"
+  ],
+  "status": "FROZEN_VALIDATED_OUTPUT",
+  "trace_refs": [
+    "g3-b2-optimization-authoritative-round1"
+  ],
+  "truth_identity": "PRERECORDED_DETERMINISTIC_OUTPUT"
+}

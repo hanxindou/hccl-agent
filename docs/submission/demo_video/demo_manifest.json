@@ -1,0 +1,332 @@
+{
+  "benchmark_rerun": false,
+  "mandatory_offline": true,
+  "profiles": {
+    "FALLBACK_DEMO": [
+      "FALLBACK-CPU-SIM",
+      "FALLBACK-AGENT-REPLAY",
+      "FALLBACK-VISUAL-VERIFY"
+    ],
+    "QUICK_DEMO": [
+      "DEMO-CPU-SIM",
+      "DEMO-AGENT-REPLAY",
+      "DEMO-VISUAL-VERIFY"
+    ],
+    "TECHNICAL_DEMO": [
+      "DEMO-CPU-SIM",
+      "DEMO-AGENT-REPLAY",
+      "DEMO-VISUAL-VERIFY",
+      "DEMO-AGENT-VERIFY",
+      "DEMO-REPORT-DESCRIBE",
+      "DEMO-SUBMISSION-DESCRIBE"
+    ]
+  },
+  "runtime_api_calls": [],
+  "schema_version": "g3-f-demo-manifest-v1",
+  "status": "PASS",
+  "steps": [
+    {
+      "api_key_required": false,
+      "claim_refs": [
+        "C-ABI-001"
+      ],
+      "cleanup": "remove generated build/result directories after recording when requested; never mutate frozen authority",
+      "command": [
+        "python",
+        "-m",
+        "tools.submission_cli",
+        "quick",
+        "--rank-size",
+        "4",
+        "--message-size",
+        "4096"
+      ],
+      "expected_exit_code": 0,
+      "expected_sentinels": [
+        "G3_F_CPU_SIM_FUNCTIONAL_OK"
+      ],
+      "fallback_step": "FALLBACK-CPU-SIM",
+      "figure_refs": [],
+      "hardware_required": false,
+      "input_refs": [
+        "hcccl/",
+        "tools/submission_cli/"
+      ],
+      "limitations": [
+        "CPU_SIM host execution only",
+        "not Ascend/NPU execution",
+        "not a performance benchmark rerun"
+      ],
+      "metric_refs": [],
+      "network_required": false,
+      "on_screen_truth_badge": "HOST_VALIDATED",
+      "order": 10,
+      "output_refs": [
+        "canonical CPU_SIM summary"
+      ],
+      "profile": [
+        "QUICK_DEMO",
+        "TECHNICAL_DEMO"
+      ],
+      "purpose": "Build and execute project-owned CPU_SIM collectives and focused checks",
+      "recording_instruction": "show bounded final JSON summary and keep truth badge visible",
+      "retry_budget": 0,
+      "step_id": "DEMO-CPU-SIM",
+      "timeout_seconds": 300,
+      "title": "CPU_SIM functional execution",
+      "trace_refs": [],
+      "truth_identity": "LIVE_DEMO_CPU_SIM",
+      "working_directory_contract": "<repo>",
+      "writes": [
+        "build/submission",
+        "dist/submission-install",
+        "dist/submission-results"
+      ]
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [],
+      "cleanup": "remove generated build/result directories after recording when requested; never mutate frozen authority",
+      "command": [
+        "python",
+        "-m",
+        "tools.agent_delivery_cli",
+        "replay",
+        "--trace",
+        "g3-b2-optimization-authoritative-round1"
+      ],
+      "expected_exit_code": 0,
+      "expected_sentinels": [
+        "G3_F_AGENT_REPLAY_STEP_OK"
+      ],
+      "fallback_step": "FALLBACK-AGENT-REPLAY",
+      "figure_refs": [],
+      "hardware_required": false,
+      "input_refs": [
+        "docs/submission/agent_delivery/traces/g3_b2_optimization_trace.json"
+      ],
+      "limitations": [
+        "replay is not original historical execution",
+        "human governance remains disclosed"
+      ],
+      "metric_refs": [],
+      "network_required": false,
+      "on_screen_truth_badge": "OFFLINE_REPLAY",
+      "order": 20,
+      "output_refs": [
+        "canonical replay summary"
+      ],
+      "profile": [
+        "QUICK_DEMO",
+        "TECHNICAL_DEMO"
+      ],
+      "purpose": "Replay the frozen G3-B2 optimization decision flow without an external LLM",
+      "recording_instruction": "show bounded final JSON summary and keep truth badge visible",
+      "retry_budget": 0,
+      "step_id": "DEMO-AGENT-REPLAY",
+      "timeout_seconds": 30,
+      "title": "Offline Agent trace replay",
+      "trace_refs": [
+        "g3-b2-optimization-authoritative-round1"
+      ],
+      "truth_identity": "DEMO_REPLAY",
+      "working_directory_contract": "<repo>",
+      "writes": []
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [],
+      "cleanup": "remove generated build/result directories after recording when requested; never mutate frozen authority",
+      "command": [
+        "python",
+        "-m",
+        "tools.visualization_cli",
+        "verify-charts"
+      ],
+      "expected_exit_code": 0,
+      "expected_sentinels": [
+        "G3_F_VISUALIZATION_VERIFY_STEP_OK"
+      ],
+      "fallback_step": "FALLBACK-VISUAL-VERIFY",
+      "figure_refs": [
+        "FIG-03",
+        "FIG-04",
+        "FIG-12"
+      ],
+      "hardware_required": false,
+      "input_refs": [
+        "docs/submission/visualization/chart_registry.json"
+      ],
+      "limitations": [
+        "45.59% is frozen simulated evidence",
+        "verification does not rerun benchmarks"
+      ],
+      "metric_refs": [],
+      "network_required": false,
+      "on_screen_truth_badge": "SIMULATED_ONLY",
+      "order": 30,
+      "output_refs": [
+        "canonical visualization verification summary"
+      ],
+      "profile": [
+        "QUICK_DEMO",
+        "TECHNICAL_DEMO"
+      ],
+      "purpose": "Verify registered figures and source-backed visual boundaries",
+      "recording_instruction": "show bounded final JSON summary and keep truth badge visible",
+      "retry_budget": 0,
+      "step_id": "DEMO-VISUAL-VERIFY",
+      "timeout_seconds": 30,
+      "title": "Evidence-derived visualization verification",
+      "trace_refs": [],
+      "truth_identity": "HISTORICAL_EVIDENCE",
+      "working_directory_contract": "<repo>",
+      "writes": []
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [],
+      "cleanup": "remove generated build/result directories after recording when requested; never mutate frozen authority",
+      "command": [
+        "python",
+        "-m",
+        "tools.agent_delivery_cli",
+        "verify"
+      ],
+      "expected_exit_code": 0,
+      "expected_sentinels": [
+        "G3_F_AGENT_DELIVERY_VERIFY_STEP_OK"
+      ],
+      "fallback_step": null,
+      "figure_refs": [],
+      "hardware_required": false,
+      "input_refs": [
+        "docs/submission/agent_delivery/"
+      ],
+      "limitations": [
+        "online LLM remains optional",
+        "historical unavailable fields remain explicit"
+      ],
+      "metric_refs": [],
+      "network_required": false,
+      "on_screen_truth_badge": "OFFLINE_REPLAY",
+      "order": 40,
+      "output_refs": [
+        "canonical Agent delivery summary"
+      ],
+      "profile": [
+        "TECHNICAL_DEMO"
+      ],
+      "purpose": "Verify Prompt, Skill, trace, provenance, and human-intervention mappings",
+      "recording_instruction": "show bounded final JSON summary and keep truth badge visible",
+      "retry_budget": 0,
+      "step_id": "DEMO-AGENT-VERIFY",
+      "timeout_seconds": 30,
+      "title": "Agent delivery verification",
+      "trace_refs": [
+        "g3-b2-optimization-authoritative-round1",
+        "g3-b3-feature-completion-agent-flow"
+      ],
+      "truth_identity": "OFFLINE_REPLAY",
+      "working_directory_contract": "<repo>",
+      "writes": []
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [],
+      "cleanup": "remove generated build/result directories after recording when requested; never mutate frozen authority",
+      "command": [
+        "python",
+        "-m",
+        "tools.report_cli",
+        "describe"
+      ],
+      "expected_exit_code": 0,
+      "expected_sentinels": [
+        "G3_F_REPORT_AUTHORITY_STEP_OK"
+      ],
+      "fallback_step": null,
+      "figure_refs": [],
+      "hardware_required": false,
+      "input_refs": [
+        "docs/submission/report_claim_ledger.json",
+        "docs/submission/report_data_ledger.json"
+      ],
+      "limitations": [
+        "description is read-only",
+        "numbers retain ledger truth identities"
+      ],
+      "metric_refs": [],
+      "network_required": false,
+      "on_screen_truth_badge": "SIMULATED_ONLY",
+      "order": 50,
+      "output_refs": [
+        "canonical reporting authority summary"
+      ],
+      "profile": [
+        "TECHNICAL_DEMO"
+      ],
+      "purpose": "Describe frozen metrics, claims, units, and truth identities read-only",
+      "recording_instruction": "show bounded final JSON summary and keep truth badge visible",
+      "retry_budget": 0,
+      "step_id": "DEMO-REPORT-DESCRIBE",
+      "timeout_seconds": 30,
+      "title": "Factual authority description",
+      "trace_refs": [],
+      "truth_identity": "HISTORICAL_EVIDENCE",
+      "working_directory_contract": "<repo>",
+      "writes": []
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [
+        "C-DIRECT-001",
+        "C-DIRECT-002"
+      ],
+      "cleanup": "remove generated build/result directories after recording when requested; never mutate frozen authority",
+      "command": [
+        "python",
+        "-m",
+        "tools.submission_cli",
+        "describe"
+      ],
+      "expected_exit_code": 0,
+      "expected_sentinels": [
+        "G3_F_DIRECT_BOUNDARY_STEP_OK"
+      ],
+      "fallback_step": null,
+      "figure_refs": [
+        "FIG-10"
+      ],
+      "hardware_required": false,
+      "input_refs": [
+        "hcccl/submission/native_plugin_abi_manifest.json",
+        "hcccl/submission/direct_readiness_abi_manifest.json"
+      ],
+      "limitations": [
+        "real device not executed",
+        "Direct artifact is compile/link readiness only"
+      ],
+      "metric_refs": [],
+      "network_required": false,
+      "on_screen_truth_badge": "DIRECT_COMPILE_LINK_ONLY",
+      "order": 60,
+      "output_refs": [
+        "canonical Direct boundary summary"
+      ],
+      "profile": [
+        "TECHNICAL_DEMO"
+      ],
+      "purpose": "Describe CPU_SIM ABI and Direct compile/link readiness without runtime execution",
+      "recording_instruction": "show bounded final JSON summary and keep truth badge visible",
+      "retry_budget": 0,
+      "step_id": "DEMO-SUBMISSION-DESCRIBE",
+      "timeout_seconds": 30,
+      "title": "CPU_SIM and Direct boundary",
+      "trace_refs": [],
+      "truth_identity": "DIRECT_READINESS_ONLY",
+      "working_directory_contract": "<repo>",
+      "writes": []
+    }
+  ]
+}
