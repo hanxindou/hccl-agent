@@ -1,0 +1,8 @@
+{
+  "schema_version": "g3-f-subtitle-validation-v1",
+  "sentinel": "G3_F_SUBTITLE_SOURCE_OK",
+  "srt_vtt_created": false,
+  "status": "PASS",
+  "subtitle_count": 11,
+  "timeline_status": "ANCHORS_ONLY_PENDING_UA_F_001"
+}

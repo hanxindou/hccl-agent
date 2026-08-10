@@ -1,0 +1,10 @@
+{
+  "external_assets": [],
+  "findings": [],
+  "private_fonts": false,
+  "reference_video_created": false,
+  "remote_assets": false,
+  "schema_version": "g3-f-asset-portability-v1",
+  "sentinel": "G3_F_ASSET_PORTABILITY_OK",
+  "status": "PASS"
+}

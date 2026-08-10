@@ -1,0 +1,21 @@
+{
+  "authority_root_count": 5,
+  "benchmark_rerun": false,
+  "candidate_count": 7,
+  "errors": [],
+  "media_tooling": {
+    "ffmpeg": {
+      "available": false,
+      "installation_attempted": false
+    },
+    "ffprobe": {
+      "available": false,
+      "installation_attempted": false
+    }
+  },
+  "required_candidate_count": 3,
+  "runtime_api_calls": [],
+  "schema_version": "g3-f-authority-validation-v1",
+  "sentinel": "G3_F_DEMO_AUTHORITY_OK",
+  "status": "PASS"
+}

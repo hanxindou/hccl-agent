@@ -1,0 +1,11 @@
+{
+  "errors": [],
+  "mapped_asset_count": 11,
+  "privacy_findings": [],
+  "recording_status": "PLANNED_NOT_RECORDED",
+  "scene_count": 11,
+  "schema_version": "g3-f-storyboard-validation-v1",
+  "sentinel": "G3_F_STORYBOARD_OK",
+  "status": "PASS",
+  "video_binary_created": false
+}

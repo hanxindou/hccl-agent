@@ -1,0 +1,21 @@
+{
+  "errors": [],
+  "flow_profiles": [
+    "SHORT",
+    "STANDARD",
+    "TECHNICAL"
+  ],
+  "language_status": "USER_ACTION_REQUIRED",
+  "narration_count": 11,
+  "schema_version": "g3-f-presentation-validation-v1",
+  "sentinel": "G3_F_NARRATION_OK",
+  "sentinels": [
+    "G3_F_NARRATION_OK",
+    "G3_F_SUBTITLE_SOURCE_OK",
+    "G3_F_PRESENTATION_FLOW_OK"
+  ],
+  "status": "PASS",
+  "subtitle_count": 11,
+  "truth_badge_count": 6,
+  "voiceover_created": false
+}

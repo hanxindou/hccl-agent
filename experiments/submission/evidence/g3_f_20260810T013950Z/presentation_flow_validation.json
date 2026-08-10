@@ -1,0 +1,10 @@
+{
+  "profiles": [
+    "SHORT",
+    "STANDARD",
+    "TECHNICAL"
+  ],
+  "schema_version": "g3-f-flow-validation-v1",
+  "sentinel": "G3_F_PRESENTATION_FLOW_OK",
+  "status": "PASS"
+}

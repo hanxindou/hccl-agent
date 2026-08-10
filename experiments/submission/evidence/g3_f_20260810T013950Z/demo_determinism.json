@@ -1,0 +1,11 @@
+{
+  "canonical_excludes_runtime": true,
+  "first_runtime_seconds": 36.469,
+  "first_sha256": "f982f9dff9a6076099a37c4edbddc3298bd1b7c594d288da57ca90e534c957ae",
+  "hash_identical": true,
+  "run_count": 2,
+  "schema_version": "g3-f-demo-determinism-v1",
+  "second_runtime_seconds": 33.671,
+  "second_sha256": "f982f9dff9a6076099a37c4edbddc3298bd1b7c594d288da57ca90e534c957ae",
+  "status": "PASS"
+}

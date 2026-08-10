@@ -1,0 +1,146 @@
+{
+  "items": [
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-B-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-B-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-B-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-B-004",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-C-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-C-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-C-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-D-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-D-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-D-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-E-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-E-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-E-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-E-004",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "inherited unresolved delivery decision"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-F-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "competition video specification"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-F-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final narration/subtitle language"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-F-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "voice/audio policy"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-F-004",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "live demo environment"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-F-005",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "recording/branding approval"
+    },
+    {
+      "allowed_fallback": "validated production package without final binary/audio/localization/branding",
+      "closed_by_g3_f": false,
+      "id": "UA-F-006",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final video/demo wording approval"
+    }
+  ],
+  "schema_version": "g3-f-user-action-required-v1",
+  "status": "USER_ACTION_REQUIRED"
+}

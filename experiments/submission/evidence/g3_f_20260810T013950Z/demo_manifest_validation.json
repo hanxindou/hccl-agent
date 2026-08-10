@@ -1,0 +1,14 @@
+{
+  "benchmark_rerun": false,
+  "errors": [],
+  "fallback_count": 3,
+  "quick_step_count": 3,
+  "runtime_api_calls": [],
+  "schema_version": "g3-f-demo-validation-v1",
+  "sentinels": [
+    "G3_F_OFFLINE_DEMO_OK",
+    "G3_F_DEMO_FALLBACK_OK"
+  ],
+  "status": "PASS",
+  "step_count": 6
+}
