@@ -1,0 +1,16 @@
+{
+  "classification": "BIT_FOR_BIT_REPRODUCIBLE",
+  "identical": true,
+  "normalized_metadata_scope": [
+    "path_order",
+    "timestamp",
+    "permissions",
+    "compression",
+    "symlink_policy"
+  ],
+  "run_1_sha256": "70ab308c8bfcb2dcf99e74b3418df8649d39974998dde985177314cab38f38c6",
+  "run_2_sha256": "70ab308c8bfcb2dcf99e74b3418df8649d39974998dde985177314cab38f38c6",
+  "run_count": 2,
+  "schema_version": "g3-g-archive-reproducibility-v1",
+  "status": "PASS"
+}

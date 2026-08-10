@@ -11,6 +11,7 @@ from tools.release_audit.authority import build_authority, validate_authority
 from tools.release_audit.audits import build_audits, validate_audits
 from tools.release_audit.cold_start import compare_runs, finalize_cold_start_results, run_clean_worktree
 from tools.release_audit.common import RELEASE_ROOT, ROOT
+from tools.release_audit.package import build_candidate, validate_release_metadata, verify_candidate
 
 
 def _emit(value: dict[str, Any]) -> int:
@@ -26,6 +27,9 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("preflight")
     sub.add_parser("build-audits")
     sub.add_parser("audit")
+    sub.add_parser("build-candidate")
+    sub.add_parser("verify-candidate")
+    sub.add_parser("verify-release-metadata")
     cold = sub.add_parser("cold-start")
     cold.add_argument("--run-id", choices=["run-1", "run-2"], required=True)
     cold.add_argument("--output", required=True)
@@ -46,6 +50,12 @@ def main(argv: list[str] | None = None) -> int:
         return _emit(build_audits())
     if args.command == "audit":
         return _emit(validate_audits())
+    if args.command == "build-candidate":
+        return _emit(build_candidate())
+    if args.command == "verify-candidate":
+        return _emit(verify_candidate())
+    if args.command == "verify-release-metadata":
+        return _emit(validate_release_metadata())
     if args.command == "cold-start":
         output = Path(args.output)
         return _emit(run_clean_worktree(args.run_id, output if output.is_absolute() else ROOT / output))

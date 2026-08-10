@@ -1,0 +1,14 @@
+{
+  "artifact_identity": "RELEASE_CANDIDATE_ARCHIVE",
+  "compression": "DEFLATE_LEVEL_9",
+  "duplicate_and_case_collision_policy": "FORBIDDEN",
+  "final_submission_archive": false,
+  "final_submission_archive_status": "NOT_AUTHORIZED",
+  "format": "ZIP",
+  "ordering": "UTF8_POSIX_PATH_SORTED",
+  "permissions": "0644_FILES_0755_SHELL_ENTRYPOINTS",
+  "schema_version": "g3-g-archive-contract-v1",
+  "status": "PASS",
+  "symlink_policy": "FORBIDDEN",
+  "timestamp": "1980-01-01T00:00:00"
+}
