@@ -1,0 +1,51 @@
+{
+  "actual_staging_and_archive_rescan": "MANDATORY_IN_G3_G_D_AND_E",
+  "forbidden_files": [],
+  "raw_secret_values_recorded": false,
+  "release_exclusions": [
+    "docs/deepseek_setup.md",
+    "docs/project_documentation.md"
+  ],
+  "reviewed_documentation_placeholders": [
+    {
+      "classification": "DOCUMENTATION_PLACEHOLDER",
+      "path": "docs/deepseek_setup.md",
+      "redacted_fingerprint": "88017d36457c",
+      "secret_value_recorded": false,
+      "type": "CREDENTIAL_VALUE"
+    },
+    {
+      "classification": "DOCUMENTATION_PLACEHOLDER",
+      "path": "docs/deepseek_setup.md",
+      "redacted_fingerprint": "88017d36457c",
+      "secret_value_recorded": false,
+      "type": "CREDENTIAL_VALUE"
+    },
+    {
+      "classification": "DOCUMENTATION_PLACEHOLDER",
+      "path": "docs/deepseek_setup.md",
+      "redacted_fingerprint": "88017d36457c",
+      "secret_value_recorded": false,
+      "type": "CREDENTIAL_VALUE"
+    },
+    {
+      "classification": "DOCUMENTATION_PLACEHOLDER",
+      "path": "docs/project_documentation.md",
+      "redacted_fingerprint": "8f26dfd1cdc7",
+      "secret_value_recorded": false,
+      "type": "CREDENTIAL_VALUE"
+    }
+  ],
+  "scanner_bounded": true,
+  "scanner_offline": true,
+  "schema_version": "g3-g-security-audit-v1",
+  "scope": [
+    "tracked source",
+    "G3-G release input metadata",
+    "canonical candidate inputs"
+  ],
+  "secret_findings": [],
+  "sentinel": "G3_G_SECURITY_AUDIT_OK",
+  "status": "PASS",
+  "text_files_scanned": 1079
+}

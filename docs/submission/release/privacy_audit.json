@@ -1,0 +1,69 @@
+{
+  "browser_or_desktop_capture_included": false,
+  "excluded_private_path_findings": [
+    {
+      "disposition": "EXCLUDE_PRIVATE",
+      "path": "docs/project_audit.md",
+      "raw_value_recorded": false,
+      "type": "WINDOWS_USER_PATH"
+    },
+    {
+      "disposition": "EXCLUDE_PRIVATE",
+      "path": "docs/v1_progress.md",
+      "raw_value_recorded": false,
+      "type": "WINDOWS_USER_PATH"
+    }
+  ],
+  "findings": [],
+  "private_logs_included": false,
+  "raw_private_values_recorded": false,
+  "release_exclusions": [
+    "docs/project_audit.md",
+    "docs/v1_progress.md"
+  ],
+  "reviewed_scanner_literals": [
+    {
+      "disposition": "REVIEWED_NOT_A_URI_VALUE",
+      "path": "docs/plans/g3-competition-delivery-readiness.md",
+      "type": "SCANNER_OR_POLICY_LITERAL"
+    },
+    {
+      "disposition": "REVIEWED_NOT_A_URI_VALUE",
+      "path": "tests/visualization/test_g3_e_charts.py",
+      "type": "SCANNER_OR_POLICY_LITERAL"
+    },
+    {
+      "disposition": "REVIEWED_NOT_A_URI_VALUE",
+      "path": "tools/agent_delivery/common.py",
+      "type": "SCANNER_OR_POLICY_LITERAL"
+    },
+    {
+      "disposition": "REVIEWED_NOT_A_URI_VALUE",
+      "path": "tools/demo_delivery/finalize.py",
+      "type": "SCANNER_OR_POLICY_LITERAL"
+    },
+    {
+      "disposition": "REVIEWED_NOT_A_URI_VALUE",
+      "path": "tools/release_audit/common.py",
+      "type": "SCANNER_OR_POLICY_LITERAL"
+    },
+    {
+      "disposition": "REVIEWED_NOT_A_URI_VALUE",
+      "path": "tools/visualization/common.py",
+      "type": "SCANNER_OR_POLICY_LITERAL"
+    },
+    {
+      "disposition": "REVIEWED_NOT_A_URI_VALUE",
+      "path": "tools/visualization/finalize.py",
+      "type": "SCANNER_OR_POLICY_LITERAL"
+    },
+    {
+      "disposition": "REVIEWED_NOT_A_URI_VALUE",
+      "path": "tools/visualization/narrative.py",
+      "type": "SCANNER_OR_POLICY_LITERAL"
+    }
+  ],
+  "schema_version": "g3-g-privacy-audit-v1",
+  "sentinel": "G3_G_PRIVACY_AUDIT_OK",
+  "status": "PASS"
+}

@@ -1,0 +1,12 @@
+{
+  "authorization": "USER_ACTION_REQUIRED",
+  "files_classified": 1187,
+  "legal_conclusion_provided": false,
+  "project_copyright_declared": false,
+  "schema_version": "g3-g-copyright-audit-v1",
+  "status": "COMPLETED",
+  "user_action_required_refs": [
+    "UA-B-001",
+    "UA-G-002"
+  ]
+}
