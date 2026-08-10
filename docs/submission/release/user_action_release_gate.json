@@ -1,0 +1,217 @@
+{
+  "final_competition_submission_authorization": "USER_ACTION_REQUIRED",
+  "item_count": 26,
+  "items": [
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-B-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "project license and copyright ownership"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-B-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "official artifact redistribution authorization"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-B-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "controlled competition material disposition"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-B-004",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "submission archive and size rules"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-C-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "precision interpretation"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-C-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final report language"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-C-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final template, font, anonymity, and PDF rules"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-D-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "historical Agent and Prompt record availability"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-D-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "Agent disclosure detail"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-D-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "real-device acceptance"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-E-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final visual language"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-E-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "competition visual template"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-E-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "logo and external asset permission"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-E-004",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final innovation wording approval"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-F-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "competition video specification"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-F-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final narration and subtitle language"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-F-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "voice and audio policy"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-F-004",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "live demo environment"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-F-005",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "recording and branding approval"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-F-006",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final video and demo wording approval"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-G-001",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final submission package specification"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-G-002",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final legal and redistribution authorization"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-G-003",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final controlled-material inclusion decision"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-G-004",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final release candidate approval"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-G-005",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "Git tag and GitHub release authorization"
+    },
+    {
+      "allowed_software_fallback": "exclude unresolved material and preserve explicit boundary",
+      "blocking_scope": "FINAL_COMPETITION_SUBMISSION_AUTHORIZATION",
+      "closed_by_g3_g": false,
+      "id": "UA-G-006",
+      "status": "USER_ACTION_REQUIRED",
+      "subject": "final competition submission authorization"
+    }
+  ],
+  "schema_version": "g3-g-user-action-release-gate-v1",
+  "software_release_readiness": "NOT_YET_EVALUATED",
+  "status": "USER_ACTION_REQUIRED"
+}

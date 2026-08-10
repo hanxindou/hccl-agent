@@ -1,0 +1,220 @@
+{
+  "errors": [],
+  "file_count": 46,
+  "frozen_evidence_roots": {
+    "g3_b2": {
+      "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483"
+    },
+    "g3_b3": {
+      "path": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+      "sha256sums_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754"
+    },
+    "g3_c": {
+      "path": "experiments/submission/evidence/g3_c_20260809T000000Z",
+      "sha256sums_sha256": "cc29469e79d9a242aa7eb2859d5ca94357bc2700ad6a6887ffdce1852bf44707"
+    },
+    "g3_d": {
+      "path": "experiments/submission/evidence/g3_d_20260809T123956Z",
+      "sha256sums_sha256": "1f702c043e6e73bf2f1464a1d40367eb4d8599d5b56b67604acdac69494bb312"
+    },
+    "g3_e": {
+      "path": "experiments/submission/evidence/g3_e_20260809T155045Z",
+      "sha256sums_sha256": "f57cbe2743042008075098a482264902129539a4a87a83e22b051edb5808cbdf"
+    },
+    "g3_f": {
+      "path": "experiments/submission/evidence/g3_f_20260810T013950Z",
+      "sha256sums_sha256": "2cc72eef68c0b788ad81006cc9b7a0f8e81188dc4bd4df3eab8528069cfc3124"
+    }
+  },
+  "records": [
+    {
+      "path": "docs/submission/report_claim_ledger.json",
+      "sha256": "2c7c9d5356fd514fc02c877a398f1da30c6b6d14009eba80a263a5a63a138053"
+    },
+    {
+      "path": "docs/submission/report_data_ledger.json",
+      "sha256": "335a6ff28bee953cba098ed66f618d4e10f08f9c78e903d8f72333a0aa8a06e3"
+    },
+    {
+      "path": "docs/submission/report_chart_data/algorithm_support_matrix.json",
+      "sha256": "310c5f164cdca69d50d8ae38ad74c22d6c87abb8ed8bdf17a92d0db40b757b67"
+    },
+    {
+      "path": "docs/submission/report_chart_data/backpressure_behavior.json",
+      "sha256": "f5eded2f57d09b621ff052638b06e455306621f45f04d4fb27a9d94fda365f69"
+    },
+    {
+      "path": "docs/submission/report_chart_data/claim_boundary_summary.json",
+      "sha256": "c475bba953b8089b0e8ee3e716f5907a5708c873ff18d294b7a23209469080ed"
+    },
+    {
+      "path": "docs/submission/report_chart_data/correctness_coverage.json",
+      "sha256": "cf230bb8a13ce7a648390884539669daa01dbe920f90d33d7fcc03e9b579a539"
+    },
+    {
+      "path": "docs/submission/report_chart_data/crc_retry_cases.json",
+      "sha256": "1d5fb91310e9b3d94a54bce0999d9d7e1f9621ed8fcab962e767070ad6f02a9d"
+    },
+    {
+      "path": "docs/submission/report_chart_data/direct_readiness_status.json",
+      "sha256": "d5ecbf1f8ad7aaaf118e973a1fa236303ae3ce54b68b7e48cecf487c223681de"
+    },
+    {
+      "path": "docs/submission/report_chart_data/g3_b2_ablation.json",
+      "sha256": "ce81f2d4e9bee468f5b26a241e0858d3fdd447c1c4ca2e7065331506060fc846"
+    },
+    {
+      "path": "docs/submission/report_chart_data/g3_b2_bandwidth_comparison.json",
+      "sha256": "972f3857b16f44482c1ba990ec793e47455822b2b518161a259518a9666df15d"
+    },
+    {
+      "path": "docs/submission/report_chart_data/g3_b2_latency_comparison.json",
+      "sha256": "d6dac200fe3e1f2cf3488f5b75138856dae3ec5df6987c85a941716d416a223f"
+    },
+    {
+      "path": "docs/submission/report_chart_data/g3_b2_scale.json",
+      "sha256": "9994529ec9e1c2eef6d2f3e935fc642e00b926234d9f5870f8713ad328e7a39a"
+    },
+    {
+      "path": "docs/submission/report_chart_data/reliability_outcomes.json",
+      "sha256": "32af5bab464941302ff8825fecae4bd7419428757c42b639802b5cb2270f353b"
+    },
+    {
+      "path": "docs/submission/report_chart_data/schedule_phase_comparison.json",
+      "sha256": "dba5c800c7ba0c02a47fea5eb46a7a4d0b95836eeedbaed94566240e9459f939"
+    },
+    {
+      "path": "docs/submission/report_chart_data/sparse_break_even.json",
+      "sha256": "dc5a3bef2419851d8f9f64655012078b0acc91c72d7946654bb88148bc327a44"
+    },
+    {
+      "path": "docs/submission/report_chart_data/sparse_compression_ratio.json",
+      "sha256": "d79b6789a19910bee0009692d4a7a01e8f1a470d41e5c66e5f144e7f3a2f4c47"
+    },
+    {
+      "path": "docs/submission/report_chart_data/sparse_dense_fallback.json",
+      "sha256": "1cee7168b7ce4ba4d83b87c11e74728a725cb490639f396f05c99e6b0ce92324"
+    },
+    {
+      "path": "docs/submission/report_chart_data/sparse_wire_bytes.json",
+      "sha256": "63e1228ed9c5e82ddf3b44583956746be1f710e35ac58c998c67b1e54f9ce679"
+    },
+    {
+      "path": "docs/submission/agent_delivery/prompt_registry.json",
+      "sha256": "51cd25d974d3290116fe527c5a278fe444e7cccdf490f4c2d258629ce518f7d9"
+    },
+    {
+      "path": "docs/submission/agent_delivery/skill_registry.json",
+      "sha256": "59ef6e8c43c899cfcedefbdaa535f495ce02e897eb958a6ad18a139361bcc89f"
+    },
+    {
+      "path": "docs/submission/agent_delivery/trace_index.json",
+      "sha256": "c4f029375ec8b3a328c5895e438d33c977748ba364a1b57a648c2d7b11d1114e"
+    },
+    {
+      "path": "docs/submission/agent_delivery/traces/g3_b2_optimization_trace.json",
+      "sha256": "28806594224d0c27075f2aaaebab7c714bce836ac335ac7c442f01c78c1234ff"
+    },
+    {
+      "path": "docs/submission/agent_delivery/traces/g3_b3_feature_completion_trace.json",
+      "sha256": "bdaf79748bb28c5ae2e6e3ad7871bc74cded9e75c972b37c8e3673c8f5a6c6af"
+    },
+    {
+      "path": "docs/submission/agent_delivery/source_commit_evidence_claim_mapping.json",
+      "sha256": "820121b927b4660399df743dd3d957a8a00fc43cf6f8fcb82f17c86b08ea538c"
+    },
+    {
+      "path": "docs/submission/visualization/chart_registry.json",
+      "sha256": "af2d88b3a8f1beb40bbb95f455e7f5e2cc76b30a77e54530f27dc4a2d793d8e9"
+    },
+    {
+      "path": "docs/submission/visualization/assets/charts/fig-03-frozen-simulated-latency-comparison.svg",
+      "sha256": "2b4e396bdac33a0a81c16627988296360823d1b303d450232fdfc9e1b021ecce"
+    },
+    {
+      "path": "docs/submission/visualization/assets/charts/fig-04-18-wins-0-ties-0-losses.svg",
+      "sha256": "56e650d368f73a662346348b9b0fbd0de54374cd89eca5199ad82caa592a362a"
+    },
+    {
+      "path": "docs/submission/visualization/assets/charts/fig-05-logical-scale-trend.svg",
+      "sha256": "3634dfc9ea5db000c77c5faa01bd60a3f9f1b82f2ed87003914083850bfeaaf8"
+    },
+    {
+      "path": "docs/submission/visualization/assets/charts/fig-06-lossless-sparse-wire-accounting-boundary.svg",
+      "sha256": "87f19628c7ec3f809d6506bfb34957af58887e72c42ceef285cd4a25cec85231"
+    },
+    {
+      "path": "docs/submission/visualization/assets/charts/fig-07-integrity-retry-and-backpressure-layers.svg",
+      "sha256": "a9da0e65594a42060f2a3d89b27024b7dca8076f0f0598fbc29f959dfcc8bfca"
+    },
+    {
+      "path": "docs/submission/visualization/assets/charts/fig-11-optimization-ablation.svg",
+      "sha256": "276a6ff2ee0bd2757f0c0c390130cde9195f10d37f2de71f4cf10760464a3754"
+    },
+    {
+      "path": "docs/submission/visualization/assets/charts/fig-13-algorithm-and-topology-coverage.svg",
+      "sha256": "e2fe41d70aacfbbab59a7b8c7a2df80fad9ffd0bb33d1f68f55962311c446832"
+    },
+    {
+      "path": "docs/submission/visualization/assets/diagrams/fig-01-system-execution-and-validation-architecture.svg",
+      "sha256": "ce1071cdb021791a99966e6a1d3baae69cd2b6e9a77bb66131804c16e398df74"
+    },
+    {
+      "path": "docs/submission/visualization/assets/diagrams/fig-02-schedule-ir-and-topology-aware-optimization-pipeline.svg",
+      "sha256": "d072bba10c7c3467973d1b67724d2fc749f0a17c315bed1fdad29cd2f46e8708"
+    },
+    {
+      "path": "docs/submission/visualization/assets/diagrams/fig-08-agent-assisted-optimization-loop.svg",
+      "sha256": "22d2c5a955abbb5c896ce0981be197cfa36f4e750b523c928c18d42c7d7f33e1"
+    },
+    {
+      "path": "docs/submission/visualization/assets/diagrams/fig-09-g3-b3-feature-decision-flow.svg",
+      "sha256": "2bc1c974a39585a15a48cfdaefb11609f1d10a094c4cef2fed95b2276e67e708"
+    },
+    {
+      "path": "docs/submission/visualization/assets/diagrams/fig-10-direct-readiness-validation-ladder.svg",
+      "sha256": "d06eb5507554407042d54fc18d5a3610ba80aad7b625953b41ce0226303fe401"
+    },
+    {
+      "path": "docs/submission/visualization/assets/diagrams/fig-12-truth-and-evidence-boundary-matrix.svg",
+      "sha256": "1c934bc87bfc0a3ab07ea892b3f9ff0d4629717263f883934a17b77acc38e139"
+    },
+    {
+      "path": "docs/submission/visualization/innovation_map.json",
+      "sha256": "3d7d99724f0d5f28506a4d26c52da28cf43a820d125aa296106146c92dac0d94"
+    },
+    {
+      "path": "docs/submission/visualization/competition_narrative.md",
+      "sha256": "ae7598cf09b8aa16db8795d4c9ec6de3e72b1d633dfaec6139d5a5d65c559610"
+    },
+    {
+      "path": "docs/submission/visualization/claim_safe_phrasebook.md",
+      "sha256": "721e7f8dfcc22f1dfeb78805479760939e9973cc9ab6f38d4a6ac9fa315bd2be"
+    },
+    {
+      "path": "docs/submission/demo_video/demo_manifest.json",
+      "sha256": "379ccbde0c29f34c2f82cf07c24053d112acf8d729b1255e8229f6e9c4ed733e"
+    },
+    {
+      "path": "docs/submission/demo_video/storyboard.json",
+      "sha256": "f9ba2464b804c870abba62d1892b9dbc946fadbee35769449ec1705cb57df348"
+    },
+    {
+      "path": "docs/submission/demo_video/narration_source.json",
+      "sha256": "1149250aa1efa807050fd335b09e0d8a2ecf1b983a07f08e4e7c4757bc49e9ea"
+    },
+    {
+      "path": "docs/submission/demo_video/subtitle_source.json",
+      "sha256": "baac88f37b7c4473e320d17fb18799d25e47b6538a33c6aa527e6636bad7d0da"
+    },
+    {
+      "path": "docs/submission/demo_video/presentation_flow.json",
+      "sha256": "b9ab8a908654e7faba49ee91fa1ac56c00ad0e2fadaa1e3f6361ab44fbc25fea"
+    }
+  ],
+  "schema_version": "g3-g-old-authority-baseline-v1",
+  "scope_count": 18,
+  "source_baseline": "e4d5fbab2b50342b0b897b971bb5cd7c47cc1976",
+  "status": "PASS"
+}
