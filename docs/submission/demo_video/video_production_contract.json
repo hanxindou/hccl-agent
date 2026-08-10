@@ -1,0 +1,30 @@
+{
+  "final_video_binary_status": "USER_ACTION_REQUIRED",
+  "language_status": "USER_ACTION_REQUIRED",
+  "mandatory_deliverable": "VALIDATED_PRODUCTION_PACKAGE",
+  "profiles": [
+    "QUICK_DEMO",
+    "TECHNICAL_DEMO",
+    "FALLBACK_DEMO"
+  ],
+  "reference_render_identity": "REFERENCE_VIDEO_ONLY",
+  "required_truth_badges": [
+    "SIMULATED_ONLY",
+    "HOST_VALIDATED",
+    "LOGICAL_MODEL_SCALE",
+    "DIRECT_COMPILE_LINK_ONLY",
+    "REAL_DEVICE_NOT_EXECUTED",
+    "OFFLINE_REPLAY"
+  ],
+  "schema_version": "g3-f-video-production-contract-v1",
+  "status": "PASS",
+  "user_action_required": [
+    "UA-F-001",
+    "UA-F-002",
+    "UA-F-003",
+    "UA-F-004",
+    "UA-F-005",
+    "UA-F-006"
+  ],
+  "voiceover_status": "USER_ACTION_REQUIRED"
+}

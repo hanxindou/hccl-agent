@@ -1,0 +1,24 @@
+{
+  "absolute_paths_in_canonical_output": false,
+  "mandatory_environment": {
+    "acl_hccl_runtime": false,
+    "api_keys": false,
+    "mpi": false,
+    "npu": false,
+    "offline": true
+  },
+  "media_tooling": {
+    "ffmpeg": {
+      "available": false,
+      "installation_attempted": false
+    },
+    "ffprobe": {
+      "available": false,
+      "installation_attempted": false
+    }
+  },
+  "sanitized_prompt_scope": "COMMAND_LOCAL_ONLY",
+  "schema_version": "g3-f-recording-environment-contract-v1",
+  "status": "PASS",
+  "tooling_decision": "REFERENCE_RENDER_NOT_AUTHORIZED_WITHOUT_TOOLS_AND_RESOLVED_SPECIFICATIONS"
+}

@@ -15337,3 +15337,1785 @@ STOP
 ```
 
 不得自动开始 G3-F implementation。
+
+---
+
+# 16. G3-F — Competition Demo and Video Delivery
+
+## 16.1 阶段定位、目标与非目标
+
+G3-F 的阶段身份固定为：
+
+```text
+DEMO DELIVERY
+VIDEO PRODUCTION READINESS
+SCREEN-RECORDING REPRODUCIBILITY
+CLAIM-SAFE PRESENTATION
+COMPETITION COMMUNICATION
+```
+
+G3-F 不是：
+
+```text
+FEATURE DEVELOPMENT
+BENCHMARK DEVELOPMENT
+PERFORMANCE OPTIMIZATION
+NEW AGENT DEVELOPMENT
+NEW VISUALIZATION RESEARCH
+HARDWARE ACCEPTANCE
+RELEASE PACKAGING
+```
+
+G3-B3 `Final Feature Freeze` 在 G3-F 全程继续有效。G3-F 的核心目标是把已经冻结的：
+
+```text
+G3-C factual authority
++ G3-D Agent / Prompt provenance
++ G3-E charts / innovations / narrative
+```
+
+组织成比赛可交付、可解释、可审计、可离线复现的：
+
+- deterministic offline live-demo package；
+- demo command sequence 与 bounded fallback path；
+- storyboard 与 screen-recording plan；
+- scene / figure / claim / trace / innovation mapping；
+- narration source 与 subtitle source / timing contract；
+- SHORT / STANDARD / TECHNICAL presentation flow；
+- claim-safe on-screen overlays；
+- video production package；
+- 仅在工具、素材和赛事规格均满足时生成的 optional reference render；
+- 纳入现有 submission staging 的 demo/video logical assets。
+
+G3-F 不产生新的 technical truth。唯一允许的数据流为：
+
+```text
+existing frozen authority
+→ deterministic demo
+→ evidence-safe storyboard
+→ claim-safe narration / subtitle source
+→ reproducible production package
+```
+
+最终评审者必须能够从 G3-F 交付中明确回答：
+
+1. 项目解决什么问题；
+2. live demo 现场真正执行了什么；
+3. 哪些结果属于 `CPU_SIM` / host execution；
+4. 哪些步骤属于 offline Agent replay；
+5. 哪些数字属于 frozen simulated evidence；
+6. 哪些能力仅属于 Direct compile/link-only readiness；
+7. 哪些能力从未在真实 Ascend/NPU 上运行；
+8. `45.59%` 为什么只能称为 simulated improvement；
+9. Agent 实际生成、评估、反思或重规划了什么；
+10. human governance、approval 和 intervention 在哪里；
+11. sparse、CRC、retry、backpressure 的实际验证层级分别是什么；
+12. 没有网络、外部 API Key 和 NPU 时 mandatory demo 是否仍可完成；
+13. 视频中的每个数字、figure、claim、overlay 和 narration 是否都可回溯到 frozen authority。
+
+G3-F 不得通过剪辑、镜头、设备图片、动画、配音或字幕暗示不存在的 real-device execution。
+
+---
+
+## 16.2 Authority hierarchy
+
+G3-F-A 执行时必须从当时的 merged `main` 重新计算 source commit、authority path 和 digest。计划编写时已知的 G3-E final commit `6eb43e1`、evidence root `experiments/submission/evidence/g3_e_20260809T155045Z` 与 `SHA256SUMS` digest `f57cbe2743042008075098a482264902129539a4a87a83e22b051edb5808cbdf` 只作为定位线索，不得被直接复制成未经校验的 G3-F authority result。
+
+### L1 — merged main / Final Feature Freeze source
+
+用于确认 current demo command/code availability、CLI/API existence、CPU_SIM current behavior、tool entry points、staging/build behavior 与 current architecture facts。任何 source path、command、sentinel 或 capability 都必须从当前源码验证，不得按旧文档或文件名推断。
+
+### L2 — G3-C formal reporting authority
+
+至少包括：
+
+```text
+docs/submission/report_data_ledger.json
+docs/submission/report_claim_ledger.json
+docs/submission/report_chart_data/
+docs/submission/reports/
+G3-C final evidence
+```
+
+L2 是 G3-F 中 numbers、claims、units、rounding、truth identities 与 performance wording 的最高权威。任何 video text、overlay、narration 或 demo summary 与 claim ledger 冲突时，必须修改 G3-F wording，不得放宽 ledger。
+
+### L3 — G3-D Agent / Prompt authority
+
+至少包括：
+
+```text
+Prompt Registry
+Skill Registry
+normalized traces
+offline replay
+human intervention disclosure
+provenance mapping
+formal Agent documentation
+G3-D final evidence
+```
+
+用于约束 Agent demo、offline replay、Agent-generated wording、human/Agent role 以及 historical/replay distinction。
+
+### L4 — G3-E visualization / narrative authority
+
+至少包括：
+
+```text
+chart registry
+13 current final SVG baseline
+innovation evidence map
+competition narrative
+defense storyline
+figure story map
+claim-safe phrasebook
+defense question map
+G3-E final evidence
+```
+
+用于约束 figures、innovation titles、story sequence、safe wording、defense boundaries 和 visual truth labels。G3-F 不得重新计算 chart number 或改变 G3-E figure semantics。
+
+### L5 — G3-B3 final feature authority
+
+用于约束 Sparse、CRC、retry、backpressure、Schedule IR v2、Direct compile/link readiness 和 implemented/deferred/skipped feature decisions。
+
+### L6 — G3-B2 optimization authority
+
+用于约束 Schedule/topology optimization、18-scenario comparison、Agent optimization trace 以及：
+
+```text
+raw simulated improvement = 45.59283008%
+display simulated improvement = 45.59%
+wins / ties / losses = 18 / 0 / 0
+truth identity = SIMULATED_ONLY
+```
+
+### L7 — G3-A audit
+
+仅用于 requirement lineage 与 historical gap，不得用来覆盖更新后的 source、claim、Agent、figure 或 feature authority。
+
+---
+
+## 16.3 Authority conflict routing
+
+统一路由如下：
+
+| 事实类型 | 唯一路由 authority |
+| --- | --- |
+| numeric fact、unit、rounding、claim language | G3-C |
+| Agent provenance、human role、historical/replay identity | G3-D |
+| figure、innovation、narrative、phrasebook | G3-E |
+| feature implementation 与 current executable behavior | merged source + G3-B3 |
+| optimization history、18 scenarios、45.59283008% | G3-B2 |
+| historical requirement gap | G3-A |
+| 本轮实际 deterministic demo execution fact | G3-F transcript/result |
+
+G3-F actual demo execution fact 只能说明该次 command 在声明环境中的事实，不得覆盖或升级 historical benchmark truth。例如 CPU_SIM demo PASS 不能推导出 real Ascend collective validated；visualization verify PASS 不能推导出 underlying benchmark rerun；offline replay PASS 不能推导出 original historical Agent execution available。
+
+发现无法消解的 authority 冲突时必须：
+
+```text
+STOP
+status=BLOCKED_BY_AUTHORITY_CONFLICT
+```
+
+不得通过选择更有利版本、改写 narration、隐藏 overlay 或剪辑绕过冲突。
+
+---
+
+## 16.4 Truth / provenance / execution vocabulary
+
+G3-F 必须继承并显式使用以下既有 vocabulary：
+
+```text
+HOST_EXECUTED
+CPU_EXECUTED
+SIMULATED_ONLY
+LOSSLESS_SPARSE_HOST_EXECUTED
+HOST_INTEGRITY_VALIDATED
+HOST_RETRY_VALIDATED
+SIMULATED_BACKPRESSURE
+DIRECT_READINESS_ONLY
+DIRECT_COMPILE_LINK_ONLY
+REAL_DEVICE_NOT_EXECUTED
+HISTORICAL_EVIDENCE
+OFFLINE_REPLAY
+REPLAYED_FROM_FROZEN_TRACE
+RECONSTRUCTED_FROM_FROZEN_EVIDENCE
+AGENT_GENERATED
+DETERMINISTIC_EVALUATION
+HUMAN_INTERVENTION
+HISTORICAL_TRACE_UNAVAILABLE
+ONLINE_LLM_OPTIONAL
+```
+
+允许增加以下 demo/video-specific identity，但不得改变既有 identity 的含义：
+
+```text
+LIVE_DEMO_CPU_SIM
+DEMO_REPLAY
+PRERECORDED_DETERMINISTIC_OUTPUT
+REFERENCE_VIDEO_ONLY
+```
+
+可在 fallback metadata 中使用 `FROZEN_VALIDATED_OUTPUT` 作为输出来源标签，但必须同时保留其原始 truth identity 和 evidence pointer。
+
+全程必须保持：
+
+```text
+live demo != frozen benchmark
+CPU_SIM != Ascend hardware
+offline replay != historical Agent execution
+Direct compile/link readiness != runtime execution
+screen recording != real-device validation
+reference video != submission acceptance
+```
+
+不得保存或公开 hidden chain-of-thought。Agent 画面只允许展示可审计的 input、proposal、deterministic evaluation、reflection/replanning result、final decision、human intervention status 与 evidence pointer。
+
+---
+
+## 16.5 Video / screen truth boundary
+
+视频画面、字幕、转场、配图、色彩和剪辑本身均构成 claim。明确禁止：
+
+- 使用 Ascend/NPU 设备图片配合 simulated chart，使观众误以为数据来自该设备；
+- 使用绿色 `PASS`、勾选或成功动画表示真实设备已验证；
+- 将 logical 1024 ranks 描述或配图为“1024 卡集群实测”；
+- 将 modeled sparse bytes 描述或配图为 NIC 实测流量；
+- 将 compile/link-only Direct flow 画成已运行 collective；
+- 将 offline Agent replay 剪辑成 historical autonomous run；
+- 将代码滚动画面描述为“全部代码由 Agent 自动生成”；
+- 在 terminal output 或裁剪后画面中隐藏 truth label；
+- 剪掉 limitation 只保留 performance number；
+- 用动画、设备图、音效或视觉层级升级 evidence level。
+
+每个高风险 scene 必须同时拥有：
+
+```text
+truth_badge
+caption_or_overlay
+claim_refs / evidence_refs
+forbidden_interpretations
+```
+
+truth badge 必须直接位于画面或紧邻 caption；不得仅依赖旁白事后补救误导画面。
+
+---
+
+## 16.6 Mandatory offline、Feature Freeze 与 hardware boundary
+
+### Mandatory offline demo boundary
+
+Mandatory G3-F path 必须完全 offline，不得要求：
+
+```text
+DEEPSEEK_API_KEY
+OPENAI_API_KEY
+ANTHROPIC_API_KEY
+Internet
+remote service
+real Ascend NPU
+CANN runtime device
+HCCL communicator
+MPI cluster
+```
+
+现有 online LLM 能力只能标记为 `ONLINE_LLM_OPTIONAL`，不得成为 mandatory demo、fallback 或 final verification 的依赖。Mandatory demo 优先消费 CPU_SIM、offline Agent replay、report verifier、visualization build/verify、submission verifier 与 merged source 中已有 deterministic tooling。不得为了现场效果调用真实 HCCL runtime。
+
+### Final Feature Freeze boundary
+
+G3-F 禁止修改：
+
+```text
+collective algorithms
+algorithm semantics
+Schedule IR execution semantics
+topology optimization semantics
+Sparse codec semantics
+CRC / integrity semantics
+timeout / retry semantics
+flow-control / backpressure semantics
+selector behavior
+cost / performance model
+simulator equations
+benchmark scenarios or results
+correctness thresholds
+CPU_SIM public ABI
+SONAME
+19-symbol allowlist
+Direct runtime semantics
+Prompt / Skill implementation
+Agent decision semantics
+G3-C ledgers and factual reports
+G3-D provenance and normalized traces
+G3-E chart-data, chart semantics, innovation facts and narrative facts
+```
+
+允许范围仅限：
+
+```text
+demo orchestration and manifest
+demo-only wrapper where inventory proves necessary
+read-only verifier integration
+expected-output and transcript contracts
+storyboard and recording plan
+scene / asset / claim mapping
+narration and subtitle source
+presentation flow
+claim-safe overlays
+optional local reference assembly
+existing submission staging integration
+focused G3-F tests
+G3-F final evidence
+```
+
+如果完成 demo 必须修改任何冻结语义，必须 `STOP` 并记录 blocker，不得自行重新打开 Final Feature Freeze。
+
+### Hardware boundary
+
+G3-F 禁止执行：
+
+```text
+ACL runtime
+HCCL runtime
+device / context / stream
+communicator
+real collective
+MPI
+hccl_test
+msprof
+real training
+real failover
+```
+
+Real-device acceptance 继续为 `HARDWARE_BLOCKED`，除非未来独立 hardware checkpoint 提供权威 evidence。不得产生：
+
+```text
+REAL_DEVICE_PASS
+real_ascend_npu_validated=true
+direct_hccl_api_call=true
+measured_on_real_npu=true
+```
+
+---
+
+## 16.7 Checkpoint 总体顺序与共同 contract
+
+G3-F 严格拆分为：
+
+```text
+G3-F-A  Demo / Video Authority and Production Contract
+G3-F-B  Deterministic Offline Demo Package
+G3-F-C  Storyboard and Screen-Recording Plan
+G3-F-D  Narration, Subtitles and Presentation Flow
+G3-F-E  Final Demo/Video Validation, Staging and Evidence Freeze
+```
+
+执行顺序固定为 `A → B → C → D → E`。每阶段必须独立包含 Objective、Inputs / Authority、Implementation scope、Expected artifacts、Tests / Acceptance criteria、Truth boundaries、Forbidden changes、Commit boundary 与 Exit criteria。上一阶段未完成不得开始下一阶段。
+
+---
+
+## 16.8 G3-F-A — Demo / Video Authority and Production Contract
+
+### Objective
+
+冻结 G3-F demo/video production contract，完整盘点 merged source 中可安全演示的 deterministic commands、tooling、figures、narrative、environment 与 recording constraints。必须先 inventory，禁止先创建 demo runner 或按预设方案拼接命令。
+
+### Inputs / Authority
+
+必须读取并核验：
+
+```text
+L1–L7 authority
+current tools/
+current scripts/
+current focused tests
+existing submission tooling and staging
+scripts/validate_linux_cpu_sim.sh
+G3-C report/data/claim contracts
+G3-D registries, trace index and offline replay
+G3-E chart registry, 13 SVG baseline, innovation/narrative maps
+available local media tooling
+```
+
+只允许检查已安装的 `ffmpeg`、`ffprobe` 或其他本地 deterministic media tooling，不得安装。若不存在，记录 environment/tooling decision；不得使用 `sudo`、`apt`、`choco`、`pip` 或其他方式临时安装大型视频工具。
+
+### Implementation scope
+
+至少盘点以下 demo candidates：
+
+- CPU_SIM functional demonstration；
+- offline Agent replay；
+- Agent delivery verify；
+- report verify；
+- visualization build/verify；
+- submission verify；
+- selected chart/innovation walkthrough；
+- Direct readiness explanation；
+- 仅在稳定、简洁且 claim-safe 时采用的 focused sparse/reliability host demonstration。
+
+每个 candidate 至少记录：
+
+```text
+demo_step_id
+purpose
+command_or_source
+entry_point
+expected_runtime
+expected_exit_code
+expected_sentinel
+truth_identity
+claim_refs
+figure_refs
+trace_refs
+dependencies
+network_required
+api_key_required
+hardware_required
+side_effects
+timeout
+failure_mode
+fallback
+priority
+status
+```
+
+`status` 只允许：
+
+```text
+REQUIRED
+RECOMMENDED
+OPTIONAL
+REJECTED_BY_DURATION
+REJECTED_BY_INSTABILITY
+REJECTED_BY_CLAIM_RISK
+NOT_APPLICABLE
+```
+
+必须从 inventory 明确每个 command 是否真实存在、是否写文件、是否可使用临时目录、是否会访问网络、是否要求 key/hardware，以及输出是否适合 bounded recording。禁止凭文档标题或文件名认定功能可演示。
+
+### Expected artifacts
+
+优先复用现有 submission schema 和目录约定，正式产物至少包括：
+
+```text
+docs/submission/demo_video/demo_delivery_contract.json
+docs/submission/demo_video/demo_candidate_inventory.json
+docs/submission/demo_video/video_production_contract.json
+docs/submission/demo_video/recording_environment_contract.json
+```
+
+允许等价 repo-native 命名，但必须保持唯一、machine-readable、可由 focused validator 消费。
+
+### Tests / Acceptance criteria
+
+- merged source commit、authority roots 和 hashes 已重新验证；
+- current CLI/tool entry points 均由源码和 `--help`/describe/check 证实；
+- candidates inventory 完整且无文件名推断；
+- every candidate 的 dependency、runtime、side effect、timeout、failure 和 fallback 均有记录；
+- required candidates 均为 offline、no-key、no-NPU；
+- media tooling availability 是只读探测结果；
+- G3-E figures/narrative 与 G3-C/D authority refs 可解析；
+- no feature/benchmark/runtime implementation created；
+- 输出稳定序列化且无 secret/local absolute path。
+
+成功 sentinel：
+
+```text
+G3_F_DEMO_AUTHORITY_OK
+```
+
+### Truth boundaries
+
+- candidate availability 不等于 candidate 已通过最终 dry run；
+- media tool availability 不等于 final video specification 已确定；
+- G3-E baseline 定位值必须在执行时重新验证；
+- inventory 中的 rejected candidate 不得被包装为 implemented demo；
+- current CPU_SIM capability 不代表 real-device capability。
+
+### Forbidden changes
+
+- 不创建 demo runner、正式 transcript、录屏、视频、音频、字幕文件或 G3-F evidence；
+- 不修改任何 L1–L7 authority；
+- 不安装依赖或 media tooling；
+- 不运行大型 benchmark、online LLM 或 hardware runtime；
+- 不预先选择未经验证的命令序列。
+
+### Commit boundary
+
+只允许提交 authority/inventory/production/recording contracts、相应 schema/validator 和 focused tests。建议 commit：
+
+```text
+G3-F-A freeze demo and video production contract
+```
+
+### Exit criteria
+
+- authority revalidation PASS；
+- demo candidate inventory complete；
+- mandatory candidates 与 rejection reasons 已冻结；
+- environment/media tooling decision 已记录；
+- production/recording contracts validated；
+- `G3_F_DEMO_AUTHORITY_OK` emitted；
+- no implementation or frozen-authority modification。
+
+---
+
+## 16.9 Demo profile contract
+
+G3-F-A 必须定义至少三个 production profiles。具体比赛时长与规格由 UA-F 确认，不得将建议时长伪装为平台要求。
+
+### QUICK_DEMO
+
+用于比赛现场短时间 deterministic demonstration，至少优先覆盖：
+
+```text
+one CPU_SIM functional result
++ one offline Agent replay
++ one evidence or visualization verification
+```
+
+不得塞入 full regression、大型 benchmark 或技术细节滚屏。
+
+### TECHNICAL_DEMO
+
+用于时间允许时的技术展开，可覆盖：
+
+```text
+CPU_SIM
+Schedule / Agent replay
+Sparse / reliability truth boundaries
+visualization and traceability
+claim / evidence resolution
+```
+
+仍不得运行大型 benchmark、online LLM 或 hardware runtime。
+
+### FALLBACK_DEMO
+
+用于 shell/tooling/display failure、时间不足或现场环境异常，必须消费：
+
+```text
+prevalidated deterministic transcript
+registered G3-E figures
+expected-output evidence
+offline replay artifacts
+```
+
+Fallback 不得使用伪造 terminal screenshot，必须显式标记 `PRERECORDED_DETERMINISTIC_OUTPUT` 或 `FROZEN_VALIDATED_OUTPUT`，不得假装命令正在现场执行。Fallback 不能改变输入、换用在线服务、换用另一组 benchmark 或删掉 limitation。
+
+每个 profile 必须记录 ordered steps、runtime budget、mandatory/optional split、truth badges、fallback transition、opening/closing state 和 USER_ACTION_REQUIRED time-limit mapping。
+
+---
+
+## 16.10 G3-F-B — Deterministic Offline Demo Package
+
+### Objective
+
+建立比赛现场可运行、无网络、无需 API Key、无需 NPU、短时有界且可重复的 deterministic demo package；同时建立可独立验证的 fallback package。
+
+### Inputs / Authority
+
+消费：
+
+```text
+G3-F-A contracts and selected candidates
+merged source and existing CLIs
+G3-C report/claim verification
+G3-D offline replay and delivery verification
+G3-E visualization build/verify and registered figures
+existing submission staging
+current focused CPU_SIM entry points
+```
+
+不得跳过 A inventory 或消费 rejected candidate。
+
+### Implementation scope
+
+优先直接编排已有 CLI，不得新建重复的 report CLI、Agent delivery CLI、visualization CLI 或 submission CLI。只有现有 commands 确实缺少统一 orchestration 时，才允许新增最小 `tools/demo_delivery_cli.py` 或 repo 风格等价 wrapper。
+
+该 wrapper 只能：
+
+```text
+orchestrate
+validate
+summarize
+produce canonical demo transcript
+```
+
+不得实现新的 communication、Agent、benchmark、selector、simulation 或 feature logic。可提供与现有 CLI convention 相容的等价命令，例如：
+
+```text
+describe
+verify
+run --profile quick
+run --profile technical
+transcript --profile <profile>
+```
+
+具体接口由 A inventory 决定。Mandatory package 必须至少包含一个真正执行项目代码的 CPU_SIM functional demonstration，不得只验证文档或 schema。它只证明 `CPU_SIM` / host execution，不证明 real Ascend/NPU collective。
+
+### Demo manifest contract
+
+machine-readable demo manifest 的每一步至少包含：
+
+```text
+step_id
+profile
+order
+title
+purpose
+command
+working_directory_contract
+timeout_seconds
+expected_exit_code
+expected_sentinels
+truth_identity
+input_refs
+output_refs
+claim_refs
+metric_refs
+trace_refs
+figure_refs
+network_required
+api_key_required
+hardware_required
+writes
+cleanup
+fallback_step
+recording_instruction
+on_screen_truth_badge
+limitations
+```
+
+禁止 shell-injection-style dynamic command、user-specific absolute path、secret environment、hidden network call 或 unresolved executable。任何 demo output 中出现的 number 必须映射到 actual demo execution fact 或 G3-C metric，且两者不得混淆。
+
+### Reproducibility contract
+
+Mandatory demo 必须满足：
+
+- clean temporary output directory；
+- fixed deterministic inputs；
+- no uncontrolled random seed；
+- canonical transcript 不含 wall-clock timestamp；
+- canonical output 不含 host-specific path、hostname、username；
+- no API keys、network、NPU；
+- repeated run canonical semantic output/hash stable；
+- expected sentinel stable；
+- explicit timeout；
+- failure returns non-zero；
+- source/frozen authority read-only。
+
+若既有 tool 不可避免打印 timestamp/path，允许 wrapper 做 presentation-level sanitization，但必须保留 semantic output，不得修改结果值、exit code、sentinel、truth identity 或失败事实。Canonicalization rules 必须 machine-readable 并受测试约束。
+
+### Timeout、retry 与 fallback policy
+
+每个 required step 必须有显式 timeout、失败分类、bounded retry budget 和 fallback step。Retry 只能用于可判定的 transient local presentation failure，次数必须有界且写入 transcript；不得通过 retry 调用网络、hardware、online LLM 或更改数据。Fallback 必须使用同一 frozen authority 和预验证输出，不得换用不同 benchmark、删减关键 boundary 或将 prerecorded output 冒充 live output。
+
+### Expected artifacts
+
+正式产物建议为：
+
+```text
+docs/submission/demo_video/demo_contract.json
+docs/submission/demo_video/demo_manifest.json
+docs/submission/demo_video/demo_profiles.md
+docs/submission/demo_video/live_demo_guide.md
+docs/submission/demo_video/fallback_demo_guide.md
+docs/submission/demo_video/expected_outputs/
+docs/submission/demo_video/demo_truth_boundary.md
+```
+
+只在 A 证明必要时增加最小 orchestration tool 与 focused tests；不得创建新的 submission root 或第二套 staging framework。
+
+### Tests / Acceptance criteria
+
+- manifest schema、profile order 和 all refs validate；
+- required commands exist and are bounded；
+- QUICK_DEMO 至少含一个 CPU_SIM functional step、一个 offline replay step、一个 evidence/visualization verification step；
+- mandatory steps declare `network_required=false`、`api_key_required=false`、`hardware_required=false`；
+- external API key variables absent/unset 时 mandatory flow 仍通过；
+- actual CPU_SIM step executes project code and emits declared sentinel/result；
+- canonical transcript repeated output/hash stable；
+- timeout/non-zero failure/retry budget/fallback behavior tested；
+- fallback package can be validated independently；
+- no frozen authority writes；
+- no shell injection、secret、private path、hostname、timestamp drift；
+- numeric output resolves to execution fact or G3-C metric；
+- truth badges and limitations present for every required step。
+
+成功 sentinels：
+
+```text
+G3_F_OFFLINE_DEMO_OK
+G3_F_DEMO_FALLBACK_OK
+```
+
+### Truth boundaries
+
+- `LIVE_DEMO_CPU_SIM` 只证明 declared CPU_SIM path 在本次 host 环境执行；
+- `DEMO_REPLAY` 不是 original historical execution；
+- canonical transcript 是 G3-F replay/output artifact，不是 G3-B2/B3 historical log；
+- expected output 不能替代 live CPU_SIM functional step；
+- fallback 必须显式显示 prerecorded/frozen identity。
+
+### Forbidden changes
+
+- 不修改 feature/Agent/report/visualization/submission semantics；
+- 不引入网络、外部 API、NPU 或新 benchmark；
+- 不新增大依赖或重复 CLI framework；
+- 不降低 existing tests 或增加 skip；
+- 不把 sanitization 用于隐藏错误、改变结果或删除 limitation；
+- 不生成正式录屏、视频、音频或 G3-F final evidence。
+
+### Commit boundary
+
+只允许提交 minimal orchestration、manifest/profiles/guides/expected-output contracts、fallback package 和 focused tests。建议 commit：
+
+```text
+G3-F-B build deterministic offline demo package
+```
+
+### Exit criteria
+
+- QUICK_DEMO selected path runnable offline；
+- CPU_SIM functional demo PASS；
+- offline Agent replay PASS；
+- evidence/visualization verification PASS；
+- deterministic transcript PASS；
+- fallback independently validated；
+- `G3_F_OFFLINE_DEMO_OK` 与 `G3_F_DEMO_FALLBACK_OK` emitted；
+- no network/API/NPU/frozen mutation。
+
+---
+
+## 16.11 G3-F-C — Storyboard and Screen-Recording Plan
+
+### Objective
+
+将 G3-E story contract、G3-F-B demo manifest、registered figures 与所有 truth boundaries 转换为逐场景、可录制、可回退、可审计的 storyboard 和 screen-recording plan。本阶段只生产 recording specification，不录屏、不生成视频。
+
+### Inputs / Authority
+
+消费：
+
+```text
+G3-F-A production and recording contracts
+G3-F-B demo manifest, profiles and expected outputs
+G3-E figure_story_map and final chart registry
+G3-E competition narrative and defense storyline
+G3-E claim-safe phrasebook and defense question map
+G3-C claim/data ledgers
+G3-D trace/provenance/human disclosure
+G3-B3 feature truth boundaries
+```
+
+不得以未经注册的 screenshot、外部图片或临时 terminal output 作为 authority。
+
+### Implementation scope
+
+每个 scene 至少记录：
+
+```text
+scene_id
+sequence
+section
+purpose
+target_duration
+visual_type
+visual_asset
+figure_ref
+demo_step_ref
+screen_action
+camera_or_crop
+overlay_text
+truth_badge
+narration_ref
+subtitle_ref
+claim_refs
+metric_refs
+trace_refs
+innovation_refs
+transition
+limitations
+forbidden_interpretations
+fallback_visual
+recording_status
+```
+
+`visual_type` 只允许受控枚举：
+
+```text
+LIVE_TERMINAL
+REGISTERED_FIGURE
+ARCHITECTURE_DIAGRAM
+TEXT_CARD
+DEMO_OUTPUT
+REFERENCE_SCREEN_CAPTURE
+```
+
+`REFERENCE_SCREEN_CAPTURE` 不是 authority；只有具备 source command、capture environment、truth identity、hash、privacy audit 和 fallback 的截图才能使用。未经验证的 screenshot 必须拒绝。
+
+### Story order contract
+
+Storyboard 主顺序继承 G3-E，可根据 `figure_story_map` 做最小调整：
+
+1. Problem；
+2. System architecture；
+3. Why static selection is insufficient；
+4. Schedule/topology optimization；
+5. Agent-assisted loop；
+6. Frozen simulated evidence；
+7. Sparse/reliability；
+8. Direct compile/link-only boundary；
+9. Offline reproducibility/live CPU_SIM demo；
+10. Limitations and real-device boundary；
+11. Competition value。
+
+不得为了节奏删除 simulation、Direct、human governance、historical/replay 或 real-device limitation。
+
+### Screen-recording privacy / cleanliness contract
+
+录屏不得展示：
+
+```text
+API key or environment secret
+Git credentials or GitHub token
+private email or browser account information
+notifications
+personal file names
+user-specific home directory
+absolute Windows user path
+/home/<private-user>
+private logs
+controlled competition material
+unrelated desktop content
+```
+
+Terminal prompt 必须使用可复现、sanitized presentation form。不得修改用户全局 shell config；如需 sanitized prompt，只能使用 command-local/subshell-local configuration。工作目录显示应使用 repository-neutral form 或安全裁剪隐藏 user-specific path，但不得通过编辑截图、替换文本或剪辑伪造命令结果。
+
+### Screen-recording visual contract
+
+必须满足：
+
+- recording-friendly font sizing；
+- bounded terminal output，避免滚动数千行；
+- high-value result 位于最终可见区域；
+- high-risk claim 出现时 truth badge 同屏可见；
+- figure IDs 保留在 production metadata；
+- no tiny text、no flashing/high-frequency transitions；
+- key fact 不依赖颜色作为唯一编码；
+- no unlicensed background image/music/icon/font/logo；
+- no private font；
+- permission 未确认前不使用 controlled logo。
+
+Resolution、aspect ratio、frame rate、container 与 safe area 由 UA-F-001 决定。未知时只建立 resolution-independent storyboard 和 vector-first asset contract；不得将 `1920×1080`、`30fps` 或任一 codec 写成不可修改的 final rule。
+
+### Expected artifacts
+
+```text
+docs/submission/demo_video/storyboard.json
+docs/submission/demo_video/storyboard.md
+docs/submission/demo_video/screen_recording_plan.md
+docs/submission/demo_video/scene_asset_map.json
+docs/submission/demo_video/recording_privacy_checklist.md
+docs/submission/demo_video/recording_fallback_map.md
+```
+
+### Tests / Acceptance criteria
+
+- every scene has purpose and deterministic sequence；
+- every technical scene maps to authority；
+- all registered figure refs exist；
+- all demo step refs exist；
+- claim/metric/trace/innovation refs resolve；
+- every high-risk scene contains visible truth badge；
+- simulated scenes visibly identify simulation；
+- Direct scenes visibly state compile/link-only；
+- explicit real-device limitation scene exists；
+- Agent replay scene distinguishes replay from history；
+- required live scene has fallback visual；
+- no private path、secret、unsupported logo/font/external asset；
+- scene order matches story contract；
+- storyboard serialization is deterministic；
+- recording privacy checklist has no silent waiver。
+
+成功 sentinel：
+
+```text
+G3_F_STORYBOARD_OK
+```
+
+### Truth boundaries
+
+- storyboard 只描述将展示的 authority 和动作，不证明动作已经录制；
+- target duration 是 production budget，不是 competition rule；
+- registered figure 继续保留原 truth identity；
+- fallback visual 必须明确 prerecorded/frozen identity；
+- crop/zoom 不得移除 source ID、truth badge 或 limitation。
+
+### Forbidden changes
+
+- 不录屏、不生成 video/audio/subtitle track/PPT；
+- 不修改 G3-E figures、narrative 或 phrasebook；
+- 不创建 unvalidated screenshot 或伪造 terminal result；
+- 不下载外部 media/font/logo；
+- 不弱化 demo truth labels 或 privacy requirements。
+
+### Commit boundary
+
+只允许提交 storyboard、recording plan、scene/asset/fallback mapping、privacy checklist、validators 与 focused tests。建议 commit：
+
+```text
+G3-F-C build storyboard and screen-recording plan
+```
+
+### Exit criteria
+
+- full scene sequence complete；
+- all authority/demo/figure refs resolve；
+- every risky scene has visible truth boundary；
+- privacy and asset checks PASS；
+- fallback mapping complete；
+- `G3_F_STORYBOARD_OK` emitted；
+- no recording or media binary created。
+
+---
+
+## 16.12 G3-F-D — Narration, Subtitles and Presentation Flow
+
+### Objective
+
+将 G3-E narrative、G3-F storyboard 与 claim boundaries 转换为 production-ready narration source、subtitle source/timing contract、claim-safe overlays 和 presentation flow。本阶段不得通过 narration、字幕或 speaker note 扩大 claim，也不创建 PPT 或 voice audio。
+
+### Inputs / Authority
+
+消费：
+
+```text
+G3-F-C storyboard and scene map
+G3-F-B demo profiles, transcript contract and fallback
+G3-E narrative, phrasebook, figure story map and defense map
+G3-C claim/data ledgers and truth identities
+G3-D Agent provenance, trace and human disclosure
+G3-B2/B3 frozen truth boundaries
+resolved USER_ACTION_REQUIRED language/template decisions, if any
+```
+
+每个 narration/subtitle/overlay 必须形成：
+
+```text
+storyboard scene
+→ G3-E narrative / phrasebook
+→ G3-C / G3-D / feature authority
+```
+
+的可审计链。
+
+### Implementation scope — Narration contract
+
+Canonical narration source 的每个 segment 至少记录：
+
+```text
+narration_id
+scene_id
+semantic_role
+text_or_localization_source
+claim_refs
+metric_refs
+figure_refs
+innovation_refs
+truth_identity
+duration_budget
+mandatory_phrase
+forbidden_phrase
+language_status
+review_status
+```
+
+不得出现 hidden chain-of-thought、fabricated historical quote、unsupported first/SOTA/leading claim、real-device overclaim、“全部由 AI 自动生成”或“完全自主 Agent”。必须继续使用 G3-E claim-safe phrasebook。
+
+当 narration 提到：
+
+| 内容 | Mandatory boundary wording |
+| --- | --- |
+| `45.59%` | 同一句或紧邻句明确 `SIMULATED_ONLY` / frozen simulated benchmark |
+| `1024 ranks` | 明确 logical/model scale，不得称真实卡数 |
+| Direct | 明确 compile/link-only 与 real device not executed |
+| Sparse | 区分 host lossless correctness 与 modeled wire saving |
+| CRC/retry | 明确 host validation，不称官方 HCCL/NIC runtime validation |
+| backpressure | 明确 simulated backpressure |
+| Agent | 区分 proposal、deterministic evaluation、human governance 与 replay/history |
+
+### Language / localization boundary
+
+G3-F 继承 `UA-C-002`、`UA-C-003`、`UA-E-001`、`UA-E-002`。若最终语言尚未确认，不得静默选择 final submission language，只允许生成 canonical semantic narration source、scene timing source 与 localizable text IDs，并把 final localized narration、final subtitle language 与 voiceover recording 标记为 `USER_ACTION_REQUIRED`。
+
+若执行前用户已关闭语言决策，才可根据 approved language 生成正式 localized narration/subtitle source。不得自行生成最终 TTS voice 或克隆任何人的声音。
+
+### Implementation scope — Subtitle contract
+
+Subtitle source 每项至少记录：
+
+```text
+subtitle_id
+scene_id
+narration_id
+text_id
+start_anchor
+end_anchor
+estimated_duration
+truth_identity
+claim_refs
+language_status
+```
+
+若 final timeline/time limit 已确认，可 deterministic 生成 `.srt`/`.vtt`；若未确认，只生成 canonical subtitle source 与 timing anchors，不得伪造最终精确 timecode。Subtitle 必须：
+
+- 不丢失 limitation；
+- 不把 simulation 简写成无边界“性能提升”；
+- 不把 compile/link 简写成“运行成功”；
+- 关键数字与 narration/ledger 一致；
+- 可读时长合理；
+- 不超出 approved safe-area contract。
+
+### Implementation scope — Presentation flow
+
+建立 `presentation_flow.json` 与 reviewer-readable Markdown，不创建 PPT deck。每个 flow item 至少记录：
+
+```text
+section
+scene
+figure_or_demo
+speaker_goal
+key_sentence
+evidence
+truth_identity
+expected_audience_takeaway
+likely_question
+fallback
+transition
+```
+
+必须提供 `SHORT`、`STANDARD`、`TECHNICAL` 三个 production profiles。其时长仅是内部 budget，不得伪装成赛事最终限制；最终时间由 UA-F-001/004 决定。
+
+### Claim-safe on-screen overlay contract
+
+至少注册以下 standardized overlays：
+
+```text
+SIMULATED_ONLY
+HOST_VALIDATED
+LOGICAL_MODEL_SCALE
+DIRECT_COMPILE_LINK_ONLY
+REAL_DEVICE_NOT_EXECUTED
+OFFLINE_REPLAY
+```
+
+Overlay 的 text、placement、contrast、scene refs、claim refs、mandatory contexts 与 forbidden abbreviations 必须 machine-readable，并与 G3-C/D/E vocabulary 一致。高风险 scene 的 truth state 必须直接出现在画面或紧邻 caption，不能只靠旁白。
+
+### Expected artifacts
+
+```text
+docs/submission/demo_video/narration_source.json
+docs/submission/demo_video/narration_script.md
+docs/submission/demo_video/subtitle_source.json
+docs/submission/demo_video/presentation_flow.json
+docs/submission/demo_video/presentation_flow.md
+docs/submission/demo_video/on_screen_truth_badges.json
+docs/submission/demo_video/claim_safe_video_phrasebook.md
+docs/submission/demo_video/localization_status.json
+```
+
+仅在 user actions 已关闭时可额外生成：
+
+```text
+docs/submission/demo_video/subtitles/<language>.srt
+docs/submission/demo_video/subtitles/<language>.vtt
+```
+
+不得生成 voice audio。
+
+### Tests / Acceptance criteria
+
+- every narration maps to a valid scene；
+- every quantitative sentence is ledger-backed；
+- every Agent claim is G3-D provenance-backed；
+- G3-E phrasebook safe/conditional/forbidden rules enforced；
+- simulated context、logical rank boundary、Direct compile/link-only 与 real-device boundary retained；
+- sparse/reliability truth levels retained；
+- no fabricated historical Agent wording or hidden chain-of-thought；
+- subtitle semantics match narration；
+- no limitation dropped by shortening；
+- language/localization status explicit；
+- unconfirmed localization is not labeled final；
+- no secret/private path；
+- all presentation flows reference valid scenes；
+- SHORT/STANDARD/TECHNICAL flows exist；
+- overlay coverage and contrast rules validate。
+
+成功 sentinels：
+
+```text
+G3_F_NARRATION_OK
+G3_F_SUBTITLE_SOURCE_OK
+G3_F_PRESENTATION_FLOW_OK
+```
+
+### Truth boundaries
+
+- narration source 是 approved/frozen facts 的 presentation layer，不是新 evidence；
+- duration budget 和 estimated subtitle duration 不是 final platform requirement；
+- localized text 未获确认时不得标记 final；
+- Agent decision explanation 不得扩展为 hidden reasoning 或 autonomous-history claim；
+- overlay 不能升级 underlying evidence identity。
+
+### Forbidden changes
+
+- 不修改 G3-C claim/data ledgers、G3-D provenance/traces 或 G3-E narrative/figures；
+- 不创建 PPT、voiceover、TTS、music、screen recording 或 video binary；
+- 不伪造 precise timeline、historical quote 或 competition rule；
+- 不删减 limitation 以满足时长；
+- 不引入 external localization/media service。
+
+### Commit boundary
+
+只允许提交 narration/subtitle sources、presentation flows、truth overlays、localization status、phrasebook extension、validators 与 focused tests。建议 commit：
+
+```text
+G3-F-D build narration subtitles and presentation flow
+```
+
+### Exit criteria
+
+- narration, subtitle source and three presentation flows complete；
+- all claims/metrics/Agent refs validate；
+- localization and timeline decisions honestly classified；
+- claim-safe overlays complete；
+- all three G3-F-D sentinels emitted；
+- no audio/PPT/video binary or authority mutation。
+
+---
+
+## 16.13 Optional reference video 与 audio policy
+
+### Production package versus final binary
+
+必须严格区分：
+
+```text
+PRODUCTION PACKAGE
+FINAL SUBMISSION VIDEO BINARY
+```
+
+G3-F mandatory software deliverable 是 validated production package。Final encoded video 是否 mandatory 取决于尚待确认的 competition duration、resolution、aspect ratio、frame rate、codec/container、file size、bitrate、language、voice、logo/template 与 upload rules。
+
+G3-F-A 只读检查本地是否已有 deterministic media tool。仅当：
+
+```text
+tool available
++ required video specifications resolved
++ source screen recordings/assets available
+```
+
+三项同时成立时，G3-F-E 才可生成 reference/final-candidate render，并使用 `ffprobe` 或等价本地工具验证 duration、resolution、streams、metadata 与 asset provenance。
+
+若任一条件不满足，不得自动安装工具或猜测规格，必须记录：
+
+```text
+final_video_binary_status=USER_ACTION_REQUIRED
+```
+
+validated production package 仍可完成，不能因此错误标记为 `FAIL`。任何 reference render 在用户确认符合正式平台规则前都必须标记 `REFERENCE_VIDEO_ONLY`，不得标记 final submission accepted。
+
+### Audio / music / voice policy
+
+G3-F 默认不得添加：
+
+```text
+background music
+sound effects
+third-party voice
+AI-cloned voice
+copyright-unclear audio
+```
+
+Voiceover 属于 user production decision；mandatory artifact 是 narration script 与 subtitle source，不是音频。若未来使用 TTS，必须作为单独的 user-approved step，不得伪造真人身份，不得引入未经记录的网络依赖，并必须记录 provider/tool、license、voice identity、input text hash 与 approval state。
+
+---
+
+## 16.14 G3-F-E — Final Demo/Video Validation, Staging and Evidence Freeze
+
+### Objective
+
+完成 demo package、storyboard、recording plan、narration/subtitle source、presentation flow、optional reference render status、existing submission staging、full regression、old-authority immutability audit 和唯一 G3-F final evidence freeze。完成后立即停止，不进入 G3-G。
+
+### Inputs / Authority
+
+消费：
+
+```text
+G3-F-A authority/inventory/production contracts
+G3-F-B demo manifest, profiles, transcripts and fallback
+G3-F-C storyboard, recording and privacy contracts
+G3-F-D narration, subtitle, overlay and presentation contracts
+existing submission staging framework
+scripts/validate_linux_cpu_sim.sh
+G3-B2/B3/C/D/E authority roots and frozen hashes
+resolved UA-F decisions, if any
+```
+
+必须复用 existing submission staging，不得建立第二套 packaging/staging framework。
+
+### Implementation scope
+
+1. 完成 focused G3-F verifier 与 single final validation entry point；
+2. 验证 demo authority、manifest、commands、profiles、truth identities 与 refs；
+3. 在 clean temporary output 中执行 mandatory QUICK_DEMO 两次并比较 canonical transcript；
+4. 若 TECHNICAL_DEMO 被选为 mandatory profile，至少执行一次；否则验证其 manifest/schema/refs 并明确 optional status；
+5. 无论 live demo 是否成功，都独立验证 FALLBACK_DEMO；
+6. 验证 storyboard、scene/asset mapping、recording privacy、narration、subtitle source、presentation flow 与 overlays；
+7. 验证所有 numbers/claims/figures/traces/innovations 回溯到 G3-C/D/E/B3/B2 authority；
+8. 仅在 16.13 条件全部满足时生成并验证 optional reference render；否则诚实记录 status/reason；
+9. 将 approved logical assets 纳入 existing submission staging，并验证 coverage/exclusions；
+10. 执行 focused tests 与完整 Linux CPU_SIM regression；
+11. 比较 G3-B2/B3/C/D/E authority freeze 前后 hashes；
+12. 执行 no-secrets、privacy、portable-path、offline/network 与 asset-license audits；
+13. 生成唯一 G3-F final evidence 和 `SHA256SUMS`；
+14. 创建 G3-F-E local commit 后 `STOP`。
+
+### Final validation sentinels
+
+至少输出：
+
+```text
+G3_F_DEMO_AUTHORITY_OK
+G3_F_OFFLINE_DEMO_OK
+G3_F_DEMO_FALLBACK_OK
+G3_F_STORYBOARD_OK
+G3_F_NARRATION_OK
+G3_F_SUBTITLE_SOURCE_OK
+G3_F_PRESENTATION_FLOW_OK
+G3_F_CLAIM_BOUNDARIES_OK
+G3_F_PRIVACY_OK
+G3_F_ASSET_PORTABILITY_OK
+G3_F_STAGING_OK
+```
+
+唯一 final success sentinel：
+
+```text
+G3_F_COMPETITION_DEMO_VIDEO_OK
+```
+
+不得在任一 mandatory validation 为 FAIL、PARTIAL、USER_ACTION_REQUIRED、ENV_BLOCKED 或 BLOCKED_BY_AUTHORITY_CONFLICT 时输出 final success sentinel。Final video binary 本身若仅因明确的 UA-F 决策未关闭而未生成，不阻止 validated production package 完成，但必须在 result/evidence 中真实记录。
+
+### Demo dry-run acceptance
+
+QUICK_DEMO 必须执行两次，要求：
+
+- both PASS；
+- same semantic result；
+- canonical transcript hash identical；
+- total runtime recorded；
+- no network、API key、hardware；
+- no frozen-authority writes；
+- every step honors timeout and exit-code contract；
+- environment-specific raw logs 与 portable canonical transcript 明确区分。
+
+TECHNICAL_DEMO 至少在其被选择为 mandatory profile 时执行一次。Fallback 必须独立验证，即使 live demo 正常；fallback transcript/figures/expected outputs 均须 hash-verified，并显式显示 prerecorded/frozen identity。
+
+### Full regression
+
+先运行 focused G3-F tests，然后完整执行：
+
+```bash
+bash scripts/validate_linux_cpu_sim.sh /tmp/hccl-agent-linux-review
+```
+
+必须继续满足：
+
+```text
+CMake configure PASS
+build PASS
+CTest PASS
+focused CPU_SIM unittest PASS
+full pytest PASS
+existing skip count no abnormal increase
+LINUX_CPU_SIM_VALIDATION_OK
+```
+
+并执行：
+
+```text
+git diff --check
+```
+
+不得重跑 G3-B2 performance benchmark、G3-B3 feature benchmark、G3-C report source benchmark 或 real-device acceptance。Live demo 运行不等于 benchmark rerun；validator 不得隐式触发 benchmark、online LLM 或 hardware runtime。
+
+### Expected artifacts — final evidence contract
+
+唯一 final evidence 放在：
+
+```text
+experiments/submission/evidence/g3_f_<timestamp>/
+```
+
+至少包含：
+
+```text
+README.md
+manifest.json
+result.json
+demo_authority_validation.json
+demo_manifest_validation.json
+quick_demo_validation.json
+technical_demo_validation.json
+fallback_demo_validation.json
+demo_determinism.json
+storyboard_validation.json
+scene_asset_mapping_validation.json
+recording_privacy_audit.json
+narration_claim_validation.json
+subtitle_source_validation.json
+presentation_flow_validation.json
+truth_overlay_validation.json
+asset_portability_audit.json
+optional_reference_video_validation.json
+staging_verification.json
+old_authority_immutability.json
+regression_summary.json
+no_secrets_audit.json
+network_offline_audit.json
+git_state.json
+user_action_required.json
+SHA256SUMS
+```
+
+若 reference video 未生成，`optional_reference_video_validation.json` 必须记录：
+
+```text
+status=NOT_RENDERED
+reason=<USER_ACTION_REQUIRED or TOOLING_BOUNDARY>
+```
+
+不得伪造 `PASS`。G3-F evidence 不得复制整个 G3-B2/B3/C/D/E evidence tree，只通过 relative path、hash、metric ID、claim ID、trace ID、figure ID、innovation ID 引用 authority。
+
+### Tests / Acceptance criteria
+
+- all focused sentinels and unique final sentinel contract validated；
+- live QUICK_DEMO two-run determinism PASS；
+- CPU_SIM functional、offline replay、evidence verification PASS；
+- fallback package independently PASS；
+- storyboard/scene/recording privacy PASS；
+- narration/subtitle/presentation/overlay claim checks PASS；
+- G3-E figures unchanged；
+- G3-C/D/E and G3-B2/B3 authority unchanged；
+- staging coverage and exclusions PASS；
+- no secret/private path/remote dependency/forbidden media；
+- no benchmark rerun or hardware runtime；
+- full pytest、CTest、Linux CPU_SIM validation PASS；
+- existing skip count has no abnormal increase；
+- final evidence manifest, hashes and Git state consistent。
+
+### Truth boundaries
+
+- G3-F evidence 证明 demo/video production package 的离线可复现、claim-safe 与 staging completeness，不证明新算法、真实 NPU 性能或 hardware acceptance；
+- final evidence timestamp 只表示 G3-F freeze time；
+- full regression 不是 real-device acceptance；
+- reference render 只在明确条件下标记 `REFERENCE_VIDEO_ONLY`；
+- screen capture 不升级其 underlying CPU_SIM/simulated/replay/Direct truth identity；
+- `runtime_api_calls=[]` 必须保持。
+
+### Forbidden changes
+
+- 不降低测试、增加无理由 skip 或修改 frozen semantics 以让 demo 通过；
+- 不修订 old authority、benchmark、charts、Agent traces 或 claim ledger；
+- 不调用 network/online LLM/hardware runtime；
+- 不创建 parallel staging、release、tag 或 final submission archive；
+- 不把 optional reference render 缺失掩盖为 `PASS`；
+- 不以 PARTIAL/HARDWARE_BLOCKED 掩盖 mandatory demo、privacy、claim、staging 或 regression failure。
+
+### Commit boundary
+
+只允许提交 final validators、existing staging integration、approved production assets、唯一 G3-F evidence 和必要 focused tests。建议 commit：
+
+```text
+G3-F-E finalize demo video delivery evidence
+```
+
+完成该 commit 后立即 `STOP`。
+
+### Exit criteria
+
+- all mandatory validation sentinels PASS；
+- `G3_F_COMPETITION_DEMO_VIDEO_OK` emitted；
+- dry-run determinism/fallback/privacy/claim/staging PASS；
+- full regression PASS；
+- old authority unchanged；
+- unique evidence and SHA256SUMS frozen；
+- final video status honestly recorded；
+- Feature Freeze preserved；
+- real-device state unchanged；
+- worktree clean after final commit；
+- no push/merge/G3-G。
+
+---
+
+## 16.15 Old authority immutability、asset 与 privacy cross-check
+
+### Old authority immutability
+
+G3-F-A 必须记录基线，G3-F-E freeze 前后至少比较：
+
+```text
+G3-B2 authority root unchanged
+G3-B3 authority root unchanged
+G3-C claim ledger unchanged
+G3-C data ledger unchanged
+G3-C report_chart_data tree unchanged
+G3-D Prompt Registry unchanged
+G3-D Skill Registry unchanged
+G3-D normalized traces unchanged
+G3-D provenance mappings unchanged
+G3-E chart registry unchanged
+G3-E 13 final SVG assets unchanged
+G3-E innovation mapping unchanged
+G3-E narrative / phrasebook unchanged
+```
+
+hash comparison 必须覆盖 declared files/tree，而不是只比较 directory name。发现 authority bug 或 hash mismatch 时必须 `STOP`；G3-F 不得自行修订旧 checkpoint。
+
+### Asset / privacy policy
+
+Staged demo/video assets 禁止包含：
+
+```text
+secret or API key
+private credential or local account token
+personal email
+GitHub authentication material
+user-specific path
+private browser screenshot
+notifications or unrelated desktop content
+private logs
+controlled SDK material
+official source copies
+unlicensed media
+private font
+remote image/font/script
+cache / venv / temporary recording
+editor history
+```
+
+第三方资产必须完整登记 source、license、SHA256、permission status 与 inclusion decision。未确认 logo permission 时，competition、school、Huawei、Ascend logo 均不得作为 mandatory asset。Canonical package 不得包含 absolute Windows path、private `/home/<user>` path、host name、user name 或 temporary directory。
+
+### Portability contract
+
+- all manifest/source/evidence refs repository-relative；
+- no `file://`、remote CDN/font/image/script；
+- expected outputs 在 clean extraction-relative environment 可解析；
+- SVG/registered assets self-contained；
+- reference media metadata 不泄漏 user/tool path；
+- local raw logs 不进入 staging，或经过可审计的 semantic-preserving canonicalization；
+- staging include/exclude list machine-readable and deterministic。
+
+---
+
+## 16.16 USER_ACTION_REQUIRED
+
+G3-F 继承所有尚未关闭的 user-action items，不得依据默认值、常见比赛规则或推测自行关闭：
+
+```text
+UA-B-001 project license / copyright
+UA-B-002 official artifact redistribution
+UA-B-003 controlled competition material
+UA-B-004 submission archive / size rules
+UA-C-001 precision interpretation
+UA-C-002 final report language
+UA-C-003 final template / font / anonymity / PDF rules
+UA-D-001 historical Prompt / Agent run availability
+UA-D-002 final Agent / Prompt disclosure detail
+UA-D-003 real-device acceptance
+UA-E-001 final visual language
+UA-E-002 competition visual template
+UA-E-003 logo / external asset permission
+UA-E-004 final innovation wording approval
+```
+
+### UA-F-001 — Competition Video Specification
+
+必须由用户或正式比赛材料确认：
+
+```text
+video required or optional
+maximum / minimum duration
+resolution and aspect ratio
+frame rate
+codec and container
+file size and bitrate
+upload portal limitations
+```
+
+未知时不得猜测 final binary contract；仅保持 resolution-independent storyboard、vector-first assets 和 production-profile duration budgets。
+
+### UA-F-002 — Final Narration / Subtitle Language
+
+必须确认 Chinese、English 或 Bilingual，以及 subtitle 是 mandatory/optional、burned-in/separate file。未确认前只能交付 semantic narration/subtitle source，不得标记 final localized output。
+
+### UA-F-003 — Voice / Audio Policy
+
+必须确认 human voice、TTS 或 no voice，以及 background music/audio restrictions。未确认前 mandatory deliverable 只包含 narration/subtitle source；不得生成最终 voice/audio。
+
+### UA-F-004 — Live Demo Environment
+
+必须确认：
+
+```text
+whether live demo is allowed
+available operating system
+whether terminal is allowed
+network availability
+Ascend hardware availability
+time limit
+whether prerecorded fallback is allowed
+```
+
+无正式信息时 mandatory demo 按 `offline + CPU_SIM + no API + no NPU` 设计；不得假设现场有 Internet、GPU/NPU、管理员权限或预装工具。
+
+### UA-F-005 — Recording / Branding Approval
+
+必须确认 logo、watermark、school identity、competition identity、Huawei/Ascend branding 与 screen-recording privacy requirements。未关闭前不使用相关受控 branding 作为 mandatory asset。
+
+### UA-F-006 — Final Video / Demo Wording Approval
+
+在 final submission video 或正式答辩 material 固化前，用户必须确认 innovation titles、`45.59%` wording、Agent autonomy wording、Direct wording 与 real-device limitation wording。未确认不允许强行完成 final binary。
+
+G3-F evidence 的 `user_action_required.json` 必须记录每项 status、authority needed、impact、allowed fallback 和 blocking scope。可完成 software production package 不表示这些外部决策已关闭。
+
+---
+
+## 16.17 Failure 与状态分类
+
+### FAIL
+
+用于：
+
+```text
+mandatory demo fails
+demo nondeterministic
+demo requires network / API key / NPU
+CPU_SIM functional demo cannot execute
+fallback invalid
+claim / metric / trace / figure ref invalid
+storyboard scene unsupported
+privacy or secret leakage
+narration overclaim
+subtitle drops limitation
+screen/video implies real-device validation
+forbidden phrase
+old authority mutation
+staging failure
+full regression failure
+Feature Freeze violation
+```
+
+### PARTIAL
+
+只用于 optional scene、optional TECHNICAL_DEMO content、optional reference render、optional localization 或 optional media asset。不得用 `PARTIAL` 绕过 mandatory QUICK_DEMO、fallback、storyboard、claim-safe narration source、subtitle source、presentation flow、staging 或 final evidence。
+
+### USER_ACTION_REQUIRED
+
+只用于必须由用户、赛事规则或外部 authority 决定的视频规格、语言、voice、logo/branding、final wording、redistribution/license、controlled material、archive/size 与 real-device acceptance。不得用于掩盖 repository bug。
+
+### ENV_BLOCKED
+
+只用于 required local deterministic toolchain unavailable 且没有安全 fallback、repository/authority unreadable、filesystem/Git object corruption，或既定 mandatory tool 在授权环境无法运行且两条可靠路径均失败。Optional reference renderer 不存在时应使用 `TOOLING_BOUNDARY`/`NOT_RENDERED`，不得把整个 G3-F 错误标为 ENV_BLOCKED。
+
+### HARDWARE_BLOCKED
+
+只用于 real-device validation。不得用于 CPU_SIM demo、offline replay、storyboard、narration、subtitle、privacy、staging 或 regression failure。
+
+### BLOCKED_BY_AUTHORITY_CONFLICT
+
+只用于 L1–L7 无法消解的事实冲突。必须停止，不得选择对 presentation 更有利的版本。
+
+---
+
+## 16.18 Branch 与 commit strategy
+
+G3-F 执行时使用单一 branch：
+
+```text
+codex/g3-f-demo-video-delivery
+```
+
+建议五个阶段性 local commits：
+
+```text
+G3-F-A freeze demo and video production contract
+G3-F-B build deterministic offline demo package
+G3-F-C build storyboard and screen-recording plan
+G3-F-D build narration subtitles and presentation flow
+G3-F-E finalize demo video delivery evidence
+```
+
+实际文案允许最小调整，但必须保持 `A → B → C → D → E` 顺序和阶段边界。G3-F 执行时不得：
+
+```text
+push
+merge
+rebase
+amend published history
+reset --hard
+git clean -fd
+create tag
+create release
+create final submission archive
+```
+
+完成 G3-F-E local commit 后必须 `STOP`，等待用户检查。
+
+---
+
+## 16.19 G3-F Exit Criteria
+
+只有以下 mandatory software-delivery requirements 全部满足，才允许标记：
+
+```text
+G3-F Competition Demo and Video Delivery: COMPLETED
+```
+
+必须满足：
+
+- merged G3-E authority 在 G3-F-A 从当前 main 重新验证；
+- demo/video authority and production contract complete；
+- mandatory demo candidates selected，rejections documented；
+- deterministic QUICK_DEMO complete；
+- CPU_SIM functional demonstration PASS；
+- offline Agent replay demo PASS；
+- evidence/visualization verification PASS；
+- no mandatory network/API/NPU dependency；
+- QUICK_DEMO repeated with identical canonical semantic output/hash；
+- FALLBACK_DEMO independently validated；
+- demo manifest complete；
+- every required command has timeout、exit code、sentinel、bounded retry 和 fallback；
+- truth identities visible and machine-auditable；
+- storyboard complete；
+- screen-recording plan complete；
+- scene/asset/figure/claim/metric/trace/innovation mapping complete；
+- recording privacy audit PASS；
+- narration source complete；
+- subtitle source/timing contract complete；
+- presentation flow complete；
+- SHORT/STANDARD/TECHNICAL production profiles complete；
+- claim-safe overlays complete；
+- no hidden chain-of-thought；
+- no historical Agent fabrication；
+- no real-device visual implication；
+- reference video status honestly recorded；
+- unresolved language/video/audio/branding decisions remain `USER_ACTION_REQUIRED`；
+- focused G3-F tests PASS；
+- full pytest PASS；
+- CTest PASS；
+- Linux CPU_SIM validation PASS；
+- existing skip count has no abnormal increase；
+- staging PASS；
+- no secret/private path/forbidden asset；
+- G3-B2/B3/C/D/E authority unchanged；
+- unique G3-F final evidence frozen；
+- `SHA256SUMS` PASS；
+- `G3_F_COMPETITION_DEMO_VIDEO_OK` emitted；
+- Final Feature Freeze preserved；
+- real-device status unchanged；
+- worktree clean after final commit；
+- no push、merge 或 G3-G implementation。
+
+Final `result.json` 至少记录：
+
+```text
+checkpoint=G3-F
+checkpoint_status=COMPLETED
+
+demo_authority=COMPLETED
+offline_demo=COMPLETED
+demo_fallback=COMPLETED
+storyboard=COMPLETED
+screen_recording_plan=COMPLETED
+narration_source=COMPLETED
+subtitle_source=COMPLETED
+presentation_flow=COMPLETED
+asset_staging=COMPLETED
+
+mandatory_network_dependency=false
+mandatory_external_api_dependency=false
+mandatory_real_device_dependency=false
+
+quick_demo_deterministic=true
+cpu_sim_demo_pass=true
+offline_agent_replay_pass=true
+fallback_demo_pass=true
+
+benchmark_rerun=false
+old_authority_modified=false
+final_feature_freeze_preserved=true
+
+final_video_binary_status=<RENDERED_REFERENCE | USER_ACTION_REQUIRED | NOT_REQUIRED>
+voiceover_status=<USER_ACTION_REQUIRED | APPROVED_SOURCE_ONLY | PROVIDED_EXTERNALLY>
+localization_status=<APPROVED | USER_ACTION_REQUIRED>
+
+real_device_acceptance=HARDWARE_BLOCKED
+real_device_api_executed=false
+measured_on_real_npu=false
+direct_hccl_api_call=false
+msprof_executed=false
+runtime_api_calls=[]
+```
+
+若任一 mandatory field 与事实不符，不得将 `checkpoint_status` 标记 `COMPLETED`。Optional final video binary、voiceover 或 localization 未完成时，必须依据已声明的软件交付边界和 user-action state 诚实记录，不得虚构产物或审批。
+
+---
+
+## 16.20 G3-G boundary
+
+只有 G3-F 满足 16.19 全部 Exit Criteria 并由用户确认后，才允许进入：
+
+```text
+G3-G — Cold-Start Reproduction and Final Release Audit
+```
+
+G3-G 将消费：
+
+```text
+G3-C factual / report authority
++ G3-D Agent / Prompt delivery
++ G3-E visualization / narrative assets
++ G3-F demo / video production package
+```
+
+重点完成：
+
+```text
+cold-start reproduction
+clean extraction validation
+dependency audit
+license audit
+copyright audit
+secret / privacy scan
+controlled-material audit
+submission staging final audit
+portable-path audit
+final release manifest
+final archive readiness
+release-candidate verification
+```
+
+G3-G 不重新设计 algorithm、Agent、chart、demo narrative 或 video story，也不重新计算 benchmark。G3-F 不允许创建 release、tag 或 final submission archive；这些属于 G3-G 的独立授权范围。
+
+G3-F-E 完成后必须：
+
+```text
+STOP
+```
+
+不得自动开始 G3-G implementation。
