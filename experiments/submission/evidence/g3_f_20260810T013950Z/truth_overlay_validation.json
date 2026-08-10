@@ -1,0 +1,7 @@
+{
+  "narration_only_mitigation_allowed": false,
+  "schema_version": "g3-f-overlay-validation-v1",
+  "sentinel": "G3_F_CLAIM_BOUNDARIES_OK",
+  "status": "PASS",
+  "truth_badge_count": 6
+}

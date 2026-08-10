@@ -1,0 +1,37 @@
+{
+  "benchmark_rerun": false,
+  "canonicalization": {
+    "exclude": [
+      "wall_clock",
+      "duration_seconds",
+      "absolute paths",
+      "hostname",
+      "username",
+      "raw stdout/stderr"
+    ],
+    "result_values_must_not_change": true,
+    "retain": [
+      "step_id",
+      "status",
+      "truth_identity",
+      "sentinel",
+      "semantic_facts",
+      "limitations"
+    ]
+  },
+  "failure_policy": {
+    "fallback_never_impersonates_live": true,
+    "nonzero_exit": "FAIL",
+    "retry_budget": 0,
+    "timeout": "FAIL"
+  },
+  "independent_fallback": "FALLBACK_DEMO",
+  "mandatory_external_api_dependency": false,
+  "mandatory_network_dependency": false,
+  "mandatory_profile": "QUICK_DEMO",
+  "mandatory_real_device_dependency": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-f-demo-contract-v1",
+  "status": "PASS",
+  "technical_profile_status": "RECOMMENDED"
+}

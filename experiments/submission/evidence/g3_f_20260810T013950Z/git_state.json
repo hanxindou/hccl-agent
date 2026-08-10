@@ -1,0 +1,15 @@
+{
+  "branch": "codex/g3-f-demo-video-delivery",
+  "commit": "f8e472d970ff48ef5cd2a71cd5fa258ab826e3b1",
+  "g3_g_started": false,
+  "merge_performed": false,
+  "push_performed": false,
+  "status_short": [
+    "M tools/agent_delivery/finalize.py",
+    " M tools/demo_delivery_cli.py",
+    "?? dist/",
+    "?? tests/demo_delivery/test_g3_f_finalization.py",
+    "?? tools/demo_delivery/finalize.py"
+  ],
+  "worktree_state": "G3-F-E final files pending authorized local commit"
+}

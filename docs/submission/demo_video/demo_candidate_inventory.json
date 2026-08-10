@@ -1,0 +1,281 @@
+{
+  "benchmark_rerun": false,
+  "candidate_count": 7,
+  "candidates": [
+    {
+      "api_key_required": false,
+      "claim_refs": [
+        "C-ABI-001"
+      ],
+      "command_or_source": [
+        "python",
+        "-m",
+        "tools.submission_cli",
+        "quick"
+      ],
+      "demo_step_id": "DEMO-CPU-SIM",
+      "dependencies": [
+        "Python 3",
+        "repository checkout"
+      ],
+      "entry_point": [
+        "python",
+        "-m",
+        "tools.submission_cli"
+      ],
+      "expected_exit_code": 0,
+      "expected_runtime": "bounded by 300 seconds; measured in G3-F-E",
+      "expected_sentinel": null,
+      "failure_mode": "non-zero exit; no claim or fallback upgrade",
+      "fallback": "FALLBACK-CPU-SIM",
+      "figure_refs": [],
+      "hardware_required": false,
+      "network_required": false,
+      "priority": "MANDATORY",
+      "purpose": "Build and execute the project-owned CPU_SIM functional path",
+      "side_effects": [
+        "build/submission",
+        "dist/submission-install",
+        "dist/submission-results"
+      ],
+      "status": "REQUIRED",
+      "timeout": 300,
+      "trace_refs": [],
+      "truth_identity": "LIVE_DEMO_CPU_SIM"
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [],
+      "command_or_source": [
+        "python",
+        "-m",
+        "tools.agent_delivery_cli",
+        "replay",
+        "--trace",
+        "g3-b2-optimization-authoritative-round1"
+      ],
+      "demo_step_id": "DEMO-AGENT-REPLAY",
+      "dependencies": [
+        "Python 3",
+        "repository checkout"
+      ],
+      "entry_point": [
+        "python",
+        "-m",
+        "tools.agent_delivery_cli"
+      ],
+      "expected_exit_code": 0,
+      "expected_runtime": "bounded by 30 seconds; measured in G3-F-E",
+      "expected_sentinel": null,
+      "failure_mode": "non-zero exit; no claim or fallback upgrade",
+      "fallback": "FALLBACK-AGENT-REPLAY",
+      "figure_refs": [],
+      "hardware_required": false,
+      "network_required": false,
+      "priority": "MANDATORY",
+      "purpose": "Replay the frozen G3-B2 optimization decision flow offline",
+      "side_effects": [],
+      "status": "REQUIRED",
+      "timeout": 30,
+      "trace_refs": [
+        "g3-b2-optimization-authoritative-round1"
+      ],
+      "truth_identity": "DEMO_REPLAY"
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [],
+      "command_or_source": [
+        "python",
+        "-m",
+        "tools.visualization_cli",
+        "verify-charts"
+      ],
+      "demo_step_id": "DEMO-VISUAL-VERIFY",
+      "dependencies": [
+        "Python 3",
+        "repository checkout"
+      ],
+      "entry_point": [
+        "python",
+        "-m",
+        "tools.visualization_cli"
+      ],
+      "expected_exit_code": 0,
+      "expected_runtime": "bounded by 30 seconds; measured in G3-F-E",
+      "expected_sentinel": null,
+      "failure_mode": "non-zero exit; no claim or fallback upgrade",
+      "fallback": "FALLBACK-VISUAL-VERIFY",
+      "figure_refs": [
+        "FIG-03",
+        "FIG-04",
+        "FIG-12"
+      ],
+      "hardware_required": false,
+      "network_required": false,
+      "priority": "MANDATORY",
+      "purpose": "Verify registered G3-E figures without rebuilding benchmark data",
+      "side_effects": [],
+      "status": "REQUIRED",
+      "timeout": 30,
+      "trace_refs": [],
+      "truth_identity": "HISTORICAL_EVIDENCE"
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [],
+      "command_or_source": [
+        "python",
+        "-m",
+        "tools.agent_delivery_cli",
+        "verify"
+      ],
+      "demo_step_id": "DEMO-AGENT-VERIFY",
+      "dependencies": [
+        "Python 3",
+        "repository checkout"
+      ],
+      "entry_point": [
+        "python",
+        "-m",
+        "tools.agent_delivery_cli"
+      ],
+      "expected_exit_code": 0,
+      "expected_runtime": "bounded by 30 seconds; measured in G3-F-E",
+      "expected_sentinel": null,
+      "failure_mode": "non-zero exit; no claim or fallback upgrade",
+      "fallback": null,
+      "figure_refs": [],
+      "hardware_required": false,
+      "network_required": false,
+      "priority": "SUPPORTING",
+      "purpose": "Validate Prompt, Skill, trace, and provenance delivery",
+      "side_effects": [],
+      "status": "RECOMMENDED",
+      "timeout": 30,
+      "trace_refs": [],
+      "truth_identity": "OFFLINE_REPLAY"
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [],
+      "command_or_source": [
+        "python",
+        "-m",
+        "tools.report_cli",
+        "describe"
+      ],
+      "demo_step_id": "DEMO-REPORT-DESCRIBE",
+      "dependencies": [
+        "Python 3",
+        "repository checkout"
+      ],
+      "entry_point": [
+        "python",
+        "-m",
+        "tools.report_cli"
+      ],
+      "expected_exit_code": 0,
+      "expected_runtime": "bounded by 30 seconds; measured in G3-F-E",
+      "expected_sentinel": null,
+      "failure_mode": "non-zero exit; no claim or fallback upgrade",
+      "fallback": null,
+      "figure_refs": [],
+      "hardware_required": false,
+      "network_required": false,
+      "priority": "SUPPORTING",
+      "purpose": "Describe frozen factual reporting authority read-only",
+      "side_effects": [],
+      "status": "RECOMMENDED",
+      "timeout": 30,
+      "trace_refs": [],
+      "truth_identity": "HISTORICAL_EVIDENCE"
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [
+        "C-DIRECT-001",
+        "C-DIRECT-002"
+      ],
+      "command_or_source": [
+        "python",
+        "-m",
+        "tools.submission_cli",
+        "describe"
+      ],
+      "demo_step_id": "DEMO-SUBMISSION-DESCRIBE",
+      "dependencies": [
+        "Python 3",
+        "repository checkout"
+      ],
+      "entry_point": [
+        "python",
+        "-m",
+        "tools.submission_cli"
+      ],
+      "expected_exit_code": 0,
+      "expected_runtime": "bounded by 30 seconds; measured in G3-F-E",
+      "expected_sentinel": null,
+      "failure_mode": "non-zero exit; no claim or fallback upgrade",
+      "fallback": null,
+      "figure_refs": [
+        "FIG-10"
+      ],
+      "hardware_required": false,
+      "network_required": false,
+      "priority": "SUPPORTING",
+      "purpose": "Describe CPU_SIM and Direct readiness boundaries",
+      "side_effects": [],
+      "status": "RECOMMENDED",
+      "timeout": 30,
+      "trace_refs": [],
+      "truth_identity": "DIRECT_READINESS_ONLY"
+    },
+    {
+      "api_key_required": false,
+      "claim_refs": [
+        "C-SPARSE-001",
+        "C-CRC-001",
+        "C-RETRY-001",
+        "C-BP-001"
+      ],
+      "command_or_source": [
+        "registered-figure",
+        "FIG-06",
+        "FIG-07"
+      ],
+      "demo_step_id": "DEMO-SPARSE-RELIABILITY",
+      "dependencies": [
+        "Python 3",
+        "repository checkout"
+      ],
+      "entry_point": [
+        "registered-figure",
+        "FIG-06",
+        "FIG-07"
+      ],
+      "expected_exit_code": 0,
+      "expected_runtime": "bounded by 60 seconds; measured in G3-F-E",
+      "expected_sentinel": null,
+      "failure_mode": "non-zero exit; no claim or fallback upgrade",
+      "fallback": null,
+      "figure_refs": [
+        "FIG-06",
+        "FIG-07"
+      ],
+      "hardware_required": false,
+      "network_required": false,
+      "priority": "SUPPORTING",
+      "purpose": "Explain host/simulator feature layers using registered figures",
+      "side_effects": [],
+      "status": "OPTIONAL",
+      "timeout": 60,
+      "trace_refs": [],
+      "truth_identity": "RECONSTRUCTED_FROM_FROZEN_EVIDENCE"
+    }
+  ],
+  "mandatory_offline": true,
+  "runtime_api_calls": [],
+  "schema_version": "g3-f-demo-candidate-inventory-v1",
+  "status": "PASS"
+}

@@ -1,0 +1,66 @@
+{
+  "api_key_required": false,
+  "canonical_transcript_sha256": "f982f9dff9a6076099a37c4edbddc3298bd1b7c594d288da57ca90e534c957ae",
+  "hardware_required": false,
+  "network_required": false,
+  "profile": "QUICK_DEMO",
+  "run_count": 2,
+  "runtimes_seconds": [
+    36.469,
+    33.671
+  ],
+  "schema_version": "g3-f-quick-demo-validation-v1",
+  "sentinel": "G3_F_OFFLINE_DEMO_OK",
+  "status": "PASS",
+  "steps": [
+    {
+      "limitations": [
+        "CPU_SIM host execution only",
+        "not Ascend/NPU execution",
+        "not a performance benchmark rerun"
+      ],
+      "semantic_facts": {
+        "backend": "CPU_SIM",
+        "command_status": "PASS",
+        "ctest_status": "PASS",
+        "expensive_simulator_evidence_regenerated": false,
+        "exported_symbol_count": 19,
+        "soname": "libhccl_plugin.so"
+      },
+      "sentinel": "G3_F_CPU_SIM_FUNCTIONAL_OK",
+      "status": "PASS",
+      "step_id": "DEMO-CPU-SIM",
+      "truth_identity": "LIVE_DEMO_CPU_SIM"
+    },
+    {
+      "limitations": [
+        "replay is not original historical execution",
+        "human governance remains disclosed"
+      ],
+      "semantic_facts": {
+        "command_status": "PASS",
+        "replay_hash": "9f73391ac51f8a232ecde078c0cee620a849a646f26d5cd76b00c130cb8f28ff",
+        "trace_id": "g3-b2-optimization-authoritative-round1"
+      },
+      "sentinel": "G3_F_AGENT_REPLAY_STEP_OK",
+      "status": "PASS",
+      "step_id": "DEMO-AGENT-REPLAY",
+      "truth_identity": "DEMO_REPLAY"
+    },
+    {
+      "limitations": [
+        "45.59% is frozen simulated evidence",
+        "verification does not rerun benchmarks"
+      ],
+      "semantic_facts": {
+        "benchmark_rerun": false,
+        "command_status": "PASS",
+        "figure_count": 13
+      },
+      "sentinel": "G3_F_VISUALIZATION_VERIFY_STEP_OK",
+      "status": "PASS",
+      "step_id": "DEMO-VISUAL-VERIFY",
+      "truth_identity": "HISTORICAL_EVIDENCE"
+    }
+  ]
+}

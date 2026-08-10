@@ -1,0 +1,10 @@
+{
+  "api_keys_present": false,
+  "hardware_required": false,
+  "mandatory_external_api_dependency": false,
+  "mandatory_network_dependency": false,
+  "online_llm_invoked": false,
+  "runtime_api_calls": [],
+  "schema_version": "g3-f-network-offline-audit-v1",
+  "status": "PASS"
+}

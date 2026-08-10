@@ -1,0 +1,8 @@
+{
+  "findings": [],
+  "private_screen_capture_included": false,
+  "recording_created": false,
+  "schema_version": "g3-f-recording-privacy-audit-v1",
+  "sentinel": "G3_F_PRIVACY_OK",
+  "status": "PASS"
+}

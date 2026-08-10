@@ -1,0 +1,8 @@
+{
+  "canonical_transcript_sha256": "665b83474387ca8bb195ceb9ea56b3119fb22c131e3f6ea2c391009e0901929e",
+  "live_execution": false,
+  "profile": "FALLBACK_DEMO",
+  "schema_version": "g3-f-fallback-validation-v1",
+  "sentinel": "G3_F_DEMO_FALLBACK_OK",
+  "status": "PASS"
+}

@@ -1,0 +1,8 @@
+{
+  "final_video_binary_status": "USER_ACTION_REQUIRED",
+  "reason": "USER_ACTION_REQUIRED_AND_TOOLING_BOUNDARY",
+  "schema_version": "g3-f-reference-video-validation-v1",
+  "status": "NOT_RENDERED",
+  "truth_identity": "REFERENCE_VIDEO_ONLY",
+  "video_binary_created": false
+}

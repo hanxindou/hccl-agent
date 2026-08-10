@@ -1,0 +1,127 @@
+{
+  "assets": [
+    {
+      "asset": "TEXT-CARD-PROBLEM",
+      "figure_refs": [],
+      "license_status": "PROJECT_GENERATED",
+      "remote_dependency": false,
+      "scene_id": "SCENE-01",
+      "sha256": null,
+      "source": "DEMO_OR_TEXT_CONTRACT"
+    },
+    {
+      "asset": "docs/submission/visualization/assets/diagrams/fig-01-system-execution-and-validation-architecture.svg",
+      "figure_refs": [
+        "FIG-01"
+      ],
+      "license_status": "PROJECT_ASSET_PENDING_UA_B_001",
+      "remote_dependency": false,
+      "scene_id": "SCENE-02",
+      "sha256": "ce1071cdb021791a99966e6a1d3baae69cd2b6e9a77bb66131804c16e398df74",
+      "source": "PROJECT_GENERATED_G3_E_ASSET"
+    },
+    {
+      "asset": "docs/submission/visualization/assets/diagrams/fig-02-schedule-ir-and-topology-aware-optimization-pipeline.svg",
+      "figure_refs": [
+        "FIG-02"
+      ],
+      "license_status": "PROJECT_ASSET_PENDING_UA_B_001",
+      "remote_dependency": false,
+      "scene_id": "SCENE-03",
+      "sha256": "d072bba10c7c3467973d1b67724d2fc749f0a17c315bed1fdad29cd2f46e8708",
+      "source": "PROJECT_GENERATED_G3_E_ASSET"
+    },
+    {
+      "asset": "docs/submission/visualization/assets/charts/fig-04-18-wins-0-ties-0-losses.svg",
+      "figure_refs": [
+        "FIG-03",
+        "FIG-04"
+      ],
+      "license_status": "PROJECT_ASSET_PENDING_UA_B_001",
+      "remote_dependency": false,
+      "scene_id": "SCENE-04",
+      "sha256": "56e650d368f73a662346348b9b0fbd0de54374cd89eca5199ad82caa592a362a",
+      "source": "PROJECT_GENERATED_G3_E_ASSET"
+    },
+    {
+      "asset": "FALLBACK-AGENT-REPLAY",
+      "figure_refs": [
+        "FIG-08"
+      ],
+      "license_status": "PROJECT_GENERATED",
+      "remote_dependency": false,
+      "scene_id": "SCENE-05",
+      "sha256": null,
+      "source": "DEMO_OR_TEXT_CONTRACT"
+    },
+    {
+      "asset": "docs/submission/visualization/assets/charts/fig-05-logical-scale-trend.svg",
+      "figure_refs": [
+        "FIG-05"
+      ],
+      "license_status": "PROJECT_ASSET_PENDING_UA_B_001",
+      "remote_dependency": false,
+      "scene_id": "SCENE-06",
+      "sha256": "3634dfc9ea5db000c77c5faa01bd60a3f9f1b82f2ed87003914083850bfeaaf8",
+      "source": "PROJECT_GENERATED_G3_E_ASSET"
+    },
+    {
+      "asset": "docs/submission/visualization/assets/charts/fig-07-integrity-retry-and-backpressure-layers.svg",
+      "figure_refs": [
+        "FIG-06",
+        "FIG-07"
+      ],
+      "license_status": "PROJECT_ASSET_PENDING_UA_B_001",
+      "remote_dependency": false,
+      "scene_id": "SCENE-07",
+      "sha256": "a9da0e65594a42060f2a3d89b27024b7dca8076f0f0598fbc29f959dfcc8bfca",
+      "source": "PROJECT_GENERATED_G3_E_ASSET"
+    },
+    {
+      "asset": "docs/submission/visualization/assets/diagrams/fig-10-direct-readiness-validation-ladder.svg",
+      "figure_refs": [
+        "FIG-10"
+      ],
+      "license_status": "PROJECT_ASSET_PENDING_UA_B_001",
+      "remote_dependency": false,
+      "scene_id": "SCENE-08",
+      "sha256": "d06eb5507554407042d54fc18d5a3610ba80aad7b625953b41ce0226303fe401",
+      "source": "PROJECT_GENERATED_G3_E_ASSET"
+    },
+    {
+      "asset": "FALLBACK-CPU-SIM",
+      "figure_refs": [],
+      "license_status": "PROJECT_GENERATED",
+      "remote_dependency": false,
+      "scene_id": "SCENE-09",
+      "sha256": null,
+      "source": "DEMO_OR_TEXT_CONTRACT"
+    },
+    {
+      "asset": "docs/submission/visualization/assets/diagrams/fig-12-truth-and-evidence-boundary-matrix.svg",
+      "figure_refs": [
+        "FIG-12"
+      ],
+      "license_status": "PROJECT_ASSET_PENDING_UA_B_001",
+      "remote_dependency": false,
+      "scene_id": "SCENE-10",
+      "sha256": "1c934bc87bfc0a3ab07ea892b3f9ff0d4629717263f883934a17b77acc38e139",
+      "source": "PROJECT_GENERATED_G3_E_ASSET"
+    },
+    {
+      "asset": "docs/submission/visualization/assets/charts/fig-13-algorithm-and-topology-coverage.svg",
+      "figure_refs": [
+        "FIG-13"
+      ],
+      "license_status": "PROJECT_ASSET_PENDING_UA_B_001",
+      "remote_dependency": false,
+      "scene_id": "SCENE-11",
+      "sha256": "e2fe41d70aacfbbab59a7b8c7a2df80fad9ffd0bb33d1f68f55962311c446832",
+      "source": "PROJECT_GENERATED_G3_E_ASSET"
+    }
+  ],
+  "controlled_logos": [],
+  "external_assets": [],
+  "schema_version": "g3-f-scene-asset-map-v1",
+  "status": "PASS"
+}

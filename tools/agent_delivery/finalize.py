@@ -86,6 +86,14 @@ ALLOWED_G3_D_CHANGE_PREFIXES = (
     "tests/visualization/",
     "tools/visualization/",
     "tools/visualization_cli.py",
+    # G3-F is another delivery-only checkpoint. Its deterministic demo,
+    # storyboard, presentation, and validators do not reopen technical
+    # Feature Freeze semantics.
+    "docs/submission/demo_video/",
+    "experiments/submission/evidence/g3_f_",
+    "tests/demo_delivery/",
+    "tools/demo_delivery/",
+    "tools/demo_delivery_cli.py",
 )
 
 USER_ACTION_REQUIRED = (

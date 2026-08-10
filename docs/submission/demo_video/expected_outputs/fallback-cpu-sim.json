@@ -1,0 +1,13 @@
+{
+  "claim_refs": [
+    "C-ABI-001"
+  ],
+  "display": "Validated CPU_SIM functional path: PASS after clean host build and focused checks",
+  "fallback_step_id": "FALLBACK-CPU-SIM",
+  "limitations": [
+    "host CPU_SIM only",
+    "not real Ascend/NPU"
+  ],
+  "status": "FROZEN_VALIDATED_OUTPUT",
+  "truth_identity": "PRERECORDED_DETERMINISTIC_OUTPUT"
+}
