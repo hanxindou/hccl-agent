@@ -17119,3 +17119,1734 @@ STOP
 ```
 
 不得自动开始 G3-G implementation。
+
+---
+
+# 17. G3-G — Cold-Start Reproduction and Final Release Audit
+
+## 17.1 阶段定位与唯一目标
+
+G3-G 的阶段身份固定为：
+
+```text
+COLD_START_REPRODUCTION
+RELEASE_READINESS
+DEPENDENCY_AUDIT
+LICENSE_COPYRIGHT_AUDIT
+SECURITY_PRIVACY_AUDIT
+CONTROLLED_MATERIAL_AUDIT
+SUBMISSION_PACKAGE_AUDIT
+PORTABILITY_VALIDATION
+RELEASE_CANDIDATE_VERIFICATION
+```
+
+G3-G 不是：
+
+```text
+FEATURE_DEVELOPMENT
+ALGORITHM_DEVELOPMENT
+BENCHMARK_DEVELOPMENT
+PERFORMANCE_OPTIMIZATION
+AGENT_DEVELOPMENT
+VISUALIZATION_DEVELOPMENT
+DEMO_STORY_DEVELOPMENT
+HARDWARE_ACCEPTANCE
+```
+
+G3-B3 `Final Feature Freeze` 在 G3-G 全程继续有效。G3-G 的唯一技术目标是从 clean、可控、无历史生成物的环境开始，验证当前 merged repository 能否：
+
+1. 按正式说明完成最小依赖准备；
+2. 构建并安装 CPU_SIM；
+3. 完成必要 CTest、Python tests 与现有 Linux CPU_SIM validation；
+4. 验证 G3-C formal reports 与 factual ledgers；
+5. 验证 G3-D Agent/Prompt delivery 与 mandatory offline replay；
+6. 按 release contract 重建或验证 G3-E visualization assets；
+7. 执行并验证 G3-F QUICK_DEMO 与 FALLBACK_DEMO；
+8. 构建并验证 canonical submission staging；
+9. 对 staging 执行 dependency、license、copyright、redistribution、security、privacy、controlled-material 与 third-party-asset audit；
+10. 生成 deterministic release-candidate manifest；
+11. 仅在允许条件满足时生成 local release-candidate archive；
+12. 从新的 extraction root 独立验证 release candidate；
+13. 证明最终软件交付不依赖开发机历史状态、stale `build/`、stale `dist/`、cache、venv 或未跟踪文件。
+
+G3-G 不产生新的 technical truth。唯一允许的数据流为：
+
+```text
+latest merged frozen repository
+→ clean cold-start reproduction
+→ audited canonical staging
+→ deterministic release candidate
+→ independent clean-extraction verification
+→ software release readiness evidence
+```
+
+计划编写时已知的 G3-F software checkpoint `1d742e70d714ca2b9f43b524ad738c863c1972e7`、fresh-checkout compatibility fix `f10af6b81be056fc12f1e15edc9c8bde3f815918`、evidence root `experiments/submission/evidence/g3_f_20260810T013950Z` 与 `SHA256SUMS` digest `2cc72eef68c0b788ad81006cc9b7a0f8e81188dc4bd4df3eab8528069cfc3124` 只作为定位线索。G3-G-A 真正执行时必须从最新 merged `origin/main` 重新验证 source commit、G3-B2/B3/C/D/E/F authority roots、hashes、current staging/build/tooling behavior；不得直接复制计划中的旧值作为执行结果。
+
+## 17.2 双状态模型
+
+G3-G 必须永久区分两个状态：
+
+```text
+A. SOFTWARE_RELEASE_READINESS
+B. FINAL_COMPETITION_SUBMISSION_AUTHORIZATION
+```
+
+`SOFTWARE_RELEASE_READINESS` 是可由代码和本地审计闭合的软件状态。当 build、tests、cold start、staging、manifest、hash、dependency audit、security/privacy audit、portability 与 clean extraction 全部通过时，可以记录：
+
+```text
+software_release_readiness=COMPLETED
+```
+
+`FINAL_COMPETITION_SUBMISSION_AUTHORIZATION` 是外部授权状态，涉及 license/copyright、official redistribution、controlled competition material、archive format/size、precision、language/template、logo/branding、innovation wording、video/audio/localization 与 real-device disclosure。只要对应 user-action gate 未关闭，就必须记录：
+
+```text
+final_competition_submission_authorization=USER_ACTION_REQUIRED
+```
+
+允许且预期出现：
+
+```text
+SOFTWARE_RELEASE_READINESS=COMPLETED
+FINAL_COMPETITION_SUBMISSION_AUTHORIZATION=USER_ACTION_REQUIRED
+```
+
+不得因为 software release readiness 完成而自动授权最终比赛提交；也不得以外部 user action 未关闭为由弱化 mandatory software gate。
+
+## 17.3 Release audit authority hierarchy
+
+G3-G authority hierarchy 固定为：
+
+### L1 — latest merged main
+
+用于 current source、tests、build scripts、CLI behavior、submission staging logic、current dependency behavior 与 current release contents。G3-G-A 开始时必须轻量确认 `main`、`origin/main`、branch、commit 与 worktree；若与用户确认基线矛盾才扩大 Git 审计。
+
+### L2 — G3-C formal reporting authority
+
+用于 metrics、claims、units、rounding、truth identities 与 formal factual reports，至少包括：
+
+```text
+docs/submission/report_data_ledger.json
+docs/submission/report_claim_ledger.json
+docs/submission/report_chart_data/
+docs/submission/reports/
+G3-C final evidence
+```
+
+### L3 — G3-D Agent / Prompt authority
+
+用于 Prompt Registry、Skill Registry、normalized traces、offline replay、human intervention、provenance mapping 与 Agent claims。
+
+### L4 — G3-E visualization / narrative authority
+
+用于 final chart registry、13 final SVG assets、innovation mapping、competition narrative、claim-safe phrasebook 与 defense boundaries。
+
+### L5 — G3-F demo / video production authority
+
+用于 offline demo、demo manifest、QUICK/FALLBACK profiles、storyboard、recording/privacy contract、narration/subtitle source、presentation flow 与 G3-F final evidence。
+
+### L6 — G3-B3 Final Feature Freeze authority
+
+用于 final communication feature semantics、Schedule IR v2、lossless Sparse、CRC/integrity、retry、backpressure、Direct compile/link readiness 与 CPU_SIM ABI-related feature state。
+
+### L7 — G3-B2 optimization authority
+
+用于 optimization history、A0–A7、18 scenarios、`45.59283008%` raw、`45.59%` display、`18 / 0 / 0` 与 `SIMULATED_ONLY` identity。
+
+### L8 — earlier native/reproduction delivery checkpoints and G3-A audit
+
+用于 native delivery lineage、requirement coverage、historical packaging gap 与 license/redistribution user-action lineage。
+
+不得使用旧 checkpoint 覆盖 current merged source 或更高 authority。G3-G evidence 只通过 repository-relative pointer 与 hash 引用旧 authority，不复制或重写旧 evidence tree。
+
+## 17.4 Authority conflict rule
+
+事实路由固定为：
+
+| 事实类型 | 唯一优先 authority |
+|---|---|
+| current source/build/tool behavior | L1 |
+| number/claim/rounding/truth label | G3-C |
+| Agent/Prompt/provenance/replay | G3-D |
+| chart/innovation/narrative/phrasebook | G3-E |
+| demo/video production fact | G3-F |
+| frozen feature semantics/ABI | G3-B3 |
+| optimization historical result | G3-B2 |
+| historical delivery gap | G3-A / earlier delivery audit |
+
+G3-G 只验证这些 authority 能否被 release package 正确携带，不重新解释旧事实。无法消解的冲突必须：
+
+```text
+STOP
+status=BLOCKED_BY_AUTHORITY_CONFLICT
+```
+
+不得通过删除文件、调整 staging、修改 README、重新生成 ledger、改变 hash scope 或降低 verifier 来隐藏冲突。
+
+## 17.5 Truth、execution 与 release boundary
+
+G3-G 必须继承至少以下 vocabulary：
+
+```text
+HOST_EXECUTED
+CPU_EXECUTED
+SIMULATED_ONLY
+LOSSLESS_SPARSE_HOST_EXECUTED
+HOST_INTEGRITY_VALIDATED
+HOST_RETRY_VALIDATED
+SIMULATED_BACKPRESSURE
+DIRECT_READINESS_ONLY
+DIRECT_COMPILE_LINK_ONLY
+REAL_DEVICE_NOT_EXECUTED
+HISTORICAL_EVIDENCE
+OFFLINE_REPLAY
+REPLAYED_FROM_FROZEN_TRACE
+RECONSTRUCTED_FROM_FROZEN_EVIDENCE
+AGENT_GENERATED
+DETERMINISTIC_EVALUATION
+HUMAN_INTERVENTION
+HISTORICAL_TRACE_UNAVAILABLE
+ONLINE_LLM_OPTIONAL
+LIVE_DEMO_CPU_SIM
+DEMO_REPLAY
+PRERECORDED_DETERMINISTIC_OUTPUT
+REFERENCE_VIDEO_ONLY
+```
+
+Release packaging 不改变 truth identity。必须持续满足：
+
+```text
+archive contains file != file was real-device validated
+build succeeds != Ascend hardware validated
+cold-start passes != real NPU tested
+release candidate != competition submission accepted
+tag/release != external authorization complete
+compile/link readiness != runtime execution
+offline replay != original historical Agent execution
+```
+
+G3-G 中产生的 transcript、manifest、archive 与 evidence 只证明 release/reproduction fact，不升级 underlying benchmark、simulation、host execution、replay 或 Direct truth。
+
+## 17.6 Final Feature Freeze、hardware 与 mandatory offline boundary
+
+G3-G 禁止修改：
+
+```text
+collective algorithms and semantics
+Schedule IR execution semantics
+topology optimization semantics
+Sparse codec semantics
+CRC/integrity semantics
+timeout/retry semantics
+flow-control/backpressure semantics
+selector behavior
+cost/performance model
+simulator equations
+benchmark scenarios/results
+correctness thresholds
+CPU_SIM public ABI
+SONAME
+19-symbol allowlist
+Direct runtime semantics
+Prompt/Skill implementation
+Agent decision semantics
+G3-C claims/data/chart-data
+G3-D traces/provenance
+G3-E charts/innovation/narrative
+G3-F demo/storyboard/narration factual semantics
+G3-B2/B3/C/D/E/F frozen evidence
+```
+
+只允许 delivery-scoped cold-start tooling、release validation、genuinely delivery-only dependency metadata、release manifest、audit metadata、existing submission staging integration、archive builder、portable-path normalization、release documentation、focused tests 与 G3-G evidence。若完成 release audit 必须修改 frozen feature truth：
+
+```text
+STOP
+```
+
+不得自行重新打开 Feature Freeze。
+
+Mandatory G3-G path 必须 offline、keyless、no-NPU，不得要求 `DEEPSEEK_API_KEY`、`OPENAI_API_KEY`、`ANTHROPIC_API_KEY` 或外部模型请求。禁止执行：
+
+```text
+ACL runtime
+HCCL runtime
+device/context/stream
+communicator
+real collective
+MPI
+hccl_test
+msprof
+real training
+real failover
+```
+
+Real-device acceptance 保持：
+
+```text
+HARDWARE_BLOCKED
+real_device_api_executed=false
+direct_hccl_api_call=false
+measured_on_real_npu=false
+runtime_api_calls=[]
+```
+
+Cold-start reproduction 默认只覆盖 CPU_SIM、offline tooling、static/native build checks 与 frozen compile/link readiness verification。
+
+## 17.7 Checkpoint 顺序与共同阶段模板
+
+G3-G 严格拆分为：
+
+```text
+G3-G-A  Release Authority and Submission Contract
+G3-G-B  Clean Cold-Start Reproduction
+G3-G-C  Dependency, License, Security and Controlled-Material Audit
+G3-G-D  Final Submission Staging and Release-Candidate Package
+G3-G-E  Independent Release Verification and Final Evidence Freeze
+```
+
+必须按 `A → B → C → D → E` 顺序执行。每阶段都必须记录：
+
+```text
+Objective
+Inputs / Authority
+Implementation scope
+Expected artifacts
+Tests / Acceptance criteria
+Truth boundaries
+Forbidden changes
+Commit boundary
+Exit criteria
+```
+
+A 完成前不得运行 cold start 或设计 archive；B 完成前不得声称 repository 与历史状态解耦；C 完成前不得把 staging 称为 audited release candidate；D 完成前不得开始 clean extraction；E 完成后必须停止。
+
+## 17.8 G3-G-A — Release Authority and Submission Contract
+
+### Objective
+
+冻结最终 release/submission contract，完整盘点 merged repository 的 tracked files、ignored/generated files、build/runtime dependencies、staging rules、release inputs/exclusions、entry points、README/docs、legal/license state、external assets、unresolved user actions 与 cold-start prerequisites。必须先 inventory，禁止先打包。
+
+### Inputs / Authority
+
+至少读取和交叉验证：
+
+```text
+git tracked file inventory and current commit
+.gitignore
+AGENTS.md
+docs/
+scripts/
+tools/
+tests/
+hcccl/
+config/ and configs/
+prompts/
+agent/
+skills/
+experiments authoritative final evidence only
+current submission staging rules
+G3-C/D/E/F final assets and final evidence
+current CI workflow
+scripts/validate_linux_cpu_sim.sh
+all current user_action_required records
+```
+
+优先使用 `git ls-files`、bounded ignored/generated inspection、targeted `rg/git grep` 与 existing manifests；不得递归输出整个 repository 或读取、复制真实 secret values。
+
+### Implementation scope
+
+1. 重新验证 latest merged main、current source commit 与 L1–L8 authority roots/hashes；
+2. 建立 tracked/generated/ignored/release candidate inventory；
+3. 识别 canonical entry points、build/install/stage/verify/clean APIs；
+4. 识别 mandatory、optional、excluded 与 user-authorized-only material；
+5. 建立 release exclusion policy、path/timestamp/permission/symlink/hash/archive policy；
+6. 建立 clean environment prerequisites 与 cold-start sequence contract；
+7. 记录 current license/copyright/redistribution/controlled-material uncertainty；
+8. 记录 current CI/runtime dependency reality，不凭开发机已安装状态省略 dependency；
+9. 禁止在 inventory 完成前创建 archive builder 或 parallel staging framework。
+
+### Release inventory schema
+
+每个 candidate path 至少记录：
+
+```text
+path
+category
+tracked_status
+source_or_generated
+mandatory_or_optional
+staging_status
+release_status
+license_status
+copyright_status
+redistribution_status
+controlled_material_status
+secret_risk
+privacy_risk
+platform_specific
+reproducible
+authority_level
+hash_required
+reason
+user_action_required_refs
+```
+
+`release_status` 至少支持：
+
+```text
+INCLUDE
+EXCLUDE_GENERATED
+EXCLUDE_PRIVATE
+EXCLUDE_CONTROLLED
+EXCLUDE_TOOL_CACHE
+EXCLUDE_BUILD_ARTIFACT
+EXCLUDE_UNRESOLVED_LICENSE
+OPTIONAL
+USER_ACTION_REQUIRED
+```
+
+不得仅凭扩展名或文件名判断 inclusion、license、source ownership 或 implementation status。
+
+### Submission / release contract
+
+Machine-readable contract 至少定义：
+
+```text
+repository source baseline
+authority roots and hash policy
+required and optional software
+required documentation
+required evidence pointers
+required native artifacts
+canonical staging root
+release-candidate root
+path normalization rules
+line-ending policy
+timestamp/mtime policy
+permissions policy
+symlink policy
+manifest schema
+hash algorithm
+archive ordering
+compression policy
+forbidden paths and file types
+secret patterns and redaction policy
+privacy rules
+controlled-material policy
+license/redistribution status policy
+external asset policy
+final authorization boundary
+```
+
+### Expected artifacts
+
+建议在 `docs/submission/release/` 形成：
+
+```text
+release_contract.json
+release_inventory.json
+release_exclusion_policy.json
+release_readiness.md
+user_action_release_gate.json
+```
+
+不得在 A 阶段生成 staging、archive、release candidate 或 G3-G evidence。
+
+### Tests / Acceptance criteria
+
+- every mandatory candidate has known source、authority 与 disposition；
+- no mandatory file has `UNKNOWN_SOURCE`；
+- excluded classes and user-action gates are machine-readable；
+- authority roots/hashes are current and verified；
+- clean-environment and archive policies are explicit；
+- release and final-submission authorization states are distinct；
+- contract contains no secret、private path or host-specific absolute path；
+- sentinel `G3_G_RELEASE_AUTHORITY_OK` emitted。
+
+### Truth boundaries
+
+A 只冻结 release contract，不证明 cold-start、security、license authorization、archive safety 或 final submission readiness。Audit plan 不等于 audit PASS。
+
+### Forbidden changes
+
+- 不运行 build/test/staging/cold-start/archive；
+- 不修改 dependency、source semantics、old authority 或 user-action state；
+- 不将 unknown license 推断为 approved；
+- 不创建新的 packaging framework。
+
+### Commit boundary
+
+建议 commit：
+
+```text
+G3-G-A freeze release authority and submission contract
+```
+
+只包含 release authority/inventory/contracts、必要 schema/validator skeleton 与 focused contract tests；不得包含执行结果或 final evidence。
+
+### Exit criteria
+
+- L1–L8 authority verified；
+- release inventory complete；
+- release/exclusion/user-action contract complete；
+- canonical current tooling mapped；
+- cold-start prerequisites and two clean models frozen；
+- no packaging execution occurred；
+- `G3_G_RELEASE_AUTHORITY_OK` PASS。
+
+## 17.9 Clean-environment model
+
+Section 17 必须定义至少两种 clean environment：
+
+### A. CLEAN_WORKTREE_REPRODUCTION
+
+从 current repository source tree 的隔离 reproduction context 开始，确保没有：
+
+```text
+prior dist
+prior build
+caches
+venv-generated output
+prior submission staging
+prior release candidate
+untracked input dependency
+```
+
+不得通过 `git clean -fd` 清理用户 workspace。所有清理只能作用于 G3-G-owned temporary/work directories，或带有现有 canonical safe marker 的明确 generated directory。
+
+### B. CLEAN_EXTRACTION_REPRODUCTION
+
+从 release candidate/package 提取到新的 G3-G-owned temp root 后验证，不得读取 original repository 的 build、dist、logs、venv 或 untracked files。
+
+G3-G-B 必须执行 A；G3-G-E 必须执行 B。若本地 Git 可安全访问，可增加无需网络的 `CLEAN_CLONE_EQUIVALENT`，但不得把 network clone 设为 mandatory。
+
+## 17.10 G3-G-A completion contract
+
+G3-G-A 结束时必须同时输出：
+
+```text
+release_authority_status=COMPLETED
+software_release_readiness=NOT_YET_EVALUATED
+final_competition_submission_authorization=USER_ACTION_REQUIRED
+G3_G_RELEASE_AUTHORITY_OK
+```
+
+不得提前输出 `G3_G_SOFTWARE_RELEASE_READY`。
+
+## 17.11 G3-G-B — Clean Cold-Start Reproduction
+
+### Objective
+
+证明项目不依赖历史生成物、stale staging、开发机 cache、previous checkpoint temporary output 或 untracked local state。必须从 `CLEAN_WORKTREE_REPRODUCTION` 开始执行两次 clean run，并记录 reproducibility classification。
+
+### Inputs / Authority
+
+```text
+G3-G-A release_contract.json
+G3-G-A release_inventory.json
+G3-G-A cold-start prerequisites
+latest merged source
+existing submission CLI/build/validation tools
+G3-C/D/E/F read-only validators
+frozen authority hashes
+```
+
+G3-G-A 必须从实际 repository tooling 生成 canonical sequence；不得提前硬编码不存在的 command，也不得复制计划中的示例而不验证 CLI behavior。
+
+### Implementation scope
+
+1. 建立 G3-G-owned temporary reproduction root 与安全 marker；
+2. 检查 Python、CMake、compiler、make/build tool 与必要 filesystem behavior；
+3. 确认 mandatory path 无 network/API key/NPU requirement；
+4. 从无 prior generated output 的 clean state 执行 canonical sequence；
+5. 生成 raw local log 与 portable canonical transcript；
+6. 清理 run-owned output 后独立执行第二次；
+7. 比较 native artifact、staging、reports、replay、SVG、demo 与 manifest outputs；
+8. 对差异分类，不得强行声称 bit-for-bit；
+9. 缺失 dependency 时记录 `ENV_BLOCKED` 或 `USER_ACTION_REQUIRED`，不得 sudo/apt/pip 自动安装；
+10. 不得读取 original workspace 的 stale `build/`、`dist/`、venv、cache 或 untracked artifact 作为 input。
+
+### Canonical cold-start logical sequence
+
+G3-G-A discovery 后冻结的实际命令必须覆盖以下逻辑顺序：
+
+1. environment `describe/check`；
+2. clean CPU_SIM configure/build/install，Direct runtime execution OFF；
+3. CTest；
+4. focused CPU_SIM Python checks；
+5. full project pytest 或 approved complete regression；
+6. G3-C report verify；
+7. G3-D Agent delivery verify；
+8. G3-D mandatory offline replay；
+9. G3-E visualization rebuild/verify，按 current contract 决定 rebuild scope；
+10. G3-F QUICK_DEMO；
+11. G3-F FALLBACK verification；
+12. canonical submission staging build；
+13. staging read-only verify；
+14. release audit preflight。
+
+Sequence 必须显式证明：
+
+```text
+G3-B2 performance benchmark not rerun
+G3-B3 feature benchmark not rerun
+external LLM not invoked
+real hardware not invoked
+runtime_api_calls=[]
+```
+
+### Cold-start transcript contract
+
+每个 machine-readable step 至少记录：
+
+```text
+step_id
+command
+working_directory_contract
+input_hashes
+expected_exit_code
+actual_exit_code
+sentinels
+truth_identity
+duration
+network_required
+api_key_required
+hardware_required
+outputs
+output_hashes
+canonical_output_hash
+status
+limitations
+```
+
+Canonical transcript 必须：
+
+- 无 username、hostname 与 private absolute path；
+- 避免 random temp basename；不可避免时使用 stable placeholder；
+- wall-clock timestamp 和 runtime duration 不进入 canonical hash；
+- 无 secret 或 credential material；
+- stable key/file/step ordering；
+- 明确 raw log 与 canonical transcript 的关系；
+- raw log 只保存在 G3-G-owned temporary/evidence log area，不进入 release candidate，除非 contract 明确 canonicalization 与 inclusion。
+
+### Reproducibility classification
+
+两次 clean run 至少比较：
+
+```text
+CPU_SIM native artifact identity where supported
+CPU_SIM SONAME/dependencies/19 symbols
+submission staging manifest
+submission staging checksums
+G3-C report verification result
+G3-D replay canonical hash
+G3-E SVG canonical hashes
+G3-F QUICK_DEMO canonical hash
+release manifest inputs
+```
+
+分类只允许：
+
+```text
+BIT_FOR_BIT_REPRODUCIBLE
+SEMANTICALLY_REPRODUCIBLE
+MANIFEST_REPRODUCIBLE
+NONDETERMINISTIC
+```
+
+如果 compiler/linker metadata 导致 ELF hash 不同，但 ABI、SONAME、dependencies、symbols、headers 与 tests 相同，应使用 `SEMANTICALLY_REPRODUCIBLE` 并记录差异来源。只有 bytes 和 declared metadata scope 均相等才可使用 `BIT_FOR_BIT_REPRODUCIBLE`。已有 frozen claim 只能按原 scope 使用。
+
+### Expected artifacts
+
+建议在 `docs/submission/release/` 形成：
+
+```text
+cold_start_contract.json
+cold_start_sequence.json
+cold_start_guide.md
+reproducibility_contract.json
+environment_requirements.md
+```
+
+只有 current architecture 缺少统一入口时，才允许增加 minimal release/cold-start verifier 与 `tests/release/` focused tests；不得创建第二套 build system。
+
+### Tests / Acceptance criteria
+
+- both clean runs start without stale dist/build/staging；
+- no prior venv/generated artifact required；
+- CPU_SIM build/install and 14 CTests PASS；
+- required Python regression PASS；
+- G3-C verify PASS；
+- G3-D verify and offline replay PASS；
+- G3-E rebuild/verify PASS；
+- G3-F QUICK_DEMO and fallback PASS；
+- canonical staging build/verify PASS；
+- no network、external API key、NPU、runtime API or benchmark rerun；
+- canonical transcript is portable and deterministic；
+- cleanup is isolated and marker-protected；
+- second-run reproducibility classification recorded；
+- sentinel `G3_G_COLD_START_REPRODUCTION_OK` emitted。
+
+### Truth boundaries
+
+Cold-start PASS 只证明 declared verified environment class 中的软件复现，不证明 arbitrary machine、native Windows、macOS、all Linux、real NPU 或 competition submission acceptance。
+
+### Forbidden changes
+
+- 不安装/升级 dependency；
+- 不执行 performance/feature benchmark；
+- 不修改 frozen source/evidence；
+- 不使用 `git clean -fd`、`reset --hard` 或用户 untracked files；
+- 不将 failed second run 降级为 PARTIAL；
+- 不把 cached build 作为 clean run input。
+
+### Commit boundary
+
+建议 commit：
+
+```text
+G3-G-B prove clean cold-start reproduction
+```
+
+只包含 cold-start contracts/tooling、focused tests 与 canonical non-final result documentation；G3-G final evidence 留到 E。
+
+### Exit criteria
+
+- two clean runs completed；
+- all mandatory steps PASS；
+- reproducibility classification complete；
+- no stale prerequisite or external dependency used；
+- run-owned outputs safely cleaned or retained only in declared untracked temp roots；
+- `G3_G_COLD_START_REPRODUCTION_OK` PASS。
+
+## 17.12 Environment status and failure handling
+
+Dependency/tool 缺失且 mandatory sequence 无安全现有 fallback 时使用：
+
+```text
+ENV_BLOCKED
+```
+
+需要外部规则/authorization 决定时使用 `USER_ACTION_REQUIRED`。不得使用 `HARDWARE_BLOCKED` 掩盖 CPU_SIM、offline tooling、cold start、staging 或 extraction failure；`HARDWARE_BLOCKED` 只用于 real-device acceptance。
+
+## 17.13 G3-G-B output identity
+
+Cold-start run 的 source commit、environment class、input hashes 与 command set 必须绑定。Run timestamp 只表示执行时间，不表示 historical checkpoint identity。G3-G 新执行不是 G3-B2/B3 historical experiment，也不得生成新的 performance claim。
+
+## 17.14 G3-G-B completion contract
+
+G3-G-B 结束时必须至少记录：
+
+```text
+cold_start_reproduction=COMPLETED
+cold_start_run_1=PASS
+cold_start_run_2=PASS
+reproducibility_classification=<allowed enum>
+benchmark_rerun=false
+network_required=false
+external_llm_required=false
+real_device_required=false
+runtime_api_calls=[]
+G3_G_COLD_START_REPRODUCTION_OK
+```
+
+## 17.15 G3-G-C entry gate
+
+只有 B 两次 clean run 均通过且无 authority mutation，才允许开始 release input audit。若 cold-start 本身 FAIL，不得仅对 stale local staging 做 C/D 审计。
+
+## 17.16 G3-G-C — Dependency, License, Security and Controlled-Material Audit
+
+### Objective
+
+对 final release candidate inputs 执行全面软件供应链与提交风险审计。以下 audit 必须分别建模、分别给出 result，不得合并成一个含糊的 PASS：
+
+```text
+DEPENDENCY
+LICENSE
+COPYRIGHT
+REDISTRIBUTION
+SECURITY
+SECRET
+PRIVACY
+CONTROLLED_MATERIAL
+THIRD_PARTY_ASSET
+```
+
+### Inputs / Authority
+
+```text
+G3-G-A release inventory/exclusion contract
+G3-G-B cold-start dependency observations
+latest tracked source
+canonical staging candidate inputs
+current dynamic-link/native audit
+G3-C/D/E/F assets and authority pointers
+current unresolved UA-B/C/D/E/F records
+official/public license notices actually present in repository
+```
+
+不得访问网络补充模糊 license，也不得将模型知识当作法律 authority。
+
+### Implementation scope — dependency audit
+
+盘点 Python stdlib/third-party packages、C/C++ compiler/build requirements、CMake/build tool、system libraries、runtime dynamic libraries、optional media/online-LLM tooling、test/dev-only dependencies 与 external system dependencies。每项至少记录：
+
+```text
+dependency_id
+name
+version_or_constraint
+purpose
+required_for
+mandatory_or_optional
+install_source
+license
+network_required_for_install
+runtime_required
+included_in_archive
+redistributed
+risk
+status
+```
+
+分类至少包括：
+
+```text
+BUILD_REQUIRED
+TEST_REQUIRED
+RUNTIME_REQUIRED
+OPTIONAL
+DEVELOPMENT_ONLY
+EXTERNAL_SYSTEM_DEPENDENCY
+```
+
+当前 repository 若没有 authoritative dependency declaration，G3-G 可创建 delivery-only manifest/documentation，但不得为“完成审计”引入新 dependency、packaging framework 或 bulk install。
+
+### Implementation scope — license/copyright/redistribution audit
+
+逐类检查 project-owned source、third-party source、official Huawei/HCOMM/HCCL/CANN references、generated code、documentation、charts、logos、fonts、media、test fixtures、copied snippets 与 vendored assets。每项至少记录：
+
+```text
+origin
+owner
+license
+copyright_status
+redistribution_permission
+modification_permission
+attribution_required
+included_or_excluded
+authority
+user_action_required_refs
+```
+
+G3-G 可以扫描、分类、记录、排除 unknown optional asset、生成 inventory 与指出风险，但不得替用户/组织作法律判断。必须保持：
+
+```text
+license_audit=COMPLETED != license_authorization=APPROVED
+redistribution_audit=COMPLETED != redistribution_authorized=true
+```
+
+未知 license 的 optional file 优先 `EXCLUDE_UNRESOLVED_LICENSE`；mandatory file 必须 `USER_ACTION_REQUIRED` 或 `BLOCKED_BY_LEGAL_OR_CONTROLLED_MATERIAL`，不得猜测 license。
+
+### Implementation scope — official and controlled material
+
+重点检测 HCOMM/HCCL source copy、CANN SDK binary/header、official DSO/SDK installer、official documentation copy、competition controlled document/private attachment、school/VPN-specific material、internal token endpoint information 与 controlled logs。
+
+Final package 默认不得包含官方 SDK/source/binary 的未经授权副本。Repository-owned adapter/source、public interface reference 与 documented external prerequisite 只能在 license/redistribution policy 允许时进入 release。
+
+### Implementation scope — secret/security audit
+
+至少扫描 tracked source、release staging 与 release-candidate archive 的 API keys/tokens、private keys/SSH material、passwords/cookies、Authorization headers、GitHub/proxy credentials、connection strings、inappropriate personal email、absolute user paths、private endpoint、history/log、`.env`、credential cache、unsafe symlink/path traversal 与 unexpected executable/native files。
+
+发现 secret 时 audit 只能输出 path、type 与 redacted fingerprint，禁止复制原值。Secret detection 是 mandatory FAIL，不得自动 redact release file 后继续 PASS；必须返回 owning checkpoint 修复并重新审计。
+
+### Implementation scope — privacy audit
+
+检查 username/home path、Windows account path、personal email、browser screenshot/notification、desktop capture、private log、hostname、local proxy config、IDE/editor history、temporary path 与 image/video/archive personal metadata。必须区分 public project identity 与 unnecessary personal/private metadata；audit 输出不得自身泄露被检测内容。
+
+### Implementation scope — asset/media audit
+
+覆盖 G3-E SVG/optional PNG、G3-F storyboard assets、screenshots、reference media、logos、fonts、audio 与 video。每项至少记录 source、hash、license、permission、embedded metadata、remote dependency 与 release inclusion decision。UA-E/F branding 未关闭时，controlled logo 不得进入 mandatory release package。
+
+### Expected artifacts
+
+建议在 `docs/submission/release/` 形成：
+
+```text
+dependency_manifest.json
+dependency_audit.md
+license_inventory.json
+license_audit.md
+copyright_audit.json
+redistribution_audit.json
+security_audit.json
+privacy_audit.json
+controlled_material_audit.json
+third_party_asset_audit.json
+release_risk_register.json
+```
+
+Tracked artifacts 中不得写入真实 secret、private raw match、unredacted credential、local account path 或无 authority 的 legal conclusion。
+
+### Tests / Acceptance criteria
+
+- dependency inventory complete and classified；
+- build/test/runtime/optional dependencies separated；
+- every included file has license/copyright/redistribution status；
+- legal unknowns map to explicit user-action or blocker；
+- official/controlled material classified and excluded unless authorized；
+- security/secret scan covers source、staging and candidate scope；
+- privacy scan PASS；
+- third-party assets source/hash/permission known or excluded；
+- no secret enters tracked audit output；
+- old authority unchanged；
+- sentinels emitted：
+
+```text
+G3_G_DEPENDENCY_AUDIT_OK
+G3_G_SECURITY_AUDIT_OK
+G3_G_PRIVACY_AUDIT_OK
+G3_G_CONTROLLED_MATERIAL_AUDIT_OK
+```
+
+License/redistribution unresolved 时正确结果是 `AUDIT_COMPLETED + AUTHORIZATION=USER_ACTION_REQUIRED`，不得伪造 `LICENSE_OK`。
+
+### Truth boundaries
+
+C 证明 audit process 和 classification 完成，不证明组织已授予 license/redistribution permission。Security scan PASS 只覆盖 declared patterns、inputs 与 scanner version，不代表绝对无漏洞。
+
+### Forbidden changes
+
+- 不修改 old authority、feature semantics 或 content 以绕过 audit；
+- 不自动删除 mandatory functionality；
+- 不自动下载 license database/dependency；
+- 不打印/保存真实 secret；
+- 不把 unresolved legal issue 标为 PASS；
+- 不将 official source/header/binary vendored 进 repository。
+
+### Commit boundary
+
+建议 commit：
+
+```text
+G3-G-C audit dependencies licenses and release risks
+```
+
+只包含 delivery audit metadata、scanner/verifier、focused tests 与 release risk documentation；不得包含 final staging/archive/evidence。
+
+### Exit criteria
+
+- all audit classes separately completed；
+- mandatory security/privacy gates PASS；
+- controlled material classified；
+- license/copyright/redistribution unknowns correctly gated；
+- third-party assets classified；
+- no old authority modified；
+- four mandatory C sentinels PASS。
+
+## 17.17 Legal authorization special rule
+
+`UA-B-001`、`UA-B-002` 或 corresponding UA-G 未获得外部确认前，`final_competition_submission_authorization` 不得为 `AUTHORIZED`。Software readiness 可以完成，只要 uncertain optional assets 被排除、mandatory files 的状态真实且外部 gate 明确保留。
+
+## 17.18 Controlled-material default policy
+
+Default policy 固定为 `EXCLUDE_UNLESS_EXPLICITLY_AUTHORIZED`。Reference externally 与 include copy 必须区分。Audit 发现 mandatory file 无法在当前 authorization 下进入 release 时使用 `BLOCKED_BY_LEGAL_OR_CONTROLLED_MATERIAL`，不得用删除 mandatory capability 的方式制造可发布假象。
+
+## 17.19 Security scanner portability
+
+Scanner 必须 deterministic、offline、bounded，并允许从 release contract 读取 pattern categories；不得把真实 secret token 写入 fixtures。测试使用 synthetic safe fixtures，只验证 type/fingerprint/redaction behavior。
+
+## 17.20 G3-G-C completion contract
+
+G3-G-C 结束时至少记录：
+
+```text
+dependency_audit=COMPLETED
+license_audit=COMPLETED
+copyright_audit=COMPLETED
+redistribution_audit=COMPLETED
+security_audit=COMPLETED
+privacy_audit=COMPLETED
+controlled_material_audit=COMPLETED
+third_party_asset_audit=COMPLETED
+license_authorization=USER_ACTION_REQUIRED or APPROVED_BY_EXTERNAL_AUTHORITY
+redistribution_authorization=USER_ACTION_REQUIRED or APPROVED_BY_EXTERNAL_AUTHORITY
+```
+
+## 17.21 G3-G-D entry gate
+
+只有 A/B 完成、C 的 mandatory security/privacy gates PASS、所有 inclusion decision 都有明确 authority/status 后，才允许构建 audited final staging。任何 mandatory unknown source、unredacted secret 或 unclassified controlled material 都阻止 D。
+
+## 17.22 G3-G-D — Final Submission Staging and Release-Candidate Package
+
+### Objective
+
+从通过 A/B/C 的 authority、cold-start 与 audit contracts 构建唯一 canonical final staging，生成 deterministic release manifest，并在 Section 17 与 current user-action state 允许时生成 local release-candidate archive。必须复用 current `tools.submission_cli` 与 existing staging framework，不得建立平行 submission system。
+
+### Inputs / Authority
+
+```text
+G3-G-A release inventory/exclusion/release contract
+G3-G-B reproducibility results
+G3-G-C dependency/legal/security/privacy/controlled-material audits
+latest merged source and source commit
+current canonical submission staging APIs
+G3-C/D/E/F final assets and authority pointers
+current CPU_SIM native ABI manifest
+current UA-B/C/D/E/F/G status
+```
+
+### Implementation scope — final staging
+
+Final staging inventory 至少覆盖 repository-owned source、native CPU_SIM deliverable、required configs/prompts、Agent/Prompt artifacts、formal reports/ledgers、visualization assets、demo/video production package、reproduction/release guides、required verification tests/tooling 与 compact evidence pointers/manifests。
+
+具体 inclusion 必须来自 G3-G-A release inventory，不得无脑复制整个 repository。特别禁止 `.git/`、Git credentials、build/dist temporary installs、venv/cache、private logs/editor files、raw development temp、official SDK/source/binary、unauthorized controlled material、unresolved-license optional asset、private screenshots 与 remote dependency cache。
+
+Staging builder 必须使用 safe generated-root marker、exact clean-output policy 与 deterministic ordering；read-only verifier 不得隐式 build 或 repair staging。
+
+### Evidence inclusion policy
+
+G3-G-A 必须为每类 evidence 指定：
+
+```text
+REQUIRED_FOR_REVIEW
+REQUIRED_FOR_REPRODUCTION
+HISTORICAL_REFERENCE
+EXCLUDE_FROM_RELEASE
+```
+
+Final release 默认使用 final authority evidence、compact manifests 与 hash pointers，不复制全部 historical intermediate evidence。G3-B2/B3/C/D/E/F traceability 通过 relative pointer、SHA256、metric/claim/trace/figure/innovation/demo-step IDs 与 authority-root hashes 保持。
+
+### Release-candidate manifest contract
+
+建立唯一 machine-readable `release_manifest.json`。每个 file 至少记录：
+
+```text
+path
+sha256
+size
+category
+source
+authority_level
+generated_or_source
+license_status
+redistribution_status
+controlled_material_status
+required
+verification_role
+```
+
+顶层至少记录：
+
+```text
+release_schema_version
+source_commit
+release_candidate_id
+build_environment_class
+file_count
+total_size
+authority_roots
+truth_boundary_summary
+user_action_required
+software_release_readiness
+final_submission_authorization
+archive_status
+```
+
+Manifest entries、authority roots 与 nested lists 必须 deterministic sorted。所有 mandatory file 必须存在 release file → staging source → repository source/generated builder → source commit → authority checkpoint → license/redistribution state → hash → verification role 的完整链；不得存在 mandatory `UNKNOWN_SOURCE`，optional unknown file 必须排除。
+
+### Deterministic archive contract
+
+必须区分：
+
+```text
+RELEASE_CANDIDATE_ARCHIVE
+FINAL_SUBMISSION_ARCHIVE
+```
+
+UA-B-004/UA-G-001 未关闭时，可以按 current safe deterministic contract 生成 local candidate，但必须标记 `RELEASE_CANDIDATE_ONLY`，且 `final_submission_archive_status=USER_ACTION_REQUIRED` 或 `NOT_AUTHORIZED`。不得标记 `FINAL_SUBMISSION_ARCHIVE`。
+
+只有赛事 format/size/layout/permissions rules 已由 external authority 确认，才可按正式格式生成 candidate；final submission authorization 仍单独受 UA-G-006 控制。
+
+Archive reproducibility contract 必须固定 file ordering、relative path normalization、timestamp/mtime normalization、uid/gid metadata、permissions/executable allowlist、compression method/parameters、symlink policy、line endings 与 duplicate/case-collision policy。如果 archive bytes 无法稳定，必须使用 `MANIFEST_REPRODUCIBLE`，不得虚假声称 `BIT_FOR_BIT_REPRODUCIBLE`。
+
+### Archive safety contract
+
+必须验证：
+
+```text
+no path traversal
+no absolute paths
+no symlink escape
+no device file/socket/FIFO
+no hidden credential
+no executable surprise outside allowlist
+no unexpected ELF/DSO
+no duplicate/conflicting path
+case-collision audit where relevant
+safe extraction into bounded root
+```
+
+列出并审计所有 ELF/native files。CPU_SIM 必须继续验证 SONAME 与 19-symbol allowlist；Direct official dependencies 不得被非法 vendored。Archive validator 必须先 inspect entry metadata，再安全提取；失败时返回 D，不得手工修改 extraction 后继续 PASS。
+
+### Expected artifacts
+
+建议 tracked metadata 放在 `docs/submission/release/`：
+
+```text
+final_staging_inventory.json
+release_manifest.json
+release_manifest.md
+archive_contract.json
+archive_readiness.md
+release_candidate_readme.md
+```
+
+Generated outputs 使用 current staging architecture 决定的 marker-protected path，例如：
+
+```text
+dist/release-candidate/staging/
+dist/release-candidate/<optional-local-candidate-archive>
+```
+
+Generated `dist/` 内容默认不 commit；tracked source 只保存 builder、contract、manifest metadata 与 verifier。不得生成 Git tag、GitHub release 或 portal submission。
+
+### Tests / Acceptance criteria
+
+- canonical staging build and read-only `verify_stage` PASS；
+- release inventory exact；
+- manifest file count/size/hash exact；
+- no orphan staged file or missing mandatory file；
+- exclusion policy PASS；
+- license/redistribution/controlled status recorded；
+- controlled material excluded or explicitly authorized；
+- security/privacy PASS；
+- ELF/native audit PASS；
+- CPU_SIM SONAME and 19-symbol allowlist unchanged；
+- no forbidden official binary/source；
+- archive extraction safety PASS when archive exists；
+- archive/manifest reproducibility classification recorded；
+- final submission authorization remains `USER_ACTION_REQUIRED` while external gates remain；
+- sentinels emitted：
+
+```text
+G3_G_FINAL_STAGING_OK
+G3_G_RELEASE_CANDIDATE_OK
+```
+
+### Truth boundaries
+
+Release candidate 表示 audited local software package，不表示 official competition package、legal authorization、hardware acceptance、GitHub release 或 portal acceptance。Archive presence 不改变 included files 的 truth identities。
+
+### Forbidden changes
+
+- 不创建 parallel staging framework；
+- 不修改 claim ledger、old evidence 或 frozen assets 以适配 archive；
+- 不默认 include entire experiments tree；
+- 不 include official/controlled/private/unlicensed optional asset；
+- 不创建 final submission archive、tag、GitHub release 或 upload；
+- 不在 verifier 中自动修复 candidate；
+- 不 commit generated candidate/archive。
+
+### Commit boundary
+
+建议 commit：
+
+```text
+G3-G-D build audited release candidate
+```
+
+只提交 staging integration、release manifest/archive contracts、builder/verifier、focused tests 与 approved tracked metadata；不提交 generated `dist/` candidate。
+
+### Exit criteria
+
+- exactly one canonical audited staging produced；
+- release manifest exact and traceable；
+- all inclusion/exclusion gates satisfied；
+- candidate archive status honest；
+- archive safety PASS where applicable；
+- no unknown mandatory source；
+- two D sentinels PASS；
+- no final authorization inferred。
+
+## 17.23 Release-candidate archive states
+
+`release_candidate_archive_status` 只允许 `CREATED | NOT_CREATED | USER_ACTION_REQUIRED`。`final_submission_archive_status` 只允许 `NOT_AUTHORIZED | USER_ACTION_REQUIRED | READY`。在 G3-G 默认 authorization 下，`git_tag_created=false`、`github_release_created=false`、`competition_submission_performed=false` 是正常且必须的状态。
+
+## 17.24 Manifest-versus-archive reproducibility
+
+必须分别记录 manifest reproducibility 与 archive byte reproducibility。`MANIFEST_REPRODUCIBLE` 不得被缩写成 “archive reproducible”；任何 bit-for-bit claim 都必须给出 two-run digest evidence 和 normalized metadata scope。
+
+## 17.25 Staging cleanup and ownership
+
+G3-G-D 只能删除带 canonical marker 的 G3-G/submission-tool-owned generated root。不得递归删除 repository root、broad `build/`、broad `dist/` 或用户 untracked path。Failed candidate 必须留在 isolated run root 或通过 safe cleanup API 清理。
+
+## 17.26 G3-G-D completion contract
+
+G3-G-D 至少记录：
+
+```text
+final_staging=COMPLETED
+release_candidate=COMPLETED
+release_manifest=COMPLETED
+release_candidate_archive_status=<allowed enum>
+final_submission_archive_status=<allowed enum>
+final_competition_submission_authorization=USER_ACTION_REQUIRED unless externally authorized
+G3_G_FINAL_STAGING_OK
+G3_G_RELEASE_CANDIDATE_OK
+```
+
+## 17.27 G3-G-E entry gate
+
+只有 D candidate 已关闭所有 mandatory software finding、manifest/hash exact、candidate tree immutable 后，才允许 E。E 不允许一边验证一边修改 candidate；发现问题必须返回 D，生成新 candidate ID 后重新开始 clean extraction。
+
+## 17.28 G3-G-E — Independent Release Verification and Final Evidence Freeze
+
+### Objective
+
+从 G3-G-D release candidate 做独立 clean-extraction verification，完成当前主软件交付路线的最终 software release readiness evidence freeze。E 是 verifier/freeze 阶段，不是 package repair 阶段。
+
+### Inputs / Authority
+
+```text
+immutable G3-G-D candidate ID
+release_manifest.json and archive contract
+G3-G-A authority/release contract
+G3-G-B cold-start run results
+G3-G-C audits and risk register
+G3-G-D staging/archive validation
+latest source validation context
+G3-B2/B3/C/D/E/F frozen authority roots
+current user-action state
+```
+
+### Implementation scope — clean extraction verification
+
+从新的 G3-G-owned temporary root inspect、extract/copy candidate，然后验证：
+
+```text
+archive metadata and extraction safety
+release manifest and all hashes
+paths, permissions and symlink policy
+documentation and entry points
+build instructions
+CPU_SIM build/install
+CTest
+required Python tests
+G3-C report verify
+G3-D delivery verify and offline replay
+G3-E assets verify/rebuild where release contract requires
+G3-F QUICK_DEMO and FALLBACK_DEMO
+submission/release read-only verifier
+```
+
+Clean extraction 不得依赖 original repository 的 `build/`、`dist/`、logs、venv、untracked files 或 unavailable Git objects。若 release contract 不包含 full Git history，需要 commit identity 的 verifier 必须读取 release manifest 中的 recorded `source_commit` 或 release-safe authority metadata。
+
+验证失败时必须返回 D：
+
+```text
+D fix
+→ new candidate ID
+→ immutable candidate
+→ new clean extraction
+→ full E verification
+```
+
+不得在 extraction tree 内手改文件、重新写 checksum 或删除 failing file 后继续 PASS。
+
+### Fresh-machine/environment boundary
+
+必须记录：
+
+```text
+VERIFIED_ENVIRONMENT
+SUPPORTED_ENVIRONMENT
+UNTESTED_ENVIRONMENT
+```
+
+Environment contract 至少覆盖 Linux/WSL class、Python version range、CMake、C compiler、make/build tool、filesystem/symlink/permission features。当前 WSL Ubuntu 验证只能证明对应 environment class，不得推导 all Linux、native Windows、all Windows、macOS 或任意机器直接运行。
+
+### Independent read-only verifier
+
+优先扩展现有 submission CLI。只有 current architecture 确实缺少统一入口时，才允许新增 minimal repo-native equivalent，例如：
+
+```text
+python -m tools.release_cli describe
+python -m tools.release_cli verify
+python -m tools.release_cli audit
+```
+
+Final `verify` 必须只读，不修改 candidate、不下载 dependency、不自动修复、不访问网络、不调用 LLM 或 hardware。至少输出：
+
+```text
+G3_G_RELEASE_AUTHORITY_OK
+G3_G_COLD_START_REPRODUCTION_OK
+G3_G_DEPENDENCY_AUDIT_OK
+G3_G_SECURITY_AUDIT_OK
+G3_G_PRIVACY_AUDIT_OK
+G3_G_CONTROLLED_MATERIAL_AUDIT_OK
+G3_G_FINAL_STAGING_OK
+G3_G_RELEASE_CANDIDATE_OK
+G3_G_CLEAN_EXTRACTION_OK
+G3_G_RELEASE_MANIFEST_OK
+```
+
+唯一 software success sentinel：
+
+```text
+G3_G_SOFTWARE_RELEASE_READY
+```
+
+不得输出 `G3_G_FINAL_SUBMISSION_AUTHORIZED` 或 `G3_G_FINAL_SUBMISSION_READY`，除非所有 external gates 真正关闭且另有明确授权。
+
+### Full regression
+
+先执行 focused G3-G tests，再在 original merged source validation context 完整执行：
+
+```bash
+bash scripts/validate_linux_cpu_sim.sh /tmp/hccl-agent-linux-review
+```
+
+必须继续满足：
+
+```text
+CMake configure PASS
+build PASS
+CTest PASS
+focused CPU_SIM unittest PASS
+full pytest PASS
+existing skip count no abnormal increase
+LINUX_CPU_SIM_VALIDATION_OK
+```
+
+Clean extraction 中还必须执行 release contract 指定的 independent subset/full verification。不得重跑 G3-B2 performance benchmark、G3-B3 feature benchmark、real-device acceptance；不得访问 external LLM。
+
+### Expected artifacts — unique final evidence
+
+唯一 final evidence 放在：
+
+```text
+experiments/submission/evidence/g3_g_<timestamp>/
+```
+
+至少包含：
+
+```text
+README.md
+manifest.json
+result.json
+release_authority_validation.json
+release_inventory_validation.json
+cold_start_environment.json
+cold_start_run_1.json
+cold_start_run_2.json
+cold_start_reproducibility.json
+dependency_audit.json
+license_audit.json
+copyright_audit.json
+redistribution_audit.json
+security_audit.json
+privacy_audit.json
+controlled_material_audit.json
+third_party_asset_audit.json
+release_risk_register.json
+final_staging_validation.json
+release_manifest_validation.json
+archive_validation.json
+archive_extraction_safety.json
+clean_extraction_validation.json
+clean_extraction_reproduction.json
+old_authority_immutability.json
+native_elf_audit.json
+abi_validation.json
+regression_summary.json
+no_secrets_audit.json
+portable_path_audit.json
+git_state.json
+user_action_required.json
+submission_authorization_status.json
+SHA256SUMS
+```
+
+不得复制完整 old evidence tree。只能通过 relative path、SHA256、metric IDs、claim IDs、trace IDs、figure IDs、innovation IDs、demo step IDs 与 authority-root hashes 引用。
+
+### Tests / Acceptance criteria
+
+- candidate immutable before verification；
+- safe fresh extraction PASS；
+- manifest/hash/path/permission/symlink checks PASS；
+- extraction build/install/CTest/tests PASS；
+- G3-C/D/E/F required verifiers PASS；
+- release verifier read-only PASS；
+- source regression and Linux CPU_SIM validation PASS；
+- old authority immutability PASS；
+- no secret/private path/unsafe archive entry；
+- native ELF/SONAME/19-symbol ABI PASS；
+- exact final evidence coverage and `SHA256SUMS` PASS；
+- all mandatory sentinels and `G3_G_SOFTWARE_RELEASE_READY` emitted；
+- final submission authorization remains honest。
+
+### Truth boundaries
+
+E 证明 declared environment 和 candidate contract 下的 software release readiness，不证明 legal authorization、competition acceptance、real-device validation、all-machine support 或 final portal upload。
+
+### Forbidden changes
+
+- 不修改 candidate/extraction 后继续验证；
+- 不修改 old authority/evidence；
+- 不新增 skip、降低 tests 或缩小 hash scope；
+- 不创建 final submission archive、tag、GitHub release 或 portal upload；
+- 不执行 network/LLM/hardware/benchmark；
+- 不使用 HARDWARE_BLOCKED 掩盖 software failure。
+
+### Commit boundary
+
+建议 commit：
+
+```text
+G3-G-E finalize software release readiness evidence
+```
+
+只提交 final validators、approved release metadata、focused tests 与唯一 G3-G final evidence；不得提交 generated candidate/archive、raw logs、cache 或 extraction tree。
+
+### Exit criteria
+
+- clean extraction verification complete；
+- all software gates PASS；
+- final evidence frozen and checksummed；
+- dual status recorded；
+- Feature Freeze and old authority preserved；
+- real-device status unchanged；
+- local worktree clean after commit；
+- no push/merge/tag/release/submission；
+- `G3_G_SOFTWARE_RELEASE_READY` emitted；
+- immediately `STOP`。
+
+## 17.29 Old authority immutability
+
+G3-G-A 建立 baseline，G3-G-E freeze 前后至少比较：
+
+```text
+G3-B2 authority root and SHA256SUMS
+G3-B3 authority root and SHA256SUMS
+G3-C claim ledger
+G3-C data ledger
+G3-C report_chart_data tree
+G3-D Prompt Registry
+G3-D Skill Registry
+G3-D normalized traces
+G3-D provenance mappings
+G3-E chart registry
+G3-E 13 final SVG assets
+G3-E innovation mapping
+G3-E narrative and phrasebook
+G3-F demo manifest
+G3-F QUICK_DEMO frozen expected result
+G3-F FALLBACK_DEMO
+G3-F storyboard
+G3-F narration/subtitle source
+G3-F final evidence root and SHA256SUMS
+```
+
+Hash comparison 必须覆盖 declared file/tree content，不只比较 directory name。任何 old authority drift 必须 `STOP`；G3-G 不得自行重新冻结旧 checkpoint。
+
+## 17.30 Release candidate ↔ source mapping
+
+最终必须能审计：
+
+```text
+release file
+→ staging source
+→ repository source or generated builder
+→ source commit
+→ authority checkpoint
+→ license/redistribution/controlled-material state
+→ SHA256
+→ verification role
+```
+
+Mandatory file 不得含 `UNKNOWN_SOURCE`；optional unknown file 必须排除并记录 reason。
+
+## 17.31 Final result status contract
+
+Final `result.json` 至少记录：
+
+```text
+checkpoint=G3-G
+
+software_release_readiness=COMPLETED | FAIL | ENV_BLOCKED
+final_competition_submission_authorization=AUTHORIZED | USER_ACTION_REQUIRED | BLOCKED
+
+release_authority=COMPLETED
+cold_start_reproduction=COMPLETED
+dependency_audit=COMPLETED
+security_audit=COMPLETED
+privacy_audit=COMPLETED
+controlled_material_audit=COMPLETED
+final_staging=COMPLETED
+release_candidate=COMPLETED
+clean_extraction_verification=COMPLETED
+
+benchmark_rerun=false
+network_required_for_mandatory_validation=false
+external_llm_required=false
+real_device_required=false
+
+old_authority_modified=false
+final_feature_freeze_preserved=true
+
+real_device_acceptance=HARDWARE_BLOCKED
+real_device_api_executed=false
+direct_hccl_api_call=false
+measured_on_real_npu=false
+msprof_executed=false
+runtime_api_calls=[]
+
+release_candidate_archive_status=CREATED | NOT_CREATED | USER_ACTION_REQUIRED
+final_submission_archive_status=NOT_AUTHORIZED | USER_ACTION_REQUIRED | READY
+
+github_release_created=false
+git_tag_created=false
+competition_submission_performed=false
+```
+
+如果 software gates 全部 PASS 但 external user actions 未关闭，必须使用：
+
+```text
+software_release_readiness=COMPLETED
+final_competition_submission_authorization=USER_ACTION_REQUIRED
+```
+
+这是正确终态，不是 PARTIAL。
+
+## 17.32 Inherited USER_ACTION_REQUIRED
+
+G3-G-A 必须重新读取 current merged user-action records，不得假设数量永久为 20。至少继承仍未关闭的：
+
+```text
+UA-B-001 project license / copyright
+UA-B-002 official artifact redistribution
+UA-B-003 controlled competition material
+UA-B-004 submission archive / size rules
+
+UA-C-001 precision interpretation
+UA-C-002 final report language
+UA-C-003 final template / font / anonymity / PDF rules
+
+UA-D-001 historical Agent / Prompt records
+UA-D-002 Agent disclosure detail
+UA-D-003 real-device acceptance
+
+UA-E-001 final visual language
+UA-E-002 competition visual template
+UA-E-003 logo / external asset permission
+UA-E-004 final innovation wording approval
+
+UA-F-001 competition video specification
+UA-F-002 final narration / subtitle language
+UA-F-003 voice / audio policy
+UA-F-004 live demo environment
+UA-F-005 recording / branding approval
+UA-F-006 final video / demo wording approval
+```
+
+G3-G 不得依据默认值、常见比赛规则、互联网经验或推测关闭这些事项。每项必须记录 current authority、impact、blocking scope、allowed fallback 与 release inclusion effect。
+
+## 17.33 G3-G-specific USER_ACTION_REQUIRED
+
+### UA-G-001 — Final Submission Package Specification
+
+由正式比赛材料或用户确认 archive format、file size、directory structure、required filenames、entry file、encoding、line endings、executable permissions 与 upload portal restrictions。未知时只能生成 contract-defined local candidate，不得称 final submission archive。
+
+### UA-G-002 — Final Legal / Redistribution Authorization
+
+用户/组织确认 release inventory 中 project-owned source、official-interface-derived material、third-party assets、documentation 与 logos 的可提交授权。G3-G audit 不提供法律结论。
+
+### UA-G-003 — Final Controlled-Material Inclusion Decision
+
+确认 competition documents、controlled attachments 与 SDK-related material 是 include、exclude 还是 reference externally。Default 为 `exclude unless explicitly authorized`。
+
+### UA-G-004 — Final Release Candidate Approval
+
+软件验证完成后，由用户审核 release manifest、file inventory、archive status、risk register 与 remaining UA list，决定是否进入独立 Final Submission Preparation。
+
+### UA-G-005 — Git Tag / GitHub Release Authorization
+
+G3-G 默认不创建 Git tag 或 GitHub release。即使 software readiness 完成，以下仍是正常状态：
+
+```text
+git_tag_created=false
+github_release_created=false
+```
+
+### UA-G-006 — Final Competition Submission Authorization
+
+这是最终总 gate。只有用户确认赛事规则、legal、controlled material、language/template、video/demo、branding、archive 与 hardware disclosure 均已处理后，才允许：
+
+```text
+final_competition_submission_authorization=AUTHORIZED
+```
+
+Codex 不得自行关闭。
+
+## 17.34 Failure and status classification
+
+### FAIL
+
+用于：
+
+```text
+cold-start build or required test failure
+release verify failure
+manifest/hash mismatch
+missing required file or unexpected included file
+secret/privacy leak
+path traversal or unsafe symlink
+unapproved controlled material
+mandatory unknown source
+old authority mutation
+staging failure
+archive extraction failure
+Feature Freeze violation
+```
+
+### PARTIAL
+
+只用于 optional release asset 或 optional environment validation。不得用 PARTIAL 绕过 cold start、required tests、security、privacy、manifest、staging、clean extraction 或 software release readiness。
+
+### USER_ACTION_REQUIRED
+
+只用于 external legal/rules/branding/language/video/archive/real-device/final approval，不得用于 repository bug。
+
+### ENV_BLOCKED
+
+只用于 required local toolchain unavailable 且无安全已有 fallback；不得自动安装 dependency 后隐藏环境事实。
+
+### HARDWARE_BLOCKED
+
+只用于 real-device acceptance。
+
+### BLOCKED_BY_AUTHORITY_CONFLICT
+
+只用于 L1–L8 无法消解的 authority conflict。
+
+### BLOCKED_BY_LEGAL_OR_CONTROLLED_MATERIAL
+
+用于 mandatory file 无法在 current authorization 下合法/合规进入 release。不得删除 mandatory functionality 让 package “看起来能发”。
+
+## 17.35 Branch and commit strategy
+
+G3-G 执行时使用单一 branch：
+
+```text
+codex/g3-g-final-release-audit
+```
+
+建议五个阶段性 local commits：
+
+```text
+G3-G-A freeze release authority and submission contract
+G3-G-B prove clean cold-start reproduction
+G3-G-C audit dependencies licenses and release risks
+G3-G-D build audited release candidate
+G3-G-E finalize software release readiness evidence
+```
+
+实际文案允许最小调整，但必须保持 `A → B → C → D → E` 顺序和阶段边界。G3-G 执行时不得：
+
+```text
+push
+merge
+rebase
+amend published history
+reset --hard
+git clean -fd
+create Git tag
+create GitHub release
+submit to competition portal
+```
+
+Local release-candidate archive 仅在 Section 17 contract 允许时生成，且不得标记 final submission authorized。完成 E local commit 后必须 `STOP`。
+
+## 17.36 G3-G Exit Criteria
+
+只有全部 mandatory software gates 满足，才允许：
+
+```text
+G3-G Software Release Readiness: COMPLETED
+```
+
+至少要求：
+
+- release authority and inventory complete；
+- latest merged main verified；
+- CLEAN_WORKTREE_REPRODUCTION complete；
+- cold-start run 1 and run 2 PASS；
+- reproducibility classification complete；
+- CPU_SIM build/install PASS；
+- CTest and required Python regression PASS；
+- G3-C verify PASS；
+- G3-D verify/offline replay PASS；
+- G3-E rebuild/verify PASS；
+- G3-F QUICK_DEMO/FALLBACK PASS；
+- canonical staging build/verify PASS；
+- dependency audit complete；
+- security and privacy audit PASS；
+- controlled-material audit complete；
+- license/copyright/redistribution audit complete；
+- unresolved legal decisions mapped to `USER_ACTION_REQUIRED`；
+- final staging exact；
+- release manifest complete；
+- all mandatory release files have known source；
+- no secrets/private paths/unsafe symlink/path traversal；
+- native ELF audit PASS；
+- CPU_SIM SONAME and 19-symbol allowlist unchanged；
+- archive safety PASS where archive generated；
+- CLEAN_EXTRACTION_REPRODUCTION PASS；
+- old authority immutability PASS；
+- full source regression and Linux CPU_SIM validation PASS；
+- unique G3-G evidence and `SHA256SUMS` PASS；
+- all mandatory sentinels and `G3_G_SOFTWARE_RELEASE_READY` emitted；
+- Final Feature Freeze preserved；
+- real-device status unchanged；
+- worktree clean after final commit；
+- no push/merge/tag/release/competition submission；
+- no next hardware checkpoint started。
+
+但 Final Competition Submission Authorization 只有 external UA items 真正关闭后才可为 `AUTHORIZED`；否则必须为 `USER_ACTION_REQUIRED`。
+
+## 17.37 Final software sentinel
+
+唯一 software readiness sentinel：
+
+```text
+G3_G_SOFTWARE_RELEASE_READY
+```
+
+禁止使用 `G3_G_FINAL_SUBMISSION_READY` 作为自动 success sentinel。Machine-readable display 必须保留：
+
+```text
+SOFTWARE_RELEASE_READY != FINAL_SUBMISSION_AUTHORIZED
+```
+
+## 17.38 Post-G3-G boundary
+
+G3-G 是当前主软件交付路线的最终 checkpoint。G3-G 后不自动开始新的 software feature stage。之后只允许在独立用户授权下进入：
+
+### A. Final Submission Preparation
+
+关闭 language、template、video、branding、archive、license 与 controlled-material gates，并在正式规则下生成最终比赛提交物。
+
+### B. Optional Real-Device Acceptance / G3-H
+
+只有真实 Ascend/NPU environment 可用且用户明确授权后执行。它不得回写或伪造 G3-B2/B3 simulation/host history，也不得把 later hardware evidence 冒充 earlier execution。
+
+### C. Post-competition development
+
+属于新的开发周期，不是 G3-G continuation。
+
+G3-G-E 完成后必须：
+
+```text
+STOP
+```
+
+等待用户审核 software release readiness、release candidate 与所有 `USER_ACTION_REQUIRED`。不得自动开始 Final Submission Preparation、G3-H、tag、release 或 portal submission。

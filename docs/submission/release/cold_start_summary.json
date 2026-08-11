@@ -1,0 +1,27 @@
+{
+  "archive_reproducibility_evaluated": false,
+  "benchmark_rerun": false,
+  "external_llm_invoked": false,
+  "manifest_reproducible": true,
+  "network_used": false,
+  "real_device_api_executed": false,
+  "reproducibility": "BIT_FOR_BIT_FOR_DECLARED_OUTPUTS",
+  "runs": [
+    {
+      "run_id": "run-1",
+      "source_commit": "08355a873bac1ee1c9195e5c99fef98a130c94c7",
+      "status": "PASS",
+      "step_count": 14
+    },
+    {
+      "run_id": "run-2",
+      "source_commit": "08355a873bac1ee1c9195e5c99fef98a130c94c7",
+      "status": "PASS",
+      "step_count": 14
+    }
+  ],
+  "runtime_api_calls": [],
+  "schema_version": "g3-g-cold-start-summary-v1",
+  "sentinel": "G3_G_COLD_START_REPRODUCTION_OK",
+  "status": "PASS"
+}

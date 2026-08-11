@@ -1,0 +1,76 @@
+{
+  "authority_roots": [
+    {
+      "authority_id": "g3_c",
+      "authority_level": "L2",
+      "path": "experiments/submission/evidence/g3_c_20260809T000000Z",
+      "sha256": "cc29469e79d9a242aa7eb2859d5ca94357bc2700ad6a6887ffdce1852bf44707"
+    },
+    {
+      "authority_id": "g3_d",
+      "authority_level": "L3",
+      "path": "experiments/submission/evidence/g3_d_20260809T123956Z",
+      "sha256": "1f702c043e6e73bf2f1464a1d40367eb4d8599d5b56b67604acdac69494bb312"
+    },
+    {
+      "authority_id": "g3_e",
+      "authority_level": "L4",
+      "path": "experiments/submission/evidence/g3_e_20260809T155045Z",
+      "sha256": "f57cbe2743042008075098a482264902129539a4a87a83e22b051edb5808cbdf"
+    },
+    {
+      "authority_id": "g3_f",
+      "authority_level": "L5",
+      "path": "experiments/submission/evidence/g3_f_20260810T013950Z",
+      "sha256": "2cc72eef68c0b788ad81006cc9b7a0f8e81188dc4bd4df3eab8528069cfc3124"
+    },
+    {
+      "authority_id": "g3_b3",
+      "authority_level": "L6",
+      "path": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+      "sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754"
+    },
+    {
+      "authority_id": "g3_b2",
+      "authority_level": "L7",
+      "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483"
+    }
+  ],
+  "checkpoint": "G3-G",
+  "final_competition_submission_authorization": "USER_ACTION_REQUIRED",
+  "release_candidate_archive_sha256": "6ccb16494f87c87278f7716b22881a28dfcb0cf66accfc1dd36bbb2e9815b3cf",
+  "release_candidate_id": "G3-G-RC-9656F67C2ED85DA5",
+  "schema_version": "g3-g-final-evidence-manifest-v1",
+  "software_release_readiness": "COMPLETED",
+  "source_commit": "6c137874e2cfa7864afbfdb5220b434a3378e898",
+  "user_action_required": [
+    "UA-B-001",
+    "UA-B-002",
+    "UA-B-003",
+    "UA-B-004",
+    "UA-C-001",
+    "UA-C-002",
+    "UA-C-003",
+    "UA-D-001",
+    "UA-D-002",
+    "UA-D-003",
+    "UA-E-001",
+    "UA-E-002",
+    "UA-E-003",
+    "UA-E-004",
+    "UA-F-001",
+    "UA-F-002",
+    "UA-F-003",
+    "UA-F-004",
+    "UA-F-005",
+    "UA-F-006",
+    "UA-G-001",
+    "UA-G-002",
+    "UA-G-003",
+    "UA-G-004",
+    "UA-G-005",
+    "UA-G-006"
+  ],
+  "worktree_revision": "G3-G-E final files pending authorized local commit"
+}

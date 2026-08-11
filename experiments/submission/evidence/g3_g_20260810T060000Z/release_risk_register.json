@@ -1,0 +1,70 @@
+{
+  "mandatory_software_blocker_count": 0,
+  "risk_count": 6,
+  "risks": [
+    {
+      "blocking_scope": "FINAL_SUBMISSION_ONLY",
+      "closed": false,
+      "description": "Project license/copyright is not declared",
+      "risk_id": "R-G-001",
+      "severity": "BLOCKER",
+      "user_action_required_refs": [
+        "UA-B-001",
+        "UA-G-002"
+      ]
+    },
+    {
+      "blocking_scope": "EXCLUDED_FROM_CANDIDATE",
+      "closed": false,
+      "description": "Official SDK/source/binary redistribution authorization unresolved",
+      "risk_id": "R-G-002",
+      "severity": "HIGH",
+      "user_action_required_refs": [
+        "UA-B-002",
+        "UA-G-002"
+      ]
+    },
+    {
+      "blocking_scope": "EXCLUDED_FROM_CANDIDATE",
+      "closed": false,
+      "description": "Controlled competition document inclusion not authorized",
+      "risk_id": "R-G-003",
+      "severity": "BLOCKER",
+      "user_action_required_refs": [
+        "UA-B-003",
+        "UA-G-003"
+      ]
+    },
+    {
+      "blocking_scope": "ENVIRONMENT_PREREQUISITE",
+      "closed": false,
+      "description": "pytest and Python 3.10 backports require external test-environment provisioning",
+      "risk_id": "R-G-004",
+      "severity": "MEDIUM",
+      "user_action_required_refs": []
+    },
+    {
+      "blocking_scope": "FINAL_SUBMISSION_ONLY",
+      "closed": false,
+      "description": "Final archive format, size, and portal rules unresolved",
+      "risk_id": "R-G-005",
+      "severity": "BLOCKER",
+      "user_action_required_refs": [
+        "UA-B-004",
+        "UA-G-001"
+      ]
+    },
+    {
+      "blocking_scope": "HARDWARE_BLOCKED",
+      "closed": false,
+      "description": "Real-device acceptance unavailable",
+      "risk_id": "R-G-006",
+      "severity": "HIGH",
+      "user_action_required_refs": [
+        "UA-D-003"
+      ]
+    }
+  ],
+  "schema_version": "g3-g-release-risk-register-v1",
+  "status": "COMPLETED"
+}

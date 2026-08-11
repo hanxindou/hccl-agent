@@ -1,0 +1,51 @@
+{
+  "errors": [],
+  "files_checked": 46,
+  "frozen_evidence": {
+    "g3_b2": {
+      "entries_verified": 25,
+      "errors": [],
+      "root": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483",
+      "status": "PASS"
+    },
+    "g3_b3": {
+      "entries_verified": 35,
+      "errors": [],
+      "root": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+      "sha256sums_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754",
+      "status": "PASS"
+    },
+    "g3_c": {
+      "entries_verified": 27,
+      "errors": [],
+      "root": "experiments/submission/evidence/g3_c_20260809T000000Z",
+      "sha256sums_sha256": "cc29469e79d9a242aa7eb2859d5ca94357bc2700ad6a6887ffdce1852bf44707",
+      "status": "PASS"
+    },
+    "g3_d": {
+      "entries_verified": 23,
+      "errors": [],
+      "root": "experiments/submission/evidence/g3_d_20260809T123956Z",
+      "sha256sums_sha256": "1f702c043e6e73bf2f1464a1d40367eb4d8599d5b56b67604acdac69494bb312",
+      "status": "PASS"
+    },
+    "g3_e": {
+      "entries_verified": 21,
+      "errors": [],
+      "root": "experiments/submission/evidence/g3_e_20260809T155045Z",
+      "sha256sums_sha256": "f57cbe2743042008075098a482264902129539a4a87a83e22b051edb5808cbdf",
+      "status": "PASS"
+    },
+    "g3_f": {
+      "entries_verified": 25,
+      "errors": [],
+      "root": "experiments/submission/evidence/g3_f_20260810T013950Z",
+      "sha256sums_sha256": "2cc72eef68c0b788ad81006cc9b7a0f8e81188dc4bd4df3eab8528069cfc3124",
+      "status": "PASS"
+    }
+  },
+  "old_authority_modified": false,
+  "schema_version": "g3-g-old-authority-immutability-v1",
+  "status": "PASS"
+}

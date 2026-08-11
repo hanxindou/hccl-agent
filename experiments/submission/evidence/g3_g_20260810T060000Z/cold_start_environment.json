@@ -1,0 +1,40 @@
+{
+  "api_keys_used": [],
+  "checkout_normalization": {
+    "core.autocrlf": false,
+    "core.eol": "lf"
+  },
+  "clean_model": "CLEAN_WORKTREE_REPRODUCTION",
+  "host_python": "3.11.7",
+  "network_used": false,
+  "npu_used": false,
+  "pytest_dependency_source": "HOST_INSTALLED_PURE_PYTHON_PACKAGES_COPIED_TO_RUN_OWNED_ROOT",
+  "pytest_packages": {
+    "_pytest": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "exceptiongroup": "EXISTING_EXTERNAL_LINUX_TEST_DEPENDENCY",
+    "iniconfig": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "packaging": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "pluggy": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "py": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "pygments": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "pytest": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY",
+    "tomli": "EXISTING_EXTERNAL_LINUX_TEST_DEPENDENCY",
+    "typing_extensions": "HOST_INSTALLED_PURE_PYTHON_DEPENDENCY"
+  },
+  "repository_local_venv_used": false,
+  "run_count": 2,
+  "runtime_api_calls": [],
+  "schema_version": "g3-g-cold-start-environment-v1",
+  "status": "PASS",
+  "supported_environment": [
+    "Linux/WSL with Python 3, CMake, C compiler, make, Git, and pytest"
+  ],
+  "untested_environment": [
+    "native Windows runtime",
+    "macOS",
+    "other Linux distributions",
+    "real Ascend/NPU"
+  ],
+  "verified_environment": "Windows host with WSL Ubuntu-22.04 Linux execution class",
+  "wsl_python": "3.10"
+}

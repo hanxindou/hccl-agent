@@ -1,0 +1,56 @@
+{
+  "classes": [
+    {
+      "patterns": [
+        "logs/",
+        "*.pyc"
+      ],
+      "reason": "non-authoritative generated output",
+      "status": "EXCLUDE_GENERATED"
+    },
+    {
+      "patterns": [
+        "__pycache__/",
+        ".pytest_cache/",
+        ".mypy_cache/"
+      ],
+      "reason": "host-local cache",
+      "status": "EXCLUDE_TOOL_CACHE"
+    },
+    {
+      "patterns": [
+        "build/",
+        "dist/"
+      ],
+      "reason": "reconstructed by cold-start",
+      "status": "EXCLUDE_BUILD_ARTIFACT"
+    },
+    {
+      "patterns": [
+        ".env",
+        "private keys",
+        "credential-bearing logs"
+      ],
+      "reason": "secret and privacy boundary",
+      "status": "EXCLUDE_PRIVATE"
+    },
+    {
+      "patterns": [
+        "controlled attachments",
+        "official SDK/HCOMM/HCCL material"
+      ],
+      "reason": "authorization unresolved",
+      "status": "EXCLUDE_CONTROLLED"
+    },
+    {
+      "patterns": [
+        "unowned third-party assets"
+      ],
+      "reason": "license audit is not authorization",
+      "status": "EXCLUDE_UNRESOLVED_LICENSE"
+    }
+  ],
+  "default_controlled_material_policy": "EXCLUDE_UNLESS_EXPLICITLY_AUTHORIZED",
+  "schema_version": "g3-g-release-exclusion-policy-v1",
+  "status": "PASS"
+}

@@ -1,0 +1,10 @@
+{
+  "archive_sha256": "6ccb16494f87c87278f7716b22881a28dfcb0cf66accfc1dd36bbb2e9815b3cf",
+  "entry_count": 508,
+  "errors": [],
+  "path_traversal": false,
+  "schema_version": "g3-g-archive-validation-v1",
+  "sentinel": "G3_G_RELEASE_CANDIDATE_OK",
+  "status": "PASS",
+  "symlink_escape": false
+}

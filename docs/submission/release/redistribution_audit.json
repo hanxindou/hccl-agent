@@ -1,0 +1,13 @@
+{
+  "authorization": "USER_ACTION_REQUIRED",
+  "controlled_material_included": false,
+  "legal_conclusion_provided": false,
+  "official_assets_included": false,
+  "schema_version": "g3-g-redistribution-audit-v1",
+  "status": "COMPLETED",
+  "user_action_required_refs": [
+    "UA-B-002",
+    "UA-G-002",
+    "UA-G-003"
+  ]
+}

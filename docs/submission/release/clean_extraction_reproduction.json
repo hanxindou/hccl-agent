@@ -1,0 +1,8 @@
+{
+  "identical": true,
+  "run_1_tree_sha256": "2b8fcb14dcbef10ea171ff7773668eb2cf4b914ef3432e745979124a915669ab",
+  "run_2_tree_sha256": "2b8fcb14dcbef10ea171ff7773668eb2cf4b914ef3432e745979124a915669ab",
+  "run_count": 2,
+  "schema_version": "g3-g-clean-extraction-reproduction-v1",
+  "status": "PASS"
+}

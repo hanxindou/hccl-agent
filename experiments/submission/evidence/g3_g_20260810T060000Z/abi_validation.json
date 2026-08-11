@@ -1,0 +1,26 @@
+{
+  "exported_symbols": [
+    "butterfly_allgather",
+    "butterfly_allreduce",
+    "fattree_allreduce",
+    "hcclAllGather",
+    "hcclAllReduce",
+    "hcclBroadcast",
+    "hcclCommDestroy",
+    "hcclCommInit",
+    "hcclFreeTopology",
+    "hcclGetTopology",
+    "hcclPluginGetAlgorithms",
+    "hcclPluginGetVersion",
+    "hcclReduceScatter",
+    "hcclSetRank",
+    "mesh_allreduce",
+    "mesh_reducescatter",
+    "nhr_allreduce",
+    "ring_allgather",
+    "ring_allreduce"
+  ],
+  "soname": "libhccl_plugin.so",
+  "status": "PASS",
+  "symbol_count": 19
+}

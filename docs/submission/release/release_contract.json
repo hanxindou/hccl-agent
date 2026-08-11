@@ -1,0 +1,218 @@
+{
+  "archive_ordering": "UTF-8 POSIX path byte order",
+  "authority_roots": {
+    "g3_b2": {
+      "path": "experiments/optimization/evidence/g3_b2_f_final_20260807T040000Z",
+      "sha256sums_sha256": "99e81dc858e965fd339f2e2e1c711f85238479fb89521c5f8ebaf673f4c05483"
+    },
+    "g3_b3": {
+      "path": "experiments/feature_completion/evidence/g3_b3_f_final_20260807T170000Z",
+      "sha256sums_sha256": "45b437e76c09a023f908cb8f724849bd93b3bd65fefb3cc4514251eb4af3e754"
+    },
+    "g3_c": {
+      "path": "experiments/submission/evidence/g3_c_20260809T000000Z",
+      "sha256sums_sha256": "cc29469e79d9a242aa7eb2859d5ca94357bc2700ad6a6887ffdce1852bf44707"
+    },
+    "g3_d": {
+      "path": "experiments/submission/evidence/g3_d_20260809T123956Z",
+      "sha256sums_sha256": "1f702c043e6e73bf2f1464a1d40367eb4d8599d5b56b67604acdac69494bb312"
+    },
+    "g3_e": {
+      "path": "experiments/submission/evidence/g3_e_20260809T155045Z",
+      "sha256sums_sha256": "f57cbe2743042008075098a482264902129539a4a87a83e22b051edb5808cbdf"
+    },
+    "g3_f": {
+      "path": "experiments/submission/evidence/g3_f_20260810T013950Z",
+      "sha256sums_sha256": "2cc72eef68c0b788ad81006cc9b7a0f8e81188dc4bd4df3eab8528069cfc3124"
+    }
+  },
+  "canonical_sequence": [
+    [
+      "python",
+      "-m",
+      "tools.submission_cli",
+      "check"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.submission_cli",
+      "quick",
+      "--rank-size",
+      "4",
+      "--message-size",
+      "4096"
+    ],
+    [
+      "python",
+      "-m",
+      "pytest",
+      "tests",
+      "-q"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.report_cli",
+      "verify"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.agent_delivery_cli",
+      "verify"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.agent_delivery_cli",
+      "replay",
+      "--trace",
+      "g3-b2-optimization-authoritative-round1"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.agent_delivery_cli",
+      "replay",
+      "--trace",
+      "g3-b3-feature-completion-agent-flow"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.visualization_cli",
+      "build-charts"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.visualization_cli",
+      "verify"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.demo_delivery_cli",
+      "run",
+      "--profile",
+      "quick"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.demo_delivery_cli",
+      "transcript",
+      "--profile",
+      "fallback"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.demo_delivery_cli",
+      "stage"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.demo_delivery_cli",
+      "verify-stage"
+    ],
+    [
+      "python",
+      "-m",
+      "tools.release_cli",
+      "preflight"
+    ]
+  ],
+  "canonical_staging_root": "dist/submission-staging",
+  "clean_environment_models": [
+    "CLEAN_WORKTREE_REPRODUCTION",
+    "CLEAN_EXTRACTION_REPRODUCTION"
+  ],
+  "cold_start_run_count": 2,
+  "compression_policy": "ZIP_DEFLATED with fixed metadata when local release-candidate archive is created",
+  "controlled_material_policy": "EXCLUDE_UNLESS_EXPLICITLY_AUTHORIZED",
+  "external_asset_policy": "EXCLUDE_UNLESS_SOURCE_AND_PERMISSION_ARE_DECLARED",
+  "final_authorization_boundary": "SOFTWARE_RELEASE_READY != FINAL_SUBMISSION_AUTHORIZED",
+  "final_competition_submission_authorization": "USER_ACTION_REQUIRED",
+  "final_submission_archive_status": "NOT_AUTHORIZED",
+  "forbidden_file_types": [
+    "private keys",
+    "credentials",
+    "official binaries",
+    "unapproved controlled documents",
+    "unapproved media binaries"
+  ],
+  "forbidden_paths": [
+    ".git",
+    ".env",
+    "build",
+    "dist",
+    "logs",
+    "venv",
+    ".venv",
+    "__pycache__",
+    ".pytest_cache"
+  ],
+  "hash_algorithm": "SHA256",
+  "license_and_redistribution_policy": "AUDIT_ONLY_NOT_LEGAL_AUTHORIZATION",
+  "line_ending_policy": "repository text retained; generated metadata UTF-8 LF",
+  "mandatory_environment": {
+    "acl_hccl_runtime": false,
+    "api_keys": false,
+    "mpi": false,
+    "npu": false,
+    "offline": true
+  },
+  "manifest_schema": "g3-g-release-manifest-v1",
+  "optional_software": [
+    "archive writer when local candidate archive is authorized by contract"
+  ],
+  "path_policy": {
+    "absolute_paths": false,
+    "case_collisions": false,
+    "dot_segments": false,
+    "relative_only": true,
+    "separator": "/"
+  },
+  "permissions_policy": "regular files only; executable bit limited to declared scripts",
+  "privacy_rules": [
+    "no local absolute paths",
+    "no usernames",
+    "no environment dumps",
+    "no raw private logs"
+  ],
+  "release_candidate_archive_status": "CREATED",
+  "release_candidate_root": "dist/g3-g-release/candidate",
+  "repository_source_baseline": "e4d5fbab2b50342b0b897b971bb5cd7c47cc1976",
+  "required_documentation": [
+    "README.md",
+    "QUICKSTART.md",
+    "CLAIM_BOUNDARIES.md",
+    "docs/submission/release/release_readiness.md"
+  ],
+  "required_native_artifacts": [
+    "native/lib/libhccl_plugin.so",
+    "native/include/hccl_comm.h",
+    "native/include/hccl_algorithms.h"
+  ],
+  "required_software": [
+    "Python 3",
+    "pytest",
+    "CMake",
+    "C compiler",
+    "make-compatible build tool",
+    "Git",
+    "WSL/Linux environment class on Windows host"
+  ],
+  "schema_version": "g3-g-release-contract-v1",
+  "secret_patterns": [
+    "private key headers",
+    "credential assignments with recognizable token prefixes"
+  ],
+  "software_release_readiness": "COMPLETED",
+  "status": "PASS",
+  "symlink_policy": "no symlinks in release candidate or archive",
+  "timestamp_policy": "SOURCE_DATE_EPOCH or normalized zero/1980 archive timestamp; timestamps excluded from semantic reproducibility"
+}

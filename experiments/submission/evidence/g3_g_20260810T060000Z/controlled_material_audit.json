@@ -1,0 +1,26 @@
+{
+  "authorization": "USER_ACTION_REQUIRED",
+  "controlled_item_count": 1,
+  "default_policy": "EXCLUDE_UNLESS_EXPLICITLY_AUTHORIZED",
+  "items": [
+    {
+      "authorization": "USER_ACTION_REQUIRED",
+      "decision": "EXCLUDE_CONTROLLED",
+      "included": false,
+      "path": "docs/2026年中国研究生人工智能大赛--华为赛题.docx",
+      "source": "tracked internal reference",
+      "type": "CONTROLLED_COMPETITION_DOCUMENT",
+      "user_action_required_refs": [
+        "UA-B-003",
+        "UA-G-003"
+      ]
+    }
+  ],
+  "official_binary_findings": [],
+  "official_binary_included": false,
+  "official_sdk_source_included": false,
+  "repository_owned_adapter_is_not_official_sdk_copy": true,
+  "schema_version": "g3-g-controlled-material-audit-v1",
+  "sentinel": "G3_G_CONTROLLED_MATERIAL_AUDIT_OK",
+  "status": "PASS"
+}

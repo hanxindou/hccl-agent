@@ -94,6 +94,14 @@ ALLOWED_G3_D_CHANGE_PREFIXES = (
     "tests/demo_delivery/",
     "tools/demo_delivery/",
     "tools/demo_delivery_cli.py",
+    # G3-G adds only cold-start, release-audit, and final-packaging delivery
+    # material. These paths are permitted while the frozen technical source,
+    # ledgers, Agent/Prompt assets, and prior evidence remain content-checked.
+    "docs/submission/release/",
+    "experiments/submission/evidence/g3_g_",
+    "tests/release/",
+    "tools/release_audit/",
+    "tools/release_cli.py",
 )
 
 USER_ACTION_REQUIRED = (
